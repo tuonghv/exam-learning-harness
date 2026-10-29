@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0005",
-  "next": "3 inspector audits (workflow, roles, skills) running; then fill Requirement/Acceptance from findings",
-  "updated": "2026-10-29 08:31"
+  "next": "ask REQ-0005 Q1-Q4; then TASK for REQ-0005 fixes; then TASK-001 (REQ-0002)",
+  "updated": "2026-10-29 08:35"
 }
