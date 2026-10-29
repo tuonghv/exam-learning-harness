@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-007",
   "title": "Math and Physics examples: 2 few-shot + 3 eval each (REQ-0003)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0003",
   "acceptance_criteria": [
     "AC1-AC4 of REQ-0003"
@@ -63,7 +63,7 @@
   },
   "user_notes": [],
   "picked_at": "2026-10-29T06:11:30Z",
-  "updated_at": "2026-10-29T06:18:01Z",
+  "updated_at": "2026-10-29T06:18:02Z",
   "updated_by": "main",
   "scope": [
     "examples/math/**",
