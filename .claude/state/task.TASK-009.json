@@ -48,7 +48,13 @@
       "waiver": "coordinator wrote the short design"
     }
   },
-  "user_notes": [],
+  "user_notes": [
+    {
+      "raw": "RAW-00047",
+      "note": "auto-continue; ask only when approving large cost",
+      "at": "2026-10-29T06:43:58Z"
+    }
+  ],
   "picked_at": "2026-10-29T06:43:41Z",
   "updated_at": "2026-10-29T06:43:41Z",
   "updated_by": "main",
