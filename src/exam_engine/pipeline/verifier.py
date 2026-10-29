@@ -106,7 +106,7 @@ def det_checks(q, ans, exam):
 
 
 def qa_prompt(exam, recs, ids):
-    base = settings.read_prompt("verification/verify_answer.md")
+    base = settings.read_prompt("verification/verify_answer.md", router.language(exam))
     qs = {q["id"]: q for q in exam["questions"]}
     items = []
     for i in sorted(ids):

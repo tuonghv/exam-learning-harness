@@ -65,7 +65,13 @@ def prompt_root():
     return os.path.join(PROMPTS_DIR, "releases", version)
 
 
-def read_prompt(rel):
-    """Text of <prompt_root>/<rel>."""
-    with open(os.path.join(prompt_root(), rel), encoding="utf-8") as fh:
+def read_prompt(rel, lang=None):
+    """Text of <prompt_root>/lang/<lang>/<rel> if it exists, else <prompt_root>/<rel> (default variant)."""
+    root = prompt_root()
+    path = os.path.join(root, rel)
+    if lang:
+        cand = os.path.join(root, "lang", lang, rel)
+        if os.path.isfile(cand):
+            path = cand
+    with open(path, encoding="utf-8") as fh:
         return fh.read()

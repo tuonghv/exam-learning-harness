@@ -1,0 +1,12 @@
+# mutations on real dev files (channel dev), restored after
+OK: 14 files, 1 variants
+baseline rc=0
+ERROR dev/lang/vi/verification/verify_answer.md: missing marker 'unsure'
+drop marker rc=1
+ERROR dev/lang/vi/exam/solve.md: output keys not in schema solve_out: cau_hoi
+ERROR dev/lang/vi/exam/solve.md: output example key structure differs from the default variant
+change output key rc=1
+ERROR dev/lang/vi/stray.md: file not in the prompt contract (typo?)
+stray file rc=1
+OK: 14 files, 1 variants
+restored rc=0

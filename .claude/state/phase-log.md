@@ -262,3 +262,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: ready.
 - Decision: coder A code, coder B vi content.
 - Next: handoffs.
+
+## UNIT_TESTED - TASK-010 - 2026-10-29T06:52:51Z
+- Action: coders A (code) and B (vi prompts); coordinator re-ran suite 238, check-prompts, 3 real-file mutations.
+- Result: all bite and pass.
+- Decision: advance.
+- Next: verifier, then release v1.1.0.

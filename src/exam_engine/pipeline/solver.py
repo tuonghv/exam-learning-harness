@@ -15,10 +15,11 @@ from exam_engine.utils.text import norm
 
 def base_prompt(exam):
     """Common rules + task wording + the subject addendum from config/subjects.json."""
-    parts = [settings.read_prompt("system.md"), settings.read_prompt("exam/solve.md")]
+    lang = router.language(exam)
+    parts = [settings.read_prompt("system.md", lang), settings.read_prompt("exam/solve.md", lang)]
     extra = router.policy(exam["fields"].get("Subject")).get("prompt")
     if extra:
-        parts.append(settings.read_prompt(extra))
+        parts.append(settings.read_prompt(extra, lang))
     return "\n".join(p.strip("\n") + "\n" for p in parts)
 
 

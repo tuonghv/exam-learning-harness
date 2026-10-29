@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-010",
   "title": "Prompt language variants + interface validator (REQ-0014)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0014",
   "acceptance_criteria": [
     "AC1-AC4 of REQ-0014"
@@ -20,15 +20,20 @@
     ]
   },
   "implementation": {
-    "status": "pending",
+    "status": "completed",
     "files": [
-      "src/exam_engine/pipeline/prompts.py"
+      "src/exam_engine/settings.py",
+      "src/exam_engine/pipeline/prompts.py",
+      "src/exam_engine/cli.py",
+      "prompts/contract.json",
+      "prompts/dev/lang/vi",
+      "tests/unit/test_prompt_variants.py"
     ]
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "238 OK + integration OK; check-prompts --all OK; dev mutations (marker, output key, stray) exit 1"
   },
   "security": {
     "status": "pending",
@@ -47,11 +52,15 @@
   "roles": {
     "designer": {
       "waiver": "coordinator wrote the short design"
+    },
+    "coder": "work/TASK-010/handoff/code.md",
+    "tester": {
+      "waiver": "coder wrote tests; coordinator re-ran suite and real-file mutations"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-29T06:49:33Z",
-  "updated_at": "2026-10-29T06:49:33Z",
+  "updated_at": "2026-10-29T06:52:51Z",
   "updated_by": "main",
   "scope": [
     "prompts/**",
@@ -67,5 +76,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "coders"
+  "next": "verifier"
 }

@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "prompts": {
+    "system.md": {
+      "markers": ["answer_status", "uncertain", "unanswerable", "not_independently_verified",
+                  "uncertainty", "issues", "sqrt(3)"],
+      "output": null
+    },
+    "exam/solve.md": {
+      "markers": ["Language:", "expr", "checks", "answer_status", "schema_version", "Open", "c-a-d-b-e"],
+      "output": {"anchor": "{\"schema_version\"", "schema": "solve_out"}
+    },
+    "verification/verify_answer.md": {
+      "markers": ["verdict", "agree", "disagree", "unsure", "findings", "reviews"],
+      "output": {"anchor": "{\"reviews\"", "schema": "qa_out"}
+    }
+  },
+  "subjects": {
+    "literature": {"markers": ["Passage"]},
+    "*": {"markers": []}
+  }
+}

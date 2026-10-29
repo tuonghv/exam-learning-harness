@@ -17,7 +17,8 @@ from exam_engine.core import schema as sch
 from exam_engine.core.decision import decide
 from exam_engine.pipeline import examples_check, parser, prompts, reporter, scorer, solver, verifier
 
-COMMANDS = ("solve", "parse", "verify", "report", "check-examples", "score", "prompts")
+COMMANDS = ("solve", "parse", "verify", "report", "check-examples", "score", "prompts",
+            "check-prompts")
 USAGE = "usage: exam.py {%s} ..." % "|".join(COMMANDS)
 
 
@@ -192,7 +193,8 @@ def main(argv=None):
     cmd, rest = (argv[0], argv[1:]) if argv else (None, [])
     table = {"solve": solve_main, "parse": parse_main, "verify": verify_main,
              "report": report_main, "check-examples": examples_check.main,
-             "score": scorer.score_main, "prompts": prompts.prompts_main}
+             "score": scorer.score_main, "prompts": prompts.prompts_main,
+             "check-prompts": prompts.check_prompts_main}
     if cmd not in table:
         print(USAGE, file=sys.stderr)
         return 2
