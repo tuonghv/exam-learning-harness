@@ -39,6 +39,25 @@ copy (`origin: normalized`, `derived_from`) is added beside the original; withou
 `missing_dependency`. `--exam-out` of an image-only document fails with `no_text`: the image goes
 to the solver as a visual (later REQ-0021).
 
+## Optional AI refine (REQ-0021)
+    python3 -I scripts/exam.py ingest-refine exam.pdf --pages 1-4 --dry-run
+    python3 -I scripts/exam.py ingest-refine exam.pdf --pages 1-4 --mock replies.json --out refined.json
+    python3 -I scripts/exam.py ingest-refine exam.pdf --pages 1-4 --real --max-cost-usd 1.00 --out refined.json
+
+- Off by default; exactly one of `--dry-run`, `--mock FILE`, `--real` is required (never defaults to
+  real). `--real` costs money: run it only after the user's go. Dry run prints the page list, the
+  call cap (pages x 2), the cost cap and the exact prompt, and makes no call.
+- Only selected pages that are flagged (`missing_text`, `bad_encoding`, `no_question_numbering`,
+  `math_possible`, or OCR status) are sent, one call per page, one retry on an invalid reply.
+  A `.json` document needs its source PDF next to it for `--real`.
+- Pages inside a detected answer-key part are refused (`answer_key_present`, exit 3) unless
+  `--allow-key-pages`.
+- The reply is checked (schema, consecutive ids, options A-D, no `answer`/`solution` field) and
+  stored as `refined` with `origin: "ai"`, a difflib `similarity` and `needs_review`; source blocks
+  are never changed and `to_exam_text` ignores `refined`. Similarity is a hint, not an accuracy claim.
+- Exit 0 ok; 1 some question needs review; 2 usage/input; 3 blocked or call/reply error
+  (`stream_format`, `call_failed`, `invalid_reply`, `cost_cap`, `answer_key_present`).
+
 ## Limits and unresolved risks
 - Math stays text. PDF: math fonts give `math_possible` plus a page image. DOCX: equation (OMML)
   text is kept as plain text with `math_possible`, not LaTeX; check formulas by eye.

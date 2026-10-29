@@ -18,7 +18,7 @@ from exam_engine.core.decision import decide
 from exam_engine.pipeline import examples_check, parser, prompts, reporter, scorer, solver, verifier
 
 COMMANDS = ("solve", "parse", "verify", "report", "check-examples", "score", "prompts",
-            "check-prompts", "ingest", "ingest-inspect")
+            "check-prompts", "ingest", "ingest-inspect", "ingest-refine")
 USAGE = "usage: exam.py {%s} ..." % "|".join(COMMANDS)
 
 
@@ -300,6 +300,104 @@ def inspect_main(argv):
     return 0
 
 
+def _refine_source(args, doc):
+    """Path of the file to render pages from (real mode); IngestError if it is missing or changed."""
+    import hashlib
+    from exam_engine.ingest.schema import IngestError
+    src = doc["source"]
+    path = args.file
+    if path.lower().endswith(".json"):
+        path = os.path.join(os.path.dirname(os.path.abspath(path)), src["name"])
+    if not os.path.isfile(path):
+        raise IngestError("corrupt", "source file %s not found next to the document" % src["name"])
+    with open(path, "rb") as fh:
+        if hashlib.sha256(fh.read()).hexdigest() != src["sha256"]:
+            raise IngestError("corrupt", "source file %s differs from the ingested hash" % src["name"])
+    if src.get("format") != "pdf":
+        raise IngestError("unsupported_format", "refine renders PDF pages only (got %s)"
+                          % src.get("format"))
+    return path
+
+
+def refine_main(argv):
+    """ingest-refine FILE --pages SPEC (--dry-run|--mock FILE|--real): AI suggestion, exit 0/1/2/3."""
+    from exam_engine.ingest import api, refine
+    from exam_engine.ingest.schema import IngestError, validate_document
+    d = settings.load_config("engine")
+    ap = argparse.ArgumentParser(prog="exam.py ingest-refine")
+    ap.add_argument("file")
+    ap.add_argument("--pages", required=True, metavar="SPEC")
+    ap.add_argument("--out")
+    ap.add_argument("--mock")
+    ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--real", action="store_true")
+    ap.add_argument("--max-cost-usd", type=float, default=1.0)
+    ap.add_argument("--timeout", type=float, default=d["timeout"])
+    ap.add_argument("--model", default="sonnet")
+    ap.add_argument("--allow-key-pages", action="store_true")
+    try:
+        a = ap.parse_args(argv)
+    except SystemExit:
+        return 2
+    if sum([bool(a.mock), a.dry_run, a.real]) != 1:
+        print("usage: choose exactly one of --mock FILE, --dry-run, --real (never defaults to real)",
+              file=sys.stderr)
+        return 2
+    if a.max_cost_usd < 0 or a.timeout <= 0:
+        print("usage: --max-cost-usd >= 0, --timeout > 0", file=sys.stderr)
+        return 2
+    tmp = None
+    try:
+        if a.file.lower().endswith(".json"):
+            with open(a.file, encoding="utf-8") as fh:
+                doc = json.load(fh)
+            errs = validate_document(doc)
+            if errs:
+                raise ValueError("invalid document: %s" % "; ".join(errs[:5]))
+        else:
+            doc = api.ingest_document(a.file, config={"ocr": "auto"})
+        refine.check_key_pages(doc, a.pages, a.allow_key_pages)
+        pages = refine.pick_pages(doc, a.pages)
+        if a.dry_run:
+            print("pages %s, calls <= %d, cap $%.2f (dry run: no call made)" % (
+                pages or "none", len(pages) * refine.MAX_ATTEMPTS, a.max_cost_usd))
+            for n in pages:
+                print("=== REFINE prompt, page %d (page image attached) ===" % n)
+                print(refine.build_prompt(n))
+            return 0
+        src = None
+        if a.real:
+            src = _refine_source(a, doc)
+            tmp = tempfile.mkdtemp(prefix="exam_refine_")
+            llm = refine.make_real_llm(a.model, a.timeout, tmp)
+            print("pages %s, calls <= %d, cap $%.2f" % (
+                pages, len(pages) * refine.MAX_ATTEMPTS, a.max_cost_usd), flush=True)
+        else:
+            llm = refine.mock_llm(a.mock)
+        out = refine.refine(doc, a.pages, llm, src, a.max_cost_usd, a.model, a.allow_key_pages)
+        if a.out:
+            with open(a.out, "w", encoding="utf-8") as fh:
+                fh.write(json.dumps(out, ensure_ascii=False, indent=2) + "\n")
+    except refine.RefineError as exc:
+        print("ERROR: ingest-refine: %s" % exc, file=sys.stderr)
+        return 3
+    except IngestError as exc:
+        print("ERROR: ingest-refine: %s" % exc, file=sys.stderr)
+        return 3 if exc.code == "answer_key_present" else 2
+    except (OSError, ValueError) as exc:
+        print("ERROR: ingest-refine: %s" % exc, file=sys.stderr)
+        return 2
+    finally:
+        if tmp:
+            shutil.rmtree(tmp, ignore_errors=True)
+    r = out["refined"]
+    nr = [q["id"] for q in r["questions"] if q["needs_review"]]
+    print("refined pages=%s questions=%d needs_review=%s calls=%d cost=$%.4f%s" % (
+        r["pages"], len(r["questions"]), nr or "none", r["calls"], r["cost_usd"],
+        " -> %s" % a.out if a.out else ""))
+    return 1 if nr else 0
+
+
 def main(argv=None):
     argv = list(sys.argv[1:] if argv is None else argv)
     cmd, rest = (argv[0], argv[1:]) if argv else (None, [])
@@ -307,7 +405,8 @@ def main(argv=None):
              "report": report_main, "check-examples": examples_check.main,
              "score": scorer.score_main, "prompts": prompts.prompts_main,
              "check-prompts": prompts.check_prompts_main,
-             "ingest": ingest_main, "ingest-inspect": inspect_main}
+             "ingest": ingest_main, "ingest-inspect": inspect_main,
+             "ingest-refine": refine_main}
     if cmd not in table:
         print(USAGE, file=sys.stderr)
         return 2
