@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-006",
   "title": "Restructure the engine into the exam_engine package per docs/design/phase-6-engine-structure.md (REQ-0012)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0012: one package src/exam_engine, prompts/, schemas/, config/, tests/, scripts/exam.py; old tools/examples/*.py become shims; behaviour and 166 tests unchanged",
   "acceptance_criteria": [
     "AC1-AC6 of REQ-0012"
@@ -21,7 +21,9 @@
   },
   "implementation": {
     "status": "pending",
-    "files": []
+    "files": [
+      "src/exam_engine/__init__.py"
+    ]
   },
   "unit_test": {
     "status": "pending",
@@ -49,7 +51,7 @@
   },
   "user_notes": [],
   "picked_at": "2026-10-29T05:27:31Z",
-  "updated_at": "2026-10-29T05:27:43Z",
+  "updated_at": "2026-10-29T05:27:51Z",
   "updated_by": "main",
   "scope": [
     "src/**",
@@ -70,5 +72,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "S1 skeleton + settings + adapters/claude"
+  "next": "S1 coder: skeleton, settings.py, adapters/claude.py, shim"
 }

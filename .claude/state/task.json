@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-006",
-  "state": "DESIGN",
-  "next": "S1 skeleton + settings + adapters/claude",
+  "state": "IMPLEMENTING",
+  "next": "S1 coder: skeleton, settings.py, adapters/claude.py, shim",
   "title": "Restructure the engine into the exam_engine package per docs/design/phase-6-engine-structure.md (REQ-0012)",
   "active": [
     {
       "task_id": "TASK-006",
-      "state": "DESIGN",
-      "next": "S1 skeleton + settings + adapters/claude",
-      "updated_at": "2026-10-29T05:27:43Z"
+      "state": "IMPLEMENTING",
+      "next": "S1 coder: skeleton, settings.py, adapters/claude.py, shim",
+      "updated_at": "2026-10-29T05:27:51Z"
     }
   ],
   "max_active": 1

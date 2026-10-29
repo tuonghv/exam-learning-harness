@@ -136,3 +136,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: file map, differences from the reference and 6 build steps recorded.
 - Decision: enter DESIGN; build in small green steps.
 - Next: IMPLEMENTING, coder step S1.
+
+## IMPLEMENTING - TASK-006 - 2026-10-29T05:27:51Z
+- Action: REQ-0012 Design section points to the phase-6 doc; implementation pending.
+- Result: ready to build S1.
+- Decision: enter IMPLEMENTING; coder does S1 then each step is committed green.
+- Next: coder S1.
