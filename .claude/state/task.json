@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-001",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
   "title": "Fit harness to exam domain: remove scan leftovers, compress skills (REQ-0005)",
   "active": [
     {
       "task_id": "TASK-001",
-      "state": "DESIGN",
+      "state": "IMPLEMENTING",
       "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": "2026-10-29T01:56:29Z"
+      "updated_at": "2026-10-29T01:58:06Z"
     }
   ],
   "max_active": 1

@@ -1,4 +1,4 @@
-# Phase 2 — Harness exam fit
+# Phase 1 — Harness exam fit
 
 Task: TASK-001 · REQ-0005 · Status: draft r3 (Nova, designer, 2026-10-29; r2 adds Q6 A+B+C = AC8-AC10 and AC11; r3 adds AC12)
 

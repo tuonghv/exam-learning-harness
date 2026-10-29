@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-001",
   "title": "Fit harness to exam domain: remove scan leftovers, compress skills (REQ-0005)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0005",
   "acceptance_criteria": [
     "AC1 audit table in design",
@@ -11,9 +11,9 @@
     "AC7 kept skills >=30% smaller"
   ],
   "design": {
-    "status": "pending",
-    "path": "docs/design/phase-2-harness-exam-fit.md",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-1-harness-exam-fit.md",
+    "summary": "31-row audit table; override doc; crosscheck oracle; compression to <=1446 skill lines; CLAUDE.md rewrite (A), strip list (B), delete list (C); agent_setup and settings out of plan",
     "reuse": [],
     "risks": []
   },
@@ -40,7 +40,9 @@
   },
   "roles_required": true,
   "crosscheck_required": true,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-001/handoff/design.md"
+  },
   "user_notes": [
     {
       "raw": "RAW-00019",
@@ -64,19 +66,22 @@
     }
   ],
   "picked_at": "2026-10-29T01:46:15Z",
-  "updated_at": "2026-10-29T01:56:29Z",
+  "updated_at": "2026-10-29T01:58:06Z",
   "updated_by": "main",
-  "scope": [],
+  "scope": [
+    "CLAUDE.md"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
     "done": [
       "picked; designer launched",
       "designer handoff; design copied to docs/design",
-      "design r3 installed, state DESIGN"
+      "design r3 installed, state DESIGN",
+      "coder step A launched"
     ],
     "notes": "",
-    "next": "brief coder step A (CLAUDE.md rewrite) per design 2.7 with override block; then B, C"
+    "next": "review work/TASK-001/handoff/code.md, run step A checks, then brief step B"
   },
   "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
 }
