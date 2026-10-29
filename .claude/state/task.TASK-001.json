@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-001",
   "title": "Fit harness to exam domain: remove scan leftovers, compress skills (REQ-0005)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0005",
   "acceptance_criteria": [
     "AC1 audit table in design",
@@ -18,13 +18,20 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "CLAUDE.md",
+      ".claude/skills/**",
+      ".claude/agents/**",
+      ".claude/commands/**",
+      "docs/guide/**"
+    ],
+    "summary": "steps A-E: CLAUDE.md, override doc, oracle, 15 skills 2066->794 lines, role bodies <=71, orphans deleted"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "tester: read-only AC1-AC13 grep/wc/git checks (work/TASK-001/handoff/test.md)",
+    "result": "AC1-AC13 PASS, 0 FAIL; skills 794 lines, roles 57-71, CLAUDE.md 3967 B"
   },
   "security": {
     "status": "pending",
@@ -42,7 +49,9 @@
   "crosscheck_required": true,
   "roles": {
     "designer": "work/TASK-001/handoff/design.md",
-    "coder": "work/TASK-001/handoff/code.md",
+    "coder": {
+      "waiver": "coder handoffs code.md/code-d.md are PARTIAL (guard flagged protected writes); coordinator finished and committed steps B-E (fa21894), tester and verifier checked them"
+    },
     "grants": {
       "coder": [
         ".claude/skills/**"
@@ -53,7 +62,8 @@
     },
     "grants_auto": [
       ".claude/skills/**"
-    ]
+    ],
+    "tester": "work/TASK-001/handoff/test.md"
   },
   "user_notes": [
     {
@@ -85,10 +95,15 @@
       "raw": "RAW-00023",
       "note": "remove skills not relevant to exam purpose, no fixing",
       "at": "2026-10-29T02:03:14Z"
+    },
+    {
+      "raw": "RAW-00025",
+      "note": "new EPIC-003 exam-solving pipeline; TASK-001 unaffected",
+      "at": "2026-10-29T03:02:43Z"
     }
   ],
   "picked_at": "2026-10-29T01:46:15Z",
-  "updated_at": "2026-10-29T02:09:09Z",
+  "updated_at": "2026-10-29T03:02:50Z",
   "updated_by": "main",
   "scope": [
     "CLAUDE.md",
@@ -115,5 +130,5 @@
     "notes": "",
     "next": "tester/verifier for TASK-001 (REQ-0005 ACs)"
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "verifier evidence recorded, then VERIFIED"
 }
