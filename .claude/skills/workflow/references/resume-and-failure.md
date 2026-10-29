@@ -1,41 +1,18 @@
-# Workflow — resume, failure and rollback
+# Workflow: resume, failure and rollback
 
-Part of skill workflow; core rules in ../SKILL.md.
+**Resume.** The SessionStart output names the task, state, blocker and `next`. Act in order: finish an
+uncommitted `.claude/state` transition; fix any workflow-check FAIL/WARN; then do `next`. Read only the
+last phase-log entry if `next` is unclear, never the whole log.
 
-## Resuming an in-progress task
+**A check fails.** Stay in the current state, set the failing sub-status (`unit_test.status=failed` or
+`verification.status=failed`) with the real output in `result`/`evidence`, fix, rerun. Never advance `state`.
 
-The SessionStart hook already printed the resume point (task, state, blocker,
-`next`, last phase-log heading, uncommitted state, gate warnings). Act on it:
-1. Uncommitted `.claude/state` listed → finish and commit that transition first.
-2. workflow-check FAIL/WARN listed → fix the bookkeeping before new work.
-3. Otherwise do `next`. Read the last phase-log entry only if `next` is unclear
-   (`awk '/^## /{b=""} {b=b $0 "\n"} END{printf "%s", b}' .claude/state/phase-log.md`),
-   never the whole log.
-With several active tasks: the start-up `Recovery:` block (`tasks.sh recover`) gives one resume line per task; relaunch each
-task's lead with `tasks.sh lead T` (coordinator §2d), which reads `tasks.sh show T` first and resumes from `checkpoint.next`.
-Mid-session: `bash .claude/scripts/task-state.sh` / `status.sh` give the same view.
+**Verification fails after UNIT_TESTED.** Roll back: `state=IMPLEMENTING`, `unit_test.status=pending`,
+`verification.status=failed` (keep the evidence), log `## IMPLEMENTING - <id> - <ts>` with the reason,
+commit it before the fix, then redo UNIT_TESTED → VERIFIED.
 
-## Failure, blocker and rollback
+**Blocked.** Add `"blocked": {"reason": "...", "attempts": n}` to `task.json`, keep `state`, set `next` to what
+unblocks it, commit. Raise `attempts` per distinct fix-and-rerun; at 3 stop and ask the user. Remove the key
+when unblocked (DONE with `blocked` set fails the gate).
 
-- **A check fails (test, verify, gate, commit):** stay in the current state,
-  set the failing sub-status (`unit_test.status=failed` /
-  `verification.status=failed`) with the real output in `result`/`evidence`,
-  fix, rerun. Never advance `state` on a failure.
-- **Verification fails after UNIT_TESTED → roll back:** `state=IMPLEMENTING`,
-  `unit_test.status=pending`, `verification.status=failed` (keep the failing
-  evidence), append `## IMPLEMENTING - <id> - <ts>` saying why, commit it
-  (`State: IMPLEMENTING`) before the fix, then redo UNIT_TESTED → VERIFIED.
-- **Cannot proceed (repeated failure, missing input, external outage):** add
-  `"blocked": {"reason": "<exact blocker>", "attempts": <n>}` to `task.json`,
-  keep `state` where it is, set `next` to what unblocks it, commit. Increment
-  `attempts` per distinct fix-and-rerun, across sessions. At `attempts >= 3`
-  (`workflow-check.sh` warns) stop retrying and ask the user. Remove the key
-  when unblocked; DONE with `blocked` set fails the gate.
-- **Waiting on a user-only question (paid, permission, block):** do not block the slot; after
-  `TASK_CHECKPOINT_TIMEOUT_MIN` the task is auto-held and the next workable task picked (skill
-  `coordinator` §6 recipe, `tasks.sh autohold`); it resumes from its checkpoint on the answer.
-- **Interrupted mid-transition** (session killed, compaction, timeout): the
-  next session sees the uncommitted files in the SessionStart output; either
-  complete steps 1-4 above or `git checkout -- .claude/state` and redo the
-  transition. Never commit a half-recorded transition.
-- **Abandon a task:** `backlog.sh complete <id> --force "<reason>"`, commit.
+Never commit a half-recorded transition: complete it, or discard the edits and redo it.

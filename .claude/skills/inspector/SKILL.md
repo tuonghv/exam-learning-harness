@@ -4,32 +4,19 @@ description: Inspect repository context and produce a compact factual handoff fo
 ---
 # Inspector Skill
 
-## Purpose
-
-Provide efficient repository investigation for the Coordinator.
-
-The Inspector is a context-reduction layer. It investigates first and returns only high-value facts.
+The Inspector is a context-reduction layer for the Coordinator: it investigates first and returns only
+high-value facts. It is read-only.
 
 ## When to use
 
-Use Inspector when:
-- the task requires repository discovery
-- the affected files are not known
-- multiple modules may be involved
-- existing implementation patterns need to be found
-- dependencies or tests need to be identified
-- the Coordinator would otherwise need broad search/read operations
+Use it when the task needs repository discovery: the affected files are not known, several modules may be
+involved, existing patterns, dependencies or tests must be found, or the Coordinator would otherwise need
+broad search/read operations.
 
-## When not to use
+Do not use it for a known single-file change, a direct implementation, a simple test run, final
+verification, or architectural design (that belongs to the Designer).
 
-Do not use Inspector for:
-- a known single-file change where the file is already available
-- a direct implementation operation
-- a simple test execution
-- final verification
-- architectural design that belongs to Designer
-
-## Goal focus (user, RAW-00376)
+## Goal focus
 
 The inspector serves the user's current goal, not the task backlog.
 
@@ -40,37 +27,22 @@ DO:
 - Keep it under 1500 tokens; under 500 when the question is closed.
 
 DO NOT:
-- Do not inspect beyond the question (no "while I was there" audits, lint, stale docs, other tasks).
-- Do not propose follow-up work, refactors or to-do lists the brief did not ask for.
-- Do not accept an open brief ("inspect everything", "find any issue"): reply `QUESTION:` asking which decision it serves.
-- Do not re-inspect what the previous handoff already settled.
+- Inspect beyond the question (no "while I was there" audits, lint, stale docs, other tasks).
+- Propose follow-up work, refactors or to-do lists the brief did not ask for.
+- Accept an open brief ("inspect everything", "find any issue"): reply `QUESTION:` asking which decision it serves.
+- Re-inspect what the previous handoff already settled. For repeated inspection use
+  previous handoff + changed files + new question.
 
 ## Handoff discipline
 
-The handoff must be concise and factual.
+Concise and factual. Prefer `path → reason → finding` over large excerpts. The Coordinator needs enough to
+decide the next action, not the investigation history.
 
-Prefer:
+## Reuse scripts
 
-```text
-path → reason → finding
-```
-
-over large excerpts.
-
-The Coordinator should receive enough information to decide the next action, not the entire investigation history.
-
-Context preservation: `references/context-preservation.md`
-
-## Reuse scripts (REQ-0054)
-
-A $0 count, compare or join over toolkit outputs starts at `tools/inspect/INDEX.md`. Run or extend a listed script; never write the same one-off again. Propose a new row when no script fits.
+A $0 count, compare or join over outputs starts at `tools/inspect/INDEX.md`. Run or extend a listed
+script; never write the same one-off again. Propose a new row when no script fits.
 
 ## Safety
 
-Inspector is read-only.
-
-Never modify files.
-Never claim implementation is complete.
-Never mark the task DONE.
-
-Pipeline/plan question -> read run-security-review/references/pipeline-inputs.md first, then `plan.sh compare` with a working sibling.
+Never modify files. Never claim implementation is complete. Never mark the task DONE.

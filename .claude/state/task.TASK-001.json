@@ -107,10 +107,11 @@
       "coder step A launched",
       "step A: CLAUDE.md 4094 B, grep 0 (main installed coder draft; guard blocks coder writes there)",
       "design r5 installed; req-design removed; step A done",
-      "step B done: override doc, oracle, Tier-1 note, commands, workflow-roles, lead deleted, role-body pointers"
+      "step B done: override doc, oracle, Tier-1 note, commands, workflow-roles, lead deleted, role-body pointers",
+      "step C done: skills 2066->795 lines (target 1033)"
     ],
     "notes": "",
-    "next": "step C compression of skills (coordinator, token-efficiency, workflow, inspector hold leftover scan pointers), then D role bodies, E deletions"
+    "next": "step D role bodies <=75 lines, then E deletions"
   },
   "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
 }
