@@ -113,7 +113,7 @@ class TestValidate(unittest.TestCase):
     def test_rules(self):
         orig = {"2": make_doc()["questions"][0]}
         self.assertEqual(refine.validate_refined(json.loads(GOOD2), orig), [])
-        bad = [{"x": 1}, {"questions": [q(1, "a"), q(3, "b")]},
+        bad = [{"x": 1}, {"questions": [q("x", "a")]},
                {"questions": [q(1, "a", answer="B")]}, {"questions": [q(1, "a")], "answer": "A"},
                {"questions": [q(1, "")]}, {"questions": [q(1, "a", {"A": 1})]},
                {"questions": [q(2, "a", {"A": "x"})]}]
@@ -293,11 +293,19 @@ class TestPromptFile(unittest.TestCase):
 
 
 class TestEdges(Base):
-    def test_non_consecutive_ids_rejected_with_retry(self):
-        bad = reply(q(1, "a", {}), q(3, "b", {}))
-        with self.assertRaises(refine.RefineError) as cm:
-            refine.refine(make_doc(), "1", Fake([bad, bad]))
-        self.assertIn("consecutive", str(cm.exception))
+    def test_gap_ids_flagged_not_rejected(self):
+        out = refine.refine(make_doc(), "1", Fake([reply(q(1, "a", {}), q(3, "b", {}))]))
+        flags = dict((x["id"], x["needs_review"]) for x in out["refined"]["questions"])
+        self.assertTrue(flags["3"])
+
+    def test_id_forms_normalised(self):
+        for raw, want in ((3, "3"), ("Câu 3.", "3"), ("Question 3", "3"), ("03", "3")):
+            self.assertEqual(refine.norm_id(raw), want)
+        for raw in (None, "", "abc", True, 2.5):
+            self.assertIsNone(refine.norm_id(raw))
+
+    def test_part_restart_not_flagged(self):
+        self.assertEqual(refine._gaps([{"id": "11"}, {"id": "12"}, {"id": "1"}, {"id": "2"}]), set())
 
     def test_option_count_rule_retried(self):
         short = reply(q(2, "Colour of grass?", {"A": "green", "B": "red"}))

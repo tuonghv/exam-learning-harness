@@ -6,6 +6,7 @@ call site is `make_real_llm`; tests and --mock inject a reply source. Python 3.8
 import copy
 import difflib
 import hashlib
+import re
 import os
 
 from exam_engine import settings
@@ -81,12 +82,15 @@ def render_page(path, n):
     return data
 
 
-def make_real_llm(model, timeout_s, cwd, runner=None):
+def make_real_llm(model, timeout_s, cwd, runner=None, trace=None):
     """llm(prompt, png) through the Claude CLI (tools off, empty cwd); the only real call site."""
     def llm(prompt, png):
         extra = {"runner": runner} if runner else {}
         call = claude.run_claude_images(prompt, [("image/png", png)], model=model,
                                         timeout_s=timeout_s, cwd=cwd, **extra)
+        if trace is not None:
+            trace.append({"ok": call.ok, "cls": call.cls, "cost_usd": call.cost_usd,
+                          "text": call.text, "reason": call.reason})
         low = call.reason.casefold()
         if not call.ok and ("input-format" in low or "stream-json" in low or "stream_json" in low):
             raise RefineError("stream_format", "the CLI rejected the image input mode: %s"
@@ -102,25 +106,41 @@ def mock_llm(path):
     return lambda prompt, png: base(prompt)
 
 
+def norm_id(v):
+    """'3', 3, 'Câu 3.', 'Question 3' -> '3'; None when no number is present."""
+    if isinstance(v, bool) or not isinstance(v, (int, str)):
+        return None
+    m = re.search(r"\d+", str(v))
+    return str(int(m.group(0))) if m else None
+
+
+def _gaps(questions):
+    """ids (normalised) that do not follow the previous id by 1 or restart at 1 (a new part)."""
+    out, prev = set(), None
+    for q in questions:
+        qid = norm_id(q.get("id"))
+        if qid is None:
+            continue
+        if prev is not None and int(qid) not in (prev + 1, 1):
+            out.add(qid)
+        prev = int(qid)
+    return out
+
+
 def validate_refined(obj, originals=None):
     """Problems of a reply (empty = valid). `originals` = {id: source question}."""
     if not isinstance(obj, dict) or not isinstance(obj.get("questions"), list):
         return ["reply needs a 'questions' list"]
     errs = ["forbidden field %r (solver-like reply)" % k for k in FORBIDDEN if k in obj]
-    prev = None
     for i, q in enumerate(obj["questions"], 1):
         if not isinstance(q, dict):
             errs.append("question %d: not an object" % i)
             continue
         errs += ["question %d: forbidden field %r (solver-like reply)" % (i, k)
                  for k in FORBIDDEN if k in q]
-        qid = q.get("id")
-        if not isinstance(qid, str) or not qid.isdigit():
-            errs.append("question %d: id must be a digit string" % i)
-        else:
-            if prev is not None and int(qid) != prev + 1:
-                errs.append("question %s: ids are not consecutive" % qid)
-            prev = int(qid)
+        qid = norm_id(q.get("id"))
+        if qid is None:
+            errs.append("question %d: id must be the question number" % i)
         if not isinstance(q.get("text"), str) or not q["text"].strip():
             errs.append("question %d: text must be a non-empty string" % i)
         opts = q.get("options", {})
@@ -194,12 +214,15 @@ def refine(doc, spec, llm, source_path=None, max_cost=1.0, model="sonnet", allow
         calls += used
         cost += spent
         text = _page_text(doc, n)
+        gaps = _gaps(obj["questions"])
         for q in obj["questions"]:
-            sim = similarity(q, by_id.get(q["id"]), text)
-            qs.append({"id": q["id"], "text": q["text"], "options": q.get("options", {}),
+            qid = norm_id(q["id"])
+            sim = similarity(q, by_id.get(qid), text)
+            qs.append({"id": qid, "text": q["text"], "options": q.get("options", {}),
                        "figures": q.get("figures", []), "origin": "ai", "page": n,
                        "similarity": sim,
-                       "needs_review": bool(q.get("unreadable")) or sim < min_similarity})
+                       "needs_review": bool(q.get("unreadable")) or sim < min_similarity
+                       or qid in gaps})
     out["refined"] = {"model": model,
                       "prompt_sha256": hashlib.sha256(template().encode("utf-8")).hexdigest(),
                       "pages": pages, "questions": qs, "calls": calls,

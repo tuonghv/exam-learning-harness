@@ -347,6 +347,7 @@ def refine_main(argv):
         print("usage: --max-cost-usd >= 0, --timeout > 0", file=sys.stderr)
         return 2
     tmp = None
+    trace = []
     try:
         if a.file.lower().endswith(".json"):
             with open(a.file, encoding="utf-8") as fh:
@@ -369,7 +370,7 @@ def refine_main(argv):
         if a.real:
             src = _refine_source(a, doc)
             tmp = tempfile.mkdtemp(prefix="exam_refine_")
-            llm = refine.make_real_llm(a.model, a.timeout, tmp)
+            llm = refine.make_real_llm(a.model, a.timeout, tmp, trace=trace)
             print("pages %s, calls <= %d, cap $%.2f" % (
                 pages, len(pages) * refine.MAX_ATTEMPTS, a.max_cost_usd), flush=True)
         else:
@@ -390,6 +391,9 @@ def refine_main(argv):
     finally:
         if tmp:
             shutil.rmtree(tmp, ignore_errors=True)
+        if trace and a.out:
+            with open(a.out + ".trace.json", "w", encoding="utf-8") as fh:
+                fh.write(json.dumps(trace, ensure_ascii=False, indent=2) + "\n")
     r = out["refined"]
     nr = [q["id"] for q in r["questions"] if q["needs_review"]]
     print("refined pages=%s questions=%d needs_review=%s calls=%d cost=$%.4f%s" % (
