@@ -58,3 +58,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: 28 OK; every mutation made its matching test fail. No tool defects.
 - Decision: advance to verifier (real repo run, AC1-AC5 evidence).
 - Next: verifier handoff, then VERIFIED.
+
+## VERIFIED - TASK-003 - 2026-10-29T03:38:07Z
+- Action: coordinator ran 13 injected-defect cases on isolated copies (evidence.md); verifier judged AC1-AC5 from files.
+- Result: AC1-AC5 PASS; 28 tests OK; limitation L1 (mid-line key leak) documented in examples/README.md; no defects.
+- Decision: VERIFIED; security not_applicable (read-only file tools).
+- Next: report, crosscheck waiver, DONE.

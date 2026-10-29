@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-003",
   "title": "Example set layout, FORMAT checker, eval scorer, README (REQ-0002)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0002",
   "acceptance_criteria": [
     "AC1 pairing",
@@ -37,12 +37,13 @@
     "tests": 28
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "not_applicable",
+    "result": "checker and scorer read files only (rb), no network or subprocess; scorer prints no key text; solver never receives evals/keys"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": "work/TASK-003/handoff/evidence.md",
+    "summary": "AC1-AC5 PASS; 13 injected-defect cases run on isolated copies; limitation L1 (mid-line key leak) documented in examples/README.md"
   },
   "report": {
     "status": "pending",
@@ -53,7 +54,8 @@
   "roles": {
     "designer": "work/TASK-003/handoff/design.md",
     "coder": "work/TASK-003/handoff/code.md",
-    "tester": "work/TASK-003/handoff/test.md"
+    "tester": "work/TASK-003/handoff/test.md",
+    "verifier": "work/TASK-003/handoff/verify.md"
   },
   "user_notes": [
     {
@@ -83,7 +85,7 @@
     }
   ],
   "picked_at": "2026-10-29T03:24:15Z",
-  "updated_at": "2026-10-29T03:36:04Z",
+  "updated_at": "2026-10-29T03:38:01Z",
   "updated_by": "main",
   "scope": [
     "tools/examples/**",
@@ -103,5 +105,5 @@
     "notes": "",
     "next": "verifier handoff, security status, VERIFIED, then crosscheck waiver and DONE"
   },
-  "next": "verifier: real repo run and AC1-AC5 evidence, security status, crosscheck"
+  "next": "report, crosscheck waiver, DONE"
 }

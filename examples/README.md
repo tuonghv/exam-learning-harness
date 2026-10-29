@@ -38,6 +38,8 @@ literature, disjoint-id, disjoint-text, input-key, key-leak); exit 2 is a usage 
 
 A solver prompt may include `examples/<subject>/*.md` pairs. It never includes anything under `evals/`.
 
+Limit: `input-key` flags answer markers at the start of a line and `key-leak` flags copied Solution/Explanation lines (>= 40 chars). A short answer written mid-line in prose is not caught, so a human reads every new eval input once.
+
 ## Eval run (main session only)
 
 1. For each file in `evals/inputs/<subject>/`, make one fresh solver call: empty temp cwd, no tools,

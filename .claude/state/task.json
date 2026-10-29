@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-003",
-  "state": "UNIT_TESTED",
-  "next": "verifier: real repo run and AC1-AC5 evidence, security status, crosscheck",
+  "state": "VERIFIED",
+  "next": "report, crosscheck waiver, DONE",
   "title": "Example set layout, FORMAT checker, eval scorer, README (REQ-0002)",
   "active": [
     {
       "task_id": "TASK-003",
-      "state": "UNIT_TESTED",
-      "next": "verifier: real repo run and AC1-AC5 evidence, security status, crosscheck",
-      "updated_at": "2026-10-29T03:36:04Z"
+      "state": "VERIFIED",
+      "next": "report, crosscheck waiver, DONE",
+      "updated_at": "2026-10-29T03:38:01Z"
     }
   ],
   "max_active": 1
