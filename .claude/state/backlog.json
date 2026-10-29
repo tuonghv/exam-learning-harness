@@ -133,7 +133,7 @@
     "task_id": "TASK-004",
     "title": "Engine core + QA: prompt+exam -> claude -p -> JSON, checks, decision, score (REQ-0010)",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-10-29T12:00:00",
     "requirement": "REQ-0010",
     "acceptance_criteria": [

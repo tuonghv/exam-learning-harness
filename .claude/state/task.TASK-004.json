@@ -1,0 +1,62 @@
+{
+  "task_id": "TASK-004",
+  "title": "Engine core + QA: prompt+exam -> claude -p -> JSON, checks, decision, score (REQ-0010)",
+  "state": "TODO",
+  "requirement": "REQ-0010",
+  "acceptance_criteria": [
+    "AC1 run_claude + extract_json",
+    "AC2 schema + retry",
+    "AC3 code checks",
+    "AC4 key isolation",
+    "AC5 mock/dry-run/real gate",
+    "AC6 mocked unit tests"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {},
+  "user_notes": [],
+  "picked_at": "2026-10-29T04:21:14Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [
+    "work/TASK-004/"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [
+      "picked for REQ-0010"
+    ],
+    "notes": "",
+    "next": "write docs/design/phase-4-engine-core.md (steps, interfaces from phase-2 2.1-2.4), set design, DESIGN, then coder step A"
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
