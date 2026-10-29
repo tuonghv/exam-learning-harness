@@ -310,3 +310,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: informatics live; EPIC-004 REQs done.
 - Decision: close.
 - Next: REQ-0009.
+
+## DESIGN - TASK-012 - 2026-10-29T07:22:22Z
+- Action: wrote docs/design/phase-12-ingest-core.md (schema v1, ingest package, Markdown adapter, bridge).
+- Result: design complete, no open questions.
+- Decision: advance.
+- Next: IMPLEMENTING with two coders.

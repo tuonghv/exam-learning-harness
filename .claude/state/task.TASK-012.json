@@ -1,0 +1,70 @@
+{
+  "task_id": "TASK-012",
+  "title": "Ingestion core: canonical document schema, validator, ingest_document, Markdown adapter, bridge to exam file (REQ-0016, EPIC-005)",
+  "state": "DESIGN",
+  "requirement": "REQ-0016",
+  "acceptance_criteria": [
+    "AC1-AC5 of REQ-0016"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-12-ingest-core.md",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": {
+      "waiver": "coordinator wrote the small design from the accepted spec and the code read; verifier reviews it"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00049",
+      "note": "spec tmp/input-exam-format.md; answers accepted RAW-00050",
+      "at": "2026-10-29T07:21:38Z"
+    }
+  ],
+  "picked_at": "2026-10-29T07:21:53Z",
+  "updated_at": "2026-10-29T07:22:39Z",
+  "updated_by": "main",
+  "scope": [
+    "src/exam_engine/ingest/**",
+    "src/exam_engine/cli.py",
+    "scripts/exam.py",
+    "tests/**",
+    "docs/design/phase-12-ingest-core.md",
+    "docs/guide/**",
+    "examples/FORMAT.md"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "coders implement"
+}

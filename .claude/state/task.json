@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-011",
-  "state": "DONE",
-  "next": "done",
-  "title": "Informatics subject + bilingual subject names (REQ-0015)",
-  "active": [],
+  "task_id": "TASK-012",
+  "state": "DESIGN",
+  "next": "coders implement",
+  "title": "Ingestion core: canonical document schema, validator, ingest_document, Markdown adapter, bridge to exam file (REQ-0016, EPIC-005)",
+  "active": [
+    {
+      "task_id": "TASK-012",
+      "state": "DESIGN",
+      "next": "coders implement",
+      "updated_at": "2026-10-29T07:22:39Z"
+    }
+  ],
   "max_active": 1
 }
