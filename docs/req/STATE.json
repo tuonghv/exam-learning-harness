@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0005",
-  "next": "ask REQ-0005 Q1-Q4; then TASK for REQ-0005 fixes; then TASK-001 (REQ-0002)",
-  "updated": "2026-10-29 08:35"
+  "next": "create TASK for REQ-0005 (backlog.json), pick, DESIGN with AC1 table; then TASK-001 (REQ-0002)",
+  "updated": "2026-10-29 08:37"
 }
