@@ -520,3 +520,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: task done.
 - Decision: REQ-0022 DONE; fields are filled by REQ-0023.
 - Next: REQ-0023.
+
+## DESIGN - TASK-019 - 2026-10-29T13:45:00Z
+- Action: wrote docs/design/phase-19-part-aware.md; found the heading is merged into question text, not a separate question.
+- Result: design completed, no open questions.
+- Decision: deterministic fixes only; solver prompt and schema unchanged.
+- Next: implement and test.

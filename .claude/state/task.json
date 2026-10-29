@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-018",
-  "state": "DONE",
-  "next": "",
-  "title": "Question schema: LaTeX, source trace, verification record (REQ-0022, EPIC-006)",
-  "active": [],
+  "task_id": "TASK-019",
+  "state": "DESIGN",
+  "next": "implement split_part, per-part gaps, _format part II/III + tests",
+  "title": "Part-aware refine and Part II/III format checks (REQ-0026, EPIC-006)",
+  "active": [
+    {
+      "task_id": "TASK-019",
+      "state": "DESIGN",
+      "next": "implement split_part, per-part gaps, _format part II/III + tests",
+      "updated_at": "2026-10-29T15:41:33Z"
+    }
+  ],
   "max_active": 1
 }

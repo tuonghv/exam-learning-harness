@@ -424,7 +424,7 @@
     "task_id": "TASK-019",
     "title": "Part-aware refine and Part II/III format checks (REQ-0026, EPIC-006)",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-10-29T13:40:00Z",
     "requirement": "REQ-0026",
     "acceptance_criteria": [
