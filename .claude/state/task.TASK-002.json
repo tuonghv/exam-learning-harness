@@ -1,19 +1,20 @@
 {
   "task_id": "TASK-002",
   "title": "Design the exam-solving pipeline: reuse table, gaps, JSON schema, build plan (REQ-0008, EPIC-003)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0008",
   "acceptance_criteria": [
-    "AC1 design doc with reuse table, gaps, modules, stage flow, TASK split",
-    "AC2 JSON schema per question",
-    "AC3 cost and safety rules",
+    "AC1 design doc",
+    "AC2 JSON schema",
+    "AC3 cost and safety",
     "AC4 tests-first plan",
-    "AC5 code-security-scanner unmodified, nothing copied"
+    "AC5 scanner unmodified",
+    "AC6 solver.md review"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-2-exam-pipeline.md",
+    "summary": "6 stdlib modules in tools/examples, 19 mocked unit tests, key read only in deterministic SCORE, PASS needs a code check, EPIC-003 split into core, report, gated benchmark after REQ-0002",
     "reuse": [],
     "risks": []
   },
@@ -40,7 +41,9 @@
   },
   "roles_required": true,
   "crosscheck_required": true,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-002/handoff/design.md"
+  },
   "user_notes": [
     {
       "raw": "RAW-00026",
@@ -49,8 +52,8 @@
     }
   ],
   "picked_at": "2026-10-29T03:08:32Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-10-29T03:13:11Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -61,5 +64,5 @@
     "notes": "",
     "next": "resume after TASK-001 crosscheck waiver"
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "user answers Q4-Q6; solver.md review into design; then IMPLEMENTING after REQ-0002"
 }

@@ -34,3 +34,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: REQ-0005 AC1-AC13 met; skills 794 lines, roles 57-71, CLAUDE.md 3,967 B.
 - Decision: adopted; coder waiver and limitations recorded in the report.
 - Next: TASK for REQ-0008 (exam pipeline design), then REQ-0006 hook caps and REQ-0002.
+
+## DESIGN - TASK-002 - 2026-10-29T03:13:11Z
+- Action: designer (Nova) wrote the exam pipeline design; installed as docs/design/phase-2-exam-pipeline.md (209 lines).
+- Result: 6 modules, 19 mocked tests; code-security-scanner git status unchanged (0 files); blind solve of English Q1 with docs/prompts/exam/solver.md gave A, matching the key.
+- Decision: Q4-Q6 go to the user; solver.md review (RAW-00027) added as REQ-0008 AC6.
+- Next: user answers Q4-Q6, then fold the solver.md review into the design.

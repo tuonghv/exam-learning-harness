@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-002",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "user answers Q4-Q6; solver.md review into design; then IMPLEMENTING after REQ-0002",
   "title": "Design the exam-solving pipeline: reuse table, gaps, JSON schema, build plan (REQ-0008, EPIC-003)",
   "active": [
     {
       "task_id": "TASK-002",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "user answers Q4-Q6; solver.md review into design; then IMPLEMENTING after REQ-0002",
+      "updated_at": "2026-10-29T03:13:11Z"
     }
   ],
   "max_active": 1
