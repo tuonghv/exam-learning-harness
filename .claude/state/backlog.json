@@ -411,7 +411,7 @@
     "task_id": "TASK-018",
     "title": "Question schema: LaTeX, source trace, verification record (REQ-0022, EPIC-006)",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-10-29T12:30:00Z",
     "requirement": "REQ-0022",
     "acceptance_criteria": [

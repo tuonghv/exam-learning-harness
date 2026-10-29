@@ -490,3 +490,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: task done.
 - Decision: REQ-0021 stays open for AC5.
 - Next: REQ-0022.
+
+## DESIGN - TASK-018 - 2026-10-29T12:40:00Z
+- Action: wrote docs/design/phase-18-question-schema.md (additive latex/source/verification fields, trace checks).
+- Result: design completed, no open questions.
+- Decision: validate in ingest/schema.py; adapters, to_exam_text, solve unchanged.
+- Next: implement validate_questions and tests.

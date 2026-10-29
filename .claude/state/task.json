@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-017",
-  "state": "DONE",
-  "next": "user go for real run (AC5); then REQ-0022",
-  "title": "Optional Claude refine stage for flagged exam pages (REQ-0021, EPIC-005)",
-  "active": [],
+  "task_id": "TASK-018",
+  "state": "DESIGN",
+  "next": "implement validate_questions in ingest/schema.py + tests",
+  "title": "Question schema: LaTeX, source trace, verification record (REQ-0022, EPIC-006)",
+  "active": [
+    {
+      "task_id": "TASK-018",
+      "state": "DESIGN",
+      "next": "implement validate_questions in ingest/schema.py + tests",
+      "updated_at": "2026-10-29T15:05:27Z"
+    }
+  ],
   "max_active": 1
 }

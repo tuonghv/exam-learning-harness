@@ -1,0 +1,58 @@
+{
+  "task_id": "TASK-018",
+  "title": "Question schema: LaTeX, source trace, verification record (REQ-0022, EPIC-006)",
+  "state": "DESIGN",
+  "requirement": "REQ-0022",
+  "acceptance_criteria": [
+    "AC1-AC5 of REQ-0022"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-18-question-schema.md",
+    "summary": "additive latex/source/verification fields + validate_questions trace checks",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": {
+      "waiver": "small additive schema design written by coordinator; same pattern as phases 14-17"
+    }
+  },
+  "user_notes": [],
+  "picked_at": "2026-10-29T15:04:53Z",
+  "updated_at": "2026-10-29T15:05:27Z",
+  "updated_by": "main",
+  "scope": [
+    "work/TASK-018/"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "implement validate_questions in ingest/schema.py + tests"
+}
