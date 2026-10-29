@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-003",
   "title": "Example set layout, FORMAT checker, eval scorer, README (REQ-0002)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0002",
   "acceptance_criteria": [
     "AC1 pairing",
@@ -23,9 +23,10 @@
     "summary": "step 1 code done: exam_parse.py, check_examples.py, score_eval.py, examples/README.md (53 lines); repo check exits 0; tests are step 2"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "completed",
+    "command": "python3 -I -m unittest discover -s tools/examples/tests",
+    "result": "28 tests OK; tester mutated 10 conditions, coordinator mutated disjoint-text, header and options: each matching test failed",
+    "tests": 28
   },
   "security": {
     "status": "pending",
@@ -43,7 +44,8 @@
   "crosscheck_required": true,
   "roles": {
     "designer": "work/TASK-003/handoff/design.md",
-    "coder": "work/TASK-003/handoff/code.md"
+    "coder": "work/TASK-003/handoff/code.md",
+    "tester": "work/TASK-003/handoff/test.md"
   },
   "user_notes": [
     {
@@ -68,7 +70,7 @@
     }
   ],
   "picked_at": "2026-10-29T03:24:15Z",
-  "updated_at": "2026-10-29T03:33:32Z",
+  "updated_at": "2026-10-29T03:35:58Z",
   "updated_by": "main",
   "scope": [
     "tools/examples/**",
@@ -87,5 +89,5 @@
     "notes": "",
     "next": "tester handoff, then UNIT_TESTED gate"
   },
-  "next": "tester writes tests 1-15 under tools/examples/tests, then run commands"
+  "next": "verifier: real repo run and AC1-AC5 evidence, security status, crosscheck"
 }

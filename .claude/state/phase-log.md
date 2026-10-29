@@ -52,3 +52,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: coder step 1 (exam_parse.py, check_examples.py, score_eval.py, README) launching; tests follow with the tester.
 - Decision: coder writes tools/examples/*.py and examples/README.md only; coordinator owns FORMAT.md and design.
 - Next: coder handoff, run the design's verification commands.
+
+## UNIT_TESTED - TASK-003 - 2026-10-29T03:35:58Z
+- Action: tester (Nemesis) wrote 28 unittest cases (tests 1-15 of the design plus extras); coordinator re-ran them and mutated disjoint-text, header, options checks in a temp copy.
+- Result: 28 OK; every mutation made its matching test fail. No tool defects.
+- Decision: advance to verifier (real repo run, AC1-AC5 evidence).
+- Next: verifier handoff, then VERIFIED.

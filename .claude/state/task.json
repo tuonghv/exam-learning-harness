@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-003",
-  "state": "IMPLEMENTING",
-  "next": "tester writes tests 1-15 under tools/examples/tests, then run commands",
+  "state": "UNIT_TESTED",
+  "next": "verifier: real repo run and AC1-AC5 evidence, security status, crosscheck",
   "title": "Example set layout, FORMAT checker, eval scorer, README (REQ-0002)",
   "active": [
     {
       "task_id": "TASK-003",
-      "state": "IMPLEMENTING",
-      "next": "tester writes tests 1-15 under tools/examples/tests, then run commands",
-      "updated_at": "2026-10-29T03:33:32Z"
+      "state": "UNIT_TESTED",
+      "next": "verifier: real repo run and AC1-AC5 evidence, security status, crosscheck",
+      "updated_at": "2026-10-29T03:35:58Z"
     }
   ],
   "max_active": 1
