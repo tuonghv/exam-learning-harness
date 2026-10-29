@@ -1,0 +1,9 @@
+# evidence: bad-version
+# task: TASK-009
+# cmd: python3 -I scripts/exam.py solve examples/math/input-001.md --dry-run --prompt-version ../dev
+# cwd: /home/tuonghv/Documents/git/online-system/exam-learning-harness
+# head: 6177f12+dirty
+# when: 2026-10-29T06:48:45Z
+# rc: 2
+---
+ERROR: prompt version must look like v1.2.3, got '../dev'

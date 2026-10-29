@@ -41,7 +41,14 @@ def solve_main(argv=None):
                     help="prompt channel (default: prompt_channel in config/engine.json)")
     ap.add_argument("--prompt-version", help="release version, e.g. v1.0.0 (default: prompt_release)")
     a = ap.parse_args(argv)
-    settings.use_prompts(a.channel, a.prompt_version)
+    try:
+        settings.use_prompts(a.channel, a.prompt_version)
+    except ValueError as exc:
+        print("ERROR: %s" % exc, file=sys.stderr)
+        return 2
+    if not os.path.isdir(settings.prompt_root()):
+        print("ERROR: no such prompt release: %s" % settings.prompt_root(), file=sys.stderr)
+        return 2
     modes = [bool(a.mock), a.dry_run, a.real]
     if sum(modes) != 1:
         print("usage: choose exactly one of --mock FILE, --dry-run, --real (never defaults to real)",

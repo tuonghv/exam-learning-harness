@@ -4,6 +4,7 @@ EXAM_ENGINE_CONFIG_DIR overrides CONFIG_DIR (tests, extra subjects without code 
 """
 import json
 import os
+import re
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 PROMPTS_DIR = os.path.join(ROOT, "prompts")
@@ -33,12 +34,17 @@ def load_schema(name):
 
 # Chosen prompt source; None = default from config/engine.json (prompt_channel, prompt_release).
 PROMPT_SOURCE = {"channel": None, "version": None}
+VERSION_RE = re.compile(r"^v\d+\.\d+\.\d+$")
 
 
 def use_prompts(channel=None, version=None):
     """Select the prompt channel ("release" or "dev") and release version; None = config default."""
     if channel not in (None, "release", "dev"):
         raise ValueError("prompt channel must be release or dev, got %r" % (channel,))
+    if version is not None and not VERSION_RE.match(version):
+        raise ValueError("prompt version must look like v1.2.3, got %r" % (version,))
+    if version is not None and channel == "dev":
+        raise ValueError("--prompt-version applies to the release channel only")
     PROMPT_SOURCE["channel"], PROMPT_SOURCE["version"] = channel, version
 
 

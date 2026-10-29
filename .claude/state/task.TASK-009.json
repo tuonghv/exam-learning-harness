@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-009",
   "title": "Prompt channels: dev and frozen releases (REQ-0013)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0013",
   "acceptance_criteria": [
     "AC1-AC4 of REQ-0013"
@@ -35,16 +35,16 @@
     "result": "219 OK + integration 2 OK; release verify OK"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "version regex blocks path traversal (tested); engine never writes under releases; no key text in prompts"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": "work/TASK-009/evidence/"
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-9-prompt-channels.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -55,6 +55,10 @@
     "coder": "work/TASK-009/handoff/code.md",
     "tester": {
       "waiver": "coder wrote tests; coordinator re-ran suite and release verify"
+    },
+    "verifier": "work/TASK-009/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "coordinator mutation run proves default=release; verify detects hash edits"
     }
   },
   "user_notes": [
@@ -65,7 +69,7 @@
     }
   ],
   "picked_at": "2026-10-29T06:43:41Z",
-  "updated_at": "2026-10-29T06:47:06Z",
+  "updated_at": "2026-10-29T06:48:45Z",
   "updated_by": "main",
   "scope": [
     "prompts/**",
@@ -82,5 +86,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verifier"
+  "next": "done"
 }

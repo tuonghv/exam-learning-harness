@@ -13,7 +13,7 @@ import sys
 from exam_engine import settings
 
 MANIFEST = "MANIFEST.json"
-VERSION_RE = re.compile(r"^v\d+\.\d+\.\d+$")
+VERSION_RE = settings.VERSION_RE
 
 
 def _dev_dir():
@@ -47,7 +47,7 @@ def release(version):
         raise ValueError("release %s already exists (releases are never overwritten)" % version)
     shutil.copytree(_dev_dir(), dest)
     manifest = {"version": version,
-                "created": datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+                "created": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
                 "files": _hash_tree(dest)}
     with open(os.path.join(dest, MANIFEST), "w", encoding="utf-8") as fh:
         json.dump(manifest, fh, indent=2, sort_keys=True)

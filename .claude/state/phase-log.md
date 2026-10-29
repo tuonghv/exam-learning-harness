@@ -238,3 +238,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: all green.
 - Decision: advance.
 - Next: verifier.
+
+## VERIFIED - TASK-009 - 2026-10-29T06:48:36Z
+- Action: verifier found 1 major + 3 minor; coordinator fixed all, suite 222.
+- Result: AC1-AC4 pass.
+- Decision: advance.
+- Next: DONE.

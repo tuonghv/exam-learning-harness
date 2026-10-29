@@ -107,5 +107,28 @@ class Releases(Base):
             self.assertEqual(m["version"], "v1.0.0")
 
 
+class VersionGuard(unittest.TestCase):
+    def tearDown(self):
+        settings.use_prompts()
+
+    def test_traversal_and_bad_versions_rejected(self):
+        for bad in ("../dev", "../../x", "1.0.0", "v1.0", "v1.0.0/../v1.0.0", ""):
+            with self.assertRaises(ValueError):
+                settings.use_prompts("release", bad)
+
+    def test_version_with_dev_rejected(self):
+        with self.assertRaises(ValueError):
+            settings.use_prompts("dev", "v1.0.0")
+
+    def test_cli_exit_2_on_bad_or_missing_version(self):
+        for v in ("../dev", "v9.9.9"):
+            err = io.StringIO()
+            with contextlib.redirect_stderr(err):
+                rc = cli.main(["solve", os.path.join(ROOT, "examples/math/input-001.md"),
+                               "--dry-run", "--prompt-version", v])
+            self.assertEqual(rc, 2, v)
+            self.assertIn("ERROR", err.getvalue())
+
+
 if __name__ == "__main__":
     unittest.main()
