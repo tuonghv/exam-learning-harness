@@ -258,12 +258,14 @@
     "task_id": "TASK-010",
     "title": "Prompt language variants + interface validator (REQ-0014)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-10-29T06:49:33Z",
     "requirement": "REQ-0014",
     "acceptance_criteria": [
       "AC1-AC4 of REQ-0014"
     ],
-    "user_notes": []
+    "user_notes": [],
+    "completed_at": "2026-10-29T06:56:00Z",
+    "report": "docs/report/phase-10-prompt-variants.md"
   }
 ]

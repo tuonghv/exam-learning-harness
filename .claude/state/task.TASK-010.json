@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-010",
   "title": "Prompt language variants + interface validator (REQ-0014)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0014",
   "acceptance_criteria": [
     "AC1-AC4 of REQ-0014"

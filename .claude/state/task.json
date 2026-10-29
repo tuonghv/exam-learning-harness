@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-010",
-  "state": "VERIFIED",
+  "state": "DONE",
   "next": "done",
   "title": "Prompt language variants + interface validator (REQ-0014)",
-  "active": [
-    {
-      "task_id": "TASK-010",
-      "state": "VERIFIED",
-      "next": "done",
-      "updated_at": "2026-10-29T06:56:00Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
