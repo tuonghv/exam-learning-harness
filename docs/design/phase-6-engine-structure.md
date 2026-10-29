@@ -1,7 +1,7 @@
-# Phase 6: engine structure (REQ-0012, DRAFT until Q1-Q4 are answered)
+# Phase 6: engine structure (REQ-0012, final: Q1-Q4 decided by the coordinator under RAW-00039)
 
 Reference: `tmp/engine-architecture.md` (RAW-00038; `tmp/` is gitignored, so the reference is cited, not committed).
-Goal: one package, grouped by responsibility, behaviour unchanged. Nothing is rewritten: each current module moves,
+Why: today nine scripts sit flat in `tools/examples/` next to prompts and tests, which is hard to read (RAW-00039). Goal: one package, grouped by responsibility, behaviour unchanged. Nothing is rewritten: each current module moves,
 the 108+ tests are the regression net after every step.
 
 ## Target layout
@@ -64,4 +64,4 @@ S1 package skeleton + `settings.py` + `adapters/claude.py` + shim; S2 schemas to
 Needs the user's say (not done by me): CLAUDE.md lines naming `tools/examples/*` and `examples/*` commands, and any `.claude` hook path; I list them and ask.
 
 ## Open questions
-Q1-Q4 in `docs/req/items/REQ-0012.md`.
+None. Q1-Q4 are decided in `docs/req/items/REQ-0012.md` (user delegated the choice, RAW-00039).
