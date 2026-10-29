@@ -316,3 +316,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: design complete, no open questions.
 - Decision: advance.
 - Next: IMPLEMENTING with two coders.
+
+## IMPLEMENTING - TASK-012 - 2026-10-29T07:22:47Z
+- Action: design committed; one coder implements ingest package and tests.
+- Result: ready.
+- Decision: advance.
+- Next: coder handoff, tests.
