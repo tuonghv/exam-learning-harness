@@ -38,7 +38,7 @@ Roster: Admiral Tuonghv = coordinator, Titan = coder, Nemesis = tester, Nova = d
   `git init/add/commit/apply` (refused by the guard). A new script you add is made executable by the
   main session at the wip commit; name it under FILES.
 - Python stdlib only. Follow `.claude/skills/{python,unit-test}/SKILL.md`.
-- Tests: `python3 -I -m unittest discover -s tools/examples/tests`. Python stdlib only.
+- Tests: `python3 -I -m unittest discover -s tests/unit`. Python stdlib only.
 - Command output is condensed by rtk; use `rtk proxy grep` for `-h/-n/-E`.
 - Task directory: `work/<TASK-ID>/` (git-ignored). Design items are `<N>.x` in
   `docs/design/phase-<N>-<slug>.md`; name them in your handoff.

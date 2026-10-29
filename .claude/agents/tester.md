@@ -17,7 +17,7 @@ Roster: Admiral Tuonghv = coordinator, Titan = coder, Nemesis = tester, Nova = d
 - Hard block (permission denial, "Prompt is too long", refused compaction): no retry, rephrase or workaround, no other work; save the handoff (`PROGRESS: PARTIAL`, the refused call) and reply PARTIAL with `BLOCKED: <permission|context> <call>`.
 ## Role rules
 - Edit test files only; never fix production code. Report each failure as test name + first error line; STATUS: FAILED when production code fails.
-- Run `python3 -I -m unittest discover -s tools/examples/tests 2>&1 | tail -n 60`. Counts: use a script from `tools/inspect/INDEX.md`, cite its row.
+- Run `python3 -I -m unittest discover -s tests/unit 2>&1 | tail -n 60`. Counts: use a script from `tools/inspect/INDEX.md`, cite its row.
 <!-- agent-setup:project:start -->
 ## Project rules (exam-learning-harness; the context guard refuses the reserved items)
 - You serve the main session inside its TASK workflow (DESIGN → IMPLEMENTING → UNIT_TESTED →
@@ -38,7 +38,7 @@ Roster: Admiral Tuonghv = coordinator, Titan = coder, Nemesis = tester, Nova = d
   `git init/add/commit/apply` (refused by the guard). A new script you add is made executable by the
   main session at the wip commit; name it under FILES.
 - Python stdlib only. Follow `.claude/skills/{python,unit-test}/SKILL.md`.
-- Tests: `python3 -I -m unittest discover -s tools/examples/tests`. Python stdlib only.
+- Tests: `python3 -I -m unittest discover -s tests/unit`. Python stdlib only.
 - Command output is condensed by rtk; use `rtk proxy grep` for `-h/-n/-E`.
 - Task directory: `work/<TASK-ID>/` (git-ignored). Design items are `<N>.x` in
   `docs/design/phase-<N>-<slug>.md`; name them in your handoff.

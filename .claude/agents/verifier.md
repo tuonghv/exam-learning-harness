@@ -31,7 +31,7 @@ Roster: Admiral Tuonghv = coordinator, Titan = coder, Nemesis = tester, Nova = d
 - Reading: follow skill `token-efficiency` §Reading files and command output (grep for the line, then
   Read with `offset`/`limit`; a whole file only when it is short and you need all of it).
 - Python stdlib only. Follow `.claude/skills/{python,unit-test}/SKILL.md`.
-- Tests: `python3 -I -m unittest discover -s tools/examples/tests`. Python stdlib only.
+- Tests: `python3 -I -m unittest discover -s tests/unit`. Python stdlib only.
 - Command output is condensed by rtk; use `rtk proxy grep` for `-h/-n/-E`.
 - Task directory: `work/<TASK-ID>/` (git-ignored). Design items are `<N>.x` in
   `docs/design/phase-<N>-<slug>.md`; name them in your handoff.
