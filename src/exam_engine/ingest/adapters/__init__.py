@@ -3,9 +3,11 @@
 Adapters with optional dependencies import them lazily and raise
 IngestError("missing_dependency", "pip install <pkg>").
 """
-from exam_engine.ingest.adapters import docx, markdown, pdf
+from exam_engine.ingest.adapters import docx, image, markdown, pdf
 
-_REGISTRY = {".docx": docx.ingest, ".md": markdown.ingest, ".pdf": pdf.ingest}
+_REGISTRY = {".docx": docx.ingest, ".md": markdown.ingest, ".pdf": pdf.ingest,
+             ".png": image.ingest, ".jpg": image.ingest, ".jpeg": image.ingest,
+             ".webp": image.ingest}
 
 
 def register(ext, fn):

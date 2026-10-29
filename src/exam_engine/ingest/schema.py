@@ -4,7 +4,7 @@ from exam_engine.core.schema import validate
 SCHEMA_VERSION = "1"
 CODES = ("unsupported_format", "empty", "decode", "missing_asset", "missing_dependency",
          "invalid_document", "corrupt", "missing_header", "encrypted", "no_questions",
-         "invalid_pages", "answer_key_present")
+         "invalid_pages", "answer_key_present", "format_mismatch", "no_text")
 STATUSES = ["native_text", "ocr", "mixed", "needs_review"]
 BLOCK_TYPES = ["heading", "paragraph", "list", "table", "code", "math", "image"]
 ORIGINS = ["source", "extracted", "normalized", "ai"]

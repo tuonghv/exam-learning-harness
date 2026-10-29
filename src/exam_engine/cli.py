@@ -216,7 +216,8 @@ def ingest_main(argv):
     ap.add_argument("--out")
     ap.add_argument("--exam-out")
     ap.add_argument("--assets", metavar="DIR")
-    ap.add_argument("--ocr", choices=["auto", "off"], default="auto")
+    ap.add_argument("--ocr", choices=["auto", "on", "off"], default="auto",
+                    help="images: OCR text only with 'on' (auto = off)")
     ap.add_argument("--check", action="store_true")
     ap.add_argument("--pages", metavar="SPEC", help="keep only these pages, e.g. 1-4 or 1,3,5-6")
     ap.add_argument("--allow-key-pages", action="store_true",

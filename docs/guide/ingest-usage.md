@@ -29,6 +29,16 @@ Body in file order: headings (`Heading N`, `Title`), list styles, paragraphs, on
 (merged cells once), inline images saved unchanged as `docx-img-NNN.ext` under `--assets` (without
 `--assets` the block has no file and the warning `asset_not_saved`). Text is NFC.
 
+## Image specifics (PNG, JPG, JPEG, WEBP)
+`ingest photo.png --assets DIR --out doc.json`: one page, one `image` block, original bytes copied
+unchanged to `--assets` (without it the asset path is the source file name). Status `needs_review`,
+warning `image_only`: no text is read unless `--ocr on` (adds an `extracted` paragraph after the
+image, never replacing it; `ocr_unavailable` if tesseract data is missing). Errors: `corrupt`
+(truncated/not an image), `format_mismatch` (extension vs content), `empty`. Over 5 MB a resized
+copy (`origin: normalized`, `derived_from`) is added beside the original; without Pillow that is
+`missing_dependency`. `--exam-out` of an image-only document fails with `no_text`: the image goes
+to the solver as a visual (later REQ-0021).
+
 ## Limits and unresolved risks
 - Math stays text. PDF: math fonts give `math_possible` plus a page image. DOCX: equation (OMML)
   text is kept as plain text with `math_possible`, not LaTeX; check formulas by eye.

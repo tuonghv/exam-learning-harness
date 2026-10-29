@@ -59,6 +59,12 @@ def to_exam_text(doc, config=None):
                           % (", ".join("%d-%d" % tuple(p["pages"]) for p in doc["parts"]
                                        if p["kind"] == "answer_key"), doc["source"]["name"]))
     src = doc["source"]
+    if (doc.get("extraction") or {}).get("method") == "image" and not any(
+            b["type"] != "image" and b["text"].strip()
+            for pg in doc["pages"] for b in pg["blocks"]):
+        raise IngestError("no_text", "%s is an image without text; it goes to the solver as a "
+                          "visual (image solving arrives with REQ-0021); no text is guessed"
+                          % src["name"])
     if src.get("format") == "md":
         text = src.get("text")
         if text is not None and hashlib.sha256(text.encode("utf-8")).hexdigest() != src["sha256"]:

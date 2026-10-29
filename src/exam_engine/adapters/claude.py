@@ -5,6 +5,7 @@ The ONLY module that runs `claude`.
 Python 3.8 stdlib only. The real runner is only the default of `runner`; tests and
 --mock inject a fake. Nothing here reads a key file.
 """
+import base64
 import collections
 import json
 import re
@@ -41,10 +42,41 @@ def _bad(cls, reason, dur, cost=0.0):
     return Call(False, "", cost, cls, mask(reason)[:200], dur)
 
 
+IMAGE_TYPES = ("image/png", "image/jpeg", "image/webp")
+MAX_IMAGE_BYTES = 5 * 1024 * 1024
+
+
 def run_claude(prompt, *, model, timeout_s, runner=subprocess.run, cwd=None):
+    return _run(prompt, [], model, timeout_s, runner, cwd)
+
+
+def run_claude_images(text, images, *, model, timeout_s, runner=subprocess.run, cwd=None):
+    """Like run_claude with images: `images` = [(media_type, bytes)], sent base64 on stdin.
+
+    Validated before any call (type, non-empty, size); no file path is ever sent.
+    """
+    blocks = []
+    for i, (mtype, data) in enumerate(images or (), 1):
+        if mtype not in IMAGE_TYPES:
+            return _bad("other", "image %d: unsupported media type %r" % (i, mtype), 0.0)
+        if not isinstance(data, (bytes, bytearray)) or not data:
+            return _bad("other", "image %d: empty or not bytes" % i, 0.0)
+        if len(data) > MAX_IMAGE_BYTES:
+            return _bad("other", "image %d: %d bytes > %d" % (i, len(data), MAX_IMAGE_BYTES), 0.0)
+        blocks.append({"type": "image", "source": {
+            "type": "base64", "media_type": mtype,
+            "data": base64.b64encode(bytes(data)).decode("ascii")}})
+    if not blocks:
+        return _bad("other", "no images given", 0.0)
+    blocks.append({"type": "text", "text": text})
+    line = json.dumps({"type": "user", "message": {"role": "user", "content": blocks}})
+    return _run(line + "\n", ["--input-format", "stream-json"], model, timeout_s, runner, cwd)
+
+
+def _run(prompt, extra, model, timeout_s, runner, cwd):
     argv = ["claude", "-p", "--output-format", "json", "--model", model,
             "--tools", "", "--disable-slash-commands", "--no-session-persistence",
-            "--strict-mcp-config"]
+            "--strict-mcp-config"] + extra
     t0 = time.time()
     try:
         p = runner(argv, input=prompt, stdout=subprocess.PIPE, stderr=subprocess.PIPE,

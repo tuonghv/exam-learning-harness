@@ -10,6 +10,10 @@ packages. `exam_engine/ingest/optional.py` retries an import once with the user 
 the END of `sys.path` (the current folder is never added). If the library is still missing the
 error is `missing_dependency: pip install <package>`.
 
+## Images
+PNG/JPEG/WEBP need nothing (stdlib header parse). `pip install pillow` is only needed to resize an
+image over 5 MB. `--ocr on` for images uses the same tesseract data as below (via PyMuPDF).
+
 ## OCR (scanned pages)
 Install the tesseract binary (e.g. `apt install tesseract-ocr`) and the language data. Vietnamese
 needs `vie.traineddata` in a tessdata folder, for example:
