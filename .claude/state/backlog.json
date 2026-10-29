@@ -205,7 +205,7 @@
     "task_id": "TASK-007",
     "title": "Math and Physics examples: 2 few-shot + 3 eval each (REQ-0003)",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-10-29T06:11:20Z",
     "requirement": "REQ-0003",
     "acceptance_criteria": [

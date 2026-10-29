@@ -1,0 +1,69 @@
+{
+  "task_id": "TASK-007",
+  "title": "Math and Physics examples: 2 few-shot + 3 eval each (REQ-0003)",
+  "state": "IMPLEMENTING",
+  "requirement": "REQ-0003",
+  "acceptance_criteria": [
+    "AC1-AC4 of REQ-0003"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-7-math-physics-examples.md",
+    "summary": "5 math + 5 physics items per FORMAT.md, edge cases labelled, checked by check-examples with wrong-key mutation",
+    "reuse": [
+      "examples/FORMAT.md",
+      "check-examples"
+    ],
+    "risks": [
+      "wrong key",
+      "eval key leaking into inputs"
+    ]
+  },
+  "implementation": {
+    "status": "pending",
+    "files": [
+      "examples/math"
+    ]
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": {
+      "waiver": "FORMAT.md is the design; coordinator wrote a short plan"
+    }
+  },
+  "user_notes": [],
+  "picked_at": "2026-10-29T06:11:30Z",
+  "updated_at": "2026-10-29T06:11:31Z",
+  "updated_by": "main",
+  "scope": [
+    "examples/math/**",
+    "examples/physics/**",
+    "evals/**",
+    "docs/design/phase-7-math-physics-examples.md"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "coders math and physics"
+}

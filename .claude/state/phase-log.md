@@ -160,3 +160,15 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: REQ-0012 AC1-AC6 verified, 198+2 tests OK.
 - Decision: close TASK-006.
 - Next: user decides CLAUDE.md/skills path edits; REQ-0003/0004, REQ-0009.
+
+## DESIGN - TASK-007 - 2026-10-29T06:11:30Z
+- Action: phase-7 plan; designer waived.
+- Result: 2+3 items per subject, edge cases, checker proof.
+- Decision: enter DESIGN.
+- Next: IMPLEMENTING, coders.
+
+## IMPLEMENTING - TASK-007 - 2026-10-29T06:11:30Z
+- Action: start content writing.
+- Result: ready.
+- Decision: two coders.
+- Next: coders.

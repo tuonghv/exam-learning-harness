@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-006",
-  "state": "DONE",
-  "next": "done",
-  "title": "Restructure the engine into the exam_engine package per docs/design/phase-6-engine-structure.md (REQ-0012)",
-  "active": [],
+  "task_id": "TASK-007",
+  "state": "IMPLEMENTING",
+  "next": "coders math and physics",
+  "title": "Math and Physics examples: 2 few-shot + 3 eval each (REQ-0003)",
+  "active": [
+    {
+      "task_id": "TASK-007",
+      "state": "IMPLEMENTING",
+      "next": "coders math and physics",
+      "updated_at": "2026-10-29T06:11:31Z"
+    }
+  ],
   "max_active": 1
 }
