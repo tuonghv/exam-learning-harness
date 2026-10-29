@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-013",
-  "state": "UNIT_TESTED",
-  "next": "verifier",
+  "state": "DONE",
+  "next": "done",
   "title": "PDF adapter (PyMuPDF native text, selective OCR, page images) + optional-lib loader + setup doc (REQ-0017, EPIC-005)",
-  "active": [
-    {
-      "task_id": "TASK-013",
-      "state": "UNIT_TESTED",
-      "next": "verifier",
-      "updated_at": "2026-10-29T07:41:51Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

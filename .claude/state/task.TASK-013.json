@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-013",
   "title": "PDF adapter (PyMuPDF native text, selective OCR, page images) + optional-lib loader + setup doc (REQ-0017, EPIC-005)",
-  "state": "UNIT_TESTED",
+  "state": "DONE",
   "requirement": "REQ-0017",
   "acceptance_criteria": [
     "AC1-AC5 of REQ-0017"
@@ -28,16 +28,16 @@
     "result": "301 OK, 1 skip (vie data absent); integration OK; mutations bite; Vietnamese PDF ingests to exam text"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "original PDF read-only (sha unchanged test); loader adds only user site to END of sys.path; asset paths relative; no network or Claude call"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": "work/TASK-013/evidence/"
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-13-pdf-adapter.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -48,6 +48,10 @@
     "coder": "work/TASK-013/handoff/code.md",
     "tester": {
       "waiver": "coder tests plus coordinator real-PDF check; mutations bite"
+    },
+    "verifier": "work/TASK-013/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "synthetic PDFs built by fitz with known text, mutation tests, Vietnamese real-run by coordinator"
     }
   },
   "user_notes": [
@@ -58,7 +62,7 @@
     }
   ],
   "picked_at": "2026-10-29T07:36:26Z",
-  "updated_at": "2026-10-29T07:41:51Z",
+  "updated_at": "2026-10-29T07:43:15Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/**",
@@ -74,5 +78,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verifier"
+  "next": "done"
 }

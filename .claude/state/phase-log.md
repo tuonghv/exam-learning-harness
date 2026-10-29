@@ -358,3 +358,15 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: suite 301 OK, 1 skip.
 - Decision: advance.
 - Next: verifier.
+
+## VERIFIED - TASK-013 - 2026-10-29T07:43:05Z
+- Action: verifier reviewed; no major defects; suites rerun.
+- Result: AC1-AC5 pass on synthetic fixtures.
+- Decision: advance.
+- Next: DONE.
+
+## DONE - TASK-013 - 2026-10-29T07:43:05Z
+- Action: report written; backlog complete.
+- Result: PDF ingestion live on synthetic fixtures.
+- Decision: close.
+- Next: REQ-0018 DOCX.
