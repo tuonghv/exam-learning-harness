@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-014",
   "title": "ingest-inspect report, answer-guide detection, --pages, key-leak guard (REQ-0020, EPIC-005)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0020",
   "acceptance_criteria": [
     "AC1-AC5 of REQ-0020"
@@ -43,8 +43,8 @@
     ]
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-14-ingest-inspect.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -64,7 +64,7 @@
     }
   ],
   "picked_at": "2026-10-29T08:31:04Z",
-  "updated_at": "2026-10-29T08:40:16Z",
+  "updated_at": "2026-10-29T08:40:30Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/**",
@@ -79,5 +79,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report, DONE"
+  "next": "TASK-015"
 }

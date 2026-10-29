@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-014",
-  "state": "VERIFIED",
-  "next": "report, DONE",
+  "state": "DONE",
+  "next": "TASK-015",
   "title": "ingest-inspect report, answer-guide detection, --pages, key-leak guard (REQ-0020, EPIC-005)",
-  "active": [
-    {
-      "task_id": "TASK-014",
-      "state": "VERIFIED",
-      "next": "report, DONE",
-      "updated_at": "2026-10-29T08:40:16Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
