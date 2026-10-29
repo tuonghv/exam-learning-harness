@@ -51,6 +51,16 @@
       "raw": "RAW-00020",
       "note": "keep subagent management + monitoring; settings.json dead scan entries removed",
       "at": "2026-10-29T01:54:41Z"
+    },
+    {
+      "raw": "RAW-00017",
+      "note": "too much scan text; clean more (Q6)",
+      "at": "2026-10-29T01:56:47Z"
+    },
+    {
+      "raw": "RAW-00018",
+      "note": "Q6 answer A+B+C",
+      "at": "2026-10-29T01:56:47Z"
     }
   ],
   "picked_at": "2026-10-29T01:46:15Z",
