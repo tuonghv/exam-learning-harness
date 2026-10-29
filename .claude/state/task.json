@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-004",
-  "state": "IMPLEMENTING",
-  "next": "tester writes test_exam_*.py (14 mock cases), mutation notes",
+  "state": "UNIT_TESTED",
+  "next": "coordinator mock end-to-end + key-leak grep, evidence.md, verifier",
   "title": "Engine core + QA: prompt+exam -> claude -p -> JSON, checks, decision, score (REQ-0010)",
   "active": [
     {
       "task_id": "TASK-004",
-      "state": "IMPLEMENTING",
-      "next": "tester writes test_exam_*.py (14 mock cases), mutation notes",
-      "updated_at": "2026-10-29T04:29:05Z"
+      "state": "UNIT_TESTED",
+      "next": "coordinator mock end-to-end + key-leak grep, evidence.md, verifier",
+      "updated_at": "2026-10-29T04:35:18Z"
     }
   ],
   "max_active": 1

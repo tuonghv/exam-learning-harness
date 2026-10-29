@@ -82,3 +82,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: pending coder handoff.
 - Decision: coder B (exam_run, qa.md) follows after A.
 - Next: coder A handoff, review, commit.
+
+## UNIT_TESTED - TASK-004 - 2026-10-29T04:35:31Z
+- Action: coder A and B committed; tester wrote 4 test files (73 new tests) with mocked replies only; coordinator ran an extra mutation (key appended to the solve prompt).
+- Result: 101 tests OK (28 old + 73 new); tester mutations 17/17 killed; coordinator mutation killed by 3 tests; no real claude call reachable.
+- Decision: UNIT_TESTED; retry set skips no_independent_check (a re-solve cannot create an independent check).
+- Next: coordinator mock end-to-end on examples/english/input-001.md with a key-leak grep, evidence.md, verifier.

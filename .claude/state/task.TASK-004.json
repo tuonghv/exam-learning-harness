@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-004",
   "title": "Engine core + QA: prompt+exam -> claude -p -> JSON, checks, decision, score (REQ-0010)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0010",
   "acceptance_criteria": [
     "AC1 run_claude+extract_json",
@@ -32,9 +32,9 @@
     "summary": "engine core built: exam_run flow, QA prompt, mock fixture; no-key english = UNCERTAIN (2 calls), with key = PASS; dry-run and no-flag exit 2 verified; tests pending"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tools/examples/tests",
+    "result": "101 tests OK (28 old + 73 new), mock only, no real claude reachable; tester mutations 17/17 killed; coordinator mutation (key appended to solve prompt) killed by 3 tests"
   },
   "security": {
     "status": "pending",
@@ -54,11 +54,12 @@
     "designer": {
       "waiver": "architecture designed in TASK-002 by the designer (Nova, work/TASK-002/handoff); phase-4 only aligns SOLVE_OUT with solve.md and splits the build"
     },
-    "coder": "work/TASK-004/handoff/code-b.md"
+    "coder": "work/TASK-004/handoff/code-b.md",
+    "tester": "work/TASK-004/handoff/test.md"
   },
   "user_notes": [],
   "picked_at": "2026-10-29T04:21:14Z",
-  "updated_at": "2026-10-29T04:29:05Z",
+  "updated_at": "2026-10-29T04:35:18Z",
   "updated_by": "main",
   "scope": [
     "tools/examples/**",
@@ -75,5 +76,5 @@
     "notes": "",
     "next": "tester handoff (14 mock cases), then UNIT_TESTED"
   },
-  "next": "tester writes test_exam_*.py (14 mock cases), mutation notes"
+  "next": "coordinator mock end-to-end + key-leak grep, evidence.md, verifier"
 }
