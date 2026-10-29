@@ -9,7 +9,7 @@
       "task_id": "TASK-003",
       "state": "UNIT_TESTED",
       "next": "verifier: real repo run and AC1-AC5 evidence, security status, crosscheck",
-      "updated_at": "2026-10-29T03:35:58Z"
+      "updated_at": "2026-10-29T03:36:04Z"
     }
   ],
   "max_active": 1

@@ -19,11 +19,19 @@
   },
   "implementation": {
     "status": "completed",
-    "files": [],
+    "files": [
+      "tools/examples/exam_parse.py",
+      "tools/examples/check_examples.py",
+      "tools/examples/score_eval.py",
+      "examples/README.md",
+      "tools/examples/tests/test_exam_parse.py",
+      "tools/examples/tests/test_check_examples.py",
+      "tools/examples/tests/test_score_eval.py"
+    ],
     "summary": "step 1 code done: exam_parse.py, check_examples.py, score_eval.py, examples/README.md (53 lines); repo check exits 0; tests are step 2"
   },
   "unit_test": {
-    "status": "completed",
+    "status": "passed",
     "command": "python3 -I -m unittest discover -s tools/examples/tests",
     "result": "28 tests OK; tester mutated 10 conditions, coordinator mutated disjoint-text, header and options: each matching test failed",
     "tests": 28
@@ -70,7 +78,7 @@
     }
   ],
   "picked_at": "2026-10-29T03:24:15Z",
-  "updated_at": "2026-10-29T03:35:58Z",
+  "updated_at": "2026-10-29T03:36:04Z",
   "updated_by": "main",
   "scope": [
     "tools/examples/**",
