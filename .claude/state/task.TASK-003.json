@@ -48,6 +48,11 @@
       "raw": "RAW-00031",
       "note": "engine must solve examples and be improved from real-run results, not guesses; REQ-0009",
       "at": "2026-10-29T03:32:17Z"
+    },
+    {
+      "raw": "RAW-00032",
+      "note": "engine = Python + claude -p: AI reasons, code checks; real results only (REQ-0009)",
+      "at": "2026-10-29T03:32:50Z"
     }
   ],
   "picked_at": "2026-10-29T03:24:15Z",

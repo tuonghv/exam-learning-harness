@@ -5,7 +5,7 @@
 
 ## Attention
 
-- WARN: EPIC-003: 4 TBD item(s) not yet turned into REQs: engine core: schema, validate, solve, decision/ret | QA stage: deterministic oracle checks plus separat | report stage: validated JSON and readable PDF
+- WARN: EPIC-003: 3 TBD item(s) not yet turned into REQs: engine core: schema, validate, solve, decision/ret | QA stage: deterministic oracle checks plus separat | report stage: validated JSON and readable PDF
 - WARN: questions waiting for user: REQ-0009(1)
 
 ## [EPIC-002](epics/EPIC-002.md) Few-shot and evaluation example sets (Math, Physics, English, Literature; VN THPT/entrance level) - TODO
@@ -28,5 +28,4 @@
 - TBD: engine core: schema, validate, solve, decision/retry, score (stdlib, mocked-LLM tests)
 - TBD: QA stage: deterministic oracle checks plus separate claude -p review, PASS/FAIL/UNCERTAIN
 - TBD: report stage: validated JSON and readable PDF
-- TBD: runner command through the harness and small benchmark on the EPIC-002 examples
 
