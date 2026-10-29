@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-016",
-  "state": "DONE",
-  "next": "TASK-017",
-  "title": "Image input adapter (PNG/JPG/WEBP) + image block to claude -p (REQ-0019, EPIC-005)",
-  "active": [],
+  "task_id": "TASK-017",
+  "state": "DESIGN",
+  "next": "coder implements",
+  "title": "Optional Claude refine stage for flagged exam pages (REQ-0021, EPIC-005)",
+  "active": [
+    {
+      "task_id": "TASK-017",
+      "state": "DESIGN",
+      "next": "coder implements",
+      "updated_at": "2026-10-29T11:45:34Z"
+    }
+  ],
   "max_active": 1
 }

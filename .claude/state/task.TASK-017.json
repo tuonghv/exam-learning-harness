@@ -1,0 +1,70 @@
+{
+  "task_id": "TASK-017",
+  "title": "Optional Claude refine stage for flagged exam pages (REQ-0021, EPIC-005)",
+  "state": "DESIGN",
+  "requirement": "REQ-0021",
+  "acceptance_criteria": [
+    "AC1-AC5 of REQ-0021"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-17-refine.md",
+    "summary": "ingest-refine command: flagged pages only, vision reply via claude -p, validated, stored as refined origin ai, dry-run/mock/real gate",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": {
+      "waiver": "coordinator wrote the design; verifier reviews it"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00067",
+      "note": "yes, continue",
+      "at": "2026-10-29T11:45:34Z"
+    }
+  ],
+  "picked_at": "2026-10-29T11:45:34Z",
+  "updated_at": "2026-10-29T11:45:34Z",
+  "updated_by": "main",
+  "scope": [
+    "src/exam_engine/ingest/**",
+    "src/exam_engine/adapters/claude.py",
+    "src/exam_engine/cli.py",
+    "prompts/dev/**",
+    "tests/**",
+    "docs/guide/**",
+    "docs/design/phase-17-refine.md"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "coder implements"
+}
