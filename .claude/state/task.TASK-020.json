@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-020",
   "title": "cross-solve: text route vs page-image route, answer-level agreement (REQ-0023, EPIC-006)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0023",
   "acceptance_criteria": [
     "AC1-AC4 of REQ-0023"
@@ -14,8 +14,13 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/cross.py",
+      "src/exam_engine/cli.py",
+      "tests/unit/test_cross_solve.py"
+    ],
+    "summary": "pipeline/cross.py (routes, canon, compare, review.md) + cross-solve CLI"
   },
   "unit_test": {
     "status": "pending",
@@ -39,11 +44,14 @@
   "roles": {
     "designer": {
       "waiver": "design written by coordinator as phases 18-19"
+    },
+    "coder": {
+      "waiver": "coordinator implemented, as phases 18-19"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-29T15:53:07Z",
-  "updated_at": "2026-10-29T15:53:07Z",
+  "updated_at": "2026-10-29T15:55:08Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-020/"
@@ -54,5 +62,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "implement pipeline/cross.py, cli cross-solve, tests"
+  "next": "record UNIT_TESTED"
 }

@@ -18,7 +18,7 @@ from exam_engine.core.decision import decide
 from exam_engine.pipeline import examples_check, parser, prompts, reporter, scorer, solver, verifier
 
 COMMANDS = ("solve", "parse", "verify", "report", "check-examples", "score", "prompts",
-            "check-prompts", "ingest", "ingest-inspect", "ingest-refine")
+            "check-prompts", "ingest", "ingest-inspect", "ingest-refine", "cross-solve")
 USAGE = "usage: exam.py {%s} ..." % "|".join(COMMANDS)
 
 
@@ -402,6 +402,107 @@ def refine_main(argv):
     return 1 if nr else 0
 
 
+def cross_main(argv):
+    """cross-solve EXAM.md --pdf FILE --pages SPEC (--dry-run|--mock FILE|--real): exit 0/1/2/3."""
+    from exam_engine.ingest import api, refine
+    from exam_engine.ingest.schema import IngestError, validate_document
+    from exam_engine.pipeline import cross
+    d = settings.load_config("engine")
+    ap = argparse.ArgumentParser(prog="exam.py cross-solve")
+    ap.add_argument("exam")
+    ap.add_argument("--pdf", required=True, metavar="FILE")
+    ap.add_argument("--pages", required=True, metavar="SPEC")
+    ap.add_argument("--out")
+    ap.add_argument("--mock")
+    ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--real", action="store_true")
+    ap.add_argument("--max-cost-usd", type=float, default=1.0)
+    ap.add_argument("--timeout", type=float, default=d["timeout"])
+    ap.add_argument("--model", default="sonnet")
+    ap.add_argument("--allow-key-pages", action="store_true")
+    try:
+        a = ap.parse_args(argv)
+    except SystemExit:
+        return 2
+    if sum([bool(a.mock), a.dry_run, a.real]) != 1:
+        print("usage: choose exactly one of --mock FILE, --dry-run, --real (never defaults to real)",
+              file=sys.stderr)
+        return 2
+    if a.max_cost_usd < 0 or a.timeout <= 0 or (not a.dry_run and not a.out):
+        print("usage: --max-cost-usd >= 0, --timeout > 0, --out DIR required", file=sys.stderr)
+        return 2
+    exam, code = _load_exam(a.exam)
+    if exam is None:
+        return code
+    tmp = None
+    try:
+        text = parser.read_text(a.exam)
+        if a.pdf.lower().endswith(".json"):
+            with open(a.pdf, encoding="utf-8") as fh:
+                doc = json.load(fh)
+            errs = validate_document(doc)
+            if errs:
+                raise ValueError("invalid document: %s" % "; ".join(errs[:5]))
+            a.file = a.pdf
+        else:
+            doc = api.ingest_document(a.pdf, config={"ocr": "auto"})
+            a.file = a.pdf
+        refine.check_key_pages(doc, a.pages, a.allow_key_pages)
+        pages = refine.partsmod.parse_pages(a.pages)
+        absent = [n for n in pages if n not in [p["n"] for p in doc["pages"]]]
+        if absent:
+            raise IngestError("invalid_pages", "page(s) %s not in the document"
+                              % ", ".join(map(str, absent)))
+        bound = cross.MAX_ATTEMPTS * 2
+        if a.dry_run:
+            print("pages %s, calls <= %d, cap $%.2f (dry run: no call made)" % (
+                pages, bound, a.max_cost_usd))
+            print("=== ROUTE A prompt (exam text) ===")
+            print(cross.route_a_prompt(exam, text))
+            print("=== ROUTE B prompt (page images attached) ===")
+            print(cross.route_b_prompt(exam))
+            return 0
+        if a.real:
+            src = _refine_source(a, doc)
+            pngs = [refine.render_page(src, n) for n in pages]
+            tmp = tempfile.mkdtemp(prefix="exam_cross_")
+
+            def llm_text(prompt):
+                return claude.run_claude(prompt, model=a.model, timeout_s=a.timeout, cwd=tmp)
+
+            def llm_images(prompt, imgs):
+                return claude.run_claude_images(prompt, [("image/png", p) for p in imgs],
+                                                model=a.model, timeout_s=a.timeout, cwd=tmp)
+            print("pages %s, calls <= %d, cap $%.2f" % (pages, bound, a.max_cost_usd), flush=True)
+        else:
+            base = engine.mock_llm(a.mock)
+            pngs = [b""] * len(pages)
+            llm_text = base
+            llm_images = lambda prompt, imgs: base(prompt)  # noqa: E731
+        res = cross.cross_solve(exam, text, llm_text, llm_images, pngs, a.max_cost_usd, a.model)
+        os.makedirs(a.out, exist_ok=True)
+        with open(os.path.join(a.out, "cross.json"), "w", encoding="utf-8") as fh:
+            fh.write(json.dumps(res, ensure_ascii=False, indent=2) + "\n")
+        with open(os.path.join(a.out, "review.md"), "w", encoding="utf-8") as fh:
+            fh.write(cross.review_md(res))
+    except cross.CrossError as exc:
+        print("ERROR: cross-solve: %s" % exc, file=sys.stderr)
+        return 3
+    except IngestError as exc:
+        print("ERROR: cross-solve: %s" % exc, file=sys.stderr)
+        return 3 if exc.code == "answer_key_present" else 2
+    except (OSError, ValueError) as exc:
+        print("ERROR: cross-solve: %s" % exc, file=sys.stderr)
+        return 2
+    finally:
+        if tmp:
+            shutil.rmtree(tmp, ignore_errors=True)
+    sm = res["summary"]
+    print("agree=%d needs_review=%d of %d, calls=%d cost=$%.4f -> %s" % (
+        sm["agree"], sm["needs_review"], sm["questions"], res["calls"], res["cost_usd"], a.out))
+    return 1 if sm["needs_review"] else 0
+
+
 def main(argv=None):
     argv = list(sys.argv[1:] if argv is None else argv)
     cmd, rest = (argv[0], argv[1:]) if argv else (None, [])
@@ -410,7 +511,7 @@ def main(argv=None):
              "score": scorer.score_main, "prompts": prompts.prompts_main,
              "check-prompts": prompts.check_prompts_main,
              "ingest": ingest_main, "ingest-inspect": inspect_main,
-             "ingest-refine": refine_main}
+             "ingest-refine": refine_main, "cross-solve": cross_main}
     if cmd not in table:
         print(USAGE, file=sys.stderr)
         return 2

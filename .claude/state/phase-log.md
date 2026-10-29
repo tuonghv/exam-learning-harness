@@ -556,3 +556,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: design completed, no open questions.
 - Decision: reuse solver prompts and SOLVE_OUT; no engine change.
 - Next: implement and test.
+
+## IMPLEMENTING - TASK-020 - 2026-10-29T15:10:00Z
+- Action: added pipeline/cross.py and the cross-solve command (modes dry-run/mock/real, key-page guard, cross.json, review.md).
+- Result: 11 new tests, suite 452 OK.
+- Decision: numeric answers compare number and unit; count mismatch never agrees; engine untouched.
+- Next: UNIT_TESTED.

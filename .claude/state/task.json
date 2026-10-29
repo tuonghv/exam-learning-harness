@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-020",
-  "state": "DESIGN",
-  "next": "implement pipeline/cross.py, cli cross-solve, tests",
+  "state": "IMPLEMENTING",
+  "next": "record UNIT_TESTED",
   "title": "cross-solve: text route vs page-image route, answer-level agreement (REQ-0023, EPIC-006)",
   "active": [
     {
       "task_id": "TASK-020",
-      "state": "DESIGN",
-      "next": "implement pipeline/cross.py, cli cross-solve, tests",
-      "updated_at": "2026-10-29T15:53:07Z"
+      "state": "IMPLEMENTING",
+      "next": "record UNIT_TESTED",
+      "updated_at": "2026-10-29T15:55:08Z"
     }
   ],
   "max_active": 1
