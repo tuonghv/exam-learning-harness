@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-007",
-  "state": "UNIT_TESTED",
-  "next": "verifier",
+  "state": "VERIFIED",
+  "next": "done",
   "title": "Math and Physics examples: 2 few-shot + 3 eval each (REQ-0003)",
   "active": [
     {
       "task_id": "TASK-007",
-      "state": "UNIT_TESTED",
-      "next": "verifier",
-      "updated_at": "2026-10-29T06:16:45Z"
+      "state": "VERIFIED",
+      "next": "done",
+      "updated_at": "2026-10-29T06:18:01Z"
     }
   ],
   "max_active": 1

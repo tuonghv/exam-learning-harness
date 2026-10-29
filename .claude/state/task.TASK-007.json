@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-007",
   "title": "Math and Physics examples: 2 few-shot + 3 eval each (REQ-0003)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0003",
   "acceptance_criteria": [
     "AC1-AC4 of REQ-0003"
@@ -35,16 +35,16 @@
     "result": "208 OK incl. 10 oracle tests; wrong key fails the oracle"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "eval keys only under evals/keys; no key text in inputs or few-shot (check-examples); no code executed from content"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": "work/TASK-007/evidence/"
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-7-math-physics-examples.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -55,11 +55,15 @@
     "coder": "work/TASK-007/handoff/code.md",
     "tester": {
       "waiver": "coordinator wrote the independent oracle tests and ran the wrong-key mutation; content tests only"
+    },
+    "verifier": "work/TASK-007/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "independent oracle test recomputes all answers and a wrong-key mutation fails it"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-29T06:11:30Z",
-  "updated_at": "2026-10-29T06:16:45Z",
+  "updated_at": "2026-10-29T06:18:01Z",
   "updated_by": "main",
   "scope": [
     "examples/math/**",
@@ -73,5 +77,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verifier"
+  "next": "done"
 }
