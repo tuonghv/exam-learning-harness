@@ -9,7 +9,7 @@
       "task_id": "TASK-001",
       "state": "IMPLEMENTING",
       "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": "2026-10-29T02:02:05Z"
+      "updated_at": "2026-10-29T02:09:09Z"
     }
   ],
   "max_active": 1

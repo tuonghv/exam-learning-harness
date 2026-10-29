@@ -77,18 +77,15 @@ header. Judge from those files and the code. If a claim
 needs output that is not there, mark it UNVERIFIED and name the missing command in NEXT.
 Before you start, Read `.claude/skills/{verify,security}/SKILL.md`: judge claims against their
 checklists (real path over unit tests, the security pass).
-- Lessons (TASK-074, REQ-0033): end your handoff with an optional `## Lessons` section, one line each: `- L: kind=<missing-skill|wrong-rule|repeat-failure|tip> target=<skill|agent:<role>|CLAUDE.md> | <lesson> | evidence=<path|->`. Only the skill-curator edits skills or agent files from them.
 <!-- agent-setup:project:end -->
 
 ## Skills (RAW-00082, RAW-00086)
 Preloaded from this file's `skills:` frontmatter (your always-on base): verify, security, token-efficiency.
 You also have the `Skill` tool: load any other skill whose description fits the work in front of you,
-the way the main session does. Examples: `report` when you write a report, `pentest-report-qa` when a
-report gate fails or you touch the report generator, `api-platform-security` for finding triage or
-severity, `python` for Python, `security` for a security pass. Load it before the first step that
+the way the main session does. Examples: `report` when you write a report, `python` for Python,
+`crosscheck` for an independent recount. Load it before the first step that
 needs it, not up front, and not for work outside your step. Skills a brief names are loaded the same way.
-Skills that move workflow or ledger state (workflow, commit, req-*, coordinator, context-compaction,
-run-security-review) are the coordinator's: do not load them. The second line of your handoff
+Skills that move workflow or ledger state (workflow, commit, req-*, coordinator) are the coordinator's: do not load them. The second line of your handoff
 must be `SKILLS: <each skill you applied>`. The coordinator rejects a handoff without it.
 
 ## Team (the main session is the coordinator; skill `coordinator` §4)

@@ -26,31 +26,18 @@ User rules: "you should have a solution to cross check; maybe the script is not 
 7. **Grep sanity on outputs.** No code or secret text (`snippet`, `lines`, `code`, `Secret` keys), no removed tool,
    no SCA row outside `dependencies`, no empty required field.
 
-## Recipes
-```bash
-# count per tool in a JSONL
-jq -r .tool b.jsonl | sort | uniq -c
-# SARIF results / gosec / bandit raw counts
-jq '[.runs[].results[]]|length' x.sarif; jq '.Issues|length' gosec.json; jq '.results|length' bandit.json
-# id set difference (both ways)
-comm -3 <(jq -r .id b.jsonl | sort -u) <(jq -r '.findings[].b_ids[], .out[].b_id' conclusion_ext.json | sort -u)
-# decision recompute (data lookup only)
-jq -r --slurpfile m ext/engine/scope_cwe.json '.findings[] | [.id, (.cwe//""), .decision, ($m[0].cwe[(.cwe//"")|ltrimstr("CWE-")].decision // "out_of_scope")] | @tsv' conclusion_ext.json | awk -F'\t' '$3!=$4'
-```
-Count first, then filter; never print a whole report or findings file (token-efficiency, RAW-00221).
-
 ## Output
 - One line per check: `<check>: PASS|FAIL|SKIP <counts> <evidence path>`; mismatch TSVs under `work/<T>/evidence/`.
 - Save each run with `.claude/scripts/save-evidence.sh <name> -- <cmd>`.
 - A FAIL names the stage, the equation and the first differing ids. It is a finding for the coder, never something to
   "adjust" in the oracle until it passes.
-- The toolkit's own oracle for the ext layer: `tests/ext_crosscheck.sh` (TASK-079); keep it independent of ext_*.py.
 
-## Report cross-check (REQ-0058, role tester)
-Every report writer ends with `CROSSCHECK: pass= fail= skip= weak= unregistered= -> <plan>/crosscheck/<scope>.json`
-(`report_registry.json` lists the kinds; `report_crosscheck.py`, $0). Brief = that result path. Re-run the runner
-through save-evidence (`--results` or `--run DIR`, `--plan-dir P --reports-dir R`; DONE report: `--report
-docs/report/phase-N-*.md --task .claude/state/task.json`), then add one independent oracle per FAIL or weak kind
-(jq count of the source vs grep count of ids in the report). Reply `work/<T>/handoff/crosscheck.md`: line 1
-`PROGRESS: COMPLETE`, line 2 `SKILLS: ...`, line 3 `RESULT: OK|MISS`, misses by code/id only (no titles, code or
-secrets). Operator runs with no task: `work/XCHK-<sys>__<plan>__<scope>/handoff/`.
+## Exam content oracle
+Each check runs without the generator's code and reports one TSV row per failing item (an empty TSV = PASS).
+- Maths/Physics: recompute every key from the item text (stdlib `python3 -I -c`, `fractions`/`decimal`); compare the value,
+  the unit (SI, as stated) and the rounding (stated places or significant figures).
+- English: re-apply the named grammar or vocabulary rule to each option; exactly one option may pass.
+- Literature: every quote is a verbatim substring of the passage (`grep -F`) and its attribution matches.
+- Leakage: no eval key string appears in eval inputs or few-shot files (`grep -F -f keys inputs`); empty = PASS.
+- Format: each expected file has Final answer, Solution, Explanation, Verification (`- Check:` lines, `Status: Verified`), Grading.
+

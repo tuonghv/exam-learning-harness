@@ -18,11 +18,7 @@ Verify real commands, APIs, inputs, configuration and expected outputs as applic
 Run each row of the design doc's `Verification` table
 (`docs/design/phase-<N>-<slug>.md`) exactly as written:
 
-- **Scanner changes:** docs/guide/toolkit-reference.md "Testing a change" — a scratch `REPOS_ROOT`
-  with throwaway repos, a full copy of the toolkit, and a fake `claude` on
-  `PATH` (prints a findings envelope, or a failure such as
-  `usage limit reached|<epoch>`). Inspect the real outputs: `manifest.json`
-  transitions, `results/*.json`, banners, generated reports.
+- **Content tasks (EPIC-002):** the crosscheck "Exam content oracle" run is Tier 1 and is the evidence; Tiers 2-3 are N/A (no scratch kit, no `claude` call).
 - **Workflow/kit changes:** run the gates on the real repo state, and replay
   real history in a clone (`git clone -q . <tmp>`; `git show <sha>:<path>`)
   to show a historic problem is now caught.

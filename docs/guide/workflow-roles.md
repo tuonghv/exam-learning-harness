@@ -31,21 +31,14 @@ commits, the hook and settings, and any paid or real run. It hands each workflow
 
 ## 2. Task leads
 
-- **Task leads (user, RAW-00490..00500; REQ-0061; coordinator §2d):** with several active tasks, main launches one `lead` per task
-  (`tasks.sh lead T`, Opus) with main's rights on that task only; the lead runs its roles and commits, and escalates paid runs, blocks,
-  permissions and user questions to main. A quit or exhausted lead is relaunched from the task checkpoint; `tasks.sh recover` runs at start-up.
-  Autonomy (user, RAW-00511): the lead decides how to meet its team's needs itself and asks main only what it cannot solve; main
-  decides for it (scope adds, test files, task design choices, recommended options) without asking the user. Only a permission main
-  cannot get, a paid run/budget, or a new/wider block goes to the user. Nobody waits idle on a decision main can make.
-  Single task (user, RAW-00515/00516): once a running task is DONE, go to `max_active` 1, and with one active task launch no lead;
-  main briefs the roles directly (saves an Opus context). Leads only when 2 tasks run.
+Removed: this harness runs one active task (`max_active` 1); main briefs the roles directly.
 
 ## 3. Inspector
 
 - **Inspector (user, RAW-00358/00359; skill `inspector`, coordinator §2c):** a supporting worker, not a workflow state and not a TASK role.
   Before any broad search or read of the toolkit, docs, tests or state, send it the question and keep only its compact INSPECTION HANDOFF
   (≈1500 tokens); skip it for a one-file lookup. Follow-up = task + previous handoff + changed files, never a full re-inspection. Its output is
-  evidence: verify a critical fact yourself. It never reads `REPOS_ROOT` or scanned source trees (guarded like the other roles), never writes
+  evidence: verify a critical fact yourself. It is guarded like the other roles), never writes
   files, never moves state. It does not replace designer/coder/tester/verifier and needs no waiver or handoff file.
 
 ## 4. Delegation, role replies, verifier evidence, coder and tester
@@ -74,9 +67,8 @@ commits, the hook and settings, and any paid or real run. It hands each workflow
 
 - The context guard (PreToolUse hook, `.claude/agent_setup.json` `protect`) refuses for roles:
   writes to workflow, ledger, design/report, frozen-prompt and run files (also via Bash redirects,
-  `sed -i`, cp/mv/rm); reads of the source trees (also searches from a parent dir) and `$REPOS_ROOT`; git commands that change the
-  repo (commit, add, switch, reset, ...); paid or scan commands; real-plan rebuilds and report
-  writers (`pipeline.sh rebuild`, `summarize_*`, `conclude.sh`, `evaluate_run.sh`); req.py/backlog
+  `sed -i`, cp/mv/rm); reads outside the harness; git commands that change the
+  repo (commit, add, switch, reset, ...); paid commands; req.py/backlog
   state commands.
   Main-session calls are only logged (`orch_delegate: false`).
 - A role whose call is refused with "stop requested" saves its handoff and replies PARTIAL.
@@ -90,38 +82,9 @@ commits, the hook and settings, and any paid or real run. It hands each workflow
 - After each meaningful step: `req.py focus --next "<next concrete step>"` (or `status ... --next`); tick ACs with `req.py ac`.
 - Skills: `req-intake` (new input / triage RAW), `req-track` (am I done? status, next).
 
-## 7. Never break: long text of rules 2 and 9
+## 7. Never break: exam briefs
 
-### Rule 2 (REPOS_ROOT and its exceptions)
-
-- One repo per fresh `claude -p` process; never multi-repo sessions. Pipeline exceptions:
-  a 2b unit mounts only its item's two repos (`--add-dir`,
-  `--restricted`, empty cwd) — never the whole `REPOS_ROOT`.
-- Toolkit dir and `REPOS_ROOT` are separate; repo source is read only inside `scan_batch.sh`'s subshell
-  (the one script exception: `tree_evidence.py` sha256-hashes file bytes, never shown or stored;
-  and REQ-0035: `ext_scan.sh` mounts one repo read-only into the pinned `env.lock` containers, static
-  tools only, no model; stored output keeps paths, lines, rule/CWE/CVE ids and hashes, never code or secrets;
-  and REQ-0043 (user RAW-00421): `ext_snippet.py` reads one repo file at a finding's path+line at report time,
-  realpath-confined to that repo, secrets masked, output only in private reports and tools-only `results/`;
-  ext roots, run files and the registry get hashes only; agents check its output by counts, never read it).
-  Agents never modify a review plan's `REPOS_ROOT` and only list names/paths there, never
-  file contents (reading is `claude -p`'s job), unless `./plan.sh kind <sys>/<plan>` prints `demo`.
-  Why: the report must reflect only the scan model's (`CLAUDE_MODEL`) own findings, and
-  re-reading source doubles the cost. Agents keep findings exactly as written (no add/drop/
-  re-rate/`status`); demo reading goes to `docs/notes/demo-<plan>-<date>.md`.
-  Tree problems: tell the user in the reply (paths, counts); never fix the tree or write notes for
-  the team that prepares it.
-
-### Rule 9 (frozen model prompts)
-
-- Model prompts are frozen (user rule, 2026-09-25): `security_prompt.md`, `docs/prompts/phase0-*.md`
-  and `phase2b-*.md` do not change for a new feature or a bug fix. Do the work in the deterministic
-  layer (overlay, correlate.py, report scripts) instead. The one exception is a prompt output that
-  cannot be mapped to the findings and results (no stable id or field to join on). Why: a stable
-  engine keeps runs comparable and reuse valid, and it avoids re-verification spend.
-  The first solution for joining findings and results is a no-cost Python script
-  (stdlib, like `correlate.py`). A prompt change comes only after such a script has
-  been shown unable to do the mapping.
+Every EPIC-002 role brief opens with the block in `docs/guide/exam-brief-override.md`.
 
 ## 8. Main session identity
 The main session (coordinator) uses the display name **Admiral Tuonghv** (leader: coordinator) when it signs or introduces itself.

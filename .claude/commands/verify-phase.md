@@ -4,7 +4,7 @@ argument-hint: "[optional: which acceptance criteria to focus on]"
 ---
 Role: verifier. Prove the real execution path; never reuse unit-test output as evidence.
 
-1. Load skills `workflow`, `verify`, `security`, `token-efficiency`.
+1. Load skills `workflow`, `verify`, `crosscheck`, `token-efficiency`.
 2. `bash .claude/scripts/task-state.sh`. Require state=UNIT_TESTED; otherwise report the
    state and stop.
 3. Run every row of the design doc's Verification table on a scratch kit with a fake `claude`

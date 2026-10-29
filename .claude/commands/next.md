@@ -8,9 +8,9 @@ Role: implementer. Advance the active task in `.claude/state/task.json`.
 2. Run `bash .claude/scripts/task-state.sh` (skip if the SessionStart output is in context
    and nothing changed). Uncommitted `.claude/state` or a workflow-check FAIL → fix that first.
 3. Load only the skills for the current phase, per `workflow`'s "Skills per phase":
-   - TODO / DESIGN → `design` (+ `api-platform-security` if `security_prompt.md` is touched)
+   - TODO / DESIGN → `design`
    - IMPLEMENTING → `coding`, `unit-test`
-   - UNIT_TESTED → `verify`, `security`
+   - UNIT_TESTED → `verify`, `crosscheck`
    - VERIFIED → `report`
    - no active task (DONE) → `bash .claude/scripts/backlog.sh next`, then `pick` it
    Then load `coordinator` and hand the step to its required role (table's role column): `designer`, `coder`

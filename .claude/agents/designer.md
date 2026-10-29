@@ -69,21 +69,17 @@ earlier handoffs). Read only those. Do not re-explore what earlier roles already
 
 Designer: write a draft for the main session, which writes `docs/design/`. Follow the doc structure of
 `.claude/skills/design/SKILL.md` (Premise, Plan modes, items `<N>.x`).
-Load `coding`/`security` only when the brief's `Load:` names them; load
-`api-platform-security` when the item touches finding triage or severity.
-- Lessons (TASK-074, REQ-0033): end your handoff with an optional `## Lessons` section, one line each: `- L: kind=<missing-skill|wrong-rule|repeat-failure|tip> target=<skill|agent:<role>|CLAUDE.md> | <lesson> | evidence=<path|->`. Only the skill-curator edits skills or agent files from them.
+Load `coding` only when the brief's `Load:` names it.
 <!-- agent-setup:project:end -->
 
 ## Skills (RAW-00082, RAW-00086)
 Preloaded from this file's `skills:` frontmatter (your always-on base): design, token-efficiency.
 Load the brief's `Load:` skills with the Skill tool before the first edit (TASK-101: the language skill is no longer preloaded).
 You also have the `Skill` tool: load any other skill whose description fits the work in front of you,
-the way the main session does. Examples: `report` when you write a report, `pentest-report-qa` when a
-report gate fails or you touch the report generator, `api-platform-security` for finding triage or
-severity, `python` for Python, `security` for a security pass. Load it before the first step that
+the way the main session does. Examples: `report` when you write a report, `python` for Python,
+`crosscheck` for an independent recount. Load it before the first step that
 needs it, not up front, and not for work outside your step. Skills a brief names are loaded the same way.
-Skills that move workflow or ledger state (workflow, commit, req-*, coordinator, context-compaction,
-run-security-review) are the coordinator's: do not load them. The second line of your handoff
+Skills that move workflow or ledger state (workflow, commit, req-*, coordinator) are the coordinator's: do not load them. The second line of your handoff
 must be `SKILLS: <each skill you applied>`. The coordinator rejects a handoff without it.
 
 ## Team (the main session is the coordinator; skill `coordinator` §4)

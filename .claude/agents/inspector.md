@@ -138,4 +138,3 @@ Do not include raw tool output.
 
 Maximum output: approximately 1500 tokens.
 
-- Lessons (TASK-074, REQ-0033): end your handoff with an optional `## Lessons` section, one line each: `- L: kind=<missing-skill|wrong-rule|repeat-failure|tip> target=<skill|agent:<role>|CLAUDE.md> | <lesson> | evidence=<path|->`. Only the skill-curator edits skills or agent files from them.

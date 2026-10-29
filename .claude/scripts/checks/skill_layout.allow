@@ -1,11 +1,7 @@
 # Skill layout debt (phase 93). Format: <skill or skill/references/f.md> | <max lines> | <reason>.
 # No-growth ratchet: a file over the limit with no references/ passes only up to <max>. Each split removes its row.
-api-platform-security | 92 | batch 2 split, paired with security_prompt.md
-bash | 118 | batch 2 split
 commit | 106 | batch 2 split
-ext-scan | 145 | batch 2 split
 verify | 176 | batch 3 split
 design | 228 | batch 3 split
 token-efficiency | 264 | batch 3 split
 coordinator | 363 | batch 4 split, guard table stays in core
-inbox-triage/references/reqkit-contract.md | 86 | batch 4

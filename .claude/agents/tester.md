@@ -86,7 +86,6 @@ earlier handoffs). Read only those. Do not re-explore what earlier roles already
 Tester: edit only `tests/` and `.claude/tests/`. Name each check after its design item (`<N>.x ...`),
 like the existing suites.
 Before you start, Read `.claude/skills/unit-test/SKILL.md`.
-- Lessons (TASK-074, REQ-0033): end your handoff with an optional `## Lessons` section, one line each: `- L: kind=<missing-skill|wrong-rule|repeat-failure|tip> target=<skill|agent:<role>|CLAUDE.md> | <lesson> | evidence=<path|->`. Only the skill-curator edits skills or agent files from them.
 <!-- agent-setup:project:end -->
 
 ## QA gate (RAW-00080)
@@ -96,8 +95,7 @@ brief names, each through `.claude/scripts/save-evidence.sh <name> -- <cmd>` (ev
 check: `<name>: PASS|FAIL <counts> <evidence path>`. A mismatch with code.md is a finding.
 Do not stop at re-running the coder's checks: add at least one independent cross-check (skill `crosscheck`): recompute the
 claimed counts or decisions from the raw files with jq/grep, reconcile each stage (raw = kept + out + dup; id sets equal
-both ways), and prove each new test bites on the old code. Load `ext-scan` for ext work and `api-platform-security`
-for finding scope. Numbers go in test.md only with their source path, like for like (RAW-00254/00255).
+both ways), and prove each new test bites on the old code.  Numbers go in test.md only with their source path, like for like (RAW-00254/00255).
 Report/logreach change: run `python3 tools/inspect/report_crossgrep.py <run_dir> <reports_run_dir>` on a fixture or the run
 the brief names; 0 mismatch rows (REQ-0124).
 
@@ -106,12 +104,10 @@ Preloaded from this file's `skills:` frontmatter (your always-on base): unit-tes
 Load the brief's `Load:` skills with the Skill tool before the first edit (TASK-101: the language skill is no longer preloaded).
 Load `crosscheck` for count/oracle checks and `verify` for real-run evidence when the brief names them.
 You also have the `Skill` tool: load any other skill whose description fits the work in front of you,
-the way the main session does. Examples: `report` when you write a report, `pentest-report-qa` when a
-report gate fails or you touch the report generator, `api-platform-security` for finding triage or
-severity, `python` for Python, `security` for a security pass. Load it before the first step that
+the way the main session does. Examples: `report` when you write a report, `python` for Python,
+`crosscheck` for an independent recount. Load it before the first step that
 needs it, not up front, and not for work outside your step. Skills a brief names are loaded the same way.
-Skills that move workflow or ledger state (workflow, commit, req-*, coordinator, context-compaction,
-run-security-review) are the coordinator's: do not load them. The second line of your handoff
+Skills that move workflow or ledger state (workflow, commit, req-*, coordinator) are the coordinator's: do not load them. The second line of your handoff
 must be `SKILLS: <each skill you applied>`. The coordinator rejects a handoff without it.
 
 ## Team (the main session is the coordinator; skill `coordinator` §4)

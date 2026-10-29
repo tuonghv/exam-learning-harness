@@ -88,7 +88,7 @@
     }
   ],
   "picked_at": "2026-10-29T01:46:15Z",
-  "updated_at": "2026-10-29T02:02:05Z",
+  "updated_at": "2026-10-29T02:09:09Z",
   "updated_by": "main",
   "scope": [
     "CLAUDE.md",
@@ -106,10 +106,11 @@
       "design r3 installed, state DESIGN",
       "coder step A launched",
       "step A: CLAUDE.md 4094 B, grep 0 (main installed coder draft; guard blocks coder writes there)",
-      "design r5 installed; req-design removed; step A done"
+      "design r5 installed; req-design removed; step A done",
+      "step B done: override doc, oracle, Tier-1 note, commands, workflow-roles, lead deleted, role-body pointers"
     ],
     "notes": "",
-    "next": "brief coder step B (design 2.2-2.4, 2.6, 2.8, delete agents/lead.md) with override block"
+    "next": "step C compression of skills (coordinator, token-efficiency, workflow, inspector hold leftover scan pointers), then D role bodies, E deletions"
   },
   "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
 }

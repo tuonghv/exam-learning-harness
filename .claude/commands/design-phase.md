@@ -4,8 +4,7 @@ argument-hint: "[task id to pick, or design question to resolve]"
 ---
 Role: designer. Only design work in this turn: no implementation code.
 
-1. Load skills `workflow`, `design`, `token-efficiency`; add `api-platform-security` if the
-   change touches `security_prompt.md` or finding triage, `security` if it touches a trust boundary.
+1. Load skills `workflow`, `design`, `token-efficiency`.
 2. `bash .claude/scripts/task-state.sh`. If there is no active task, or $ARGUMENTS names a queued
    task, commit any leftover state first, then `bash .claude/scripts/backlog.sh pick <id>`.
 3. Prove the defect on HEAD (design skill "Premise first"), then write
