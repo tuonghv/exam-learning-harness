@@ -11,7 +11,7 @@ import sys
 from exam_engine.adapters import claude
 from exam_engine.core import schema as sch
 from exam_engine.core.decision import decide_rec, evidence_kind, is_open, new_rec
-from exam_engine.pipeline import parser, reporter, router, scorer, solver, verifier
+from exam_engine.pipeline import parser, prompts, reporter, router, scorer, solver, verifier
 
 BLOCKING = ("auth", "rate_limit", "service")
 
@@ -84,7 +84,8 @@ def build_result(exam, exam_path, recs, cfg, rn, stopped):
         "run": {"llm": cfg["llm_name"], "model": cfg["model"], "max_attempts": cfg["max_attempts"],
                 "timeout_s": cfg["timeout"], "max_cost_usd": cfg["max_cost_usd"],
                 "cost_usd": round(rn.cost, 6), "calls": rn.calls,
-                "stopped": stopped[0] if stopped else None},
+                "stopped": stopped[0] if stopped else None,
+                "prompt": prompts.prompt_info()},
         "questions": qs,
         "summary": {"pass": sum(q["verification_status"] == "PASS" for q in qs),
                     "fail": sum(q["verification_status"] == "FAIL" for q in qs),

@@ -232,3 +232,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: ready.
 - Decision: one coder.
 - Next: coder handoff.
+
+## UNIT_TESTED - TASK-009 - 2026-10-29T06:46:57Z
+- Action: coder implemented channels; coordinator re-ran suite (219), integration, release verify, dev==release diff.
+- Result: all green.
+- Decision: advance.
+- Next: verifier.

@@ -15,9 +15,9 @@ from exam_engine import engine, settings
 from exam_engine.adapters import claude
 from exam_engine.core import schema as sch
 from exam_engine.core.decision import decide
-from exam_engine.pipeline import examples_check, parser, reporter, scorer, solver, verifier
+from exam_engine.pipeline import examples_check, parser, prompts, reporter, scorer, solver, verifier
 
-COMMANDS = ("solve", "parse", "verify", "report", "check-examples", "score")
+COMMANDS = ("solve", "parse", "verify", "report", "check-examples", "score", "prompts")
 USAGE = "usage: exam.py {%s} ..." % "|".join(COMMANDS)
 
 
@@ -37,7 +37,11 @@ def solve_main(argv=None):
     ap.add_argument("--timeout", type=float, default=d["timeout"])
     ap.add_argument("--model", default=d["model"])
     ap.add_argument("--no-pdf", action="store_true", help="write report.md only")
+    ap.add_argument("--channel", choices=("release", "dev"),
+                    help="prompt channel (default: prompt_channel in config/engine.json)")
+    ap.add_argument("--prompt-version", help="release version, e.g. v1.0.0 (default: prompt_release)")
     a = ap.parse_args(argv)
+    settings.use_prompts(a.channel, a.prompt_version)
     modes = [bool(a.mock), a.dry_run, a.real]
     if sum(modes) != 1:
         print("usage: choose exactly one of --mock FILE, --dry-run, --real (never defaults to real)",
@@ -181,7 +185,7 @@ def main(argv=None):
     cmd, rest = (argv[0], argv[1:]) if argv else (None, [])
     table = {"solve": solve_main, "parse": parse_main, "verify": verify_main,
              "report": report_main, "check-examples": examples_check.main,
-             "score": scorer.score_main}
+             "score": scorer.score_main, "prompts": prompts.prompts_main}
     if cmd not in table:
         print(USAGE, file=sys.stderr)
         return 2

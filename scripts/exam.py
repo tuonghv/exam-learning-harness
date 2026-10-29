@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Single entry: exam.py solve|parse|verify|report|check-examples|score ...
+"""Single entry: exam.py solve|parse|verify|report|check-examples|score|prompts ...
 
 Run as `python3 -I scripts/exam.py ...`; <repo>/src is put on sys.path explicitly.
 """

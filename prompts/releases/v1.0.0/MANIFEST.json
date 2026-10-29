@@ -1,0 +1,13 @@
+{
+  "created": "2026-10-29T06:44:57Z",
+  "files": {
+    "exam/solve.md": "daeafe8df71ccc913e4e6e620edfbe426d22f0a6e303632965b9cd2b12f82132",
+    "subjects/english.md": "f5b8422f75a04718bbc3da75fb62bfaf46fb38917d7204d29967e490677ae98a",
+    "subjects/literature.md": "8f06e96c836ecfe1cbbaf36de62a993945338a44da457afc7ea9e495a8180f2c",
+    "subjects/math.md": "5f322c750d711d8a0cab4684b3c1bc09bee16eedeed972eec4d716b49c5f5e94",
+    "subjects/physics.md": "4689f305da2be067493112bd1ac36f4526121239c6ed3615000eb308ec7b29ec",
+    "system.md": "92847640443f8055391805e010a9db68a86067468431ddad4eb34c3bafad3150",
+    "verification/verify_answer.md": "496026560f865d20b199c672ad743685f5d9453773a825c40c05dbda72336b2c"
+  },
+  "version": "v1.0.0"
+}

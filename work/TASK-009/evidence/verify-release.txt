@@ -1,0 +1,9 @@
+# evidence: verify-release
+# task: TASK-009
+# cmd: python3 -I scripts/exam.py prompts verify
+# cwd: /home/tuonghv/Documents/git/online-system/exam-learning-harness
+# head: dd65bf6+dirty
+# when: 2026-10-29T06:46:57Z
+# rc: 0
+---
+ok

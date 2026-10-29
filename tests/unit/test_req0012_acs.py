@@ -132,13 +132,15 @@ class PromptsAndKeys(Base):
                 self.assertNotIn('"docs"', text(p), p)
         for rel in ("system.md", "exam/solve.md", "subjects/math.md",
                     "verification/verify_answer.md"):
-            self.assertTrue(os.path.isfile(os.path.join(ROOT, "prompts", rel)), rel)
+            self.assertTrue(os.path.isfile(os.path.join(ROOT, "prompts", "dev", rel)), rel)
 
     def test_6_4_schemas_and_config_read_via_settings(self):
         for p in files(os.path.join(ROOT, "src"), ".py"):
             if p.endswith(os.path.join("exam_engine", "settings.py")):
                 continue
             t = text(p)
+            if p.endswith(os.path.join("exam_engine", "cli.py")):
+                t = t.replace('"prompts"', "")  # the `prompts` subcommand name, not a path
             self.assertNotRegex(t, r"""["'](schemas|config|prompts)["']""", p)
             self.assertNotRegex(t, r"""["'][\w/]*\.schema\.json["']""", p)
         for n in ("solve_out", "qa_out", "result"):
@@ -162,12 +164,12 @@ class PromptsAndKeys(Base):
 
     def test_6_5_new_subject_by_config_and_prompt_file_only(self):
         cfg = os.path.join(self.tmp, "config")
-        prm = os.path.join(self.tmp, "prompts")
+        prm = os.path.join(self.tmp, "prompts", "dev")
         os.makedirs(os.path.join(prm, "subjects"))
         os.makedirs(os.path.join(prm, "exam"))
         os.makedirs(cfg)
-        shutil.copy(os.path.join(ROOT, "prompts", "system.md"), prm)
-        shutil.copy(os.path.join(ROOT, "prompts", "exam", "solve.md"),
+        shutil.copy(os.path.join(ROOT, "prompts", "dev", "system.md"), prm)
+        shutil.copy(os.path.join(ROOT, "prompts", "dev", "exam", "solve.md"),
                     os.path.join(prm, "exam", "solve.md"))
         with open(os.path.join(prm, "subjects", "chem.md"), "w") as fh:
             fh.write("ADDENDUM-CHEM-ZZ: use atomic masses.\n")
@@ -184,7 +186,8 @@ class PromptsAndKeys(Base):
             fh.write(CHEM)
         self.assertTrue(parser.validate_exam(parser.parse_exam(path)))  # unknown without entry
         with mock.patch.dict(os.environ, {"EXAM_ENGINE_CONFIG_DIR": cfg}), \
-                mock.patch.object(settings, "PROMPTS_DIR", prm):
+                mock.patch.object(settings, "PROMPTS_DIR", os.path.dirname(prm)), \
+                mock.patch.dict(settings.PROMPT_SOURCE, {"channel": "dev"}):
             exam = parser.parse_exam(path)
             self.assertEqual(parser.validate_exam(exam), [])
             self.assertIn("ADDENDUM-CHEM-ZZ", solver.base_prompt(exam))

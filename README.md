@@ -19,7 +19,7 @@ src/exam_engine/  settings.py cli.py engine.py
   pipeline/   parser router solver verifier scorer reporter examples_check
   utils/      md2html.py text.py
 config/       engine.json (defaults)  subjects.json (per subject: task, checks, score_basis, language, prompt)
-prompts/      system.md  exam/solve.md  subjects/*.md  verification/verify_answer.md
+prompts/      dev/ (editable: system.md exam/solve.md subjects/*.md verification/verify_answer.md)  releases/vX.Y.Z/ (frozen + MANIFEST.json)
 schemas/      solve_out / qa_out / result  (*.schema.json)
 tests/        unit/  integration/ (fake claude executable on a temp PATH)
 workspace/    runtime output, gitignored
@@ -45,4 +45,4 @@ Exit codes of `solve`: 0 all PASS, 1 any FAIL/UNCERTAIN/unresolved, 2 invalid in
 Safety rules: the answer key is opened only in `pipeline/scorer.py`, after every model call, and
 never appears in a prompt; model text is data (escaped in reports, never executed); every model
 call goes through `adapters/claude.py` (a test greps for others); a new subject is a
-`config/subjects.json` entry plus an optional `prompts/subjects/<name>.md`, no engine code.
+`config/subjects.json` entry plus an optional `prompts/dev/subjects/<name>.md`, no engine code.

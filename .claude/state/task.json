@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-009",
-  "state": "IMPLEMENTING",
-  "next": "coder",
+  "state": "UNIT_TESTED",
+  "next": "verifier",
   "title": "Prompt channels: dev and frozen releases (REQ-0013)",
   "active": [
     {
       "task_id": "TASK-009",
-      "state": "IMPLEMENTING",
-      "next": "coder",
-      "updated_at": "2026-10-29T06:43:41Z"
+      "state": "UNIT_TESTED",
+      "next": "verifier",
+      "updated_at": "2026-10-29T06:47:06Z"
     }
   ],
   "max_active": 1

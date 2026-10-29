@@ -113,6 +113,29 @@
             "string",
             "null"
           ]
+        },
+        "prompt": {
+          "type": "object",
+          "required": [
+            "channel",
+            "version"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "channel": {
+              "type": "string",
+              "enum": [
+                "release",
+                "dev"
+              ]
+            },
+            "version": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
         }
       }
     },

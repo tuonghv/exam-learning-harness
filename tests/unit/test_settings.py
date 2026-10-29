@@ -32,7 +32,8 @@ class Settings(unittest.TestCase):
 
     def test_engine_defaults(self):
         cfg = settings.load_config("engine")
-        self.assertEqual(sorted(cfg), ["max_attempts", "max_cost_usd", "model", "timeout"])
+        self.assertEqual(sorted(cfg), ["max_attempts", "max_cost_usd", "model", "prompt_channel",
+                                       "prompt_release", "timeout"])
 
     def test_config_dir_override(self):
         with tempfile.TemporaryDirectory() as d:
