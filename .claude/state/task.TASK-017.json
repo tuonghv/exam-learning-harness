@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-017",
   "title": "Optional Claude refine stage for flagged exam pages (REQ-0021, EPIC-005)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0021",
   "acceptance_criteria": [
     "AC1-AC5 of REQ-0021"

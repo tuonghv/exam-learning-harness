@@ -1,13 +1,13 @@
 {
   "schema": 2,
   "task_id": "TASK-017",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "next": "coder implements",
   "title": "Optional Claude refine stage for flagged exam pages (REQ-0021, EPIC-005)",
   "active": [
     {
       "task_id": "TASK-017",
-      "state": "DESIGN",
+      "state": "IMPLEMENTING",
       "next": "coder implements",
       "updated_at": "2026-10-29T11:45:34Z"
     }
