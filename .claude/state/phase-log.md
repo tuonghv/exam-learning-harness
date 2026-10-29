@@ -40,3 +40,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: 6 modules, 19 mocked tests; code-security-scanner git status unchanged (0 files); blind solve of English Q1 with docs/prompts/exam/solver.md gave A, matching the key.
 - Decision: Q4-Q6 go to the user; solver.md review (RAW-00027) added as REQ-0008 AC6.
 - Next: user answers Q4-Q6, then fold the solver.md review into the design.
+
+## DESIGN - TASK-003 - 2026-10-29T03:26:59Z
+- Action: designer (Nova) wrote the example checker design; installed as docs/design/phase-3-example-checker.md (128 lines).
+- Result: 5 modules/files, 15 unit tests; 4 low defects (expected-001 not in FORMAT form, Skill/Language optional, eval ids start at 003, rewording not machine-checkable).
+- Decision: Q1-Q5 go to the user (Q5 touches the approved FORMAT.md).
+- Next: user answers, then IMPLEMENTING.

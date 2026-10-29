@@ -1,19 +1,19 @@
 {
   "task_id": "TASK-003",
   "title": "Example set layout, FORMAT checker, eval scorer, README (REQ-0002)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0002",
   "acceptance_criteria": [
-    "AC1 pairing check",
-    "AC2 few-shot/eval disjoint",
+    "AC1 pairing",
+    "AC2 disjoint ids/texts",
     "AC3 eval inputs hold no key sections",
     "AC4 scorer reads keys from separate dir",
-    "AC5 stdlib, tests, README <=80 lines"
+    "AC5 stdlib, tests, README<=80"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-3-example-checker.md",
+    "summary": "exam_parse.py shared parser, check_examples.py, score_eval.py, 15 unittest cases mapped to AC1-AC5, README <=80 lines; legacy allowance for english expected-001; Q1-Q5 open",
     "reuse": [],
     "risks": []
   },
@@ -40,11 +40,13 @@
   },
   "roles_required": true,
   "crosscheck_required": true,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-003/handoff/design.md"
+  },
   "user_notes": [],
   "picked_at": "2026-10-29T03:24:15Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-10-29T03:26:59Z",
+  "updated_by": "main",
   "scope": [
     "work/TASK-003/"
   ],
@@ -57,5 +59,5 @@
     "notes": "",
     "next": "install designer draft as docs/design/phase-3-example-checker.md, set design, state DESIGN, answer open questions"
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "user answers Q1-Q5, then IMPLEMENTING (coder parser+checker, tester tests)"
 }
