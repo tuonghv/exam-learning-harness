@@ -1,0 +1,11 @@
+# evidence: claude-sites
+# task: TASK-006
+# cmd: bash -c grep\ -rnE\ \'subprocess\|\"claude\"\'\ src\ scripts\ \|\ grep\ -v\ adapters/claude.py\ \|\ grep\ -i\ claude\;\ echo\ none-other\;\ grep\ -rn\ \'expected-0\\\|evals/keys\'\ prompts\;\ echo\ no-key-in-prompts
+# cwd: /home/tuonghv/Documents/git/online-system/exam-learning-harness
+# head: 41c1f49+dirty
+# when: 2026-10-29T06:07:56Z
+# rc: 0
+---
+Binary file src/exam_engine/adapters/__pycache__/claude.cpython-38.pyc matches
+none-other
+no-key-in-prompts

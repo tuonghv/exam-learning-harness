@@ -1,0 +1,15 @@
+# evidence: old-vs-new
+# task: TASK-006
+# cmd: bash -c for\ c\ in\ tools/examples/exam_run.py\ \'scripts/exam.py\ solve\'\;\ do\ python3\ -I\ \$c\ examples/english/input-001.md\ --mock\ tests/unit/fixtures/mock_english_001.json\ --key\ examples/english/expected-001.md\ --out\ /tmp/claude-1627/-home-tuonghv-Documents-git-online-system-exam-learning-harness/bb3d4790-cd14-4f2f-a160-b4751a91ebd1/scratchpad/t6b/\$\(echo\ \$c\|tr\ \'/\ \'\ \'__\'\)\ 2\>\&1\|grep\ -o\ \'pass=.\*stopped=\[A-Za-z\]\*\'\;\ done\;\ python3\ -I\ tools/examples/exam_run.py\ examples/english/input-001.md\;\ echo\ rc=\$\?\;\ cd\ /tmp\ \&\&\ python3\ -I\ /home/tuonghv/Documents/git/online-system/exam-learning-harness/scripts/exam.py\ solve\ /home/tuonghv/Documents/git/online-system/exam-learning-harness/examples/english/input-001.md\ --dry-run\ 2\>\&1\|head\ -3
+# cwd: /home/tuonghv/Documents/git/online-system/exam-learning-harness
+# head: 41c1f49+dirty
+# when: 2026-10-29T06:07:56Z
+# rc: 0
+---
+pass=1 fail=0 uncertain=0 unresolved=0 calls=2 stopped=None
+pass=1 fail=0 uncertain=0 unresolved=0 calls=2 stopped=None
+usage: choose exactly one of --mock FILE, --dry-run, --real (never defaults to real)
+rc=2
+calls <= 5, cap $1.00 (dry run: no call made)
+=== SOLVE prompt ===
+You are an expert solver of Vietnamese Grade 12 graduation and university-entrance exam questions

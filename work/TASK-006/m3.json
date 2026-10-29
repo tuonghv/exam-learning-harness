@@ -1,0 +1,1 @@
+{"implementation":{"status":"completed","files":["src/exam_engine/cli.py","src/exam_engine/engine.py","src/exam_engine/settings.py","scripts/exam.py","schemas","config","prompts","tests/unit","tests/integration","tools/examples","README.md","pyproject.toml"]},"roles":{"coder":"work/TASK-006/handoff/code.md"},"next":"tester: new-structure tests, mutations"}
