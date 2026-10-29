@@ -114,16 +114,26 @@ def norm_id(v):
     return str(int(m.group(0))) if m else None
 
 
+PART_RE = re.compile(r"^\s*PH[ẦA]N\s+(IV|V|I{1,3})\b[^\n]*(?:\n|$)", re.I)
+
+
+def split_part(text):
+    """(roman part or None, text without the leading part heading line)."""
+    m = PART_RE.match(text)
+    return (m.group(1).upper(), text[m.end():].strip()) if m else (None, text)
+
+
 def _gaps(questions):
-    """ids (normalised) that do not follow the previous id by 1 or restart at 1 (a new part)."""
-    out, prev = set(), None
+    """(part, id) pairs that do not follow the previous id of their part by 1 or restart at 1."""
+    out, prev = set(), {}
     for q in questions:
         qid = norm_id(q.get("id"))
         if qid is None:
             continue
-        if prev is not None and int(qid) not in (prev + 1, 1):
-            out.add(qid)
-        prev = int(qid)
+        p = q.get("part")
+        if p in prev and int(qid) not in (prev[p] + 1, 1):
+            out.add((p, qid))
+        prev[p] = int(qid)
     return out
 
 
@@ -205,7 +215,7 @@ def refine(doc, spec, llm, source_path=None, max_cost=1.0, model="sonnet", allow
     pages = pick_pages(doc, spec)
     out = copy.deepcopy(doc)
     by_id = dict((str(q["n"]), q) for q in doc.get("questions") or ())
-    qs, calls, cost = [], 0, 0.0
+    qs, calls, cost, part = [], 0, 0.0, None
     for n in pages:
         if cost >= max_cost:
             raise RefineError("cost_cap", "cost $%.2f reached the cap $%.2f before page %d"
@@ -214,15 +224,23 @@ def refine(doc, spec, llm, source_path=None, max_cost=1.0, model="sonnet", allow
         calls += used
         cost += spent
         text = _page_text(doc, n)
-        gaps = _gaps(obj["questions"])
+        items = []
         for q in obj["questions"]:
+            found, rest = split_part(q["text"])
+            part = found or part
+            if not rest and not q.get("options"):
+                continue
+            items.append(dict(q, text=rest, part=part))
+        gaps = _gaps(items)
+        for q in items:
             qid = norm_id(q["id"])
             sim = similarity(q, by_id.get(qid), text)
-            qs.append({"id": qid, "text": q["text"], "options": q.get("options", {}),
+            qs.append({"id": qid, "part": q["part"], "text": q["text"],
+                       "options": q.get("options", {}),
                        "figures": q.get("figures", []), "origin": "ai", "page": n,
                        "similarity": sim,
                        "needs_review": bool(q.get("unreadable")) or sim < min_similarity
-                       or qid in gaps})
+                       or (q["part"], qid) in gaps})
     out["refined"] = {"model": model,
                       "prompt_sha256": hashlib.sha256(template().encode("utf-8")).hexdigest(),
                       "pages": pages, "questions": qs, "calls": calls,

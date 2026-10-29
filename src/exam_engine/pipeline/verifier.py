@@ -32,6 +32,22 @@ def _letters(text):
     return re.findall(r"(?m)^\s*\(?([a-e])[.)]\s", text)
 
 
+_VERDICT = re.compile(r"(?<!\w)(đúng|sai|true|false|đ|s|t|f)(?!\w)", re.I)
+
+
+def _part_format(q, a, exam):
+    """Math/physics Part II (a-d true/false) and Part III (one number) answer shapes, else None."""
+    if _policy(exam).get("key") not in ("math", "physics") or q.get("options"):
+        return None
+    if set("abcd") <= set(_letters(q.get("text", ""))):
+        n = len(_VERDICT.findall(a))
+        return _chk("format", "four true/false verdicts (a-d)", "pass" if n == 4 else "fail", False)
+    if not _letters(q.get("text", "")):
+        return _chk("format", "answer holds a number", "pass" if re.search(r"\d", a) else "fail",
+                    False)
+    return None
+
+
 def _format(q, ans, exam):
     a = str(ans.get("answer")).strip()
     task = ((exam.get("fields") or {}).get("Task") or "").strip().casefold()
@@ -43,6 +59,10 @@ def _format(q, ans, exam):
         ok = bool(re.match(r"^[A-D]$", a)) and a in q["options"]
         return _chk("format", "single letter A-D", "pass" if ok else "fail", False)
     letters = _letters(q.get("text", ""))
+    if task != "sentence ordering" and not re.match(r"^[a-z](?:-[a-z])+$", a):
+        part = _part_format(q, a, exam)
+        if part:
+            return part
     if task == "sentence ordering" or re.match(r"^[a-z](?:-[a-z])+$", a):
         parts = a.replace(" ", "").casefold().split("-")
         want = sorted(letters)

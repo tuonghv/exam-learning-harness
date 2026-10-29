@@ -526,3 +526,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: design completed, no open questions.
 - Decision: deterministic fixes only; solver prompt and schema unchanged.
 - Next: implement and test.
+
+## IMPLEMENTING - TASK-019 - 2026-10-29T14:10:00Z
+- Action: split_part and per-part gaps in refine; Part II/III shape checks in verifier._format.
+- Result: 9 new tests, suite 441 OK, check-examples OK (25 pairs).
+- Decision: tolerant checks (only clearly wrong shapes fail); solver prompt untouched.
+- Next: UNIT_TESTED.
