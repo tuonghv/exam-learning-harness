@@ -1,0 +1,134 @@
+{
+  "task_id": "TASK-160",
+  "title": "Twin mounts: a finding served under two tiers (same handler in the phase 0 card) is matched to callers of the other tier in correlate R1 and logreach; old 2b items reused from cache (REQ-0125)",
+  "state": "DONE",
+  "requirement": "REQ-0125",
+  "acceptance_criteria": [
+    "160.1 twin only when both routes in the finding repo card share >=1 handler ref",
+    "160.2 correlate R1 matches callers of the twin; item records via_twin + refs; counts in graph/correlation.json",
+    "160.3 logreach caller link through the twin with card refs in basis_text",
+    "160.4 cache: old 2b items keep key + input hash and are reused; only new twin items called; dry-run shows reused vs would call",
+    "160.5 new twin items never push an existing selected item over the cap",
+    "160.6 findings untouched; coverage gaps=0; single-source unchanged"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-160-twin-mount-caller.md",
+    "summary": "twin rule from card shared refs; R1 --twin key (old items byte-equal, cache reused); own twin budget 10; logreach card refs; unit reselect + run --only"
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "correlate card_twins + R1 --twin items (own budget 10, coverage-first), twins in correlation.json; logreach twin_refs in basis_text; pipeline.sh unit reselect [--yes] + PIPELINE_2B_TWIN_MAX pass-through",
+    "files": [
+      "correlate.py",
+      "logreach.py",
+      "pipeline.sh",
+      "tests/correlate_twin_test.sh",
+      "tests/logreach_test.sh",
+      "tests/pipeline_unit_control_test.sh",
+      "docs/guide/pipeline-operations.md"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh --fast + correlate*, logreach*, pipeline_unit_control, pipeline_dryrun, pipeline_run, pipeline_rerun_e2e, job_hold_pl; shell.sh",
+    "result": "all pass (skill_layout U7 pre-existing, fixed in a separate commit); bites a-d fail as expected; oracle on r160: 30 old keys byte-equal, same order, 10 twin items, 0 mismatch rows"
+  },
+  "security": {
+    "status": "completed",
+    "result": "twin refs via REF sanitiser (<=4), no free model text in reports, only new network = ES queries for new twin caller routes, no secrets (verifier)"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "scratch kit v160 (Upzi/full copy, HEAD): unit reselect/--yes, run --only (fake claude), run, logreach (ES stub for 3 uncached twin-caller queries), rebuild, coverage_check; single-source summarize_report.sh base vs HEAD",
+    "result": "V5-V8 pass: 30 old 2b items kept (hash), 10 twin calls only; 008 card refs in 9 reports + conclusion; 4 twin-driven moves (0 seen change, 64/6/72 -> 64/9/69); gaps=0 142/142; report_qa PASS; single-source 76 files identical except 4 timestamps; verifier AC1-AC7 VERIFIED",
+    "evidence": [
+      "work/TASK-160/evidence/v_summary.md",
+      "work/TASK-160/handoff/verify.md",
+      "work/TASK-160/evidence/v7_verdict_moves.tsv",
+      "work/TASK-160/evidence/v8_single_source_diff.txt",
+      "work/TASK-160/evidence/v9_skill_layout.txt"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-160-twin-mount-caller.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-160/handoff/design.md",
+    "coder": "work/TASK-160/handoff/code.md",
+    "tester": "work/TASK-160/handoff/test.md",
+    "verifier": "work/TASK-160/handoff/verify.md",
+    "crosscheck": "work/TASK-160/handoff/crosscheck.md"
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-01073",
+      "note": "find /internal twin of /external findings in the engine, no prompt change",
+      "at": "2026-10-28T06:34:29Z"
+    },
+    {
+      "raw": "RAW-01074",
+      "note": "yes run twin items in 2b, with cache: unchanged items reused",
+      "at": "2026-10-28T06:34:29Z"
+    },
+    {
+      "raw": "RAW-01075",
+      "note": "Upzi/full is big: run only the selected new twin 2b items (TASK-146 run --only), never the whole phase",
+      "at": "2026-10-28T06:36:32Z"
+    },
+    {
+      "raw": "RAW-01076",
+      "note": "Idea: caller links can find what phase 1 missed -> new REQ-0126 (caller-seeded 2b items), after TASK-160",
+      "at": "2026-10-28T06:38:53Z"
+    },
+    {
+      "raw": "RAW-01081",
+      "note": "Hold REQ-0126 and the paid twin 2b run; prompt QA team tries a phase 1 prompt change for /internal; $0 TASK-160 work continues",
+      "at": "2026-10-28T07:14:36Z"
+    },
+    {
+      "raw": "RAW-01082",
+      "note": "Session limit cleared; resume tester now",
+      "at": "2026-10-28T07:15:20Z"
+    },
+    {
+      "raw": "RAW-01083",
+      "note": "endpoint display of twin mounts -> new REQ-0127 (after TASK-160)",
+      "at": "2026-10-28T08:18:06Z"
+    },
+    {
+      "raw": "RAW-01084",
+      "note": "public/external/internal one tier group, stable, low risk -> REQ-0127",
+      "at": "2026-10-28T08:18:06Z"
+    },
+    {
+      "raw": "RAW-01085",
+      "note": "'; ' endpoint fine; samples for tier group + most-exposed display -> REQ-0127 AC6",
+      "at": "2026-10-28T08:26:20Z"
+    },
+    {
+      "raw": "RAW-01078",
+      "note": "old cross pairs for Upzi/full: 346 edges, 279 unique pairs (answered)",
+      "at": "2026-10-28T08:27:32Z"
+    },
+    {
+      "raw": "RAW-01086",
+      "note": "v16 sample cross-check by grep: 11/11 two mounts = card twins -> REQ-0127 evidence",
+      "at": "2026-10-28T08:28:32Z"
+    }
+  ],
+  "picked_at": "2026-10-28T06:34:29Z",
+  "updated_at": "2026-10-28T08:29:38Z",
+  "updated_by": "coordinator",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": ""
+}

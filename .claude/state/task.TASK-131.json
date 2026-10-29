@@ -1,0 +1,75 @@
+{
+  "task_id": "TASK-131",
+  "title": "Graph-weak hold: script classifies unresolved targets, only unknown ones count (REQ-0098)",
+  "state": "DONE",
+  "requirement": "REQ-0098: classify unresolved graph targets outside the group by a no-model script; only unknown ones count against GRAPH_UNRESOLVED_MAX",
+  "acceptance_criteria": [
+    "classifier writes graph/unresolved_check.json",
+    "graph_quality counts only unknown; real weak graph still holds",
+    "$0, byte-identical when nothing outside-group, tests pass"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-131-unresolved-target-classifier.md",
+    "summary": "unresolved_check.py classifies unresolved graph targets (outside-group vs unknown) from deploy hosts/sibling manifests; graph_quality counts only unknown; Upzi 77.1% -> 48.9%"
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "unresolved_check.py classifies unresolved targets; graph_quality counts only unknown; Upzi 58 outside/23 unknown/48.9%",
+    "files": [
+      "unresolved_check.py",
+      "checkpoint_report.py",
+      "pipeline.sh",
+      "tests/unresolved_check_test.sh",
+      "tests/pipeline_checkpoint_test.sh",
+      "docs/guide/toolkit-reference.md"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh --changed; checks/shell.sh",
+    "result": "unresolved_check 14, checkpoint_report 38, pipeline_checkpoint 81, shell.sh 561/0, --changed green; Upzi copy 81/58/23 48.9% no hold; default byte-identical"
+  },
+  "security": {
+    "status": "completed",
+    "result": "stdlib classifier, no model call, no REPOS_ROOT source read, no secrets"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "verifier + saved evidence + real Upzi run to cp1",
+    "result": "AC1-AC3 verified; real run no graph hold, 58/23, 48.9%",
+    "evidence": [
+      "work/TASK-131/evidence/real-run-no-graph-hold.txt",
+      "work/TASK-131/evidence/frozen-prompts-diff.txt",
+      "work/TASK-131/handoff/verify.md"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-131-unresolved-target-classifier.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-131/handoff/design.md",
+    "coder": "work/TASK-131/handoff/code.md",
+    "tester": "work/TASK-131/handoff/test.md",
+    "verifier": "work/TASK-131/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "counts cross-checked by tester and verifier on the Upzi copy and the real run"
+    }
+  },
+  "user_notes": [],
+  "picked_at": "2026-10-21T05:25:53Z",
+  "updated_at": "2026-10-21T06:02:25Z",
+  "updated_by": "main",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": "",
+    "next": "verifier + real Upzi run check"
+  },
+  "next": ""
+}

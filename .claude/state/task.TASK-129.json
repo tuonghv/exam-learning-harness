@@ -1,0 +1,88 @@
+{
+  "task_id": "TASK-129",
+  "title": "Linked cross-product checks in the report; stale correlation guard (REQ-0096)",
+  "state": "DONE",
+  "requirement": "REQ-0096: render correlation.linked as a Cross-product checks table, re-correlate when linked.json is newer, repair Upzi_g03 run.",
+  "acceptance_criteria": [
+    "Cross-product checks table from correlation.linked",
+    "rebuild re-runs correlate when linked.json newer; 2b selection unchanged",
+    "Upzi_g03 run repaired, gaps=0, 30 findings",
+    "single-source and pipeline plans unchanged; tests; run_all/shell.sh pass"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-129-linked-cross-product-checks.md",
+    "summary": "correlate.py --linked-only patches correlation.json only; linked_corr_refresh guard in report_common.sh; build_run_data .run.linked; report ### table; scratch repair then real Upzi_g03 repair",
+    "reuse": [],
+    "risks": [
+      "selected.json rewrite losing verify merges",
+      "golden output of non-linked runs"
+    ]
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "correlate.py --linked-only; linked_corr_refresh guard; build_run_data .run.linked; Cross-product checks table; tests correlate_linked 20, run_reports 71, linked_refresh 13",
+    "files": [
+      "correlate.py",
+      "report_common.sh",
+      "conclude.sh",
+      "summarize_report.sh",
+      "docs/guide/toolkit-reference.md",
+      "tests/correlate_linked_test.sh",
+      "tests/run_reports_test.sh",
+      "tests/linked_refresh_test.sh"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh --changed (184 suites); shell.sh; correlate_linked, run_reports, linked_refresh",
+    "result": "correlate_linked 20/0, run_reports 71/0, linked_refresh 13/0, shell 553/0; full run 3 failures all pre-existing (ext_scan, track_hook, tracking_new_only); V4/V5 byte-identical; V7 scratch repair R2 1 R3 9, gaps=0, 30 findings"
+  },
+  "security": {
+    "status": "not_applicable",
+    "result": "deterministic report code; no model call, no repo source read, no secret"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "work/TASK-129/evidence/*",
+    "result": "AC1-AC4 met; real Upzi_g03 repaired: 10 rows, gaps=0, 30 findings, selected.json unchanged; full run 3 pre-existing failures",
+    "evidence": [
+      "work/TASK-129/evidence/v8_repair.txt",
+      "work/TASK-129/evidence/v8_coverage.txt",
+      "work/TASK-129/evidence/v4_run_hunk.txt",
+      "work/TASK-129/evidence/qa_changed_run_all.txt",
+      "work/TASK-129/handoff/verify.md"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-129-linked-cross-product-checks.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-129/handoff/design.md",
+    "grants": {
+      "coder": []
+    },
+    "coder": "work/TASK-129/handoff/code.md",
+    "tester": "work/TASK-129/handoff/test.md",
+    "verifier": "work/TASK-129/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "counts checked by tester, verifier and coverage_check gaps=0"
+    }
+  },
+  "user_notes": [],
+  "picked_at": "2026-10-20T09:31:13Z",
+  "updated_at": "2026-10-20T11:40:49Z",
+  "updated_by": "main",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": "",
+    "next": "verifier AC check; V8 real repair already done"
+  },
+  "next": ""
+}

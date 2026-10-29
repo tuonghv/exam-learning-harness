@@ -1,0 +1,198 @@
+{
+  "task_id": "TASK-126",
+  "title": "Upzi links Vietnamworks s2s group (8 repos) read-only: apiv2-s2s gateway rule, linked-product input for graph/correlate, dry-run RUN_DIR fix (REQ-0093)",
+  "state": "DONE",
+  "requirement": "REQ-0093: Treat apiv2-s2s.vietnamworks.com as in-cluster for Upzi; review the 8 Vietnamworks repos once as group Vietnamworks/s2s (phase 1 cached) and link them read-only to Upzi (option B, RAW-00749).",
+  "acceptance_criteria": [
+    "Vietnamworks s2s group + plan registered; route_repo_override maps the 8 routes",
+    "gateway Upzi rule for apiv2-s2s resolves in deploy/graph",
+    "deterministic read-only linked-product input for graph/correlate, symmetric for later Vietnamworks->Upzi",
+    "$0 dry run reports phase 1 cache hits; pipeline.sh run --dry-run RUN_DIR bug fixed",
+    "frozen prompts unchanged; coverage gaps=0; tests green"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-126-upzi-linked-s2s.md",
+    "summary": "Option B: Vietnamworks_s2s plan (8 repos) + link_product record; text-route reader, host-scoped route alias, linked.json snapshot, graph linked_edges, correlate linked items, dry_run RUN_DIR fix + cache-hit line. Frozen prompts untouched.",
+    "reuse": [
+      "link_gateway_rewrite.py",
+      "graph_build.sh",
+      "correlate.py",
+      "ai_store.py"
+    ],
+    "risks": [
+      "deploy_stale on open Upzi run",
+      "phase0 re-spend for changed slices",
+      "8 route->repo guesses need user confirm"
+    ]
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "126.2-126.7: link_product record, gateway text routes + alias, linked_repos.py, graph linked_edges, correlate linked rules + engine_review table, dry_run RUN_DIR fix + cache hits; s2s group/plan/gateway/link config",
+    "files": [
+      "products_common.sh",
+      "routes_text.py",
+      "link_gateway_rewrite.py",
+      "linked_repos.py",
+      "graph_build.sh",
+      "correlate.py",
+      "engine_review.py",
+      "pipeline.sh",
+      "report_common.sh",
+      "deploy_check.py",
+      "exposure_map.py",
+      "products.conf",
+      "user_scripts/prompts/vietnamworks/route_repo_override.txt"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh (full) + checks/shell.sh; targeted: pipeline_dryrun, link_gateway_rewrite, products_link, linked_repos, deploy_exposure",
+    "result": "182 suites, 178 pass; 4 fail not from TASK-126 (track_hook S3, tracking_new_only N3, ext_scan 2 QA fail identically on HEAD kit; lock_guard 15.1e flake, passes alone); targeted suites pass; shell.sh 549/0"
+  },
+  "security": {
+    "status": "not_applicable",
+    "result": "read-only link mechanism and name-only route match; no new input surface, no source read"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "tests/run_all.sh; coverage_check g03; verifier AC1-AC7",
+    "result": "AC1-AC7 MET; g03 20 linked edges gaps=0; s2s 240 routes rewritten; run_all 183 suites, 3 failures pre-existing on base commit (ext_scan, track_hook, tracking_new_only)",
+    "evidence": [
+      "work/TASK-126/evidence/run_all_final.txt",
+      "work/TASK-126/evidence/g03_linked_edges.txt",
+      "work/TASK-126/evidence/s2s_gateway_rewrite.txt",
+      "work/TASK-126/handoff/verify-final.md"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-126-upzi-linked-s2s.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-126/handoff/design.md",
+    "coder": "work/TASK-126/handoff/code.md",
+    "tester": "work/TASK-126/handoff/test.md",
+    "verifier": "work/TASK-126/handoff/verify-final.md",
+    "crosscheck": {
+      "waiver": "no count or decision oracle needed: coverage_check gaps=0 is the deterministic cross-check on the g03 run"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00761",
+      "note": "queued: slim CLAUDE.md (REQ-0094), after TASK-126",
+      "at": "2026-10-19T15:28:50Z"
+    },
+    {
+      "raw": "RAW-00762",
+      "note": "user: use subagents as much as possible to save tokens (working style)",
+      "at": "2026-10-19T15:30:07Z"
+    },
+    {
+      "raw": "RAW-00763",
+      "note": "ai group takes all 20 folders; the 20 routes come from the upzi service route file",
+      "at": "2026-10-19T15:34:11Z"
+    },
+    {
+      "raw": "RAW-00764",
+      "note": "user away: decide free toolkit work by best architect judgment and automate; paid runs still need explicit go with cost",
+      "at": "2026-10-19T15:35:18Z"
+    },
+    {
+      "raw": "RAW-00765",
+      "note": "keep comments short and only what is needed; hand work to subagents",
+      "at": "2026-10-19T15:36:55Z"
+    },
+    {
+      "raw": "RAW-00766",
+      "note": "ai group is 18 folders: skip textract, candidate consumer and the two routes without a folder",
+      "at": "2026-10-19T15:39:45Z"
+    },
+    {
+      "raw": "RAW-00767",
+      "note": "ai group tree path given by user; product UpziAI added to products.conf, 18 folders",
+      "at": "2026-10-19T15:42:52Z"
+    },
+    {
+      "raw": "RAW-00768",
+      "note": "user: automate free work, do not ask for inputs",
+      "at": "2026-10-19T15:43:22Z"
+    },
+    {
+      "raw": "RAW-00769",
+      "note": "user go for s2s phase 1; blocked until s2s tree dir exists",
+      "at": "2026-10-19T22:39:12Z"
+    },
+    {
+      "raw": "RAW-00770",
+      "note": "user: do not ask for paths already given; make the engine filter by group list instead of a prepared tree",
+      "at": "2026-10-19T23:09:08Z"
+    },
+    {
+      "raw": "RAW-00776",
+      "note": "user: stay on s2s then Upzi_g03 only, do not go further",
+      "at": "2026-10-20T01:43:35Z"
+    },
+    {
+      "raw": "RAW-00777",
+      "note": "user: plan first then confirm; Upzi_g03 depends on s2s results",
+      "at": "2026-10-20T01:44:35Z"
+    },
+    {
+      "raw": "RAW-00782",
+      "note": "user: ai group is not linked to Upzi; link line removed, ai plan parked",
+      "at": "2026-10-20T01:50:34Z"
+    },
+    {
+      "raw": "RAW-00787",
+      "note": "user: s2s needs no own cross-repo run; the Upzi_g03 to s2s link is the goal",
+      "at": "2026-10-20T03:16:27Z"
+    },
+    {
+      "raw": "RAW-00792",
+      "note": "user: verify by real check whether frontend-to-backend cross checks confirm findings; keep if valuable, drop if not",
+      "at": "2026-10-20T03:42:42Z"
+    },
+    {
+      "raw": "RAW-00793",
+      "note": "g03 run now has 20 edges into the s2s repos; payment gateway url left unrewritten",
+      "at": "2026-10-20T03:55:06Z"
+    },
+    {
+      "raw": "RAW-00797",
+      "note": "s2s must reference the g01 plan for routes outside its 8 repos; no g01 run is asked",
+      "at": "2026-10-20T04:06:55Z"
+    },
+    {
+      "raw": "RAW-00798",
+      "note": "after the fix, find the root cause of the missed step and add a guard so it does not return",
+      "at": "2026-10-20T04:08:08Z"
+    },
+    {
+      "raw": "RAW-00800",
+      "note": "go fix s2s, but as a general rule for every group plan, never a one-off; no route may miss silently",
+      "at": "2026-10-20T04:14:40Z"
+    }
+  ],
+  "picked_at": "2026-10-19T11:18:19Z",
+  "updated_at": "2026-10-20T06:34:18Z",
+  "updated_by": "main",
+  "scope": [
+    "products.conf",
+    "pipeline.sh",
+    "deploy",
+    "user_scripts",
+    "tests"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": "",
+    "next": "write report, lessons, backlog complete"
+  },
+  "next": ""
+}

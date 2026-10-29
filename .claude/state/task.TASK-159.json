@@ -1,0 +1,133 @@
+{
+  "task_id": "TASK-159",
+  "title": "Access-log check: caller-link findings explained as one internet path in every report, report QC cross-grep (REQ-0124)",
+  "state": "DONE",
+  "requirement": "REQ-0124",
+  "acceptance_criteria": [
+    "159.1 caller_link rule unchanged; Upzi/full rebuild moves 0 verdicts",
+    "159.2 quick-table row labels own route vs caller (no unlabeled second hit line)",
+    "159.3 internet path text: own URL hits, caller A (host, route, hits, auth), forwarded B (tier swap), shared sink refs, mesh line",
+    "159.4 basis shown in every report file kind, internal + public + tracking copy",
+    "159.5 report_qa check + bite: seen row with own-route 0 hits lacks basis text -> FAIL",
+    "159.6 QC cross-grep TSV over every report md, 0 mismatches, in tester/verifier checklist",
+    "159.7 findings untouched; coverage gaps=0; report_qa PASS; deliverables pass"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-159-caller-link-internet-path.md",
+    "summary": "caller_link basis_text in one internet-path order (reached /internal route, public caller+auth, sink, mesh, scanned URL 0 hits); link fields a_auth/sink/mount_refs, refs cap 6; quick-table labels; exec/findings notes; report_qa check; report_crossgrep.py",
+    "reuse": [
+      "logreach.py basis_text",
+      "chain_links REF sanitiser",
+      "reachrow"
+    ],
+    "risks": [
+      "text changes break anchored tests",
+      "rebuild must not use --render"
+    ]
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "caller_link basis_text in internet-path order (reached /internal route, caller+auth label, sink, mesh, scanned URL 0 hits on this URL); link a_auth/sink/mount_refs/own, refs cap 6; quick-table labels on caller_link rows; caller_path_notes under exec/findings tables; report_qa caller_link check; report_crossgrep.py",
+    "files": [
+      "logreach.py",
+      "logreach_report.py",
+      "report_common.sh",
+      "summarize_exec.sh",
+      "report_qa.py",
+      "tools/inspect/report_crossgrep.py",
+      "tools/inspect/INDEX.md",
+      "tests/logreach_ladder_test.sh",
+      "tests/logreach_mesh_test.sh",
+      "tests/logreach_report_test.sh",
+      "tests/logreach_render_test.sh",
+      "tests/report_crossgrep_test.sh",
+      "tests/inspect_tools_test.sh"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh logreach_ladder logreach_mesh logreach_report logreach_render report_crossgrep inspect_tools public_reports; tests/run_all.sh --fast; .claude/scripts/checks/shell.sh",
+    "result": "7 suites pass (ladder 131, mesh 63, report 70, render 49, crossgrep 5, inspect_tools 95, public_reports); --fast 172 pass; shell.sh 595/0; bites a-g fail on mutated code (d fixed by tester); non-caller_link rows byte-identical vs 0e306b7f"
+  },
+  "security": {
+    "status": "completed",
+    "result": "no finding: basis_text from sanitised refs + closed auth label, escaped in tables, no network/secrets in new code (verifier)"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "scratch Upzi/full copy: pipeline.sh rebuild (no --render); report_crossgrep.py; coverage_check --conclusion; report_qa.py; check_deliverables.sh",
+    "result": "AC1-AC7 pass (verifier): 008 basis_text in internet-path order, 0/142 verdict moves, 0 ES requests, crossgrep 0/2663 mismatches, coverage gaps=0, report_qa PASS, deliverables 150/2/1 (D14 scratch-only, no ext_inscope copy); AC8 at DONE",
+    "evidence": [
+      "work/TASK-159/evidence/v_scratch_rebuild.txt",
+      "work/TASK-159/evidence/v6_crossgrep.tsv",
+      "work/TASK-159/handoff/verify.md"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-159-caller-link-internet-path.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-159/handoff/design.md",
+    "coder": "work/TASK-159/handoff/code.md",
+    "tester": "work/TASK-159/handoff/test.md",
+    "verifier": "work/TASK-159/handoff/verify.md",
+    "crosscheck": "work/TASK-159/handoff/crosscheck.md"
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-01066",
+      "note": "Q1=(a): no special-case hiding; explain the internet path (own URL 0 hits, via community-hub A -> B -> same sink) clearly in every report",
+      "at": "2026-10-28T05:20:52Z"
+    },
+    {
+      "raw": "RAW-01064",
+      "note": "QC must cross-grep every report md (internal, public, tracking)",
+      "at": "2026-10-28T05:20:53Z"
+    },
+    {
+      "raw": "RAW-01067",
+      "note": "show scanned /external route (0 hits) + caller's /internal twin mount of same handler (chain refs); engine only, finding not edited",
+      "at": "2026-10-28T05:26:30Z"
+    },
+    {
+      "raw": "RAW-01068",
+      "note": "row leads with reached /internal route + public caller A; scanned /external URL shown as 0 hits (not 'safe', same handler)",
+      "at": "2026-10-28T05:43:42Z"
+    },
+    {
+      "raw": "RAW-01069",
+      "note": "phase1 gives /external only (11/11); engine adds /internal twin from 2b link, prompt untouched",
+      "at": "2026-10-28T05:44:44Z"
+    },
+    {
+      "raw": "RAW-01071",
+      "note": "report gets a Lessons from the 008 case section; lessons curated into skills",
+      "at": "2026-10-28T06:04:00Z"
+    },
+    {
+      "raw": "RAW-01072",
+      "note": "drop 'no traffic seen'; say '0 hits in 21 d on this URL (same code reached via the route above)'",
+      "at": "2026-10-28T06:06:21Z"
+    },
+    {
+      "raw": "RAW-01073",
+      "note": "ALREADY scope: twin-mount engine change split to REQ-0125, not in TASK-159",
+      "at": "2026-10-28T06:14:01Z"
+    }
+  ],
+  "picked_at": "2026-10-28T05:20:59Z",
+  "updated_at": "2026-10-28T06:22:52Z",
+  "updated_by": "coordinator",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": ""
+}

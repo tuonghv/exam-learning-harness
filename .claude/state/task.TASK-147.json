@@ -1,0 +1,103 @@
+{
+  "task_id": "TASK-147",
+  "title": "Repo findings index report (repo table per workspace with total findings) + admin by-repo-public cleanup script (REQ-0114)",
+  "state": "DONE",
+  "requirement": "REQ-0114. User 2026-10-27 (RAW-01001): new report alongside security_report_*.md (which stays unchanged, by-repo/ unchanged): per workspace one row per repo with total findings; admin script cleans by-repo-public/ (a copy the admin makes) of <ws>__<repo>.md/.pdf for repos with 0 findings. No engine change.",
+  "acceptance_criteria": [
+    "New report lists every plan repo per workspace with its total finding count (0 rows included), counts reconcile with the findings JSON",
+    "security_report_*.md and by-repo/ byte-identical before/after",
+    "Cleanup script touches only the given by-repo-public dir, dry-run by default, --apply removes .md/.pdf of 0-finding repos only, never by-repo/",
+    "Works for single-source and pipeline (--run) plans"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-147-repo-findings-index.md",
+    "summary": "Sidecar repo_findings_<date>.json captured in the summarize_report.sh §8 loop (same counts), md/pdf rendered from it on every non-baseline build; admin publish_by_repo.sh deletes 0-finding <ws>__<repo>.md/.pdf from a by-repo-public copy (dry-run default, refuses by-repo/). security_report and by-repo unchanged.",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "completed",
+    "files": [
+      "summarize_report.sh",
+      "publish_by_repo.sh",
+      "report_registry.json",
+      "tests/repo_findings_test.sh",
+      "tests/plan_reports_test.sh",
+      "tests/report_crosscheck_test.sh",
+      "tests/track_a_ss_test.sh",
+      "docs/guide/toolkit-reference.md",
+      "docs/guide/security-review-runbook.md"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh repo_findings; bash tests/pipeline_track_test.sh; tests/run_all.sh (full)",
+    "result": "repo_findings pass=42 fail=0; pipeline_track pass=47 fail=0 (bbb964fd); full run_all: remaining failures identical at base 321541ba (TASK-141 model names, track_hook S3, tracking_new_only N3, lead L24, pipeline_equiv 62)"
+  },
+  "security": {
+    "status": "completed",
+    "result": "publish_by_repo.sh: deletes only regular non-symlink files inside <report_dir>/by-repo-public; refuses a symlinked target and by-repo itself; sidecar by_repo names must match ^[A-Za-z0-9_-][A-Za-z0-9._-]*$ (no / or leading .); by-repo read-only (sha256 unchanged, V6). No new input from scanned repos; no network; Bash 3.2. Argus checks 2 and 8 PASS."
+  },
+  "verification": {
+    "status": "passed",
+    "evidence": [
+      "work/TASK-147/handoff/verify.md (Argus PASS, AC1-AC3, checks 1-8)",
+      "work/TASK-147/evidence/v3-v6-main.txt (V3-V6 real data, Upzi_g04 scratch kits)",
+      "work/TASK-147/evidence/fix1_pipeline_track_committed.txt (47/0 at bbb964fd)",
+      "work/TASK-147/evidence/head_skill_layout.txt (13/0)",
+      "work/TASK-147/evidence/shell_v7.txt (V7: only pre-existing pipeline_step.sh SC2015)"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-147-repo-findings-index.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-147/handoff/design.md",
+    "coder": "work/TASK-147/handoff/code.md",
+    "tester": {
+      "waiver": "Nemesis stopped at its turn limit twice (2 PARTIALs); main ran the remaining base compares and pipeline_track itself, $0. Evidence: work/TASK-147/evidence/ (full_run_all, base_*.txt, fix1_pipeline_track_committed rc 0 47/0, v3-v6-main.txt)."
+    },
+    "verifier": "work/TASK-147/handoff/verify.md",
+    "grants": {
+      "skill-curator": [
+        ".claude/skills/*"
+      ]
+    },
+    "crosscheck": {
+      "waiver": "No finding path changed (security_report and by-repo identical to base, V3). Index counts cross-checked against §8 on real Upzi_g04 data by main (V5, work/TASK-147/evidence/v3-v6-main.txt) and by Argus (verify.md); report_crosscheck suite 45/0 and pipeline_track AC6 (--scan-only, unregistered=0) 47/0 at bbb964fd."
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-01003",
+      "note": "linked to REQ-0114",
+      "at": "2026-10-27T00:51:59Z"
+    }
+  ],
+  "picked_at": "2026-10-27T00:52:09Z",
+  "updated_at": "2026-10-27T05:48:22Z",
+  "updated_by": "main",
+  "scope": [
+    "summarize_report.sh",
+    "publish_by_repo.sh",
+    "tests/repo_findings_test.sh",
+    "docs/guide/toolkit-reference.md",
+    "docs/guide/security-review-runbook.md",
+    "report_registry.json"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [
+      "design",
+      "147.1-147.5 code"
+    ],
+    "notes": "",
+    "next": "Nemesis (tester): full suite + V3-V6 on scratch copy of Upzi_g04"
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}

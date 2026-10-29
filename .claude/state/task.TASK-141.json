@@ -1,0 +1,77 @@
+{
+  "task_id": "TASK-141",
+  "title": "Pipeline suites follow PIPELINE_MODEL_* instead of pinned sonnet/opus/haiku names (4 suites red after the claude-opus-5-5 switch, follow-up of TASK-140)",
+  "state": "DONE",
+  "requirement": "pipeline_e2e, pipeline_equiv, pipeline_recon, pipeline_run expect old model names; make them read config.sh values so a model switch never breaks them",
+  "acceptance_criteria": [
+    "pipeline_run, pipeline_recon, pipeline_e2e, verify_scan green on HEAD",
+    "pipeline_approval stays green with the hygiene sed fix",
+    "no change outside tests/ (git diff --stat)",
+    "a guard fails the suite if the sed anchor stops matching (bite)"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-141-suites-follow-pipeline-models.md",
+    "summary": "Tests pin PIPELINE_MODEL_* in each scratch kit (anchored sed =.* + guard, or export) instead of asserting the config default; 5 test files only, no production/config/prompt change."
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "5 suites pin PIPELINE_MODEL_* (and PIPELINE_P0_FALLBACK_MODEL where used) in the scratch kit with anchored sed + guard; design gap: fallback/P2 pins added in pipeline_recon and pipeline_run.",
+    "files": [
+      "tests/pipeline_run_test.sh",
+      "tests/pipeline_recon_test.sh",
+      "tests/pipeline_approval_test.sh",
+      "tests/pipeline_e2e_test.sh",
+      "tests/verify_scan_test.sh"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "bash tests/{pipeline_run,pipeline_recon,pipeline_e2e,verify_scan,pipeline_approval}_test.sh; tests/run_all.sh --fast",
+    "result": "128/0, 63/0, 42/0, 31/0, 31/0 (baseline 4/8/1/3/0 fail); guard bites red; run_all --fast 3 red suites pre-existing on fa4a8acc (skill_layout U7, track_a_ss 106.7, track_hook S3)"
+  },
+  "security": {
+    "status": "not_applicable",
+    "result": "test-only change, no paid call, no REPOS_ROOT (Argus)"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "5 pipeline suites via tests/run_all.sh; git diff --stat fa4a8acc..b1dad421; shell.sh",
+    "result": "5 suites green (v0 red); diff only 5 test files; shell.sh only pre-existing pipeline_step.sh; Argus PASS",
+    "evidence": [
+      "work/TASK-141/evidence/v0.txt",
+      "work/TASK-141/evidence/diffstat.txt",
+      "work/TASK-141/evidence/static_shell.txt",
+      "work/TASK-141/handoff/verify.md"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-141-suites-follow-pipeline-models.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-141/handoff/design.md",
+    "coder": "work/TASK-141/handoff/code.md",
+    "tester": "work/TASK-141/handoff/test.md",
+    "verifier": "work/TASK-141/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "test-only change, no counts to reconcile; Vega and Argus re-ran independently"
+    }
+  },
+  "user_notes": [],
+  "picked_at": "2026-10-27T22:31:47Z",
+  "updated_at": "2026-10-27T23:27:51Z",
+  "updated_by": "main",
+  "scope": [
+    "work/TASK-141/"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": ""
+}

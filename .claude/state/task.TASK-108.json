@@ -1,0 +1,80 @@
+{
+  "task_id": "TASK-108",
+  "title": "flow_map.py label truncation never cuts a finding id (D10 false gap PT-01 on Vietnamworks_g01 run 20261013-174303); re-render $0 to deliverables fail=0 (REQ-0073)",
+  "state": "DONE",
+  "requirement": "REQ-0073 (RAW-00578)",
+  "acceptance_criteria": [
+    "flow_map.field never ends inside a [\\w-] token unless the text is one token longer than the limit (tests T1-T3)",
+    "g01 run 20261013-174303 re-rendered: check_deliverables fail=0, coverage gaps=0 findings=19 shown=19, posture CRITICAL C2 H10 M7 unchanged"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-108-flow-map-id-cut.md",
+    "summary": "field() backs off to the last word boundary when a cut would split a [\\w-] token, so PT ids are whole or dropped"
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "field() drops a partial trailing [\\w-] token when the cut splits one; hard cut kept for a single over-long token",
+    "files": [
+      "flow_map.py",
+      "tests/flow_map_test.sh"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh flow_map; .claude/scripts/checks/shell.sh",
+    "result": "flow_map pass=18 fail=0 (T1-T3 new); shell pass=499 fail=0"
+  },
+  "security": {
+    "status": "completed",
+    "result": "string truncation only; regex [\\w-]+$ linear, no ReDoS; no input or secret handling change"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "PLAN=Vietnamworks_g01/main ./pipeline.sh rebuild --render --run <g01 run>; check_deliverables.sh --run latest; coverage_check.py --conclusion; report_crosscheck.py",
+    "result": "deliverables pass=31 fail=0 (was fail=1 D10); coverage findings=19 shown=19 gaps=0; crosscheck fail=0 (was 8); posture CRITICAL C2 H10 M7 unchanged; label now ends at word boundary",
+    "evidence": [
+      "work/TASK-108/evidence/rebuild-render.txt",
+      "work/TASK-108/evidence/deliverables.txt",
+      "work/TASK-108/evidence/coverage.txt",
+      "work/TASK-108/evidence/crosscheck.txt"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-108-flow-map-id-cut.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": {
+      "waiver": "one-function change; coordinator drafted design from the observed report line and coverage regex"
+    },
+    "coder": "work/TASK-108/handoff/code.md",
+    "tester": {
+      "waiver": "main re-ran the coder checks (one-function change)"
+    },
+    "verifier": "work/TASK-108/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "verifier checked counts against evidence; deterministic coverage/crosscheck scripts are the oracle (19/19, gaps=0, fail=0)"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00578",
+      "note": "user: fix it (the D10 PT-01 gap after the g01 run)",
+      "at": "2026-10-13T13:50:53Z"
+    }
+  ],
+  "picked_at": "2026-10-13T13:50:59Z",
+  "updated_at": "2026-10-13T13:55:29Z",
+  "updated_by": "main",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": ""
+}

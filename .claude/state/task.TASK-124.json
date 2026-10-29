@@ -1,0 +1,185 @@
+{
+  "task_id": "TASK-124",
+  "title": "Smarter harness: learn from product-quality misses (no skipped safeguards, plan conformance before paid runs, stuck-loop root-cause protocol, incident -> guard)",
+  "state": "DONE",
+  "requirement": "The harness (skills, hooks, coordinator) SHALL stop repeating product-quality misses: missed steps, old plans reused unchecked, loops on one blocker, recommending to skip a safeguard instead of fixing its cause, missed log check; a stuck task follows a root-cause protocol that fixes the engine, and each incident leaves a deterministic guard. Design first from the incident history. REQ-0092 (RAW-00726)",
+  "acceptance_criteria": [
+    "AC1 D16",
+    "AC2 D15 state",
+    "AC3 checklist+protocol",
+    "AC4 ledger+bite gate",
+    "AC5 plan.sh compare",
+    "AC6 pipeline-inputs ref+test",
+    "AC7 single-source cmp + gaps=0",
+    "AC8 first-failure diagnose + known incidents WARN"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-124-smarter-harness.md",
+    "summary": "9 items (124.7 dropped): D16 deploy-context FAIL, D15 logreach-state FAIL, plan.sh compare, pipeline-inputs skill ref + drift test, incidents ledger, incident bite gate, learn-forward WARN, paid-go checklist, first-failure diagnose protocol",
+    "reuse": [
+      "check_deliverables.sh D-check pattern",
+      "features.json / plan.sh features",
+      "blocked.attempts"
+    ],
+    "risks": [
+      "new FAILs on old real runs (correct: they are unsound)"
+    ]
+  },
+  "implementation": {
+    "status": "completed",
+    "files": [
+      "check_deliverables.sh",
+      "tests/check_deliverables_test.sh",
+      "plan.sh",
+      "tests/plan_compare_test.sh",
+      "tests/features_catalog_test.sh",
+      ".claude/scripts/workflow-check.sh",
+      ".claude/tests/workflow_gates_test.sh",
+      ".claude/skills/run-security-review/SKILL.md",
+      ".claude/skills/run-security-review/references/pipeline-inputs.md",
+      ".claude/skills/coordinator/SKILL.md",
+      ".claude/skills/design/SKILL.md",
+      ".claude/skills/inspector/SKILL.md",
+      "docs/notes/incidents.md",
+      "docs/guide/toolkit-reference.md"
+    ],
+    "summary": "124.1 D16, 124.2 D15 state, 124.3/124.4 skill text, 124.5 incidents.md, 124.6 incident bite gate, 124.8 plan.sh compare, 124.9 pipeline-inputs ref + S1, 124.10 known-incidents WARN; 124.7 dropped"
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh </dev/null; .claude/scripts/checks/shell.sh",
+    "result": "177 suites; only pre-existing fails ext_scan, track_hook, tracking_new_only (TASK-078); check_deliverables 73/0, workflow_gates 156/0, plan_compare 11/0, features_catalog 9/0, run_reports 67/0; shell 539/0; bites FAIL on old code (bite_*.txt); single-source cmp identical"
+  },
+  "security": {
+    "status": "completed",
+    "result": "read-only checks; compare prints key names only; no secrets/link values in evidence (sec_evidence_scan: file names only); no REPOS_ROOT reads; findings, run files, prompts unchanged"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "check_deliverables --run latest on Upzi_g01/main + Upzi_g02/qlv5; plan.sh compare g01 g02; coverage_check qlv5; git diff prompts",
+    "result": "verifier: all V rows + AC1-AC8 PASS; at HEAD 311b3f7 g01 FAIL D16 (pre-122) + WARN D15, qlv5 WARN D16 weak + PASS D15, coverage gaps=0, 0 prompt files changed",
+    "evidence": [
+      "work/TASK-124/evidence/V1a_g01_head.txt",
+      "work/TASK-124/evidence/V2a_qlv5_head.txt",
+      "work/TASK-124/evidence/V6_coverage_qlv5.txt",
+      "work/TASK-124/evidence/V7_compare_g01_g02.txt",
+      "work/TASK-124/evidence/V_prompts_frozen.txt",
+      "work/TASK-124/handoff/verify.md"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-124-smarter-harness.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "grants": {
+      "coder": [
+        ".claude/scripts/*",
+        ".claude/skills/*",
+        ".claude/skills/**",
+        ".claude/scripts/workflow-check.sh",
+        ".claude/scripts/stuck.sh",
+        ".claude/skills/coding/SKILL.md",
+        ".claude/skills/unit-test/SKILL.md",
+        ".claude/skills/verify/SKILL.md"
+      ],
+      "tester": [
+        ".claude/skills/**",
+        ".claude/scripts/workflow-check.sh",
+        ".claude/scripts/stuck.sh",
+        ".claude/skills/coding/SKILL.md",
+        ".claude/skills/unit-test/SKILL.md",
+        ".claude/skills/verify/SKILL.md"
+      ],
+      "skill-curator": [
+        ".claude/skills/*"
+      ]
+    },
+    "grants_auto": [
+      ".claude/skills/**",
+      ".claude/scripts/workflow-check.sh",
+      ".claude/scripts/stuck.sh",
+      ".claude/skills/coding/SKILL.md",
+      ".claude/skills/unit-test/SKILL.md",
+      ".claude/skills/verify/SKILL.md"
+    ],
+    "designer": "work/TASK-124/handoff/design.md",
+    "coder": "work/TASK-124/handoff/code.md",
+    "tester": "work/TASK-124/handoff/test.md",
+    "verifier": "work/TASK-124/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "no report generator or finding count changed (check_deliverables, plan.sh, skills only); qlv5 coverage gaps=0 in work/TASK-124/evidence/V6_coverage_qlv5.txt"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00726",
+      "note": "update harness+skills from past misses (missed steps, reused old plans, loops, recommend skipping deploy context, missed ES log check); smarter work, solve hard stuck",
+      "at": "2026-10-19T01:18:48Z"
+    },
+    {
+      "raw": "RAW-00727",
+      "note": "linked to REQ-0092",
+      "at": "2026-10-19T01:26:02Z"
+    },
+    {
+      "raw": "RAW-00728",
+      "note": "linked to REQ-0092",
+      "at": "2026-10-19T01:26:33Z"
+    },
+    {
+      "raw": "RAW-00729",
+      "note": "linked to REQ-0092",
+      "at": "2026-10-19T01:28:57Z"
+    },
+    {
+      "raw": "RAW-00730",
+      "note": "linked to REQ-0092",
+      "at": "2026-10-19T01:30:45Z"
+    },
+    {
+      "raw": "RAW-00732",
+      "note": "linked to REQ-0092",
+      "at": "2026-10-19T03:23:40Z"
+    },
+    {
+      "raw": "RAW-00731",
+      "note": "user asked what the fixture choice means; answered (pipeline fixture, not single-source)",
+      "at": "2026-10-19T04:23:03Z"
+    }
+  ],
+  "picked_at": "2026-10-19T01:18:48Z",
+  "updated_at": "2026-10-19T04:29:57Z",
+  "updated_by": "main",
+  "scope": [
+    "docs/design/phase-124-*",
+    "docs/req/**",
+    "check_deliverables.sh",
+    "plan.sh",
+    "tests/check_deliverables_test.sh",
+    "tests/plan_compare_test.sh",
+    "tests/features_catalog_test.sh",
+    ".claude/skills/**",
+    ".claude/scripts/workflow-check.sh",
+    ".claude/scripts/stuck.sh",
+    ".claude/tests/**",
+    "docs/notes/incidents.md",
+    "docs/guide/toolkit-reference.md",
+    "tests/run_reports_test.sh",
+    ".claude/skills/coding/SKILL.md",
+    ".claude/skills/unit-test/SKILL.md",
+    ".claude/skills/verify/SKILL.md",
+    ".claude/lessons/ledger.jsonl"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "",
+  "questions_open": 0
+}

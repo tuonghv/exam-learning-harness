@@ -1,0 +1,140 @@
+{
+  "task_id": "TASK-106",
+  "title": "Reports visible under ./reports: CHECKLIST.md next to each run's reports, $0 scratch/verify runs as PREVIEW under reports/<sys>/<plan>/preview/<run>/, index (REQ-0070)",
+  "state": "DONE",
+  "requirement": "REQ-0070: every run's reports and the report checklist are visible under ./reports/<sys>/<plan>/; the checklist inventories the ./reports path; scratch runs land as PREVIEW apart from deliverables",
+  "acceptance_criteria": [
+    "REQ-0070 AC1-AC12"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-106-reports-visible-checklist.md",
+    "summary": "CHECKLIST.md+index.md in ./reports (report_publish.py), opt-in previews preview/<run>/ keep 5, Track A = single-source set in run-<id>/single-source/ (+ext, tracking), baseline name retired (alias kept)",
+    "reuse": "ss branch of summarize_report/summarize_exec, crosscheck_hook, track_hook, report_crosscheck profile",
+    "risks": "test pollution of real ./reports (opt-in + run_all REPORT_PREVIEW=0); TASK-104 baseline asserts change on purpose; 95.3 dir hash"
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "106.1-106.11: report_publish.py preview/index, CHECKLIST.md next to reports, Track A single-source set via ss view (writers unchanged), carry.py carried rows with id clash rename, tracking copies with stable ids, checklist inventories tracking, check_deliverables --single-source",
+    "files": [
+      ".claude/scripts/scratch-kit.sh",
+      ".claude/tests/scratch_kit_test.sh",
+      "README.md",
+      "check_deliverables.sh",
+      "docs/guide/architecture.md",
+      "docs/guide/toolkit-reference.md",
+      "ext_scan.sh",
+      "pipeline.sh",
+      "report_common.sh",
+      "report_crosscheck.py",
+      "report_publish.py",
+      "report_registry.json",
+      "tests/check_deliverables_test.sh",
+      "tests/pipeline_track_test.sh",
+      "tests/report_crosscheck_test.sh",
+      "tests/report_publish_test.sh",
+      "tests/run_all.sh",
+      "tests/track_a_ss_test.sh",
+      "tracking/track.py",
+      "tracking/track.sh"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh (full, 158 suites) + .claude/scripts/checks/shell.sh",
+    "result": "155/158 suites pass; 3 FAILs pre-existing and not from TASK-106: ext_scan QA/QA adv (F-96-1), tracking_new_only N3 (fails at 5a0b11b), track_hook S3 (F-106-QA3, guard text from TASK-104 6bf9c08). pipeline_track 47/0, track_a_ss 30/0, report_crosscheck 45/0, report_publish 22/0, check_deliverables 46/0, tracking_test 77/0, shell 495/0. Evidence work/TASK-106/evidence/qa106b-*.txt"
+  },
+  "security": {
+    "status": "completed",
+    "result": "PASS (Argus): report_publish.py validates preview origin and target under reports/<sys>/<plan>/preview, swap via .tmp dir, prune only banner-checked dirs; tests force REPORT_PREVIEW=0; checklist shows names/paths only; real plan/registry hash unchanged in r6"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "bash work/TASK-106/evidence/r6_trackA.sh (Track A on scratch kit of 949cadb + copy of Upzi_g02/main, fake claude); check_deliverables old vs HEAD; carry.py; grep baseline",
+    "result": "r6 rc0, 0 calls, QA PASS, 12+4 carried, tracking gaps=0, CHECKLIST 9/9 with reasons on all not-expected rows, deliverables 19/0, real data unchanged; AC3/5/9/11/12 PASS (Argus verify-r6.md). AC1 real full run + A-then-B: unit-only, waived by user 2026-10-13 (prove on next real full run)",
+    "evidence": [
+      "work/TASK-106/evidence/v106-trackA-upzi-r6.txt",
+      "work/TASK-106/evidence/v106-ac3-preview-ignored.txt",
+      "work/TASK-106/evidence/v106-ac12-carry.txt",
+      "work/TASK-106/evidence/v106-baseline-grep-r6.txt",
+      "work/TASK-106/evidence/v106-index.txt",
+      "work/TASK-106/handoff/verify.md",
+      "work/TASK-106/handoff/verify-r6.md"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-106-reports-visible-checklist.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-106/handoff/design.md",
+    "grants": {
+      "coder": [
+        ".claude/scripts/*"
+      ]
+    },
+    "coder": "work/TASK-106/handoff/code-fix4.md",
+    "tester": "work/TASK-106/handoff/test.md",
+    "verifier": "work/TASK-106/handoff/verify-r6.md",
+    "crosscheck": "work/TASK-106/handoff/crosscheck.md"
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00554",
+      "note": "user expects to see every run's report in ./reports and cross-check it there without a manual copy"
+    },
+    {
+      "raw": "RAW-00555",
+      "note": "accept all (preview/<run>/, keep 5, high priority); the checklist must apply to the ./reports path"
+    },
+    {
+      "raw": "RAW-00556",
+      "note": "Track A must render the full single-source report set (pdf, exec, per-repo, findings) + tracking copies, PRELIMINARY",
+      "at": "2026-10-12T23:02:41Z"
+    },
+    {
+      "raw": "RAW-00557",
+      "note": "after Track A: the single-source report kinds and names (+ ext scan kinds), no 'baseline' report/name",
+      "at": "2026-10-12T23:04:02Z"
+    },
+    {
+      "raw": "RAW-00558",
+      "note": "reuse existing reports, no new kind; only the end-to-end multi-phase reports are missing after Track A",
+      "at": "2026-10-12T23:06:41Z"
+    },
+    {
+      "raw": "RAW-00559",
+      "note": "user: coordinator chooses; Track A and the single-source plan must be complete (AC10, 106.8)",
+      "at": "2026-10-12T23:11:31Z"
+    },
+    {
+      "raw": "RAW-00561",
+      "note": "Track A can be the end of a review: its set must be a complete final deliverable, no PRELIMINARY",
+      "at": "2026-10-12T23:17:02Z"
+    },
+    {
+      "raw": "RAW-00562",
+      "note": "compare Track A with full-run tracking set; 106.10 gap table, AC12 carried findings",
+      "at": "2026-10-12T23:25:42Z"
+    },
+    {
+      "raw": "RAW-00563",
+      "note": "keep report engine stable: Track A reuses existing writers via ss view (ext_gap_report.sh:57), only gaps are new",
+      "at": "2026-10-12T23:42:51Z"
+    }
+  ],
+  "picked_at": "2026-10-12T22:58:37Z",
+  "updated_at": "2026-10-13T06:06:12Z",
+  "updated_by": "main",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": "r6 real-data Track A at 949cadb: rc0, 0 calls, QA PASS, 12+4 carried, gaps=0, CHECKLIST 9/9, D 19/0, real data unchanged",
+    "notes": "",
+    "next": "Argus re-verify (r6, AC3/5/9/11/12 evidence); then ask user waiver for AC1 real full run + A-then-B"
+  },
+  "next": ""
+}

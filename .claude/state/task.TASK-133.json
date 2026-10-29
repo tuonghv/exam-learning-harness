@@ -1,0 +1,90 @@
+{
+  "task_id": "TASK-133",
+  "title": "Linked 2b callee gets its card and deploy slice from the linked plan latest run (REQ-0100)",
+  "state": "DONE",
+  "requirement": "REQ-0100: p2b_compose gives the linked callee the card from <plan>/runs/latest/phase0/out/<key>.json and the deploy slice from <plan>/runs/latest/deploy-context.json instead of card none",
+  "acceptance_criteria": [
+    "linked callee card+mounted_at in cards.json and slice in deploy.json",
+    "falls back to card none without phase0 output",
+    "default byte-identical; frozen prompts untouched; tests pass"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-133-linked-callee-card-deploy.md",
+    "summary": "linked callee gets phase0 card and deploy slice from the linked plan latest run; fallback card none"
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "linked callee card + deploy slice read from the linked plan latest run; fallback card none; slice failure warns",
+    "files": [
+      "pipeline_lib.sh",
+      "tests/p2b_linked_compose_test.sh",
+      "docs/guide/toolkit-reference.md"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh (full)",
+    "result": "188 suites, 185 pass; only known failures ext_scan, track_hook, tracking_new_only; p2b_linked 24/0, linked 7 suites, pipeline_linked 8/0, shell.sh 561/0; U1 fails 3x on old code"
+  },
+  "security": {
+    "status": "completed",
+    "result": "lplan validated by regex and no .. (unchanged), reads only the linked plan run dir, no REPOS_ROOT read, stderr only on slice failure"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "verifier + real compose on Upzi L-R2 + coverage_check",
+    "result": "PASS all criteria; callee card 22KB, slice 2KB (was 209B/none); coverage gaps=0; frozen prompts diff empty; run_all only known failures",
+    "evidence": [
+      "work/TASK-133/evidence/real_compose.txt",
+      "work/TASK-133/evidence/bite_old.txt",
+      "work/TASK-133/evidence/coverage.txt",
+      "work/TASK-133/evidence/frozen-prompts-diff.txt",
+      "work/TASK-133/handoff/verify.md"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-133-linked-callee-card-deploy.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": {
+      "waiver": "one branch of p2b_compose, design written by the coordinator"
+    },
+    "coder": "work/TASK-133/handoff/code.md",
+    "tester": "work/TASK-133/handoff/test.md",
+    "verifier": "work/TASK-133/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "one branch of p2b_compose; verifier and real compose cover counts"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00858",
+      "note": "automate the task end to end; do not ask the user repeatedly; stop only for paid runs over the stated limit",
+      "at": "2026-10-21T23:11:40Z"
+    },
+    {
+      "raw": "RAW-00863",
+      "note": "user wants a stable design for graph calls via domain+route / Kong ingress / Kong external (REQ-0101 widened)",
+      "at": "2026-10-22T00:08:20Z"
+    }
+  ],
+  "picked_at": "2026-10-21T23:10:38Z",
+  "updated_at": "2026-10-22T01:00:08Z",
+  "updated_by": "main",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [
+      "design committed 300e7022; coder briefed",
+      "coder done: pipeline_lib.sh linked branch + tests; real compose ok"
+    ],
+    "notes": "",
+    "next": "tester QA then UNIT_TESTED"
+  },
+  "next": ""
+}

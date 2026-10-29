@@ -1,0 +1,120 @@
+{
+  "task_id": "TASK-107",
+  "title": "In-scope A/B ext report ext_inscope_ab_<date>.md (+pdf): ext_ab restricted to in-scope findings, shared in-scope rule, registry kind ext-inscope-ab (REQ-0071)",
+  "state": "DONE",
+  "requirement": "WHEN an ext A/B report is rendered, the toolkit SHALL also render ext_inscope_ab_<date>.md (+pdf) with the ext_ab sections counting only in-scope findings by the shared ext_inscope rule; ext_ab unchanged (REQ-0071)",
+  "acceptance_criteria": [
+    "107.1 shared in-scope rule in ext_inscope.py (is_in_scope, inscope_keep), load_records unchanged",
+    "107.2 ext_report.build(keep=...) scoped build; keep=None byte-identical",
+    "107.3 render + main write ext_inscope_ab_<date>.md/.pdf next to ext_ab, in-scope records line = ext_inscope",
+    "107.4 registry kind ext-inscope-ab (expect = ext-ab), exclude on ext-inscope, ext_scan.sh crosscheck kinds",
+    "107.5 D14 and pipeline.sh ss fallback globs narrowed to the two ext_inscope families; D14 WARN when ab-inscope missing",
+    "107.6 ext_selfcheck i11 in-scope count check"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-107-inscope-ab-report.md",
+    "summary": "ext_report.py writes ext_inscope_ab next to ext_ab in the same call via build(keep=inscope_keep(ext_root)); one shared in-scope rule; registry kind + glob-clash fixes; ext_ab byte-identical",
+    "reuse": [
+      "ext_report.build/render",
+      "ext_inscope.load_records",
+      "report_registry exclude",
+      "ext_selfcheck families"
+    ],
+    "risks": [
+      "ext_inscope_* glob clash in registry, D14, Track A fallback (fixed in 107.4/107.5)",
+      "ab byte-identity (U1 golden cmp)"
+    ]
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "ext_inscope.is_in_scope/inscope_keep; ext_report.build(keep=)+scope_match+render scope; inscope_ab written after ext_ab (WARN-only); registry kind ext-inscope-ab + exclude; D14/pipeline globs narrowed; selfcheck I11",
+    "files": [
+      "ext_inscope.py",
+      "ext_report.py",
+      "ext_selfcheck.py",
+      "ext_scan.sh",
+      "report_registry.json",
+      "check_deliverables.sh",
+      "pipeline.sh",
+      "docs/guide/toolkit-reference.md",
+      "tests/ext_inscope_ab_test.sh",
+      "tests/track_a_ss_test.sh",
+      "tests/check_deliverables_test.sh",
+      "tests/ext_selfcheck_test.sh",
+      "tests/report_crosscheck_test.sh"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "bash tests/ext_inscope_ab_test.sh; tests/run_all.sh ext_inscope|ext_selfcheck|pipeline_ext|track_a_ss|check_deliverables|report_crosscheck|ext_scan; report_crosscheck.py --lint; checks/shell.sh",
+    "result": "ext_inscope_ab 30/0; named suites pass; lint OK 25 kinds; shell 497/0; ext_scan 321/2 = known F-96-1 (TASK-078). Evidence work/TASK-107/evidence/qa107-gate-*.txt (Nemesis, HEAD f33bf36)"
+  },
+  "security": {
+    "status": "completed",
+    "result": "PASS (Argus): new cells through esc(); pointer is an existence check confined to the out dir; no new file reads; report shows the same data class as ext_ab"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "work/TASK-107/evidence/v107_trackA.sh (Track A on Upzi_g02 copy, fake claude); v107_ac3_realcmp.sh; v107_extscan_base.sh; Argus verify.md",
+    "result": "AC1-AC5 and 107.1-107.6 PASS (Argus). Real data: rc 0, 0 claude calls, 39 of 162 in ext_inscope_ab and ext_inscope_pre, deliverables 19/0, D14 self-check 11/11, checklist 10/10, preview has the pair, real data unchanged; ext_ab byte-identical old vs new on same inputs; ext_scan 2 fails pre-existing at 8fa67dd",
+    "evidence": [
+      "work/TASK-107/evidence/v107-trackA-upzi-r2.txt",
+      "work/TASK-107/evidence/v107-ac3-realcmp.txt",
+      "work/TASK-107/evidence/v107-extscan-base.txt",
+      "work/TASK-107/evidence/v107-extra.txt",
+      "work/TASK-107/evidence/qa107-gate-suites (per-suite files)"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-107-inscope-ab-report.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-107/handoff/design.md",
+    "coder": "work/TASK-107/handoff/code.md",
+    "tester": "work/TASK-107/handoff/test.md",
+    "verifier": "work/TASK-107/handoff/verify.md",
+    "crosscheck": "work/TASK-107/handoff/crosscheck.md"
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00566",
+      "note": "user: ext_inscope_ab like ext_ab but in-scope only; design it. Also asked about vnw cronjob path in Upzi ext report (tree content, not a copy bug)",
+      "at": "2026-10-13T05:23:37Z"
+    },
+    {
+      "raw": "RAW-00567",
+      "note": "user approved phase-107 design, start implementing",
+      "at": "2026-10-13T06:12:05Z"
+    }
+  ],
+  "picked_at": "2026-10-13T06:07:01Z",
+  "updated_at": "2026-10-13T07:08:34Z",
+  "updated_by": "main",
+  "scope": [
+    "ext_inscope.py",
+    "ext_report.py",
+    "ext_selfcheck.py",
+    "ext_scan.sh",
+    "report_registry.json",
+    "check_deliverables.sh",
+    "pipeline.sh",
+    "tests/ext_inscope_ab_test.sh",
+    "tests/track_a_ss_test.sh",
+    "tests/check_deliverables_test.sh",
+    "docs/guide/toolkit-reference.md",
+    "tests/ext_selfcheck_test.sh",
+    "tests/report_crosscheck_test.sh"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": "impl 107.1-107.6 + fix round 1 (pointer names the real sibling in-scope report); real-data kit v107: 39 of 162 in ab and pre, deliverables 19/0, 0 claude calls; Nemesis QA 30/30, U1 vs 9f1fb97, bites fail right cases; fix round 2 F-107-1 direct count",
+    "notes": "",
+    "next": ""
+  },
+  "next": ""
+}

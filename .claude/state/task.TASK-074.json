@@ -1,0 +1,163 @@
+{
+  "task_id": "TASK-074",
+  "title": "Role lessons journal + skill-curator role and skill-maintenance skill [queue review 2026-10-08: re-check guard/role ACs against the inspector and current agent_setup.json; decide whether the curator replaces the manual Going-faster lessons; any new block needs user confirmation] [staleness review r2: re-scope to 74.1-74.6 (lessons, curator, ratchet); add inspector as a lesson source; skill sizes refreshed; 74.7/74.8 skill split moved to TASK-093; any new block needs user confirmation]",
+  "state": "DONE",
+  "requirement": "REQ-0033: roles append lessons; one skill-curator role reads them and updates skills/agent files per role kind, searching before editing (no duplicates, no conflicts with user rules)",
+  "acceptance_criteria": [
+    "AC1 lessons journal format + append without clashes",
+    "AC2 skill-curator agent + skill-maintenance skill (search, merge, keep RAW rules, size limits)",
+    "AC3 only the curator edits skills from lessons (grant or patch route)",
+    "AC4 each lesson consumed once with a trace",
+    "AC5 coordinator trigger point; shared skills covered",
+    "AC6 $0 seeded-lesson test",
+    "74.7 evidence-gated skill edits: curate.md evidence column, no-evidence reject, ledger watch rows, process_metrics --roles no-worse check at next DONE, reverse-patch revert (AC8)"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-74-role-lessons-curator.md",
+    "summary": "Role lessons journal (L: lines in handoffs) + lessons.py similar/mark-from ledger + skill-maintenance skill + skill-curator role via the patch route (no grantable widening); protect.roles += skill-curator, inbox-triage (user yes 2026-09-29); curator replaces the manual Going-faster append; 74.5 narrowed to no-growth (ratchet in TASK-093). Staleness r3: 3 still needed, 3 changed base.",
+    "reuse": "apply-patches.sh patch route, agent_setup.json protect.roles, brief.sh, save-evidence.sh",
+    "risks": "agent_setup.py init --profile rewrites the project block; curator patches to shared skills land in the DONE commit (main reviews diff)"
+  },
+  "implementation": {
+    "status": "completed",
+    "files": [
+      ".claude/agent_setup.json",
+      ".claude/agents/coder.md",
+      ".claude/agents/designer.md",
+      ".claude/agents/inbox-triage.md",
+      ".claude/agents/inspector.md",
+      ".claude/agents/lead.md",
+      ".claude/agents/skill-curator.md",
+      ".claude/agents/tester.md",
+      ".claude/agents/verifier.md",
+      ".claude/scripts/lessons.py",
+      ".claude/scripts/process_metrics.py",
+      ".claude/skills/coordinator/SKILL.md",
+      ".claude/skills/skill-maintenance/SKILL.md",
+      ".claude/skills/workflow/SKILL.md",
+      ".claude/tests/agent_setup_hook_test.sh",
+      ".claude/tests/lessons_revert_confine_test.sh",
+      ".claude/tests/lessons_test.sh",
+      ".claude/tests/process_metrics_test.sh"
+    ],
+    "summary": "74.1-74.7: L: lesson line in every role file, lessons.py collect/similar/patch/mark-from/scope/watch with evidence gate and no-growth rc 4, skill-curator role (Sage) with .claude/skills/* grant, skill-maintenance skill, coordinator/workflow trigger, process_metrics.py --roles/turns/no_worse rc 5"
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "bash .claude/tests/lessons_test.sh; bash .claude/tests/lessons_revert_confine_test.sh; .claude/scripts/checks/shell.sh; tests/run_all.sh (Nemesis)",
+    "result": "U2 rounds U2-U2e: lessons 164/0, lessons_revert_confine 14/0, shell 489/0; new cases bite on 987bfbb (14 fails); full suite 153/154 (only ext_scan_test F-96-1, TASK-078); real ledger 3 watch rows revert=replace, scratch revert byte-identical to 987bfbb^ (evidence qa74-u2e-*, qa74-u2-*, v74-u2-fill, v74-u2-revert)"
+  },
+  "security": {
+    "status": "completed",
+    "result": "Argus: evidence path confined to repo, patch text cannot leave its target, curator grant per task (roles.grants), no new block (RAW-00537 only widened grantable); F-74-V1 evidence gate on all targets fixed (6198081); U2e: revert realpath confined to .claude/skills/<skill>/SKILL.md (lessons.py:571-574), Argus PASS"
+  },
+  "verification": {
+    "status": "passed",
+    "evidence": [
+      "work/TASK-074/evidence/qa74-r3-full.txt",
+      "work/TASK-074/evidence/qa74-u2e-lessons_revert_confine_test.txt",
+      "work/TASK-074/evidence/v74-e2e.txt",
+      "work/TASK-074/evidence/v74-final-checks.txt",
+      "work/TASK-074/evidence/v74-final-hook.txt",
+      "work/TASK-074/evidence/v74-final-lessons.txt",
+      "work/TASK-074/evidence/v74-final-pm.txt",
+      "work/TASK-074/evidence/v74-final-shell.txt",
+      "work/TASK-074/evidence/v74-pm-roles.txt",
+      "work/TASK-074/evidence/v74-u2-fill.txt",
+      "work/TASK-074/evidence/v74-u2-final-lessons.txt",
+      "work/TASK-074/evidence/v74-u2-revert.txt",
+      "work/TASK-074/handoff/verify.md"
+    ],
+    "command": "Argus re-verify (work/TASK-074/handoff/verify.md ## Round U2 re-verify); lessons_test, lessons_revert_confine_test, checks/shell.sh; v74-u2-fill, v74-u2-revert on scratch",
+    "result": "AC1-AC8 PASS (AC7 moved); U2: 3 live watch rows revert=replace non-empty hunk; scratch revert byte-identical to 987bfbb^, double revert rc 1; lessons 164/0, confine 14/0, shell 489/0"
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-74-role-lessons-curator.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "grants": {
+      "coder": [
+        ".claude/scripts/*",
+        ".claude/scripts/lessons.py",
+        ".claude/skills/skill-maintenance/*",
+        ".claude/scripts/process_metrics.py"
+      ],
+      "tester": [
+        ".claude/scripts/lessons.py",
+        ".claude/skills/skill-maintenance/*",
+        ".claude/scripts/process_metrics.py"
+      ],
+      "skill-curator": [
+        ".claude/skills/*"
+      ]
+    },
+    "grants_auto": [
+      ".claude/scripts/lessons.py",
+      ".claude/skills/skill-maintenance/*",
+      ".claude/scripts/process_metrics.py"
+    ],
+    "designer": "work/TASK-074/handoff/design.md",
+    "coder": "work/TASK-074/handoff/code.md",
+    "tester": "work/TASK-074/handoff/test.md",
+    "verifier": "work/TASK-074/handoff/verify.md",
+    "crosscheck": "work/TASK-074/handoff/crosscheck.md"
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00476",
+      "note": "re-check staleness / overlap with newer tasks and re-design before implementing"
+    },
+    {
+      "raw": "RAW-00477",
+      "note": "an old requirement never overrides a newer feature (design has ## Newer features kept)"
+    },
+    {
+      "raw": "RAW-00537",
+      "note": "user: allow skill-curator to update skills directly (grant on .claude/skills/*)",
+      "at": "2026-10-09T10:54:16Z"
+    },
+    {
+      "raw": "RAW-00536",
+      "note": "user asks if only main/lead writing skills is best practice",
+      "at": "2026-10-09T10:54:16Z"
+    },
+    {
+      "raw": "RAW-00538",
+      "note": "process skills stable: edit only with evidence + no regression (REQ-0033 AC8); app-skill freshness -> REQ-0066",
+      "at": "2026-10-09T11:02:37Z"
+    },
+    {
+      "raw": "RAW-00539",
+      "note": "continue after weekly limit reset",
+      "at": "2026-10-12T07:03:41Z"
+    }
+  ],
+  "picked_at": "2026-10-09T10:22:44Z",
+  "updated_at": "2026-10-12T08:07:14Z",
+  "updated_by": "main",
+  "scope": [
+    "work/TASK-074/",
+    ".claude/scripts/lessons.py",
+    ".claude/tests/lessons_test.sh",
+    ".claude/agents/skill-curator.md",
+    ".claude/skills/skill-maintenance/*",
+    ".claude/lessons/*",
+    ".claude/scripts/process_metrics.py",
+    ".claude/tests/process_metrics_test.sh"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [
+      "DESIGN: staleness r3 + phase-74 design, D1-D5 decided",
+      "74.2 lessons.py + lessons_test 32/0 (Titan)"
+    ],
+    "notes": "",
+    "next": "74.3 skill-maintenance skill (curate table format from lessons.py)"
+  },
+  "next": ""
+}

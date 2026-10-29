@@ -1,0 +1,122 @@
+{
+  "task_id": "TASK-158",
+  "title": "Access-log check: opt-in Istio check of the B route for caller-linked seen rows (REQ-0123)",
+  "state": "DONE",
+  "requirement": "REQ-0123",
+  "acceptance_criteria": [
+    "158.1 opt-in flag, off = byte-identical, 0 mesh queries",
+    "158.2 only seen/caller_link rows; names from deploy-context; missing name -> nothing",
+    "158.3 own cache; terminate_after 1; stop at first window hit; errors silent, never unavailable",
+    "158.4 found -> strong line + KQL (Vietnamworks: access-log wording); not found -> nothing",
+    "158.5 findings untouched; gaps=0; report_qa PASS; 0 verdict moves; both plan modes",
+    "158.6 mesh_mode evidence|decisive; decisive 0 hits -> not_seen (B not in use); errors never move a verdict",
+    "158.7 real Upzi/full rebuild with LOGREACH_MESH=1 shows 008 strong line"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-158-logreach-mesh-check.md",
+    "summary": "opt-in LOGREACH_MESH flag + mesh_* profile keys; seen/caller_link rows only; A pod prefix on x_requested_by_pod_service (authority fallback; Vietnamworks: B host in A index, access-log wording); own mesh_queries cache + mesh_rule; found -> strong line + KQL, not found -> nothing; verdict unchanged; flag off byte-identical"
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "LOGREACH_MESH flag (config.sh, pipeline.sh --mesh); logreach.py mesh_conf/mesh_target/mesh_query/Checker.mesh with own mesh_queries cache + mesh_rule, mesh_run counts; note-only strong line + KQL; logreach_report Caller link mesh lines; fake_es mesh branch",
+    "files": [
+      "config.sh",
+      "pipeline.sh",
+      "logreach.py",
+      "logreach_report.py",
+      "tests/fixtures/logreach/fake_es.py",
+      "tests/logreach_mesh_test.sh"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/logreach_mesh_test.sh; tests/run_all.sh --fast; heavy suites; .claude/scripts/checks/shell.sh",
+    "result": "tester Nemesis: mesh 63/0, ladder 119/0, report 68/0, run_all --fast 170 suites pass, shell.sh 593/0, 4 bites fail as expected (work/TASK-158/handoff/test.md)"
+  },
+  "security": {
+    "status": "completed",
+    "result": "ES bodies built as dicts, KQL display escaped (kql_esc), method whitelist, no secrets logged, TLS handling reused; flag off by default; no finding"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "LOGREACH_MESH=1 PLAN=Upzi/full ./pipeline.sh rebuild --run plans/Upzi/full/runs/20261026-060019; coverage_check; report_qa; check_deliverables; per-key jq verdict diff",
+    "result": "verifier Argus: AC1-AC8 pass; Upzi mesh rows=1 found=1 requests=1; 008 strong line + KQL; 0/142 verdict moves; gaps=0; report_qa PASS; deliverables 152/0",
+    "evidence": [
+      "work/TASK-158/handoff/verify.md",
+      "work/TASK-158/evidence/v5_trial_rebuild.txt",
+      "work/TASK-158/evidence/verify_verdict_diff.tsv",
+      "work/TASK-158/evidence/v7_report_lines.txt",
+      "work/TASK-158/evidence/v5_coverage.txt",
+      "work/TASK-158/evidence/v5_report_qa.txt",
+      "work/TASK-158/evidence/v5_deliverables.txt"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-158-logreach-mesh-check.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-158/handoff/design.md",
+    "coder": "work/TASK-158/handoff/code.md",
+    "tester": "work/TASK-158/handoff/test.md",
+    "verifier": "work/TASK-158/handoff/verify.md",
+    "crosscheck": "work/TASK-158/handoff/crosscheck.md"
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-01051",
+      "note": "Istio B-route check idea"
+    },
+    {
+      "raw": "RAW-01052",
+      "note": "opt-in only, found=strong, not found=silent, verdict on A only"
+    },
+    {
+      "raw": "RAW-01053",
+      "note": "Upzi index istio-proxy.upzi-*; Vietnamworks has no istio, use A's index"
+    },
+    {
+      "raw": "RAW-01054",
+      "note": "match by prefix on x_requested_by_pod_service; authority only fallback"
+    },
+    {
+      "raw": "RAW-01055",
+      "note": "mesh_mode per product: Upzi evidence, Vietnamworks decisive; show it working on Upzi",
+      "at": "2026-10-28T01:45:31Z"
+    },
+    {
+      "raw": "RAW-01056",
+      "note": "validate mesh index/fields before use, else off",
+      "at": "2026-10-28T01:45:55Z"
+    },
+    {
+      "raw": "RAW-01057",
+      "note": "value-check the B option by trial; off unless valuable",
+      "at": "2026-10-28T01:47:39Z"
+    },
+    {
+      "raw": "RAW-01058",
+      "note": "B check note only (strong if hit), decisive deferred",
+      "at": "2026-10-28T01:52:18Z"
+    },
+    {
+      "raw": "RAW-01059",
+      "note": "auto, don't ask; user away",
+      "at": "2026-10-28T01:53:08Z"
+    }
+  ],
+  "picked_at": "2026-10-28T01:34:41Z",
+  "updated_at": "2026-10-28T03:09:27Z",
+  "updated_by": "coordinator",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": ""
+}

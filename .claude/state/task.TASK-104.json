@@ -1,0 +1,144 @@
+{
+  "task_id": "TASK-104",
+  "title": "Pipeline --track A|B|all execution profiles: phase1-first baseline report, cross-source later (REQ-0068, minimal change)",
+  "state": "DONE",
+  "requirement": "REQ-0068: --track A runs the single-source baseline (same phase1 path/prompt/engine) and a PRELIMINARY report_baseline; --track B the rest reusing done phase1; --track all byte-identical to today. Step 0 audit reported to the user before code.",
+  "acceptance_criteria": [
+    "104.1 track step sets derived from PL_STEPS; A = deploy recon extpre phase1 (RAW-00546)",
+    "104.2 loop filter; Track A exits before finish_run, B resumes same run, phase1 runs once",
+    "104.3 report_baseline via --run --baseline, PRELIMINARY banner, same ids, no registry write",
+    "104.4 --rerun-stale no-op alias, prompt hash shown",
+    "104.5 lock exit 11 for concurrent runs (test)",
+    "104.6 startup line with explicit --track; Track A end hint; no flag = byte-identical stdout",
+    "104.7 phase1 AI-store key = template + repo digest + model, no phase0 card (pipeline.sh:576, ai_store.py:236)",
+    "104.8 re-seed phase1 store from Upzi_g02/main 20260928-222915 at $0 and prove a store hit with 0 claude calls (scratch copy, refusing fake)",
+    "104.9 baseline report registered as a kind in report_registry.json (lint pass, unregistered=0 after Track A)"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-104-pipeline-track-profiles.md",
+    "summary": "--track A|B|all: A = deploy phase1 + report_baseline (single-source renderer, no conclude), run left open; B/all = unchanged loop; startup line only with explicit --track; --rerun-stale no-op alias",
+    "reuse": [
+      "PL_STEPS order",
+      "step_done/steps_done skip",
+      "pl_current_run resume",
+      "summarize_report.sh single-source path (build_findings)",
+      "acquire_lock .scan.lock"
+    ],
+    "risks": [
+      "conclude/P2 premise unproven until tests T1-T2",
+      "auto_scan pipeline driver has no --track (deferred)"
+    ]
+  },
+  "implementation": {
+    "status": "completed",
+    "files": [
+      "pipeline.sh",
+      "summarize_report.sh",
+      "ai_store.py",
+      "report_registry.json",
+      "README.md",
+      "docs/guide/toolkit-reference.md",
+      "tests/pipeline_track_test.sh"
+    ],
+    "summary": "--track A|B|all in pipeline.sh (A = deploy recon extpre phase1 + baseline report, run left open; B/all unchanged loop), summarize_report.sh --baseline, phase1 store key without phase0 card (ai_store.py), baseline-report kind in report_registry.json, usage docs, tests/pipeline_track_test.sh 45/0"
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh pipeline_track|pipeline|ai_|report_; .claude/scripts/checks/shell.sh; python3 report_crosscheck.py --lint",
+    "result": "pipeline_track 46/0 (incl. AC6 unregistered=0), pipeline*/ai_/report_ suites pass, shell.sh 491/0, registry lint 22 kinds 0 errors; bite on 6bf9c08^: 29 cases fail, 104.7 key case fails with old ai_store.py"
+  },
+  "security": {
+    "status": "completed",
+    "result": "--track strict whitelist (exit 2 otherwise); no new source reads; store key narrower (drops phase0 card), same digest/prompt/model"
+  },
+  "verification": {
+    "status": "passed",
+    "evidence": [
+      "work/TASK-104/handoff/verify.md",
+      "work/TASK-104/evidence/v104-ac11-trackA-store.txt",
+      "work/TASK-104/evidence/v104-diffstat.txt",
+      "work/TASK-104/evidence/qa104-track.txt"
+    ],
+    "command": "Argus review of qa104-* + v104-ac11-trackA-store (scratch Upzi_g02 Track A, refusing fake claude) + v104-diffstat",
+    "result": "AC1-AC13 PASS; Track A on real Upzi_g02 copy: phase1 4/4 from AI store, 0 claude calls, baseline + 2 tool pre-review reports, crosscheck unregistered=0; no frozen prompt/schema/rename in diff"
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-104-pipeline-track-profiles.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-104/handoff/design.md",
+    "coder": "work/TASK-104/handoff/code.md",
+    "tester": "work/TASK-104/handoff/test.md",
+    "verifier": "work/TASK-104/handoff/verify.md",
+    "crosscheck": "work/TASK-104/handoff/crosscheck.md"
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00540",
+      "note": "user task: --track A/B/all, Step 0 audit first (report before coding), hard constraints 1-6, acceptance 1-6, high priority",
+      "at": "2026-10-12T07:56:02Z"
+    },
+    {
+      "raw": "RAW-00541",
+      "note": "base stage sets on the current PL_STEPS (pipeline.sh:56), incl. correlate; architecture names are informational",
+      "at": "2026-10-12T07:58:16Z"
+    },
+    {
+      "raw": "RAW-00542",
+      "note": "decision 1 (a): keep REQ-0040 rerun policy; --rerun-stale no-op alias",
+      "at": "2026-10-12T08:06:24Z"
+    },
+    {
+      "raw": "RAW-00543",
+      "note": "focus TASK-104 only; save tokens: no separate probe run, P1/P2 become the first test cases",
+      "at": "2026-10-12T08:10:14Z"
+    },
+    {
+      "raw": "RAW-00544",
+      "note": "re-run depends only on real inputs; phase1 store key drops the phase0 card (104.7)",
+      "at": "2026-10-12T08:16:57Z"
+    },
+    {
+      "raw": "RAW-00545",
+      "note": "Upzi_g02: re-seed ai_store at $0 after 104.7 and reuse phase1 (AC11)",
+      "at": "2026-10-12T08:25:51Z"
+    },
+    {
+      "raw": "RAW-00546",
+      "note": "Track A adds recon+extpre ($0); phase0/graph after phase1 via A->B, PL_STEPS unchanged",
+      "at": "2026-10-12T08:35:28Z"
+    },
+    {
+      "raw": "RAW-00548",
+      "note": "Track A end lists baseline + ext pre-review reports",
+      "at": "2026-10-12T08:42:27Z"
+    }
+  ],
+  "picked_at": "2026-10-12T08:07:35Z",
+  "updated_at": "2026-10-12T11:14:13Z",
+  "updated_by": "main",
+  "scope": [
+    "pipeline.sh",
+    "pipeline_lib.sh",
+    "report_common.sh",
+    "summarize_report.sh",
+    "tests/pipeline_track_test.sh",
+    "docs/guide/toolkit-reference.md",
+    "README.md",
+    "CLAUDE.md",
+    "docs/guide/architecture.md",
+    "ai_store.py",
+    "report_registry.json"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": ""
+}

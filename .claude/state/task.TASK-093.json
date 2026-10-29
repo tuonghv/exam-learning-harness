@@ -1,0 +1,94 @@
+{
+  "task_id": "TASK-093",
+  "title": "Skill layout checker + split over-budget skills (carried from TASK-074 74.7/74.8 by staleness review r2, RAW-00476): skill_layout.py, references/ split for the 14 skills at or over 80 lines",
+  "state": "DONE",
+  "requirement": "Keep skill files within the line budget by moving detail to references/ without losing any rule; checker in .claude/scripts/checks. REQ-0038",
+  "acceptance_criteria": [
+    "AC1 skill_layout.py checks size, frontmatter, links, --moved line preservation, rc 0/1/2",
+    "AC2 allow file holds today's debt, no growth",
+    "AC3 batch 1 split: role-monitor, inspector, context-compaction cores <=80, content moved word for word",
+    "AC4 $0 tests tests/skill_layout_test.sh and existing skill suites stay green; drift rows do not grow"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-93-skill-layout-check.md",
+    "summary": "skill_layout.py checker with allow file + batch 1 split (role-monitor, inspector, context-compaction); D1-D5 recommended",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "completed",
+    "files": [
+      ".claude/scripts/skill_layout.py",
+      ".claude/scripts/checks/skill_layout.allow",
+      "tests/skill_layout_test.sh",
+      "tests/suite_map.txt",
+      ".claude/skills/role-monitor/SKILL.md",
+      ".claude/skills/inspector/SKILL.md",
+      ".claude/skills/context-compaction/SKILL.md"
+    ],
+    "summary": "skill_layout.py checker + allow ratchet + test; batch 1 split role-monitor, inspector (header), context-compaction; moved-line proof passes"
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/skill_layout_test.sh; tests/run_all.sh --fast",
+    "result": "13/0; fast only known track_hook S3"
+  },
+  "security": {
+    "status": "not_applicable",
+    "result": "read-only local checker, no network, no data"
+  },
+  "verification": {
+    "status": "passed",
+    "evidence": [
+      "work/TASK-093/evidence/moved-main.txt",
+      "work/TASK-093/evidence/fast.txt"
+    ],
+    "command": "skill_layout.py --moved 918c5050; skill_layout.py",
+    "result": "moved rc 0; check fail=0 debt=9"
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-93-skill-layout-check.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-093/handoff/design.md",
+    "grants": {
+      "coder": [
+        ".claude/skills/*",
+        ".claude/scripts/*"
+      ]
+    },
+    "coder": "work/TASK-093/handoff/code.md",
+    "tester": {
+      "waiver": "main re-ran --moved and the --fast gate"
+    },
+    "verifier": {
+      "waiver": "main saved evidence"
+    },
+    "crosscheck": {
+      "waiver": "checker verified by moved-line proof and fixture tests"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00476",
+      "note": "re-check staleness / overlap with newer tasks and re-design before implementing",
+      "at": "2026-10-08T16:06:46Z"
+    }
+  ],
+  "picked_at": "2026-10-23T05:54:15Z",
+  "updated_at": "2026-10-23T06:04:20Z",
+  "updated_by": "main",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": "",
+    "next": "designer drafting work/TASK-093/handoff/design.md"
+  },
+  "next": ""
+}

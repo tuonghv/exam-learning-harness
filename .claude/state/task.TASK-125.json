@@ -1,0 +1,81 @@
+{
+  "task_id": "TASK-125",
+  "title": "I9 allowlist: add the media-service 'bearer <rule id>' report line hash to ext/engine/selfcheck_allow.json",
+  "state": "DONE",
+  "requirement": "The I9 secret-mask self-check SHALL not fail a report on the public line '| backend__media-service | media-service-002 | bearer go_gosec_injection_ssrf_injection ...' (false positive: rule id matches the bearer-token mask). Allowlist its sha256; findings unaffected. (user, 2026-10-19: 'allowlist change as a small task')",
+  "acceptance_criteria": [
+    "selfcheck_allow.json holds the sha256 of the stripped line and stays valid JSON (schema 1)",
+    "ext_scan.sh --stage report on Upzi_g01/main run 20261019-131844: SELFCHECK pass=11 fail=0",
+    "check_deliverables.sh --run latest: fail=0",
+    "ext_selfcheck tests stay green; findings and coverage gaps=0 unchanged"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-125-i9-allowlist.md",
+    "summary": "Data-only: add sha256 of the public media-service bearer-rule-id report line to the I9 allowlist; no code, findings unaffected.",
+    "reuse": [
+      "ext_selfcheck.allow_hashes()"
+    ],
+    "risks": [
+      "none: exact-hash match on one line"
+    ]
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "Appended sha256 781fcb6b...5008 of the stripped media-service bearer-rule-id line to the I9 allowlist.",
+    "files": [
+      "ext/engine/selfcheck_allow.json"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh ext_selfcheck; checks/shell.sh",
+    "result": "ext_selfcheck_test 72 passed, ext_selfcheck_qa_test 80 passed; shell pass=539 fail=0"
+  },
+  "security": {
+    "status": "not_applicable",
+    "result": "data-only allowlist of one public constant line hash; no code, no secrets, findings unchanged"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "ext_scan.sh --run latest --stage report; check_deliverables.sh --run latest; coverage_check.py --conclusion",
+    "result": "SELFCHECK pass=11 fail=0; deliverables pass=42 fail=0; coverage gaps=0 findings=29",
+    "evidence": [
+      "work/TASK-125/evidence/selfcheck-report.txt",
+      "work/TASK-125/evidence/deliverables.txt",
+      "work/TASK-125/evidence/coverage.txt"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-125-i9-allowlist.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": {
+      "waiver": "one-line data change, design is the 20-line doc; coordinator wrote it"
+    },
+    "coder": {
+      "waiver": "one data entry computed and written by coordinator; no code"
+    },
+    "verifier": {
+      "waiver": "coordinator saved evidence via save-evidence.sh; one-line data change"
+    },
+    "crosscheck": {
+      "waiver": "one-line data change; counts verified by coverage_check gaps=0 and SELFCHECK 11/0"
+    }
+  },
+  "user_notes": [],
+  "picked_at": "2026-10-19T08:25:51Z",
+  "updated_at": "2026-10-19T08:31:59Z",
+  "updated_by": "coordinator",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": ""
+}

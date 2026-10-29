@@ -1,0 +1,178 @@
+{
+  "task_id": "TASK-096",
+  "title": "Several active tasks at once: per-task state files .claude/state/tasks/<TASK>.json, Task-trailer gates, file-scope overlap check at pick, hooks/status for all active tasks, per-task role guard, pending-question record + 10-min reminder [RAW-00482; reuse TASK-080 80.5 code in 8793e80]",
+  "state": "DONE",
+  "requirement": "WHEN the coordinator picks a task while another task is active, the workflow SHALL keep each active task's state in its own file (.claude/state/tasks/<TASK>.json), and gates, hooks and commits SHALL act on the task named in the commit Task: trailer. REQ-0060",
+  "acceptance_criteria": [
+    "AC1 up to N active tasks, own files, task.json view",
+    "AC2 gates keyed by Task: trailer, one task per commit",
+    "AC3 scope overlap serialized with blocked_by; B2 block",
+    "AC4 hooks/status show all active tasks",
+    "AC5 per-task guard B1",
+    "AC7 pending question + 10-min reminder",
+    "AC8 protocol import, small main context",
+    "AC6 tests with two active tasks",
+    "AC9 reader inventory check",
+    "AC10 decisions before start; no mid-task block",
+    "AC11 configurable N, hold/resume with checkpoint",
+    "AC12 checkpoint check before stop"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-96-multi-active-tasks.md",
+    "summary": "per-task task.<T>.json + task.json view, N<=3 active, Task-trailer gates, scope overlap -> blocked_by queue, guard B1/B2 blocks, pending questions, tasks.sh status for main context, input-hash stale check; protocol import table"
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "three slices: per-task state core (_tasks.py, tasks.sh, backlog/workflow-check/commit-check/readers), pending questions + status + hold/resume + stale inputs + reader inventory + questions gate + 96.18 hardening, guard B1/B2 + ask-once checkpoint + multi-task hooks (patches applied by the user), docs, migration",
+    "files": [
+      ".claude/scripts/_tasks.py",
+      ".claude/scripts/tasks.sh",
+      ".claude/workflow.json",
+      ".claude/scripts/backlog.sh",
+      ".claude/scripts/workflow-check.sh",
+      ".claude/scripts/commit-check.sh",
+      ".claude/req/task_gate.py",
+      ".claude/scripts/task-state.sh",
+      ".claude/scripts/status.sh",
+      ".claude/scripts/checklist.sh",
+      ".claude/scripts/save-evidence.sh",
+      ".claude/scripts/team-status.sh",
+      ".claude/scripts/task_checkpoint.sh",
+      ".claude/scripts/checks/task_readers.sh",
+      ".claude/scripts/checks/task_readers.allow",
+      ".claude/scripts/checks/shell.sh",
+      ".claude/hooks/agent_setup.py",
+      ".claude/hooks/stop-check.sh",
+      ".claude/hooks/session-start.sh",
+      ".claude/hooks/pre-compact-check.sh",
+      ".claude/agent_setup.json",
+      ".claude/tests/multi_task_test.sh",
+      ".claude/tests/multi_guard_test.sh",
+      ".claude/tests/task_checkpoint_test.sh"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "env -u TASK -u CTXGUARD_TASK bash .claude/tests/<suite>_test.sh (all 12); checks/shell.sh; checks/task_readers.sh; tests/run_all.sh",
+    "result": "12 .claude suites 0 fail (multi_task 128, multi_guard 38, workflow_gates 146, task_checkpoint 38); task_readers fail=0; shell 1 known (untracked tmp/); run_all 144 suites, only ext_scan_test (F-96-1, TASK-095, queued on TASK-078); evidence work/TASK-096/evidence/qa-96-final-*"
+  },
+  "security": {
+    "status": "completed",
+    "result": "B1/B2 block cross-task writes, quote-stripped (multi_guard 87-88). Residual: Bash write detection is a verb regex (misses cd+relative, python -c, variables, symlinks); a role with no launch match self-binds by its first work/TASK-x write; agent_setup_binds.json is gitignored runtime and not write-protected for roles (protecting it is a new block, needs the user). No secrets or REPOS_ROOT reads added."
+  },
+  "verification": {
+    "status": "passed",
+    "command": "Argus review of AC1-AC12 vs evidence; main: git diff --name-only 3697c02..HEAD, protect diff",
+    "result": "PASS: AC1-AC12 evidenced (AC8/AC10 by docs review); only approved blocks B1/B2/ask-once; protect diff = one narrowing (save|load removed); out-of-scope task_gate.py added to scope (F-V96-1); code unchanged since QA evidence 076b92b (only state/req files after)",
+    "evidence": [
+      "work/TASK-096/handoff/verify.md",
+      "work/TASK-096/handoff/test.md",
+      "work/TASK-096/evidence/qa-96-final-*",
+      "work/TASK-096/evidence/verify-96-diff-names.txt",
+      "work/TASK-096/evidence/verify-96-protect-diff.txt",
+      "work/TASK-096/evidence/qa-96-s2b-bite-stale-lock.txt"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-96-multi-active-tasks.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-096/handoff/design.md",
+    "grants": {
+      "coder": [
+        ".claude/scripts/*"
+      ]
+    },
+    "coder": "work/TASK-096/handoff/code-s3.md",
+    "tester": "work/TASK-096/handoff/test.md",
+    "verifier": "work/TASK-096/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "workflow tooling only: no finding counts, report data or run decisions to cross-check; tester AC map (test.md) and verifier (verify.md) are the independent checks"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00482",
+      "note": "single task.json blocks the team; support several tasks running at the same time"
+    },
+    {
+      "raw": "RAW-00483",
+      "note": "name per-task state task.<TASK>.json next to task.json",
+      "at": "2026-10-08T22:14:09Z"
+    },
+    {
+      "raw": "RAW-00484",
+      "note": "hold other tasks; import tmp/multi-task-protocol.md minimal-change; U1 block; U2 log only; main context small",
+      "at": "2026-10-08T22:27:24Z"
+    },
+    {
+      "raw": "RAW-00485",
+      "note": "B2 block confirmed; user: do your best as senior solution/application architect",
+      "at": "2026-10-08T22:30:09Z"
+    },
+    {
+      "raw": "RAW-00486",
+      "note": "approved; every script/hook parallel-aware + inventory check; ask user decisions before the task starts; never block mid-task when no user is there",
+      "at": "2026-10-08T22:33:41Z"
+    },
+    {
+      "raw": "RAW-00487",
+      "note": "after DESIGN the coordinator decides implementation questions as the architect; only cost/block/permission go to the user",
+      "at": "2026-10-08T22:36:17Z"
+    },
+    {
+      "raw": "RAW-00488",
+      "note": "N configurable (default 3); hold/resume with checkpoint note; roles read checkpoint on load; checkpoint check before agent stop",
+      "at": "2026-10-08T22:41:02Z"
+    },
+    {
+      "raw": "RAW-00489",
+      "note": "scripts triggered by hooks follow multi-task too",
+      "at": "2026-10-08T22:43:20Z"
+    },
+    {
+      "raw": "RAW-00493",
+      "note": "take ideas from tmp/durrable_task_parallel without changing much; make current better",
+      "at": "2026-10-08T22:55:12Z"
+    },
+    {
+      "raw": "RAW-00494",
+      "note": "user approved main running the stale-lock bite proof on a scratch copy (done)",
+      "at": "2026-10-08T23:36:58Z"
+    }
+  ],
+  "picked_at": "2026-10-08T22:13:46Z",
+  "updated_at": "2026-10-09T00:33:38Z",
+  "updated_by": "main (coordinator)",
+  "next": "",
+  "scope": [
+    ".claude/scripts/*",
+    ".claude/hooks/*",
+    ".claude/tests/*",
+    ".claude/agent_setup.json",
+    ".claude/settings.json",
+    ".claude/agents/*",
+    ".claude/skills/workflow/*",
+    ".claude/skills/coordinator/*",
+    ".claude/skills/commit/*",
+    "CLAUDE.md",
+    "docs/guide/toolkit-reference.md",
+    ".claude/workflow.json",
+    ".claude/req/task_gate.py"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [
+      "DONE"
+    ],
+    "next": "",
+    "notes": "",
+    "at": "2026-10-09T00:33:38Z"
+  },
+  "questions_open": 0
+}

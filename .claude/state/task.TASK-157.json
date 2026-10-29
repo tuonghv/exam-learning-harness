@@ -1,0 +1,147 @@
+{
+  "task_id": "TASK-157",
+  "title": "Access-log check: caller hit stays via_caller; report states the real basis and hit counts (REQ-0122, VNW-SEC-0222)",
+  "state": "DONE",
+  "requirement": "REQ-0122",
+  "acceptance_criteria": [
+    "157.1 caller hit -> via_caller, caller pair kept",
+    "157.2 basis text, one source, no siblings may match",
+    "157.3 per-window outcome + deciding rung + checklist rows",
+    "157.4 sibling/prefix/broad stay seen",
+    "157.5 findings untouched, gates PASS",
+    "157.6 KQL/Lucene line per rung, masked, 0 vs >=1"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-157-logreach-verdict-basis.md",
+    "summary": "caller hit -> via_caller; engine-owned basis_text/decided_by/win_text/kql_line printed by reachrow and logreach_report.py; no query-body or cache change; no real count"
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "caller_link rule (chain_links, link_match, A-only caller_entries, caller_check link_hit, evaluate); basis_text/decided/win_text/kql_line; apply_reach basis fields; reachrow basis_text; access_log_review Caller link block, 157.7 headings, checklist rows",
+    "files": [
+      "logreach.py",
+      "logreach_report.py",
+      "report_common.sh",
+      "summarize_report.sh",
+      "tests/logreach_ladder_test.sh",
+      "tests/logreach_report_test.sh",
+      "tests/logreach_render_test.sh",
+      "tests/fixtures/logreach_report/logreach.json",
+      "tests/fixtures/logreach/golden_verdicts_152.tsv"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/logreach_{ladder,report,render}_test.sh, tests/logreach_test.sh, tests/run_all.sh --fast, heavy: public_reports check_deliverables pipeline_logreach repo_findings vnw_route_public, .claude/scripts/checks/shell.sh",
+    "result": "ladder 119/0, report 68/0, render 44/0, logreach_test 201/0; run_all --fast 169 suites all pass; heavy 5/5 pass; shell 591/0; bites: tier swap, 157.7 heading, B-queried (U157-1L6 want 0 got 6)"
+  },
+  "security": {
+    "status": "completed",
+    "result": "filter value masked in every KQL line; rec.link holds only ENTRY_RX paths, file refs and field names (no free model text); md/HTML cells escaped; no secrets"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "PLAN=Upzi/full ./pipeline.sh rebuild --run plans/Upzi/full/runs/20261026-060019; jq over logreach.json; coverage_check --conclusion; report_qa; check_deliverables",
+    "result": "008 seen/caller_link L4 (A POST /community-hub/external/api/v1/books >=1 in 1d -> B POST /internal/v1/books/recommend in-cluster, tier swap); 009/011/005 + 3 more via_caller; counts 67/0/75 -> 64/6/72; 0 B-path rungs on A host; 0 siblings text; 211/211 headings with result; gaps=0; report_qa PASS; deliverables 152/0",
+    "evidence": [
+      "work/TASK-157/handoff/verify.md",
+      "work/TASK-157/evidence/logreach.after.json",
+      "work/TASK-157/evidence/v6_moved.tsv",
+      "work/TASK-157/evidence/v5_coverage.txt",
+      "work/TASK-157/evidence/v5_report_qa.txt",
+      "work/TASK-157/evidence/v5_deliverables.txt",
+      "work/TASK-157/evidence/v2_reachrows.txt"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-157-logreach-verdict-basis.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-157/handoff/design.md",
+    "coder": "work/TASK-157/handoff/code.md",
+    "tester": "work/TASK-157/handoff/test.md",
+    "verifier": "work/TASK-157/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "verifier recomputed every count independently from the JSON/report files (jq/grep over logreach.before/after.json and the 10-28 reports: 67/0/75 -> 64/6/72, 0 B-path rungs, 211/211 headings); see work/TASK-157/handoff/verify.md"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-01044",
+      "note": "VNW-SEC-0222 seen is wrong: own route 0 hits, find root cause and other findings with the same issue"
+    },
+    {
+      "raw": "RAW-01045",
+      "note": "fix in the engine, never a manual fix of the Upzi full report"
+    },
+    {
+      "raw": "RAW-01046",
+      "note": "show trust: re-runnable KQL + result per rung (REQ-0122 AC6)",
+      "at": "2026-10-28T00:53:06Z"
+    },
+    {
+      "raw": "RAW-01047",
+      "note": "pair query blocks show no result; every block needs level/result/window, deciding one marked (AC7)",
+      "at": "2026-10-28T01:01:30Z"
+    },
+    {
+      "raw": "RAW-01048",
+      "note": "confirms AC7: Prefix query heading has no hit/no_hit",
+      "at": "2026-10-28T01:03:55Z"
+    },
+    {
+      "raw": "RAW-01049",
+      "note": "caller confirm OK only with a trustable shown link A route -> B route (AC1 revised)",
+      "at": "2026-10-28T01:08:06Z"
+    },
+    {
+      "raw": "RAW-01050",
+      "note": "only A route abc needs a hit; bcd in-cluster, shown not queried",
+      "at": "2026-10-28T01:09:30Z"
+    },
+    {
+      "raw": "RAW-01051",
+      "note": "Istio B-route check -> REQ-0123 (separate, after TASK-157)",
+      "at": "2026-10-28T01:24:46Z"
+    },
+    {
+      "raw": "RAW-01052",
+      "note": "B mesh check opt-in only, verdict on A route (REQ-0123)",
+      "at": "2026-10-28T01:26:39Z"
+    },
+    {
+      "raw": "RAW-01053",
+      "note": "Istio index/fields for REQ-0123 (after TASK-157)",
+      "at": "2026-10-28T01:31:11Z"
+    },
+    {
+      "raw": "RAW-01054",
+      "note": "REQ-0123 Istio: prefix on x_requested_by_pod_service",
+      "at": "2026-10-28T01:33:12Z"
+    }
+  ],
+  "picked_at": "2026-10-28T00:52:37Z",
+  "updated_at": "2026-10-28T01:33:45Z",
+  "updated_by": "coordinator",
+  "scope": [
+    "logreach.py",
+    "logreach_report.py",
+    "report_common.sh",
+    "summarize_report.sh",
+    "tests/logreach_ladder_test.sh",
+    "tests/logreach_report_test.sh",
+    "tests/logreach_render_test.sh",
+    "tests/logreach_test.sh"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": ""
+}

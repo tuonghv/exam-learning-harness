@@ -1,0 +1,110 @@
+{
+  "task_id": "TASK-101",
+  "title": "Role cost plan (REQ-0064): slimmer role preloads, Sonnet designer for delta refresh, tester --changed + 2 rounds, brief Load: line",
+  "state": "DONE",
+  "requirement": "REQ-0064 AC1-AC5",
+  "acceptance_criteria": [],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-101-role-cost.md",
+    "summary": "slimmer preloads (coder 555->288, tester 724->314, designer 726->485 lines), brief.sh Load:/Patch route:/--refresh, designer Sonnet for delta refresh, tester --changed + 2 rounds, refusal metric excludes allowed scope_out",
+    "reuse": [
+      "brief.sh",
+      "process_metrics.py",
+      "run_all --changed"
+    ],
+    "risks": [
+      "role misses a skill -> Load line + on-demand Skill tool",
+      "agent frontmatter live only after restart"
+    ]
+  },
+  "implementation": {
+    "status": "completed",
+    "files": [
+      ".claude/scripts/brief.sh",
+      ".claude/scripts/process_metrics.py",
+      ".claude/tests/process_speed_test.sh",
+      ".claude/agents/coder.md",
+      ".claude/agents/tester.md",
+      ".claude/agents/designer.md",
+      ".claude/skills/coordinator/SKILL.md",
+      ".claude/skills/workflow/SKILL.md",
+      "CLAUDE.md"
+    ],
+    "commits": [
+      "76acf97",
+      "124bbe6"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "bash .claude/tests/process_speed_test.sh; .claude/scripts/checks/shell.sh; tests/run_all.sh",
+    "result": "process_speed 67/0 (12 bite on HEAD~1), shell 483/0, run_all 151/152 (ext_scan_test F-96-1 pre-existing, TASK-078)",
+    "evidence": "work/TASK-101/evidence/qa-*.txt"
+  },
+  "security": {
+    "status": "completed",
+    "result": "No guard/permission change (agent_setup.json, settings, hooks untouched); brief.sh validates skill names ^[a-z0-9-]+$ and skips state-moving skills; Patch route only lists protected paths, grants unchanged; process_metrics reads logs only. No REPOS_ROOT access, no prompts touched."
+  },
+  "verification": {
+    "status": "passed",
+    "summary": "AC1-AC4 PASS; AC5 PASS (preload bytes coder -31 %, tester -44 %, designer -22 %; checks green); next-task compare DEFERRED (live after restart). F-101-V1 ext_inscope_qa load flake -> TASK-078",
+    "evidence": [
+      "work/TASK-101/handoff/verify.md",
+      "work/TASK-101/evidence/"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-101-role-cost.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "grants": {
+      "coder": [
+        ".claude/scripts/brief.sh",
+        ".claude/scripts/process_metrics.py"
+      ],
+      "tester": [
+        ".claude/scripts/brief.sh",
+        ".claude/scripts/process_metrics.py"
+      ]
+    },
+    "grants_auto": [
+      ".claude/scripts/brief.sh",
+      ".claude/scripts/process_metrics.py"
+    ],
+    "designer": "work/TASK-101/handoff/design.md",
+    "coder": "work/TASK-101/handoff/code.md",
+    "tester": "work/TASK-101/handoff/test.md",
+    "verifier": "work/TASK-101/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "counts cross-checked inside the task: tester jq oracle on the violations log (qa-v5), verifier re-checked preload bytes and AC evidence"
+    }
+  },
+  "user_notes": [],
+  "picked_at": "2026-10-09T06:25:47Z",
+  "updated_at": "2026-10-09T07:12:58Z",
+  "updated_by": "main",
+  "scope": [
+    ".claude/agents/coder.md",
+    ".claude/agents/tester.md",
+    ".claude/agents/designer.md",
+    ".claude/scripts/brief.sh",
+    ".claude/skills/coordinator/SKILL.md",
+    ".claude/skills/workflow/SKILL.md",
+    "CLAUDE.md",
+    ".claude/tests/process_speed_test.sh",
+    "docs/design/phase-101-role-cost.md",
+    ".claude/scripts/process_metrics.py"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": "",
+    "next": "pick next: TASK-100 (high)"
+  },
+  "next": "pick next: TASK-100 (high)"
+}

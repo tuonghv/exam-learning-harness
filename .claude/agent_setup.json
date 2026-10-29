@@ -1,0 +1,157 @@
+{
+  "window": 200000,
+  "soft": 100000,
+  "hard": 140000,
+  "orch_soft": 40000,
+  "enforce": [],
+  "state_every": 10,
+  "state_max_chars": 1500,
+  "deny_globs": [
+    "**/node_modules/**",
+    "**/vendor/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/.git/**",
+    "**/*.min.js",
+    "**/*.min.css",
+    "**/*.map",
+    "**/*.lock",
+    "**/package-lock.json",
+    "**/go.sum",
+    "**/*.pb.go"
+  ],
+  "roles": {
+    "designer": {
+      "read": 400,
+      "out": 60,
+      "files": 40
+    },
+    "coder": {
+      "read": 300,
+      "out": 80,
+      "files": 30
+    },
+    "tester": {
+      "read": 250,
+      "out": 60,
+      "files": 25
+    },
+    "verifier": {
+      "read": 200,
+      "out": 40,
+      "files": 15
+    },
+    "lead": {
+      "read": 400,
+      "out": 80,
+      "files": 40,
+      "max_turns": 120,
+      "soft": 150000
+    },
+    "skill-curator": {
+      "read": 300,
+      "out": 60,
+      "files": 30
+    }
+  },
+  "session": {
+    "read": 300,
+    "out": 80,
+    "files": 30
+  },
+  "violations_log": ".claude/agent_setup_violations.jsonl",
+  "runs_log": ".claude/agent_setup_runs.jsonl",
+  "hookkeys": ".claude/agent_setup_hookkeys.json",
+  "calls_log": ".claude/agent_setup_calls.jsonl",
+  "warn": [
+    "orch_work",
+    "orch_big",
+    "msg_budget",
+    "dirty_stop",
+    "partial_stop",
+    "lead_turns",
+    "lead_ctx"
+  ],
+  "msg_budget": 3,
+  "orch_delegate": true,
+  "task_from": {
+    "file": ".claude/state/task.json",
+    "key": "task_id"
+  },
+  "protect": {
+    "roles": [
+      "designer",
+      "coder",
+      "tester",
+      "verifier",
+      "inspector",
+      "lead",
+      "skill-curator",
+      "inbox-triage"
+    ],
+    "grantable": [
+      ".claude/scripts/*",
+      ".claude/skills/*"
+    ],
+    "write_globs": [
+      ".claude/state/*",
+      ".claude/req/*",
+      ".claude/settings*.json",
+      ".claude/agent_setup.json",
+      ".claude/agents/*",
+      ".claude/hooks/*",
+      ".claude/scripts/*",
+      ".claude/skills/*",
+      "CLAUDE.md",
+      "docs/req/*",
+      "docs/design/*",
+      "docs/report/*",
+      "security_prompt.md",
+      "docs/prompts/phase0-*",
+      "docs/prompts/phase2b-*",
+      "plans/*",
+      "results/*",
+      "reports/*",
+      "manifest.json",
+      "*conclusion.json",
+      ".git/*",
+      ".claude/agent_setup_*"
+    ],
+    "read_globs": [
+      "/home/tuonghv/Documents/git/online-system/pentest_source_code*"
+    ],
+    "bash_deny": [
+      "\\bgit\\s+(-[Cc]\\s+\\S+\\s+)*(commit|push|reset|checkout|restore|rebase|merge|stash|tag|clean|am|cherry-pick|add|rm|mv|switch|revert|worktree|update-ref|apply|pull|fetch|gc|prune|notes)\\b",
+      "\\bclaude\\s+(-p|--print)\\b",
+      "(^|[;&|(`]|\\$\\()\\s*((\\w+=\\S*|sudo|env|nohup|exec|time|nice|setsid|stdbuf|xargs|timeout(\\s+-\\S+)*\\s+\\S+|(ba|z|k|da)?sh(\\s+-(?!n\\s)\\S+)*|source|\\.)\\s+)*['\\\"]?(\\S*/)?(scan_batch|auto_scan)\\.sh\\b",
+      "pipeline\\.sh\\s+(run|new|verify)\\b",
+      "pentest_",
+      "req\\.py\\s+(status|ac|new|raw|task|epic|focus|log)\\b",
+      "backlog\\.sh\\s+(pick|complete|add)\\b",
+      "task_checkpoint\\.sh\\s+(ask|answer)\\b",
+      "commit-check\\.sh",
+      "\\bgit\\s+(-[Cc]\\s+\\S+\\s+)*branch\\s+-[a-zA-Z]*[dDmMcCf]",
+      "(>>?|>\\||\\btee\\b|\\bsed\\s+(-[a-zA-Z]*i|--in-place)|\\bperl\\s+-[a-zA-Z]*i|\\b(cp|mv|rm|truncate|install|ln|touch|chmod|dd)\\b)(?:[^;&|\\n]|\\\\\\n)*(\\.claude/(state|req|agents|hooks|scripts|skills)/|\\.claude/settings[^/\\s]*\\.json|\\.claude/agent_setup\\.json|\\.claude/agent_setup_[a-z_]+\\.(jsonl?|lock)|CLAUDE\\.md|docs/(req|design|report)/|docs/prompts/phase(0|2b)-|security_prompt\\.md|manifest\\.json|conclusion\\.json|(^|[\\s'\"=(]|code-security-scanner/)(\\./)?(plans|results|reports)/)",
+      "(^|[;&|(]\\s*)(\\w+=\\S*\\s+)*((ba)?sh\\s+)?(\\S*/)?(pipeline\\.sh\\s+rebuild|(summarize_report|summarize_exec|evaluate_run|conclude)\\.sh)\\b",
+      "\\$\\{?REPOS_ROOT\\b",
+      "(^|[;&|(`]|\\$\\()\\s*(cd|pushd)\\s+['\"]?(\\./|\\S*code-security-scanner/)?\\.claude/(state|req|agents|hooks|scripts|skills)/?['\"]?(\\s|$|[;&|)])",
+      "(\\bnode(js)?\\s+(-\\S+\\s+)*(-e|--eval|-p)\\b|\\bruby\\s+(-\\S+\\s+)*-e\\b|\\bg?awk\\s+(-\\S+\\s+)*-i\\s*inplace\\b|\\brsync\\b)(?:[^;&|\\n]|\\\\\\n)*(\\.claude/(state|req|agents|hooks|scripts|skills)/|\\.claude/settings[^/\\s]*\\.json|\\.claude/agent_setup\\.json|\\.claude/agent_setup_[a-z_]+\\.(jsonl?|lock)|CLAUDE\\.md|docs/(req|design|report)/|docs/prompts/phase(0|2b)-|security_prompt\\.md|manifest\\.json|conclusion\\.json)",
+      "[\\w~/.-]\\.(pem|key)(?=$|[\\s'\";|&)<>])",
+      "tasks\\.sh\\s+(pick|lead|resume|migrate|commit|set|checkpoint|hold|scope|question|inputs|recover|sync)\\b",
+      "(wip|apply-patches)\\.sh\\b"
+    ],
+    "lead_allow": {
+      "req_items": true,
+      "write": [
+        "docs/design/phase-{N}-*",
+        "docs/report/phase-{N}-*"
+      ],
+      "bash": [
+        "^\\s*((bash|python3)\\s+)?(\\S*/)?tasks\\.sh\\s+(show|set|checkpoint|hold|commit)\\s+{T}(\\s|$)",
+        "^\\s*((bash|python3)\\s+)?(\\S*/)?backlog\\.sh\\s+complete\\s+{T}(\\s|$)",
+        "^\\s*((bash|python3)\\s+)?(\\S*/)?task_checkpoint\\.sh\\s+ask\\s+{T}(\\s|$)",
+        "^\\s*((bash|python3)\\s+)?(\\S*/)?req\\.py\\s+(status|ac|focus|log)\\s+(?P<req>REQ-[0-9]+)(\\s|$)"
+      ]
+    }
+  }
+}

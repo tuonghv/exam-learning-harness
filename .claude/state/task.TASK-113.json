@@ -1,0 +1,97 @@
+{
+  "task_id": "TASK-113",
+  "title": "logreach one public route per repo (private hosts excluded, pick order)",
+  "state": "DONE",
+  "requirement": "Query one public route per repo; private hosts (s2s) never; pick ms + repo-named prefix. REQ-0078 (RAW-00629, RAW-00631)",
+  "acceptance_criteria": [
+    "AC1 one route per repo unless the finding names a host",
+    "AC2 private hosts never queried",
+    "AC3 pick order prefer_host, repo-named prefix, name, file order; VNW jobseekers -> ms /jobseekers/",
+    "AC4 no keys / single-route repos unchanged; Upzi identical",
+    "AC5 VNW g01 rebuild gaps=0, QA PASS, changed verdicts listed",
+    "AC6 stored map: 1 public domain + 1 route per repo (extras logreach:false + note); --check-routes validates the map, fails on >1 (RAW-00632/00633)"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-113-logreach-one-route.md",
+    "summary": "private_hosts, prefer_host, routes_per_repo=one default, pick_route rank (prefer host, repo-named prefix, name, order), hint rule kept, report lists picked/dropped"
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "private_hosts/prefer_host, logreach:false entries, pick_route fallback with WARN+valid=false, doc.routes, --check-routes map check, report mapping section, route_public.txt import (113.7), docs; tests logreach 193/40/37/13, vnw_route_public 6, shell 511/0",
+    "files": [
+      "logreach.py",
+      "logreach_report.py",
+      "user_scripts/vietnamworks_route_repo_map.py",
+      "tests/logreach_test.sh",
+      "tests/logreach_report_test.sh",
+      "tests/vnw_route_public_test.sh",
+      "docs/guide/access-log-onboarding.md",
+      "docs/guide/toolkit-reference.md",
+      "docs/guide/vietnamworks-route-map.md"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh logreach; tests/run_all.sh vnw_route; .claude/scripts/checks/shell.sh; tests/run_all.sh",
+    "result": "logreach 192/40/37/13, vnw_route_public 6/6, shell 511/0; full 164 suites, 3 pre-existing failures (ext_scan, track_hook, tracking_new_only) also fail on 8b176b5~1 (tester)"
+  },
+  "security": {
+    "status": "completed",
+    "result": "no password, filter value or real IP in code, docs, tests, evidence or reports; private hosts never queried; no REPOS_ROOT read by roles (verifier)"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "logreach.py --check-routes (VNW, Upzi); LOGREACH_REFRESH=1 pipeline.sh rebuild --run (VNW g01 20261013-174303, Upzi g02 logreach-v8 20260928-222915)",
+    "result": "check-routes VNW 6/6 Upzi 4/4 one_public multi=0; VNW 113 requests (252 before), hosts ms 109 secure 4, 0 apiv2-s2s/graphql; 1 verdict change jobseekers-004 seen->via_caller; gaps=0 QA PASS crosscheck 0 fail checklist 12/12; Upzi verdicts identical, gaps=0 QA PASS; 0 real IPs",
+    "evidence": [
+      "work/TASK-113/evidence/check-routes-vnw.txt",
+      "work/TASK-113/evidence/check-routes-upzi.txt",
+      "work/TASK-113/evidence/vnw-rebuild.txt",
+      "work/TASK-113/evidence/vnw-query-hosts.txt",
+      "work/TASK-113/evidence/vnw-verdict-diff.txt",
+      "work/TASK-113/evidence/upzi-rebuild.txt",
+      "work/TASK-113/evidence/upzi-verdict-diff.txt",
+      "work/TASK-113/evidence/no-real-ip.txt",
+      "work/TASK-113/handoff/verify.md"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-113-logreach-one-route.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": {
+      "waiver": "main wrote the design from the user decision RAW-00631 and the logreach.py read"
+    },
+    "coder": "work/TASK-113/handoff/code.md",
+    "tester": "work/TASK-113/handoff/test.md",
+    "verifier": "work/TASK-113/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "verifier checked every AC against saved evidence; pipeline crosscheck fail=0 on both runs"
+    }
+  },
+  "user_notes": [],
+  "picked_at": "2026-10-15T15:42:15Z",
+  "updated_at": "2026-10-15T17:08:51Z",
+  "updated_by": "main",
+  "scope": [
+    "logreach.py",
+    "logreach_report.py",
+    "tests/logreach_test.sh",
+    "tests/logreach_report_test.sh",
+    "tests/fixtures/logreach",
+    "docs/guide/access-log-onboarding.md",
+    "docs/guide/toolkit-reference.md",
+    "user_scripts/prompts/vietnamworks/vietnamworks_routes_logreach.json"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": ""
+}

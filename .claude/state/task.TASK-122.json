@@ -1,0 +1,228 @@
+{
+  "task_id": "TASK-122",
+  "title": "Deploy context provider interface: pipeline deploy step builds deploy-context.json from the product link file (Upzi, VietnamWorks, future products)",
+  "state": "DONE",
+  "requirement": "Pipeline deploy step SHALL build deploy-context.json from a per-product provider (link file + converter chain) chosen through one interface, no manual --from-dir; deploy hold and recon report name the source; a new product is added by config, not code. REQ-0088 (RAW-00673, RAW-00675)",
+  "acceptance_criteria": [
+    "AC1 provider record + validation",
+    "AC2 auto build from link, meta source/link/sha, no placeholder",
+    "AC3 resumed run refreshed on provider change",
+    "AC4 hold/recon text names link or missing config",
+    "AC5 link secrets masked before context/slices",
+    "AC6 every user input mapped to a slot or out of scope",
+    "AC7 deploy-check verdict + hold text per product+plan",
+    "AC8 Upzi gateway calls mapped via upzi_service_route.txt, VNW byte-identical",
+    "AC9 single-source unchanged",
+    "AC10 built-context verdict + hard cost gate before phase0, reasoned waiver only, shown in reports",
+    "AC11 graph check before phase1 holds on 0 edges or >50% unresolved",
+    "AC12 deploy-context.json holds only the internal model; ingress/external gateways rewrite to it; validator reports violations",
+    "AC13 per-product path_rule full/partial/off; exposure.json from the public host/route inputs; overlay exposure per rule, conflicts counted, hiding never stricter than today"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-122-deploy-provider.md",
+    "summary": "Deploy provider in products.conf (deploy/gateway records); build_deploy precedence from-dir > PIPELINE_DEPLOY_DIR > provider > kubectl > none with meta source/link/sha; refresh on provider change; link-value secret masking (F-122-1); input inventory to slots; deploy_check.py --inputs (sufficiency) and --built (good/weak/empty quality verdict); hard cost gate before phase0 (only waiver --no-deploy-context --reason, never auto_scan, ignores PIPELINE_CHECKPOINTS=0); graph check before phase1; generalised Kong gateway rewrite (Upzi via upzi_service_route.txt, VNW byte-identical); RAW-00680 output contract = internal model only (Deployment+Service+ConfigMap per repo, in-cluster URLs, no gateway/vendor data), vendor-neutral gateway kinds ingress/external, GATEWAY_ROUTE key, contract validator 122.11; RAW-00681/00682 public exposure map exposure.json (122.12) with per-product path_rule (Upzi full, VNW partial), consumers overlay/correlate/reports",
+    "reuse": [
+      "deploy_link_to_k8s.py",
+      "deploy_context.sh",
+      "secret_mask.py",
+      "active_apps.py",
+      "recon cp0 resolved",
+      "checkpoint_report.py",
+      "user_scripts/vietnamworks_kong_rewrite.py"
+    ],
+    "risks": [
+      "wider deploy hold changes behaviour for pipeline plans with URL env keys and no context",
+      "fixtures using PIPELINE_CHECKPOINTS=0 / --no-deploy-context need --reason",
+      "link secrets reaching contexts before masking"
+    ]
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "122.1-122.12: provider records (deploy/gateway/exposure), build_deploy provider precedence (no kubectl fallback when off), masking, deploy_check.py --inputs/--built, contract filter+validator, hard phase0 cost gate + reasoned waiver, graph check, exposure.json + consumers, link_gateway_rewrite.py (VNW wrapper byte-identical), report lines, input-contract doc",
+    "files": [
+      "auto_scan.sh",
+      "checkpoint_report.py",
+      "config.sh",
+      "correlate.py",
+      "deploy_check.py",
+      "deploy_context.sh",
+      "deploy_link_to_k8s.py",
+      "deploy_report_lines.py",
+      "docs/guide/architecture.md",
+      "docs/guide/deploy-context-standard.md",
+      "docs/guide/deploy-input-contract.md",
+      "docs/guide/security-review-runbook.md",
+      "docs/guide/toolkit-reference.md",
+      "evaluate_run.sh",
+      "exposure_map.py",
+      "graph_build.sh",
+      "link_gateway_rewrite.py",
+      "pipeline.sh",
+      "products_common.sh",
+      "products.conf.example",
+      "recon_report.py",
+      "secret_mask.py",
+      "summarize_exec.sh",
+      "user_scripts/vietnamworks_kong_rewrite.py"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh (work/TASK-122/evidence/full_run_all_r4.txt)",
+    "result": "172 suites; 169 pass; 3 fail (ext_scan F-96-1, track_hook S3, tracking_new_only N3); same 3 fail at 2863757 before TASK-122, files untouched by TASK-122 -> pre-existing, queued to TASK-078"
+  },
+  "security": {
+    "status": "completed",
+    "result": "link secrets masked before context/slices (V5); evidence holds counts, paths, key names only (sec_evidence_scan: no URL/secret values); no REPOS_ROOT reads; single-source untouched (v14_9)"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "verifier (work/TASK-122/handoff/verify.md) + main save-evidence v14_6/8/9/10, V_122_15, sec_evidence_scan",
+    "result": "28 PASS; V12/V18/V19 verdict weak not good: accepted (weak never holds, 122.13; parity met); V6/V8/V9/V10 saved PASS; V7 waived (suite D5-D5i, 0 calls)",
+    "evidence": [
+      "work/TASK-122/handoff/verify.md",
+      "work/TASK-122/evidence/full_run_all_r4.txt",
+      "work/TASK-122/evidence/V_122_15_deploy_check.txt",
+      "work/TASK-122/evidence/v14_6_status.txt",
+      "work/TASK-122/evidence/v14_8_help.txt",
+      "work/TASK-122/evidence/v14_9_single.txt",
+      "work/TASK-122/evidence/v14_10_product.txt",
+      "work/TASK-122/evidence/sec_evidence_scan.txt"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-122-deploy-provider.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-122/handoff/design.md",
+    "tester": "work/TASK-122/handoff/test.md",
+    "coder": "work/TASK-122/handoff/code.md",
+    "verifier": "work/TASK-122/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "no finding count or decision changed by TASK-122 (deploy input only); verifier cross-checked every V/AC row against saved evidence files (verify.md)"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00677",
+      "note": "Interface must cover every production input the user gave and say enough/missing (design 122.7/122.8)",
+      "at": "2026-10-16T23:52:44Z"
+    },
+    {
+      "raw": "RAW-00679",
+      "note": "Quality-check the built deploy-context.json; no paid phase on an empty/weak context; waiver only with reason (design 122.10)",
+      "at": "2026-10-16T23:52:44Z"
+    },
+    {
+      "raw": "RAW-00680",
+      "note": "Output = internal model only (as Upzi_g02/VNW contexts, no Kong); gateways are input adapters rewriting to internal URLs",
+      "at": "2026-10-16T23:55:33Z"
+    },
+    {
+      "raw": "RAW-00681",
+      "note": "Public host+route inputs = exposure map (which repo routes are internet-reachable); public-domain s2s calls = internal edges",
+      "at": "2026-10-17T00:03:50Z"
+    },
+    {
+      "raw": "RAW-00682",
+      "note": "Path convention public/external/internal: full for Upzi, partial for VietnamWorks -> per-product setting; VNW exposure from route map",
+      "at": "2026-10-17T00:06:22Z"
+    },
+    {
+      "raw": "RAW-00684",
+      "note": "After DONE: paid re-runs Upzi_g01, Upzi_g02/qlv5, Vietnamworks_g01 with provider contexts; per-phase + old-vs-new prompt effect report per plan (supersedes TASK-092's VNW re-run)",
+      "at": "2026-10-17T00:13:53Z"
+    },
+    {
+      "raw": "RAW-00685",
+      "note": "Provider switched off: no kubectl fallback (source none -> gate holds)",
+      "at": "2026-10-17T00:17:37Z"
+    },
+    {
+      "raw": "RAW-00686",
+      "note": "Unattended: finish TASK-122 and run the 3 paid re-runs + prompt-effect reports without asking; user checks reports on return",
+      "at": "2026-10-17T00:19:30Z"
+    },
+    {
+      "raw": "RAW-00689",
+      "note": "After TASK-122 DONE run the paid re-scans Upzi_g01, Upzi_g02/qlv5, Vietnamworks_g01 unattended + prompt-effect reports",
+      "at": "2026-10-18T07:02:16Z"
+    },
+    {
+      "raw": "RAW-00688",
+      "note": "Coordinator follows up roles so none stalls or locks (one run_all at a time)",
+      "at": "2026-10-18T07:02:16Z"
+    },
+    {
+      "raw": "RAW-00693",
+      "note": "Upzi re-scans: keep using the weak deploy context (68/168 resolved); clear the gate with the waiver, which keeps the context",
+      "at": "2026-10-18T09:04:03Z"
+    },
+    {
+      "raw": "RAW-00695",
+      "note": "Upzi_g01 has few cross-service relations by nature; judge cross-service edges/graph effect on Upzi_g02 (and VNW_g01), not Upzi_g01",
+      "at": "2026-10-18T09:08:16Z"
+    },
+    {
+      "raw": "RAW-00696",
+      "note": "Re-scan after DONE: only Upzi_g02/qlv5 (drops Upzi_g01 and, with 'just', Vietnamworks_g01 from RAW-00684) to save time",
+      "at": "2026-10-18T09:09:24Z"
+    },
+    {
+      "raw": "RAW-00697",
+      "note": "Upzi_g01 = single-source/coverage checks only; no cross-repo work on it; stop rule: max 2 rounds per V item, data misses closed as DATA",
+      "at": "2026-10-18T09:11:14Z"
+    },
+    {
+      "raw": "RAW-00698",
+      "note": "Upzi_g01 run 20261016-221613 used empty placeholder context (source none); new provider gives 1 workload/3 objects per repo in kit kD, verdict enough; report AC2 evidence",
+      "at": "2026-10-18T09:20:14Z"
+    },
+    {
+      "raw": "RAW-00701",
+      "note": "root cause: empty deploy step marked done, resume skipped it; 122.3 refresh fixes it before phase0, after phase0 a new run is needed",
+      "at": "2026-10-18T09:22:22Z"
+    },
+    {
+      "raw": "RAW-00703",
+      "note": "deep dive in the deploy-context-stuck note; open gap: resume after phase0 with new inputs only warns, 122.14 hold proposed",
+      "at": "2026-10-18T09:25:51Z"
+    },
+    {
+      "raw": "RAW-00708",
+      "note": "new groups Upzi_gNN / Vietnamworks_gNN take the product link with no new input (122.14d)",
+      "at": "2026-10-18T09:43:02Z"
+    },
+    {
+      "raw": "RAW-00709",
+      "note": "VNW raw link is rewritten in the run to in-cluster names; 15 of 493 gateway URLs have no route line",
+      "at": "2026-10-18T09:43:03Z"
+    },
+    {
+      "raw": "RAW-00715",
+      "note": "Solve hard things the simple way; no over-engineering (same shape as Upzi)",
+      "at": "2026-10-18T09:57:59Z"
+    },
+    {
+      "raw": "RAW-00714",
+      "note": "Inspect only the files the user names; copy the working example (Upzi)",
+      "at": "2026-10-18T11:06:08Z"
+    }
+  ],
+  "picked_at": "2026-10-16T23:39:15Z",
+  "updated_at": "2026-10-18T11:32:28Z",
+  "updated_by": "main",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": "122.1 deploy/gateway records + products_check, 122.2 build_deploy precedence + meta, 122.3 refresh; deploy_provider_test 41/0, shell 513/0; 122.6 mask_value + converter/deploy_context masking (deploy_mask_test); QA 122.1-122.3: deploy_provider 43/0 (+2 cases), shell 514/0, 3 bites; QA 122.6: deploy_mask 29/0, shell 515/0, 3 bites; 122.8 deploy_check.py --inputs + pipeline deploy-check; RAW-00685 no kubectl fallback; 122.10 --built verdict + phase0 gate + --no-deploy-context --reason + graph check; 122.11 contract filter/validator; auto_scan hold texts + test; 122.12 exposure record, exposure_map.py, build_exposure (consumers in progress); QA r3 122.8 pass; QA r4 122.10/122.11 pass (deploy_quality 41/0, pipeline_checkpoint 77/0); 122.12 exposure consumers + tests/deploy_exposure_test.sh 36/0; QA r5 122.12 + hold texts pass (deploy_exposure 42/0, auto_scan_hold 12/0); follow-up: track_hook S3 + tracking_new_only fail at base d698550 (pre-existing); 122.9 link_gateway_rewrite.py + wrapper; 122.4/5 deploy_report_lines.py started; 122.4/5 report lines (recon/exec/eval), 122.7 docs/guide/deploy-input-contract.md, 122.9 tests V8 byte-identical; QA r6 pass: link_gateway_rewrite 23/0, deploy_report_lines 22/0; verify fixes V5/V6/V7/V11/V17 + products.conf Upzi/Vietnamworks records; main V9,V10/16/25,V13,V15,V17 match; V12 mismatch (weak) to coder; unknown_hosts_n/outside_plan_hosts_n + test G4 (V12 follow-up); main V21, V23 match; RAW-00693 noted; V18/V19/V21/V22/V23/V24/V5 run; 122.13 design delta from user; V18 fixed: provider passes --edge-key (edge_key=KONG_ROUTE), link byte-identical to wrapper; 122.13 done (coder); deep dive note on empty-context chain; 122.14 design delta written (designer draft); kH HEAD kit: VNW provider rewrite 51 rewritten/44 fixed/28 edge keys, 15/493 gateway URLs unresolved; kH HEAD kit: VNW provider rewrite 51 rewritten/44 fixed/28 edge keys, 15/493 gateway URLs unresolved; 122.14 implemented + tests + docs; 122.15 designed; 122.15 implemented + test + docs",
+    "notes": "",
+    "next": "Relaunch designer from work/TASK-122/handoff/design.md next: line (full phase-122 doc + scope adds A/B/C + enough/missing for Upzi_g01, Upzi/full, VietnamWorks; include F-122-1 masking); then write do"
+  },
+  "next": ""
+}

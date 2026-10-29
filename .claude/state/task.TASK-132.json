@@ -1,0 +1,81 @@
+{
+  "task_id": "TASK-132",
+  "title": "Linked plan findings read from latest run phase1/out even when the run is not complete (REQ-0099)",
+  "state": "DONE",
+  "requirement": "REQ-0099: linked_repos.py reads a linked plan like an in-plan group: runs/latest/phase1/out whenever it has findings files, not only when run.json says complete",
+  "acceptance_criteria": [
+    "linked_repos._link uses runs/latest/phase1/out when it holds *.json, whatever run.json status; results/ stays the fallback",
+    "a running s2s run (parked at cp2b) gives its repos findings in graph/linked.json; no claude call",
+    "single-source linked plans and complete runs unchanged; tests pass"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-132-linked-reads-latest-run.md",
+    "summary": "linked_repos._link reads runs/latest/phase1/out whenever it holds json, not only for a complete run; results/ stays fallback",
+    "reuse": [
+      "linked_repos.py"
+    ],
+    "risks": [
+      "half-written phase1 of a running run: missing repos keep the WARNING"
+    ]
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "_link uses runs/latest/phase1/out when it holds json, any run status; results/ fallback",
+    "files": [
+      "linked_repos.py",
+      "tests/linked_repos_test.sh"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh (full) + bash tests/linked_repos_test.sh",
+    "result": "linked_repos_test pass=26 fail=0 (U1 fails 3x on old code); run_all 188 suites, failures only ext_scan, track_hook, tracking_new_only (known) and pipeline_pool_test.sh (load flake: passes alone 58/0, no link to linked_repos); real scratch s2s check 8/8 repos done"
+  },
+  "security": {
+    "status": "completed",
+    "result": "no REPOS_ROOT read, no model call, stdlib only; reads findings files of a linked plan by name"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "bash tests/linked_repos_test.sh; scratch s2s build (work/TASK-132/evidence/real_s2s.txt); git diff frozen prompts",
+    "result": "26/0; 8 of 8 s2s repos done with run.json running; frozen prompts diff 0 bytes",
+    "evidence": [
+      "work/TASK-132/evidence/real_s2s.txt",
+      "work/TASK-132/evidence/linked_test.txt",
+      "work/TASK-132/evidence/full_run_all.txt",
+      "work/TASK-132/evidence/frozen-prompts-diff.txt",
+      "work/TASK-132/handoff/verify.md"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-132-linked-reads-latest-run.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": {
+      "waiver": "two-line change, design written by the coordinator"
+    },
+    "coder": "work/TASK-132/handoff/code.md",
+    "tester": "work/TASK-132/handoff/test.md",
+    "verifier": "work/TASK-132/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "one-line source test; counts re-run independently by tester and verifier (26/0, 8 of 8 repos)"
+    }
+  },
+  "user_notes": [],
+  "picked_at": "2026-10-21T13:55:44Z",
+  "updated_at": "2026-10-21T15:03:00Z",
+  "updated_by": "main",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": "",
+    "next": ""
+  },
+  "next": ""
+}

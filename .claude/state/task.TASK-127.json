@@ -1,0 +1,85 @@
+{
+  "task_id": "TASK-127",
+  "title": "Slim CLAUDE.md: core rules only, detail to on-demand docs/guide (REQ-0094)",
+  "state": "DONE",
+  "requirement": "REQ-0094: CLAUDE.md holds only what every session needs; role/lead/inspector/req-kit detail moves to an on-demand doc by pointer, no rule dropped.",
+  "acceptance_criteria": [
+    "CLAUDE.md at most about 9000 bytes; moved text in docs/guide with a one-line pointer each",
+    "every Never-break rule kept in CLAUDE.md or the moved doc with a pointer; agent-setup and req-kit markers kept",
+    "run_all and checks/shell.sh pass; hooks, agent_setup.py, lessons.py, report/SKILL.md still work"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-127-slim-claude-md.md",
+    "summary": "Move role/lead/inspector/guard/identity detail to docs/guide/workflow-roles.md; CLAUDE.md to about 9 KB keeping Never break heads, rules 1-10, markers; lessons.py corpus reads the new doc",
+    "reuse": [],
+    "risks": [
+      "agent-setup custom marker lost",
+      "lessons contradiction check misses moved rules"
+    ]
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "workflow-roles.md new; CLAUDE.md 16982->9200 B; lessons.py corpus reads the doc",
+    "files": [
+      "CLAUDE.md",
+      "docs/guide/workflow-roles.md",
+      ".claude/scripts/lessons.py",
+      ".claude/tests/lessons_test.sh"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh --changed; .claude/scripts/checks/shell.sh",
+    "result": "shell 551/0; run_changed 183 suites, 4 failed all pre-existing/unrelated (track_hook, tracking_new_only fail on HEAD; ext_scan = F-96-1 in TASK-078; ext_pregate passes alone 10/28); lessons S4 pass"
+  },
+  "security": {
+    "status": "not_applicable",
+    "result": "docs and one corpus line; no code path or secret touched"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "work/TASK-127/evidence/*",
+    "result": "AC1 9200 B; AC2 15/15 rules, 1-10 + status line byte-equal; AC3 shell 551/0, touched suites pass; track_hook/tracking_new_only fail on baseline 224b3d46; ext_pregate passes alone; agent_setup init leaves CLAUDE.md identical",
+    "evidence": [
+      "work/TASK-127/evidence/v_checks.txt",
+      "work/TASK-127/evidence/base_head_fail.txt",
+      "work/TASK-127/evidence/v5_init.txt",
+      "work/TASK-127/evidence/run_changed.txt"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-127-slim-claude-md.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-127/handoff/design.md",
+    "coder": "work/TASK-127/handoff/code.md",
+    "tester": "work/TASK-127/handoff/test.md",
+    "verifier": "work/TASK-127/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "docs move; counts checked by tester and verifier"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00807",
+      "note": "also review why context reaches auto compact so fast",
+      "at": "2026-10-20T06:38:08Z"
+    }
+  ],
+  "picked_at": "2026-10-20T06:37:04Z",
+  "updated_at": "2026-10-20T07:58:04Z",
+  "updated_by": "main",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": "",
+    "next": "coder brief 127.1 and 127.3"
+  },
+  "next": ""
+}

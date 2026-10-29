@@ -1,0 +1,76 @@
+{
+  "task_id": "TASK-155",
+  "title": "Fix cmd_recover: local `import subprocess` (_tasks.py:1324, TASK-102) shadows the module import, so recover crashes when tests/run_worktree.sh is absent (multi_task 100.8 red; found by TASK-154 QA F-154-T1)",
+  "state": "DONE",
+  "requirement": "",
+  "acceptance_criteria": [
+    "multi_task 100.8 green",
+    "NEXT hint says backlog.sh pick",
+    "bites red"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-155-recover-import-and-pick-hint.md",
+    "summary": "delete local import subprocess in cmd_recover; NEXT hint names backlog.sh pick"
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "removed local import (155.1); hint backlog.sh pick (155.2); keepalive assert",
+    "files": [
+      ".claude/scripts/_tasks.py",
+      ".claude/tests/keepalive_test.sh"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "bash .claude/tests/multi_task_test.sh; bash .claude/tests/keepalive_test.sh",
+    "result": "205/0 (was 204/1), 55/0; bites: revert 155.2 -> 1 FAIL, revert 155.1 -> 100.8 FAIL"
+  },
+  "security": {
+    "status": "not_applicable",
+    "result": "removes an import, changes a hint string; no input handling"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "bash .claude/scripts/tasks.sh recover (real repo)",
+    "result": "rc 0, no traceback; suites green",
+    "evidence": [
+      "work/TASK-155/evidence/v.txt"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-155-recover-import-and-pick-hint.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": {
+      "waiver": "two-line fix in a main-owned protected gate script; design by main"
+    },
+    "coder": {
+      "waiver": "protected gate script, guard forbids roles; main owns it"
+    },
+    "tester": {
+      "waiver": "two-line fix; main ran both suites and two bites (work/TASK-155/evidence/v.txt)"
+    },
+    "verifier": {
+      "waiver": "two-line fix, real recover rc 0 recorded in evidence/v.txt"
+    },
+    "crosscheck": {
+      "waiver": "no counts; two-line fix with bites"
+    }
+  },
+  "user_notes": [],
+  "picked_at": "2026-10-27T23:49:56Z",
+  "updated_at": "2026-10-27T23:52:46Z",
+  "updated_by": "main",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": ""
+}

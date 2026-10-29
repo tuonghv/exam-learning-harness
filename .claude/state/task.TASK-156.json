@@ -1,0 +1,80 @@
+{
+  "task_id": "TASK-156",
+  "title": "Fix 4 pre-existing red checks: skill_layout U7 (real tree), track_a_ss 106.7 (kinds 3/22 vs 3/21 after phase 151), track_hook S3 (summarize_report.sh track_hook guard, check TASK-153 regression), ShellCheck SC2015 pipeline_step.sh:47",
+  "state": "DONE",
+  "requirement": "",
+  "acceptance_criteria": [
+    "156.1 coordinator SKILL.md back to the 363 ratchet, same words",
+    "156.2 track_a_ss 106.7 expects 3/22",
+    "156.3 track_hook S3 accepts the baseline guard and still bites",
+    "156.4 shellcheck pipeline_step.sh rc 0, same behaviour"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-156-pre-existing-red-checks.md",
+    "summary": "diagnosis: U7 regression from TASK-154 (+6 lines), 106.7 and S3 stale after phase 152 / TASK-104, pipeline_step.sh lint; fixes 156.1-156.4"
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "156.1 re-wrap coordinator SKILL.md (word-diff empty, 363 lines); 156.2 106.7 3/22; 156.3 S3 optional baseline guard; 156.4 pipeline_step.sh brace groups, quoted $ap, SC2086 disables with reasons",
+    "files": [
+      ".claude/skills/coordinator/SKILL.md",
+      "tests/track_a_ss_test.sh",
+      "tests/track_hook_test.sh",
+      "pipeline_step.sh"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "bash tests/skill_layout_test.sh; bash tests/track_a_ss_test.sh; bash tests/track_hook_test.sh; shellcheck -x pipeline_step.sh; .claude/scripts/checks/shell.sh",
+    "result": "skill_layout 13/0, track_a_ss 35/0, track_hook 52/0, shellcheck rc 0, shell.sh no FAIL; S3 bite: guard removed -> 0 matches (work/TASK-156/evidence/suites.txt)"
+  },
+  "security": {
+    "status": "completed",
+    "result": "no new input, path or command; brace groups keep die-on-failure; SC2086 splits only internal step names from ORDER"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "scratch plan t/u in a scratch kit: pipeline_step.sh adopt (mismatch, match), reset recon (dry), reset recon --cascade --apply",
+    "result": "mismatch rc 2 with the die text; adopt dry rc 0; reset prints the later note with graph phase0 split; cascade apply rc 0, steps_done [deploy], backup written, run.json running",
+    "evidence": [
+      "work/TASK-156/evidence/v.txt",
+      "work/TASK-156/evidence/suites.txt"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-156-pre-existing-red-checks.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": {
+      "waiver": "4 small fixes diagnosed by main; design by main"
+    },
+    "coder": {
+      "waiver": "protected skill file plus 3 one-line test/lint fixes; main owns them"
+    },
+    "tester": {
+      "waiver": "main ran the 3 suites, shell.sh and an S3 bite (work/TASK-156/evidence/suites.txt)"
+    },
+    "verifier": {
+      "waiver": "scratch-plan run of pipeline_step.sh in work/TASK-156/evidence/v.txt"
+    },
+    "crosscheck": {
+      "waiver": "no counts; test and lint fixes with a bite"
+    }
+  },
+  "user_notes": [],
+  "picked_at": "2026-10-27T23:55:23Z",
+  "updated_at": "2026-10-28T00:00:30Z",
+  "updated_by": "coordinator",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": ""
+}

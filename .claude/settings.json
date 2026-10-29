@@ -1,0 +1,197 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(//**/*.pem)",
+      "Read(//**/*.key)",
+      "Read(~/.claude/.credentials*)"
+    ],
+    "ask": [
+      "Read(//home/tuonghv/Documents/git/online-system/pentest_source_code*/**)",
+      "Edit(.claude/hooks/**)",
+      "Edit(.claude/settings*.json)",
+      "Edit(.claude/agent_setup.json)",
+      "Edit(.claude/agents/**)",
+      "Edit(.claude/skills/**)",
+      "Edit(.claude/scripts/**)",
+      "Edit(.claude/req/**)",
+      "Bash(claude -p *)",
+      "Bash(claude --print *)",
+      "Bash(claude * -p *)",
+      "Bash(claude * --print *)",
+      "Bash(./scan_batch.sh *)",
+      "Bash(scan_batch.sh *)",
+      "Bash(bash scan_batch.sh *)",
+      "Bash(bash ./scan_batch.sh *)",
+      "Bash(./auto_scan.sh *)",
+      "Bash(auto_scan.sh *)",
+      "Bash(bash auto_scan.sh *)",
+      "Bash(bash ./auto_scan.sh *)",
+      "Bash(./pipeline.sh run *)",
+      "Bash(bash pipeline.sh run *)",
+      "Bash(bash ./pipeline.sh run *)",
+      "Bash(./pipeline.sh new *)",
+      "Bash(bash pipeline.sh new *)",
+      "Bash(bash ./pipeline.sh new *)",
+      "Bash(./pipeline.sh verify *)",
+      "Bash(bash pipeline.sh verify *)",
+      "Bash(bash ./pipeline.sh verify *)",
+      "Bash(git push *)",
+      "Bash(git reset --hard *)",
+      "Bash(git reset * --hard *)",
+      "Bash(git clean -*f*)",
+      "Bash(git clean --force *)",
+      "Bash(git branch -D *)",
+      "Bash(git branch * -D *)",
+      "Bash(git *--force*)",
+      "Bash(git -C * push *)",
+      "Bash(git -C * reset --hard *)",
+      "Bash(git -C * clean -*f*)",
+      "Bash(git -C * branch -D *)"
+    ],
+    "allow": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Edit",
+      "Write",
+      "Bash",
+      "Agent",
+      "Monitor",
+      "TaskStop",
+      "Bash(python3 .claude/req/req.py:*)",
+      "Bash(bash .claude/scripts/commit-check.sh:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ]
+  },
+  "autoMemoryEnabled": false,
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/session-start.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/req/hook_context.py\"",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/agent_setup.py\" post --config \"$CLAUDE_PROJECT_DIR/.claude/agent_setup.json\""
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/post-edit-test.sh"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/pre-compact-check.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/stop-check.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/req/hook_stop.py\"",
+            "timeout": 30
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/scripts/tasks.sh\" nextpick || true",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/req/hook_capture.py\"",
+            "timeout": 15
+          },
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/scripts/task_checkpoint.sh\" brief || true",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/agent_setup.py\" hook --config \"$CLAUDE_PROJECT_DIR/.claude/agent_setup.json\""
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/agent_setup.py\" event --config \"$CLAUDE_PROJECT_DIR/.claude/agent_setup.json\""
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/agent_setup.py\" event --config \"$CLAUDE_PROJECT_DIR/.claude/agent_setup.json\""
+          }
+        ]
+      }
+    ]
+  }
+}

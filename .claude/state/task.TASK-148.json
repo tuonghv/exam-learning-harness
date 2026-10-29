@@ -1,0 +1,105 @@
+{
+  "task_id": "TASK-148",
+  "title": "Report build writes by-repo-public automatically (by-repo minus 0-finding repos) (REQ-0115)",
+  "state": "DONE",
+  "requirement": "REQ-0115. User 2026-10-27 (RAW-01012, one-click answer \"Auto in report build\"): no command to remember; every non-baseline per-repo report build also writes <report_dir>/by-repo-public via publish_by_repo.sh --apply logic. Supersedes RAW-01004. security_report and by-repo unchanged.",
+  "acceptance_criteria": [
+    "AC1 by-repo-public written by the build, lacks exactly the 0-finding done repos",
+    "AC2 security_report and by-repo unchanged",
+    "AC3 baseline / no by-repo build writes none",
+    "AC4 registry per-repo-public writer summarize_report.sh, crosscheck unregistered=0"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-148-auto-by-repo-public.md",
+    "summary": "summarize_report.sh calls publish_by_repo.sh <REPORTS_DIR> --findings <repo_findings json> --apply after the per-repo block when PER_REPO=1 (one SUMMARY line; failure = build exit 1; baseline/PER_REPO=0 none); dry run SUMMARY would_delete=; registry per-repo-public writer += summarize_report.sh, modes ss/pl, optional.",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "completed",
+    "files": [
+      "summarize_report.sh",
+      "publish_by_repo.sh",
+      "report_registry.json",
+      "docs/guide/toolkit-reference.md",
+      "docs/guide/security-review-runbook.md",
+      "tests/repo_findings_test.sh",
+      "tests/report_crosscheck_test.sh",
+      "tests/plan_reports_test.sh",
+      "tests/scan_equiv_test.sh"
+    ],
+    "summary": "148.1 summarize_report.sh calls publish_by_repo.sh --apply after by-repo (PER_REPO=1 + sidecar), one SUMMARY line, failure exit 1; 148.2 dry-run would_delete=; 148.3 registry per-repo-public writer += summarize_report.sh modes ss/pl; docs. Fix round 1: plan_reports 19.1 + scan_equiv E1 expected file sets += by-repo-public."
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh <suite> per suite: repo_findings report_crosscheck track_a_ss pipeline_track plan_reports scan_equiv run_reports check_deliverables report_qa (+7)",
+    "result": "all 0 failed: repo_findings 48/0, pipeline_track 47/0, plan_reports 44/0, scan_equiv 12/0, report_crosscheck 45/0, run_reports 78/0, check_deliverables 73/0, report_qa 33/0; bite 4 FAIL with call removed",
+    "evidence": [
+      "work/TASK-148/evidence/qa_*.txt",
+      "work/TASK-148/evidence/fix1_plan_reports.txt",
+      "work/TASK-148/evidence/fix1_scan_equiv.txt"
+    ]
+  },
+  "security": {
+    "status": "completed",
+    "result": "publish only deletes inside <report_dir>/by-repo-public; by-repo refusal, symlink and bad-name refusals kept; failure path exits 1 with ERROR; no new input from untrusted sources (sidecar written by the same build)"
+  },
+  "verification": {
+    "status": "passed",
+    "evidence": [
+      "work/TASK-148/handoff/verify.md",
+      "work/TASK-148/evidence/v4-realdata.txt",
+      "work/TASK-148/evidence/v5-crosscheck.txt"
+    ],
+    "summary": "Argus PASS AC1-AC4; real data Upzi_g04 run 20261027-074446 on scratch kit: security_report + by-repo identical, by-repo-public = 3 backend md+pdf (byte copies), 4 ai files dropped; crosscheck unregistered=0 fail=0"
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-148-auto-by-repo-public.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-148/handoff/design.md",
+    "coder": "work/TASK-148/handoff/code.md",
+    "tester": "work/TASK-148/handoff/test.md",
+    "verifier": "work/TASK-148/handoff/verify.md",
+    "grants": {
+      "skill-curator": [
+        ".claude/skills/*"
+      ]
+    },
+    "crosscheck": {
+      "waiver": "report cross-check run by main on the real-data scratch rebuild: work/TASK-148/evidence/v5-crosscheck.txt (unregistered=0 fail=0); report_crosscheck suite 45/0; Argus verified registry"
+    },
+    "skill-curator": "work/TASK-148/handoff/curate.md"
+  },
+  "user_notes": [],
+  "picked_at": "2026-10-27T07:27:29Z",
+  "updated_at": "2026-10-27T08:29:32Z",
+  "updated_by": "main",
+  "scope": [
+    "summarize_report.sh",
+    "publish_by_repo.sh",
+    "report_registry.json",
+    "tests/repo_findings_test.sh",
+    "tests/report_crosscheck_test.sh",
+    "tests/track_a_ss_test.sh",
+    "docs/guide/toolkit-reference.md",
+    "docs/guide/security-review-runbook.md",
+    "tests/plan_reports_test.sh",
+    "tests/scan_equiv_test.sh",
+    "tests/pipeline_track_test.sh"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [
+      "148.1-148.3 code + tests (wip)"
+    ],
+    "notes": "",
+    "next": "lessons drift/collect, DONE report docs/report/phase-148-auto-by-repo-public.md, backlog complete"
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}

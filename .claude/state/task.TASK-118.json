@@ -1,0 +1,103 @@
+{
+  "task_id": "TASK-118",
+  "title": "Declared multi-domain public routes: query all public domains of a service; api-rc public",
+  "state": "DONE",
+  "requirement": "A service listed with several public routes in route_public.txt is log-checked on all of them; api-rc public. REQ-0083 (RAW-00653)",
+  "acceptance_criteria": [
+    "AC1 list accepted",
+    "AC2 all declared queried",
+    "AC3 check-routes",
+    "AC4 VNW data",
+    "AC5 rebuilds unchanged"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-118-multi-domain-public.md",
+    "summary": "route_public.txt comma list = declared public routes; importer marks public:declared; logreach queries all declared; check-routes multi_public",
+    "reuse": [
+      "route_plan",
+      "importer route_public block"
+    ],
+    "risks": [
+      "single-route repos byte-identical"
+    ]
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "route_public.txt comma list = declared public routes (importer public:declared); route_plan queries all declared; --check-routes multi_public; VNW data: api-rc public, email-service apiv2+api-rc",
+    "files": [
+      "logreach.py",
+      "user_scripts/vietnamworks_route_repo_map.py",
+      "tests/logreach_test.sh",
+      "tests/vnw_route_public_test.sh",
+      "docs/guide/*",
+      "user_scripts/prompts/vietnamworks/*"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh logreach; tests/run_all.sh vnw_route; checks/shell.sh",
+    "result": "logreach 4 suites, vnw_route 1 suite pass (D1-D4); shell 511/0"
+  },
+  "security": {
+    "status": "completed",
+    "result": "no secret or filter value in git/logs; local profile and routes copy mode 600; private s2s host still excluded"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "check-routes all VNW/Upzi plans; validate_routes; pipeline.sh rebuild VNW g01 20261013-174303 + Upzi_g02/logreach-v8 20260928-222915",
+    "result": "VNW 75/75 valid, multi_public=1 (email-service apiv2+api-rc), multi=0 in every plan; Upzi multi=0; VNW g01 seen 8/via 4/not_seen 7 unchanged, gaps=0 QA PASS crosscheck fail=0 checklist 12/12; Upzi g02 seen 5/via 1/not_seen 6 unchanged, gaps=0 QA PASS fail=0 (checklist missing=2 pre-existing)",
+    "evidence": [
+      "work/TASK-118/evidence/routes-vnw.txt",
+      "work/TASK-118/evidence/validate_vnw.txt",
+      "work/TASK-118/evidence/vnw_rebuild118.log",
+      "work/TASK-118/evidence/upzi_rebuild118.log"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-118-multi-domain-public.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": {
+      "waiver": "small; main wrote design from code read"
+    },
+    "coder": "work/TASK-118/handoff/code.md",
+    "tester": {
+      "waiver": "main re-ran all suites (evidence ut-logreach, ut-vnwroute, shell)"
+    },
+    "verifier": {
+      "waiver": "main checked AC observables directly (evidence files)"
+    },
+    "crosscheck": {
+      "waiver": "pipeline crosscheck in both rebuilds fail=0"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00654",
+      "note": "email-service-api has two public routes: apiv2 + api-rc /email-service/",
+      "at": "2026-10-16T09:12:46Z"
+    }
+  ],
+  "picked_at": "2026-10-16T09:04:22Z",
+  "updated_at": "2026-10-16T09:12:47Z",
+  "updated_by": "main",
+  "scope": [
+    "logreach.py",
+    "user_scripts/vietnamworks_route_repo_map.py",
+    "user_scripts/prompts/vietnamworks/**",
+    "tests/logreach_test.sh",
+    "tests/vnw_route_public_test.sh",
+    "docs/guide/**"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": ""
+}

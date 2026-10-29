@@ -1,0 +1,113 @@
+{
+  "task_id": "TASK-138",
+  "title": "Call resolver rest: longest prefix, Kong strip, reason codes, call_resolution.json with join method per call (REQ-0101, after TASK-136)",
+  "state": "DONE",
+  "requirement": "REQ-0101: route_resolve.py records via/prefix/strip/match tier/reason per caller call from the user route files, zone-separated; docs/notes/design-draft-call-resolver.md",
+  "acceptance_criteria": [
+    "call_resolution.json per call: zone, ns, service, via (ns/name, fqdn, route), prefix, strip, tier, reason",
+    "Kong in-cluster and outside Kong strip ON, namespace no strip, longest whole-segment prefix, no silent drop",
+    "no finding lost, coverage gaps=0, $0, both plan modes one path, tests per golden case incl. same name in two zones"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-138-call-resolver-rest.md",
+    "summary": "Direct in-cluster lookup first, gateway second (strip recorded unverified, strip_conf_conflict reason), longest whole-segment prefix, zone rule for linked joins, call_resolution.json per call with via/tier/reason; $0",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "completed",
+    "files": [
+      "linked_repos.py",
+      "graph_build.sh",
+      "pipeline.sh",
+      "checkpoint_report.py",
+      "tests/call_resolution_test.sh",
+      "tests/checkpoint_report_test.sh",
+      "tests/suite_map.txt",
+      "docs/guide/toolkit-reference.md"
+    ],
+    "summary": "linked_repos resolve, graph_build call_resolution.json, step_graph writes gateways.tsv, cp2b reads via; VW Kong strip golden"
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh call_resolution graph_linked graph_linked2b checkpoint_report pipeline_checkpoint pipeline_graph pipeline_run; run_all.sh --fast; bash tests/pipeline_track_test.sh",
+    "result": "call_resolution 28 cases, graph_linked 22/0, checkpoint_report 77/0, pipeline_graph 49/49 (case 26.2 updated for the new calls: line), pipeline_run 127/0, pipeline_track 47/0 alone, --fast only known track_hook S3 failure"
+  },
+  "security": {
+    "status": "not_applicable",
+    "result": "deterministic resolver on plan metadata; no model, no repo access, frozen prompts untouched, products.conf unchanged"
+  },
+  "verification": {
+    "status": "passed",
+    "evidence": [
+      "work/TASK-138/evidence/call_resolution.json",
+      "work/TASK-138/evidence/linked_edges_before.txt",
+      "work/TASK-138/evidence/linked_edges_after.txt",
+      "work/TASK-138/evidence/pipeline_track_alone.txt"
+    ],
+    "command": "graph_build.sh edges on a scratch copy of Upzi_g03 run 20261021-220859 (read-only on the plan)",
+    "result": "call_resolution.json: 32 direct, 0 gateway, 136 none (external 33, no_namespace 1, unresolved_target 102). linked_edges 20 -> 7 distinct pairs; the 13 dropped are all the pre-TASK-136 wrong joins (target backend/... against a microservices-v2 callee, plus one duplicate external host); every kept edge has a matching ns/name and via=ns_name. Non-linked edges identical (24)."
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-138-call-resolver-rest.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-138/handoff/design.md",
+    "coder": "work/TASK-138/handoff/code.md",
+    "tester": "work/TASK-138/handoff/test.md",
+    "verifier": {
+      "waiver": "coordinator replayed the real Upzi_g03 run at $0 and compared before and after"
+    },
+    "crosscheck": {
+      "waiver": "coordinator re-ran suites and replayed the real run at $0"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00898",
+      "note": "strip=0 on Upzi Kong lines is untested in real use; reviews mostly call in-cluster services directly, not via public/Kong/ext domain; treat gateway strip as unverified, resolve direct in-cluster first",
+      "at": "2026-10-23T01:27:54Z"
+    },
+    {
+      "raw": "RAW-00899",
+      "note": "Vietnamworks Kong strip is real: ms.vietnamworks.com/job-application -> direct call has no /job-application. Fixture it; Upzi strip=0 still unverified",
+      "at": "2026-10-23T01:31:49Z"
+    },
+    {
+      "raw": "RAW-00900",
+      "note": "user away: automate and follow up, do not ask; paid runs still need a cost go",
+      "at": "2026-10-23T01:33:05Z"
+    },
+    {
+      "raw": "RAW-00904",
+      "note": "run long tests with run_in_background directly so completion notifies; act at once on finish",
+      "at": "2026-10-23T03:18:00Z"
+    }
+  ],
+  "picked_at": "2026-10-23T01:24:04Z",
+  "updated_at": "2026-10-23T03:18:28Z",
+  "updated_by": "main",
+  "scope": [
+    "linked_repos.py",
+    "graph_build.sh",
+    "pipeline.sh",
+    "checkpoint_report.py",
+    "tests/call_resolution_test.sh",
+    "tests/checkpoint_report_test.sh",
+    "tests/suite_map.txt",
+    "docs/guide/toolkit-reference.md",
+    "tests/pipeline_graph_test.sh"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": "",
+    "next": "Brief designer for TASK-138 design draft (REQ-0101 resolver rest)"
+  },
+  "next": ""
+}

@@ -1,0 +1,110 @@
+{
+  "task_id": "TASK-161",
+  "title": "Engine reads prompt http-v16 output: internal-only findings reached via callers (logreach never queries /internal on the WAF host), multi-mount endpoint checked per tier and used as twin, exposure line in reports, compare with run 20261026-060019 (REQ-0127)",
+  "state": "UNIT_TESTED",
+  "requirement": "REQ-0127",
+  "acceptance_criteria": [
+    "161.1 /internal mount never queried as own route on the public WAF host",
+    "161.2 internal-only finding: verdict from callers only, closed in-cluster state otherwise, never not_seen suggested Low",
+    "161.3 multi-mount: public/external mounts checked, /internal mount used for caller match like a twin (endpoint is the proof)",
+    "161.4 reports: exposure line (most exposed mount), in-cluster text; severity/confidence as written",
+    "161.5 compare new run vs 20261026-060019: run_diff + tracking, no id lost through the endpoint format",
+    "161.6 skill api-platform-security carries the several-mounts rule; findings untouched; coverage gaps=0; single-source unchanged"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-161-multi-mount-in-cluster.md",
+    "summary": "WAF skips /internal mounts; internal-only decided from callers or not_checkable/in_cluster; correlate cluster_routes guard; Exposure line + also-mounted; run_compare T2 strip; skill 2 lines",
+    "reuse": [
+      "parse_endpoint",
+      "link_match",
+      "caller_path_notes",
+      "card_twins"
+    ],
+    "risks": [
+      "v15 internal-only rows move not_seen->in_cluster (intended)"
+    ]
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "161.1-161.6: WAF skips /internal, in_cluster state, correlate cluster_routes guard + twin skip, Exposure/also-mounted rows, run_compare T2 strip, skill line; new suite logreach_mounts (33 checks, 19 bite)",
+    "files": [
+      "logreach.py",
+      "logreach_report.py",
+      "correlate.py",
+      "run_compare.py",
+      "report_common.sh",
+      "summarize_report.sh",
+      "summarize_exec.sh",
+      ".claude/skills/api-platform-security/SKILL.md",
+      "tests/logreach_mounts_test.sh",
+      "tests/logreach_test.sh",
+      "tests/logreach_ladder_test.sh",
+      "tests/public_reports_test.sh"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh --fast; logreach x7; correlate x3; correlate_twin; public_reports; pipeline_logreach; pipeline_correlate; run_compare; skill_layout; logreach_mounts; checks/shell.sh",
+    "result": "all pass; shell.sh 599/0; bite: AI fallback in_cluster skip (1 call vs 0), logreach_mounts 19/33 fail on revert; --changed: tracking_new_only N3 fails same on base 0d762946 (pre-existing), usage_hold x3 pass alone"
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": {
+      "waiver": "designer hit turn limit (PARTIAL draft work/TASK-161/handoff/design.md); coordinator finished the design from it, 4 OPENs settled with the designer picks"
+    },
+    "coder": "work/TASK-161/handoff/code.md",
+    "tester": "work/TASK-161/handoff/test.md"
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-01087",
+      "note": "go: v16 prompt (already deployed ed230c2a), run Upzi/full, design engine gap logreach/report; internal only via caller",
+      "at": "2026-10-28T08:58:57Z"
+    },
+    {
+      "raw": "RAW-01088",
+      "note": "keep run 20261026-060019 to compare with the v16 run",
+      "at": "2026-10-28T08:58:58Z"
+    },
+    {
+      "raw": "RAW-01089",
+      "note": "replies short, only what is needed",
+      "at": "2026-10-28T09:00:26Z"
+    },
+    {
+      "raw": "RAW-01093",
+      "note": "hold track B on Upzi/full run 20261028-154021 until QA team confirms phase 1 findings",
+      "at": "2026-10-28T13:34:22Z"
+    },
+    {
+      "raw": "RAW-01094",
+      "note": "QA: v16 phase 1 has more false positives; wait until user says ready",
+      "at": "2026-10-28T14:06:32Z"
+    }
+  ],
+  "picked_at": "2026-10-28T08:58:57Z",
+  "updated_at": "2026-10-28T11:13:39Z",
+  "updated_by": "coordinator",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "HOLD (user RAW-01093): QA team verifies phase 1 findings of run 20261028-154021; then track B (deploy-context stop: --from-dir or approve --no-deploy-context), then verifier V1-V7"
+}

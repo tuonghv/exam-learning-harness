@@ -1,0 +1,118 @@
+{
+  "task_id": "TASK-075",
+  "title": "All-time plan history report in the tracking step (per-run stats, cost, fix vs engine effort), $0 stdlib script [queue review 2026-10-08: build on tracking/rollup.py + run_diff + the TASK-081 roll-up; inventory must include ai_store, ext and tools-only runs, both plan modes] [staleness review r2: keep; refresh refs vs TASK-083/085/087/089/091; inventory covers store-reused (reused_from store:), ext and tools-only runs; demo/ab skip via plan_role]",
+  "state": "DONE",
+  "requirement": "REQ-0034: one all-time history report per plan, built in the tracking step from existing per-run stats by a $0 stdlib script; no prompt change; run compare kept. Design phase first (user: design only for now).",
+  "acceptance_criteria": [
+    "AC1 source inventory, every column mapped to an existing file",
+    "AC2 history.md + JSON, one row per run",
+    "AC3 all-time totals and trends",
+    "AC4 fix vs engine effort labelled from recorded data, mixed/unknown never guessed",
+    "AC5 runs in the tracking step, idempotent, run compare untouched",
+    "AC6 counts match sources, tests both modes, $0 replay on Upzi g02 copy"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-75-plan-history-report.md",
+    "summary": "history.py card (per-run card at track time) + render (history.md/json/pdf, all-time totals, source/engine/mixed/unknown attribution, --check) hooked in track.sh; 75.4b report_registry plan-history kind (scope add asked); 75.5 toolkit stamp read now, producer pending user scope decision; folds in phase-76 76.9 ext field",
+    "reuse": [
+      "scanset_common.sh run_set/results_set",
+      "rollup.load_runs/load_entries",
+      "annotate.load_delta",
+      "track.py run_meta",
+      "md_to_pdf"
+    ],
+    "risks": [
+      "F075-7 crosscheck unregistered until 75.4b",
+      "F075-8 run.json is engine input: stamp as sidecar",
+      "single-source spend window vs store hits"
+    ]
+  },
+  "implementation": {
+    "status": "completed",
+    "files": [
+      "tracking/history.py",
+      "tracking/track.sh",
+      "report_registry.json",
+      "tests/history_test.sh",
+      "docs/guide/toolkit-reference.md"
+    ],
+    "summary": "tracking/history.py (card, render, --check), track.sh hook (card after track rc 0, render + pdf, WARN on failure), report_registry.json plan-history kind (75.4b), toolkit-reference history section; 75.5 stamp read only"
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh history (+14 tracking/rollup/crosscheck suites via save-evidence)",
+    "result": "history 31/0 (lead re-run), 15 suites rc 0 (work/TASK-075/evidence/ut-*.txt), 6 mutation bites each fail their case (ut-bite.txt), replays v2-v6 rc 0, real dirs hash-equal (v5)"
+  },
+  "security": {
+    "status": "completed",
+    "result": "no shell in git calls, markdown cells escaped, outputs hold counts/hashes only, no REPOS_ROOT reads (verify.md)"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "verifier Argus on saved evidence + save-evidence v-prompts-untouched",
+    "result": "AC1-AC6 PASS; history 31/31; $0 replays 5 rows/5 runs byte-stable, coverage gaps=0, 0 report files changed; prompts untouched matches=0",
+    "evidence": [
+      "work/TASK-075/handoff/verify.md",
+      "work/TASK-075/evidence/v-prompts-untouched.txt",
+      "work/TASK-075/evidence/v2.txt",
+      "work/TASK-075/evidence/v6.txt",
+      "work/TASK-075/evidence/ut-history.txt"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-75-plan-history-report.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-075/handoff/design.md",
+    "coder": "work/TASK-075/handoff/code.md",
+    "tester": "work/TASK-075/handoff/test.md",
+    "verifier": "work/TASK-075/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "independent oracle already run in QA: ext_tools counts equal a separate jq oracle (evidence/v4.txt:13-15), coverage_check gaps=0 12/12 (v3.txt:9), render --check ok (v2.txt:34); judged PASS by Argus in verify.md AC6"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00476",
+      "note": "re-check staleness / overlap with newer tasks and re-design before implementing"
+    },
+    {
+      "raw": "RAW-00477",
+      "note": "an old requirement never overrides a newer feature (design has ## Newer features kept)"
+    }
+  ],
+  "picked_at": "2026-10-09T03:26:02Z",
+  "updated_at": "2026-10-09T04:20:22Z",
+  "updated_by": "main",
+  "scope": [
+    "tracking/history.py",
+    "tracking/history.sh",
+    "tracking/track.sh",
+    "tests/history*_test.sh",
+    "tests/fixtures/history/**",
+    "docs/design/phase-75-*.md",
+    "docs/guide/toolkit-reference.md",
+    "report_registry.json",
+    "docs/guide/architecture.md"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [
+      "DESIGN committed (phase-75 doc)",
+      "75.0 premise (SEV_MATCH yes, ab_summary main ok/toolsproof null, reused_from null on all units)",
+      "wip 75.1-75.4b partial committed after session limit",
+      "IMPLEMENTING committed (75.1-75.4b)",
+      "UNIT_TESTED committed (history 31/0, 15 suites, v2-v6)"
+    ],
+    "notes": "",
+    "next": "DONE; follow-up TASK-099 (75.5 producer) queued"
+  },
+  "next": "DONE; follow-up TASK-099 (75.5 producer) queued",
+  "lead_gen": 1,
+  "lead_at": "2026-10-09T03:26:26Z"
+}

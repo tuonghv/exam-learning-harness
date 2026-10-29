@@ -1,0 +1,54 @@
+results/*
+reports/*
+manifest.json
+# TASK-077 77.9: test fixture manifests must be tracked (a fresh clone lacked them)
+!tests/fixtures/**/manifest.json
+.scan.lock
+.DS_Store
+logs/*
+scheduler_state.json
+.scan_abort.json
+.auto_scan.lock
+__pycache__/
+tmp/
+plans/
+local/
+docs/req/.lock
+
+# agent_setup.py (role subagents): per-task work dirs and guard logs
+/work/
+.claude/agent_setup_*
+.usage_hold.json
+.usage_hold.json.tmp.*
+
+# ---- inbox-triage (append to the repo's root .gitignore) ----
+
+# Runtime state: inbox messages, staging records, questions, logs.
+# May contain sensitive message content, never commit it.
+# The orchestrator must create these dirs itself (mkdir -p) at startup.
+/.triage/
+
+# Claude Code per-user local overrides (shared agents/skills stay tracked)
+/.claude/settings.local.json
+/.claude/**/*.local.*
+
+# Triage tooling build and test output (fixtures under tests/fixtures/ stay tracked)
+/tools/triage/bin/
+/tools/triage/tests/out/
+/tools/triage/tests/**/.triage/
+
+# Kit delivery helpers, not part of the project
+/INTEGRATION_PROMPT.md
+/MANIFEST.txt
+
+
+# RAW-00194: local copies of external tool reports (may hold code/secret text; never commit)
+/external/ext-scan/results/
+
+# RAW-00247: raw MITRE CWE view XML (6 MB); the converter output ext/engine/owasp*_cwe.json is tracked
+/ext/reference/*.xml
+/ext/reference/*.zip
+ai_store/
+
+.claude/state/.keepalive.json
+.claude/state/.keepalive.pid

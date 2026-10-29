@@ -1,0 +1,92 @@
+{
+  "task_id": "TASK-154",
+  "title": "Coordinator keeps working: after DONE or a soft Your-turn ending, pick the next workable $0 queued task; Stop hook warns on an idle end with a workable queue (REQ-0121)",
+  "state": "DONE",
+  "requirement": "REQ-0121. User 2026-10-28 (RAW-01041/01042): queue stalled after TASK-153 DONE; the 10-min auto-park only fires for registered questions.",
+  "acceptance_criteria": [
+    "AC1 Stop hook on idle end after DONE",
+    "AC2 soft Your-turn flagged",
+    "AC3 workable via needs_user",
+    "AC4 real trial",
+    "AC5 master check keepalive",
+    "AC6 watcher + guarded continue"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-154-auto-pick-after-done.md",
+    "summary": "154.1 needs_user on 143/144/146; 154.2 nextpick Stop hook; 154.5 master check tasks.sh keepalive (WAIT/DUE/STALL/OK); 154.6 zero-cost background watcher wakes main; 154.7 Stop hook continues main on STALL (guarded); 154.4 coordinator rule"
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "tasks.sh keepalive (WAIT/DUE/STALL/OK, --watch) and nextpick (Stop hook, guarded block) in _tasks.py; Stop hook entry in settings.json; coordinator rule 154.4. Code by Titan, finished and reviewed by main after the role guard flagged the protected scripts.",
+    "files": [
+      ".claude/scripts/_tasks.py",
+      ".claude/scripts/tasks.sh",
+      ".gitignore",
+      ".claude/settings.json",
+      ".claude/skills/coordinator/SKILL.md"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "bash .claude/tests/keepalive_test.sh; bash .claude/tests/multi_task_test.sh",
+    "result": "keepalive 54/54 (U1-U10), 2 bite proofs (cap drop 4 fail, not-waits drop 3 fail); multi_task 204/1, the 1 = pre-existing 100.8 recover bug from TASK-102, queued as TASK-155"
+  },
+  "security": {
+    "status": "completed",
+    "result": "hook reads stdin/transcript only, no shell, no paid or network call (Argus)"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "tasks.sh workable; nextpick with real transcript copy; keepalive; jq .hooks.Stop; git diff --stat 47574d33..HEAD",
+    "result": "V1 SKIP 143/144/146, WORKABLE 141/142/155; V2 last reply line read from real transcript, nextpick rc 0; V3 3 Stop hooks; V5 only .claude/docs/.gitignore; Argus PASS. V4 live trial runs at DONE.",
+    "evidence": [
+      "work/TASK-154/evidence/v_real.txt",
+      "work/TASK-154/evidence/v5_diffstat.txt",
+      "work/TASK-154/handoff/verify.md"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-154-auto-pick-after-done.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-154/handoff/design.md",
+    "coder": "work/TASK-154/handoff/code.md",
+    "tester": "work/TASK-154/handoff/test.md",
+    "verifier": "work/TASK-154/handoff/verify.md",
+    "crosscheck": "work/TASK-154/handoff/crosscheck.md"
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-01041",
+      "note": "investigate why queue stalled; 10-min rule should keep work going",
+      "at": "2026-10-27T22:06:57Z"
+    },
+    {
+      "raw": "RAW-01042",
+      "note": "harness following is not perfect yet",
+      "at": "2026-10-27T22:06:57Z"
+    },
+    {
+      "raw": "RAW-01043",
+      "note": "hook + monitor script ($0) to resume when stuck; simple master cross-check script; read as OK for Stop-hook continue (D1-B)",
+      "at": "2026-10-27T22:10:34Z"
+    }
+  ],
+  "picked_at": "2026-10-27T22:06:58Z",
+  "updated_at": "2026-10-27T22:31:04Z",
+  "updated_by": "main",
+  "scope": [
+    "work/TASK-154/"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": ""
+}

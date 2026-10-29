@@ -1,0 +1,127 @@
+{
+  "task_id": "TASK-109",
+  "title": "logreach: $0 step after overlay that checks each finding endpoint against the product user-access log (ES, 21d) and shows not_seen findings as Low (scan: X); Upzi g02 first, VietnamWorks profile (REQ-0074)",
+  "state": "DONE",
+  "requirement": "REQ-0074 (RAW-00589..00602)",
+  "acceptance_criteria": [
+    "AC1 parser table",
+    "AC2 routes->repo map, unmapped=not_checkable",
+    "AC3/3b/3c query ladder + refusal + cost",
+    "AC3d stdlib, no Postman",
+    "AC4 logreach.json schema, cache, no secrets/IPs",
+    "AC5/5b render Low (scan: X), QA PASS, coverage gaps=0",
+    "AC6 via_caller",
+    "AC7/7b profile config, missing/ES down = no-op",
+    "AC8 g02 real check + 5 spot checks"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-109-logreach.md",
+    "summary": "New $0 stdlib step logreach.py (overlay -> logreach -> conclude): parse phase1 endpoint, prefix-exists then id-regexp ES queries per product profile (local/logreach), verdict seen/via_caller/not_seen/not_checkable; apply_reach joins _reach in both modes; reach_display shows not_seen as Low (scan: X) in render temp only; report_qa dsev; .severity never mutated.",
+    "reuse": [
+      "graph_build.sh name map",
+      "apply_overlay join key",
+      "correlate.py stdlib style"
+    ],
+    "risks": [
+      "endpoint free text",
+      "21d silence != unreachable",
+      "VNW routes file not available"
+    ]
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "logreach.py (parser, id-regexp, EsSource with refusal, prefix-exists then exact ladder, verdicts incl via_caller, cache, keep-stored-on-unavailable); pipeline step overlay->logreach->conclude + rebuild/verify lists + config defaults; apply_reach/reach_display in report_common.sh; conclude + both summarizers; report_qa dsev E4/E7; QA rule text.",
+    "files": [
+      "logreach.py",
+      "pipeline.sh",
+      "config.sh",
+      "report_common.sh",
+      "conclude.sh",
+      "summarize_report.sh",
+      "summarize_exec.sh",
+      "report_qa.py",
+      "tests/logreach_test.sh",
+      "tests/logreach_render_test.sh",
+      "tests/pipeline_logreach_test.sh",
+      "tests/fixtures/logreach/",
+      "tests/fixtures/logreach_render/",
+      ".claude/skills/pentest-report-qa/validation-rules.md",
+      "docs/guide/toolkit-reference.md"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh (full, 162 suites) + logreach/pipeline_logreach/logreach_render/run_reports/report_qa/plan_reports/report_crosscheck + checks/shell.sh",
+    "result": "All TASK-109 suites pass (logreach 73, pipeline_logreach 8, logreach_render 29, run_reports 67, report_qa 33, plan_reports 44 golden byte-identical, report_crosscheck 45 after F-109-T1 fix); shell.sh 505/0; full run: 3 pre-existing failures (ext_scan, track_hook, tracking_new_only; same at 461fa1a); bite checks on guards and severity mutation fail the tests."
+  },
+  "security": {
+    "status": "completed",
+    "result": "Creds only in gitignored local/logreach/*.conf (600) or env; never in git, run files, logreach.json or reports (v8-noleak); user-traffic IP filter not stored; Postman file never read; queries need a uri filter (refused otherwise), sequential, 30s timeout; TLS-off prints a WARN; findings and .severity never mutated (v8-severity-unchanged). Residual: ES password was pasted in chat history, user advised to rotate."
+  },
+  "verification": {
+    "status": "passed",
+    "command": "PLAN=Upzi_g02/logreach-v8 [LOGREACH_REFRESH=1] ./pipeline.sh rebuild --run 20260928-222915; report_qa.py; coverage_check.py --conclusion; logreach.py with unreachable ES",
+    "result": "g02 live: seen 5, via_caller 1, not_seen 6, not_checkable 0 (18 ES requests); report_qa PASS; coverage gaps=0 (12/12 shown); scan severity identical 12/12; 6 shown Low (scan: High/Medium) with AC5b label+advice; no creds/IP in outputs; ES down = WARN, rc 0, stored result kept; 9 hand ES spot checks agree; verifier: 13/13 AC MET",
+    "evidence": [
+      "work/TASK-109/evidence/v8-coverage.txt",
+      "work/TASK-109/evidence/v8-report-qa.txt",
+      "work/TASK-109/evidence/v8-severity-unchanged.txt",
+      "work/TASK-109/evidence/v8-noleak.txt",
+      "work/TASK-109/evidence/v10-live-refresh.txt",
+      "work/TASK-109/evidence/v10-es-down-noop.txt",
+      "work/TASK-109/evidence/v10-early-live-g02.md",
+      "work/TASK-109/handoff/verify.md"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-109-logreach.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-109/handoff/design.md",
+    "coder": "work/TASK-109/handoff/code-A.md",
+    "tester": {
+      "waiver": "tester handoff PROGRESS reflects F-109-T1 failure; main fixed it (one-word KNOWN_STEPS) and re-ran report_crosscheck 45/0 (evidence ut-crosscheck-fix)"
+    },
+    "verifier": "work/TASK-109/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "counts cross-checked independently: verifier re-derived verdict/coverage/severity counts from saved evidence (verify.md 13/13), plus 9 hand ES spot checks and the real g02 rebuild matching the scratch run (seen 5/via_caller 1/not_seen 6)"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00602",
+      "note": "user approved all Q1-Q6; user will verify the report",
+      "at": "2026-10-14T11:28:13Z"
+    },
+    {
+      "raw": "RAW-00603",
+      "note": "user: finish the whole design first, then implement",
+      "at": "2026-10-14T11:28:39Z"
+    },
+    {
+      "raw": "RAW-00604",
+      "note": "user: filtering after phase1 is a $0 Python engine script, no AI call",
+      "at": "2026-10-14T11:29:54Z"
+    },
+    {
+      "raw": "RAW-00605",
+      "note": "user approves running bash scripts unattended; user away, will review later",
+      "at": "2026-10-14T11:31:55Z"
+    }
+  ],
+  "picked_at": "2026-10-14T11:28:31Z",
+  "updated_at": "2026-10-14T13:24:43Z",
+  "updated_by": "main",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": "109.1-109.4 logreach.py + tests (coder A, 70 pass)",
+    "notes": ""
+  },
+  "next": ""
+}

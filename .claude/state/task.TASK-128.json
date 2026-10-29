@@ -1,0 +1,87 @@
+{
+  "task_id": "TASK-128",
+  "title": "Split the workflow skill: short core + references/ (REQ-0095)",
+  "state": "DONE",
+  "requirement": "REQ-0095: workflow SKILL.md keeps a short core; long sections move to references/ on demand, no rule dropped.",
+  "acceptance_criteria": [
+    "SKILL.md <= about 8000 B, moved sections in references/ with pointers",
+    "no rule dropped; field table, gating, Momentum stay in core",
+    "workflow-check/commit-check/hooks still work; run_all and shell.sh pass"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-128-split-workflow-skill.md",
+    "summary": "Core keeps states, field table, gating, Momentum, finished-transition; 4 references files verbatim; 3 cites get the reference path",
+    "reuse": [],
+    "risks": [
+      "core over 8.2 KB: fallback F1",
+      "cite breakage"
+    ]
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "workflow SKILL.md 17629->8188 B; 4 references files verbatim; 3 cites point to references",
+    "files": [
+      ".claude/skills/workflow/SKILL.md",
+      ".claude/skills/workflow/references/tasks.md",
+      ".claude/skills/workflow/references/ledger-and-status.md",
+      ".claude/skills/workflow/references/resume-and-failure.md",
+      ".claude/skills/workflow/references/roles-per-phase.md",
+      ".claude/commands/verify-phase.md",
+      ".claude/skills/context-compaction/SKILL.md",
+      ".claude/skills/coordinator/SKILL.md"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh (full); .claude/scripts/checks/shell.sh; V1-V9",
+    "result": "V1-V9 pass; shell 551/0; full run 183 suites, 3 failed all pre-existing (ext_scan F-96-1, track_hook, tracking_new_only fail on baseline)"
+  },
+  "security": {
+    "status": "not_applicable",
+    "result": "skill text move only; no code or secret touched"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "work/TASK-128/evidence/*",
+    "result": "AC1 core 8188 B; AC2 missing=0 (v2_oracle.txt), field table/gating/Momentum in core; AC3 shell 551/0, full run 3 pre-existing failures",
+    "evidence": [
+      "work/TASK-128/evidence/v2_oracle.txt",
+      "work/TASK-128/evidence/changed_run.txt",
+      "work/TASK-128/handoff/verify.md"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-128-split-workflow-skill.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-128/handoff/design.md",
+    "grants": {
+      "coder": [
+        ".claude/skills/*"
+      ]
+    },
+    "coder": "work/TASK-128/handoff/code.md",
+    "tester": "work/TASK-128/handoff/test.md",
+    "verifier": "work/TASK-128/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "skill text move; oracle missing=0 by tester and verifier"
+    }
+  },
+  "user_notes": [],
+  "picked_at": "2026-10-20T08:00:23Z",
+  "updated_at": "2026-10-20T09:31:02Z",
+  "updated_by": "main",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": "",
+    "next": "verifier AC check"
+  },
+  "next": ""
+}

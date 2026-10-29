@@ -1,0 +1,100 @@
+{
+  "task_id": "TASK-112",
+  "title": "logreach widening windows 1/7/21 d, existence-only checks, timeout 120 s",
+  "state": "DONE",
+  "requirement": "Search 1d->7d->21d stop at first hit; confirm existence not count; longer timeout. REQ-0077 (RAW-00627)",
+  "acceptance_criteria": [
+    "AC1 newest slice first (1d, 1-7d, 7-21d), stop at first hit",
+    "AC2 disjoint slices, total range per route <= 21d",
+    "AC3 existence only: size 0, terminate_after 1, track_total_hits 1, no count/cap",
+    "AC4 default timeout 120s; windows configurable, bad list -> profile_unreadable",
+    "AC5 reports show windows, no counts; VNW g01 + Upzi g02 rebuild gaps=0, QA PASS"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-112-logreach-windows.md",
+    "summary": "windows key 1,7,21; disjoint slices newest first; prefix then exact, stop at first hit; existence only (terminate_after 1); pre_filter_shard_size=1; timeout 120; RULE bump; report text without counts"
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "windows key, disjoint slices newest first, prefix->exact ladder stop at first hit, existence only (terminate_after 1, track_total_hits 1), pre_filter_shard_size=1, timeout 120, RULE slices:<w>, report/exec text without counts",
+    "files": [
+      "logreach.py",
+      "logreach_report.py",
+      "report_common.sh",
+      "summarize_report.sh",
+      "summarize_exec.sh",
+      "tests/logreach_test.sh",
+      "tests/logreach_render_test.sh",
+      "tests/fixtures/logreach/fake_es.py",
+      "tests/fixtures/logreach/logreach.sample.json",
+      "tests/fixtures/logreach_render/logreach.sample.json",
+      "docs/guide/access-log-onboarding.md",
+      "docs/guide/toolkit-reference.md"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh logreach; .claude/scripts/checks/shell.sh",
+    "result": "4 suites pass (168/37/37/13); shell pass=509 fail=0. One flaky run of logreach_render 109.6 stale-endpoint cmp (passes 5/5 reruns, also on HEAD); noted"
+  },
+  "security": {
+    "status": "completed",
+    "result": "no credential or filter value in outputs (256/256 masked); TLS WARN kept; only new network change is read-only pre_filter_shard_size=1"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "LOGREACH_REFRESH=1 ./pipeline.sh rebuild --run (VNW g01 20261013-174303, Upzi g02 20260928-222915)",
+    "result": "VNW: 252 req, 0 errors, 0 timeouts, PT-013 seen, gaps=0, QA PASS, crosscheck fail=0; Upzi identical verdicts; verifier AC1-AC5 PASS",
+    "evidence": [
+      "work/TASK-112/evidence/unit-logreach.txt",
+      "work/TASK-112/evidence/shellcheck.txt",
+      "work/TASK-112/evidence/vnw-rebuild.txt",
+      "work/TASK-112/evidence/vnw-queries.txt",
+      "work/TASK-112/evidence/vnw-before-after.txt",
+      "work/TASK-112/evidence/upzi-rebuild.txt",
+      "work/TASK-112/evidence/report-text.txt"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-112-logreach-windows.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": {
+      "waiver": "main wrote the design directly from the logreach.py read (small engine change, user present)"
+    },
+    "coder": "work/TASK-112/handoff/code.md",
+    "tester": {
+      "waiver": "main re-ran the full logreach group + shell checks itself"
+    },
+    "verifier": "work/TASK-112/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "deterministic oracles on the real runs: coverage_check gaps=0, report_crosscheck fail=0, report_qa PASS (VNW g01 + Upzi g02)"
+    }
+  },
+  "user_notes": [],
+  "picked_at": "2026-10-15T10:09:05Z",
+  "updated_at": "2026-10-15T10:40:48Z",
+  "updated_by": "main",
+  "scope": [
+    "logreach.py",
+    "logreach_report.py",
+    "tests/logreach_test.sh",
+    "tests/logreach_report_test.sh",
+    "tests/logreach_render_test.sh",
+    "tests/pipeline_logreach_test.sh",
+    "tests/fixtures/logreach",
+    "docs/guide/access-log-onboarding.md",
+    "docs/guide/toolkit-reference.md"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": ""
+}

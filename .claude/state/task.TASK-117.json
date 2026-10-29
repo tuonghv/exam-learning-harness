@@ -1,0 +1,87 @@
+{
+  "task_id": "TASK-117",
+  "title": "Per-repo Rating from effective severities (by-repo header + report §8)",
+  "state": "DONE",
+  "requirement": "Per-repo Rating = highest effective severity after the access-log check, '(scan: X)' when different. REQ-0082 (RAW-00652)",
+  "acceptance_criteria": [
+    "AC1 by-repo header rating",
+    "AC2 §8 rating",
+    "AC3 both modes",
+    "AC4 g01 rebuild"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-117-repo-rating-effective.md",
+    "summary": "per-repo Rating = highest effective severity, (scan: X) when different; §8 + by-repo header",
+    "reuse": [
+      "$TMP.eff effective rows already used for counts"
+    ],
+    "risks": [
+      "byte-identical output when no severity change"
+    ]
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "effr jq helper: §8 Rating cell + per-repo header Rating from effective severities, (scan: X) when different; single-source header eff from _sev_scan rows",
+    "files": [
+      "summarize_report.sh",
+      "tests/logreach_render_test.sh"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh logreach_render; tests/run_all.sh report; checks/shell.sh",
+    "result": "logreach_render 42/0 (E1-E3); report 10 suites pass; shell 511/0"
+  },
+  "security": {
+    "status": "not_applicable",
+    "result": "report text only; no new input, no secrets, no source read"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "PLAN=Vietnamworks_g01/main ./pipeline.sh rebuild --run .../20261013-174303; coverage_check --conclusion; report_qa",
+    "result": "api-gateway Medium (scan: High), jobseekers High (scan: Critical), 4 others unchanged; §8 same; tracking copy same; verdicts unchanged (seen 8, via_caller 4, not_seen 7); gaps=0; QA PASS; crosscheck fail=0; checklist 12/12",
+    "evidence": [
+      "work/TASK-117/evidence/ratings.txt",
+      "work/TASK-117/evidence/coverage.txt",
+      "work/TASK-117/evidence/qa.txt"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-117-repo-rating-effective.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": {
+      "waiver": "small report change; main wrote design"
+    },
+    "coder": "work/TASK-117/handoff/code.md",
+    "tester": {
+      "waiver": "main re-ran every suite (evidence ut-render, ut-report, shell)"
+    },
+    "verifier": {
+      "waiver": "report-only change; main checked the AC observables directly (evidence files)"
+    },
+    "crosscheck": {
+      "waiver": "pipeline crosscheck ran in rebuild: fail=0"
+    }
+  },
+  "user_notes": [],
+  "picked_at": "2026-10-16T08:04:20Z",
+  "updated_at": "2026-10-16T08:12:06Z",
+  "updated_by": "main",
+  "scope": [
+    "summarize_report.sh",
+    "tests/summarize*",
+    "docs/guide/**"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": ""
+}

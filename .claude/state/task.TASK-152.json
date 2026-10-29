@@ -1,0 +1,184 @@
+{
+  "task_id": "TASK-152",
+  "title": "Access-log check resolves via_caller and not_checkable with real ES queries, all plans (REQ-0119)",
+  "state": "DONE",
+  "requirement": "REQ-0119. User 2026-10-27 (RAW-01019/01020): engine coverage, not a per-report fix: logreach.py queries the caller route (via_caller), exact regexp for too_broad, better endpoint parsing (unparsable), fallback route for unmapped; findings unchanged, ES only.",
+  "acceptance_criteria": [
+    "REQ-0119 AC1-AC15 (docs/req): fixtures (a)-(l) seen/not_seen from fake ES; real re-run lowers via_caller+not_checkable with stored query each; findings/results/conclusion unchanged, gaps=0, report_qa PASS; AI only after ladder no-hit/error, never sets verdict; logreach_unresolved file every plan both modes, registered; Upzi/full before/after compare"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-152-logreach-coverage.md",
+    "summary": "logreach ladder L1-L4 (prefix, regexp tighten, step-back, root control) + cut rule + unmapped candidates by name token/profile host + via_caller via caller roots + one batched Haiku L5 (AI_PROMPT constant, engine-validated, never sets verdict); logreach_unresolved file per plan, both modes; logreach_compare verify helper",
+    "reuse": [
+      "logreach.py evaluate/parse_endpoint/path_ok/ES cache",
+      "scan_common.sh isolation flags",
+      "report_registry + check_deliverables D15"
+    ],
+    "risks": [
+      "ES quota/latency (terminate_after 1, size 0, cache)",
+      "AI output untrusted (validated, hit only)",
+      "seen/not_seen today must not move"
+    ]
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "Titan: 152.1-152.11 ES ladder, root no-traffic, retry one segment shorter, Haiku fallback (AI_PROMPT constant, never sets a verdict alone), logreach_unresolved.md, logreach_compare.py, review page columns; coordinator: summarize_report.sh copy of the unresolved list, public_reports U4 skips access_log_review",
+    "files": [
+      "logreach.py",
+      "logreach_report.py",
+      "logreach_compare.py",
+      "check_deliverables.sh",
+      "report_registry.json",
+      "summarize_report.sh",
+      "docs/guide/toolkit-reference.md",
+      "tests/fixtures/logreach/fake_es.py",
+      "tests/logreach_ladder_test.sh",
+      "tests/logreach_test.sh",
+      "tests/logreach_report_test.sh",
+      "tests/check_deliverables_test.sh",
+      "tests/report_crosscheck_test.sh",
+      "tests/public_reports_test.sh"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "TASK=TASK-152 tests/run_all.sh logreach|pipeline_logreach|check_deliverables|report_crosscheck|public_reports|run_reports|plan_reports|registry (one filter per call)",
+    "result": "all pass; Vega QA: ladder 49->57 checks, 9 mutants all fail a test (4 survived before her 8 added checks); security: no shell=True, claude timeout 120 + empty cwd, ES bodies via json.dumps"
+  },
+  "security": {
+    "status": "completed",
+    "result": "Endpoint text and AI output are untrusted: no shell=True, claude call with timeout 120, empty temp cwd, isolation flags, prompt is a module constant; AI output validated (path shape, no whitespace/prose) and never sets a verdict without an ES hit; ES bodies built with json.dumps; query bodies in the unresolved list mask the traffic filter value."
+  },
+  "verification": {
+    "status": "passed",
+    "command": "V1-V7 of docs/design/phase-152-logreach-coverage.md: real ES (profile upzi) logreach.py on copies of Upzi_g04 plan + run 20261027-074446 and Upzi/full run 20261026-060019, logreach_compare.py, LOGREACH_AI=1 once, pipeline.sh rebuild --render in scratch kit, coverage_check, report_qa, check_deliverables, report_crosscheck, shell.sh",
+    "result": "Upzi/full seen 49->64, not_seen 61->66, via_caller 14->7, not_checkable 18->5; no old seen/not_seen changed; Haiku 1 call $0.000543, 0 resolved, re-run 0 calls; findings minus _reach identical; gaps=0; report_qa PASS; deliverables 151/0; crosscheck fail=0 unregistered=0 (registry fix 0dffda90); Argus PASS; AC5 by unit U20",
+    "evidence": [
+      "work/TASK-152/evidence/verify_summary.txt",
+      "work/TASK-152/evidence/compare_full.md",
+      "work/TASK-152/evidence/compare_full_ai.md",
+      "work/TASK-152/evidence/compare_g04.md",
+      "work/TASK-152/evidence/v6.txt",
+      "work/TASK-152/evidence/v6_conclusion_diff.txt",
+      "work/TASK-152/handoff/verify.md"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-152-logreach-coverage.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-152/handoff/design.md",
+    "coder": "work/TASK-152/handoff/code.md",
+    "tester": "work/TASK-152/handoff/test.md",
+    "verifier": "work/TASK-152/handoff/verify.md",
+    "crosscheck": "work/TASK-152/handoff/crosscheck.md"
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-01020",
+      "note": "engine must cover via_caller and not_checkable for every plan, not one report",
+      "at": "2026-10-27T09:48:10Z"
+    },
+    {
+      "raw": "RAW-01021",
+      "note": "too_broad uses the simple prefix query, no hard regexp; fallback keeps findings shown",
+      "at": "2026-10-27T09:57:48Z"
+    },
+    {
+      "raw": "RAW-01024",
+      "note": "add route-root fallback query, no hit on the service root means not_seen",
+      "at": "2026-10-27T10:22:40Z"
+    },
+    {
+      "raw": "RAW-01025",
+      "note": "root control query: root hit and endpoint no-hit means a real not_seen, root error means not_checkable",
+      "at": "2026-10-27T10:27:44Z"
+    },
+    {
+      "raw": "RAW-01026",
+      "note": "not_checkable rows must show method and public URL (or candidate) for manual cross-check",
+      "at": "2026-10-27T10:29:58Z"
+    },
+    {
+      "raw": "RAW-01027",
+      "note": "on query error retry one path segment shorter; VNW-SEC-0138 reference case",
+      "at": "2026-10-27T10:34:19Z"
+    },
+    {
+      "raw": "RAW-01028",
+      "note": "VNW-SEC-0265 second reference case, cut at the colon parameter",
+      "at": "2026-10-27T10:36:32Z"
+    },
+    {
+      "raw": "RAW-01029",
+      "note": "list Upzi full not_checkable endpoints, user guides the better queries",
+      "at": "2026-10-27T10:38:38Z"
+    },
+    {
+      "raw": "RAW-01030",
+      "note": "cut rule at first colon or brace segment, host root not too broad, Haiku fallback only when no usable query",
+      "at": "2026-10-27T11:02:32Z"
+    },
+    {
+      "raw": "RAW-01031",
+      "note": "AI only after the deterministic ladder gives no hit or error, coordinator picks the query ladder",
+      "at": "2026-10-27T11:08:28Z"
+    },
+    {
+      "raw": "RAW-01032",
+      "note": "user confirms the case reading is correct",
+      "at": "2026-10-27T11:08:36Z"
+    },
+    {
+      "raw": "RAW-01033",
+      "note": "proceed autonomously, user away, no questions",
+      "at": "2026-10-27T11:14:33Z"
+    },
+    {
+      "raw": "RAW-01034",
+      "note": "compare Upzi full before and after, list cases still not covered",
+      "at": "2026-10-27T11:17:38Z"
+    },
+    {
+      "raw": "RAW-01035",
+      "note": "standalone list of endpoint URLs with error or no hit, with exact query, for the user's cross-check",
+      "at": "2026-10-27T11:20:13Z"
+    },
+    {
+      "raw": "RAW-01036",
+      "note": "unresolved list is an engine output for every plan, not a one-off",
+      "at": "2026-10-27T11:20:41Z"
+    }
+  ],
+  "picked_at": "2026-10-27T12:04:44Z",
+  "updated_at": "2026-10-27T13:19:02Z",
+  "updated_by": "coordinator",
+  "scope": [
+    "work/TASK-152/",
+    "logreach.py",
+    "logreach_report.py",
+    "logreach_compare.py",
+    "tests/fake_es.py",
+    "tests/logreach_*",
+    "tests/check_deliverables_test.sh",
+    "tests/report_crosscheck_test.sh",
+    "check_deliverables.sh",
+    "report_registry.json",
+    "docs/guide/toolkit-reference.md"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [
+      "DESIGN committed 7ec5015b",
+      "V1-V7 run (verify_summary.txt), registry fix for @run/report/logreach_unresolved.md"
+    ],
+    "notes": "",
+    "next": "Argus verify, then VERIFIED, DONE"
+  },
+  "next": ""
+}

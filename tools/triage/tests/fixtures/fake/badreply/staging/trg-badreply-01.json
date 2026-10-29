@@ -1,0 +1,22 @@
+{
+  "schema": "triage-record/v1",
+  "triage_id": "trg-badreply-01",
+  "source_file": "msg/badreply.md",
+  "triaged_at": "2026-09-29T10:00:00+07:00",
+  "intent": "update",
+  "category": "scan",
+  "priority": "normal",
+  "target": "toolkit",
+  "title": "Re-run scan for Sys/main (payments)",
+  "task": "Re-run the security scan for the Sys/main plan (the payments service).",
+  "acceptance": [],
+  "context_refs": [],
+  "related_reqkit_id": null,
+  "possible_duplicate_of": [],
+  "needs_clarification": true,
+  "questions": [
+    "Your message is cut off after 'target toolkit, ....'. What should be done?"
+  ],
+  "flags": [],
+  "confidence": "low"
+}

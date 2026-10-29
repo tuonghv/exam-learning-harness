@@ -1,0 +1,10 @@
+{
+  "checks": {
+    "IMPLEMENTING": "python3 .claude/req/task_gate.py {id} IMPLEMENTING",
+    "UNIT_TESTED": "python3 .claude/req/task_gate.py {id} UNIT_TESTED",
+    "VERIFIED": "python3 .claude/req/task_gate.py {id} VERIFIED",
+    "DONE": "python3 .claude/req/task_gate.py {id} DONE"
+  },
+  "task_glob": "",
+  "capture_min_chars": 25
+}

@@ -1,0 +1,98 @@
+{
+  "task_id": "TASK-114",
+  "title": "VNW route map: only user-provided links (nginx info rows out, guesses to review list)",
+  "state": "DONE",
+  "requirement": "Route map keeps only links the user gave plus exact name matches; nginx host-only rows out; toolkit-guessed links go to a review list. REQ-0079 (RAW-00638)",
+  "acceptance_criteria": [
+    "AC1 nginx host-only rows not in TSV/json",
+    "AC2 toolkit-rule links -> repo - + vietnamworks_route_review.tsv, not in json",
+    "AC3 override/alias/nginx map/exact name kept",
+    "AC4 override line turns a review row into a mapping",
+    "AC5 VNW map regenerated; public_unmapped reported; g01 rebuild gaps=0 QA PASS, changed verdicts listed"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-114-route-map-user-links.md",
+    "summary": "importer keeps override/alias, nginx > maps, exact name; other rules -> review list; nginx host-only rows skipped; public_unmapped"
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "importer maps only override/alias, nginx > maps, exact name; other rules -> review rows + vietnamworks_route_review.tsv; nginx gateway host rows skipped; public_unmapped + summary counts",
+    "files": [
+      "docs/guide/vietnamworks-route-map.md",
+      "tests/vnw_route_public_test.sh",
+      "user_scripts/vietnamworks_route_repo_map.py"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh vnw_route; tests/run_all.sh logreach; checks/shell.sh",
+    "result": "vnw_route_public 19/0 (M1-M5), logreach 4 suites pass, shell 511/0 (work/TASK-114/evidence/unit.txt)"
+  },
+  "security": {
+    "status": "completed",
+    "result": "no secret or gateway IP in map, tests, reports (no-real-ip.txt = 0); no source tree read (map re-applied from TSV rule column)"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "VNW g01 LOGREACH_REFRESH=1 pipeline.sh rebuild run 20261013-174303; logreach.py --check-routes vietnamworks; unit suites",
+    "result": "json 71 entries (ms 67 api/payment/secure/www 1), 0 apiv2-s2s, 0 getToken; review=22; public_unmapped=11; check-routes multi=0; g01 0 changed verdicts, gaps=0, QA PASS, crosscheck fail=0, checklist 12/12; 0 real IPs",
+    "evidence": [
+      "work/TASK-114/evidence/unit.txt",
+      "work/TASK-114/evidence/vnw-rebuild.txt",
+      "work/TASK-114/evidence/vnw-verdict-diff.txt",
+      "work/TASK-114/evidence/public-unmapped.txt",
+      "work/TASK-114/evidence/check-routes-vnw.txt",
+      "work/TASK-114/evidence/map-hosts.txt",
+      "work/TASK-114/evidence/no-real-ip.txt",
+      "work/TASK-114/evidence/review-list.txt"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-114-route-map-user-links.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": {
+      "waiver": "main wrote the design from the user decision (AskUserQuestion 2026-10-16) and RAW-00638/00639"
+    },
+    "coder": "work/TASK-114/handoff/code.md",
+    "tester": {
+      "waiver": "small importer change; coder tests M1-M4 re-run by main into evidence/unit.txt"
+    },
+    "verifier": "work/TASK-114/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "no counts/decisions beyond the deterministic route check and coverage/QA gates"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00639",
+      "note": "frontend domains (nginx host list) are noise for service mapping; keep only explicit host maps the user wrote",
+      "at": "2026-10-16T01:00:50Z"
+    },
+    {
+      "raw": "RAW-00638",
+      "note": "map only user-provided links; guesses to review list",
+      "at": "2026-10-16T01:00:50Z"
+    }
+  ],
+  "picked_at": "2026-10-16T01:00:40Z",
+  "updated_at": "2026-10-16T01:16:09Z",
+  "updated_by": "main",
+  "scope": [
+    "user_scripts/vietnamworks_route_repo_map.py",
+    "user_scripts/prompts/vietnamworks/*",
+    "tests/vnw_route_public_test.sh",
+    "docs/guide/vietnamworks-route-map.md"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": ""
+}

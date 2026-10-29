@@ -1,0 +1,89 @@
+{
+  "task_id": "TASK-119",
+  "title": "Multi-route finding: stop at first route with traffic",
+  "state": "DONE",
+  "requirement": "Stop at the first public route with traffic; do not query the others. REQ-0084 (RAW-00655)",
+  "acceptance_criteria": [
+    "AC1 first hit stops",
+    "AC2 no hit asks all",
+    "AC3 rebuilds unchanged"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-119-first-route-hit.md",
+    "summary": "evaluate breaks out of a path route loop on first match",
+    "reuse": [
+      "evaluate route loop"
+    ],
+    "risks": [
+      "single-route unchanged"
+    ]
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "evaluate breaks a path route loop on first match; test F1; route-map doc",
+    "files": [
+      "logreach.py",
+      "tests/logreach_test.sh",
+      "docs/guide/vietnamworks-route-map.md"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh logreach; checks/shell.sh",
+    "result": "4 suites pass incl F1 (seen, only first host asked) and D2 (no hit, both asked); shell 511/0"
+  },
+  "security": {
+    "status": "not_applicable",
+    "result": "fewer queries only; no new input or output"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "pipeline.sh rebuild VNW g01 20261013-174303 + Upzi_g02/logreach-v8 20260928-222915; tests F1/D2",
+    "result": "F1 first-route hit asks one host; D2 no hit asks both; VNW seen 8/via 4/not_seen 7, Upzi 5/1/6 unchanged; gaps=0, QA PASS, crosscheck fail=0",
+    "evidence": [
+      "work/TASK-119/evidence/ut-logreach.txt",
+      "work/TASK-119/evidence/vnw_rebuild119.log",
+      "work/TASK-119/evidence/upzi_rebuild119.log"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-119-first-route-hit.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": {
+      "waiver": "one-line change; main wrote design"
+    },
+    "coder": {
+      "waiver": "two-line change done by main"
+    },
+    "tester": {
+      "waiver": "main ran suites (evidence ut-logreach, shell)"
+    },
+    "verifier": {
+      "waiver": "main checked AC observables (evidence files)"
+    },
+    "crosscheck": {
+      "waiver": "pipeline crosscheck fail=0 in both rebuilds"
+    }
+  },
+  "user_notes": [],
+  "picked_at": "2026-10-16T09:21:44Z",
+  "updated_at": "2026-10-16T09:25:21Z",
+  "updated_by": "main",
+  "scope": [
+    "logreach.py",
+    "tests/logreach_test.sh",
+    "docs/guide/**"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": ""
+}

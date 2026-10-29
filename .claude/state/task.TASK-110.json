@@ -1,0 +1,125 @@
+{
+  "task_id": "TASK-110",
+  "title": "logreach follow-ups: check carried findings, prefix query up to first param + served status 2*/3*, real host/prefix in sample request, Low findings keep full card, access_log_review report with ES queries, severity impact summary, mapping doc (REQ-0075)",
+  "state": "DONE",
+  "requirement": "REQ-0075 (RAW-00607)",
+  "acceptance_criteria": [
+    "AC1 carried checked (PT-014/015 verdicts)",
+    "AC2 prefix-up-to-param query + served 2*/3*",
+    "AC3 sample host/prefix rewrite only for mapped non-internal",
+    "AC4 Low findings full s9 card + URL",
+    "AC5 access_log_review md+pdf with queries, no secrets",
+    "AC6 severity impact, same total, display order",
+    "AC7 mapping doc + checklist",
+    "AC8 served rule for all profiles; QA PASS, gaps=0, g02 rebuild"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-110-logreach-followups.md",
+    "summary": "carried findings checked (carry.decide, rkey|id@origin), served = status prefix 2*/3* + rule cache tag, sample/public URL rewrite for mapped non-internal endpoints (literal pairs from Python), Low cards kept in s9 + URL column s10, new logreach_report.py access_log_review report with masked Kibana queries + debug query + mapping chain/checklist, severity impact s4/s5/exec + display-order sort, report_qa E10/E11, D15"
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "A: logreach.py carried+served 2*/3*+rule tag+public/sample+query log jsonl, pipeline step_logreach, conclude second apply_reach, apply_reach public/sample; B: s9 Low cards, Public URL row, s10 URL column, s4/s5 impact, display order, exec, report_qa E10/E11; C: logreach_report.py access_log_review md/pdf + D15",
+    "files": [
+      "logreach.py",
+      "pipeline.sh",
+      "conclude.sh",
+      "report_common.sh",
+      "summarize_report.sh",
+      "summarize_exec.sh",
+      "report_qa.py",
+      "logreach_report.py",
+      "check_deliverables.sh",
+      "docs/guide/toolkit-reference.md",
+      ".claude/skills/pentest-report-qa/validation-rules.md",
+      "tests/logreach_test.sh",
+      "tests/pipeline_logreach_test.sh",
+      "tests/logreach_render_test.sh",
+      "tests/logreach_report_test.sh",
+      "tests/check_deliverables_test.sh"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh (full, 163 suites) + targeted logreach, pipeline_logreach, logreach_render, logreach_report, check_deliverables, report_qa, report_crosscheck, plan_reports, run_reports, ext_selfcheck(_qa), track_a_ss; checks/shell.sh",
+    "result": "targeted all PASS (logreach_render 37/0, report_qa 33, plan_reports 44 golden, shell 507/0); full run: only known pre-existing ext_scan, track_hook, tracking_new_only fail (TASK-078); 3 stale tests (D14 sed range, registry later count 16) fixed and re-run PASS",
+    "evidence": "work/TASK-110/evidence/qa_*_r2.txt, qa_full_run_all_r2.txt"
+  },
+  "security": {
+    "status": "completed",
+    "result": "ES creds only in gitignored local/logreach/*.conf (0600), never in outputs (grep 0 in md/pdf/json/jsonl); user-traffic filter masked <FILTER_VALUE> in queries, query log and review report; profile key = name only; review report has no absolute local paths; sample rewrite only on a closed placeholder host list and never on internal-segment paths, real domains kept; ES read-only _search with size 0/terminate_after; TLS-off profile warns; findings and .severity unchanged, no prompt change"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "PLAN=Upzi_g02/main LOGREACH_PROFILE=upzi LOGREACH_REFRESH=1 ./pipeline.sh rebuild --run plans/Upzi_g02/main/runs/20260928-222915; coverage_check.py --conclusion; report_qa.py; check_deliverables.sh --run; report_crosscheck",
+    "result": "18 findings checked (6 carried), seen 9 via_caller 1 not_seen 8 not_checkable 0; PT-014/015 seen (118/1000 hits); 0 placeholder hosts left, 16 rewrite notes; 8 of 18 moved to Low, total unchanged; gaps=0; report_qa PASS; D10+D15 PASS (29/0); crosscheck fail=0 unregistered=0; no creds/IP/abs path in md, pdf, json, jsonl; verifier AC1-AC9 MET",
+    "evidence": [
+      "work/TASK-110/evidence/v10_coverage.txt",
+      "work/TASK-110/evidence/v10_report_qa.txt",
+      "work/TASK-110/evidence/v10_deliverables.txt",
+      "work/TASK-110/evidence/v10_logreach_counts.txt",
+      "work/TASK-110/evidence/v10_pt014_015.txt",
+      "work/TASK-110/evidence/v10_no_placeholder_host.txt",
+      "work/TASK-110/evidence/v10_no_secrets.txt",
+      "work/TASK-110/evidence/v10_impact.txt",
+      "work/TASK-110/evidence/v10_crosscheck.txt",
+      "work/TASK-110/evidence/v10_frozen_prompts.txt",
+      "work/TASK-110/evidence/v10_scan_files_untouched.txt",
+      "work/TASK-110/handoff/verify.md"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-110-logreach-followups.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-110/handoff/design.md",
+    "coder": "work/TASK-110/handoff/code-A.md",
+    "tester": "work/TASK-110/handoff/test.md",
+    "verifier": "work/TASK-110/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "deterministic oracles cover the counts: coverage_check gaps=0, report_crosscheck fail=0 unregistered=0, report_qa PASS, check_deliverables 29/0 on the real g02 rebuild; no model-produced count to cross-check"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00607",
+      "note": "logreach follow-ups: 5 points (sample host, carried+query, Low in detail + review report, impact, VNW code)",
+      "at": "2026-10-14T15:16:01Z"
+    },
+    {
+      "raw": "RAW-00608",
+      "note": "sample request: replace host only for endpoints with a public route; internal/no-route APIs keep scan text",
+      "at": "2026-10-14T15:19:50Z"
+    },
+    {
+      "raw": "RAW-00609",
+      "note": "sample request: replace unless path is /internal/ or repo has no route; no /external/ requirement (VNW)",
+      "at": "2026-10-14T15:22:08Z"
+    },
+    {
+      "raw": "RAW-00610",
+      "note": "log every ES query (masked) to logreach_queries.jsonl for human review",
+      "at": "2026-10-14T15:28:45Z"
+    },
+    {
+      "raw": "RAW-00611",
+      "note": "user away: run bash unattended, finish to DONE + g02 report, no waiting",
+      "at": "2026-10-14T15:31:14Z"
+    }
+  ],
+  "picked_at": "2026-10-14T15:16:01Z",
+  "updated_at": "2026-10-14T16:57:58Z",
+  "updated_by": "main",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": ""
+}

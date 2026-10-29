@@ -1,0 +1,90 @@
+{
+  "task_id": "TASK-134",
+  "title": "finish_run re-conclude must not leave reports stale: crosscheck fresh X2 passes on a complete run (REQ-0102)",
+  "state": "DONE",
+  "requirement": "REQ-0102: after finish_run (pipeline.sh:1755) re-concludes, reports are re-rendered or conclusion.json is left untouched when only concluded_at changed, so engine-review fresh passes with no manual rebuild",
+  "acceptance_criteria": [
+    "fresh PASS after a complete run",
+    "findings unchanged gaps=0"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-134-finish-run-fresh-reports.md",
+    "summary": "finish_run restores conclusion mtime when unchanged, re-renders reports when it changed",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "completed",
+    "files": [
+      "pipeline.sh",
+      "tests/finish_run_fresh_test.sh",
+      "tests/suite_map.txt",
+      "docs/guide/toolkit-reference.md"
+    ],
+    "summary": "finish_run restores conclusion mtime when bytes equal, else re-renders once (output only on failure)"
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "bash tests/finish_run_fresh_test.sh; tests/run_all.sh pipeline_track; tests/run_all.sh --changed",
+    "result": "finish_run_fresh 8/8; pipeline_track 47/0 alone; --changed 190 suites: only known failures ext_scan, track_hook (clean HEAD too), tracking_new_only, plus load flakes ext_pregate (28/0 alone) and pipeline_track (47/0 after fix)"
+  },
+  "security": {
+    "status": "not_applicable",
+    "result": "report freshness only; no model, no repo access, no prompt change"
+  },
+  "verification": {
+    "status": "passed",
+    "evidence": [
+      "work/TASK-134/evidence/pt134d.txt",
+      "work/TASK-134/evidence/ch134.txt",
+      "work/TASK-134/evidence/frozen.txt"
+    ],
+    "command": "tests/run_all.sh --changed; pipeline_track alone; git diff frozen prompts",
+    "result": "finish_run fixture: unchanged conclusion keeps mtime, changed one re-renders once; pipeline suites pass; stdout equals HEAD; frozen prompts diff empty; coverage_check still runs in finish_run (gaps=0 required)"
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-134-finish-run-fresh-reports.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": {
+      "waiver": "small change designed by coordinator"
+    },
+    "coder": "work/TASK-134/handoff/code.md",
+    "tester": {
+      "waiver": "coordinator re-ran the suites"
+    },
+    "verifier": {
+      "waiver": "coordinator checked suites and stdout parity"
+    },
+    "crosscheck": {
+      "waiver": "report freshness logic only; checked by finish_run_fresh and pipeline suites"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00855",
+      "note": "fix the engine-review fail; queue the finish_run fix",
+      "at": "2026-10-21T23:09:47Z"
+    }
+  ],
+  "picked_at": "2026-10-22T22:29:38Z",
+  "updated_at": "2026-10-23T00:47:19Z",
+  "updated_by": "main",
+  "scope": [
+    "pipeline.sh",
+    "tests/finish_run_fresh_test.sh",
+    "tests/suite_map.txt",
+    "docs/guide/toolkit-reference.md"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": ""
+}

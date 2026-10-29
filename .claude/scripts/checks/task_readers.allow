@@ -1,0 +1,15 @@
+# Readers of task.json / task_from / .task_id (phase 96.14). Format: <path> | <one-line reason>.
+# The resolver (_tasks.py, tasks.sh) is exempt. A new reader must be added here with a reason, or use the resolver.
+.claude/scripts/workflow-check.sh | multi-aware: runs _tasks.py check per active task, schema-2 view for legacy
+.claude/scripts/backlog.sh | multi-aware: pick/complete go through _tasks.py; reads the view only for legacy mode
+.claude/scripts/status.sh | reads the schema-2 view (focus task); per-task list comes from tasks.sh status
+.claude/scripts/task-state.sh | prints the view and calls tasks.sh status for all active tasks
+.claude/scripts/team-status.sh | reads the schema-2 view for the focus task; per-task rows via tasks.sh
+.claude/scripts/checklist.sh | reads the task id from the view; checklist is per task id
+.claude/scripts/save-evidence.sh | task id from CTXGUARD_TASK first, view as fallback
+.claude/scripts/commit-check.sh | resolves the task from Task: trailer / --task first (guarded file; patch under work/TASK-096/patches)
+.claude/req/task_gate.py | REQ gate follows the linked task id; view only names the focus task (guarded file)
+.claude/hooks/stop-check.sh | multi mode (task.TASK-*.json present): loops the task files, WARN on empty/stale checkpoint.next, workflow-check --task per DONE file; legacy path unchanged (patch hooks-multi.py)
+.claude/hooks/session-start.sh | multi mode: tasks.sh status + workflow-check --task FAIL lines + task_checkpoint brief (patch hooks-multi.py)
+.claude/hooks/pre-compact-check.sh | multi mode: tasks.sh status + workflow-check --task FAIL lines + task_checkpoint brief, never blocks (patch hooks-multi.py)
+.claude/hooks/agent_setup.py | bound_task(): env CTXGUARD_TASK, sticky bind, launch queue, first work/ write, then task_from (view); per-task grants/waiver read task.<T>.json (patch agent-setup-multi.py)

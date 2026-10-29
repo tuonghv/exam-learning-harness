@@ -1,0 +1,89 @@
+{
+  "task_id": "TASK-140",
+  "title": "Upzi full plan renewed on the latest cleaned source (64 repos), active-app list mapped to real repo names, pipeline track A run with claude-opus-5-5 (REQ-0106)",
+  "state": "DONE",
+  "requirement": "REQ-0106: new plan Upzi/full2 from pentest_source_clean/upzi; map backend/feature-mgmt->feature-management, order-mgmt->order-management, recruitment-cpg-pltf->recruitment-campaign-platform in upzi_active-app-list.txt (user RAW-00928, do not ask again); commit the claude-opus-5-5 model switch in config.sh; run ./pipeline.sh run --track A; check every repo lands (no miss).",
+  "acceptance_criteria": [
+    "140.1 active list mapped to real repo names",
+    "140.2 plan Upzi/full2 from the latest tree, active apps approved",
+    "140.3 dry-run clean, hash forecast printed",
+    "140.4 track A done, every approved repo has phase1 result or named failure, coverage gaps=0"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-140-upzi-full-plan-track-a.md",
+    "summary": "New plan Upzi/full2 (64 repos), mapped active list, track A run on claude-opus-5-5 with a no-miss check.",
+    "reuse": [
+      "plan.sh new",
+      "init_manifest.sh",
+      "active_apps.py",
+      "pipeline.sh run --track A"
+    ],
+    "risks": [
+      "paid opus run",
+      "4 pipeline suites pin old model names"
+    ]
+  },
+  "implementation": {
+    "status": "completed",
+    "files": [
+      "config.sh",
+      "user_scripts/prompts/upzi_active-app-list.txt"
+    ],
+    "summary": "plan Upzi/full (64 repos, 60 approved) from clean tree, active list mapped, config.sh opus switch committed"
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "active_apps.py list vs manifest; pipeline.sh status",
+    "result": "active_apps malformed 0 disagree 0 duplicates 0; no new code; 4 suites pinned to old model names stay red, tracked TASK-141"
+  },
+  "security": {
+    "status": "completed",
+    "result": "no code change; models and approvals per user (RAW-00928); no secret from production link in reports (i9_check 0)"
+  },
+  "verification": {
+    "status": "passed",
+    "evidence": [
+      "plans/Upzi/full/runs/20261026-060019",
+      "reports/Upzi/full/run-20261026-060019/"
+    ],
+    "command": "pipeline.sh run --track A then B on Upzi/full; coverage_check --conclusion; check_deliverables --run latest",
+    "result": "60/60 approved repos have phase1 out; 30/30 phase2b; coverage findings=142 shown=142 gaps=0; deliverables pass=141 warn=1 fail=0 (warn: 4 unapproved repos)"
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-140-upzi-full-plan-track-a.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-140/handoff/design.md",
+    "coder": {
+      "waiver": "no engine code in this task (plan, config model switch, mapped list); run executed by coordinator"
+    },
+    "tester": {
+      "waiver": "no engine code in this task (plan, config model switch, mapped list); run executed by coordinator"
+    },
+    "verifier": {
+      "waiver": "no engine code in this task (plan, config model switch, mapped list); run executed by coordinator"
+    },
+    "crosscheck": {
+      "waiver": "coverage_check gaps=0 and check_deliverables on the real run"
+    }
+  },
+  "user_notes": [],
+  "picked_at": "2026-10-25T14:36:53Z",
+  "updated_at": "2026-10-26T14:07:27Z",
+  "updated_by": "coordinator",
+  "scope": [
+    "work/TASK-140/"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": "",
+    "next": "resume: close TASK-140 (track A/B done), then report"
+  },
+  "next": ""
+}

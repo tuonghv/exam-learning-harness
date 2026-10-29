@@ -1,0 +1,83 @@
+{
+  "task_id": "TASK-149",
+  "title": "Tracking copies mirror by-repo-public like by-repo (REQ-0116)",
+  "state": "DONE",
+  "requirement": "REQ-0116. User 2026-10-27 (RAW-01013 \"by-repo-public not apply under tracking directory yet\", RAW-01014 \"go\"): tracking/annotate.py copies of a run's engine reports include by-repo-public/* the same way as by-repo/* (stable ids annotated where PT/XR ids appear, else copied unchanged), listed in index.md. Follow-up of TASK-148.",
+  "acceptance_criteria": [
+    "AC1 annotate.py copies by-repo-public/* into tracking/<run>/by-repo-public with stable-id annotation like by-repo",
+    "AC2 index.md lists the by-repo-public files",
+    "AC3 engine dir without by-repo-public: no by-repo-public dir in the copy",
+    "AC4 real run copy: tracking by-repo-public md set == engine by-repo-public md set, engine untouched"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-149-tracking-by-repo-public.md",
+    "summary": "annotate.py engine_files lists by-repo and by-repo-public; existing copy loop annotates/indexes them",
+    "reuse": [
+      "annotate.py copy loop",
+      "tracking_test.sh phase 58 fixture"
+    ],
+    "risks": [
+      "more per-repo PDF renders"
+    ]
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "engine_files lists by-repo and by-repo-public; docstrings, reference doc; tests 149.1 + 58.1 index count 8",
+    "files": [
+      "tracking/annotate.py",
+      "tests/tracking_test.sh",
+      "docs/guide/toolkit-reference.md"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh tracking; tests/run_all.sh --fast",
+    "result": "tracking_test 79/0; bite with old annotate.py 77/2 (149.1, 58.1). Pre-existing on HEAD~1 too: tracking_new_only N3, track_hook S3, verify_scan 70.2/73.1"
+  },
+  "security": {
+    "status": "completed",
+    "result": "names from os.listdir of fixed sub dir, extension+isfile filter, engine dir read only; no new input or command"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "python3 tracking/annotate.py --registry ../security-findings --system Upzi_g04 --plan main --run 20261027-074446 --engine-dir reports/Upzi_g04/main/run-20261027-074446 --out-root <scratchpad>",
+    "result": "rc 0; engine+registry sha256 unchanged; copy by-repo-public md set == engine (3); 3/3 Stable ID rows; index 6 rows; verifier PASS AC1-AC4",
+    "evidence": [
+      "work/TASK-149/handoff/v2-evidence.md",
+      "work/TASK-149/handoff/verify.md"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-149-tracking-by-repo-public.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": {
+      "waiver": "3-line change; coordinator wrote the design directly from the read code (annotate.py:242-246)"
+    },
+    "coder": "work/TASK-149/handoff/code.md",
+    "tester": "work/TASK-149/handoff/test.md",
+    "verifier": "work/TASK-149/handoff/verify.md",
+    "crosscheck": "work/TASK-149/handoff/crosscheck.md"
+  },
+  "user_notes": [],
+  "picked_at": "2026-10-27T08:46:51Z",
+  "updated_at": "2026-10-27T09:02:51Z",
+  "updated_by": "coordinator",
+  "scope": [
+    "work/TASK-149/",
+    "tracking/annotate.py",
+    "tests/tracking_test.sh",
+    "docs/guide/toolkit-reference.md"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": ""
+}

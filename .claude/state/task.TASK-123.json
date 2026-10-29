@@ -1,0 +1,139 @@
+{
+  "task_id": "TASK-123",
+  "title": "Feature catalog + plan conformance check (engine stability): register every feature, show per plan/run what is on/off/missing and why, static check for unregistered features",
+  "state": "DONE",
+  "requirement": "Every engine feature SHALL be registered once in a feature catalog; a conformance check per plan and per run shows on/off/missing with the reason; a static check fails on an unregistered step or setting. Design first from a gap analysis; no over-engineering. REQ-0091 (RAW-00721, RAW-00722); REQ-0090 logreach is the first consumer",
+  "acceptance_criteria": [
+    "REQ-0091 AC1-AC6",
+    "REQ-0090 AC1-AC2",
+    "coverage gaps=0, old reports byte-identical, 0 claude calls"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-123-feature-catalog.md",
+    "summary": "features.conf catalog + feature_state (features_common.sh) + logreach profile from product + plan.sh features view + static catalog test + run features.json/report line + run preflight drift guard; all $0, no prompt change",
+    "reuse": [
+      "products_common.sh parser style",
+      "deploy_report_lines.py",
+      "plan.sh list",
+      "gap_enabled"
+    ],
+    "risks": [
+      "skip wording greps in tests",
+      "run.json hashed -> separate features.json"
+    ]
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "123.1-123.7: features.conf + features_common.sh (feature_state/feature_on/preflight), logreach profile from product, plan.sh features view, pipeline status line, features_catalog_test drift guard, <run>/features.json + exec report line, run preflight (missing/new/changed)",
+    "files": [
+      "features.conf",
+      "features_common.sh",
+      "products.conf",
+      "products_common.sh",
+      "pipeline.sh",
+      "plan.sh",
+      "deploy_report_lines.py",
+      "summarize_exec.sh",
+      "scan_batch.sh",
+      "docs/guide/toolkit-reference.md",
+      "tests/features_common_test.sh",
+      "tests/features_catalog_test.sh",
+      "tests/features_view_test.sh"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh (full) + .claude/scripts/checks/shell.sh",
+    "result": "176 suites, 172 pass; 4 fail = ext_scan, track_hook, tracking_new_only (pre-existing, TASK-078) + ext_pregate T8 load flake (passes alone 28/0, re-run by main); shell.sh 537/0; bite: catalog test FAILs on drift; evidence work/TASK-123/evidence/{full_run_all,shell_checks,bite_catalog}.txt"
+  },
+  "security": {
+    "status": "completed",
+    "result": "no claude/paid calls added; logreach profile files checked for existence only; no link values or secrets in new outputs (verifier); no REPOS_ROOT reads; prompts unchanged"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "verifier V1-V8 + main extras (inputs_sha, products_check, bites, full run at e852186)",
+    "result": "V1-V8 PASS, REQ-0091 AC1-6 + REQ-0090 AC1-2 PASS; full run_all 173/176 (3 known TASK-078); shell 537/0; qlv5 re-render: only timestamp diffs, QA PASS, coverage gaps=0; inputs_sha equal with/without features.json; 123.8 bite fails on old code",
+    "evidence": [
+      "work/TASK-123/handoff/verify.md",
+      "work/TASK-123/evidence/full_run_all_final.txt",
+      "work/TASK-123/evidence/shell_checks_final.txt",
+      "work/TASK-123/evidence/V7_md_diff.txt",
+      "work/TASK-123/evidence/V7_coverage.txt",
+      "work/TASK-123/evidence/V6_inputs_sha.txt",
+      "work/TASK-123/evidence/bite_catalog.txt",
+      "work/TASK-123/evidence/bite_products_check.txt",
+      "work/TASK-123/evidence/products_check.txt"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-123-feature-catalog.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-123/handoff/design.md",
+    "coder": "work/TASK-123/handoff/code.md",
+    "tester": "work/TASK-123/handoff/test.md",
+    "verifier": "work/TASK-123/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "no finding counts changed; qlv5 report crosscheck 27/0 in V7_rebuild_render.txt"
+    },
+    "skill-curator": "work/TASK-123/handoff/curator.md"
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00722",
+      "note": "Design the feature catalog from a gap analysis of the current architecture; stable engine; no over-engineering",
+      "at": "2026-10-18T12:53:23Z"
+    },
+    {
+      "raw": "RAW-00721",
+      "note": "Every feature registers in one master catalog so the plan manager knows all (track A/B etc.)",
+      "at": "2026-10-18T12:53:23Z"
+    },
+    {
+      "raw": "RAW-00720",
+      "note": "Logreach skipped silently on qlv5: root cause per-plan LOGREACH_PROFILE; fix via product profile",
+      "at": "2026-10-18T12:53:23Z"
+    },
+    {
+      "raw": "RAW-00723",
+      "note": "linked to REQ-0091",
+      "at": "2026-10-18T13:01:54Z"
+    },
+    {
+      "raw": "RAW-00724",
+      "note": "linked to REQ-0091",
+      "at": "2026-10-18T13:04:34Z"
+    }
+  ],
+  "picked_at": "2026-10-18T12:53:23Z",
+  "updated_at": "2026-10-18T23:22:27Z",
+  "updated_by": "main",
+  "scope": [
+    "docs/req/**",
+    "features.conf",
+    "features_common.sh",
+    "products.conf",
+    "products_common.sh",
+    "pipeline.sh",
+    "plan.sh",
+    "config.sh",
+    "deploy_report_lines.py",
+    "summarize_exec.sh",
+    "tests/**",
+    "docs/guide/**",
+    "scan_batch.sh",
+    "auto_scan.sh"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": ""
+}

@@ -1,0 +1,95 @@
+{
+  "task_id": "TASK-099",
+  "title": "TASK-075 follow-up 75.5: per-run toolkit stamp producer <run>/toolkit.json {commit, dirty, prompt_sha256} so history.py labels new run pairs source/engine (reader already in history.py)",
+  "state": "DONE",
+  "requirement": "REQ-0034 Q1 (user 2026-09-30) + RAW-00508 split: pipeline run and scan_batch results record the toolkit stamp as a sidecar; no prompt change; past runs stay unknown",
+  "acceptance_criteria": [
+    "99.1 history.py stamp prints {commit,dirty,prompt_sha256}",
+    "99.2 toolkit_stamp wrapper validates JSON, a fault never charges an attempt",
+    "99.3 pipeline run writes <run>/toolkit.json once at creation, never on resume/rebuild",
+    "99.4 single-source result carries .toolkit; unset output byte-identical",
+    "$0, frozen prompts hashed not edited, non-git kit does not fail"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-99-toolkit-run-stamp.md",
+    "summary": "history.py stamp producer; toolkit_stamp wrapper validates; pipeline sidecar <run>/toolkit.json written once in pl_new_run; single-source result .toolkit key; non-git kit gives commit null, never fails",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "completed",
+    "files": [
+      "tracking/history.py",
+      "tracking/track.py",
+      "scan_common.sh",
+      "pipeline_lib.sh",
+      "scan_batch.sh",
+      "tests/toolkit_stamp_test.sh",
+      "docs/guide/toolkit-reference.md"
+    ],
+    "summary": "history.py stamp + prompt_hashes moved from track.py, toolkit_stamp wrapper in scan_common.sh, sidecar in pl_new_run, .toolkit key via finalize_result"
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "bash tests/toolkit_stamp_test.sh; pipeline_run, pipeline_pool, pipeline_track tests alone; tests/run_all.sh --fast",
+    "result": "toolkit_stamp 22/22 (4 scratch bites fail it); pipeline_run 127/0; pipeline_pool 58/0; pipeline_track 47/0; --fast 162 suites only known track_hook S3 (clean HEAD too)"
+  },
+  "security": {
+    "status": "not_applicable",
+    "result": "deterministic stamp from git metadata and prompt hashes; no model, no repo source, frozen prompts untouched"
+  },
+  "verification": {
+    "status": "passed",
+    "evidence": [
+      "work/TASK-099/evidence/v1_pipeline.txt",
+      "work/TASK-099/evidence/v2_single_source.txt",
+      "work/TASK-099/evidence/v3_stamp_off_vs_on.txt",
+      "work/TASK-099/evidence/v4_non_git.txt",
+      "work/TASK-099/evidence/v5_prompts.txt",
+      "work/TASK-099/evidence/pipeline_run.txt"
+    ],
+    "command": "tester V1-V5 at function level in clone/archive kits; pipeline_run, pipeline_pool, pipeline_track full fake-claude runs",
+    "result": "V1 pl_new_run wrote toolkit.json with a 40-hex commit, history card rev_src stamped; V2 result .toolkit.commit 40-hex, stamp off gives no key; V3 result JSON byte-equal minus .toolkit, run.json equal; V4 no-.git kit rc 0, commit null; V5 prompts diff 0 lines. Entry scripts not run by the tester (guard); conclusion and coverage_check covered by the full fake-claude runs in pipeline_run/pipeline_track (step_conclude runs coverage_check --conclusion) and by grep: only pipeline_lib.sh and history.py touch toolkit.json"
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-99-toolkit-run-stamp.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-099/handoff/design.md",
+    "coder": "work/TASK-099/handoff/code.md",
+    "tester": {
+      "waiver": "coordinator re-ran the heavy suites and --fast; coder showed the bites"
+    },
+    "verifier": {
+      "waiver": "tester ran V1-V5 at function level; coordinator checked the engine path by grep and full runs"
+    },
+    "crosscheck": {
+      "waiver": "coordinator re-ran heavy suites and checked the engine path at $0"
+    }
+  },
+  "user_notes": [],
+  "picked_at": "2026-10-23T04:52:50Z",
+  "updated_at": "2026-10-23T05:29:53Z",
+  "updated_by": "main",
+  "scope": [
+    "tracking/history.py",
+    "tracking/track.py",
+    "scan_common.sh",
+    "pipeline_lib.sh",
+    "scan_batch.sh",
+    "tests/toolkit_stamp_test.sh",
+    "docs/guide/toolkit-reference.md"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": "",
+    "next": "Designer drafts the per-run toolkit stamp producer (toolkit.json)"
+  },
+  "next": ""
+}

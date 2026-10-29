@@ -1,0 +1,90 @@
+{
+  "task_id": "TASK-120",
+  "title": "Access-log review shows real filter value (opt-in profile key, admin-only report)",
+  "state": "DONE",
+  "requirement": "report_filter_value=show prints the real filter value in access_log_review queries; run files masked. REQ-0085 (RAW-00657)",
+  "acceptance_criteria": [
+    "AC1 unmasked",
+    "AC2 header/checklist",
+    "AC3 default masked, no password",
+    "AC4 rebuilds"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-120-show-filter-value.md",
+    "summary": "opt-in profile key report_filter_value=show unmasks the filter term in access_log_review bodies; run files stay masked",
+    "reuse": [
+      "logreach.read_conf",
+      "mask_body"
+    ],
+    "risks": [
+      "value only in gitignored admin report"
+    ]
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "report_filter_value=show unmasks filter term in review bodies via logreach.read_conf; default masked",
+    "files": [
+      "logreach_report.py",
+      "tests/logreach_report_test.sh",
+      "docs/guide/access-log-onboarding.md"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh logreach; checks/shell.sh",
+    "result": "4 suites pass (report 46/46 incl S1-S4); shell 511/0/0"
+  },
+  "security": {
+    "status": "completed",
+    "result": "value only in gitignored admin review report (opt-in); run files masked; password never read; agents/chat never print value"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "rebuild VNW g01 + Upzi g02; report_qa; leakcount.py",
+    "result": "gaps=0 both, QA PASS both, 0 <FILTER_VALUE> in reviews, logreach run files clean",
+    "evidence": [
+      "work/TASK-120/evidence/rebuild-vnw.log",
+      "work/TASK-120/evidence/rebuild-upzi.log",
+      "work/TASK-120/evidence/qa-vnw*",
+      "work/TASK-120/evidence/leakcount.txt"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-120-show-filter-value.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": {
+      "waiver": "small; main wrote design"
+    },
+    "coder": "work/TASK-120/handoff/code.md",
+    "tester": {
+      "waiver": "main re-ran checks, evidence work/TASK-120/evidence"
+    },
+    "verifier": {
+      "waiver": "main verified with saved evidence (count checks; value must not be shown to roles)"
+    },
+    "crosscheck": {
+      "waiver": "report-only change; coverage+QA+crosscheck rerun in rebuild"
+    }
+  },
+  "user_notes": [],
+  "picked_at": "2026-10-16T09:57:52Z",
+  "updated_at": "2026-10-16T10:07:13Z",
+  "updated_by": "main",
+  "scope": [
+    "logreach_report.py",
+    "tests/logreach_report_test.sh",
+    "docs/guide/**"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": ""
+}

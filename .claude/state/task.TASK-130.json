@@ -1,0 +1,94 @@
+{
+  "task_id": "TASK-130",
+  "title": "Linked cross-product items into phase 2b, opt-in (REQ-0097)",
+  "state": "DONE",
+  "requirement": "REQ-0097: opt-in selection of linked items into 2b, two-repo mount across plan roots, merge into the table; paid run only on user go.",
+  "acceptance_criteria": [
+    "opt-in selection, default byte-identical",
+    "two-repo restricted mount across plan roots",
+    "answers merge into table; gaps=0",
+    "cost estimate before run; frozen prompts untouched; tests pass"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-130-linked-2b-optin.md",
+    "summary": "Opt-in --linked-2b selects L- units; p2b_compose and evidence gate mount the callee from the linked plan root; coverage 41.3 and renderer take the answers; cp2b hold prints estimate (about $2.62 for Upzi); frozen prompt unchanged",
+    "reuse": [],
+    "risks": [
+      "cross-plan mount breaking the two-repo rule",
+      "coverage answer-unused",
+      "default output not byte-identical"
+    ]
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "Linked 2b opt-in (LINKED_2B=0 default): correlate selects L- items, p2b_compose cross-plan two-repo mount, evidence gate, report merge, coverage 41.3, cost estimate + forced hold. Off path byte-identical.",
+    "files": [
+      "config.sh",
+      "pipeline.sh",
+      "pipeline_lib.sh",
+      "correlate.py",
+      "graph_build.sh",
+      "summarize_report.sh",
+      "coverage_check.py",
+      "checkpoint_report.py",
+      "docs/guide/toolkit-reference.md",
+      "tests/correlate_linked_test.sh",
+      "tests/run_reports_test.sh",
+      "tests/checkpoint_report_test.sh",
+      "tests/p2b_linked_compose_test.sh",
+      "tests/graph_linked2b_test.sh",
+      "tests/pipeline_linked_hold_test.sh"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh --changed; checks/shell.sh; V6 fake-claude e2e",
+    "result": "12 filtered suites green, correlate_linked 36/0, shell.sh 559/0; --changed 187 suites 3 known fails not from this task; V6 e2e all pass (own-cap fix F-130-1)"
+  },
+  "security": {
+    "status": "completed",
+    "result": "no REPOS_ROOT reads added, no secrets (secrets.sh warn = test fixtures), 2-repo restricted mount"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "verifier + saved evidence (work/TASK-130/evidence)",
+    "result": "AC1-AC4 verified: e2e fake-claude, byte-identical off, frozen prompts untouched, coverage gaps=0",
+    "evidence": [
+      "work/TASK-130/evidence/v6-on-run.txt",
+      "work/TASK-130/evidence/frozen-prompts-diff.txt",
+      "work/TASK-130/evidence/report-linked-rows.txt",
+      "work/TASK-130/handoff/verify.md"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-130-linked-2b-optin.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-130/handoff/design.md",
+    "coder": "work/TASK-130/handoff/code.md",
+    "tester": "work/TASK-130/handoff/test.md",
+    "verifier": "work/TASK-130/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "counts cross-checked by tester V6 and verifier evidence"
+    }
+  },
+  "user_notes": [],
+  "picked_at": "2026-10-20T12:27:16Z",
+  "updated_at": "2026-10-20T23:43:39Z",
+  "updated_by": "main",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [
+      "coder 130.1-130.7"
+    ],
+    "notes": "",
+    "next": "verifier: evidence check + security"
+  },
+  "next": ""
+}

@@ -1,0 +1,109 @@
+{
+  "task_id": "TASK-111",
+  "title": "logreach per-host index: profile key host_index sends listed hosts to another index (VNW web hosts -> vnw_access-*)",
+  "state": "DONE",
+  "requirement": "A logreach profile can route listed hosts to another ES index, same URL/creds/fields; others use the default index. REQ-0076 (RAW-00621, RAW-00622, RAW-00623)",
+  "acceptance_criteria": [
+    "AC1 listed hosts query the override index, others the default",
+    "AC2 profile without host_index unchanged",
+    "AC3 query log and report show the routed index",
+    "AC4 cache re-queries when a host moves index",
+    "AC5 bad syntax -> profile_unreadable",
+    "AC6 VNW g01 rebuild: vnw_access-* only for the 4 web hosts, coverage gaps=0, QA PASS",
+    "AC7 filter_value list -> terms query, masked everywhere; single value unchanged"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-111-logreach-host-index.md",
+    "summary": "Optional profile key host_index=<index>:<host>,..[;..] routes listed hosts to another ES index; index_for() in search/log/cache; report shows per-query index",
+    "reuse": [
+      "read_conf",
+      "EsSource.search",
+      "Checker cache",
+      "logreach_report.block_query"
+    ],
+    "risks": [
+      "stale cache across map change (handled: record index compared)"
+    ]
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "host_index key parsed to {host:index}; index_for() used by EsSource.search, query log and cache-staleness check; doc.es.host_index; report query blocks use the record index; 111.5 filter_value comma list -> terms query, masked as [<FILTER_VALUE>]",
+    "files": [
+      "logreach.py",
+      "logreach_report.py",
+      "tests/logreach_test.sh",
+      "tests/logreach_report_test.sh",
+      "tests/fixtures/logreach/fake_es.py",
+      "docs/guide/access-log-onboarding.md",
+      "docs/guide/toolkit-reference.md"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh logreach",
+    "result": "4 suites passed: logreach_test 148/0, logreach_report 37/0, logreach_render 37/0, pipeline_logreach 13/0 (re-run by main after 111.5)"
+  },
+  "security": {
+    "status": "completed",
+    "result": "no credential or filter value in logreach.json, query log or reports (masked term/terms); TLS-off WARN kept; only the configured ES URL contacted; bad host_index/filter list -> profile_unreadable"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "LOGREACH_REFRESH=1 ./pipeline.sh rebuild --run plans/Vietnamworks_g01/main/runs/20261013-174303 (+ Upzi_g02 20260928-222915)",
+    "result": "VNW: secure.* queries -> vnw_access-* (4), others -> vnw_api_access-* (101); filter terms masked in 105/105 lines, 0 real IPs in outputs; PT-002/PT-019 now seen; coverage gaps=0, QA PASS, crosscheck fail=0. Upzi verdicts identical. Verifier AC1-AC7 PASS (AC6: only secure.* of the 4 web hosts had findings).",
+    "evidence": [
+      "work/TASK-111/evidence/unit-logreach.txt",
+      "work/TASK-111/evidence/vnw-rebuild-summary.txt",
+      "work/TASK-111/evidence/vnw-index-routing.txt",
+      "work/TASK-111/evidence/vnw-filter-masked.txt",
+      "work/TASK-111/evidence/vnw-verdicts.txt",
+      "work/TASK-111/evidence/upzi-unchanged.txt",
+      "work/TASK-111/evidence/shellcheck.txt"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-111-logreach-host-index.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": {
+      "waiver": "small change; coordinator read logreach.py/logreach_report.py and wrote the design directly (user waiting on result)"
+    },
+    "coder": "work/TASK-111/handoff/code.md",
+    "tester": {
+      "waiver": "main re-ran tests/run_all.sh logreach itself (4 suites pass); small change"
+    },
+    "verifier": "work/TASK-111/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "deterministic oracles: coverage_check gaps=0, report_crosscheck fail=0, report_qa PASS on the real VNW run"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00626",
+      "note": "filter remote.keyword in 10.122.4.11/.12/.13 for both VNW indices (multi-value filter_value)",
+      "at": "2026-10-15T09:31:37Z"
+    }
+  ],
+  "picked_at": "2026-10-15T09:16:24Z",
+  "updated_at": "2026-10-15T09:56:44Z",
+  "updated_by": "main",
+  "scope": [
+    "logreach.py",
+    "logreach_report.py",
+    "tests/logreach_test.sh",
+    "tests/logreach_report_test.sh",
+    "docs/guide/access-log-onboarding.md",
+    "docs/guide/toolkit-reference.md"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": ""
+}

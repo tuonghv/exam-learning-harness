@@ -1,0 +1,140 @@
+{
+  "task_id": "TASK-151",
+  "title": "Public report set (_public): executive_summary/security_report/findings/by-repo-public with Low/Info hidden (REQ-0118)",
+  "state": "DONE",
+  "requirement": "REQ-0118. User 2026-10-27 (RAW-01017 item 2): keep full reports unchanged, add _public copies for other teams with Low/Info (incl. suggested-Low not_seen/via_caller) hidden, same renderers, hidden-count line; after TASK-150; review on Upzi_g04.",
+  "acceptance_criteria": [
+    "AC1 4 public reports written, no Low/Info row, hidden-count line",
+    "AC2 public C/H/M == full display C/H/M (jq crosscheck)",
+    "AC3 full reports byte-identical minus _Generated, coverage gaps=0, report_qa PASS",
+    "AC4 by-repo-public = repos with >=1 shown finding, Low/Info hidden",
+    "AC5 registry + crosscheck unregistered=0, check_deliverables, tracking mirror",
+    "AC6 baseline none, both plan modes"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-151-public-report-set.md",
+    "summary": "Report layer only: summarize_report.sh/summarize_exec.sh re-exec with --public on a render copy filtered to _reach.verdict!=not_seen (report_common.sh public_filter/public_path/reach_usable); writes security_report_public, executive_summary_public, findings_public, by-repo-public; registry kinds *-public, check_deliverables D17, tracking picks full report; full set byte-identical; no logreach -> skip line"
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "151.1-151.7; 151.7 public mode drops repo posture prose (deterministic shown-count line), rating = max shown severity without (scan:), appendix pointers -> full report",
+    "files": [
+      "check_deliverables.sh",
+      "docs/guide/toolkit-reference.md",
+      "ext_gap_report.sh",
+      "publish_by_repo.sh",
+      "report_common.sh",
+      "report_crosscheck.py",
+      "report_registry.json",
+      "summarize_exec.sh",
+      "summarize_report.sh",
+      "tests/ext_anomaly_test.sh",
+      "tests/ext_results_test.sh",
+      "tests/job_hold_sched_test.sh",
+      "tests/logreach_render_test.sh",
+      "tests/pipeline_logreach_test.sh",
+      "tests/public_reports_test.sh",
+      "tests/repo_findings_test.sh",
+      "tests/report_crosscheck_test.sh",
+      "tests/report_qa_test.sh",
+      "tests/tracking_new_only_test.sh",
+      "tracking/annotate.py"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh public_reports|run_reports|report_qa|report_crosscheck|check_deliverables (one filter per call)",
+    "result": "Nemesis round 3: public_reports 36/0 (U24,U24b,U24c), run_reports 78/0, report_qa 33/0, report_crosscheck 45/0, check_deliverables 75/0; bite: summarize_report.sh from 18e82118 and eafa35e8 each fail U24b+U24c (33/2); report crosscheck RESULT OK (L1 fixed)"
+  },
+  "security": {
+    "status": "completed",
+    "result": "Threat: hidden (not_seen) findings disclosed to other teams via public files. Round 1 leak (posture prose, scan rating, appendix pointer) fixed by deterministic header; oracle 0 hits on both real runs. Residual by design: per-repo hidden count shown. No new inputs, no shell/eval of report data. Round 3: linked-plan table ids hidden here dropped in public (151.8/151.8b), 0 id hits."
+  },
+  "verification": {
+    "status": "passed",
+    "command": "scratch kit head4 (2117318e): PLAN=<p> TRACK_AFTER_RUN=0 ./pipeline.sh rebuild --render --run <run> for Upzi_g04/main 20261027-074446 and Upzi/full 20261026-060019; leak.py, whole-word not_seen id grep over public files, coverage_check, report_qa, check_deliverables, diff vs base, report_crosscheck.py",
+    "result": "0 leaks and 0 not_seen id hits in public files on both runs; Upzi/full linked table 4 rows dropped, each only hidden fids (repo|id); full set identical to base; coverage gaps=0; report_qa PASS; deliverables 40/0, 150/0; crosscheck fail=0; report crosscheck RESULT OK; Argus round 3 PASS (AC1-AC6). HEAD diff since 2117318e in summarize_report.sh = 4 lines in non-public branch (TASK-152 copy)",
+    "evidence": [
+      "work/TASK-151/evidence/verify_round4.txt",
+      "work/TASK-151/handoff/verify.md",
+      "work/TASK-151/handoff/crosscheck.md",
+      "work/TASK-151/evidence/leak_oracle.py"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-151-public-report-set.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-151/handoff/design.md",
+    "coder": "work/TASK-151/handoff/code.md",
+    "tester": "work/TASK-151/handoff/test.md",
+    "verifier": "work/TASK-151/handoff/verify.md",
+    "crosscheck": "work/TASK-151/handoff/crosscheck.md"
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-01017",
+      "note": "add _public reports hiding Low/Info (incl via_caller), keep full reports, recommend impacted set",
+      "at": "2026-10-27T09:39:50Z"
+    },
+    {
+      "raw": "RAW-01018",
+      "note": "public reports keep only access-log verdict seen, hide the other verdicts",
+      "at": "2026-10-27T09:43:45Z"
+    },
+    {
+      "raw": "RAW-01019",
+      "note": "public copy hides only not_seen; via_caller and not_checkable stay shown",
+      "at": "2026-10-27T09:46:00Z"
+    },
+    {
+      "raw": "RAW-01023",
+      "note": "continue the design after the login fix",
+      "at": "2026-10-27T10:08:39Z"
+    },
+    {
+      "raw": "RAW-01024",
+      "note": "by-repo-public counts only shown findings, all-not_seen repo has no file; design approved",
+      "at": "2026-10-27T10:22:40Z"
+    },
+    {
+      "raw": "RAW-01033",
+      "note": "proceed autonomously, user away, no questions",
+      "at": "2026-10-27T11:14:33Z"
+    }
+  ],
+  "picked_at": "2026-10-27T09:59:57Z",
+  "updated_at": "2026-10-27T12:44:20Z",
+  "updated_by": "coordinator",
+  "scope": [
+    "work/TASK-151/",
+    "summarize_report.sh",
+    "report_common.sh",
+    "tests/public_reports_test.sh",
+    "tests/run_reports_test.sh"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [
+      "picked, DESIGN, Nova briefed",
+      "design completed, docs/design/phase-151-public-report-set.md",
+      "design approved by user (RAW-01024)",
+      "Titan 151.1-151.6 implemented (uncommitted), U7 + suites pending",
+      "implemented 151.1-151.6",
+      "V1-V4 real rebuild evidence saved (Upzi_g04 7/11, Upzi/full 81/142, gates PASS)",
+      "151.7 real rebuild: strict leak oracle 0 hits both runs (pre-fix 1/4), gates PASS",
+      "151.8 addendum written (crosscheck L1)",
+      "151.8 implemented (Forge): public_reports 35/0, U24b bites",
+      "151.8 real rebuild: still 2 id hits (ws mismatch across plans); addendum 151.8b",
+      "151.8b real rebuild: 0 not_seen ids in public, 9/13 linked rows, gates PASS (verify_round4.txt)"
+    ],
+    "notes": "",
+    "next": "Nemesis QA round 3 + report crosscheck on kit head4, then Argus"
+  },
+  "next": ""
+}

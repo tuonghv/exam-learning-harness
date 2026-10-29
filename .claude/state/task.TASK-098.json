@@ -1,0 +1,192 @@
+{
+  "task_id": "TASK-098",
+  "title": "Faster, safer, cheaper workflow (REQ-0062): wip.sh one-call commit, req.py raw link --ac, brief.sh, auto grants at pick, batched guard patch bundle, run_all --changed, process_metrics.py [RAW-00501; AC4 touches _tasks.py/backlog.sh -> after TASK-097]",
+  "state": "DONE",
+  "requirement": "WHEN the coordinator or a role runs the TASK workflow, the toolkit SHALL remove repeated manual steps and avoidable round trips, keep every gate as strict, and measure the gain. REQ-0062",
+  "acceptance_criteria": [
+    "AC1 wip.sh",
+    "AC2 raw link --ac",
+    "AC3 brief.sh",
+    "AC4 auto grants",
+    "AC5 one patch bundle",
+    "AC6 run_all --changed",
+    "AC7 process_metrics.py",
+    "98.8 commit-check scoped to task (P27)"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-98-process-speed-up.md",
+    "summary": "wip.sh one-call commit, req.py raw link --ac, brief.sh, auto grants for scope globs, one patch bundle per task, run_all --changed, process_metrics.py baseline/compare, commit-check scoped to the committed task",
+    "reuse": [
+      "tasks.sh commit",
+      "commit-check.sh",
+      "multi_guard_test patch pattern",
+      "run_all.sh"
+    ],
+    "risks": [
+      "items 98.1/98.4/98.5/98.8 wait for TASK-097"
+    ]
+  },
+  "implementation": {
+    "status": "completed",
+    "files": [
+      ".claude/scripts/wip.sh",
+      ".claude/scripts/brief.sh",
+      ".claude/scripts/process_metrics.py",
+      ".claude/scripts/apply-patches.sh",
+      ".claude/scripts/commit-check.sh",
+      ".claude/scripts/_tasks.py",
+      ".claude/scripts/tasks.sh",
+      ".claude/scripts/checklist.sh",
+      ".claude/scripts/workflow-check.sh",
+      ".claude/req/req.py",
+      ".claude/hooks/agent_setup.py",
+      ".claude/hooks/stop-check.sh",
+      ".claude/agent_setup.json",
+      "tests/run_all.sh",
+      "tests/suite_map.txt",
+      ".claude/skills/coordinator/SKILL.md",
+      "docs/guide/toolkit-reference.md"
+    ],
+    "summary": "98.1-98.5 + guard bundle 01/04/05 applied by user (7c8aa9a); run_all clears TASK/CTXGUARD_TASK (F-98-ENV)"
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh (full) + clean-env rerun + checks/shell.sh",
+    "result": "152 suites: 149 PASS; ext_scan F-96-1 pre-existing (TASK-078); multi_task 128/0 and save_evidence 17/0 failed only from caller TASK env, fixed in run_all (F-98-ENV); shell.sh 483/0",
+    "evidence": [
+      "work/TASK-098/evidence/ut-run_all-final.txt",
+      "work/TASK-098/evidence/ut-rerun-env-clean.txt",
+      "work/TASK-098/evidence/ut-shell.txt",
+      "work/TASK-098/handoff/test.md"
+    ]
+  },
+  "security": {
+    "status": "completed",
+    "result": "bundle 01 grants only .claude/scripts/* globs in the task scope; 05 only the lead own REQ text, never status/tasks/Original/RAW/INDEX (verify.md)"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "Argus on saved evidence + main: run_all at HEAD, shell.sh, process_metrics compare",
+    "result": "REQ-0062 AC1-AC7; run_all 151/152 (ext_scan F-96-1, TASK-078); shell 483/0; metrics compare recorded (TASK-098 worse than baseline: bootstrap task)",
+    "evidence": [
+      "work/TASK-098/handoff/verify.md",
+      "work/TASK-098/evidence/v-run_all-head.txt",
+      "work/TASK-098/evidence/v-shell.txt",
+      "work/TASK-098/evidence/v-metrics-compare.txt",
+      "work/TASK-098/evidence/park-trial.txt"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-98-process-speed-up.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-098/handoff/design.md",
+    "grants": {
+      "coder": [
+        ".claude/scripts/*",
+        ".claude/scripts/wip.sh",
+        ".claude/scripts/brief.sh",
+        ".claude/scripts/process_metrics.py",
+        ".claude/scripts/apply-patches.sh",
+        ".claude/scripts/commit-check.sh",
+        ".claude/scripts/_tasks.py",
+        ".claude/scripts/tasks.sh",
+        ".claude/scripts/checklist.sh",
+        ".claude/scripts/workflow-check.sh"
+      ],
+      "tester": [
+        ".claude/scripts/wip.sh",
+        ".claude/scripts/brief.sh",
+        ".claude/scripts/process_metrics.py",
+        ".claude/scripts/apply-patches.sh",
+        ".claude/scripts/commit-check.sh",
+        ".claude/scripts/_tasks.py",
+        ".claude/scripts/tasks.sh",
+        ".claude/scripts/checklist.sh",
+        ".claude/scripts/workflow-check.sh"
+      ]
+    },
+    "tester": "work/TASK-098/handoff/test.md",
+    "grants_auto": [
+      ".claude/scripts/wip.sh",
+      ".claude/scripts/brief.sh",
+      ".claude/scripts/process_metrics.py",
+      ".claude/scripts/apply-patches.sh",
+      ".claude/scripts/commit-check.sh",
+      ".claude/scripts/_tasks.py",
+      ".claude/scripts/tasks.sh",
+      ".claude/scripts/checklist.sh",
+      ".claude/scripts/workflow-check.sh"
+    ],
+    "coder": "work/TASK-098/handoff/code-f7.md",
+    "verifier": "work/TASK-098/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "no counts or findings decided: workflow tooling; the numbers (suite counts, metrics) are read directly from saved evidence by main and Argus"
+    }
+  },
+  "user_notes": [],
+  "picked_at": "2026-10-09T01:00:21Z",
+  "updated_at": "2026-10-09T06:25:24Z",
+  "updated_by": "main",
+  "scope": [
+    ".claude/scripts/wip.sh",
+    ".claude/scripts/brief.sh",
+    ".claude/scripts/process_metrics.py",
+    ".claude/req/req.py",
+    "tests/run_all.sh",
+    ".claude/tests/process_speed_test.sh",
+    "tests/suite_map.txt",
+    ".claude/scripts/apply-patches.sh",
+    ".claude/tests/patch_bundle_test.sh",
+    ".claude/scripts/commit-check.sh",
+    ".claude/scripts/_tasks.py",
+    ".claude/scripts/tasks.sh",
+    ".claude/tests/commit_scope_test.sh",
+    ".claude/scripts/checklist.sh",
+    ".claude/scripts/workflow-check.sh",
+    ".claude/tests/checklist_task_test.sh",
+    ".claude/tests/stop_check_lead_test.sh",
+    ".claude/tests/lead_req_grant_test.sh",
+    ".claude/tests/multi_task_test.sh",
+    ".claude/tests/lead_test.sh"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [
+      "98.2 P6-P9 tests (2df9d34)",
+      "slice A QA (process_speed 28/0; run_all 145/146, ext_scan_test = known F-96-1 in TASK-078)",
+      "gen2 lead resumed, remaining 98.1 98.4 98.5 98.8 F-97-7, 98.3 skill line",
+      "coder A 98.1 98.4 F-97-7 committed wip, process_speed 47/0 lead 162/0 multi_task 128/0",
+      "coder B 98.8 98.5 committed wip (patch_bundle 14/14, commit_scope 9/9), 98.3 skill line in patches/02-coordinator-brief-line.md, F2 guard false alert logged",
+      "F3 logged (checklist gate uses all active tasks), coder drafting patches/03-checklist-task.patch in a scratch kit",
+      "F3 patch ready: patches/03-checklist-task.patch (checklist_task 4/0, bite 2/4 on unpatched, workflow_gates 146/0, multi_task 128/0)",
+      "tester QA B PASS (process_speed 47/0, lead 162/0, multi_task 128/0, patch_bundle 14/0, commit_scope 9/0, bites shown), shell.sh 2 FAIL: process_speed_test.sh:295 SC2015 (ours, coder A fixing), tmp/dur",
+      "SC2015 fix committed (process_speed 47/0), bundle.txt written for patch 01 (target .claude, suites multi_guard protect_rules process_speed)",
+      "F4-F7 logged, F7 proposal in patches/F7-proposal.md, scope globs asked (checklist_task_test.sh, stop_check_lead_test.sh)",
+      "F7 approved by user (RAW-00510), coder building patches/05-lead-req-grant.py + .claude/tests/lead_req_grant_test.sh",
+      "F4 F6 committed wip (process_speed 54/0)",
+      "F3 applied and F5 test committed wip, F4 +x proven live on commit",
+      "F7 patch 05 drafted (lead_req_grant 44/0) but it removed lead req.py status/ac on own REQ, sent back: keep HEAD rights, only add",
+      "QA C green for F3-F6 (checklist_task 4/0, workflow_gates 146/0, process_speed 54/0, lead 162/0, stop_check_lead 6/0, multi_task 128/0, live workflow-check 096/097 PASS)",
+      "after session limit: F7 patch 05 revised (keeps HEAD status/ac), test state unknown",
+      "F7 test committed (lead_req_grant 47/0, lead 162/0), bundle.txt final 01+04+05",
+      "QA D bundle 01+04+05 PASS (idempotent, 8 suites, no widening), F-D-1 accepted (view dropped like existing live-lead branch)",
+      "F-D-2 F-D-3 committed, bundle 01+04+05 sent to main for apply-patches --check then --apply, skill line 02 sent"
+    ],
+    "notes": "",
+    "next": "DONE; next: role cost follow-up, TASK-100",
+    "at": "2026-10-09T03:06:33Z"
+  },
+  "next": "DONE; next: role cost follow-up, TASK-100",
+  "lead_gen": 2,
+  "lead_at": "2026-10-09T03:12:48Z",
+  "lead_gen_reset": {
+    "at": "2026-10-09T02:55:05Z",
+    "reason": "gen1-2 only waited for TASK-097 DONE, no work lost"
+  }
+}

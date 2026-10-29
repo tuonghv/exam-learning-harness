@@ -1,0 +1,146 @@
+{
+  "task_id": "TASK-100",
+  "title": "Auto-park a task stuck on an unanswered question (10 min), pick the next backlog task, resume on answer (REQ-0063)",
+  "state": "DONE",
+  "requirement": "REQ-0063 AC2-AC7; AC1 trial is done in TASK-098 verify. Builds on task_checkpoint.sh ask/due + tasks.sh hold/resume. New hook/guard block needs user confirmation. Trial (TASK-098, work/TASK-098/evidence/park-trial.txt, 20/22): fix F-98-PT1 workflow-check reports a held task as missing (_tasks.py:503-505) first; add held age to tasks.sh status (AC9d); list held tasks first for a returning user (AC9b); auto-park itself does not exist yet (hold manual, due only reports).",
+  "acceptance_criteria": [
+    "100.1 workflow-check accepts a held task (F-98-PT1)",
+    "100.2 commit a held task",
+    "100.3 pick next to a held task (F-100-D1)",
+    "100.4 question kind (AC9a)",
+    "100.5 trigger: `task_checkpoint.sh watch <Q-id>` (AC2)",
+    "100.6 executor: `tasks.sh autohold <T> <Q-id>` (AC3, AC6)",
+    "100.7 candidate selector: `tasks.sh workable [--exclude T]` (AC4)",
+    "100.8 resume on answer (AC5, AC8)",
+    "100.9 stop, not loop (AC9c)",
+    "100.10 returning user sees held tasks first (AC9b, AC9d)",
+    "100.11 docs (main)"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-100-auto-park-question.md",
+    "summary": "Auto-hold on an unanswered user-only question: task_checkpoint.sh watch (background, 30 s poll) -> tasks.sh autohold (hold+commit+pick workable+commit) -> resume on answer; fixes F-98-PT1, F-100-D1/D2; held-first status/brief; no new block.",
+    "reuse": "task_checkpoint.sh ask/due/answer/brief, tasks.sh hold/resume/recover/pick/commit, _tasks.py check/status",
+    "risks": "F-100-D1 pick refused while a task is held (100.3); F-100-D2 commit refuses held task (100.2); D2 dialog vs watcher unproven (V10); paid detection only via explicit fields"
+  },
+  "implementation": {
+    "status": "completed",
+    "files": [
+      ".claude/scripts/_tasks.py",
+      ".claude/scripts/tasks.sh",
+      ".claude/scripts/task_checkpoint.sh",
+      ".claude/tests/multi_task_test.sh",
+      ".claude/tests/task_checkpoint_test.sh",
+      ".claude/state/backlog.json",
+      ".claude/skills/coordinator/SKILL.md",
+      ".claude/skills/workflow/SKILL.md"
+    ],
+    "summary": "100.1-100.10 code: held task passes workflow-check/commit/pick (F-98-PT1, F-100-D1/D2); ask --kind user-only; task_checkpoint.sh watch; tasks.sh autohold + workable; resume at safe point; rc 5 stop once; held-first status/brief. 100.11 skill docs. Settings brief hook = work/TASK-100/patches/settings-brief-hook.patch (classifier refused main; user to apply)."
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh --changed + multi_task + task_checkpoint + checks/shell.sh (Nemesis QA at 3b830df)",
+    "result": "multi_task 205/0, task_checkpoint 48/0, shell.sh 483/0; --changed 152 suites, only ext_scan_test fails (F-96-1 pre-existing, TASK-078). F-100-V10 cases bite on old _auto_commit; trailer injection collapses to one line. Evidence work/TASK-100/evidence/qa3-*."
+  },
+  "security": {
+    "status": "completed",
+    "result": "PASS (Argus): git calls list-argv, Q-id/task id regex-validated, fixed commit path list, refused commit rolls hold back, hook print-only || true; trailer text capped + flattened to one line (injection probe). Low: L1 legacy no-kind entry treated user-only (_tasks.py:1675), L2 CTXGUARD_ROLE self-asserted (_tasks.py:1654) -> follow-up."
+  },
+  "verification": {
+    "status": "passed",
+    "evidence": [
+      "work/TASK-100/handoff/verify.md",
+      "work/TASK-100/evidence/v1-hold-workflow-check.txt",
+      "work/TASK-100/evidence/v4-watch-due.txt",
+      "work/TASK-100/evidence/v10-watch.txt",
+      "work/TASK-100/evidence/v10-autohold-fail.txt",
+      "work/TASK-100/evidence/v10-autohold-retry.txt",
+      "work/TASK-100/evidence/v10-commits.txt",
+      "work/TASK-100/evidence/v7-live-resume.txt",
+      "work/TASK-100/evidence/v11-attribution.txt",
+      "work/TASK-100/evidence/qa3-multi_task.txt"
+    ],
+    "command": "Argus (verifier) verify.md: V1-V9, V11 (tester evidence), V10 live trial (watch + autohold on Q-1791538037), V7/AC5 live resume",
+    "result": "PASS: AC1-AC8 verified. V10 live: watch rc 3 at +10m00s; first autohold refused by gate (F-100-V10, rolled back cleanly), fixed in 3b830df, retry rc 0: hold 7016aa9 + pick TASK-074 2742e81, designer briefed (6ffde1a). AC5 live: user answered, TASK-074 held at safe point, TASK-100 resumed with state/next unchanged, workflow-check PASS each step. V11 FAIL only from f5dfdb9 + F-96-1 (pre-existing, TASK-078)."
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-100-auto-park-question.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-100/handoff/design.md",
+    "grants": {
+      "coder": [
+        ".claude/scripts/*"
+      ],
+      "tester": [
+        ".claude/scripts/*"
+      ]
+    },
+    "grants_auto": [
+      ".claude/scripts/_tasks.py",
+      ".claude/scripts/tasks.sh",
+      ".claude/scripts/task_checkpoint.sh"
+    ],
+    "coder": "work/TASK-100/handoff/code.md",
+    "tester": "work/TASK-100/handoff/test.md",
+    "verifier": "work/TASK-100/handoff/verify.md",
+    "crosscheck": "work/TASK-100/handoff/crosscheck.md"
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00526",
+      "note": "auto-park request (REQ-0063)",
+      "at": "2026-10-09T10:36:42Z"
+    },
+    {
+      "raw": "RAW-00534",
+      "note": "user yes to V10 trial question Q-1791538037",
+      "at": "2026-10-09T10:36:42Z"
+    }
+  ],
+  "picked_at": "2026-10-09T07:19:30Z",
+  "updated_at": "2026-10-09T10:36:42Z",
+  "updated_by": "main",
+  "scope": [
+    ".claude/scripts/_tasks.py",
+    ".claude/scripts/tasks.sh",
+    ".claude/scripts/task_checkpoint.sh",
+    ".claude/tests/multi_task_test.sh",
+    ".claude/tests/task_checkpoint_test.sh",
+    ".claude/state/backlog.json"
+  ],
+  "depends_on": [
+    "TASK-098"
+  ],
+  "inputs": {},
+  "checkpoint": {
+    "done": [
+      "DESIGN committed 1960bd9; scope+coder grant set",
+      "100.1-100.3 coded (Titan), 5 bite cases",
+      "100.4-100.9 coded (Titan); qa-1 edge cases applied; multi_task 175/0",
+      "100.11 skill docs (coordinator §6 recipe, workflow)",
+      "100.10 code (Titan): held rows in status, held-first brief",
+      "settings hook patch built (classifier refused main edit)",
+      "IMPLEMENTING: 100.1-100.11 in, qa-2 applied, multi_task 197/0",
+      "settings brief hook applied by user",
+      "REQ-0065 Q1 decided (sibling worktree), TASK-102 queued",
+      "REQ-0065 AC7/AC8 lifecycle added (RAW-00530)",
+      "UNIT_TESTED 151/152 (ext_scan F-96-1 pre-existing)",
+      "RAW-00531 triaged to REQ-0065 AC9",
+      "RAW-00532 triaged to REQ-0065 AC10",
+      "RAW-00533 linked to REQ-0065",
+      "V10 trial: asked Q-1791538037 (permission), watcher armed",
+      "V10: watch fired rc 3 on time; autohold refused by commit-check (F-100-V10), rolled back to IMPLEMENTING",
+      "Titan fixed F-100-V10 (_gate_trailer), multi_task 205/0",
+      "UNIT_TESTED again after F-100-V10 fix",
+      "resumed after answer (AC5 live): state/next unchanged, workflow-check PASS each step",
+      "VERIFIED (Argus PASS, AC1-AC8)"
+    ],
+    "notes": "",
+    "next": "report + DONE"
+  },
+  "next": ""
+}

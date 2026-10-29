@@ -1,0 +1,116 @@
+{
+  "task_id": "TASK-146",
+  "title": "Engine unit-level control: unit list/reset, run --only, self-heal, guarded new, per-unit dry run (REQ-0113)",
+  "state": "DONE",
+  "requirement": "REQ-0113. User 2026-10-26: fix one failed unit by selecting or resetting that unit only; never re-run a whole phase and hope the cache covers it; make the engine more stable and faster for real reviews. Design: docs/design/phase-146-pipeline-unit-control.md. No dependency on TASK-144 or the Vietnamworks review (user, RAW-01062: order only, no relationship); go given by RAW-01061. Replaces the interim pipeline_step.sh.",
+  "acceptance_criteria": [
+    "AC1 a failed/held/reset unit re-runs alone (1 call), other done units untouched",
+    "AC2 wiped unit table with valid outputs: 0 calls on resume",
+    "AC3 new cannot wipe a running run with done units by accident",
+    "AC4 --only dry-run lists units, no-flag dry-run unchanged",
+    "AC5 single-source unchanged (no scan_batch.sh diff)",
+    "AC6 reset unit really called; old output kept until success; gaps=0"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-146-pipeline-unit-control.md",
+    "summary": "Per-unit control of pipeline.sh: unit list/reset with a fresh_call flag that bypasses every reuse path, run --only, same-run self-heal, guarded new (--yes-wipe), --only dry-run, status --units + stale line; retire pipeline_step.sh. 146.7 dropped. Slices A/B/C.",
+    "reuse": [
+      "pl_next_unit",
+      "pl_try_reuse",
+      "pl_mark_done",
+      "acquire_lock",
+      "release parse pattern",
+      "pipeline_step.sh cascade rule",
+      "pipeline_rerun_e2e fake claude"
+    ],
+    "risks": [
+      "reset unit re-marked done by reuse (fresh_call)",
+      "reopened run re-runs post-run hooks (track idempotency)",
+      "15 suites call new (--yes-wipe)"
+    ]
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "Slices A (5b3584dc: fresh_call, unit list/reset, run --only, self-heal), B (63d06698: guarded new --yes-wipe, --only dry-run, status --units + stale line), C (pipeline_step.sh retired, guide + run-pipeline skill, goldens G1-G3 PASS).",
+    "files": [
+      "pipeline.sh",
+      "pipeline_lib.sh",
+      "tests/pipeline_unit_control_test.sh",
+      "tests/*_test.sh (--yes-wipe)",
+      "docs/guide/pipeline-operations.md",
+      "docs/guide/toolkit-reference.md",
+      ".claude/skills/run-pipeline/SKILL.md",
+      "pipeline_step.sh (deleted)"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh --fast; tests/run_all.sh pipeline_unit_control + 10 pipeline suites; .claude/scripts/checks/shell.sh; G1-G3",
+    "result": "run_all --fast 171 suites 0 failed (30 skipped); pipeline_unit_control 48/0; 10 pipeline suites 0 fail; shell.sh 593 pass; bites a-d fail on their path (5/1/2/9); G1,G3 reproduce; G2 PASS with hash masked (gold.sh does not mask hash). Evidence work/TASK-146/evidence/qa_*.txt, handoff test.md"
+  },
+  "security": {
+    "status": "completed",
+    "result": "jq inputs via --arg; keys checked against the unit table before forming paths; writes after acquire_lock; --yes-wipe reason one line 10+ chars; secrets.sh 0 hits in changed files. Low F-146-1: unquoted glob in the two key loops (pipeline.sh:1791,1918) can only cause a false refusal; follow-up set -f."
+  },
+  "verification": {
+    "status": "passed",
+    "command": "save-evidence.sh v_* on a scratch kit copy of Upzi/full (fake claude, ES blocked, cached queries only): unit reset + run --only + rebuild, track x2, guarded new, changed 2b answer; verifier handoff verify.md",
+    "result": "AC1/AC6: 1 call, 29 other units unchanged, out.prev kept, verdicts 64/6/72, coverage 142/142 gaps=0. Changed 2b answer (009 not-upheld) reaches out + conclusion, gaps=0. Track twice on reopened run: counter 297, 296 unique ids. fresh_call V- unit not carried (bite carried). AC3 new refused rc=2, --yes-wipe reason check. AC5 scan_batch.sh diff empty. G2 hash diff = temp-path noise (same HEAD twice differs). Scratch-only: PDF and ext_inscope deliverables (no renderer, reports/ not copied).",
+    "evidence": [
+      "work/TASK-146/handoff/verify.md",
+      "work/TASK-146/evidence/v_ac1_reset_only_rebuild.txt",
+      "work/TASK-146/evidence/v_f2_changed_answer.txt",
+      "work/TASK-146/evidence/v_gap1_track_twice.txt",
+      "work/TASK-146/evidence/v_gap2_fresh_verify.txt",
+      "work/TASK-146/evidence/v_new_guard.txt",
+      "work/TASK-146/evidence/v_single_source.txt",
+      "work/TASK-146/evidence/v_g2_determinism_cmp.txt"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-146-pipeline-unit-control.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-146/handoff/design.md",
+    "coder": "work/TASK-146/handoff/code.md",
+    "verifier": "work/TASK-146/handoff/verify.md",
+    "crosscheck": "work/TASK-146/handoff/crosscheck.md"
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-01061",
+      "note": "user: do this task now",
+      "at": "2026-10-28T03:18:20Z"
+    },
+    {
+      "raw": "RAW-01062",
+      "note": "user: no dependency on TASK-144; order only",
+      "at": "2026-10-28T03:21:43Z"
+    },
+    {
+      "raw": "RAW-01063",
+      "note": "user: high-priority logreach issue on 008 raised; tracked in REQ-0124, not part of TASK-146",
+      "at": "2026-10-28T04:30:58Z"
+    },
+    {
+      "raw": "RAW-01065",
+      "note": "REQ-0124 root-cause question (008 seen via caller_link); not TASK-146 scope",
+      "at": "2026-10-28T04:36:26Z"
+    }
+  ],
+  "picked_at": "2026-10-28T03:18:25Z",
+  "updated_at": "2026-10-28T05:07:53Z",
+  "updated_by": "coordinator",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": ""
+}

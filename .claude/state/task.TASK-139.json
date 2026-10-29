@@ -1,0 +1,96 @@
+{
+  "task_id": "TASK-139",
+  "title": "Sanitizer content-hashes.json as reviewed-baseline + $0 forecast/integrity gate (hash_gate.py), upzi re-scan procedure (REQ-0105)",
+  "state": "DONE",
+  "requirement": "REQ-0105: per-group content-hashes.json from ai-code-sanitizer; toolkit keeps previous reviewed baseline, forecasts reused/called per repo, checks tree integrity; ai_store stays the authority",
+  "acceptance_criteria": [
+    "139.1 forecast per repo: unchanged/changed(+changed_files)/new/unlisted/removed",
+    "139.2 sanitizer-config version guard; no file = tree_evidence only, exit 0",
+    "139.3 integrity verify of files_sha256 vs tree (mismatch/missing/extra)",
+    "139.4 record: baseline reviewed.json + history, done repos only, atomic",
+    "139.5 wired in scan_batch.sh and pipeline.sh finish_run, advisory, HASH_GATE=0 off",
+    "139.6 runbook: update upzi after fixes + group backfill",
+    "139.7 single-source: forecast equals AI cache line; results byte-identical gate on/off",
+    "139.8 pipeline: same, baseline written in finish_run",
+    "139.9 coverage_check gaps=0, no prompt file changed"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-139-content-hash-gate.md",
+    "summary": "Premise: unchanged repos already skip via ai_store (tree walk 1.5s/64 repos), sanitizer file matches disk 7933/7933. So hash_gate.py is an advisory $0 forecast + integrity check + reviewed-baseline store, ai_store stays authority; upzi update runbook.",
+    "reuse": [
+      "ai_store.py key (authority)",
+      "tree_evidence.py (unchanged)",
+      "AI cache log line scan_batch.sh:856 / pipeline.sh:944",
+      "finish_run pipeline.sh:1762"
+    ],
+    "risks": [
+      "advisory only: forecast can differ from store hits (explained by consistency line)",
+      "file digest differs from toolkit digest by design, never compared across",
+      "subset groups need HASH_FILE"
+    ]
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "hash_gate.py (forecast/verify/record/consistency), hash_gate_common.sh, tests/hash_gate_test.sh (45 cases), wiring in scan_batch.sh/pipeline.sh/config.sh (HASH_GATE, HASH_VERIFY, HASH_FILE), runbook + reference rows",
+    "files": [
+      "hash_gate.py",
+      "hash_gate_common.sh",
+      "tests/hash_gate_test.sh",
+      "config.sh",
+      "scan_batch.sh",
+      "pipeline.sh",
+      "docs/guide/security-review-runbook.md",
+      "docs/guide/toolkit-reference.md"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh (fast tier) + tests/run_all.sh hash_gate",
+    "result": "hash_gate 45/0, shell check 579/0, ai_store/ai_reuse_pipeline/scan_isolation/pipeline_layout pass. Fast tier 187 pass / 8 fail: pipeline_e2e,equiv,recon,run fail only on the user's uncommitted model switch in config.sh (pass on HEAD kit); track_hook, tracking_new_only, lead fail identically on the pre-TASK-139 commit 7eec59af kit (not caused by this task); verify_scan passes alone (flaky in full run). | resume QA 2026-10-27T23:46:02Z: hash_gate 45/0, ai_reuse_pipeline 34/0, 139.7/139.8 run pairs forecast=AI cache (2/2, 3/3), gate on/off byte-identical results, gaps=0, 2 bites caught; 139.3 real upzi verify 64 repos 0/0/0"
+  },
+  "security": {
+    "status": "completed",
+    "result": "advisory only, untrusted JSON and symlinks handled, writes only under hashes/ atomically (Argus)"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "hash_gate.py verify on real upzi; scratch-kit run pairs (single-source + pipeline) gate on/off; coverage_check; shell.sh",
+    "result": "real verify 64 repos 0/0/0; forecast unchanged = AI cache reused; results byte-identical gate on/off; gaps=0; no prompt change; Argus PASS. Real paid track A comparison still open (REQ-0105, TASK-143).",
+    "evidence": [
+      "work/TASK-139/evidence/v_139_3_real.txt",
+      "work/TASK-139/handoff/test.md",
+      "work/TASK-139/handoff/verify.md",
+      "work/TASK-139/evidence/static_shell.txt"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-139-content-hash-gate.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-139/handoff/design.md",
+    "coder": "work/TASK-139/handoff/code.md",
+    "tester": "work/TASK-139/handoff/test.md",
+    "verifier": "work/TASK-139/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "counts reconciled independently by the tester run pairs (forecast vs AI cache line) and Argus; no new count beyond these"
+    }
+  },
+  "user_notes": [],
+  "picked_at": "2026-10-25T12:43:35Z",
+  "updated_at": "2026-10-27T23:49:30Z",
+  "updated_by": "main",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": "",
+    "next": "tester + 139.7-139.9 scratch-kit proofs, then VERIFIED"
+  },
+  "next": "",
+  "status": "active"
+}

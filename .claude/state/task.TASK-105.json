@@ -1,0 +1,108 @@
+{
+  "task_id": "TASK-105",
+  "title": "Report inventory checklist from report_registry.json: per run/track, every kind expected/present/missing with its checks (REQ-0069)",
+  "state": "DONE",
+  "requirement": "REQ-0069: after each run or render, one checklist lists every registered report kind as expected/present/missing/not expected with its $0 check result",
+  "acceptance_criteria": [
+    "105.1 registry expect field + lint",
+    "105.2 profile and per-kind status, MISSING exit 1",
+    "105.3 Markdown checklist next to JSON",
+    "105.4 Track A end runs the checklist",
+    "105.5 hook prints CHECKLIST line, WARN-only",
+    "105.6 docs"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-105-report-inventory-checklist.md",
+    "summary": "registry expect tokens vs steps_done/run status -> per-kind OK/MISSING/FAIL/SKIP/PENDING/not expected/?; Markdown checklist next to crosscheck JSON; CHECKLIST stdout line; Track A runs crosscheck_hook; hooks WARN-only",
+    "reuse": [
+      "report_registry.json",
+      "report_crosscheck.py",
+      "crosscheck_hook (report_common.sh)"
+    ],
+    "risks": [
+      "false MISSING on optional kinds -> kinds without expect stay optional",
+      "no-flag stdout gains one CHECKLIST line"
+    ]
+  },
+  "implementation": {
+    "status": "completed",
+    "files": [
+      "report_registry.json",
+      "report_crosscheck.py",
+      "report_common.sh",
+      "pipeline.sh",
+      "README.md",
+      "docs/guide/toolkit-reference.md",
+      "tests/report_crosscheck_test.sh",
+      "tests/pipeline_track_test.sh"
+    ],
+    "summary": "registry expect tokens on 12 kinds; report_crosscheck profile/status/checklist md + CHECKLIST/MISSING lines, exit 1 on MISSING; Track A crosscheck_hook; hook WARN-only; docs; report_crosscheck 43/0"
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh report_crosscheck|pipeline_track|report_|pipeline|ext_; checks/shell.sh; report_crosscheck.py --lint",
+    "result": "report_crosscheck 45/0 (+2 AC4 cases), pipeline_track 47/0, shell 491/0, lint OK; wide pass except ext_scan_test QA (known F-96-1, TASK-078); bite: 1de5eaf^ aborts at U1"
+  },
+  "security": {
+    "status": "completed",
+    "result": "checklist prints inventory names/paths only, no file content; md under <plan>/crosscheck/, not reports/; hook WARN-only"
+  },
+  "verification": {
+    "status": "passed",
+    "evidence": [
+      "work/TASK-105/handoff/verify.md",
+      "work/TASK-105/evidence/v105-trackA-upzi.txt",
+      "work/TASK-105/evidence/v105-diffstat.txt",
+      "work/TASK-105/evidence/qa105-report_crosscheck-r2.txt"
+    ],
+    "command": "Argus review + v105-trackA-upzi (scratch Upzi_g02 Track A, refusing fake claude) + v105-diffstat",
+    "result": "AC1-AC5 PASS; real data CHECKLIST expected=3 present=3 missing=0 fail=0 not_expected=17, 0 calls; no report writer in diff; A-then-B half of AC4 by unit cases only (Track B on real copy would need paid phase0)"
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-105-report-inventory-checklist.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-105/handoff/design.md",
+    "coder": "work/TASK-105/handoff/code.md",
+    "tester": "work/TASK-105/handoff/test.md",
+    "verifier": "work/TASK-105/handoff/verify.md",
+    "crosscheck": "work/TASK-105/handoff/crosscheck.md"
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00549",
+      "note": "register each report kind and validate; after a run like Track A show how many reports exist as a human checklist; after TASK-104"
+    },
+    {
+      "raw": "RAW-00550",
+      "note": "user: start TASK-105",
+      "at": "2026-10-12T11:30:11Z"
+    }
+  ],
+  "picked_at": "2026-10-12T11:30:11Z",
+  "updated_at": "2026-10-12T22:28:32Z",
+  "updated_by": "main",
+  "scope": [
+    "report_crosscheck.py",
+    "report_registry.json",
+    "pipeline.sh",
+    "summarize_report.sh",
+    "tests/report_crosscheck*",
+    "tests/report_inventory*",
+    "docs/guide/toolkit-reference.md",
+    "README.md",
+    "report_common.sh",
+    "tests/pipeline_track_test.sh"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": ""
+}

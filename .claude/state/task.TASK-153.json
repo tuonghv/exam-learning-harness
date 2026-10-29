@@ -1,0 +1,95 @@
+{
+  "task_id": "TASK-153",
+  "title": "Access-log check follows user guidance on the 12 Upzi/full leftovers: unmapped one-route repos as mapped, /internal/ URLs shown, GET/POST cross-check for PUT/PATCH/DELETE, via_caller no-traffic -> not_seen (REQ-0120)",
+  "state": "DONE",
+  "requirement": "REQ-0120. User 2026-10-27 (RAW-01039): root causes for the 12 unresolved endpoints of TASK-152 and engine fixes; findings unchanged, ES only.",
+  "acceptance_criteria": [
+    "AC1 single orphan -> mapped",
+    "AC2 tie stays fallback",
+    "AC3 internal URL shown",
+    "AC4 method_sibling",
+    "AC5 via_caller entries no-hit -> not_seen",
+    "AC6 no other old verdict moves, gaps=0, report_qa PASS",
+    "AC7 real Upzi/full re-run"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-153-logreach-user-guidance.md",
+    "summary": "153.1 orphan single/strict-top route used as mapped (superset guard keeps old fallback seen); 153.2 /internal/ paths keep mapped URL with note; 153.3 GET/POST sibling for PUT/PATCH/DELETE -> seen L3s method_sibling; 153.4 via_caller own+caller entries all no_hit -> not_seen endpoint+caller_entries; 153.5 labels"
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "Titan: 153.1 orphan pick as mapped route + superset guard, 153.2 internal path URL with note, 153.3 GET/POST method_sibling L3s, 153.4 caller entries no-hit -> not_seen, compare flags D-153a; 153.5 no code (match map exists); 153.6 public chain cards mask hidden scan ids, PT ids and PT+title pairs; internal path note in public URL cells",
+    "files": [
+      "logreach.py",
+      "logreach_report.py",
+      "logreach_compare.py",
+      "docs/guide/toolkit-reference.md",
+      "tests/logreach_ladder_test.sh",
+      "tests/logreach_report_test.sh",
+      "tests/logreach_test.sh",
+      "tests/fixtures/logreach/golden_verdicts_152.tsv",
+      "summarize_report.sh",
+      "tests/public_reports_test.sh"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "TASK=TASK-153 tests/run_all.sh logreach|pipeline_logreach|check_deliverables|report_crosscheck|public_reports|run_reports|report_qa",
+    "result": "all pass; ladder 79 checks; 8/8 bites fail a test (work/TASK-153/evidence/bite_all.txt)"
+  },
+  "security": {
+    "status": "completed",
+    "result": "ES _search POST only, read-only; query strings use existing escaping; no new write paths; public masking leaks no hidden id or title (Nemesis O3/O4, Argus)"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "LOGREACH_AI=0 logreach.py on a copy of Upzi/full 20261026-060019 (real ES, read-only) + logreach_compare.py; pipeline.sh rebuild --render in scratch kit; coverage_check, report_qa, check_deliverables, report_crosscheck",
+    "result": "seen 64->67, via_caller 7->0, not_seen 66->75, not_checkable 5->0; all user-guided endpoints resolved; only old move jobseeker-service-002 (D-153a); findings unchanged; gaps=0, report_qa PASS, D17 PASS 67/142, crosscheck 35/0; Argus PASS",
+    "evidence": [
+      "work/TASK-153/evidence/v_real.txt",
+      "work/TASK-153/evidence/compare_vs152.md",
+      "work/TASK-153/evidence/v_real_ac7.txt",
+      "work/TASK-153/evidence/v6c.txt",
+      "work/TASK-153/handoff/verify.md"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-153-logreach-user-guidance.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-153/handoff/design.md",
+    "coder": "work/TASK-153/handoff/code.md",
+    "tester": "work/TASK-153/handoff/test.md",
+    "verifier": "work/TASK-153/handoff/verify.md",
+    "crosscheck": "work/TASK-153/handoff/crosscheck.md"
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-01039",
+      "note": "user guidance on 12 unresolved: 4 via_caller no traffic confirmed; homepage/retrieve-tracking root cause; GET/POST cross-check for PUT/PATCH/DELETE; param cut for unmapped",
+      "at": "2026-10-27T14:02:30Z"
+    },
+    {
+      "raw": "RAW-01040",
+      "note": "auto mode: proceed without asking, user back later",
+      "at": "2026-10-27T14:03:07Z"
+    }
+  ],
+  "picked_at": "2026-10-27T14:02:37Z",
+  "updated_at": "2026-10-27T15:10:46Z",
+  "updated_by": "coordinator",
+  "scope": [
+    "work/TASK-153/"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": ""
+}

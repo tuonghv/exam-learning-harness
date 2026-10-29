@@ -1,0 +1,80 @@
+{
+  "task_id": "TASK-121",
+  "title": "Access-log review readable: code spans instead of HTML entities",
+  "state": "DONE",
+  "requirement": "endpoints/paths/hosts/routes/hits as inline code, no &lt;/&gt;/&amp;. REQ-0086 (RAW-00658)",
+  "acceptance_criteria": [
+    "AC1 no entities",
+    "AC2 tables intact, gaps=0, QA PASS"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-121-review-readable.md",
+    "summary": "code() spans for technical cells, cell() keeps placeholders as code"
+  },
+  "implementation": {
+    "status": "completed",
+    "summary": "code()/cell() in logreach_report.py",
+    "files": [
+      "logreach_report.py",
+      "tests/logreach_report_test.sh"
+    ]
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "tests/run_all.sh logreach; checks/shell.sh",
+    "result": "4 suites pass (report 49/49, T1-T3 new); shell 511/0/0"
+  },
+  "security": {
+    "status": "completed",
+    "result": "raw < > only inside code spans (not rendered as HTML); other tags escaped"
+  },
+  "verification": {
+    "status": "passed",
+    "command": "rebuild VNW g01 + Upzi g02; report_qa; entity count",
+    "result": "gaps=0 both, QA PASS both, crosscheck fail=0, 0 entities, 0 <FILTER_VALUE>",
+    "evidence": [
+      "work/TASK-121/evidence/entities.txt",
+      "work/TASK-121/evidence/rebuild-vnw.log",
+      "work/TASK-121/evidence/rebuild-upzi.log"
+    ]
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-121-review-readable.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": {
+      "waiver": "tiny render change; main wrote design"
+    },
+    "coder": {
+      "waiver": "~20-line render change done by main"
+    },
+    "tester": {
+      "waiver": "main re-ran, evidence saved"
+    },
+    "verifier": {
+      "waiver": "main verified with saved evidence"
+    },
+    "crosscheck": {
+      "waiver": "render-only; crosscheck rerun in rebuild fail=0"
+    }
+  },
+  "user_notes": [],
+  "picked_at": "2026-10-16T10:41:16Z",
+  "updated_at": "2026-10-16T10:45:47Z",
+  "updated_by": "main",
+  "scope": [
+    "logreach_report.py",
+    "tests/logreach_report_test.sh"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": ""
+}

@@ -1,0 +1,19 @@
+{
+  "schema": "triage-record/v1",
+  "triage_id": "trg-malformed-01",
+  "source_file": "msg/malformed.md",
+  "triaged_at": "2026-09-29T10:00:00+07:00",
+  "intent": "new",
+  "category": "other",
+  "priority": "asap",
+  "target": "toolkit",
+  "title": "x",
+  "task": "y",
+  "acceptance": [],
+  "context_refs": [],
+  "related_reqkit_id": null,
+  "possible_duplicate_of": [],
+  "needs_clarification": false,
+  "questions": [],
+  "flags": []
+}

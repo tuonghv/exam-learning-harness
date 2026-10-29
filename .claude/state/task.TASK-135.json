@@ -1,0 +1,93 @@
+{
+  "task_id": "TASK-135",
+  "title": "Linked 2b preflight at cp2b: per-item $0 miss list (repo missing, no card, no slice, route not joined) (REQ-0103)",
+  "state": "DONE",
+  "requirement": "REQ-0103: cp2b report and estimate line show linked items with a miss before approval",
+  "acceptance_criteria": [
+    "each selected linked item has found/card/deploy/joined/service rows",
+    "estimate shows M with misses",
+    "$0, non-linked cp2b output byte-identical"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-135-linked-2b-preflight.md",
+    "summary": "cp2b report-only rows linked_preflight/linked_misses, 5 checks per linked item, estimate keeps total and appends M with misses",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "completed",
+    "files": [
+      "checkpoint_report.py",
+      "tests/checkpoint_report_test.sh",
+      "docs/guide/toolkit-reference.md"
+    ],
+    "summary": "checkpoint_report.py: linked_preflight/linked_misses rows (5 checks), hostseg/ns_name mirrors, estimate suffix M with misses, --plans-root"
+  },
+  "unit_test": {
+    "status": "passed",
+    "command": "bash tests/checkpoint_report_test.sh; tests/run_all.sh --fast; tests/run_all.sh ext_scan pipeline_checkpoint",
+    "result": "checkpoint_report 76/0; --fast 160 suites 2m52 only known track_hook S3 (clean HEAD too); ext_scan 323/0 after refreshing the plan-dir list (crosscheck, F-96-1); pipeline_checkpoint 81/0"
+  },
+  "security": {
+    "status": "not_applicable",
+    "result": "report rows from plan metadata only; no model, no repo access, frozen prompts untouched"
+  },
+  "verification": {
+    "status": "passed",
+    "evidence": [
+      "work/TASK-135/evidence/cp2b_replay.md.md",
+      "work/TASK-135/evidence/fast135.txt",
+      "work/TASK-135/evidence/es.txt"
+    ],
+    "command": "checkpoint_report.py --at phase2b on plans/Upzi_g03/main run 20261021-220859 (read-only, out to scratchpad)",
+    "result": "10 linked items listed, found/card/deploy/joined ok for all, 5 Service ns/name misses (backend/company-service vs microservices-v2): the pre-TASK-136 wrong joins; non-linked cp2b byte-identical (T11)"
+  },
+  "report": {
+    "status": "completed",
+    "path": "docs/report/phase-135-linked-2b-preflight.md"
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": "work/TASK-135/handoff/design.md",
+    "coder": "work/TASK-135/handoff/code.md",
+    "tester": {
+      "waiver": "coordinator re-ran the suites and the real replay"
+    },
+    "verifier": {
+      "waiver": "coordinator replayed the real Upzi run at $0"
+    },
+    "crosscheck": {
+      "waiver": "coordinator re-ran suites and replayed the real run at $0"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00862",
+      "note": "task to prevent misses in linked 2b before paying",
+      "at": "2026-10-22T00:03:02Z"
+    },
+    {
+      "raw": "RAW-00874",
+      "note": "Preflight also checks that each linked edge target ns/name exists as a Service in the callee deploy-context",
+      "at": "2026-10-22T07:32:30Z"
+    }
+  ],
+  "picked_at": "2026-10-23T00:47:27Z",
+  "updated_at": "2026-10-23T01:23:00Z",
+  "updated_by": "main",
+  "scope": [
+    "checkpoint_report.py",
+    "tests/checkpoint_report_test.sh",
+    "docs/guide/toolkit-reference.md",
+    "tests/ext_scan_test.sh"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": ""
+}

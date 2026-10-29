@@ -1,0 +1,1 @@
+TRIAGE|msg/cancel.md|OK|1|trg-cancel-01
