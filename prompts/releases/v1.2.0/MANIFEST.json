@@ -1,0 +1,22 @@
+{
+  "created": "2026-10-29T07:04:08Z",
+  "files": {
+    "exam/solve.md": "daeafe8df71ccc913e4e6e620edfbe426d22f0a6e303632965b9cd2b12f82132",
+    "lang/vi/exam/solve.md": "e9abdddbd3ac693cb32ac6ab56046f34a3cfd169e8b5527d6ae037caef0b66ca",
+    "lang/vi/subjects/english.md": "d801798c8daa63cf2cdfe91d951803be68ce5e25d08123d3fc038510a01f28e9",
+    "lang/vi/subjects/informatics.md": "24e1d5102531a9c3c69b77b0c83fdd89518ef02752eec8dfb294822c2a8af588",
+    "lang/vi/subjects/literature.md": "2564d66bde399a3101784bfa2edf6c298e964c7b3d21cc5b1078872e4c17b6ed",
+    "lang/vi/subjects/math.md": "d450bb9df49a106bd6593274d7f7966463db00c39e1720779faddd0b0f38f168",
+    "lang/vi/subjects/physics.md": "ca7760e83370dfef5faa1740a53148ed6f465b3aa0e9e2284006b13dca840176",
+    "lang/vi/system.md": "d046a3a5ee01abdc48ebca9477ab3a4a27945de8695c6dab8ff9b1d90e536d63",
+    "lang/vi/verification/verify_answer.md": "321c7ca4f755b5796eb3f90900cf882b34bf38b256181b4a6bbea5b9ca8b8342",
+    "subjects/english.md": "f5b8422f75a04718bbc3da75fb62bfaf46fb38917d7204d29967e490677ae98a",
+    "subjects/informatics.md": "328b631ec63560925e4c3801d2057430febcf30f525d829f5b55c0827c77096e",
+    "subjects/literature.md": "8f06e96c836ecfe1cbbaf36de62a993945338a44da457afc7ea9e495a8180f2c",
+    "subjects/math.md": "5f322c750d711d8a0cab4684b3c1bc09bee16eedeed972eec4d716b49c5f5e94",
+    "subjects/physics.md": "4689f305da2be067493112bd1ac36f4526121239c6ed3615000eb308ec7b29ec",
+    "system.md": "92847640443f8055391805e010a9db68a86067468431ddad4eb34c3bafad3150",
+    "verification/verify_answer.md": "496026560f865d20b199c672ad743685f5d9453773a825c40c05dbda72336b2c"
+  },
+  "version": "v1.2.0"
+}

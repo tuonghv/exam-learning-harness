@@ -82,6 +82,11 @@
         "raw": "RAW-00045",
         "note": "prompt channels/variants/IT subject -> EPIC-004",
         "at": "2026-10-29T06:31:31Z"
+      },
+      {
+        "raw": "RAW-00049",
+        "note": "new epic EPIC-005 document ingestion",
+        "at": "2026-10-29T07:04:35Z"
       }
     ]
   },
