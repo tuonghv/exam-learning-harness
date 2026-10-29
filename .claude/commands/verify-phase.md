@@ -14,6 +14,6 @@ Role: verifier. Prove the real execution path; never reuse unit-test output as e
    (report, `backlog.sh complete`, commit including backlog.json).
    Fail → follow the rollback in `workflow` "Failure, blocker and rollback" (`references/resume-and-failure.md`): commit the rollback
    before any fix.
-5. End with `context-compaction` and `Decisions:`.
+5. End with `Decisions:`.
 
 Focus: $ARGUMENTS

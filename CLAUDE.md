@@ -23,8 +23,8 @@ queue in `backlog.json`, audit trail in `phase-log.md`; one task per commit (`Ta
 | Start/advance/resume a task / design doc | `workflow` / `design` |
 | Unit tests / real verification | `unit-test` / `verify` |
 | Independent cross-check (content oracle) | `crosscheck` |
-| Commit a transition / report / batch requests | `commit` / `report` / `task-priority` |
-| Context boundary / scope, reading / Bash code | `context-compaction` / `token-efficiency` / `bash` |
+| Commit a transition / report | `commit` / `report` |
+| Scope, reading | `token-efficiency` |
 | New user need / REQ design / progress | `req-intake` / `req-design` / `req-track` |
 | Roles, delegation, monitoring, inspector | `coordinator`, `role-monitor`, `inspector` |
 

@@ -78,7 +78,7 @@ Never mark DONE without verification evidence.
 | UNIT_TESTED | same | `coder` writes the tests; `tester` re-runs every check as independent QA (`--changed` per round, `run_all.sh --fast` plus mapped heavy suites at the gate, complete run weekly or before a release; max 2 coder↔tester rounds) and saves the evidence |
 | UNIT_TESTED → VERIFIED | `verify`, `security` | `verifier` (save the evidence first, see `verify`) |
 | VERIFIED → DONE | `report` | coordinator |
-| every transition | `commit`, `coordinator`; at the turn end, `context-compaction` | coordinator |
+| every transition | `commit`, `coordinator` | coordinator |
 
 
 

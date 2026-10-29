@@ -80,6 +80,11 @@
       "raw": "RAW-00022",
       "note": "role skills still too big/off-purpose: cut more (raise AC7 target)",
       "at": "2026-10-29T02:02:09Z"
+    },
+    {
+      "raw": "RAW-00023",
+      "note": "remove skills not relevant to exam purpose, no fixing",
+      "at": "2026-10-29T02:03:14Z"
     }
   ],
   "picked_at": "2026-10-29T01:46:15Z",

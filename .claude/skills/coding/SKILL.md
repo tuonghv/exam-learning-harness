@@ -23,7 +23,7 @@ Review after implementation:
 - configuration and defaults
 - testability
 
-Follow the `bash` skill (most code here) or `python` skill, then run
+Follow the `python` skill, then run
 `tests/run_all.sh` and `.claude/scripts/checks/shell.sh`.
 
 - Match a doc section by heading regex (`^## X`), never a substring: prose naming it passes (TASK-124).

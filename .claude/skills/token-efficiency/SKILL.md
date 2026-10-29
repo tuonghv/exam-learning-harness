@@ -16,8 +16,8 @@ calls, `docker pull`).
   `~/.claude`) unless the user names that path in the current request.
 - Never read `.env*`, `node_modules/`, or `.git/objects` contents directly.
 - Work only on the active task in `task.json`; load only the language/domain
-  skill(s) the current change actually touches (CLAUDE.md rule 6) - `bash`
-  for *.sh (most changes), `python` only when Python code changes,
+  skill(s) the current change actually touches (CLAUDE.md rule 6) -
+  `python` only when Python code changes,
   `api-platform-security` only for prompt/triage work.
 
 ## Reading and reuse

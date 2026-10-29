@@ -5,7 +5,7 @@ description: Python standards for this repo - md2html.py, the json_repair fallba
 
 # Python
 
-This is a Bash toolkit (`bash` skill first); Python is a small helper layer.
+Python is the language for the exam tools (`tools/examples/`), stdlib only.
 Where it lives (there is no package, no venv, no pytest suite):
 
 | Code | Runs from | Tested by |
