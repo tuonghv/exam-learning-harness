@@ -346,5 +346,17 @@
     ],
     "completed_at": "2026-10-29T08:40:31Z",
     "report": "docs/report/phase-14-ingest-inspect.md"
+  },
+  {
+    "task_id": "TASK-015",
+    "title": "DOCX adapter, ten-case spec tests, ingest usage docs (REQ-0018, EPIC-005)",
+    "priority": 1,
+    "status": "queued",
+    "created_at": "2026-10-29T08:55:17Z",
+    "requirement": "REQ-0018",
+    "acceptance_criteria": [
+      "AC1-AC4 of REQ-0018"
+    ],
+    "user_notes": []
   }
 ]
