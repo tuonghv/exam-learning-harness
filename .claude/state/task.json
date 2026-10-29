@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-017",
-  "state": "UNIT_TESTED",
-  "next": "verifier checks AC1-AC4",
+  "state": "DONE",
+  "next": "user go for real run (AC5); then REQ-0022",
   "title": "Optional Claude refine stage for flagged exam pages (REQ-0021, EPIC-005)",
-  "active": [
-    {
-      "task_id": "TASK-017",
-      "state": "UNIT_TESTED",
-      "next": "verifier checks AC1-AC4",
-      "updated_at": "2026-10-29T11:52:47Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0021",
-  "next": "verifier",
-  "updated": "2026-10-29 18:52"
+  "next": "AC5 real run waits for user go",
+  "updated": "2026-10-29 18:53"
 }

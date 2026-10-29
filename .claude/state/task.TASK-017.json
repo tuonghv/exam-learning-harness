@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-017",
   "title": "Optional Claude refine stage for flagged exam pages (REQ-0021, EPIC-005)",
-  "state": "UNIT_TESTED",
+  "state": "DONE",
   "requirement": "REQ-0021",
   "acceptance_criteria": [
     "AC1-AC5 of REQ-0021"
@@ -29,16 +29,19 @@
     "result": "423 OK; 4 mutations bite (test.md)"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "refine sends only selected flagged exam pages as base64 images via claude -p with tools off and empty cwd; key-pages refused without flag; prompt has no answers; real mode never defaults and is unreachable from tests; no eval keys touched"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-017/evidence/unit.txt",
+      "work/TASK-017/handoff/verify.md"
+    ]
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-17-refine.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -47,7 +50,11 @@
       "waiver": "coordinator wrote the design; verifier reviews it"
     },
     "coder": "work/TASK-017/handoff/code.md",
-    "tester": "work/TASK-017/handoff/test.md"
+    "tester": "work/TASK-017/handoff/test.md",
+    "verifier": "work/TASK-017/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "no exam answers produced; mock-verified, real benchmark pending user go"
+    }
   },
   "user_notes": [
     {
@@ -57,7 +64,7 @@
     }
   ],
   "picked_at": "2026-10-29T11:45:34Z",
-  "updated_at": "2026-10-29T11:52:47Z",
+  "updated_at": "2026-10-29T11:53:41Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/**",
@@ -74,5 +81,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verifier checks AC1-AC4"
+  "next": "user go for real run (AC5); then REQ-0022"
 }

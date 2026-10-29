@@ -391,12 +391,20 @@
     "task_id": "TASK-017",
     "title": "Optional Claude refine stage for flagged exam pages (REQ-0021, EPIC-005)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-10-29T11:45:34Z",
     "requirement": "REQ-0021",
     "acceptance_criteria": [
       "AC1-AC5 of REQ-0021"
     ],
-    "user_notes": []
+    "user_notes": [
+      {
+        "raw": "RAW-00067",
+        "note": "yes, continue",
+        "at": "2026-10-29T11:45:34Z"
+      }
+    ],
+    "completed_at": "2026-10-29T11:53:41Z",
+    "report": "docs/report/phase-17-refine.md"
   }
 ]
