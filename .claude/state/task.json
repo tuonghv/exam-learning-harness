@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-015",
-  "state": "DONE",
-  "next": "TASK-016",
-  "title": "DOCX adapter, ten-case spec tests, ingest usage docs (REQ-0018, EPIC-005)",
-  "active": [],
+  "task_id": "TASK-016",
+  "state": "DESIGN",
+  "next": "coder implements",
+  "title": "Image input adapter (PNG/JPG/WEBP) + image block to claude -p (REQ-0019, EPIC-005)",
+  "active": [
+    {
+      "task_id": "TASK-016",
+      "state": "DESIGN",
+      "next": "coder implements",
+      "updated_at": "2026-10-29T09:11:16Z"
+    }
+  ],
   "max_active": 1
 }

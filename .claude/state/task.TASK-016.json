@@ -1,0 +1,69 @@
+{
+  "task_id": "TASK-016",
+  "title": "Image input adapter (PNG/JPG/WEBP) + image block to claude -p (REQ-0019, EPIC-005)",
+  "state": "DESIGN",
+  "requirement": "REQ-0019",
+  "acceptance_criteria": [
+    "AC1-AC6 of REQ-0019"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-16-image-input.md",
+    "summary": "image adapter with stdlib header checks, 5MB resize via PIL, optional OCR, run_claude_images stream-json base64",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": {
+      "waiver": "coordinator wrote the design; verifier reviews it"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00066",
+      "note": "continue autonomously",
+      "at": "2026-10-29T09:10:56Z"
+    }
+  ],
+  "picked_at": "2026-10-29T09:10:56Z",
+  "updated_at": "2026-10-29T09:11:16Z",
+  "updated_by": "main",
+  "scope": [
+    "src/exam_engine/ingest/**",
+    "src/exam_engine/adapters/claude.py",
+    "src/exam_engine/cli.py",
+    "tests/**",
+    "docs/guide/**",
+    "docs/design/phase-16-image-input.md"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "coder implements"
+}
