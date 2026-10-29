@@ -61,7 +61,13 @@
     },
     "coder": "work/TASK-006/handoff/code.md"
   },
-  "user_notes": [],
+  "user_notes": [
+    {
+      "raw": "RAW-00042",
+      "note": "user: keep replies short, save tokens",
+      "at": "2026-10-29T06:04:39Z"
+    }
+  ],
   "picked_at": "2026-10-29T05:27:31Z",
   "updated_at": "2026-10-29T06:03:56Z",
   "updated_by": "main",
