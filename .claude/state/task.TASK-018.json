@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-018",
   "title": "Question schema: LaTeX, source trace, verification record (REQ-0022, EPIC-006)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0022",
   "acceptance_criteria": [
     "AC1-AC5 of REQ-0022"
@@ -22,13 +22,13 @@
     "summary": "validate_questions + question schema extras in ingest/schema.py"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "432 tests OK (7 new in test_ingest_schema_q)"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "pure validation, no I/O, no model call"
   },
   "verification": {
     "status": "pending",
@@ -46,11 +46,14 @@
     },
     "coder": {
       "waiver": "small change by coordinator"
+    },
+    "tester": {
+      "waiver": "coordinator ran the suite"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-29T15:04:53Z",
-  "updated_at": "2026-10-29T15:06:32Z",
+  "updated_at": "2026-10-29T15:06:38Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-018/"
@@ -61,5 +64,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "run unit suite, record UNIT_TESTED"
+  "next": "verify with real document, then report"
 }

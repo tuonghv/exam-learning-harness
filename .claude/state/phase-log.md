@@ -502,3 +502,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: 7 new tests, suite 432 OK.
 - Decision: adapters, to_exam_text, solve unchanged.
 - Next: record UNIT_TESTED.
+
+## UNIT_TESTED - TASK-018 - 2026-10-29T13:00:00Z
+- Action: ran the unit suite.
+- Result: 432 OK; mutation test shows the trace check bites.
+- Decision: verify on a real refined document.
+- Next: VERIFIED.

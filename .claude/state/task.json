@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-018",
-  "state": "IMPLEMENTING",
-  "next": "run unit suite, record UNIT_TESTED",
+  "state": "UNIT_TESTED",
+  "next": "verify with real document, then report",
   "title": "Question schema: LaTeX, source trace, verification record (REQ-0022, EPIC-006)",
   "active": [
     {
       "task_id": "TASK-018",
-      "state": "IMPLEMENTING",
-      "next": "run unit suite, record UNIT_TESTED",
-      "updated_at": "2026-10-29T15:06:32Z"
+      "state": "UNIT_TESTED",
+      "next": "verify with real document, then report",
+      "updated_at": "2026-10-29T15:06:38Z"
     }
   ],
   "max_active": 1
