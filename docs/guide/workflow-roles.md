@@ -88,7 +88,7 @@ commits, the hook and settings, and any paid or real run. It hands each workflow
 - Never edit `status:` by hand. Lifecycle: TODO → DESIGN → IMPLEMENTING → UNIT_TESTED → VERIFIED → DONE via `req.py status` (gated);
   a REQ follows its linked TASK and never runs ahead of it (`.claude/req/task_gate.py`, skill `workflow`).
 - After each meaningful step: `req.py focus --next "<next concrete step>"` (or `status ... --next`); tick ACs with `req.py ac`.
-- Skills: `req-intake` (new input / triage RAW), `req-design` (design one REQ at a time), `req-track` (am I done? status, next).
+- Skills: `req-intake` (new input / triage RAW), `req-track` (am I done? status, next).
 
 ## 7. Never break: long text of rules 2 and 9
 

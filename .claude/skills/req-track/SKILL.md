@@ -29,7 +29,7 @@ Never answer from recollection. If it's not ticked in the REQ file, it's not don
 | Move | Requires | Example |
 |---|---|---|
 | TODO → DESIGN | Requirement filled, no open questions | `req status REQ-12 DESIGN` |
-| DESIGN → IMPLEMENTING | Design filled (see req-design) | `req status REQ-12 IMPLEMENTING` |
+| DESIGN → IMPLEMENTING | Design filled (skill `design`) | `req status REQ-12 IMPLEMENTING` |
 | IMPLEMENTING → UNIT_TESTED | ≥1 acceptance item + evidence | `req status REQ-12 UNIT_TESTED --evidence "go test ./ratelimit/... 14 pass"` |
 | UNIT_TESTED → VERIFIED | all acceptance ticked + evidence | `req status REQ-12 VERIFIED --evidence "verifier subagent: AC1-3 pass"` |
 | VERIFIED → DONE | reported / merged | `req status REQ-12 DONE --evidence "MR !231 merged"` |
@@ -53,3 +53,8 @@ An item the TASK evidence does not cover is a real gap: send the TASK back, don'
 ## Reporting progress to the user
 `req next`, `req list --active`, `req epic list`, `req check`. Summarize in a few lines; don't paste files.
 After DONE: `req next` tells you what to pick up (resume active → ready TODO → waiting on user answers).
+
+## Designing one REQ
+- The design lives on disk, not in chat: `req focus REQ-x --next "design: <item>"`, `req status REQ-x DESIGN` (refused while open questions remain), then write `docs/design/phase-<N>-<slug>.md` (skill `design`); `## Design` in the REQ holds a 3-line summary and that path. Read only this REQ.
+- Too big (more than ~6 acceptance items or several components): keep the first slice, move the rest to new REQs or `- [ ] TBD:` EPIC lines, `req log` the split.
+- A gap found while designing becomes an acceptance item or an open question, never chat-only.

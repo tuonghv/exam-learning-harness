@@ -25,7 +25,7 @@ queue in `backlog.json`, audit trail in `phase-log.md`; one task per commit (`Ta
 | Independent cross-check (content oracle) | `crosscheck` |
 | Commit a transition / report | `commit` / `report` |
 | Scope, reading | `token-efficiency` |
-| New user need / REQ design / progress | `req-intake` / `req-design` / `req-track` |
+| New user need / REQ design / progress | `req-intake` / `req-track` |
 | Roles, delegation, monitoring, inspector | `coordinator`, `role-monitor`, `inspector` |
 
 ## Never break
@@ -39,7 +39,7 @@ queue in `backlog.json`, audit trail in `phase-log.md`; one task per commit (`Ta
 - WHAT to build lives in `docs/req/` (RAW = verbatim prompts, REQ = one requirement, EPIC = big request); TASKs implement REQs (`req.py task`).
 - Never trust conversation memory for requirements; after compaction run `python3 .claude/req/req.py gaps`.
 - Never edit `status:` by hand; a REQ follows its linked TASK via `req.py status` (gated). After each step: `req.py focus --next "<step>"`, tick ACs with `req.py ac`.
-- Skills `req-intake`, `req-design`, `req-track`. Detail: `workflow-roles.md` §6.
+- Skills `req-intake`, `req-track`. Detail: `workflow-roles.md` §6.
 
 <!-- agent-setup:start -->
 <!-- agent-setup:custom -->

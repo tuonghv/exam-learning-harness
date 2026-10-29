@@ -105,10 +105,11 @@
       "designer handoff; design copied to docs/design",
       "design r3 installed, state DESIGN",
       "coder step A launched",
-      "step A: CLAUDE.md 4094 B, grep 0 (main installed coder draft; guard blocks coder writes there)"
+      "step A: CLAUDE.md 4094 B, grep 0 (main installed coder draft; guard blocks coder writes there)",
+      "design r5 installed; req-design removed; step A done"
     ],
     "notes": "",
-    "next": "brief step B: pointer cleanup + strip + compression + override doc + oracle (design 2.2-2.6, 2.8)"
+    "next": "brief coder step B (design 2.2-2.4, 2.6, 2.8, delete agents/lead.md) with override block"
   },
   "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
 }
