@@ -152,7 +152,7 @@
     "task_id": "TASK-005",
     "title": "Report stage: Markdown + PDF via copied md2html.py and headless Chrome (REQ-0011)",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-10-29T13:00:00",
     "requirement": "REQ-0011",
     "acceptance_criteria": [

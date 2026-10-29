@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-004",
-  "state": "DONE",
-  "next": "DONE",
-  "title": "Engine core + QA: prompt+exam -> claude -p -> JSON, checks, decision, score (REQ-0010)",
-  "active": [],
+  "task_id": "TASK-005",
+  "state": "DESIGN",
+  "next": "coder: md2html.py copy, exam_report.py, exam_run integration, evidence_kind",
+  "title": "Report stage: Markdown + PDF via copied md2html.py and headless Chrome (REQ-0011)",
+  "active": [
+    {
+      "task_id": "TASK-005",
+      "state": "DESIGN",
+      "next": "coder: md2html.py copy, exam_report.py, exam_run integration, evidence_kind",
+      "updated_at": "2026-10-29T05:15:22Z"
+    }
+  ],
   "max_active": 1
 }

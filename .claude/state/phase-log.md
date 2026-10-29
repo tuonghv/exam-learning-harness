@@ -100,3 +100,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: REQ-0010 AC1-AC6 ticked, 108 tests OK, verifier PASS after the safe_eval fix; no real claude call made.
 - Decision: DONE; model accuracy stays unclaimed until REQ-0009 (needs the user's go).
 - Next: REQ-0011 report stage; then REQ-0009 dry-run and call-count/cap proposal for the user.
+
+## DESIGN - TASK-005 - 2026-10-29T05:15:22Z
+- Action: RAW-00037 triaged into REQ-0011 (PDF follows code-security-scanner: copy md2html.py, rewrite md_to_pdf in Python); design docs/design/phase-5-report.md written; scanner md2html.py read in full (stdlib, escapes, scheme allowlist).
+- Result: design complete, no open questions; designer waived (coordinator wrote it).
+- Decision: go to IMPLEMENTING with one coder; renderer is Chrome (present at /usr/bin/google-chrome).
+- Next: coder (md2html copy, exam_report, exam_run hook, evidence_kind), then tester.

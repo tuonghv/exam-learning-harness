@@ -1,0 +1,74 @@
+{
+  "task_id": "TASK-005",
+  "title": "Report stage: Markdown + PDF via copied md2html.py and headless Chrome (REQ-0011)",
+  "state": "DESIGN",
+  "requirement": "REQ-0011",
+  "acceptance_criteria": [
+    "AC1 result.json carries evidence kind",
+    "AC2 Markdown report",
+    "AC3 PDF via md2html + renderer, skip flagged",
+    "AC4 mocked tests"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-5-report.md",
+    "summary": "Markdown report + PDF: md2html.py copied from code-security-scanner (trimmed), renderer lookup and Chrome print rewritten in Python, skip flagged when no renderer; evidence_kind added to result",
+    "reuse": [
+      "code-security-scanner/md2html.py:1-416",
+      "code-security-scanner/report_common.sh:719-790"
+    ],
+    "risks": [
+      "copied script must stay stdlib/py3.8 and escape model text",
+      "Chrome can hang: kill at timeout"
+    ]
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": {
+      "waiver": "small design derived directly from the scanner's md2html/md_to_pdf plus the accepted phase-2 REPORT stage; coordinator wrote it"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00037",
+      "note": "PDF: reference code-security-scanner, copy the needed script (md2html.py), rewrite md_to_pdf in Python",
+      "at": "2026-10-29T05:12:53Z"
+    }
+  ],
+  "picked_at": "2026-10-29T05:12:53Z",
+  "updated_at": "2026-10-29T05:15:22Z",
+  "updated_by": "main",
+  "scope": [
+    "tools/examples/**",
+    "docs/design/phase-5-report.md"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "coder: md2html.py copy, exam_report.py, exam_run integration, evidence_kind"
+}
