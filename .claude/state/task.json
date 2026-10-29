@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-019",
-  "state": "DONE",
-  "next": "",
-  "title": "Part-aware refine and Part II/III format checks (REQ-0026, EPIC-006)",
-  "active": [],
+  "task_id": "TASK-020",
+  "state": "DESIGN",
+  "next": "implement pipeline/cross.py, cli cross-solve, tests",
+  "title": "cross-solve: text route vs page-image route, answer-level agreement (REQ-0023, EPIC-006)",
+  "active": [
+    {
+      "task_id": "TASK-020",
+      "state": "DESIGN",
+      "next": "implement pipeline/cross.py, cli cross-solve, tests",
+      "updated_at": "2026-10-29T15:53:07Z"
+    }
+  ],
   "max_active": 1
 }

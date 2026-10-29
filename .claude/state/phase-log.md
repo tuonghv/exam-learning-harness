@@ -550,3 +550,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: task done.
 - Decision: REQ-0026 DONE; Part I inference left as a known limit.
 - Next: REQ-0023 cross-solve.
+
+## DESIGN - TASK-020 - 2026-10-29T14:45:00Z
+- Action: wrote docs/design/phase-20-cross-solve.md (lean plan: two routes, answer-level compare).
+- Result: design completed, no open questions.
+- Decision: reuse solver prompts and SOLVE_OUT; no engine change.
+- Next: implement and test.
