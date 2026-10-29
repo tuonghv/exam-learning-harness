@@ -2,14 +2,14 @@
   "schema": 2,
   "task_id": "TASK-005",
   "state": "IMPLEMENTING",
-  "next": "coder: md2html copy, exam_report, exam_run hook, evidence_kind",
+  "next": "tester: 10 design tests (fakes only)",
   "title": "Report stage: Markdown + PDF via copied md2html.py and headless Chrome (REQ-0011)",
   "active": [
     {
       "task_id": "TASK-005",
       "state": "IMPLEMENTING",
-      "next": "coder: md2html copy, exam_report, exam_run hook, evidence_kind",
-      "updated_at": "2026-10-29T05:15:29Z"
+      "next": "tester: 10 design tests (fakes only)",
+      "updated_at": "2026-10-29T05:18:57Z"
     }
   ],
   "max_active": 1

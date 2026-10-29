@@ -131,6 +131,9 @@ RESULT = {
                 "verification_status": {"type": "string",
                                         "enum": ["PASS", "FAIL", "UNCERTAIN"]},
                 "status_reason": _STR,
+                "evidence_kind": {"type": "string",
+                                  "enum": ["code oracle", "key match",
+                                           "Claude review only", "none"]},
                 "qa_findings": {"type": "array", "items": {
                     "type": "object", "required": ["source", "code", "message"],
                     "properties": {

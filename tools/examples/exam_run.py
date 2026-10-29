@@ -17,6 +17,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import exam_checks as ck  # noqa: E402
 import exam_llm  # noqa: E402
 import exam_parse as ep  # noqa: E402
+import exam_report  # noqa: E402
 import exam_schema as sch  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -286,7 +287,7 @@ def build_result(exam, exam_path, recs, cfg, rn, stopped):
             r["status"], r["reason"] = "UNCERTAIN", "not_solved"
         sc = r["score"] or {"points": None, "max": None, "basis": "none", "detail": "no key"}
         qs.append({
-            "id": str(i), "answer": a.get("answer"), "solution": a.get("solution") or [],
+            "id": str(i), "evidence_kind": exam_report.evidence_kind(r), "answer": a.get("answer"), "solution": a.get("solution") or [],
             "explanation": a.get("explanation") or "",
             "uncertainty": a.get("uncertainty") or {"level": "high", "reason": "no answer"},
             "checks": r["checks"], "verification_status": r["status"],
@@ -357,6 +358,7 @@ def run(exam_path, out_dir, cfg, llm):
         fh.write("\n")
     with open(os.path.join(out_dir, "run.log"), "w", encoding="utf-8") as fh:
         fh.write("\n".join(log) + ("\n" if log else ""))
+    result["reports"] = exam_report.write_reports(result, out_dir, pdf=cfg.get("pdf", False))
     if stopped:
         return result, 3
     s = result["summary"]
@@ -390,6 +392,7 @@ def main(argv=None):
     ap.add_argument("--max-cost-usd", type=float, default=1.00)
     ap.add_argument("--timeout", type=float, default=300)
     ap.add_argument("--model", default="sonnet")
+    ap.add_argument("--no-pdf", action="store_true", help="write report.md only")
     a = ap.parse_args(argv)
     modes = [bool(a.mock), a.dry_run, a.real]
     if sum(modes) != 1:
@@ -403,7 +406,8 @@ def main(argv=None):
         print("usage: --out DIR is required", file=sys.stderr)
         return 2
     cfg = {"max_attempts": a.max_attempts, "max_cost_usd": a.max_cost_usd, "timeout": a.timeout,
-           "model": a.model, "key": a.key, "llm_name": "claude-p" if a.real else "mock"}
+           "model": a.model, "key": a.key, "llm_name": "claude-p" if a.real else "mock",
+           "pdf": not a.no_pdf}
     if a.dry_run:
         try:
             text = _read(a.exam)
@@ -445,6 +449,12 @@ def main(argv=None):
         print("pass=%d fail=%d uncertain=%d unresolved=%d calls=%d stopped=%s -> %s" % (
             s["pass"], s["fail"], s["uncertain"], s["unresolved"], result["run"]["calls"],
             result["run"]["stopped"], os.path.join(a.out, "result.json")))
+        rep_ = result.get("reports") or {}
+        for key in ("md", "html", "pdf"):
+            if rep_.get(key):
+                print("report %s -> %s" % (key, rep_[key]))
+        if rep_.get("pdf_status", "").startswith("skipped"):
+            print("PDF %s" % rep_["pdf_status"])
     return code
 
 

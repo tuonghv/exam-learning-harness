@@ -23,14 +23,14 @@
     ]
   },
   "implementation": {
-    "status": "pending",
+    "status": "completed",
     "files": [
       "tools/examples/md2html.py",
       "tools/examples/exam_report.py",
       "tools/examples/exam_run.py",
       "tools/examples/exam_schema.py"
     ],
-    "summary": "coder launching"
+    "summary": "md2html.py copied and trimmed from code-security-scanner; exam_report (evidence_kind, build_markdown, find_pdf_renderer, md_to_pdf, write_reports); exam_run hook + --no-pdf; coordinator real Chrome render with Vietnamese text OK"
   },
   "unit_test": {
     "status": "pending",
@@ -54,7 +54,8 @@
   "roles": {
     "designer": {
       "waiver": "small design derived directly from the scanner's md2html/md_to_pdf plus the accepted phase-2 REPORT stage; coordinator wrote it"
-    }
+    },
+    "coder": "work/TASK-005/handoff/code.md"
   },
   "user_notes": [
     {
@@ -64,7 +65,7 @@
     }
   ],
   "picked_at": "2026-10-29T05:12:53Z",
-  "updated_at": "2026-10-29T05:15:29Z",
+  "updated_at": "2026-10-29T05:18:57Z",
   "updated_by": "main",
   "scope": [
     "tools/examples/**",
@@ -76,5 +77,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "coder: md2html copy, exam_report, exam_run hook, evidence_kind"
+  "next": "tester: 10 design tests (fakes only)"
 }
