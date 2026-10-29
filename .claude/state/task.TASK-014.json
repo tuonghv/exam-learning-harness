@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-014",
   "title": "ingest-inspect report, answer-guide detection, --pages, key-leak guard (REQ-0020, EPIC-005)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0020",
   "acceptance_criteria": [
     "AC1-AC5 of REQ-0020"
@@ -14,13 +14,21 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/ingest/parts.py",
+      "src/exam_engine/ingest/inspect.py",
+      "src/exam_engine/ingest/api.py",
+      "src/exam_engine/ingest/schema.py",
+      "src/exam_engine/cli.py",
+      "tests/unit/test_ingest_inspect.py",
+      "docs/guide/ingest-setup.md"
+    ]
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "323 OK; 4 mutations bite (work/TASK-014/evidence.md)"
   },
   "security": {
     "status": "pending",
@@ -39,7 +47,9 @@
   "roles": {
     "designer": {
       "waiver": "coordinator wrote the design from the accepted REQ and the real PDF trial; verifier reviews it"
-    }
+    },
+    "coder": "work/TASK-014/handoff/code.md",
+    "tester": "work/TASK-014/handoff/test.md"
   },
   "user_notes": [
     {
@@ -49,7 +59,7 @@
     }
   ],
   "picked_at": "2026-10-29T08:31:04Z",
-  "updated_at": "2026-10-29T08:32:31Z",
+  "updated_at": "2026-10-29T08:37:30Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/**",
@@ -64,5 +74,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "coder implements"
+  "next": "verifier checks AC1-AC5"
 }
