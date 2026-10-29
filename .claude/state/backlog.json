@@ -386,5 +386,17 @@
     ],
     "completed_at": "2026-10-29T09:18:43Z",
     "report": "docs/report/phase-16-image-input.md"
+  },
+  {
+    "task_id": "TASK-017",
+    "title": "Optional Claude refine stage for flagged exam pages (REQ-0021, EPIC-005)",
+    "priority": 1,
+    "status": "queued",
+    "created_at": "2026-10-29T11:45:34Z",
+    "requirement": "REQ-0021",
+    "acceptance_criteria": [
+      "AC1-AC5 of REQ-0021"
+    ],
+    "user_notes": []
   }
 ]
