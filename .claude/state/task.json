@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-003",
-  "state": "VERIFIED",
-  "next": "report, crosscheck waiver, DONE",
+  "state": "DONE",
+  "next": "none; TASK-003 done, REQ-0002 ready; next EPIC-003 engine build, REQ-0003/0004",
   "title": "Example set layout, FORMAT checker, eval scorer, README (REQ-0002)",
-  "active": [
-    {
-      "task_id": "TASK-003",
-      "state": "VERIFIED",
-      "next": "report, crosscheck waiver, DONE",
-      "updated_at": "2026-10-29T03:38:01Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

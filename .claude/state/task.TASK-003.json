@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-003",
   "title": "Example set layout, FORMAT checker, eval scorer, README (REQ-0002)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0002",
   "acceptance_criteria": [
     "AC1 pairing",
@@ -46,8 +46,8 @@
     "summary": "AC1-AC5 PASS; 13 injected-defect cases run on isolated copies; limitation L1 (mid-line key leak) documented in examples/README.md"
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-3-example-checker.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -55,7 +55,10 @@
     "designer": "work/TASK-003/handoff/design.md",
     "coder": "work/TASK-003/handoff/code.md",
     "tester": "work/TASK-003/handoff/test.md",
-    "verifier": "work/TASK-003/handoff/verify.md"
+    "verifier": "work/TASK-003/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "coordinator ran 13 injected-defect cases on isolated fresh copies as the independent oracle (evidence.md); no separate crosscheck role for a small checker"
+    }
   },
   "user_notes": [
     {
@@ -85,7 +88,7 @@
     }
   ],
   "picked_at": "2026-10-29T03:24:15Z",
-  "updated_at": "2026-10-29T03:38:01Z",
+  "updated_at": "2026-10-29T03:38:25Z",
   "updated_by": "main",
   "scope": [
     "tools/examples/**",
@@ -105,5 +108,5 @@
     "notes": "",
     "next": "verifier handoff, security status, VERIFIED, then crosscheck waiver and DONE"
   },
-  "next": "report, crosscheck waiver, DONE"
+  "next": "none; TASK-003 done, REQ-0002 ready; next EPIC-003 engine build, REQ-0003/0004"
 }

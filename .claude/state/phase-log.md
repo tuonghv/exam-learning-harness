@@ -64,3 +64,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: AC1-AC5 PASS; 28 tests OK; limitation L1 (mid-line key leak) documented in examples/README.md; no defects.
 - Decision: VERIFIED; security not_applicable (read-only file tools).
 - Next: report, crosscheck waiver, DONE.
+
+## DONE - TASK-003 - 2026-10-29T03:38:25Z
+- Action: report written (docs/report/phase-3-example-checker.md); crosscheck waived with reason; backlog completed.
+- Result: REQ-0002 AC1-AC5 ticked; 28 tests OK; limitation L1 documented.
+- Decision: DONE.
+- Next: EPIC-003 engine build (resume TASK-002 or new TASK), REQ-0003/0004 examples, REQ-0009 benchmark after the user's go.
