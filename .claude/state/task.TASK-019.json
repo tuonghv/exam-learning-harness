@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-019",
   "title": "Part-aware refine and Part II/III format checks (REQ-0026, EPIC-006)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0026",
   "acceptance_criteria": [
     "AC1-AC4 of REQ-0026"
@@ -40,8 +40,8 @@
     "result": "parts II/III assigned correctly; heading removed; 441 tests OK"
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-19-part-aware.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -64,7 +64,7 @@
   },
   "user_notes": [],
   "picked_at": "2026-10-29T15:41:33Z",
-  "updated_at": "2026-10-29T15:43:40Z",
+  "updated_at": "2026-10-29T15:43:50Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-019/"
@@ -75,5 +75,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report and DONE"
+  "next": ""
 }

@@ -544,3 +544,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: parts II/III assigned correctly; Part I stays null (limit recorded).
 - Decision: waivers for verifier/crosscheck (text rules).
 - Next: report and DONE.
+
+## DONE - TASK-019 - 2026-10-29T14:25:00Z
+- Action: report docs/report/phase-19-part-aware.md.
+- Result: task done.
+- Decision: REQ-0026 DONE; Part I inference left as a known limit.
+- Next: REQ-0023 cross-solve.

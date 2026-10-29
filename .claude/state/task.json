@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-019",
-  "state": "VERIFIED",
-  "next": "report and DONE",
+  "state": "DONE",
+  "next": "",
   "title": "Part-aware refine and Part II/III format checks (REQ-0026, EPIC-006)",
-  "active": [
-    {
-      "task_id": "TASK-019",
-      "state": "VERIFIED",
-      "next": "report and DONE",
-      "updated_at": "2026-10-29T15:43:40Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
