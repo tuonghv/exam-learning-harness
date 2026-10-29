@@ -1,0 +1,9 @@
+# evidence: prompts-verify
+# task: TASK-010
+# cmd: python3 -I scripts/exam.py prompts verify v1.1.0
+# cwd: /home/tuonghv/Documents/git/online-system/exam-learning-harness
+# head: 01d1d6c+dirty
+# when: 2026-10-29T06:55:51Z
+# rc: 0
+---
+ok

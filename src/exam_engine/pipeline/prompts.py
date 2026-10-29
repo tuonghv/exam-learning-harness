@@ -101,7 +101,7 @@ def prompts_main(argv):
 
 # Built, not a literal: a test bans bare path-name strings here (paths come from settings).
 CONTRACT_KEY = "prompt" + "s"
-CODE_RE = re.compile(r"^[a-z]{2}$")
+CODE_RE = settings.CODE_RE
 
 
 def _shape(v):
@@ -153,7 +153,7 @@ def _check_file(path, rel, spec, default_example, errs, shown):
         errs.append("ERROR %s: cannot read: %s" % (shown, exc))
         return None
     for m in spec.get("markers", []):
-        if m not in text:
+        if not re.search(r"(?<![A-Za-z_])%s(?![A-Za-z_])" % re.escape(m), text):
             errs.append("ERROR %s: missing marker %r" % (shown, m))
     out = spec.get("output")
     if not out:

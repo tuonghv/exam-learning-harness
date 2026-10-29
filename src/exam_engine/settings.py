@@ -35,6 +35,7 @@ def load_schema(name):
 # Chosen prompt source; None = default from config/engine.json (prompt_channel, prompt_release).
 PROMPT_SOURCE = {"channel": None, "version": None}
 VERSION_RE = re.compile(r"^v\d+\.\d+\.\d+$")
+CODE_RE = re.compile(r"^[a-z]{2}$")  # prompt variant code; the exam header Language: is untrusted
 
 
 def use_prompts(channel=None, version=None):
@@ -69,7 +70,7 @@ def read_prompt(rel, lang=None):
     """Text of <prompt_root>/lang/<lang>/<rel> if it exists, else <prompt_root>/<rel> (default variant)."""
     root = prompt_root()
     path = os.path.join(root, rel)
-    if lang:
+    if lang and CODE_RE.match(lang):
         cand = os.path.join(root, "lang", lang, rel)
         if os.path.isfile(cand):
             path = cand

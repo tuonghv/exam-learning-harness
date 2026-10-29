@@ -268,3 +268,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: all bite and pass.
 - Decision: advance.
 - Next: verifier, then release v1.1.0.
+
+## VERIFIED - TASK-010 - 2026-10-29T06:55:50Z
+- Action: verifier found 1 major + 3 minor; coordinator fixed all, suite 241; release v1.1.0 created.
+- Result: AC1-AC4 pass.
+- Decision: advance.
+- Next: DONE.

@@ -2,7 +2,9 @@
 copy of prompts/ (real files never edited); variants the tests need are built there."""
 import contextlib
 import io
+import json
 import os
+import re
 import shutil
 import sys
 import tempfile
@@ -167,6 +169,53 @@ class Lookup(Base):
             ex["questions"][0]["id"] = "1"
             text = verifier.qa_prompt(ex, recs, ["1"])
             self.assertEqual("VI-QA" in text, want)
+
+
+class Hardening(unittest.TestCase):
+    def test_untrusted_language_cannot_escape_prompt_root(self):
+        for bad in ("../../../etc", "../dev", "vi/../..", "VI", "vie", ""):
+            self.assertEqual(settings.read_prompt("system.md", bad), settings.read_prompt("system.md"), bad)
+
+    def test_marker_needs_word_boundary(self):
+        tmp = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, tmp, True)
+        src = os.path.join(settings.PROMPTS_DIR, "dev")
+        dst = os.path.join(tmp, "dev")
+        shutil.copytree(src, dst)
+        shutil.copy(os.path.join(settings.PROMPTS_DIR, "contract.json"), tmp)
+        path = os.path.join(dst, "verification", "verify_answer.md")
+        with open(path, encoding="utf-8") as fh:
+            text = fh.read()
+        text = re.sub(r"(?<![A-Za-z_])agree(?![A-Za-z_])", "xagreex", text)  # "disagree" must not count
+        with open(path, "w", encoding="utf-8") as fh:
+            fh.write(text)
+        with mock.patch.object(settings, "PROMPTS_DIR", tmp):
+            errs, _, _ = prompts.check_prompts("dev", None, False)
+        self.assertTrue(any("'agree'" in e for e in errs), errs[:3])
+
+
+class MockRunPerVariant(unittest.TestCase):
+    """AC4: the same engine and the same output JSON for the vi and the default variant."""
+
+    def run_lang(self, lang):
+        tmp = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, tmp, True)
+        with open(os.path.join(ROOT, "examples", "english", "input-001.md"), encoding="utf-8") as fh:
+            text = fh.read().replace("Mode: Solve", "Mode: Solve\nLanguage: %s" % lang, 1)
+        exam = os.path.join(tmp, "exam.md")
+        with open(exam, "w", encoding="utf-8") as fh:
+            fh.write(text)
+        mock_file = os.path.join(ROOT, "tests", "unit", "fixtures", "mock_english_001.json")
+        with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+            cli.main(["solve", exam, "--mock", mock_file, "--out", tmp, "--no-pdf", "--channel", "dev"])
+        with open(os.path.join(tmp, "result.json"), encoding="utf-8") as fh:
+            return json.load(fh)
+
+    def test_vi_and_en_results_validate_against_one_schema(self):
+        from exam_engine.core import schema as sch
+        schema = settings.load_schema("result")
+        for lang in ("vi", "en"):
+            self.assertEqual(sch.validate(self.run_lang(lang), schema), [], lang)
 
 
 if __name__ == "__main__":

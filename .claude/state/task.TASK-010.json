@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-010",
   "title": "Prompt language variants + interface validator (REQ-0014)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0014",
   "acceptance_criteria": [
     "AC1-AC4 of REQ-0014"
@@ -36,16 +36,16 @@
     "result": "238 OK + integration OK; check-prompts --all OK; dev mutations (marker, output key, stray) exit 1"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "untrusted Language header restricted to ^[a-z]{2}$ (tested); versions regex-guarded; no key text in prompts; releases never overwritten"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": "work/TASK-010/evidence/"
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-10-prompt-variants.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -56,11 +56,15 @@
     "coder": "work/TASK-010/handoff/code.md",
     "tester": {
       "waiver": "coder wrote tests; coordinator re-ran suite and real-file mutations"
+    },
+    "verifier": "work/TASK-010/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "coordinator real-file mutations prove the validator bites"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-29T06:49:33Z",
-  "updated_at": "2026-10-29T06:52:51Z",
+  "updated_at": "2026-10-29T06:56:00Z",
   "updated_by": "main",
   "scope": [
     "prompts/**",
@@ -76,5 +80,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verifier"
+  "next": "done"
 }
