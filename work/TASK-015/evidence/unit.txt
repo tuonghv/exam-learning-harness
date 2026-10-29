@@ -1,0 +1,21 @@
+# evidence: unit
+# task: TASK-015
+# cmd: python3 -I -m unittest discover -s tests/unit
+# cwd: /home/tuonghv/Documents/git/online-system/exam-learning-harness
+# head: 629204b+dirty
+# when: 2026-10-29T09:02:14Z
+# rc: 0
+---
+.................................................................................................................................................................................................................................................Warning: Parameter not found: language_model_ngram_on
+Warning: Parameter not found: classify_misfit_junk_penalty
+..............Warning: Parameter not found: language_model_ngram_on
+Warning: Parameter not found: classify_misfit_junk_penalty
+.........Warning: Parameter not found: language_model_ngram_on
+Warning: Parameter not found: classify_misfit_junk_penalty
+...Warning: Parameter not found: language_model_ngram_on
+Warning: Parameter not found: classify_misfit_junk_penalty
+.........................................................................................
+----------------------------------------------------------------------
+Ran 356 tests in 11.293s
+
+OK

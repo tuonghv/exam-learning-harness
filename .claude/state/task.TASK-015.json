@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-015",
   "title": "DOCX adapter, ten-case spec tests, ingest usage docs (REQ-0018, EPIC-005)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0018",
   "acceptance_criteria": [
     "AC1-AC4 of REQ-0018"
@@ -14,13 +14,20 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/ingest/adapters/docx.py",
+      "src/exam_engine/ingest/adapters/__init__.py",
+      "tests/unit/test_ingest_docx.py",
+      "tests/unit/test_ingest_spec.py",
+      "docs/guide/ingest-usage.md",
+      "docs/guide/ingest-setup.md"
+    ]
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "356 OK; 5 mutations bite (test.md)"
   },
   "security": {
     "status": "pending",
@@ -39,7 +46,9 @@
   "roles": {
     "designer": {
       "waiver": "coordinator wrote the design; verifier reviews it"
-    }
+    },
+    "coder": "work/TASK-015/handoff/code.md",
+    "tester": "work/TASK-015/handoff/test.md"
   },
   "user_notes": [
     {
@@ -49,7 +58,7 @@
     }
   ],
   "picked_at": "2026-10-29T08:55:26Z",
-  "updated_at": "2026-10-29T08:55:51Z",
+  "updated_at": "2026-10-29T09:02:14Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/**",
@@ -63,5 +72,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "coder implements"
+  "next": "verifier checks AC1-AC4"
 }

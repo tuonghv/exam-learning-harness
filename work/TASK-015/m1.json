@@ -1,0 +1,1 @@
+{"design":{"status":"completed","path":"docs/design/phase-15-docx-adapter.md","summary":"docx adapter in body order, tables, images to assets, math warning; ten-case spec tests; ingest-usage guide"},"roles":{"designer":{"waiver":"coordinator wrote the design; verifier reviews it"}},"next":"coder implements"}

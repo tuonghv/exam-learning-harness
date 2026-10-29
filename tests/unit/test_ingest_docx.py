@@ -147,6 +147,101 @@ class TestBlocks(DocxBase):
         self.assertEqual(self.blocks(doc)[0]["text"], "Tiếng Việt có dấu")
 
 
+    def test_table_rows_kept_and_vertical_merge(self):
+        d = docx.Document()
+        t = d.add_table(rows=3, cols=2)
+        t.cell(0, 0).merge(t.cell(1, 0)).text = "tall"
+        t.cell(0, 1).text = "r0"
+        t.cell(1, 1).text = "r1"
+        t.cell(2, 0).text = "x"
+        t.cell(2, 1).text = "y"
+        tb = [b for b in self.blocks(self.ingest(self.save(d))) if b["type"] == "table"]
+        self.assertEqual(len(tb), 1)
+        self.assertEqual(tb[0]["rows"][0], ["tall", "r0"])
+        self.assertEqual(tb[0]["rows"][2], ["x", "y"])
+        self.assertEqual(tb[0]["text"].count("tall"), 1)
+
+    def test_table_with_image_warns_not_extracted(self):
+        d = docx.Document()
+        t = d.add_table(rows=1, cols=1)
+        t.cell(0, 0).paragraphs[0].add_run().add_picture(io.BytesIO(png_bytes()))
+        t.cell(0, 0).add_paragraph("cell caption")
+        doc = self.ingest(self.save(d))
+        self.assertEqual(doc["assets"], [])
+        self.assertIn("image in table", json.dumps(doc))
+        self.assertIn("unsupported_content", [w["code"] for w in doc["warnings"]])
+
+    def test_auto_numbered_list_is_list_block(self):
+        from lxml import etree
+        d = docx.Document()
+        p = d.add_paragraph("numbered item")
+        ns = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+        ppr = p._p.get_or_add_pPr()
+        ppr.append(etree.fromstring(
+            '<w:numPr xmlns:w="%s"><w:ilvl w:val="0"/><w:numId w:val="1"/></w:numPr>' % ns))
+        b = self.blocks(self.ingest(self.save(d)))[0]
+        self.assertEqual((b["type"], b["text"]), ("list", "numbered item"))
+
+    def test_footer_warns_and_is_not_read(self):
+        d = docx.Document()
+        d.add_paragraph("body text")
+        d.sections[0].footer.paragraphs[0].text = "FOOTER SECRET"
+        doc = self.ingest(self.save(d))
+        self.assertNotIn("FOOTER SECRET", json.dumps(doc))
+        msgs = [w["message"] for w in doc["warnings"] if w["code"] == "unsupported_content"]
+        self.assertTrue(msgs and "footer" in msgs[0])
+
+    def test_no_header_no_unsupported_warning(self):
+        d = docx.Document()
+        d.add_paragraph("body text")
+        doc = self.ingest(self.save(d))
+        self.assertNotIn("unsupported_content", [w["code"] for w in doc["warnings"]])
+
+    def test_image_without_folder_does_not_create_files(self):
+        d = docx.Document()
+        d.add_picture(io.BytesIO(png_bytes()))
+        path = self.save(d)
+        api.ingest_document(path, config={})
+        self.assertFalse(os.path.exists(self.assets))
+
+    def test_source_file_unchanged_by_ingest(self):
+        path = self.save(self.questions_doc())
+        with open(path, "rb") as fh:
+            before = fh.read()
+        self.ingest(path)
+        with open(path, "rb") as fh:
+            self.assertEqual(fh.read(), before)
+
+    def test_cli_docx_exam_out(self):
+        import contextlib
+        from exam_engine import cli
+        path = self.save(self.questions_doc())
+        out = os.path.join(self.dir, "exam.md")
+        meta = []
+        for k, v in META.items():
+            meta += ["--meta", "%s=%s" % (k, v)]
+        with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+            code = cli.main(["ingest", path, "--exam-out", out] + meta
+                            + ["--assets", self.assets])
+        self.assertEqual(code, 0)
+        with open(out, encoding="utf-8") as fh:
+            text = fh.read()
+        self.assertIn("## Question 1", text)
+        self.assertIn("B. four", text)
+
+    def test_cli_docx_bad_file_exit_2(self):
+        import contextlib
+        from exam_engine import cli
+        bad = os.path.join(self.dir, "bad.docx")
+        with open(bad, "wb") as fh:
+            fh.write(b"not a zip")
+        err = io.StringIO()
+        with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(err):
+            code = cli.main(["ingest", bad])
+        self.assertEqual(code, 2)
+        self.assertIn("ERROR", err.getvalue())
+
+
 class TestQuestions(DocxBase):
     def test_questions_to_exam_text(self):
         doc = self.ingest(self.save(self.questions_doc()))
