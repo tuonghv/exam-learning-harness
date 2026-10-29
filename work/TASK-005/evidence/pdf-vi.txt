@@ -1,0 +1,14 @@
+# evidence: pdf-vi
+# task: TASK-005
+# cmd: bash -c pdfinfo\ /tmp/claude-1627/-home-tuonghv-Documents-git-online-system-exam-learning-harness/bb3d4790-cd14-4f2f-a160-b4751a91ebd1/scratchpad/ev/d/report.pdf\ \|\ grep\ -E\ \'Pages\|Page\ size\'\;\ pdftotext\ /tmp/claude-1627/-home-tuonghv-Documents-git-online-system-exam-learning-harness/bb3d4790-cd14-4f2f-a160-b4751a91ebd1/scratchpad/ev/c/report.pdf\ -\ \|\ grep\ -E\ \'Nghiệm\|Điều\ kiện\'\;\ pdffonts\ /tmp/claude-1627/-home-tuonghv-Documents-git-online-system-exam-learning-harness/bb3d4790-cd14-4f2f-a160-b4751a91ebd1/scratchpad/ev/c/report.pdf\ \|\ tail\ -2\;\ head\ -c\ 5\ /tmp/claude-1627/-home-tuonghv-Documents-git-online-system-exam-learning-harness/bb3d4790-cd14-4f2f-a160-b4751a91ebd1/scratchpad/ev/c/report.pdf
+# cwd: /home/tuonghv/Documents/git/online-system/exam-learning-harness
+# head: 211ac3b+dirty
+# when: 2026-10-29T05:25:52Z
+# rc: 0
+---
+Pages:          1
+Page size:      594.96 x 841.92 pts (A4)
+Nghiệm x = 1/3. Điều kiện xác định: x ≠ 0. <script>alert(1)</script>
+AAAAAA+DejaVuSans-Bold               CID TrueType      Identity-H       yes yes yes      4  0
+BAAAAA+DejaVuSans                    CID TrueType      Identity-H       yes yes yes      5  0
+%PDF-

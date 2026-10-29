@@ -7,6 +7,7 @@ is kept and report.md says so. Nothing here raises on a render problem.
 Library only; exam_run.py calls write_reports().
 """
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -31,8 +32,16 @@ def evidence_kind(q):
     return "Claude review only" if passed else "none"
 
 
+ZWSP = "\u200b"
+
+
 def _one_line(text):
-    return " ".join(str(text if text is not None else "").split())
+    """One line of model text. A zero-width space before a leading markdown marker
+    (fence, heading, list, quote) and inside `**` keeps the model from opening
+    structure or faking a verdict pill; the visible text is unchanged."""
+    t = " ".join(str(text if text is not None else "").split())
+    t = re.sub(r"^([#>`~|+*-]+|\d+[.)])", lambda m: ZWSP + m.group(1), t)
+    return t.replace("**", "*" + ZWSP + "*")
 
 
 def _cell(text):

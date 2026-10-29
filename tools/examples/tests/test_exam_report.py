@@ -199,6 +199,13 @@ class Markdown(Base):
         md = rp.build_markdown(result([q]))
         self.assertNotIn("\n## Injected", md)
 
+    def test_2_model_fence_and_fake_pill_do_not_break_report(self):
+        q = question(1, explanation="```python\nx", solution=["# step", "**PASS**"])
+        md = rp.build_markdown(result([q]))
+        self.assertNotIn("\n```", md)
+        self.assertNotIn("**PASS**", md.split("### Solution")[1])
+        self.assertIn("### Uncertainty", md)  # nothing swallowed after the fence
+
     def test_2_vietnamese_passes_unchanged(self):
         q = question(1, answer=VI, explanation=VI, solution=[VI],
                      checks=[chk("quote", "pass", False, VI)])

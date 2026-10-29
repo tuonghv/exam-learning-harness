@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-005",
-  "state": "UNIT_TESTED",
-  "next": "coordinator evidence.md (real Chrome render, no-renderer PATH check), then verifier",
+  "state": "VERIFIED",
+  "next": "report phase-5-report.md, crosscheck waiver, DONE",
   "title": "Report stage: Markdown + PDF via copied md2html.py and headless Chrome (REQ-0011)",
   "active": [
     {
       "task_id": "TASK-005",
-      "state": "UNIT_TESTED",
-      "next": "coordinator evidence.md (real Chrome render, no-renderer PATH check), then verifier",
-      "updated_at": "2026-10-29T05:23:00Z"
+      "state": "VERIFIED",
+      "next": "report phase-5-report.md, crosscheck waiver, DONE",
+      "updated_at": "2026-10-29T05:26:12Z"
     }
   ],
   "max_active": 1

@@ -118,3 +118,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: 165 tests OK; mutations killed 6/6.
 - Decision: advance to UNIT_TESTED; real Chrome evidence is the VERIFIED step.
 - Next: coordinator evidence.md, then verifier.
+
+## VERIFIED - TASK-005 - 2026-10-29T05:26:02Z
+- Action: coordinator real runs (mock end to end, no-renderer PATH, real Chrome Vietnamese PDF) saved under work/TASK-005/evidence; verifier read code, tests and evidence.
+- Result: AC1-AC4 verified; verifier D1 (markdown structure injection) and D2 (fake verdict pill) fixed with a test; 166 tests OK.
+- Decision: advance to VERIFIED.
+- Next: report, crosscheck waiver, DONE.

@@ -1,0 +1,13 @@
+# evidence: suite
+# task: TASK-005
+# cmd: python3 -I -m unittest discover -s tools/examples/tests
+# cwd: /home/tuonghv/Documents/git/online-system/exam-learning-harness
+# head: 211ac3b+dirty
+# when: 2026-10-29T05:25:52Z
+# rc: 0
+---
+......................................................................................................................................................................
+----------------------------------------------------------------------
+Ran 166 tests in 7.352s
+
+OK
