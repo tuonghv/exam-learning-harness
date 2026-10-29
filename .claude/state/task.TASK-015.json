@@ -1,15 +1,15 @@
 {
   "task_id": "TASK-015",
   "title": "DOCX adapter, ten-case spec tests, ingest usage docs (REQ-0018, EPIC-005)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0018",
   "acceptance_criteria": [
     "AC1-AC4 of REQ-0018"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-15-docx-adapter.md",
+    "summary": "docx adapter in body order, tables, images to assets, math warning; ten-case spec tests; ingest-usage guide",
     "reuse": [],
     "risks": []
   },
@@ -36,7 +36,11 @@
   },
   "roles_required": true,
   "crosscheck_required": true,
-  "roles": {},
+  "roles": {
+    "designer": {
+      "waiver": "coordinator wrote the design; verifier reviews it"
+    }
+  },
   "user_notes": [
     {
       "raw": "RAW-00063",
@@ -45,7 +49,7 @@
     }
   ],
   "picked_at": "2026-10-29T08:55:26Z",
-  "updated_at": "2026-10-29T08:55:43Z",
+  "updated_at": "2026-10-29T08:55:51Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/**",
@@ -59,5 +63,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder implements"
 }
