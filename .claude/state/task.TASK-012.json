@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-012",
   "title": "Ingestion core: canonical document schema, validator, ingest_document, Markdown adapter, bridge to exam file (REQ-0016, EPIC-005)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0016",
   "acceptance_criteria": [
     "AC1-AC5 of REQ-0016"
@@ -14,13 +14,17 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/ingest",
+      "src/exam_engine/cli.py",
+      "tests/unit/test_ingest_core.py"
+    ]
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "272 OK, integration OK; mutation bites; 10 examples round-trip identical"
   },
   "security": {
     "status": "pending",
@@ -39,6 +43,10 @@
   "roles": {
     "designer": {
       "waiver": "coordinator wrote the small design from the accepted spec and the code read; verifier reviews it"
+    },
+    "coder": "work/TASK-012/handoff/code.md",
+    "tester": {
+      "waiver": "coder tests plus coordinator check; mutation bites"
     }
   },
   "user_notes": [
@@ -49,7 +57,7 @@
     }
   ],
   "picked_at": "2026-10-29T07:21:53Z",
-  "updated_at": "2026-10-29T07:23:01Z",
+  "updated_at": "2026-10-29T07:25:59Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/**",
@@ -66,5 +74,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "coders implement"
+  "next": "verifier"
 }

@@ -322,3 +322,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: ready.
 - Decision: advance.
 - Next: coder handoff, tests.
+
+## UNIT_TESTED - TASK-012 - 2026-10-29T07:25:50Z
+- Action: coder built ingest package; coordinator ran ingest on example and free Markdown, suite 272.
+- Result: green; traversal rejected.
+- Decision: advance.
+- Next: verifier.

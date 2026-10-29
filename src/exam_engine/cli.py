@@ -18,7 +18,7 @@ from exam_engine.core.decision import decide
 from exam_engine.pipeline import examples_check, parser, prompts, reporter, scorer, solver, verifier
 
 COMMANDS = ("solve", "parse", "verify", "report", "check-examples", "score", "prompts",
-            "check-prompts")
+            "check-prompts", "ingest")
 USAGE = "usage: exam.py {%s} ..." % "|".join(COMMANDS)
 
 
@@ -188,13 +188,55 @@ def report_main(argv):
     return 0
 
 
+def ingest_main(argv):
+    """ingest FILE [--out DOC.json] [--meta K=V ...] [--exam-out EXAM.md]: canonical document."""
+    from exam_engine.ingest import api
+    from exam_engine.ingest.schema import IngestError
+    ap = argparse.ArgumentParser(prog="exam.py ingest")
+    ap.add_argument("file")
+    ap.add_argument("--out")
+    ap.add_argument("--exam-out")
+    ap.add_argument("--meta", action="append", default=[], metavar="K=V")
+    try:
+        args = ap.parse_args(argv)
+    except SystemExit:
+        return 2
+    meta = {}
+    for item in args.meta:
+        key, sep, val = item.partition("=")
+        if not sep or not key.strip():
+            print("ERROR: --meta expects K=V, got %r" % item, file=sys.stderr)
+            return 2
+        meta[key.strip()] = val.strip()
+    try:
+        doc = api.ingest_document(args.file, meta=meta)
+        if args.exam_out:
+            text = api.to_exam_text(doc)
+            with open(args.exam_out, "w", encoding="utf-8") as fh:
+                fh.write(text)
+        blob = json.dumps(doc, ensure_ascii=False, indent=2) + "\n"
+        if args.out:
+            with open(args.out, "w", encoding="utf-8") as fh:
+                fh.write(blob)
+    except IngestError as exc:
+        print("ERROR: ingest: %s" % exc, file=sys.stderr)
+        return 2
+    except OSError as exc:
+        print("ERROR: ingest: %s" % exc, file=sys.stderr)
+        return 2
+    if not args.out:
+        sys.stdout.write(blob)
+    return 0
+
+
 def main(argv=None):
     argv = list(sys.argv[1:] if argv is None else argv)
     cmd, rest = (argv[0], argv[1:]) if argv else (None, [])
     table = {"solve": solve_main, "parse": parse_main, "verify": verify_main,
              "report": report_main, "check-examples": examples_check.main,
              "score": scorer.score_main, "prompts": prompts.prompts_main,
-             "check-prompts": prompts.check_prompts_main}
+             "check-prompts": prompts.check_prompts_main,
+             "ingest": ingest_main}
     if cmd not in table:
         print(USAGE, file=sys.stderr)
         return 2

@@ -1,0 +1,1 @@
+{"design":{"status":"completed","path":"docs/design/phase-12-ingest-core.md","summary":"Canonical doc v1 + ingest package (schema, registry, Markdown adapter, api, to_exam_text) + CLI ingest; stdlib only"}}
