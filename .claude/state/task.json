@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-013",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "next": "coder implements",
   "title": "PDF adapter (PyMuPDF native text, selective OCR, page images) + optional-lib loader + setup doc (REQ-0017, EPIC-005)",
   "active": [
     {
       "task_id": "TASK-013",
-      "state": "DESIGN",
+      "state": "IMPLEMENTING",
       "next": "coder implements",
-      "updated_at": "2026-10-29T07:37:05Z"
+      "updated_at": "2026-10-29T07:37:14Z"
     }
   ],
   "max_active": 1

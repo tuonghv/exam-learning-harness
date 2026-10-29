@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-013",
   "title": "PDF adapter (PyMuPDF native text, selective OCR, page images) + optional-lib loader + setup doc (REQ-0017, EPIC-005)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0017",
   "acceptance_criteria": [
     "AC1-AC5 of REQ-0017"
@@ -49,7 +49,7 @@
     }
   ],
   "picked_at": "2026-10-29T07:36:26Z",
-  "updated_at": "2026-10-29T07:37:05Z",
+  "updated_at": "2026-10-29T07:37:14Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/**",
