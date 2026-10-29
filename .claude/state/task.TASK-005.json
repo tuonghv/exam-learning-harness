@@ -62,6 +62,11 @@
       "raw": "RAW-00037",
       "note": "PDF: reference code-security-scanner, copy the needed script (md2html.py), rewrite md_to_pdf in Python",
       "at": "2026-10-29T05:12:53Z"
+    },
+    {
+      "raw": "RAW-00038",
+      "note": "engine restructure requested (REQ-0012): finish TASK-005 first, then TASK-006 move per phase-6 design",
+      "at": "2026-10-29T05:20:16Z"
     }
   ],
   "picked_at": "2026-10-29T05:12:53Z",
