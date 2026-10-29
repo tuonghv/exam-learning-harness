@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-020",
   "title": "cross-solve: text route vs page-image route, answer-level agreement (REQ-0023, EPIC-006)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0023",
   "acceptance_criteria": [
     "AC1-AC4 of REQ-0023"
@@ -32,8 +32,13 @@
     "result": "no real call without --real; images rendered locally; empty cwd; key pages refused"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-020/evidence/task020-dryrun-keypages.txt",
+      "work/TASK-020/evidence/task020-dryrun-real-doc.txt"
+    ],
+    "command": "cross-solve dry-run on real doc.json; key pages refused",
+    "result": "dry run exit 0 with route B prompt; pages 3-6 refused (exit 3)"
   },
   "report": {
     "status": "pending",
@@ -50,11 +55,17 @@
     },
     "tester": {
       "waiver": "coordinator ran the suite"
+    },
+    "verifier": {
+      "waiver": "coordinator ran real-doc dry-run"
+    },
+    "crosscheck": {
+      "waiver": "no counts; behaviour covered by seeded-corruption tests"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-29T15:53:07Z",
-  "updated_at": "2026-10-29T15:55:08Z",
+  "updated_at": "2026-10-29T15:55:32Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-020/"
@@ -65,5 +76,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "dry-run on the real doc, then report"
+  "next": "report and DONE"
 }

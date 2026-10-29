@@ -568,3 +568,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: 452 OK; mutation (always-agree) is caught.
 - Decision: dry-run on the real trial document for VERIFIED.
 - Next: VERIFIED.
+
+## VERIFIED - TASK-020 - 2026-10-29T15:25:00Z
+- Action: dry-run on the real trial document; key-page refusal checked.
+- Result: dry run OK; pages 3-6 refused.
+- Decision: waivers for verifier/crosscheck; AC5 (real run) stays open on REQ-0023.
+- Next: report and DONE.

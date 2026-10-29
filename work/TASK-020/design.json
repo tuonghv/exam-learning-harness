@@ -1,0 +1,1 @@
+{"design": {"status": "completed", "path": "docs/design/phase-20-cross-solve.md", "summary": "cross-solve command: text vs image route, answer-level agreement, cross.json + review.md"}, "acceptance_criteria": ["AC1-AC4 of REQ-0023"], "roles": {"designer": {"waiver": "design written by coordinator as phases 18-19"}}, "next": "implement pipeline/cross.py, cli cross-solve, tests"}
