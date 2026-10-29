@@ -272,7 +272,7 @@
     "task_id": "TASK-011",
     "title": "Informatics subject + bilingual subject names (REQ-0015)",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-10-29T06:56:46Z",
     "requirement": "REQ-0015",
     "acceptance_criteria": [

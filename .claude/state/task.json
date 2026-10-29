@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-010",
-  "state": "DONE",
-  "next": "done",
-  "title": "Prompt language variants + interface validator (REQ-0014)",
-  "active": [],
+  "task_id": "TASK-011",
+  "state": "IMPLEMENTING",
+  "next": "coders",
+  "title": "Informatics subject + bilingual subject names (REQ-0015)",
+  "active": [
+    {
+      "task_id": "TASK-011",
+      "state": "IMPLEMENTING",
+      "next": "coders",
+      "updated_at": "2026-10-29T06:56:46Z"
+    }
+  ],
   "max_active": 1
 }

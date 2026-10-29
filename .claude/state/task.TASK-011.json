@@ -1,0 +1,75 @@
+{
+  "task_id": "TASK-011",
+  "title": "Informatics subject + bilingual subject names (REQ-0015)",
+  "state": "IMPLEMENTING",
+  "requirement": "REQ-0015",
+  "acceptance_criteria": [
+    "AC1-AC4 of REQ-0015"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-11-informatics-subject.md",
+    "summary": "fold() in router, vi aliases, informatics subject+prompts, FORMAT section, 5 items, oracle tests",
+    "reuse": [
+      "router",
+      "examples_check",
+      "oracle tests"
+    ],
+    "risks": [
+      "alias collision",
+      "IT item answer wrong"
+    ]
+  },
+  "implementation": {
+    "status": "pending",
+    "files": [
+      "config/subjects.json"
+    ]
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": {
+      "waiver": "coordinator wrote the short design"
+    }
+  },
+  "user_notes": [],
+  "picked_at": "2026-10-29T06:56:46Z",
+  "updated_at": "2026-10-29T06:56:46Z",
+  "updated_by": "main",
+  "scope": [
+    "examples/informatics/**",
+    "examples/FORMAT.md",
+    "evals/**",
+    "prompts/dev/subjects/**",
+    "prompts/dev/lang/vi/subjects/**",
+    "config/subjects.json",
+    "src/exam_engine/**",
+    "tests/**",
+    "docs/design/phase-11-informatics-subject.md"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "coders"
+}

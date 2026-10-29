@@ -280,3 +280,15 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: variants and validator live.
 - Decision: close.
 - Next: REQ-0015.
+
+## DESIGN - TASK-011 - 2026-10-29T06:56:46Z
+- Action: phase-11 design.
+- Result: scope and items fixed.
+- Decision: enter DESIGN.
+- Next: IMPLEMENTING.
+
+## IMPLEMENTING - TASK-011 - 2026-10-29T06:56:46Z
+- Action: start coding.
+- Result: ready.
+- Decision: coder A code, coder B items.
+- Next: handoffs.
