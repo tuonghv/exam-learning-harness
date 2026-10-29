@@ -152,7 +152,7 @@
     "task_id": "TASK-005",
     "title": "Report stage: Markdown + PDF via copied md2html.py and headless Chrome (REQ-0011)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-10-29T13:00:00",
     "requirement": "REQ-0011",
     "acceptance_criteria": [
@@ -161,6 +161,24 @@
       "AC3 PDF via md2html + renderer, skip flagged",
       "AC4 mocked tests"
     ],
-    "user_notes": []
+    "user_notes": [
+      {
+        "raw": "RAW-00037",
+        "note": "PDF: reference code-security-scanner, copy the needed script (md2html.py), rewrite md_to_pdf in Python",
+        "at": "2026-10-29T05:12:53Z"
+      },
+      {
+        "raw": "RAW-00038",
+        "note": "engine restructure requested (REQ-0012): finish TASK-005 first, then TASK-006 move per phase-6 design",
+        "at": "2026-10-29T05:20:16Z"
+      },
+      {
+        "raw": "RAW-00039",
+        "note": "user delegated the structure choice; REQ-0012 Q1-Q4 decided by coordinator",
+        "at": "2026-10-29T05:20:28Z"
+      }
+    ],
+    "completed_at": "2026-10-29T05:26:33Z",
+    "report": "docs/report/phase-5-report.md"
   }
 ]

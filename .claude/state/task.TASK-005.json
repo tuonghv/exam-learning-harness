@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-005",
   "title": "Report stage: Markdown + PDF via copied md2html.py and headless Chrome (REQ-0011)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0011",
   "acceptance_criteria": [
     "AC1 result.json carries evidence kind",
@@ -50,8 +50,8 @@
     "summary": "AC1-AC4 verified; verifier D1/D2 fixed"
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-5-report.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -61,7 +61,10 @@
     },
     "coder": "work/TASK-005/handoff/code.md",
     "tester": "work/TASK-005/handoff/test.md",
-    "verifier": "work/TASK-005/handoff/verify.md"
+    "verifier": "work/TASK-005/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "report stage has no counts or decisions to reconcile; coordinator ran the real renders (evidence.md) and the verifier read code and tests"
+    }
   },
   "user_notes": [
     {
@@ -81,7 +84,7 @@
     }
   ],
   "picked_at": "2026-10-29T05:12:53Z",
-  "updated_at": "2026-10-29T05:26:12Z",
+  "updated_at": "2026-10-29T05:26:33Z",
   "updated_by": "main",
   "scope": [
     "tools/examples/**",
@@ -93,5 +96,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report phase-5-report.md, crosscheck waiver, DONE"
+  "next": "done"
 }

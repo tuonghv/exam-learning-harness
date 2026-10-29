@@ -124,3 +124,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: AC1-AC4 verified; verifier D1 (markdown structure injection) and D2 (fake verdict pill) fixed with a test; 166 tests OK.
 - Decision: advance to VERIFIED.
 - Next: report, crosscheck waiver, DONE.
+
+## DONE - TASK-005 - 2026-10-29T05:26:33Z
+- Action: wrote docs/report/phase-5-report.md; crosscheck waived with reason; backlog complete.
+- Result: REQ-0011 AC1-AC4 verified, 166 tests OK, real Chrome PDF with Vietnamese.
+- Decision: close TASK-005.
+- Next: TASK-006 engine restructure (REQ-0012).
