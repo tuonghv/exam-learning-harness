@@ -41,7 +41,19 @@
   "roles_required": true,
   "crosscheck_required": true,
   "roles": {
-    "designer": "work/TASK-001/handoff/design.md"
+    "designer": "work/TASK-001/handoff/design.md",
+    "coder": "work/TASK-001/handoff/code.md",
+    "grants": {
+      "coder": [
+        ".claude/skills/**"
+      ],
+      "tester": [
+        ".claude/skills/**"
+      ]
+    },
+    "grants_auto": [
+      ".claude/skills/**"
+    ]
   },
   "user_notes": [
     {
@@ -63,13 +75,22 @@
       "raw": "RAW-00018",
       "note": "Q6 answer A+B+C",
       "at": "2026-10-29T01:56:47Z"
+    },
+    {
+      "raw": "RAW-00022",
+      "note": "role skills still too big/off-purpose: cut more (raise AC7 target)",
+      "at": "2026-10-29T02:02:09Z"
     }
   ],
   "picked_at": "2026-10-29T01:46:15Z",
-  "updated_at": "2026-10-29T01:58:06Z",
+  "updated_at": "2026-10-29T02:02:05Z",
   "updated_by": "main",
   "scope": [
-    "CLAUDE.md"
+    "CLAUDE.md",
+    ".claude/skills/**",
+    ".claude/agents/**",
+    ".claude/commands/**",
+    "docs/guide/**"
   ],
   "depends_on": [],
   "inputs": {},
@@ -78,10 +99,11 @@
       "picked; designer launched",
       "designer handoff; design copied to docs/design",
       "design r3 installed, state DESIGN",
-      "coder step A launched"
+      "coder step A launched",
+      "step A: CLAUDE.md 4094 B, grep 0 (main installed coder draft; guard blocks coder writes there)"
     ],
     "notes": "",
-    "next": "review work/TASK-001/handoff/code.md, run step A checks, then brief step B"
+    "next": "brief step B: pointer cleanup + strip + compression + override doc + oracle (design 2.2-2.6, 2.8)"
   },
   "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
 }
