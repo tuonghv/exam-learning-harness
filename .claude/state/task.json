@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-011",
-  "state": "VERIFIED",
+  "state": "DONE",
   "next": "done",
   "title": "Informatics subject + bilingual subject names (REQ-0015)",
-  "active": [
-    {
-      "task_id": "TASK-011",
-      "state": "VERIFIED",
-      "next": "done",
-      "updated_at": "2026-10-29T07:01:01Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

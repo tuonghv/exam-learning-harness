@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-011",
   "title": "Informatics subject + bilingual subject names (REQ-0015)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0015",
   "acceptance_criteria": [
     "AC1-AC4 of REQ-0015"
@@ -68,7 +68,7 @@
   },
   "user_notes": [],
   "picked_at": "2026-10-29T06:56:46Z",
-  "updated_at": "2026-10-29T07:01:01Z",
+  "updated_at": "2026-10-29T07:01:02Z",
   "updated_by": "main",
   "scope": [
     "examples/informatics/**",
