@@ -1,0 +1,69 @@
+{
+  "task_id": "TASK-013",
+  "title": "PDF adapter (PyMuPDF native text, selective OCR, page images) + optional-lib loader + setup doc (REQ-0017, EPIC-005)",
+  "state": "DESIGN",
+  "requirement": "REQ-0017",
+  "acceptance_criteria": [
+    "AC1-AC5 of REQ-0017"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-13-pdf-adapter.md",
+    "summary": "PDF adapter on PyMuPDF (native first, selective OCR, crops), user-site loader, shared segmenter, ingest --check, setup doc",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": {
+      "waiver": "coordinator wrote the design from the accepted spec; verifier reviews it"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00055",
+      "note": "approve all: loader option A; document setup",
+      "at": "2026-10-29T07:36:26Z"
+    }
+  ],
+  "picked_at": "2026-10-29T07:36:26Z",
+  "updated_at": "2026-10-29T07:37:05Z",
+  "updated_by": "main",
+  "scope": [
+    "src/exam_engine/ingest/**",
+    "src/exam_engine/cli.py",
+    "tests/**",
+    "docs/design/phase-13-pdf-adapter.md",
+    "docs/guide/ingest-setup.md",
+    "config/**"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "coder implements"
+}

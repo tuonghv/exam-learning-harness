@@ -311,7 +311,7 @@
     "task_id": "TASK-013",
     "title": "PDF adapter (PyMuPDF native text, selective OCR, page images) + optional-lib loader + setup doc (REQ-0017, EPIC-005)",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-10-29T07:36:26Z",
     "requirement": "REQ-0017",
     "acceptance_criteria": [

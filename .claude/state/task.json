@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-012",
-  "state": "DONE",
-  "next": "done",
-  "title": "Ingestion core: canonical document schema, validator, ingest_document, Markdown adapter, bridge to exam file (REQ-0016, EPIC-005)",
-  "active": [],
+  "task_id": "TASK-013",
+  "state": "DESIGN",
+  "next": "coder implements",
+  "title": "PDF adapter (PyMuPDF native text, selective OCR, page images) + optional-lib loader + setup doc (REQ-0017, EPIC-005)",
+  "active": [
+    {
+      "task_id": "TASK-013",
+      "state": "DESIGN",
+      "next": "coder implements",
+      "updated_at": "2026-10-29T07:37:05Z"
+    }
+  ],
   "max_active": 1
 }

@@ -340,3 +340,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: ingestion core + Markdown live.
 - Decision: close.
 - Next: REQ-0017 PDF adapter.
+
+## DESIGN - TASK-013 - 2026-10-29T07:37:05Z
+- Action: wrote docs/design/phase-13-pdf-adapter.md.
+- Result: complete, no open questions.
+- Decision: advance.
+- Next: IMPLEMENTING.
