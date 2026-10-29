@@ -46,3 +46,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: 5 modules/files, 15 unit tests; 4 low defects (expected-001 not in FORMAT form, Skill/Language optional, eval ids start at 003, rewording not machine-checkable).
 - Decision: Q1-Q5 go to the user (Q5 touches the approved FORMAT.md).
 - Next: user answers, then IMPLEMENTING.
+
+## IMPLEMENTING - TASK-003 - 2026-10-29T03:31:10Z
+- Action: user accepted Q1-Q5 (RAW-00030); FORMAT.md marks Skill and Language optional; state DESIGN -> IMPLEMENTING.
+- Result: coder step 1 (exam_parse.py, check_examples.py, score_eval.py, README) launching; tests follow with the tester.
+- Decision: coder writes tools/examples/*.py and examples/README.md only; coordinator owns FORMAT.md and design.
+- Next: coder handoff, run the design's verification commands.

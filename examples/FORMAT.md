@@ -24,8 +24,8 @@ Level: Grade 12
 Exam type: High School Graduation    # or: University Entrance (<profile name>)
 Task: Multiple Choice                # Multiple Choice | Short Answer | Sentence Ordering | Reading Comprehension | Essay
 Mode: Solve                          # Solve | Grade | Teach
-Skill: Grammar - first conditional   # topic tag, free text
-Language: vi                         # language of the explanation: vi | en
+Skill: Grammar - first conditional   # optional; topic tag, free text
+Language: vi                         # optional (default: the language of the exam); explanation language: vi | en
 
 ## Instructions
 

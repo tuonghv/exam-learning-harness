@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-003",
   "title": "Example set layout, FORMAT checker, eval scorer, README (REQ-0002)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0002",
   "acceptance_criteria": [
     "AC1 pairing",
@@ -45,19 +45,23 @@
   },
   "user_notes": [],
   "picked_at": "2026-10-29T03:24:15Z",
-  "updated_at": "2026-10-29T03:26:59Z",
+  "updated_at": "2026-10-29T03:31:10Z",
   "updated_by": "main",
   "scope": [
-    "work/TASK-003/"
+    "tools/examples/**",
+    "examples/README.md",
+    "examples/FORMAT.md",
+    "docs/design/phase-3-example-checker.md"
   ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
     "done": [
-      "TASK-003 picked for REQ-0002; designer launched (phase-3-example-checker draft)"
+      "TASK-003 picked for REQ-0002; designer launched (phase-3-example-checker draft)",
+      "Q1-Q5 accepted, FORMAT optional headers, IMPLEMENTING"
     ],
     "notes": "",
-    "next": "install designer draft as docs/design/phase-3-example-checker.md, set design, state DESIGN, answer open questions"
+    "next": "coder step 1 handoff, then tester tests 1-15"
   },
   "next": "user answers Q1-Q5, then IMPLEMENTING (coder parser+checker, tester tests)"
 }

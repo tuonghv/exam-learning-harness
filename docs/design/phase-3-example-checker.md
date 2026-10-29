@@ -118,11 +118,13 @@ literature pair, one eval math pair), injects one defect and asserts exit 1 plus
 2. tester: tests 1-15, then the commands under Verification. 3. verifier: real repo run + AC1-AC5 evidence.
 
 ## Open questions (recommended answer first)
-- Q1 expected-001 handling: legacy allowance pinned by path+sha256 (recommended) / by path only / fail it.
-- Q2 ids: shared numbering per subject, eval starting at 003 (recommended, AC2) / numbering per tree (breaks AC2).
-- Q3 parser home: new `exam_parse.py` now (recommended) / readers inside check_examples.py (phase-2 table wording).
-- Q4 solver answer file: FORMAT expected layout Markdown (recommended) / result.json (phase 2, not built yet).
-- Q5 `Skill`/`Language` headers: optional (recommended; input-001 lacks them) / required (input-001 fails).
+- [x] Q1 expected-001 handling: legacy allowance pinned by path+sha256 (recommended) / by path only / fail it.
+- [x] Q2 ids: shared numbering per subject, eval starting at 003 (recommended, AC2) / numbering per tree (breaks AC2).
+- [x] Q3 parser home: new `exam_parse.py` now (recommended) / readers inside check_examples.py (phase-2 table wording).
+- [x] Q4 solver answer file: FORMAT expected layout Markdown (recommended) / result.json (phase 2, not built yet).
+- [x] Q5 `Skill`/`Language` headers: optional (recommended; input-001 lacks them) / required (input-001 fails).
+
+Answers: Q1-Q5 accepted as recommended (user, RAW-00030, 2026-10-29).
 
 ## Out of scope
 Authoring the 20 items (content tasks). Detecting reworded duplicates. The phase-2 pipeline. Running a solver.
