@@ -18,9 +18,9 @@
     "risks": []
   },
   "implementation": {
-    "status": "in_progress",
+    "status": "completed",
     "files": [],
-    "summary": "exam_parse.py, check_examples.py, score_eval.py, examples/README.md (53 lines) built; repo check exits 0; tests pending"
+    "summary": "step 1 code done: exam_parse.py, check_examples.py, score_eval.py, examples/README.md (53 lines); repo check exits 0; tests are step 2"
   },
   "unit_test": {
     "status": "pending",
@@ -58,7 +58,7 @@
     }
   ],
   "picked_at": "2026-10-29T03:24:15Z",
-  "updated_at": "2026-10-29T03:33:26Z",
+  "updated_at": "2026-10-29T03:33:32Z",
   "updated_by": "main",
   "scope": [
     "tools/examples/**",
@@ -71,10 +71,11 @@
   "checkpoint": {
     "done": [
       "TASK-003 picked for REQ-0002; designer launched (phase-3-example-checker draft)",
-      "Q1-Q5 accepted, FORMAT optional headers, IMPLEMENTING"
+      "Q1-Q5 accepted, FORMAT optional headers, IMPLEMENTING",
+      "coder step 1 done and committed (92e57d4); tester launched"
     ],
     "notes": "",
-    "next": "coder step 1 handoff, then tester tests 1-15"
+    "next": "tester handoff, then UNIT_TESTED gate"
   },
   "next": "tester writes tests 1-15 under tools/examples/tests, then run commands"
 }
