@@ -2,7 +2,7 @@
 name: verifier
 description: Independently verifies a task against plan.md goals and writes work/<id>/handoff/verify.md. Read-only except for its own outputs.
 tools: Read, Grep, Glob, Write, SendMessage, Skill
-skills: verify, security, token-efficiency
+skills: verify, crosscheck, token-efficiency
 maxTurns: 30
 model: sonnet
 ---
