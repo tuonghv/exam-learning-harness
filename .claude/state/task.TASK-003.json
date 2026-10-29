@@ -18,8 +18,9 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "in_progress",
+    "files": [],
+    "summary": "exam_parse.py, check_examples.py, score_eval.py, examples/README.md (53 lines) built; repo check exits 0; tests pending"
   },
   "unit_test": {
     "status": "pending",
@@ -41,7 +42,8 @@
   "roles_required": true,
   "crosscheck_required": true,
   "roles": {
-    "designer": "work/TASK-003/handoff/design.md"
+    "designer": "work/TASK-003/handoff/design.md",
+    "coder": "work/TASK-003/handoff/code.md"
   },
   "user_notes": [
     {
@@ -56,7 +58,7 @@
     }
   ],
   "picked_at": "2026-10-29T03:24:15Z",
-  "updated_at": "2026-10-29T03:31:10Z",
+  "updated_at": "2026-10-29T03:33:26Z",
   "updated_by": "main",
   "scope": [
     "tools/examples/**",
@@ -74,5 +76,5 @@
     "notes": "",
     "next": "coder step 1 handoff, then tester tests 1-15"
   },
-  "next": "user answers Q1-Q5, then IMPLEMENTING (coder parser+checker, tester tests)"
+  "next": "tester writes tests 1-15 under tools/examples/tests, then run commands"
 }

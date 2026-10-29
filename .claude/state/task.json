@@ -2,14 +2,14 @@
   "schema": 2,
   "task_id": "TASK-003",
   "state": "IMPLEMENTING",
-  "next": "user answers Q1-Q5, then IMPLEMENTING (coder parser+checker, tester tests)",
+  "next": "tester writes tests 1-15 under tools/examples/tests, then run commands",
   "title": "Example set layout, FORMAT checker, eval scorer, README (REQ-0002)",
   "active": [
     {
       "task_id": "TASK-003",
       "state": "IMPLEMENTING",
-      "next": "user answers Q1-Q5, then IMPLEMENTING (coder parser+checker, tester tests)",
-      "updated_at": "2026-10-29T03:31:10Z"
+      "next": "tester writes tests 1-15 under tools/examples/tests, then run commands",
+      "updated_at": "2026-10-29T03:33:26Z"
     }
   ],
   "max_active": 1
