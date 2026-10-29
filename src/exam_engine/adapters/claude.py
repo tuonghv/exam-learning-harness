@@ -70,11 +70,32 @@ def run_claude_images(text, images, *, model, timeout_s, runner=subprocess.run, 
         return _bad("other", "no images given", 0.0)
     blocks.append({"type": "text", "text": text})
     line = json.dumps({"type": "user", "message": {"role": "user", "content": blocks}})
-    return _run(line + "\n", ["--input-format", "stream-json"], model, timeout_s, runner, cwd)
+    return _run(line + "\n", ["--input-format", "stream-json", "--verbose"], model, timeout_s,
+                runner, cwd, stream=True)
 
 
-def _run(prompt, extra, model, timeout_s, runner, cwd):
-    argv = ["claude", "-p", "--output-format", "json", "--model", model,
+def _envelope(out, stream):
+    """The result envelope: whole stdout as JSON, or (stream-json) the last `result` line."""
+    if not out.strip():
+        return None
+    if not stream:
+        try:
+            return json.loads(out)
+        except ValueError:
+            return None
+    env = None
+    for ln in out.splitlines():
+        try:
+            obj = json.loads(ln)
+        except ValueError:
+            continue
+        if isinstance(obj, dict) and obj.get("type") == "result":
+            env = obj
+    return env
+
+
+def _run(prompt, extra, model, timeout_s, runner, cwd, stream=False):
+    argv = ["claude", "-p", "--output-format", "stream-json" if stream else "json", "--model", model,
             "--tools", "", "--disable-slash-commands", "--no-session-persistence",
             "--strict-mcp-config"] + extra
     t0 = time.time()
@@ -87,10 +108,7 @@ def _run(prompt, extra, model, timeout_s, runner, cwd):
         return _bad("other", "cannot start claude: %s" % exc, time.time() - t0)
     dur = time.time() - t0
     out, err = p.stdout or "", p.stderr or ""
-    try:
-        env = json.loads(out) if out.strip() else None
-    except ValueError:
-        env = None
+    env = _envelope(out, stream)
     cost = 0.0
     if isinstance(env, dict):
         c = env.get("total_cost_usd", env.get("cost_usd", 0.0))

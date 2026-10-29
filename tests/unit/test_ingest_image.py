@@ -290,7 +290,8 @@ class TestFiveMB(ImageBase):
 class Rec(object):
     def __init__(self, out=None):
         self.calls = []
-        self.out = out or json.dumps({"result": "ok", "total_cost_usd": 0.0})
+        self.out = out or (json.dumps({"type": "system"}) + "\n" +
+                           json.dumps({"type": "result", "result": "ok", "total_cost_usd": 0.0}) + "\n")
 
     def __call__(self, argv, **kw):
         self.calls.append((argv, kw))
@@ -310,6 +311,8 @@ class TestClaudeImages(unittest.TestCase):
         self.assertTrue(res.ok)
         argv, kw = rec.calls[0]
         self.assertIn("stream-json", argv)
+        self.assertEqual(argv[argv.index("--output-format") + 1], "stream-json")
+        self.assertIn("--verbose", argv)
         self.assertEqual(argv[argv.index("--input-format") + 1], "stream-json")
         self.assertEqual(argv[argv.index("--tools") + 1], "")
         self.assertEqual(kw["cwd"], "/empty")
