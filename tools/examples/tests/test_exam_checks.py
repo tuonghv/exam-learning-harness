@@ -1,11 +1,20 @@
 """Tests 5-9 of docs/design/phase-4-engine-core.md (+D6 independence); REQ-0010 AC3. No model call."""
+import io
+import contextlib
+import json
 import os
+import shutil
 import sys
+import tempfile
+import time
 import unittest
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(HERE))
 import exam_checks as ck  # noqa: E402
+import exam_llm  # noqa: E402
+import exam_run as er  # noqa: E402
+import exam_schema as sch  # noqa: E402
 
 MC = {"fields": {"Subject": "English", "Task": "Multiple Choice"}, "passage": "The cat sat."}
 OPTS = {"A": "have", "B": "had", "C": "will have", "D": "would have"}
@@ -211,6 +220,86 @@ class Decide(unittest.TestCase):
         self.assertEqual((s["points"], s["max"], s["basis"], s["detail"]),
                          (0, 1, "official_key", "differs_from_key"))
         self.assertEqual(ck.score(ans("A"), {"final": None})["basis"], "none")
+
+
+class SafeEvalRegression(unittest.TestCase):
+    """Verifier defects: every refusal is a prompt ValueError (< 2 s), never a hang or other error."""
+
+    def refused(self, expr):
+        t0 = time.time()
+        with self.assertRaises(ValueError, msg=expr[:40]):
+            ck.safe_eval(expr)
+        self.assertLess(time.time() - t0, 2.0, expr[:40])
+
+    def test_5_value_and_overflow_refused_fast(self):
+        for expr in ("(10**100)**4", "((((9**99)**99)**99)**99)**99", "10**100*10**100",
+                     "10**101", "exp(500)", "1e308*10", "1e200"):
+            self.refused(expr)
+
+    def test_5_round_digits_refused_fast(self):
+        for expr in ("round(5,-999999999)", "round(5,2.5)", "round(5,16)", "round(5,-16)"):
+            self.refused(expr)
+        self.assertEqual(ck.safe_eval("round(5.55,1)"), round(5.55, 1))
+
+    def test_5_math_errors_refused_fast(self):
+        for expr in ("1/0", "sqrt(-1)", "log(0)", "5%0", "0**-1"):
+            self.refused(expr)
+
+    def test_5_depth_and_length_caps(self):
+        deep = "-(" * 45 + "1" + ")" * 45
+        self.assertLess(len(deep), ck.MAX_EXPR_LEN)
+        self.refused(deep)
+        ok = "-(" * 10 + "1" + ")" * 10
+        self.assertEqual(ck.safe_eval(ok), 1.0)
+        self.refused("1+" * 200 + "1")  # 401 chars: length cap
+
+    def test_5_valid_still_work(self):
+        self.assertAlmostEqual(ck.safe_eval("2*sqrt(3)"), 3.4641, places=4)
+        self.assertEqual(ck.safe_eval("round(2.567,2)"), 2.57)
+        self.assertAlmostEqual(ck.safe_eval("pi*2"), 6.283185, places=5)
+        self.assertEqual(ck.safe_eval("10**99"), 1e99)
+
+    def test_6_bomb_expr_in_computed_check_is_unevaluable(self):
+        t0 = time.time()
+        for expr in ("(10**100)**4", "round(5,-999999999)"):
+            cs = ck.det_checks(QNUM, ans("3.46", expr=expr), NUM)
+            comp = [c for c in cs if c["kind"] == "computed"][0]
+            self.assertEqual((comp["result"], comp["independent"]), ("unknown", False))
+        self.assertLess(time.time() - t0, 2.0)
+
+    def test_6_run_completes_with_bomb_expr_and_valid_result(self):
+        tmp = tempfile.mkdtemp(prefix="exam_chk_test_")
+        self.addCleanup(shutil.rmtree, tmp, True)
+        exam = os.path.join(tmp, "e.md")
+        with open(exam, "w", encoding="utf-8") as fh:
+            fh.write("# Exam Input\n\nSubject: Mathematics\nLevel: Grade 12\nExam type: T\n"
+                     "Task: Short Answer\nMode: Solve\n\n## Instructions\n\nSolve.\n\n"
+                     "## Question 1\n\nCompute something.\n")
+        reply = json.dumps({"schema_version": "1.0", "questions": [{
+            "id": "1", "answer": "3.46", "answer_status": "answered", "solution": ["s"],
+            "explanation": "e", "expr": "(10**100)**4", "evidence": [],
+            "uncertainty": {"level": "low", "reason": "r"},
+            "reasoning_status": "not_independently_verified"}]})
+        review = json.dumps({"reviews": [{"id": "1", "verdict": "agree", "findings": []}]})
+        replies = [reply, review, reply, review]
+        calls = []
+
+        def llm(prompt):
+            calls.append(prompt)
+            return exam_llm.Call(True, replies.pop(0), 0.0, "", "", 0.0)
+        c = {"max_attempts": 2, "max_cost_usd": 1.0, "timeout": 5, "model": "m", "key": None,
+             "llm_name": "mock"}
+        out = os.path.join(tmp, "out")
+        with contextlib.redirect_stderr(io.StringIO()):
+            res, code = er.run(exam, out, c, llm)
+        self.assertIn(code, (0, 1))
+        with open(os.path.join(out, "result.json"), encoding="utf-8") as fh:
+            disk = json.load(fh)
+        self.assertEqual(sch.validate(disk, sch.RESULT), [])
+        q = disk["questions"][0]
+        self.assertNotEqual(q["verification_status"], "PASS")  # unevaluable is not proof
+        self.assertTrue(all(not k["independent"] for k in q["checks"]))
+        self.assertLessEqual(len(calls), 1 + 2 * c["max_attempts"])
 
 
 if __name__ == "__main__":

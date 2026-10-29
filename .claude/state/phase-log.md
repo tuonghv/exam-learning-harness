@@ -88,3 +88,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: 101 tests OK (28 old + 73 new); tester mutations 17/17 killed; coordinator mutation killed by 3 tests; no real claude call reachable.
 - Decision: UNIT_TESTED; retry set skips no_independent_check (a re-solve cannot create an independent check).
 - Next: coordinator mock end-to-end on examples/english/input-001.md with a key-leak grep, evidence.md, verifier.
+
+## VERIFIED - TASK-004 - 2026-10-29T04:40:41Z
+- Action: coordinator ran mock end-to-end, the --real path against a fake claude executable and a key-sentinel grep; verifier reviewed AC1-AC6 statically, found safe_eval overflow/hang (D1-D3), coder A fixed, tester added 7 regression tests, verifier re-checked.
+- Result: 108 tests OK; AC1-AC6 PASS; no sentinel or key line in any prompt or output; no real claude call; D4 (extra ids ignored) accepted and AC2 reworded.
+- Decision: VERIFIED; model accuracy is not claimed here (REQ-0009 needs the user's go).
+- Next: report, crosscheck waiver, DONE, backlog complete.

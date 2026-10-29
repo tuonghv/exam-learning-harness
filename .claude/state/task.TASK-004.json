@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-004",
   "title": "Engine core + QA: prompt+exam -> claude -p -> JSON, checks, decision, score (REQ-0010)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0010",
   "acceptance_criteria": [
     "AC1 run_claude+extract_json",
@@ -34,15 +34,17 @@
   "unit_test": {
     "status": "passed",
     "command": "python3 -I -m unittest discover -s tools/examples/tests",
-    "result": "101 tests OK (28 old + 73 new), mock only, no real claude reachable; tester mutations 17/17 killed; coordinator mutation (key appended to solve prompt) killed by 3 tests"
+    "result": "108 tests OK (28 old + 80 new), mock only"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "not_applicable",
+    "result": "engine runs no shell, passes prompt on stdin, isolated empty cwd with tools disabled; safe_eval is whitelist + caps; key opened only after decision; sentinel grep clean"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": "work/TASK-004/handoff/evidence.md",
+    "method": "coordinator ran mock end-to-end, fake-claude --real path and sentinel key-leak grep (evidence.md E1-E12); verifier static review of AC1-AC6 with re-check after safe_eval fix (verify.md)",
+    "result": "AC1-AC6 PASS; defects D1-D3 fixed and regression-tested, D4 accepted (extra ids ignored, AC2 reworded); no real claude call made; model accuracy not claimed (REQ-0009)"
   },
   "report": {
     "status": "pending",
@@ -55,11 +57,12 @@
       "waiver": "architecture designed in TASK-002 by the designer (Nova, work/TASK-002/handoff); phase-4 only aligns SOLVE_OUT with solve.md and splits the build"
     },
     "coder": "work/TASK-004/handoff/code-b.md",
-    "tester": "work/TASK-004/handoff/test.md"
+    "tester": "work/TASK-004/handoff/test.md",
+    "verifier": "work/TASK-004/handoff/verify.md"
   },
   "user_notes": [],
   "picked_at": "2026-10-29T04:21:14Z",
-  "updated_at": "2026-10-29T04:35:18Z",
+  "updated_at": "2026-10-29T04:40:41Z",
   "updated_by": "main",
   "scope": [
     "tools/examples/**",
@@ -76,5 +79,5 @@
     "notes": "",
     "next": "tester handoff (14 mock cases), then UNIT_TESTED"
   },
-  "next": "coordinator mock end-to-end + key-leak grep, evidence.md, verifier"
+  "next": "report, crosscheck waiver, DONE, backlog complete"
 }

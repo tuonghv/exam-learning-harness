@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-004",
-  "state": "UNIT_TESTED",
-  "next": "coordinator mock end-to-end + key-leak grep, evidence.md, verifier",
+  "state": "VERIFIED",
+  "next": "report, crosscheck waiver, DONE, backlog complete",
   "title": "Engine core + QA: prompt+exam -> claude -p -> JSON, checks, decision, score (REQ-0010)",
   "active": [
     {
       "task_id": "TASK-004",
-      "state": "UNIT_TESTED",
-      "next": "coordinator mock end-to-end + key-leak grep, evidence.md, verifier",
-      "updated_at": "2026-10-29T04:35:18Z"
+      "state": "VERIFIED",
+      "next": "report, crosscheck waiver, DONE, backlog complete",
+      "updated_at": "2026-10-29T04:40:41Z"
     }
   ],
   "max_active": 1
