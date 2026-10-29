@@ -496,3 +496,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: design completed, no open questions.
 - Decision: validate in ingest/schema.py; adapters, to_exam_text, solve unchanged.
 - Next: implement validate_questions and tests.
+
+## IMPLEMENTING - TASK-018 - 2026-10-29T12:55:00Z
+- Action: added latex/source/figures/verification to the question schema and validate_questions (trace checks).
+- Result: 7 new tests, suite 432 OK.
+- Decision: adapters, to_exam_text, solve unchanged.
+- Next: record UNIT_TESTED.

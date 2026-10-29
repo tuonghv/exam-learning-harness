@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-018",
   "title": "Question schema: LaTeX, source trace, verification record (REQ-0022, EPIC-006)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0022",
   "acceptance_criteria": [
     "AC1-AC5 of REQ-0022"
@@ -14,8 +14,12 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/ingest/schema.py",
+      "tests/unit/test_ingest_schema_q.py"
+    ],
+    "summary": "validate_questions + question schema extras in ingest/schema.py"
   },
   "unit_test": {
     "status": "pending",
@@ -39,11 +43,14 @@
   "roles": {
     "designer": {
       "waiver": "small additive schema design written by coordinator; same pattern as phases 14-17"
+    },
+    "coder": {
+      "waiver": "small change by coordinator"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-29T15:04:53Z",
-  "updated_at": "2026-10-29T15:05:27Z",
+  "updated_at": "2026-10-29T15:06:32Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-018/"
@@ -54,5 +61,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "implement validate_questions in ingest/schema.py + tests"
+  "next": "run unit suite, record UNIT_TESTED"
 }

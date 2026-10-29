@@ -8,6 +8,8 @@ CODES = ("unsupported_format", "empty", "decode", "missing_asset", "missing_depe
 STATUSES = ["native_text", "ocr", "mixed", "needs_review"]
 BLOCK_TYPES = ["heading", "paragraph", "list", "table", "code", "math", "image"]
 ORIGINS = ["source", "extracted", "normalized", "ai"]
+LATEX_ORIGINS = ["ai", "recognizer"]
+VERIFY_STATUSES = ["unverified", "verified", "needs_review", "rejected"]
 
 _BLOCK = {"type": "object", "required": ["id", "order", "type", "text", "origin"],
           "properties": {"id": {"type": "string"}, "order": {"type": "integer"},
@@ -22,6 +24,21 @@ _PAGE = {"type": "object", "required": ["n", "blocks"],
 _ASSET = {"type": "object", "required": ["id", "path", "mime", "sha256"],
           "properties": {"id": {"type": "string"}, "path": {"type": "string"},
                          "mime": {"type": "string"}, "sha256": {"type": "string"}}}
+_BBOX = {"type": ["array", "null"], "items": {"type": "number"}}
+_QUESTION = {"type": "object", "properties": {
+    "latex": {"type": "object", "required": ["text", "origin"], "properties": {
+        "text": {"type": "string"}, "origin": {"enum": LATEX_ORIGINS},
+        "options": {"type": "object"}}},
+    "source": {"type": "object", "required": ["page"], "properties": {
+        "page": {"type": "integer", "minimum": 1}, "bbox": _BBOX,
+        "crop": {"type": ["string", "null"]}, "route": {"type": "object"}}},
+    "figures": {"type": "array", "items": {"type": "object", "required": ["asset"],
+                                           "properties": {"asset": {"type": "string"},
+                                                          "page": {"type": "integer"},
+                                                          "bbox": _BBOX}}},
+    "verification": {"type": "object", "required": ["status"], "properties": {
+        "status": {"enum": VERIFY_STATUSES}, "checks": {"type": "array"},
+        "reasons": {"type": "array", "items": {"type": "string"}}}}}}
 DOCUMENT = {
     "type": "object",
     "required": ["schema_version", "source", "status", "extraction", "meta", "pages",
@@ -34,7 +51,7 @@ DOCUMENT = {
         "meta": {"type": "object"},
         "pages": {"type": "array", "items": _PAGE},
         "assets": {"type": "array", "items": _ASSET},
-        "questions": {"type": "array"},
+        "questions": {"type": "array", "items": _QUESTION},
         "parts": {"type": "array", "items": {
             "type": "object", "required": ["kind", "pages"],
             "properties": {"kind": {"enum": ["exam", "answer_key"]},
@@ -77,4 +94,29 @@ def validate_document(doc):
             seen.add(blk["id"])
             if blk.get("asset") and blk["asset"] not in assets:
                 errs.append("block %s: asset %s not in assets" % (blk["id"], blk["asset"]))
+    return errs + validate_questions(doc)
+
+
+def validate_questions(doc):
+    """Trace integrity of questions that carry latex, figures or verification (REQ-0022)."""
+    errs = []
+    pages = set(p["n"] for p in doc["pages"])
+    assets = set(a["id"] for a in doc["assets"] if isinstance(a, dict) and "id" in a)
+    for i, q in enumerate(doc.get("questions") or (), 1):
+        if not any(k in q for k in ("latex", "figures", "verification")):
+            continue
+        tag = "question %s" % q.get("n", i)
+        src = q.get("source")
+        if not isinstance(src, dict):
+            errs.append("%s: source trace required (latex/figures/verification present)" % tag)
+            continue
+        if src["page"] not in pages:
+            errs.append("%s: source page %s not in the document" % (tag, src["page"]))
+        if src.get("crop") and src["crop"] not in assets:
+            errs.append("%s: crop asset %s not in assets" % (tag, src["crop"]))
+        for f in q.get("figures", ()):
+            if f["asset"] not in assets:
+                errs.append("%s: figure asset %s not in assets" % (tag, f["asset"]))
+        if not doc["source"].get("sha256"):
+            errs.append("%s: document source sha256 missing" % tag)
     return errs
