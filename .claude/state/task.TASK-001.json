@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-001",
   "title": "Fit harness to exam domain: remove scan leftovers, compress skills (REQ-0005)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0005",
   "acceptance_criteria": [
     "AC1 audit table in design",
@@ -12,7 +12,7 @@
   ],
   "design": {
     "status": "pending",
-    "path": "",
+    "path": "docs/design/phase-2-harness-exam-fit.md",
     "summary": "",
     "reuse": [],
     "risks": []
@@ -54,18 +54,19 @@
     }
   ],
   "picked_at": "2026-10-29T01:46:15Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-10-29T01:56:29Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
     "done": [
       "picked; designer launched",
-      "designer handoff; design copied to docs/design"
+      "designer handoff; design copied to docs/design",
+      "design r3 installed, state DESIGN"
     ],
     "notes": "",
-    "next": "set design.path, commit DESIGN; brief coder on design 2.2-2.6 with --checks override"
+    "next": "brief coder step A (CLAUDE.md rewrite) per design 2.7 with override block; then B, C"
   },
   "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
 }
