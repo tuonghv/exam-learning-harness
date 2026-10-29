@@ -1,0 +1,1 @@
+{"unit_test": {"status": "passed", "command": "python3 -I -m unittest discover -s tests/unit", "result": "432 tests OK (7 new in test_ingest_schema_q)"}, "security": {"status": "passed", "result": "pure validation, no I/O, no model call"}, "roles": {"tester": {"waiver": "coordinator ran the suite"}}, "next": "verify with real document, then report"}

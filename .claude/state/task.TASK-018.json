@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-018",
   "title": "Question schema: LaTeX, source trace, verification record (REQ-0022, EPIC-006)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0022",
   "acceptance_criteria": [
     "AC1-AC5 of REQ-0022"
@@ -31,8 +31,12 @@
     "result": "pure validation, no I/O, no model call"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-018/evidence/task018-verify.txt"
+    ],
+    "command": "validate real refined doc + untraced/traced variants",
+    "result": "real doc valid; untraced rejected; traced valid"
   },
   "report": {
     "status": "pending",
@@ -49,11 +53,17 @@
     },
     "tester": {
       "waiver": "coordinator ran the suite"
+    },
+    "verifier": {
+      "waiver": "coordinator ran real-document check"
+    },
+    "crosscheck": {
+      "waiver": "schema validation only, no counts to reconcile"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-29T15:04:53Z",
-  "updated_at": "2026-10-29T15:06:38Z",
+  "updated_at": "2026-10-29T15:07:12Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-018/"
@@ -64,5 +74,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verify with real document, then report"
+  "next": "report and DONE"
 }

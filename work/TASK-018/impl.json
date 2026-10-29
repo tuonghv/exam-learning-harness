@@ -1,0 +1,1 @@
+{"implementation": {"status": "completed", "summary": "validate_questions + question schema extras in ingest/schema.py", "files": ["src/exam_engine/ingest/schema.py", "tests/unit/test_ingest_schema_q.py"]}, "roles": {"coder": {"waiver": "small change by coordinator"}}, "next": "run unit suite, record UNIT_TESTED"}

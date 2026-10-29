@@ -1,0 +1,1 @@
+{"design": {"status": "completed", "path": "docs/design/phase-18-question-schema.md", "summary": "additive latex/source/verification fields + validate_questions trace checks"}, "acceptance_criteria": ["AC1-AC5 of REQ-0022"], "next": "implement validate_questions in ingest/schema.py + tests"}

@@ -508,3 +508,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: 432 OK; mutation test shows the trace check bites.
 - Decision: verify on a real refined document.
 - Next: VERIFIED.
+
+## VERIFIED - TASK-018 - 2026-10-29T13:10:00Z
+- Action: validated the real refined document and traced/untraced variants.
+- Result: real doc valid; untraced verification rejected; traced valid.
+- Decision: waivers for verifier/crosscheck (schema only).
+- Next: report and DONE.

@@ -1,0 +1,11 @@
+# evidence: task018-verify
+# task: TASK-018
+# cmd: python3 -I -c $'\nimport json,sys\nsys.path.insert(0,\'src\')\nfrom exam_engine.ingest import schema\nd=json.load(open(\'work/TASK-017/real/refined.json\'))\nprint(\'real doc errors:\',schema.validate_document(d))\nd[\'questions\']=[{\'n\':1,\'text\':\'x\',\'options\':[],\'verification\':{\'status\':\'unverified\'}}]\nprint(\'no-trace:\',schema.validate_document(d))\nd[\'questions\'][0][\'source\']={\'page\':1,\'crop\':None}\nprint(\'traced:\',schema.validate_document(d))\n'
+# cwd: /home/tuonghv/Documents/git/online-system/exam-learning-harness
+# head: 2af742a+dirty
+# when: 2026-10-29T15:07:02Z
+# rc: 0
+---
+real doc errors: []
+no-trace: ['question 1: source trace required (latex/figures/verification present)']
+traced: []
