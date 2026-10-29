@@ -514,3 +514,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: real doc valid; untraced verification rejected; traced valid.
 - Decision: waivers for verifier/crosscheck (schema only).
 - Next: report and DONE.
+
+## DONE - TASK-018 - 2026-10-29T13:15:00Z
+- Action: report docs/report/phase-18-question-schema.md.
+- Result: task done.
+- Decision: REQ-0022 DONE; fields are filled by REQ-0023.
+- Next: REQ-0023.

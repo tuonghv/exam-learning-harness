@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-018",
   "title": "Question schema: LaTeX, source trace, verification record (REQ-0022, EPIC-006)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0022",
   "acceptance_criteria": [
     "AC1-AC5 of REQ-0022"
@@ -39,8 +39,8 @@
     "result": "real doc valid; untraced rejected; traced valid"
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-18-question-schema.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -63,7 +63,7 @@
   },
   "user_notes": [],
   "picked_at": "2026-10-29T15:04:53Z",
-  "updated_at": "2026-10-29T15:07:12Z",
+  "updated_at": "2026-10-29T15:07:17Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-018/"
@@ -74,5 +74,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report and DONE"
+  "next": ""
 }
