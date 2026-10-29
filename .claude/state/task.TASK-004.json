@@ -20,7 +20,13 @@
   },
   "implementation": {
     "status": "pending",
-    "files": []
+    "files": [
+      "tools/examples/exam_schema.py",
+      "tools/examples/exam_llm.py",
+      "tools/examples/exam_checks.py",
+      "tools/examples/exam_parse.py"
+    ],
+    "summary": "step A done: schema, claude -p caller (isolated argv, cwd), safe_eval, det_checks, decide, score, validate_exam; step B (exam_run, qa.md) and tests pending"
   },
   "unit_test": {
     "status": "pending",
@@ -44,11 +50,12 @@
   "roles": {
     "designer": {
       "waiver": "architecture designed in TASK-002 by the designer (Nova, work/TASK-002/handoff); phase-4 only aligns SOLVE_OUT with solve.md and splits the build"
-    }
+    },
+    "coder": "work/TASK-004/handoff/code-a.md"
   },
   "user_notes": [],
   "picked_at": "2026-10-29T04:21:14Z",
-  "updated_at": "2026-10-29T04:22:11Z",
+  "updated_at": "2026-10-29T04:26:06Z",
   "updated_by": "main",
   "scope": [
     "tools/examples/**",
@@ -64,5 +71,5 @@
     "notes": "",
     "next": "coder A handoff, then coder B (exam_run, qa.md), tester"
   },
-  "next": "IMPLEMENTING: coder step A (schema, llm, validate_exam, checks)"
+  "next": "coder B: exam_run.py + prompts/qa.md; then tester"
 }

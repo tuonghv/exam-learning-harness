@@ -141,3 +141,42 @@ def parse_expected(path, legacy=False):
             if lm:
                 q["final"] = lm.group(1)
     return {"questions": qs}
+
+
+_REQUIRED_HEADERS = ("Subject", "Level", "Exam type", "Task", "Mode")
+_SUBJECTS = ("mathematics", "math", "physics", "english", "literature")
+_SUPPORTED_MODES = ("Solve",)
+
+
+def validate_exam(exam):
+    """Errors of a parse_exam result as a list of strings (empty = valid); never raises."""
+    errs = []
+    fields = exam.get("fields") or {}
+    for key in _REQUIRED_HEADERS:
+        if not fields.get(key):
+            errs.append("missing header: %s" % key)
+    subj = fields.get("Subject")
+    if subj and subj.strip().casefold() not in _SUBJECTS:
+        errs.append("unsupported Subject: %s" % subj)
+    mode = fields.get("Mode")
+    if mode and mode not in _SUPPORTED_MODES:
+        errs.append("unsupported Mode: %s" % mode)
+    qs = exam.get("questions") or []
+    if not qs:
+        errs.append("no questions")
+    for pos, q in enumerate(qs, 1):
+        if q["id"] != pos:
+            errs.append("question numbering: expected %d, found %d" % (pos, q["id"]))
+            break
+    seen = set()
+    for q in qs:
+        if q["id"] in seen:
+            errs.append("duplicate question %d" % q["id"])
+        seen.add(q["id"])
+    mc = (fields.get("Task") or "").strip().casefold() == "multiple choice"
+    for q in qs:
+        if not q["text"].strip() and not q["options"]:
+            errs.append("question %d: empty body" % q["id"])
+        if (mc or q["options"]) and sorted(q["options"]) != ["A", "B", "C", "D"]:
+            errs.append("question %d: options must be exactly A-D" % q["id"])
+    return errs

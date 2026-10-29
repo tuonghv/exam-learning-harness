@@ -2,14 +2,14 @@
   "schema": 2,
   "task_id": "TASK-004",
   "state": "IMPLEMENTING",
-  "next": "IMPLEMENTING: coder step A (schema, llm, validate_exam, checks)",
+  "next": "coder B: exam_run.py + prompts/qa.md; then tester",
   "title": "Engine core + QA: prompt+exam -> claude -p -> JSON, checks, decision, score (REQ-0010)",
   "active": [
     {
       "task_id": "TASK-004",
       "state": "IMPLEMENTING",
-      "next": "IMPLEMENTING: coder step A (schema, llm, validate_exam, checks)",
-      "updated_at": "2026-10-29T04:22:11Z"
+      "next": "coder B: exam_run.py + prompts/qa.md; then tester",
+      "updated_at": "2026-10-29T04:26:06Z"
     }
   ],
   "max_active": 1
