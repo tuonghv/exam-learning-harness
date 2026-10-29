@@ -19,14 +19,17 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
+    "status": "completed",
     "files": [
       "tools/examples/exam_schema.py",
       "tools/examples/exam_llm.py",
       "tools/examples/exam_checks.py",
-      "tools/examples/exam_parse.py"
+      "tools/examples/exam_parse.py",
+      "tools/examples/exam_run.py",
+      "tools/examples/prompts/qa.md",
+      "tools/examples/tests/fixtures/mock_english_001.json"
     ],
-    "summary": "step A done: schema, claude -p caller (isolated argv, cwd), safe_eval, det_checks, decide, score, validate_exam; step B (exam_run, qa.md) and tests pending"
+    "summary": "engine core built: exam_run flow, QA prompt, mock fixture; no-key english = UNCERTAIN (2 calls), with key = PASS; dry-run and no-flag exit 2 verified; tests pending"
   },
   "unit_test": {
     "status": "pending",
@@ -51,11 +54,11 @@
     "designer": {
       "waiver": "architecture designed in TASK-002 by the designer (Nova, work/TASK-002/handoff); phase-4 only aligns SOLVE_OUT with solve.md and splits the build"
     },
-    "coder": "work/TASK-004/handoff/code-a.md"
+    "coder": "work/TASK-004/handoff/code-b.md"
   },
   "user_notes": [],
   "picked_at": "2026-10-29T04:21:14Z",
-  "updated_at": "2026-10-29T04:26:06Z",
+  "updated_at": "2026-10-29T04:29:05Z",
   "updated_by": "main",
   "scope": [
     "tools/examples/**",
@@ -71,5 +74,5 @@
     "notes": "",
     "next": "coder A handoff, then coder B (exam_run, qa.md), tester"
   },
-  "next": "coder B: exam_run.py + prompts/qa.md; then tester"
+  "next": "tester writes test_exam_*.py (14 mock cases), mutation notes"
 }

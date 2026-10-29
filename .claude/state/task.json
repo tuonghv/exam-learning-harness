@@ -2,14 +2,14 @@
   "schema": 2,
   "task_id": "TASK-004",
   "state": "IMPLEMENTING",
-  "next": "coder B: exam_run.py + prompts/qa.md; then tester",
+  "next": "tester writes test_exam_*.py (14 mock cases), mutation notes",
   "title": "Engine core + QA: prompt+exam -> claude -p -> JSON, checks, decision, score (REQ-0010)",
   "active": [
     {
       "task_id": "TASK-004",
       "state": "IMPLEMENTING",
-      "next": "coder B: exam_run.py + prompts/qa.md; then tester",
-      "updated_at": "2026-10-29T04:26:06Z"
+      "next": "tester writes test_exam_*.py (14 mock cases), mutation notes",
+      "updated_at": "2026-10-29T04:29:05Z"
     }
   ],
   "max_active": 1
