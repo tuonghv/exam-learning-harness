@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-008",
-  "state": "DONE",
-  "next": "done",
-  "title": "English and Literature examples (REQ-0004)",
-  "active": [],
+  "task_id": "TASK-009",
+  "state": "IMPLEMENTING",
+  "next": "coder",
+  "title": "Prompt channels: dev and frozen releases (REQ-0013)",
+  "active": [
+    {
+      "task_id": "TASK-009",
+      "state": "IMPLEMENTING",
+      "next": "coder",
+      "updated_at": "2026-10-29T06:43:41Z"
+    }
+  ],
   "max_active": 1
 }

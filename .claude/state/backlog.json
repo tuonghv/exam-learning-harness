@@ -238,7 +238,7 @@
     "task_id": "TASK-009",
     "title": "Prompt channels: dev and frozen releases (REQ-0013)",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-10-29T06:43:41Z",
     "requirement": "REQ-0013",
     "acceptance_criteria": [
