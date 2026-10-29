@@ -3,7 +3,7 @@ id: EPIC-006
 title: Verified math extraction: LaTeX, source regions, independent verification, solve gate, measured accuracy
 source: [RAW-00064]
 created: 2026-10-29 16:06
-updated: 2026-10-29 16:07
+updated: 2026-10-29 22:40
 ---
 ## Original (verbatim, never edit)
 > **[RAW-00064]** 2026-10-29 16:06
@@ -33,5 +33,6 @@ Extraction fidelity for math exams that can be shown, not claimed: LaTeX, region
 - REQ-0023
 - REQ-0024
 - REQ-0025
+- REQ-0026
 
 ## Notes
