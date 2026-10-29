@@ -41,7 +41,13 @@
   "roles_required": true,
   "crosscheck_required": true,
   "roles": {},
-  "user_notes": [],
+  "user_notes": [
+    {
+      "raw": "RAW-00019",
+      "note": "agent_setup.json/agent_setup.py/its test: never delete or edit",
+      "at": "2026-10-29T01:52:51Z"
+    }
+  ],
   "picked_at": "2026-10-29T01:46:15Z",
   "updated_at": "",
   "updated_by": "",
