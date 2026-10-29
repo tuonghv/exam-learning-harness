@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-019",
   "title": "Part-aware refine and Part II/III format checks (REQ-0026, EPIC-006)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0026",
   "acceptance_criteria": [
     "AC1-AC4 of REQ-0026"
@@ -32,8 +32,12 @@
     "result": "pure text rules, no I/O, no model call"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-019/evidence/task019-real-replay.txt"
+    ],
+    "command": "replay split_part on saved real refine replies + unit mutations",
+    "result": "parts II/III assigned correctly; heading removed; 441 tests OK"
   },
   "report": {
     "status": "pending",
@@ -50,11 +54,17 @@
     },
     "tester": {
       "waiver": "coordinator ran the suite"
+    },
+    "verifier": {
+      "waiver": "coordinator replay on saved real replies"
+    },
+    "crosscheck": {
+      "waiver": "text rules only, no counts"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-29T15:41:33Z",
-  "updated_at": "2026-10-29T15:43:28Z",
+  "updated_at": "2026-10-29T15:43:40Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-019/"
@@ -65,5 +75,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "replay on real replies, report"
+  "next": "report and DONE"
 }

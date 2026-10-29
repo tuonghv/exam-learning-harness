@@ -538,3 +538,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: 441 OK; mutation per rule bites (split, part format).
 - Decision: replay on the saved real replies for VERIFIED.
 - Next: VERIFIED.
+
+## VERIFIED - TASK-019 - 2026-10-29T14:20:00Z
+- Action: replayed split_part on the saved real replies.
+- Result: parts II/III assigned correctly; Part I stays null (limit recorded).
+- Decision: waivers for verifier/crosscheck (text rules).
+- Next: report and DONE.
