@@ -112,3 +112,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: pending coder handoff.
 - Decision: tester follows the coder; no Chrome needed for unit tests.
 - Next: coder handoff, review, commit.
+
+## UNIT_TESTED - TASK-005 - 2026-10-29T05:23:00Z
+- Action: tester wrote test_exam_report.py (41) and test_md2html.py (16), fakes only; 6 mutations; coordinator fixed D1 (invalid pdf removed) and added an assertion.
+- Result: 165 tests OK; mutations killed 6/6.
+- Decision: advance to UNIT_TESTED; real Chrome evidence is the VERIFIED step.
+- Next: coordinator evidence.md, then verifier.

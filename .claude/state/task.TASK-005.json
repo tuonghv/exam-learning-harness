@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-005",
   "title": "Report stage: Markdown + PDF via copied md2html.py and headless Chrome (REQ-0011)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0011",
   "acceptance_criteria": [
     "AC1 result.json carries evidence kind",
@@ -28,14 +28,16 @@
       "tools/examples/md2html.py",
       "tools/examples/exam_report.py",
       "tools/examples/exam_run.py",
-      "tools/examples/exam_schema.py"
+      "tools/examples/exam_schema.py",
+      "tools/examples/tests/test_exam_report.py",
+      "tools/examples/tests/test_md2html.py"
     ],
     "summary": "md2html.py copied and trimmed from code-security-scanner; exam_report (evidence_kind, build_markdown, find_pdf_renderer, md_to_pdf, write_reports); exam_run hook + --no-pdf; coordinator real Chrome render with Vietnamese text OK"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tools/examples/tests",
+    "result": "165 tests OK (108 + 57 new); 6/6 mutations killed; D1 fixed with assertion"
   },
   "security": {
     "status": "pending",
@@ -55,7 +57,8 @@
     "designer": {
       "waiver": "small design derived directly from the scanner's md2html/md_to_pdf plus the accepted phase-2 REPORT stage; coordinator wrote it"
     },
-    "coder": "work/TASK-005/handoff/code.md"
+    "coder": "work/TASK-005/handoff/code.md",
+    "tester": "work/TASK-005/handoff/test.md"
   },
   "user_notes": [
     {
@@ -75,7 +78,7 @@
     }
   ],
   "picked_at": "2026-10-29T05:12:53Z",
-  "updated_at": "2026-10-29T05:18:57Z",
+  "updated_at": "2026-10-29T05:23:00Z",
   "updated_by": "main",
   "scope": [
     "tools/examples/**",
@@ -87,5 +90,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tester: 10 design tests (fakes only)"
+  "next": "coordinator evidence.md (real Chrome render, no-renderer PATH check), then verifier"
 }

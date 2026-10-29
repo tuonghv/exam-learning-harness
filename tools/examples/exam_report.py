@@ -215,6 +215,8 @@ def md_to_pdf(md_path, pdf_path, *, lang="en", renderer=None, timeout=None,
         if _pdf_ok(absp):
             os.remove(html_path)
             return True, "PDF written with %s" % kind
+        if os.path.exists(absp):  # D1: a rejected file must not stay named report.pdf
+            os.remove(absp)
         if timed_out:
             return False, "%s timed out after %gs; HTML kept" % (kind, timeout)
         return False, "%s produced no valid PDF; HTML kept" % kind
