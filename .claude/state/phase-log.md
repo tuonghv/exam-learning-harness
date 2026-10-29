@@ -334,3 +334,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: AC1-AC5 pass.
 - Decision: advance.
 - Next: DONE.
+
+## DONE - TASK-012 - 2026-10-29T07:28:54Z
+- Action: report written; backlog complete.
+- Result: ingestion core + Markdown live.
+- Decision: close.
+- Next: REQ-0017 PDF adapter.

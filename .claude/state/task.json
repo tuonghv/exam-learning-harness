@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-012",
-  "state": "VERIFIED",
+  "state": "DONE",
   "next": "done",
   "title": "Ingestion core: canonical document schema, validator, ingest_document, Markdown adapter, bridge to exam file (REQ-0016, EPIC-005)",
-  "active": [
-    {
-      "task_id": "TASK-012",
-      "state": "VERIFIED",
-      "next": "done",
-      "updated_at": "2026-10-29T07:28:48Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

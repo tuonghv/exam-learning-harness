@@ -291,7 +291,7 @@
     "task_id": "TASK-012",
     "title": "Ingestion core: canonical document schema, validator, ingest_document, Markdown adapter, bridge to exam file (REQ-0016, EPIC-005)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-10-29T07:21:38Z",
     "requirement": "REQ-0016",
     "acceptance_criteria": [
@@ -303,6 +303,8 @@
         "note": "spec tmp/input-exam-format.md; answers accepted RAW-00050",
         "at": "2026-10-29T07:21:38Z"
       }
-    ]
+    ],
+    "completed_at": "2026-10-29T07:28:54Z",
+    "report": "docs/report/phase-12-ingest-core.md"
   }
 ]

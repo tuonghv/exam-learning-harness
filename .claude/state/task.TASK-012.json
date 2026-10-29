@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-012",
   "title": "Ingestion core: canonical document schema, validator, ingest_document, Markdown adapter, bridge to exam file (REQ-0016, EPIC-005)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0016",
   "acceptance_criteria": [
     "AC1-AC5 of REQ-0016"
@@ -61,7 +61,7 @@
     }
   ],
   "picked_at": "2026-10-29T07:21:53Z",
-  "updated_at": "2026-10-29T07:28:48Z",
+  "updated_at": "2026-10-29T07:28:54Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/**",
