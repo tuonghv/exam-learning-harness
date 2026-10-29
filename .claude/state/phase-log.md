@@ -436,3 +436,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: complete.
 - Decision: advance.
 - Next: IMPLEMENTING.
+
+## IMPLEMENTING - TASK-016 - 2026-10-29T09:11:16Z
+- Action: design recorded.
+- Result: gate ok.
+- Decision: coder.
+- Next: handoff.

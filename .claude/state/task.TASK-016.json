@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-016",
   "title": "Image input adapter (PNG/JPG/WEBP) + image block to claude -p (REQ-0019, EPIC-005)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0019",
   "acceptance_criteria": [
     "AC1-AC6 of REQ-0019"

@@ -1,13 +1,13 @@
 {
   "schema": 2,
   "task_id": "TASK-016",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "next": "coder implements",
   "title": "Image input adapter (PNG/JPG/WEBP) + image block to claude -p (REQ-0019, EPIC-005)",
   "active": [
     {
       "task_id": "TASK-016",
-      "state": "DESIGN",
+      "state": "IMPLEMENTING",
       "next": "coder implements",
       "updated_at": "2026-10-29T09:11:16Z"
     }
