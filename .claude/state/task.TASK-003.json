@@ -60,6 +60,11 @@
       "raw": "RAW-00033",
       "note": "script compiles prompt + exam -> claude -p -> JSON (already in design 2.1; REQ-0009 AC0b)",
       "at": "2026-10-29T03:34:17Z"
+    },
+    {
+      "raw": "RAW-00034",
+      "note": "REQ-0009 Q1 accepted: smoke on 2 English few-shot, then 3 English eval",
+      "at": "2026-10-29T03:34:47Z"
     }
   ],
   "picked_at": "2026-10-29T03:24:15Z",
