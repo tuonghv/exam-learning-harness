@@ -18,3 +18,5 @@
 
 ## Next
 TASK-015: REQ-0018 DOCX, REQ-0019 images.
+
+User instructions honoured: auto your task, comment less, nothing run at cost.

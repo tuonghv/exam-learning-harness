@@ -54,7 +54,10 @@
     },
     "coder": "work/TASK-014/handoff/code.md",
     "tester": "work/TASK-014/handoff/test.md",
-    "verifier": "work/TASK-014/handoff/verify.md"
+    "verifier": "work/TASK-014/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "no content oracle applies (no exam answers produced); independent check done by coordinator on the real PDF: parts exam p1-4 / key p5-12 and guard refusal, saved in work/TASK-014/evidence/key-guard.txt"
+    }
   },
   "user_notes": [
     {
