@@ -292,3 +292,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: ready.
 - Decision: coder A code, coder B items.
 - Next: handoffs.
+
+## UNIT_TESTED - TASK-011 - 2026-10-29T06:59:22Z
+- Action: coders A and B; coordinator recomputed 5 IT answers, added oracle, suite 250, wrong-key mutation fails.
+- Result: green.
+- Decision: advance.
+- Next: verifier.

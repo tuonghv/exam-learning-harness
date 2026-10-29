@@ -11,7 +11,7 @@ Markdown files with the same number: `input-NNN.md` (what the solver sees) and `
 | Few-shot (may be shown to the solver) | `examples/<subject>/input-NNN.md` | `examples/<subject>/expected-NNN.md` |
 | Evaluation (never shown with its key) | `evals/inputs/<subject>/input-NNN.md` | `evals/keys/<subject>/expected-NNN.md` |
 
-`<subject>` = `math`, `physics`, `english`, `literature`. A question used in one set is never
+`<subject>` = `math`, `physics`, `english`, `literature`, `informatics`. A question used in one set is never
 reused, reworded, in the other.
 
 ## Input: `input-NNN.md`
@@ -19,7 +19,7 @@ reused, reworded, in the other.
 ```markdown
 # Exam Input
 
-Subject: English                     # Mathematics | Physics | English | Literature
+Subject: English                     # Mathematics | Physics | English | Literature | Informatics
 Level: Grade 12
 Exam type: High School Graduation    # or: University Entrance (<profile name>)
 Task: Multiple Choice                # Multiple Choice | Short Answer | Sentence Ordering | Reading Comprehension | Essay
@@ -112,6 +112,11 @@ boundary.
 `Final answer:` carries a unit (`2.5 m/s^2`) and the rounding used. `Check:` lines: unit analysis,
 order of magnitude, a limiting case. Edge cases: sign/direction, zero or limiting value, unit
 conversion.
+
+**Informatics** - `### Solution` states the representation first (base, schema, data type or unit),
+then the trace table or truth table. `Check:` recomputes another way (convert back, re-evaluate,
+re-run the loop). Edge cases: base prefix, overflow/carry, NULL/duplicate rows, off-by-one loop
+bound.
 
 **English** - grammar/vocabulary: name the rule or collocation. Reading: a `Check:` quotes the
 line of the passage that proves the answer. Sentence ordering: `Final answer: c-a-d-b-e`, and the

@@ -114,5 +114,52 @@ class English(unittest.TestCase):
         self.assertEqual(key("english", 5, True), "A")  # hardly ... when
 
 
+class Informatics(unittest.TestCase):
+    """Answers recomputed with stdlib only; the option letter is looked up in the input text."""
+
+    def option(self, path, letter):
+        with open(os.path.join(ROOT, path), encoding="utf-8") as fh:
+            m = re.search(r"(?m)^%s\. (.+)$" % letter, fh.read())
+        return m.group(1).strip()
+
+    def test_001_binary_to_decimal(self):
+        v = int("1011010", 2)
+        self.assertEqual(v, 90)
+        self.assertEqual(self.option("examples/informatics/input-001.md", key("informatics", 1)), str(v))
+
+    def test_002_boolean_value(self):
+        good = [c for c in "ABCD" if self.holds(c)]
+        self.assertEqual(good, [key("informatics", 2)])
+
+    def holds(self, letter):
+        t = self.option("examples/informatics/input-002.md", letter)
+        a, b, c = [int(x) for x in re.findall(r"= (\d)", t)]
+        return bool((a or b) and not (a and c))
+
+    def test_003_loop_trace(self):
+        s, i = 0, 1
+        while i < 10:
+            s += i
+            i += 3
+        self.assertEqual(s, 12)
+        self.assertEqual(self.option("evals/inputs/informatics/input-003.md", key("informatics", 3, True)), str(s))
+
+    def test_004_sql_null_trap(self):
+        import sqlite3
+        db = sqlite3.connect(":memory:")
+        db.execute("create table hs (ma int, ten text, lop text, diem real)")
+        db.executemany("insert into hs values (?,?,?,?)", [
+            (1, "An", "12A", 4.5), (2, "Binh", "12A", 7.0), (3, "Chi", "12B", None),
+            (4, "Dung", "12B", 3.0), (5, "Em", "12A", 4.5), (6, "Ga", "12C", None), (7, "Ha", "12C", 5.0)])
+        n = db.execute("select count(*) from hs where diem < 5").fetchone()[0]
+        self.assertEqual(n, 3)
+        self.assertEqual(key("informatics", 4, True), str(n))
+
+    def test_005_subnet_hosts(self):
+        hosts = 2 ** (32 - 26) - 2
+        self.assertEqual(hosts, 62)
+        self.assertTrue(key("informatics", 5, True).startswith(str(hosts)))
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -150,7 +150,7 @@ def validate_exam(exam):
         if not fields.get(key):
             errs.append("missing header: %s" % key)
     subj = fields.get("Subject")
-    if subj and subj.strip().casefold() not in router.known_names():
+    if subj and not router.subject_key(subj):
         errs.append("unsupported Subject: %s" % subj)
     mode = fields.get("Mode")
     if mode and mode not in _SUPPORTED_MODES:

@@ -12,7 +12,6 @@ from exam_engine import settings
 from exam_engine.pipeline import parser as ep, router
 
 SUBJECTS = tuple(router.subjects())
-SUBJECT_NAMES = dict((n, k) for k in SUBJECTS for n in router.known_names() if router.subject_key(n) == k)
 TASKS = ("Multiple Choice", "Short Answer", "Sentence Ordering",
          "Reading Comprehension", "Essay")
 MODES = ("Solve", "Grade", "Teach")
@@ -70,7 +69,7 @@ def _check_input(root, path, sub, errs):
     for k in REQUIRED_HEADERS:
         if not f.get(k):
             err("header", "missing %s" % k)
-    if f.get("Subject") and SUBJECT_NAMES.get(f["Subject"].casefold()) != sub:
+    if f.get("Subject") and router.subject_key(f["Subject"]) != sub:
         err("header", "Subject %r does not match dir %s" % (f["Subject"], sub))
     if f.get("Task") and f["Task"] not in TASKS:
         err("header", "bad Task %r" % f["Task"])

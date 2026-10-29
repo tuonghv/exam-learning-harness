@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-011",
   "title": "Informatics subject + bilingual subject names (REQ-0015)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0015",
   "acceptance_criteria": [
     "AC1-AC4 of REQ-0015"
@@ -21,15 +21,23 @@
     ]
   },
   "implementation": {
-    "status": "pending",
+    "status": "completed",
     "files": [
-      "config/subjects.json"
+      "config/subjects.json",
+      "src/exam_engine/pipeline/router.py",
+      "src/exam_engine/utils/text.py",
+      "examples/informatics",
+      "evals/inputs/informatics",
+      "evals/keys/informatics",
+      "prompts/dev/subjects/informatics.md",
+      "tests/unit/test_subjects.py",
+      "tests/unit/test_examples_oracle.py"
     ]
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "250 OK; check-examples OK 25 pairs; wrong key 004 fails oracle"
   },
   "security": {
     "status": "pending",
@@ -48,11 +56,15 @@
   "roles": {
     "designer": {
       "waiver": "coordinator wrote the short design"
+    },
+    "coder": "work/TASK-011/handoff/code.md",
+    "tester": {
+      "waiver": "coder tests plus coordinator oracle; wrong-key mutation bites"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-29T06:56:46Z",
-  "updated_at": "2026-10-29T06:56:46Z",
+  "updated_at": "2026-10-29T06:59:23Z",
   "updated_by": "main",
   "scope": [
     "examples/informatics/**",
@@ -71,5 +83,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "coders"
+  "next": "verifier"
 }

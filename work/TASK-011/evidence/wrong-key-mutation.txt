@@ -1,0 +1,9 @@
+# informatics eval key 004 changed 3 -> 4, then restored
+mutated:
+Ran 18 tests in 0.024s
+
+FAILED (failures=1)
+restored:
+Ran 18 tests in 0.024s
+
+OK

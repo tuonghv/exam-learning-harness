@@ -1,0 +1,9 @@
+# evidence: check-prompts
+# task: TASK-011
+# cmd: python3 -I scripts/exam.py check-prompts --channel dev
+# cwd: /home/tuonghv/Documents/git/online-system/exam-learning-harness
+# head: a030d4c+dirty
+# when: 2026-10-29T06:59:03Z
+# rc: 0
+---
+OK: 16 files, 1 variants

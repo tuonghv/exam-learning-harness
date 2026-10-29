@@ -1,14 +1,17 @@
 {
-  "math": {"aliases": ["mathematics", "math"], "task": "Closed",
+  "math": {"aliases": ["mathematics", "math", "toán"], "task": "Closed",
            "checks": ["format", "computed", "quote"], "score_basis": "official_key",
            "language": "vi", "prompt": "subjects/math.md"},
-  "physics": {"aliases": ["physics"], "task": "Closed",
+  "physics": {"aliases": ["physics", "vật lý"], "task": "Closed",
               "checks": ["format", "computed", "quote"], "score_basis": "official_key",
               "language": "vi", "prompt": "subjects/physics.md"},
-  "english": {"aliases": ["english"], "task": "Closed",
+  "english": {"aliases": ["english", "tiếng anh"], "task": "Closed",
               "checks": ["format", "computed", "quote"], "score_basis": "official_key",
               "language": "en", "prompt": "subjects/english.md"},
-  "literature": {"aliases": ["literature"], "task": "Open",
+  "literature": {"aliases": ["literature", "ngữ văn", "văn"], "task": "Open",
                  "checks": ["format", "quote"], "score_basis": "none",
-                 "language": "vi", "prompt": "subjects/literature.md"}
+                 "language": "vi", "prompt": "subjects/literature.md"},
+  "informatics": {"aliases": ["informatics", "tin học", "it", "information technology", "cntt"],
+                  "task": "Closed", "checks": ["format", "computed", "quote"],
+                  "score_basis": "official_key", "language": "vi", "prompt": "subjects/informatics.md"}
 }
