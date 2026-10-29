@@ -376,3 +376,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: complete, no open questions.
 - Decision: advance.
 - Next: IMPLEMENTING.
+
+## IMPLEMENTING - TASK-014 - 2026-10-29T08:32:35Z
+- Action: design filled in REQ-0020.
+- Result: gate passed.
+- Decision: delegate to coder.
+- Next: coder handoff.
