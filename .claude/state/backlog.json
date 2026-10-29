@@ -406,5 +406,16 @@
     ],
     "completed_at": "2026-10-29T11:53:41Z",
     "report": "docs/report/phase-17-refine.md"
+  },
+  {
+    "task_id": "TASK-018",
+    "title": "Question schema: LaTeX, source trace, verification record (REQ-0022, EPIC-006)",
+    "priority": 1,
+    "status": "queued",
+    "created_at": "2026-10-29T12:30:00Z",
+    "requirement": "REQ-0022",
+    "acceptance_criteria": [
+      "AC1-AC5 of REQ-0022"
+    ]
   }
 ]
