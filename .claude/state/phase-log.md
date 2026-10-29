@@ -298,3 +298,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: green.
 - Decision: advance.
 - Next: verifier.
+
+## VERIFIED - TASK-011 - 2026-10-29T07:00:43Z
+- Action: verifier re-solved 5 IT items, reviewed aliases; minor fixes applied.
+- Result: AC1-AC4 pass.
+- Decision: advance.
+- Next: DONE.

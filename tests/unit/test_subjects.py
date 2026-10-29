@@ -76,5 +76,15 @@ class Routing(unittest.TestCase):
         self.assertIn("Quy tắc môn (Tin học)", buf.getvalue())
 
 
+class Unique(unittest.TestCase):
+    def test_alias_belongs_to_one_subject(self):
+        seen = {}
+        for key, pol in router.subjects().items():
+            for name in [key] + list(pol.get("aliases", [])):
+                f = fold(name)
+                self.assertNotIn(f, seen, "%s also maps to %s" % (name, seen.get(f)))
+                seen[f] = key
+
+
 if __name__ == "__main__":
     unittest.main()

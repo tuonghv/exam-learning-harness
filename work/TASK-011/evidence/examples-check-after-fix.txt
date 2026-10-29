@@ -1,0 +1,10 @@
+# evidence: examples-check-after-fix
+# task: TASK-011
+# cmd: python3 -I scripts/exam.py check-examples
+# cwd: /home/tuonghv/Documents/git/online-system/exam-learning-harness
+# head: acc42ed+dirty
+# when: 2026-10-29T07:01:01Z
+# rc: 0
+---
+NOTE: legacy allowance: examples/english/expected-001.md
+OK: 25 pairs (10 few-shot, 15 eval)

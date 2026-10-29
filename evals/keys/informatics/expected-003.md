@@ -22,6 +22,7 @@ Correct answer: B. 12
 
 - Check: chạy mô phỏng cho s = 12, i = 10 sau vòng lặp. Pass
 - Check: số lần lặp = ceil((10-1)/3) = 3 và 1+4+7 = 12 (cấp số cộng: 3*(1+7)/2). Pass
+- Edge case: vòng lặp dừng khi i = 10 (không còn i < 10), nên i = 10 không được cộng vào s. Pass
 - Final answer: B
 - Status: Verified
 

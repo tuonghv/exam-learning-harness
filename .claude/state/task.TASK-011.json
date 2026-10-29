@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-011",
   "title": "Informatics subject + bilingual subject names (REQ-0015)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0015",
   "acceptance_criteria": [
     "AC1-AC4 of REQ-0015"
@@ -40,16 +40,16 @@
     "result": "250 OK; check-examples OK 25 pairs; wrong key 004 fails oracle"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "fold only used for name matching; no alias collisions (tested); no key text in inputs; releases untouched"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": "work/TASK-011/evidence/"
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-11-informatics-subject.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -60,11 +60,15 @@
     "coder": "work/TASK-011/handoff/code.md",
     "tester": {
       "waiver": "coder tests plus coordinator oracle; wrong-key mutation bites"
+    },
+    "verifier": "work/TASK-011/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "coordinator Informatics oracle recomputes all five answers; wrong-key mutation fails"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-29T06:56:46Z",
-  "updated_at": "2026-10-29T06:59:23Z",
+  "updated_at": "2026-10-29T07:01:01Z",
   "updated_by": "main",
   "scope": [
     "examples/informatics/**",
@@ -83,5 +87,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verifier"
+  "next": "done"
 }

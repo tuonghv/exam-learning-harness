@@ -1,0 +1,21 @@
+# evidence: suite-after-fix
+# task: TASK-011
+# cmd: python3 -I -m unittest discover -s tests/unit
+# cwd: /home/tuonghv/Documents/git/online-system/exam-learning-harness
+# head: acc42ed+dirty
+# when: 2026-10-29T07:01:01Z
+# rc: 1
+---
+..........................................................................................................................................................................................................................................................F
+======================================================================
+FAIL: test_alias_belongs_to_one_subject (test_subjects.Unique)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_subjects.py", line 85, in test_alias_belongs_to_one_subject
+    self.assertNotIn(f, seen, "%s also maps to %s" % (name, seen.get(f)))
+AssertionError: 'math' unexpectedly found in {'math': 'math', 'mathematics': 'math'} : math also maps to math
+
+----------------------------------------------------------------------
+Ran 251 tests in 8.533s
+
+FAILED (failures=1)
