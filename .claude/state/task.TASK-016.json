@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-016",
   "title": "Image input adapter (PNG/JPG/WEBP) + image block to claude -p (REQ-0019, EPIC-005)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0019",
   "acceptance_criteria": [
     "AC1-AC6 of REQ-0019"
@@ -14,13 +14,23 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/ingest/adapters/image.py",
+      "src/exam_engine/ingest/adapters/__init__.py",
+      "src/exam_engine/ingest/api.py",
+      "src/exam_engine/ingest/schema.py",
+      "src/exam_engine/cli.py",
+      "src/exam_engine/adapters/claude.py",
+      "tests/unit/test_ingest_image.py",
+      "docs/guide/ingest-usage.md",
+      "docs/guide/ingest-setup.md"
+    ]
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "387 OK; 4 mutations bite (test.md)"
   },
   "security": {
     "status": "pending",
@@ -39,7 +49,9 @@
   "roles": {
     "designer": {
       "waiver": "coordinator wrote the design; verifier reviews it"
-    }
+    },
+    "coder": "work/TASK-016/handoff/code.md",
+    "tester": "work/TASK-016/handoff/test.md"
   },
   "user_notes": [
     {
@@ -49,7 +61,7 @@
     }
   ],
   "picked_at": "2026-10-29T09:10:56Z",
-  "updated_at": "2026-10-29T09:11:16Z",
+  "updated_at": "2026-10-29T09:17:37Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/**",
@@ -65,5 +77,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "coder implements"
+  "next": "verifier checks AC1-AC6"
 }

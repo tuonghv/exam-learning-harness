@@ -442,3 +442,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: gate ok.
 - Decision: coder.
 - Next: handoff.
+
+## UNIT_TESTED - TASK-016 - 2026-10-29T09:17:26Z
+- Action: coder + tester; 387 tests, 4 mutations bite.
+- Result: green.
+- Decision: verifier.
+- Next: VERIFIED.

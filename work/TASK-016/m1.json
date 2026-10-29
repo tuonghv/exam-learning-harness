@@ -1,0 +1,1 @@
+{"design":{"status":"completed","path":"docs/design/phase-16-image-input.md","summary":"image adapter with stdlib header checks, 5MB resize via PIL, optional OCR, run_claude_images stream-json base64"},"roles":{"designer":{"waiver":"coordinator wrote the design; verifier reviews it"}},"next":"coder implements"}

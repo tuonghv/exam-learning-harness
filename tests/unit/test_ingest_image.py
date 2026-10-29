@@ -195,6 +195,98 @@ class TestOversize(ImageBase):
         self.assertEqual(len(doc["assets"]), 1)
 
 
+def padded_png(total):
+    """Valid PNG of exactly `total` bytes (private ancillary chunk before IEND)."""
+    base = png_bytes()
+    pad = total - len(base) - 12
+    return base[:-12] + _chunk(b"prVt", b"\0" * pad) + base[-12:]
+
+
+def riff(kind_payload):
+    return b"RIFF" + struct.pack("<I", len(kind_payload) + 4) + b"WEBP" + kind_payload
+
+
+def webp_vp8(w, h):
+    return riff(b"VP8 " + struct.pack("<I", 10) + b"\0\0\0" + b"\x9d\x01\x2a" + struct.pack("<HH", w, h))
+
+
+def webp_vp8l(w, h):
+    bits = (w - 1) | ((h - 1) << 14)
+    return riff(b"VP8L" + struct.pack("<I", 13) + b"\x2f" + struct.pack("<I", bits) + b"\0" * 8)
+
+
+def webp_vp8x(w, h):
+    return riff(b"VP8X" + struct.pack("<I", 10) + b"\0\0\0\0" + (w - 1).to_bytes(3, "little")
+                + (h - 1).to_bytes(3, "little"))
+
+
+def jpeg_sof(marker, w, h):
+    sof = bytes([0xFF, marker]) + struct.pack(">HBHHB", 11, 8, h, w, 1) + b"\x01\x11\x00"
+    return b"\xff\xd8\xff\xe0\x00\x04\0\0" + sof + b"\xff\xd9"
+
+
+class TestHeaderParse(ImageBase):
+    """4.x header parsers, stdlib only (no PIL)."""
+
+    def test_webp_variants(self):
+        for fn in (webp_vp8, webp_vp8l, webp_vp8x):
+            self.assertEqual(imgmod._webp_size(fn(321, 123)), (321, 123), fn.__name__)
+            doc = self.ingest("w.webp", fn(321, 123))
+            self.assertEqual((doc["pages"][0]["width"], doc["pages"][0]["height"]), (321, 123))
+            self.assertEqual(doc["assets"][0]["mime"], "image/webp")
+
+    def test_webp_truncated(self):
+        for fn in (webp_vp8, webp_vp8l, webp_vp8x):
+            self.assertEqual(self.code("t.webp", fn(5, 5)[:-3]), "corrupt", fn.__name__)
+        self.assertIsNone(imgmod._webp_size(b"RIFF\x00\x00\x00\x00WEBPVP8 "))
+
+    def test_jpeg_baseline_and_progressive(self):
+        self.assertEqual(imgmod._jpeg_size(jpeg_sof(0xC0, 40, 30)), (40, 30))
+        self.assertEqual(imgmod._jpeg_size(jpeg_sof(0xC2, 41, 31)), (41, 31))  # progressive
+        doc = self.ingest("p.jpg", jpeg_sof(0xC2, 41, 31))
+        self.assertEqual((doc["pages"][0]["width"], doc["pages"][0]["height"]), (41, 31))
+
+    def test_jpeg_truncated_and_png_truncated(self):
+        self.assertEqual(self.code("t.jpg", jpeg_sof(0xC2, 4, 4)[:-2]), "corrupt")
+        self.assertEqual(self.code("t.jpg", jpeg_sof(0xC2, 4, 4)[:12]), "corrupt")
+        self.assertEqual(self.code("t.png", png_bytes()[:8]), "corrupt")
+
+    def test_webp_wrong_extension(self):
+        self.assertEqual(self.code("w.png", webp_vp8(2, 2)), "format_mismatch")
+        self.assertEqual(self.code("w.webp", png_bytes()), "format_mismatch")
+
+
+class TestFiveMB(ImageBase):
+    LIMIT = 5 * 1024 * 1024
+
+    def test_default_limit_is_5mb(self):
+        self.assertEqual(imgmod.MAX_IMAGE_BYTES, self.LIMIT)
+        self.assertEqual(claude.MAX_IMAGE_BYTES, self.LIMIT)
+
+    def test_exactly_limit_not_resized(self):
+        data = padded_png(self.LIMIT)
+        self.assertEqual(len(data), self.LIMIT)
+        with mock.patch.object(imgmod, "_shrink", side_effect=AssertionError):
+            doc = self.ingest("b.png", data)
+        self.assertEqual(len(doc["assets"]), 1)
+
+    def test_over_limit_with_pil_shrinks_keeps_original(self):
+        data = padded_png(self.LIMIT + 1)
+        with mock.patch.object(imgmod, "_shrink", return_value=b"small") as sh:
+            doc = self.ingest("b.png", data)
+        sh.assert_called_once()
+        self.assertEqual(sh.call_args[0][2], self.LIMIT)
+        self.assertEqual([a["origin"] for a in doc["assets"]], ["source", "normalized"])
+        with open(os.path.join(self.assets, "b.png"), "rb") as fh:
+            self.assertEqual(fh.read(), data)
+
+    def test_over_limit_without_pil(self):
+        err = IngestError("missing_dependency", "pip install pillow")
+        with mock.patch.object(imgmod.optional, "load", side_effect=err):
+            self.assertEqual(self.code("b.png", padded_png(self.LIMIT + 1)),
+                             "missing_dependency")
+
+
 class Rec(object):
     def __init__(self, out=None):
         self.calls = []
@@ -248,6 +340,29 @@ class TestClaudeImages(unittest.TestCase):
             self.assertEqual(rec.calls, [])
         res, _ = self.call([("image/gif", b"x")])
         self.assertIn("unsupported media type", res.reason)
+
+    def test_no_key_text_in_argv_or_stdin(self):
+        with mock.patch.dict(os.environ, {"ANTHROPIC_API_KEY": "sk-ant-SECRET"}):
+            _, rec = self.call([("image/png", png_bytes())])
+        argv, kw = rec.calls[0]
+        blob = " ".join(argv) + kw["input"]
+        self.assertNotIn("SECRET", blob)
+        self.assertNotIn("sk-ant", blob)
+        self.assertNotIn("ANTHROPIC_API_KEY", blob)
+
+    def test_multiple_images_one_line_in_order(self):
+        _, rec = self.call([("image/png", b"a"), ("image/jpeg", b"b"), ("image/webp", b"c")])
+        kw = rec.calls[0][1]
+        self.assertEqual(kw["input"].count("\n"), 1)
+        content = json.loads(kw["input"])["message"]["content"]
+        self.assertEqual([c["type"] for c in content], ["image"] * 3 + ["text"])
+        self.assertEqual([c["source"]["media_type"] for c in content[:3]],
+                         ["image/png", "image/jpeg", "image/webp"])
+
+    def test_oversize_boundary_to_claude(self):
+        res, rec = self.call([("image/png", b"x" * claude.MAX_IMAGE_BYTES)])
+        self.assertTrue(res.ok)
+        self.assertEqual(len(rec.calls), 1)
 
 
 if __name__ == "__main__":
