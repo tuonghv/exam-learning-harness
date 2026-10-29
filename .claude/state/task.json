@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-001",
-  "state": "UNIT_TESTED",
-  "next": "verifier evidence recorded, then VERIFIED",
+  "state": "VERIFIED",
+  "next": "write report, backlog.sh complete, then DONE",
   "title": "Fit harness to exam domain: remove scan leftovers, compress skills (REQ-0005)",
   "active": [
     {
       "task_id": "TASK-001",
-      "state": "UNIT_TESTED",
-      "next": "verifier evidence recorded, then VERIFIED",
-      "updated_at": "2026-10-29T03:02:50Z"
+      "state": "VERIFIED",
+      "next": "write report, backlog.sh complete, then DONE",
+      "updated_at": "2026-10-29T03:07:41Z"
     }
   ],
   "max_active": 1

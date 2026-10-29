@@ -22,3 +22,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: all PASS, 0 FAIL; skills 794 lines (<=1033), role bodies 57-71 (<=75), CLAUDE.md 3967 B; minor D1: tools/examples/* named before REQ-0002 creates it.
 - Decision: advance to verifier; the agent-setup project-block text edit stays (not generated, not forbidden by AC11/AC13).
 - Next: verifier evidence, then VERIFIED.
+
+## VERIFIED - TASK-001 - 2026-10-29T03:07:35Z
+- Action: verifier (Argus) checked AC1-AC13 independently; coordinator ran the git-based AC4, AC5, AC11 checks.
+- Result: no REFUTED; AC5 grep empty; agent_setup files, hooks, settings.json unchanged.
+- Decision: advance to DONE; agent-setup project-block text edits stay (not generated, not forbidden).
+- Next: report, backlog complete, DONE.

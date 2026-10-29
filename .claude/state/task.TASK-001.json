@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-001",
   "title": "Fit harness to exam domain: remove scan leftovers, compress skills (REQ-0005)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0005",
   "acceptance_criteria": [
     "AC1 audit table in design",
@@ -34,12 +34,17 @@
     "result": "AC1-AC13 PASS, 0 FAIL; skills 794 lines, roles 57-71, CLAUDE.md 3967 B"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "not_applicable",
+    "result": "docs/config cleanup only; no code, network or trust-boundary change; hooks, settings.json and agent_setup files untouched"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-001/handoff/verify.md",
+      "work/TASK-001/handoff/test.md"
+    ],
+    "command": "verifier (Argus) independent AC check + coordinator git checks (AC4, AC5, AC11)",
+    "result": "AC1-AC13 verified; AC5 grep empty; agent_setup.json, hooks, settings.json unchanged since 5e05abd; no REFUTED"
   },
   "report": {
     "status": "pending",
@@ -63,7 +68,8 @@
     "grants_auto": [
       ".claude/skills/**"
     ],
-    "tester": "work/TASK-001/handoff/test.md"
+    "tester": "work/TASK-001/handoff/test.md",
+    "verifier": "work/TASK-001/handoff/verify.md"
   },
   "user_notes": [
     {
@@ -103,7 +109,7 @@
     }
   ],
   "picked_at": "2026-10-29T01:46:15Z",
-  "updated_at": "2026-10-29T03:02:50Z",
+  "updated_at": "2026-10-29T03:07:41Z",
   "updated_by": "main",
   "scope": [
     "CLAUDE.md",
@@ -130,5 +136,5 @@
     "notes": "",
     "next": "tester/verifier for TASK-001 (REQ-0005 ACs)"
   },
-  "next": "verifier evidence recorded, then VERIFIED"
+  "next": "write report, backlog.sh complete, then DONE"
 }
