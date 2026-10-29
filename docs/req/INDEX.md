@@ -3,10 +3,6 @@
 
 **TODO** 8 | **DESIGN** 0 | **IMPLEMENTING** 0 | **UNIT_TESTED** 0 | **VERIFIED** 0 | **DONE** 9 | **SUPERSEDED** 0 | **REJECTED** 0
 
-## Attention
-
-- WARN: questions waiting for user: REQ-0016(2), REQ-0017(3)
-
 ## [EPIC-002](epics/EPIC-002.md) Few-shot and evaluation example sets (Math, Physics, English, Literature; VN THPT/entrance level) - TODO
 
 | ID | Status | AC | Title | Tasks |
