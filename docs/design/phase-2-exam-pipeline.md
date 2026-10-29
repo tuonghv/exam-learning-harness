@@ -195,14 +195,20 @@ as plain text. A missing font or a codepoint with no glyph (gid 0) gives `pdf_sk
 EPIC TBD "QA stage" is folded into order 2, because DECISION cannot be tested without it.
 
 ## Open questions (each with a recommended answer)
-- Q4: May PASS come from a `computed` check (code evaluates the solver's own arithmetic `expr`)?
+- [x] Q4: May PASS come from a `computed` check (code evaluates the solver's own arithmetic `expr`)?
   Recommended: yes for Maths/Physics, recorded as `independent=true` with detail "arithmetic only".
   Without it, Solve mode with no key can never PASS.
-- Q5: Literature with an eval key: may a separate QA call see the key's rubric to grade the essay?
+- [x] Q5: Literature with an eval key: may a separate QA call see the key's rubric to grade the essay?
   Recommended: no in the first build. Literature gets `score.basis=none` and UNCERTAIN, with
   deterministic quote checks only, because the key must not reach any prompt.
-- Q6: Mode Grade/Teach. Recommended: out of scope now (VALIDATE rejects them), because the spec scores
+- [x] Q6: Mode Grade/Teach. Recommended: out of scope now (VALIDATE rejects them), because the spec scores
   answers, not learners.
+
+Answers: Q4, Q5, Q6 accepted as recommended (user, RAW-00028, 2026-10-29).
+
+## Solver prompt review (RAW-00027, AC6)
+The user's `docs/prompts/exam/solver.md` was reviewed; it stays as the user's file. The engine uses `tools/examples/prompts/solve.md`, which drops `reference_answers` and `compare_reference` (key isolation), the JSON input and summary counts (code computes them), `confidence` (replaced by `uncertainty`), model-set `verified`; and adds per-type answer forms, `checks`, `expr`, `evidence` quotes, plain-text math and a length limit.
+Blind try: English Q1 answered A, equal to the key.
 
 ## Out of scope
 PDF/image exam input. Mode Grade/Teach. Batch over many files (loop in a later task). Model

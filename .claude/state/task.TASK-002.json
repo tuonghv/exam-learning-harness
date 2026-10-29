@@ -59,10 +59,11 @@
   "inputs": {},
   "checkpoint": {
     "done": [
-      "TASK-002 picked; designer launched (phase-2-exam-pipeline draft)"
+      "TASK-002 picked; designer launched (phase-2-exam-pipeline draft)",
+      "design installed; Q4-Q6 accepted; solver prompt reviewed, solve.md written"
     ],
     "notes": "",
-    "next": "resume after TASK-001 crosscheck waiver"
+    "next": "hold TASK-002 design-only; pick REQ-0002 task (layout, checker), then EPIC-003 build tasks"
   },
   "next": "user answers Q4-Q6; solver.md review into design; then IMPLEMENTING after REQ-0002"
 }
