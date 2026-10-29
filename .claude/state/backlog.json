@@ -233,5 +233,17 @@
     "user_notes": [],
     "completed_at": "2026-10-29T06:21:52Z",
     "report": "docs/report/phase-8-english-literature-examples.md"
+  },
+  {
+    "task_id": "TASK-009",
+    "title": "Prompt channels: dev and frozen releases (REQ-0013)",
+    "priority": 1,
+    "status": "queued",
+    "created_at": "2026-10-29T06:43:41Z",
+    "requirement": "REQ-0013",
+    "acceptance_criteria": [
+      "AC1-AC4 of REQ-0013"
+    ],
+    "user_notes": []
   }
 ]
