@@ -238,12 +238,20 @@
     "task_id": "TASK-009",
     "title": "Prompt channels: dev and frozen releases (REQ-0013)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-10-29T06:43:41Z",
     "requirement": "REQ-0013",
     "acceptance_criteria": [
       "AC1-AC4 of REQ-0013"
     ],
-    "user_notes": []
+    "user_notes": [
+      {
+        "raw": "RAW-00047",
+        "note": "auto-continue; ask only when approving large cost",
+        "at": "2026-10-29T06:43:58Z"
+      }
+    ],
+    "completed_at": "2026-10-29T06:48:45Z",
+    "report": "docs/report/phase-9-prompt-channels.md"
   }
 ]

@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-009",
   "title": "Prompt channels: dev and frozen releases (REQ-0013)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0013",
   "acceptance_criteria": [
     "AC1-AC4 of REQ-0013"

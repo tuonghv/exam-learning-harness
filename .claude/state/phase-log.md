@@ -244,3 +244,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: AC1-AC4 pass.
 - Decision: advance.
 - Next: DONE.
+
+## DONE - TASK-009 - 2026-10-29T06:48:36Z
+- Action: report written; backlog complete.
+- Result: channels live.
+- Decision: close.
+- Next: REQ-0014.
