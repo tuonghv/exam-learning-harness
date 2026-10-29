@@ -24,6 +24,6 @@ Review after implementation:
 - testability
 
 Follow the `python` skill, then run
-`python3 -I -m unittest discover -s tools/examples/tests`.
+`python3 -I -m unittest discover -s tests/unit`.
 
 - Match a doc section by heading regex (`^## X`), never a substring: prose naming it passes (TASK-124).

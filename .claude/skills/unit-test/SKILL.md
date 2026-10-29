@@ -24,7 +24,7 @@ script in isolation:
 
 Keep UNIT_TESTED and VERIFIED distinct: unit tests prove the code; the `verify` skill proves the behavior.
 
-Before UNIT_TESTED run the whole suite once, `python3 -I -m unittest discover -s tools/examples/tests` (0 tests run is a failure). While iterating, add `-p 'test_<name>.py'`. Record
+Before UNIT_TESTED run the whole suite once, `python3 -I -m unittest discover -s tests/unit` (0 tests run is a failure). While iterating, add `-p 'test_<name>.py'`. Record
 `unit_test.command` (the exact commands) and `unit_test.result` (per-suite pass/fail counts, plus the
 bites-on-old-code count); 0 tests run is a failure, not a pass.
 

@@ -34,7 +34,7 @@ For behaviour changes, build two scratch copies (`git archive HEAD | tar -x -C <
 
 ## Before calling the verifier role: save the evidence
 The `verifier` has no Bash and judges only files in `work/<TASK>/evidence/`; a claim without a file is UNVERIFIED. Save each check with `.claude/scripts/save-evidence.sh <name> -- <cmd...>` (header with task, command, HEAD, time, rc; returns the command's rc; use `bash -c '...'` for pipes). One file per claim, and name each file in the verifier request:
-- [ ] the unit suites the change touches: `unit-<suite> -- python3 -I -m unittest discover -s tools/examples/tests`
+- [ ] the unit suites the change touches: `unit-<suite> -- python3 -I -m unittest discover -s tests/unit`
 - [ ] the real run for each acceptance item: `run-<item> -- ...`
 - [ ] for a behaviour change, both sides with the same inputs: `before-<x>` and `after-<x>`
 
