@@ -75,6 +75,11 @@
       "raw": "RAW-00034",
       "note": "REQ-0009 Q1 accepted: smoke on 2 English few-shot, then 3 English eval",
       "at": "2026-10-29T03:34:47Z"
+    },
+    {
+      "raw": "RAW-00035",
+      "note": "exam solving = same pattern as scanner review: prompt + source -> claude -p -> result (design 2.1 reuse table)",
+      "at": "2026-10-29T03:36:34Z"
     }
   ],
   "picked_at": "2026-10-29T03:24:15Z",
@@ -92,10 +97,11 @@
     "done": [
       "TASK-003 picked for REQ-0002; designer launched (phase-3-example-checker draft)",
       "Q1-Q5 accepted, FORMAT optional headers, IMPLEMENTING",
-      "coder step 1 done and committed (92e57d4); tester launched"
+      "coder step 1 done and committed (92e57d4); tester launched",
+      "UNIT_TESTED (28 tests); coordinator ran AC1-AC5 injections (evidence.md); RAW-00035 linked; verifier launched"
     ],
     "notes": "",
-    "next": "tester handoff, then UNIT_TESTED gate"
+    "next": "verifier handoff, security status, VERIFIED, then crosscheck waiver and DONE"
   },
   "next": "verifier: real repo run and AC1-AC5 evidence, security status, crosscheck"
 }
