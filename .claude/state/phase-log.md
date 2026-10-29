@@ -28,3 +28,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: no REFUTED; AC5 grep empty; agent_setup files, hooks, settings.json unchanged.
 - Decision: advance to DONE; agent-setup project-block text edits stay (not generated, not forbidden).
 - Next: report, backlog complete, DONE.
+
+## DONE - TASK-001 - 2026-10-29T03:08:03Z
+- Action: report written (docs/report/phase-1-harness-exam-fit.md), backlog complete.
+- Result: REQ-0005 AC1-AC13 met; skills 794 lines, roles 57-71, CLAUDE.md 3,967 B.
+- Decision: adopted; coder waiver and limitations recorded in the report.
+- Next: TASK for REQ-0008 (exam pipeline design), then REQ-0006 hook caps and REQ-0002.

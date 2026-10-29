@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-001",
-  "state": "VERIFIED",
-  "next": "write report, backlog.sh complete, then DONE",
+  "state": "DONE",
+  "next": "",
   "title": "Fit harness to exam domain: remove scan leftovers, compress skills (REQ-0005)",
-  "active": [
-    {
-      "task_id": "TASK-001",
-      "state": "VERIFIED",
-      "next": "write report, backlog.sh complete, then DONE",
-      "updated_at": "2026-10-29T03:07:41Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

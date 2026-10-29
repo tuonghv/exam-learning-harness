@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-001",
   "title": "Fit harness to exam domain: remove scan leftovers, compress skills (REQ-0005)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0005",
   "acceptance_criteria": [
     "AC1 audit table in design",
@@ -47,8 +47,8 @@
     "result": "AC1-AC13 verified; AC5 grep empty; agent_setup.json, hooks, settings.json unchanged since 5e05abd; no REFUTED"
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-1-harness-exam-fit.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -109,7 +109,7 @@
     }
   ],
   "picked_at": "2026-10-29T01:46:15Z",
-  "updated_at": "2026-10-29T03:07:41Z",
+  "updated_at": "2026-10-29T03:08:03Z",
   "updated_by": "main",
   "scope": [
     "CLAUDE.md",
@@ -136,5 +136,5 @@
     "notes": "",
     "next": "tester/verifier for TASK-001 (REQ-0005 ACs)"
   },
-  "next": "write report, backlog.sh complete, then DONE"
+  "next": ""
 }
