@@ -1,0 +1,71 @@
+{
+  "task_id": "TASK-010",
+  "title": "Prompt language variants + interface validator (REQ-0014)",
+  "state": "IMPLEMENTING",
+  "requirement": "REQ-0014",
+  "acceptance_criteria": [
+    "AC1-AC4 of REQ-0014"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-10-prompt-variants.md",
+    "summary": "lang/<code>/ variants inside each channel, contract.json markers+output example, check-prompts",
+    "reuse": [
+      "settings.read_prompt",
+      "core.schema.validate"
+    ],
+    "risks": [
+      "markers too weak",
+      "vi text drifts from default"
+    ]
+  },
+  "implementation": {
+    "status": "pending",
+    "files": [
+      "src/exam_engine/pipeline/prompts.py"
+    ]
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": {
+      "waiver": "coordinator wrote the short design"
+    }
+  },
+  "user_notes": [],
+  "picked_at": "2026-10-29T06:49:33Z",
+  "updated_at": "2026-10-29T06:49:33Z",
+  "updated_by": "main",
+  "scope": [
+    "prompts/**",
+    "src/exam_engine/**",
+    "scripts/exam.py",
+    "tests/**",
+    "docs/design/phase-10-prompt-variants.md",
+    "config/engine.json"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "coders"
+}
