@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-007",
-  "state": "DONE",
-  "next": "done",
-  "title": "Math and Physics examples: 2 few-shot + 3 eval each (REQ-0003)",
-  "active": [],
+  "task_id": "TASK-008",
+  "state": "IMPLEMENTING",
+  "next": "coders",
+  "title": "English and Literature examples (REQ-0004)",
+  "active": [
+    {
+      "task_id": "TASK-008",
+      "state": "IMPLEMENTING",
+      "next": "coders",
+      "updated_at": "2026-10-29T06:18:18Z"
+    }
+  ],
   "max_active": 1
 }

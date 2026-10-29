@@ -1,0 +1,70 @@
+{
+  "task_id": "TASK-008",
+  "title": "English and Literature examples (REQ-0004)",
+  "state": "IMPLEMENTING",
+  "requirement": "REQ-0004",
+  "acceptance_criteria": [
+    "AC1-AC4 of REQ-0004"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-8-english-literature-examples.md",
+    "summary": "English 002-005 and Literature 001-005 per FORMAT.md",
+    "reuse": [
+      "examples/FORMAT.md",
+      "check-examples"
+    ],
+    "risks": [
+      "quotes not verbatim",
+      "key hints in inputs"
+    ]
+  },
+  "implementation": {
+    "status": "pending",
+    "files": [
+      "examples/english"
+    ]
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": {
+      "waiver": "FORMAT.md is the design"
+    }
+  },
+  "user_notes": [],
+  "picked_at": "2026-10-29T06:18:18Z",
+  "updated_at": "2026-10-29T06:18:18Z",
+  "updated_by": "main",
+  "scope": [
+    "examples/english/**",
+    "examples/literature/**",
+    "evals/**",
+    "docs/design/phase-8-english-literature-examples.md",
+    "tests/unit/test_examples_oracle.py"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "coders"
+}

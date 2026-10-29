@@ -219,7 +219,7 @@
     "task_id": "TASK-008",
     "title": "English and Literature examples (REQ-0004)",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-10-29T06:18:18Z",
     "requirement": "REQ-0004",
     "acceptance_criteria": [

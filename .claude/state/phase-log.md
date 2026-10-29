@@ -190,3 +190,15 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: 10 items verified.
 - Decision: close.
 - Next: REQ-0004.
+
+## DESIGN - TASK-008 - 2026-10-29T06:18:18Z
+- Action: phase-8 plan.
+- Result: scope fixed.
+- Decision: enter DESIGN.
+- Next: IMPLEMENTING.
+
+## IMPLEMENTING - TASK-008 - 2026-10-29T06:18:18Z
+- Action: start content writing.
+- Result: ready.
+- Decision: two coders.
+- Next: coders.
