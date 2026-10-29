@@ -7,7 +7,7 @@ from exam_engine.ingest.schema import IngestError
 from exam_engine.utils.text import fold
 
 _KEY = re.compile(r"(huong dan giai|dap an|loi giai|answer key|solutions?|marking scheme)\b")
-_HEAD_BLOCKS = 3
+_HEAD_BLOCKS = 6
 
 
 def _starts_key(page):
@@ -35,7 +35,8 @@ def find_parts(doc):
 
 
 def has_key(doc):
-    return any(p.get("kind") == "answer_key" for p in doc.get("parts") or ())
+    found = doc["parts"] if "parts" in doc else find_parts(doc)
+    return any(p.get("kind") == "answer_key" for p in found)
 
 
 def parse_pages(spec):

@@ -388,3 +388,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: green.
 - Decision: advance to verifier.
 - Next: VERIFIED.
+
+## VERIFIED - TASK-014 - 2026-10-29T08:40:07Z
+- Action: verifier read AC1-AC5; real PDF guard run; D1 (heading window 3->6) and D2 (parts computed if absent) fixed, 324 tests.
+- Result: all AC pass.
+- Decision: advance.
+- Next: DONE + report.

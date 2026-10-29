@@ -1,0 +1,258 @@
+{
+  "schema_version": "1",
+  "status": "needs_review",
+  "extraction": {
+    "method": "pdf",
+    "tool": "pymupdf 1.24.11",
+    "ocr": "off"
+  },
+  "meta": {},
+  "pages": [
+    {
+      "n": 1,
+      "width": 595.32,
+      "height": 841.92,
+      "blocks": [
+        {
+          "id": "b1",
+          "order": 0,
+          "type": "image",
+          "text": "",
+          "level": null,
+          "bbox": [
+            14.12,
+            42.55,
+            581.17,
+            820.68
+          ],
+          "origin": "extracted",
+          "asset": "a1"
+        }
+      ],
+      "chars": 0,
+      "images": 1,
+      "drawings": 0,
+      "status": "needs_review",
+      "method": "native",
+      "warnings": [
+        {
+          "level": "warning",
+          "code": "missing_text",
+          "message": "page text suspicious (missing_text)",
+          "page": 1
+        }
+      ]
+    },
+    {
+      "n": 2,
+      "width": 595.32,
+      "height": 841.92,
+      "blocks": [
+        {
+          "id": "b2",
+          "order": 0,
+          "type": "image",
+          "text": "",
+          "level": null,
+          "bbox": [
+            8.9,
+            42.55,
+            586.4,
+            819.45
+          ],
+          "origin": "extracted",
+          "asset": "a2"
+        }
+      ],
+      "chars": 0,
+      "images": 1,
+      "drawings": 0,
+      "status": "needs_review",
+      "method": "native",
+      "warnings": [
+        {
+          "level": "warning",
+          "code": "missing_text",
+          "message": "page text suspicious (missing_text)",
+          "page": 2
+        }
+      ]
+    },
+    {
+      "n": 3,
+      "width": 595.32,
+      "height": 841.92,
+      "blocks": [
+        {
+          "id": "b3",
+          "order": 0,
+          "type": "image",
+          "text": "",
+          "level": null,
+          "bbox": [
+            15.65,
+            42.55,
+            579.62,
+            822.9
+          ],
+          "origin": "extracted",
+          "asset": "a3"
+        }
+      ],
+      "chars": 0,
+      "images": 1,
+      "drawings": 0,
+      "status": "needs_review",
+      "method": "native",
+      "warnings": [
+        {
+          "level": "warning",
+          "code": "missing_text",
+          "message": "page text suspicious (missing_text)",
+          "page": 3
+        }
+      ]
+    },
+    {
+      "n": 4,
+      "width": 595.32,
+      "height": 841.92,
+      "blocks": [
+        {
+          "id": "b4",
+          "order": 0,
+          "type": "image",
+          "text": "",
+          "level": null,
+          "bbox": [
+            1.17,
+            42.55,
+            594.12,
+            820.47
+          ],
+          "origin": "extracted",
+          "asset": "a4"
+        }
+      ],
+      "chars": 0,
+      "images": 1,
+      "drawings": 0,
+      "status": "needs_review",
+      "method": "native",
+      "warnings": [
+        {
+          "level": "warning",
+          "code": "missing_text",
+          "message": "page text suspicious (missing_text)",
+          "page": 4
+        }
+      ]
+    }
+  ],
+  "assets": [
+    {
+      "id": "a1",
+      "path": "work/ingest/e7bb0dcc/p1_v1.png",
+      "mime": "image/png",
+      "sha256": "4e6e2cdb51a3fda68653c16649739762128748598b77d56b76fbc746fdf36ced",
+      "page": 1,
+      "bbox": [
+        14.12,
+        42.55,
+        581.17,
+        820.68
+      ]
+    },
+    {
+      "id": "a2",
+      "path": "work/ingest/e7bb0dcc/p2_v1.png",
+      "mime": "image/png",
+      "sha256": "fc5d15d8a480f939980029758f081b5654b463c92e90c8ab92a702555756626b",
+      "page": 2,
+      "bbox": [
+        8.9,
+        42.55,
+        586.4,
+        819.45
+      ]
+    },
+    {
+      "id": "a3",
+      "path": "work/ingest/e7bb0dcc/p3_v1.png",
+      "mime": "image/png",
+      "sha256": "350616268a54fef8f117d94e984e4d23b751aadb6e1632c74325cf4bdd8b4074",
+      "page": 3,
+      "bbox": [
+        15.65,
+        42.55,
+        579.62,
+        822.9
+      ]
+    },
+    {
+      "id": "a4",
+      "path": "work/ingest/e7bb0dcc/p4_v1.png",
+      "mime": "image/png",
+      "sha256": "81dbc829e815ed9e10e7b81585e1a95b48f4f70f5f41d5a622bfc728738de9cb",
+      "page": 4,
+      "bbox": [
+        1.17,
+        42.55,
+        594.12,
+        820.47
+      ]
+    }
+  ],
+  "warnings": [
+    {
+      "level": "warning",
+      "code": "missing_text",
+      "message": "page text suspicious (missing_text)",
+      "page": 1
+    },
+    {
+      "level": "warning",
+      "code": "missing_text",
+      "message": "page text suspicious (missing_text)",
+      "page": 2
+    },
+    {
+      "level": "warning",
+      "code": "missing_text",
+      "message": "page text suspicious (missing_text)",
+      "page": 3
+    },
+    {
+      "level": "warning",
+      "code": "missing_text",
+      "message": "page text suspicious (missing_text)",
+      "page": 4
+    },
+    {
+      "level": "warning",
+      "code": "no_question_numbering",
+      "message": "question numbering not usable after page selection"
+    },
+    {
+      "level": "info",
+      "code": "pages_selected",
+      "message": "pages 1-4 of 12 kept"
+    }
+  ],
+  "source": {
+    "path": "math_12_graduation_2026_001.pdf",
+    "name": "math_12_graduation_2026_001.pdf",
+    "format": "pdf",
+    "sha256": "e7bb0dcc40428f8bb6266bbe020b959888efccdda73ef17b98c7926cfbc9e600",
+    "size": 2282419
+  },
+  "parts": [
+    {
+      "kind": "exam",
+      "pages": [
+        1,
+        4
+      ]
+    }
+  ]
+}

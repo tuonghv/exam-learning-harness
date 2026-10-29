@@ -137,9 +137,9 @@ class ExtraUnit(unittest.TestCase):
         self.assertEqual(self.kinds(["Q1", "Q2 mentions the answer key later"]), ["exam"])
 
     def test_heading_only_in_first_blocks(self):
-        late = fake([["Q1"], ["a", "b", "c", "Answer key"]])
+        late = fake([["Q1"], ["a", "b", "c", "d", "e", "f", "Answer key"]])
         self.assertEqual([x["kind"] for x in parts.find_parts(late)], ["exam"])
-        third = fake([["Q1"], ["a", "b", "Answer key"]])
+        third = fake([["Q1"], ["a", "b", "c", "d", "e", "Answer key"]])
         self.assertEqual([x["kind"] for x in parts.find_parts(third)], ["exam", "answer_key"])
 
     def test_key_sticks_to_end(self):
@@ -288,3 +288,11 @@ class PdfInspect(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class NoPartsKey(unittest.TestCase):
+    def test_guard_without_parts_key(self):
+        from exam_engine.ingest import api
+        d = fake([["Q1"], ["Answer key"]])
+        d.pop("parts", None)
+        self.assertTrue(parts.has_key(d))

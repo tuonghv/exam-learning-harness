@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-014",
   "title": "ingest-inspect report, answer-guide detection, --pages, key-leak guard (REQ-0020, EPIC-005)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0020",
   "acceptance_criteria": [
     "AC1-AC5 of REQ-0020"
@@ -31,12 +31,16 @@
     "result": "323 OK; 4 mutations bite (work/TASK-014/evidence.md)"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "ingest/inspect.py and parts.py import only re/copy and exam_engine modules; no network, no subprocess, no Claude call; input read-only, select_pages deep-copies; key-leak guard in to_exam_text refuses answer_key pages without --allow-key-pages; no eval keys touched"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-014/evidence/unit.txt",
+      "work/TASK-014/evidence/key-guard.txt",
+      "work/TASK-014/handoff/verify.md"
+    ]
   },
   "report": {
     "status": "pending",
@@ -49,7 +53,8 @@
       "waiver": "coordinator wrote the design from the accepted REQ and the real PDF trial; verifier reviews it"
     },
     "coder": "work/TASK-014/handoff/code.md",
-    "tester": "work/TASK-014/handoff/test.md"
+    "tester": "work/TASK-014/handoff/test.md",
+    "verifier": "work/TASK-014/handoff/verify.md"
   },
   "user_notes": [
     {
@@ -59,7 +64,7 @@
     }
   ],
   "picked_at": "2026-10-29T08:31:04Z",
-  "updated_at": "2026-10-29T08:37:30Z",
+  "updated_at": "2026-10-29T08:40:16Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/**",
@@ -74,5 +79,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verifier checks AC1-AC5"
+  "next": "report, DONE"
 }

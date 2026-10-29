@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-014",
-  "state": "UNIT_TESTED",
-  "next": "verifier checks AC1-AC5",
+  "state": "VERIFIED",
+  "next": "report, DONE",
   "title": "ingest-inspect report, answer-guide detection, --pages, key-leak guard (REQ-0020, EPIC-005)",
   "active": [
     {
       "task_id": "TASK-014",
-      "state": "UNIT_TESTED",
-      "next": "verifier checks AC1-AC5",
-      "updated_at": "2026-10-29T08:37:30Z"
+      "state": "VERIFIED",
+      "next": "report, DONE",
+      "updated_at": "2026-10-29T08:40:16Z"
     }
   ],
   "max_active": 1

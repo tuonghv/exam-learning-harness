@@ -1,0 +1,1 @@
+{"security":{"status":"completed","result":"ingest/inspect.py and parts.py import only re/copy and exam_engine modules; no network, no subprocess, no Claude call; input read-only, select_pages deep-copies; key-leak guard in to_exam_text refuses answer_key pages without --allow-key-pages; no eval keys touched"}}

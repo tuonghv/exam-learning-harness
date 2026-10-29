@@ -1,0 +1,1 @@
+{"unit_test":{"command":"python3 -I -m unittest discover -s tests/unit","result":"323 OK; 4 mutations bite (work/TASK-014/evidence.md)"},"roles":{"coder":"work/TASK-014/handoff/code.md","tester":"work/TASK-014/handoff/test.md"},"next":"verifier checks AC1-AC5"}

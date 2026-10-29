@@ -1,0 +1,9 @@
+# evidence: key-guard
+# task: TASK-014
+# cmd: bash -c python3\ -I\ scripts/exam.py\ ingest\ input/exam/math/math_12_graduation_2026_001.pdf\ --ocr\ off\ --meta\ Subject=Math\ --meta\ Level=12\ --meta\ \"Exam\ type=graduation\"\ --meta\ Task=solve\ --meta\ Mode=solve\ --exam-out\ /tmp/n.md\;\ test\ \$\?\ -ne\ 0
+# cwd: /home/tuonghv/Documents/git/online-system/exam-learning-harness
+# head: e3a723d+dirty
+# when: 2026-10-29T08:39:56Z
+# rc: 0
+---
+ERROR: ingest: answer_key_present: answer-key pages 5-12 in math_12_graduation_2026_001.pdf; select the exam pages (--pages) or pass --allow-key-pages

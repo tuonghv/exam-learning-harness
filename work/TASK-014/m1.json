@@ -1,0 +1,1 @@
+{"design":{"status":"completed","path":"docs/design/phase-14-ingest-inspect.md","summary":"parts detection, select_pages, suspicious checks, Markdown report, answer_key guard in to_exam_text, ingest-inspect CLI"},"roles":{"designer":{"waiver":"coordinator wrote the design from the accepted REQ and the real PDF trial; verifier reviews it"}},"next":"coder implements"}
