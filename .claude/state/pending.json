@@ -1,13 +1,1 @@
-[
-  {
-    "id": "Q-1791538037",
-    "task_id": "TASK-100",
-    "question": "V10 live trial (REQ-0063 AC7): may the auto-park hold TASK-100 and pick the next workable task (TASK-074) if this stays unanswered 10 min? Please do NOT answer for 10 min.",
-    "recommendation": "leave unanswered; autohold should fire at +10 min",
-    "kind": "permission",
-    "asked_at": "2026-10-09T09:27:17Z",
-    "held_at": "2026-10-09T10:22:43Z",
-    "answered_at": "2026-10-09T10:29:31Z",
-    "answer": "yes (user, RAW-00534, 2026-10-09): auto-park may hold TASK-100 and pick the next workable task"
-  }
-]
+[]

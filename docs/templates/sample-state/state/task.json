@@ -1,0 +1,16 @@
+{
+  "schema": 2,
+  "task_id": "TASK-161",
+  "state": "UNIT_TESTED",
+  "next": "HOLD (user RAW-01093): QA team verifies phase 1 findings of run 20261028-154021; then track B (deploy-context stop: --from-dir or approve --no-deploy-context), then verifier V1-V7",
+  "title": "Engine reads prompt http-v16 output: internal-only findings reached via callers (logreach never queries /internal on the WAF host), multi-mount endpoint checked per tier and used as twin, exposure line in reports, compare with run 20261026-060019 (REQ-0127)",
+  "active": [
+    {
+      "task_id": "TASK-161",
+      "state": "UNIT_TESTED",
+      "next": "HOLD (user RAW-01093): QA team verifies phase 1 findings of run 20261028-154021; then track B (deploy-context stop: --from-dir or approve --no-deploy-context), then verifier V1-V7",
+      "updated_at": "2026-10-28T11:13:39Z"
+    }
+  ],
+  "max_active": 1
+}
