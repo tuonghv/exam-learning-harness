@@ -72,6 +72,11 @@
         "raw": "RAW-00026",
         "note": "accept all: Q1 stdlib PDF with embedded TTF else Markdown; Q2 mocks only, real claude -p after user go; Q3 design now, build after REQ-0002",
         "at": "2026-10-29T03:08:25Z"
+      },
+      {
+        "raw": "RAW-00031",
+        "note": "design: benchmark = real runs, measured counts (REQ-0009)",
+        "at": "2026-10-29T03:32:17Z"
       }
     ]
   },
