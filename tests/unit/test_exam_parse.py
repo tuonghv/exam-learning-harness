@@ -5,8 +5,10 @@ import tempfile
 import unittest
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.join(os.path.dirname(HERE)))
-import exam_parse as ep  # noqa: E402
+ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
+TOOLS = os.path.join(ROOT, "tools", "examples")  # the old-command shims
+sys.path.insert(0, os.path.join(ROOT, "src"))
+from exam_engine.pipeline import parser as ep  # noqa: E402
 
 INPUT = """# Exam Input
 

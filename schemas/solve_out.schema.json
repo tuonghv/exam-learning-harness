@@ -1,0 +1,116 @@
+{
+  "type": "object",
+  "required": [
+    "questions"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string"
+    },
+    "questions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "answer",
+          "answer_status",
+          "solution",
+          "explanation",
+          "uncertainty",
+          "reasoning_status"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "answer": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "answer_status": {
+            "type": "string",
+            "enum": [
+              "answered",
+              "uncertain",
+              "unanswerable"
+            ]
+          },
+          "solution": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "explanation": {
+            "type": "string"
+          },
+          "checks": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "expr": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "uncertainty": {
+            "type": "object",
+            "required": [
+              "level",
+              "reason"
+            ],
+            "properties": {
+              "level": {
+                "type": "string",
+                "enum": [
+                  "low",
+                  "medium",
+                  "high"
+                ]
+              },
+              "reason": {
+                "type": "string"
+              }
+            }
+          },
+          "reasoning_status": {
+            "type": "string",
+            "enum": [
+              "not_independently_verified"
+            ]
+          },
+          "issues": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "input_issues": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

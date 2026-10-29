@@ -8,9 +8,10 @@ import tempfile
 import unittest
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-TOOLS = os.path.dirname(HERE)
-sys.path.insert(0, TOOLS)
-import score_eval as se  # noqa: E402
+ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
+TOOLS = os.path.join(ROOT, "tools", "examples")  # the old-command shims
+sys.path.insert(0, os.path.join(ROOT, "src"))
+from exam_engine.pipeline import scorer as se  # noqa: E402
 
 SENTINEL = "ZQXSENTINELKEYTEXT"
 KEY = """# Expected Output
@@ -62,7 +63,7 @@ class DirRunTests(unittest.TestCase):
     def run_cli(self, *args):
         out, err = io.StringIO(), io.StringIO()
         with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
-            rc = se.main(list(args))
+            rc = se.score_main(list(args))
         return rc, out.getvalue(), err.getvalue()
 
     def test_14_scores_and_hides_key(self):  # AC4

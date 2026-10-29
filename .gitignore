@@ -40,3 +40,4 @@ ai_store/
 
 .claude/state/.keepalive.json
 .claude/state/.keepalive.pid
+workspace/

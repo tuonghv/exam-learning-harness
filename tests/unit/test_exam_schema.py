@@ -5,9 +5,11 @@ import sys
 import unittest
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.dirname(HERE))
-import exam_parse as ep  # noqa: E402
-import exam_schema as sch  # noqa: E402
+ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
+TOOLS = os.path.join(ROOT, "tools", "examples")  # the old-command shims
+sys.path.insert(0, os.path.join(ROOT, "src"))
+from exam_engine.pipeline import parser as ep  # noqa: E402
+from exam_engine.core import schema as sch  # noqa: E402
 
 
 def good_q(**kw):
@@ -80,7 +82,7 @@ class ValidateExamTests(unittest.TestCase):
 
     def test_valid_and_real_example(self):
         self.assertEqual(ep.validate_exam(self.exam()), [])
-        root = os.path.join(HERE, "..", "..", "..")
+        root = ROOT
         ex = ep.parse_exam(os.path.join(root, "examples", "english", "input-001.md"))
         self.assertEqual(ep.validate_exam(ex), [])
 

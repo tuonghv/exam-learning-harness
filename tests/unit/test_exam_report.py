@@ -13,12 +13,12 @@ import unittest
 from unittest import mock
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-TOOLS = os.path.dirname(HERE)
-ROOT = os.path.abspath(os.path.join(TOOLS, "..", ".."))
-sys.path.insert(0, TOOLS)
-import exam_report as rp  # noqa: E402
-import exam_run as er  # noqa: E402
-import exam_schema as sch  # noqa: E402
+ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
+TOOLS = os.path.join(ROOT, "tools", "examples")  # the old-command shims
+sys.path.insert(0, os.path.join(ROOT, "src"))
+from exam_engine.pipeline import reporter as rp  # noqa: E402
+from exam_engine import cli, engine as er  # noqa: E402
+from exam_engine.core import schema as sch  # noqa: E402
 
 INPUT_001 = os.path.join(ROOT, "examples", "english", "input-001.md")
 MOCK = os.path.join(HERE, "fixtures", "mock_english_001.json")
@@ -173,7 +173,7 @@ class Markdown(Base):
             self.assertIn("&lt;script&gt;", html_)
 
     def render(self, md, r):
-        import md2html
+        from exam_engine.utils import md2html
         return md2html.convert(md, False, "t", "en")
 
     def test_2_javascript_link_in_model_text_is_not_a_link(self):
@@ -465,7 +465,7 @@ class Cli(Base):
     def main(self, *argv):
         o, e = io.StringIO(), io.StringIO()
         with contextlib.redirect_stdout(o), contextlib.redirect_stderr(e):
-            code = er.main(list(argv))
+            code = cli.solve_main(list(argv))
         return code, o.getvalue(), e.getvalue()
 
     def test_10_mock_no_pdf_end_to_end(self):

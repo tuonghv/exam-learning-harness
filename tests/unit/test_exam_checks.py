@@ -10,11 +10,14 @@ import time
 import unittest
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.dirname(HERE))
-import exam_checks as ck  # noqa: E402
-import exam_llm  # noqa: E402
-import exam_run as er  # noqa: E402
-import exam_schema as sch  # noqa: E402
+ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
+TOOLS = os.path.join(ROOT, "tools", "examples")  # the old-command shims
+sys.path.insert(0, os.path.join(ROOT, "src"))
+from exam_engine.core import decision as dc, safe_eval as sev  # noqa: E402
+from exam_engine.pipeline import scorer as sc, verifier as vf  # noqa: E402
+from exam_engine.adapters import claude as exam_llm  # noqa: E402
+from exam_engine import cli, engine as er  # noqa: E402
+from exam_engine.core import schema as sch  # noqa: E402
 
 MC = {"fields": {"Subject": "English", "Task": "Multiple Choice"}, "passage": "The cat sat."}
 OPTS = {"A": "have", "B": "had", "C": "will have", "D": "would have"}
@@ -39,13 +42,13 @@ def chk(kind, result, independent):
 
 class SafeEval(unittest.TestCase):
     def test_5_allowed(self):
-        self.assertAlmostEqual(ck.safe_eval("2*sqrt(3)"), 3.4641016, places=6)
+        self.assertAlmostEqual(sev.safe_eval("2*sqrt(3)"), 3.4641016, places=6)
         for expr, want in (("2**10", 1024), ("-3+4", 1), ("10 % 3", 1), ("abs(-2)", 2),
                            ("log(100)", 2), ("ln(e)", 1), ("round(2.567, 2)", 2.57),
                            ("(1+2)*3/9", 1), ("+5", 5)):
-            self.assertAlmostEqual(ck.safe_eval(expr), want, msg=expr)
-        self.assertAlmostEqual(ck.safe_eval("sin(pi)"), 0, places=9)
-        self.assertIsInstance(ck.safe_eval("3"), float)
+            self.assertAlmostEqual(sev.safe_eval(expr), want, msg=expr)
+        self.assertAlmostEqual(sev.safe_eval("sin(pi)"), 0, places=9)
+        self.assertIsInstance(sev.safe_eval("3"), float)
 
     def test_5_refused_code_names_attributes(self):
         for expr in ("__import__('os')", "__import__('os').system('true')", "x", "os",
@@ -56,29 +59,29 @@ class SafeEval(unittest.TestCase):
                      "import os", "a = 1", "~1", "1 << 2", "2 // 1", "1j", "(1+2j)",
                      "[x for x in ()]"):
             with self.assertRaises(ValueError, msg=expr):
-                ck.safe_eval(expr)
+                sev.safe_eval(expr)
 
     def test_5_refused_bad_input_and_math_errors(self):
         for expr in ("", "   ", None, 5, "1/0", "sqrt(-1)", "log(0)", "exp(1000)", "(1+",
                      "9" * 300, "1+" * 150 + "1", "(" * 500 + "1" + ")" * 500):
             with self.assertRaises(ValueError, msg=str(expr)[:30]):
-                ck.safe_eval(expr)
+                sev.safe_eval(expr)
 
     def test_5_exponent_cap_cheap(self):
         for expr in ("2**101", "10**1000", "2**-101", "2**(50*3)"):
             with self.assertRaises(ValueError, msg=expr):
-                ck.safe_eval(expr)
-        self.assertEqual(ck.safe_eval("2**100"), float(2 ** 100))
+                sev.safe_eval(expr)
+        self.assertEqual(sev.safe_eval("2**100"), float(2 ** 100))
 
     def test_5_power_bomb_refused(self):
         for expr in ("9**9**9", "9**(9**9)", "2**(9**9)"):
             with self.assertRaises(ValueError, msg=expr):
-                ck.safe_eval(expr)
+                sev.safe_eval(expr)
 
     def test_5_huge_strings_refused(self):
         for expr in ("'a'*10**9", "'a'*99999999", "'a'" + "*2" * 40, "1" * 10000):
             with self.assertRaises(ValueError, msg=expr[:30]):
-                ck.safe_eval(expr)
+                sev.safe_eval(expr)
 
 
 class DetChecks(unittest.TestCase):
@@ -86,32 +89,32 @@ class DetChecks(unittest.TestCase):
         return [(c["kind"], c["result"], c["independent"]) for c in cs]
 
     def test_6_computed_pass_and_fail(self):
-        cs = ck.det_checks(QNUM, ans("3.46", expr="2*sqrt(3)"), NUM)
+        cs = vf.det_checks(QNUM, ans("3.46", expr="2*sqrt(3)"), NUM)
         comp = [c for c in cs if c["kind"] == "computed"][0]
         self.assertEqual((comp["result"], comp["independent"]), ("pass", True))
         self.assertIn("arithmetic only", comp["detail"])
-        comp = [c for c in ck.det_checks(QNUM, ans("3.47", expr="2*sqrt(3)"), NUM)
+        comp = [c for c in vf.det_checks(QNUM, ans("3.47", expr="2*sqrt(3)"), NUM)
                 if c["kind"] == "computed"][0]
         self.assertEqual(comp["result"], "fail")
-        comp = [c for c in ck.det_checks(QNUM, ans("7", expr="3+4"), NUM)
+        comp = [c for c in vf.det_checks(QNUM, ans("7", expr="3+4"), NUM)
                 if c["kind"] == "computed"][0]
         self.assertEqual(comp["result"], "pass")
-        comp = [c for c in ck.det_checks(QNUM, ans("1,5 m", expr="3/2"), NUM)
+        comp = [c for c in vf.det_checks(QNUM, ans("1,5 m", expr="3/2"), NUM)
                 if c["kind"] == "computed"][0]
         self.assertEqual(comp["result"], "pass")  # decimal comma and unit
 
     def test_6_computed_unusable_is_unknown_and_not_independent(self):
         for a in (ans("3.46", expr="__import__('os')"), ans("no number", expr="1+1"),
                   ans("3.46", expr="9**9**9")):
-            comp = [c for c in ck.det_checks(QNUM, a, NUM) if c["kind"] == "computed"][0]
+            comp = [c for c in vf.det_checks(QNUM, a, NUM) if c["kind"] == "computed"][0]
             self.assertEqual((comp["result"], comp["independent"]), ("unknown", False))
-        self.assertEqual([c for c in ck.det_checks(QNUM, ans("3.46"), NUM)
+        self.assertEqual([c for c in vf.det_checks(QNUM, ans("3.46"), NUM)
                           if c["kind"] == "computed"], [])  # no expr, no check
 
     def test_6_format_letter(self):
         for a, want in (("A", "pass"), ("D", "pass"), ("E", "fail"), ("AB", "fail"),
                         ("a", "fail"), ("A. have", "fail")):
-            c = [x for x in ck.det_checks(QMC, ans(a), MC) if x["kind"] == "format"][0]
+            c = [x for x in vf.det_checks(QMC, ans(a), MC) if x["kind"] == "format"][0]
             self.assertEqual(c["result"], want, a)
             self.assertIs(c["independent"], False)
 
@@ -120,106 +123,106 @@ class DetChecks(unittest.TestCase):
         q = {"id": 1, "text": "Arrange:\na. one\nb. two\nc. three", "options": {}}
         for a, want in (("c-a-b", "pass"), ("a-b-c", "pass"), ("a-a-b", "fail"),
                         ("a-b", "fail"), ("a-b-d", "fail"), ("abc", "fail")):
-            c = [x for x in ck.det_checks(q, ans(a), exam) if x["kind"] == "format"][0]
+            c = [x for x in vf.det_checks(q, ans(a), exam) if x["kind"] == "format"][0]
             self.assertEqual(c["result"], want, a)
             self.assertIs(c["independent"], False)
 
     def test_6_quote_present_and_absent(self):
-        cs = ck.det_checks(QMC, ans("A", evidence=["If I ___ time", "The  cat\nsat."]), MC)
+        cs = vf.det_checks(QMC, ans("A", evidence=["If I ___ time", "The  cat\nsat."]), MC)
         qs = [c for c in cs if c["kind"] == "quote"]
         self.assertEqual([c["result"] for c in qs], ["pass", "pass"])  # whitespace-insensitive
-        cs = ck.det_checks(QMC, ans("A", evidence=["The dog barked."]), MC)
+        cs = vf.det_checks(QMC, ans("A", evidence=["The dog barked."]), MC)
         q = [c for c in cs if c["kind"] == "quote"][0]
         self.assertEqual(q["result"], "fail")
         self.assertIs(q["independent"], False)
-        self.assertEqual([c for c in ck.det_checks(QMC, ans("A", evidence=[None, "null", " "]), MC)
+        self.assertEqual([c for c in vf.det_checks(QMC, ans("A", evidence=[None, "null", " "]), MC)
                           if c["kind"] == "quote"], [])
 
     def test_6_only_computed_is_independent(self):
-        cs = (ck.det_checks(QMC, ans("A", evidence=["If I ___ time"]), MC)
-              + ck.det_checks(QNUM, ans("3.46", expr="2*sqrt(3)", evidence=["Compute"]), NUM))
+        cs = (vf.det_checks(QMC, ans("A", evidence=["If I ___ time"]), MC)
+              + vf.det_checks(QNUM, ans("3.46", expr="2*sqrt(3)", evidence=["Compute"]), NUM))
         for c in cs:
             self.assertEqual(c["independent"], c["kind"] == "computed" and c["result"] != "unknown")
 
     def test_8_declined_runs_no_check(self):
         for a in (ans("A", answer_status="uncertain"), ans("A", answer_status="unanswerable"),
                   ans(None), ans("   "), ans(None, expr="1+1")):
-            self.assertTrue(ck.declined(a))
-            self.assertEqual(ck.det_checks(QMC, a, MC), [])
-            self.assertEqual(ck.decide([], {"verdict": "agree", "findings": []}, a),
+            self.assertTrue(dc.declined(a))
+            self.assertEqual(vf.det_checks(QMC, a, MC), [])
+            self.assertEqual(dc.decide([], {"verdict": "agree", "findings": []}, a),
                              ("UNCERTAIN", "solver_declined"))
-        self.assertFalse(ck.declined(ans("A")))
+        self.assertFalse(dc.declined(ans("A")))
 
     def test_9_literature_open_only_format_and_quote(self):
-        cs = ck.det_checks(QLIT, ans("Open", evidence=["Quote line one.", "Not there"]), LIT)
+        cs = vf.det_checks(QLIT, ans("Open", evidence=["Quote line one.", "Not there"]), LIT)
         self.assertEqual(self.kinds(cs), [("format", "pass", False), ("quote", "pass", False),
                                           ("quote", "fail", False)])
-        cs = ck.det_checks(QLIT, ans("Some essay", expr="1+1"), LIT)
+        cs = vf.det_checks(QLIT, ans("Some essay", expr="1+1"), LIT)
         self.assertEqual(cs[0]["kind"], "format")
         self.assertEqual(cs[0]["result"], "fail")  # Literature answer must be Open
 
     def test_9_literature_always_uncertain(self):
         forged = [chk("format", "pass", True), chk("computed", "pass", True)]
         agree = {"verdict": "agree", "findings": []}
-        st, why = ck.decide(forged, agree, ans("Open"))
+        st, why = dc.decide(forged, agree, ans("Open"))
         self.assertEqual(st, "UNCERTAIN")
         self.assertIn("open_task_no_rubric", why)
-        st, why = ck.decide([chk("quote", "fail", False)], agree, ans("Open"))
+        st, why = dc.decide([chk("quote", "fail", False)], agree, ans("Open"))
         self.assertEqual(st, "UNCERTAIN")
         self.assertIn("quote", why)
 
     def test_9_score_basis_none_without_key_or_open(self):
-        self.assertEqual(ck.score(ans("Open"), {"final": None})["basis"], "none")
-        self.assertEqual(ck.score(ans("Open"), None)["basis"], "none")
-        self.assertEqual(ck.score(ans("Open"), {"final": "Open (rubric)"})["basis"], "none")
+        self.assertEqual(sc.score(ans("Open"), {"final": None})["basis"], "none")
+        self.assertEqual(sc.score(ans("Open"), None)["basis"], "none")
+        self.assertEqual(sc.score(ans("Open"), {"final": "Open (rubric)"})["basis"], "none")
 
 
 class Decide(unittest.TestCase):
     AGREE = {"verdict": "agree", "findings": []}
 
     def test_7_ai_agree_alone_is_uncertain(self):
-        st, why = ck.decide([], self.AGREE, ans("A"))
+        st, why = dc.decide([], self.AGREE, ans("A"))
         self.assertEqual((st, why), ("UNCERTAIN", "no_independent_check"))
-        st, why = ck.decide([chk("format", "pass", False), chk("quote", "pass", False)],
+        st, why = dc.decide([chk("format", "pass", False), chk("quote", "pass", False)],
                             self.AGREE, ans("A"))
         self.assertEqual((st, why), ("UNCERTAIN", "no_independent_check"))
 
     def test_7_independent_pass_plus_agree_is_pass(self):
         for kind in ("computed", "key_match"):
-            st, _ = ck.decide([chk("format", "pass", False), chk(kind, "pass", True)],
+            st, _ = dc.decide([chk("format", "pass", False), chk(kind, "pass", True)],
                               self.AGREE, ans("A"))
             self.assertEqual(st, "PASS", kind)
 
     def test_7_quote_or_format_pass_never_lifts(self):
-        st, _ = ck.decide([chk("quote", "pass", False), chk("format", "pass", False),
+        st, _ = dc.decide([chk("quote", "pass", False), chk("format", "pass", False),
                            chk("computed", "unknown", False)], self.AGREE, ans("A"))
         self.assertEqual(st, "UNCERTAIN")
 
     def test_7_any_code_fail_is_fail_even_with_agree(self):
-        st, why = ck.decide([chk("computed", "pass", True), chk("quote", "fail", False)],
+        st, why = dc.decide([chk("computed", "pass", True), chk("quote", "fail", False)],
                             self.AGREE, ans("A"))
         self.assertEqual((st, why), ("FAIL", "check_failed: quote"))
-        self.assertEqual(ck.decide([chk("format", "fail", False)], None, ans("A"))[0], "FAIL")
+        self.assertEqual(dc.decide([chk("format", "fail", False)], None, ans("A"))[0], "FAIL")
 
     def test_7_disagree_is_fail(self):
-        st, why = ck.decide([chk("computed", "pass", True)],
+        st, why = dc.decide([chk("computed", "pass", True)],
                             {"verdict": "disagree", "findings": ["x"]}, ans("A"))
         self.assertEqual((st, why), ("FAIL", "reviewer_disagrees"))
 
     def test_7_unsure_missing_review_and_uncertainty(self):
         good = [chk("computed", "pass", True)]
-        self.assertEqual(ck.decide(good, {"verdict": "unsure", "findings": []}, ans("A")),
+        self.assertEqual(dc.decide(good, {"verdict": "unsure", "findings": []}, ans("A")),
                          ("UNCERTAIN", "reviewer_unsure"))
-        self.assertEqual(ck.decide(good, None, ans("A")), ("UNCERTAIN", "no_review"))
+        self.assertEqual(dc.decide(good, None, ans("A")), ("UNCERTAIN", "no_review"))
         a = ans("A", uncertainty={"level": "medium", "reason": "r"})
-        self.assertEqual(ck.decide(good, self.AGREE, a), ("UNCERTAIN", "solver_uncertainty_not_low"))
+        self.assertEqual(dc.decide(good, self.AGREE, a), ("UNCERTAIN", "solver_uncertainty_not_low"))
 
     def test_score_key(self):
-        self.assertEqual(ck.score(ans("A"), {"final": "A"})["detail"], "matches key")
-        s = ck.score(ans("B"), {"final": "A"})
+        self.assertEqual(sc.score(ans("A"), {"final": "A"})["detail"], "matches key")
+        s = sc.score(ans("B"), {"final": "A"})
         self.assertEqual((s["points"], s["max"], s["basis"], s["detail"]),
                          (0, 1, "official_key", "differs_from_key"))
-        self.assertEqual(ck.score(ans("A"), {"final": None})["basis"], "none")
+        self.assertEqual(sc.score(ans("A"), {"final": None})["basis"], "none")
 
 
 class SafeEvalRegression(unittest.TestCase):
@@ -228,7 +231,7 @@ class SafeEvalRegression(unittest.TestCase):
     def refused(self, expr):
         t0 = time.time()
         with self.assertRaises(ValueError, msg=expr[:40]):
-            ck.safe_eval(expr)
+            sev.safe_eval(expr)
         self.assertLess(time.time() - t0, 2.0, expr[:40])
 
     def test_5_value_and_overflow_refused_fast(self):
@@ -239,7 +242,7 @@ class SafeEvalRegression(unittest.TestCase):
     def test_5_round_digits_refused_fast(self):
         for expr in ("round(5,-999999999)", "round(5,2.5)", "round(5,16)", "round(5,-16)"):
             self.refused(expr)
-        self.assertEqual(ck.safe_eval("round(5.55,1)"), round(5.55, 1))
+        self.assertEqual(sev.safe_eval("round(5.55,1)"), round(5.55, 1))
 
     def test_5_math_errors_refused_fast(self):
         for expr in ("1/0", "sqrt(-1)", "log(0)", "5%0", "0**-1"):
@@ -247,22 +250,22 @@ class SafeEvalRegression(unittest.TestCase):
 
     def test_5_depth_and_length_caps(self):
         deep = "-(" * 45 + "1" + ")" * 45
-        self.assertLess(len(deep), ck.MAX_EXPR_LEN)
+        self.assertLess(len(deep), sev.MAX_EXPR_LEN)
         self.refused(deep)
         ok = "-(" * 10 + "1" + ")" * 10
-        self.assertEqual(ck.safe_eval(ok), 1.0)
+        self.assertEqual(sev.safe_eval(ok), 1.0)
         self.refused("1+" * 200 + "1")  # 401 chars: length cap
 
     def test_5_valid_still_work(self):
-        self.assertAlmostEqual(ck.safe_eval("2*sqrt(3)"), 3.4641, places=4)
-        self.assertEqual(ck.safe_eval("round(2.567,2)"), 2.57)
-        self.assertAlmostEqual(ck.safe_eval("pi*2"), 6.283185, places=5)
-        self.assertEqual(ck.safe_eval("10**99"), 1e99)
+        self.assertAlmostEqual(sev.safe_eval("2*sqrt(3)"), 3.4641, places=4)
+        self.assertEqual(sev.safe_eval("round(2.567,2)"), 2.57)
+        self.assertAlmostEqual(sev.safe_eval("pi*2"), 6.283185, places=5)
+        self.assertEqual(sev.safe_eval("10**99"), 1e99)
 
     def test_6_bomb_expr_in_computed_check_is_unevaluable(self):
         t0 = time.time()
         for expr in ("(10**100)**4", "round(5,-999999999)"):
-            cs = ck.det_checks(QNUM, ans("3.46", expr=expr), NUM)
+            cs = vf.det_checks(QNUM, ans("3.46", expr=expr), NUM)
             comp = [c for c in cs if c["kind"] == "computed"][0]
             self.assertEqual((comp["result"], comp["independent"]), ("unknown", False))
         self.assertLess(time.time() - t0, 2.0)

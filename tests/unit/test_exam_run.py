@@ -11,13 +11,13 @@ import unittest
 from unittest import mock
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-TOOLS = os.path.dirname(HERE)
-ROOT = os.path.abspath(os.path.join(TOOLS, "..", ".."))
-sys.path.insert(0, TOOLS)
-import exam_llm  # noqa: E402
-import exam_parse as ep  # noqa: E402
-import exam_run as er  # noqa: E402
-import exam_schema as sch  # noqa: E402
+ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
+TOOLS = os.path.join(ROOT, "tools", "examples")  # the old-command shims
+sys.path.insert(0, os.path.join(ROOT, "src"))
+from exam_engine.adapters import claude as exam_llm  # noqa: E402
+from exam_engine.pipeline import parser as ep  # noqa: E402
+from exam_engine import cli, engine as er  # noqa: E402
+from exam_engine.core import schema as sch  # noqa: E402
 
 INPUT_001 = os.path.join(ROOT, "examples", "english", "input-001.md")
 MOCK = os.path.join(HERE, "fixtures", "mock_english_001.json")
@@ -102,7 +102,7 @@ class Base(unittest.TestCase):
     def main(self, *argv):
         o, e = io.StringIO(), io.StringIO()
         with contextlib.redirect_stdout(o), contextlib.redirect_stderr(e):
-            code = er.main(list(argv))
+            code = cli.solve_main(list(argv))
         return code, o.getvalue(), e.getvalue()
 
 
@@ -266,7 +266,7 @@ class KeyIsolation(Base):
             events.append("key")
             return real(*args, **kw)
         llm = Script(solve(a(1, "A")), qa((1, "agree")), events=events)
-        with mock.patch.object(er.ep, "parse_expected", spy):
+        with mock.patch.object(ep, "parse_expected", spy):
             self.go(INPUT_001, llm, key=self.keyfile("A. have"))
         self.assertEqual(events, ["llm", "llm", "key"])
 
@@ -374,7 +374,7 @@ class Cli(Base):
 
     def test_12_dry_run_makes_no_call_and_no_output_dir_and_no_key_text(self):
         key = self.write("key.md", "Correct answer: A. have\n\nHidden note %s\n" % SENTINEL)
-        with mock.patch.object(er.exam_llm, "run_claude", side_effect=AssertionError("called")):
+        with mock.patch.object(exam_llm, "run_claude", side_effect=AssertionError("called")):
             code, out, err = self.main(INPUT_001, "--dry-run", "--key", key)
         self.assertEqual((code, err), (0, ""))
         self.assertIn("calls <= 5, cap $1.00", out)
@@ -383,7 +383,7 @@ class Cli(Base):
         self.assertFalse(os.path.exists(self.out))
 
     def test_12_no_mode_or_two_modes_is_usage_exit_2_without_call(self):
-        with mock.patch.object(er.exam_llm, "run_claude", side_effect=AssertionError("called")):
+        with mock.patch.object(exam_llm, "run_claude", side_effect=AssertionError("called")):
             for argv in ([INPUT_001, "--out", self.out],
                          [INPUT_001, "--out", self.out, "--dry-run", "--mock", MOCK],
                          [INPUT_001, "--out", self.out, "--real", "--mock", MOCK],
@@ -408,9 +408,9 @@ class Cli(Base):
             seen.update(printed=o.getvalue(), cwd=cwd, listing=os.listdir(cwd), model=model,
                         timeout=timeout_s, isdir=os.path.isdir(cwd))
             return exam_llm.Call(False, "", 0.0, "auth", "401", 0.0)
-        with mock.patch.object(er.exam_llm, "run_claude", fake), \
+        with mock.patch.object(exam_llm, "run_claude", fake), \
                 contextlib.redirect_stdout(o), contextlib.redirect_stderr(io.StringIO()):
-            code = er.main([INPUT_001, "--real", "--out", self.out, "--max-cost-usd", "0.5",
+            code = cli.solve_main([INPUT_001, "--real", "--out", self.out, "--max-cost-usd", "0.5",
                             "--model", "haiku", "--timeout", "9"])
         self.assertEqual(code, 3)
         self.assertIn("calls <= 5, cap $0.50", seen["printed"])

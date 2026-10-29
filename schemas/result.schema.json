@@ -1,0 +1,362 @@
+{
+  "type": "object",
+  "required": [
+    "schema_version",
+    "exam",
+    "run",
+    "questions",
+    "summary"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "enum": [
+        1
+      ]
+    },
+    "exam": {
+      "type": "object",
+      "required": [
+        "path",
+        "subject",
+        "task",
+        "mode"
+      ],
+      "properties": {
+        "path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "subject": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "level": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "exam_type": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "task": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "mode": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "language": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "run": {
+      "type": "object",
+      "required": [
+        "llm",
+        "calls",
+        "cost_usd"
+      ],
+      "properties": {
+        "llm": {
+          "type": "string",
+          "enum": [
+            "claude-p",
+            "mock"
+          ]
+        },
+        "model": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "max_attempts": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "timeout_s": {
+          "type": "number",
+          "minimum": 0
+        },
+        "max_cost_usd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "cost_usd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "calls": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "stopped": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "questions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "answer",
+          "solution",
+          "explanation",
+          "uncertainty",
+          "checks",
+          "verification_status",
+          "status_reason",
+          "qa_findings",
+          "score",
+          "attempts",
+          "unresolved",
+          "error"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "answer": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "answer_text": {
+            "type": "string"
+          },
+          "solution": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "explanation": {
+            "type": "string"
+          },
+          "uncertainty": {
+            "type": "object",
+            "required": [
+              "level",
+              "reason"
+            ],
+            "properties": {
+              "level": {
+                "type": "string",
+                "enum": [
+                  "low",
+                  "medium",
+                  "high"
+                ]
+              },
+              "reason": {
+                "type": "string"
+              }
+            }
+          },
+          "checks": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "kind",
+                "detail",
+                "result",
+                "independent"
+              ],
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "computed",
+                    "format",
+                    "quote",
+                    "key_match",
+                    "ai_review"
+                  ]
+                },
+                "detail": {
+                  "type": "string"
+                },
+                "result": {
+                  "type": "string",
+                  "enum": [
+                    "pass",
+                    "fail",
+                    "unknown"
+                  ]
+                },
+                "independent": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "verification_status": {
+            "type": "string",
+            "enum": [
+              "PASS",
+              "FAIL",
+              "UNCERTAIN"
+            ]
+          },
+          "status_reason": {
+            "type": "string"
+          },
+          "evidence_kind": {
+            "type": "string",
+            "enum": [
+              "code oracle",
+              "key match",
+              "Claude review only",
+              "none"
+            ]
+          },
+          "qa_findings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "source",
+                "code",
+                "message"
+              ],
+              "properties": {
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "deterministic",
+                    "ai_review",
+                    "score"
+                  ]
+                },
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "score": {
+            "type": "object",
+            "required": [
+              "points",
+              "max",
+              "basis"
+            ],
+            "properties": {
+              "points": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "max": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "basis": {
+                "type": "string",
+                "enum": [
+                  "official_key",
+                  "rubric",
+                  "none"
+                ]
+              },
+              "detail": {
+                "type": "string"
+              }
+            }
+          },
+          "attempts": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "unresolved": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "cls": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "required": [
+        "pass",
+        "fail",
+        "uncertain",
+        "unresolved"
+      ],
+      "properties": {
+        "pass": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "fail": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "uncertain": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "unresolved": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "points": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "max_points": {
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      }
+    }
+  }
+}

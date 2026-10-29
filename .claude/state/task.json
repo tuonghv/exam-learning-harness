@@ -2,14 +2,14 @@
   "schema": 2,
   "task_id": "TASK-006",
   "state": "IMPLEMENTING",
-  "next": "S1 coder: skeleton, settings.py, adapters/claude.py, shim",
+  "next": "tester: new-structure tests, mutations",
   "title": "Restructure the engine into the exam_engine package per docs/design/phase-6-engine-structure.md (REQ-0012)",
   "active": [
     {
       "task_id": "TASK-006",
       "state": "IMPLEMENTING",
-      "next": "S1 coder: skeleton, settings.py, adapters/claude.py, shim",
-      "updated_at": "2026-10-29T05:27:51Z"
+      "next": "tester: new-structure tests, mutations",
+      "updated_at": "2026-10-29T06:03:56Z"
     }
   ],
   "max_active": 1

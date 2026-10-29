@@ -1,0 +1,14 @@
+{
+  "math": {"aliases": ["mathematics", "math"], "task": "Closed",
+           "checks": ["format", "computed", "quote"], "score_basis": "official_key",
+           "language": "vi", "prompt": "subjects/math.md"},
+  "physics": {"aliases": ["physics"], "task": "Closed",
+              "checks": ["format", "computed", "quote"], "score_basis": "official_key",
+              "language": "vi", "prompt": "subjects/physics.md"},
+  "english": {"aliases": ["english"], "task": "Closed",
+              "checks": ["format", "computed", "quote"], "score_basis": "official_key",
+              "language": "en", "prompt": "subjects/english.md"},
+  "literature": {"aliases": ["literature"], "task": "Open",
+                 "checks": ["format", "quote"], "score_basis": "none",
+                 "language": "vi", "prompt": "subjects/literature.md"}
+}

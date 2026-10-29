@@ -9,8 +9,10 @@ import unittest
 from unittest import mock
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.dirname(HERE))
-import exam_llm as L  # noqa: E402
+ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
+TOOLS = os.path.join(ROOT, "tools", "examples")  # the old-command shims
+sys.path.insert(0, os.path.join(ROOT, "src"))
+from exam_engine.adapters import claude as L  # noqa: E402
 
 ARGV = ["claude", "-p", "--output-format", "json", "--model", "sonnet", "--tools", "",
         "--disable-slash-commands", "--no-session-persistence", "--strict-mcp-config"]

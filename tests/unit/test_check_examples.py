@@ -9,10 +9,11 @@ import tempfile
 import unittest
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-TOOLS = os.path.dirname(HERE)
-REPO = os.path.dirname(os.path.dirname(TOOLS))
-sys.path.insert(0, TOOLS)
-import check_examples as ce  # noqa: E402
+ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
+TOOLS = os.path.join(ROOT, "tools", "examples")  # the old-command shims
+sys.path.insert(0, os.path.join(ROOT, "src"))
+REPO = ROOT
+from exam_engine.pipeline import examples_check as ce  # noqa: E402
 
 Q_EN = "If I ______ enough time tomorrow,\nI will help you prepare."
 OPTS = "A. have\nB. had\nC. will have\nD. would have"
