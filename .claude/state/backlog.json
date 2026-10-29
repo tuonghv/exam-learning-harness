@@ -286,5 +286,23 @@
     "user_notes": [],
     "completed_at": "2026-10-29T07:01:02Z",
     "report": "docs/report/phase-11-informatics-subject.md"
+  },
+  {
+    "task_id": "TASK-012",
+    "title": "Ingestion core: canonical document schema, validator, ingest_document, Markdown adapter, bridge to exam file (REQ-0016, EPIC-005)",
+    "priority": 1,
+    "status": "queued",
+    "created_at": "2026-10-29T07:21:38Z",
+    "requirement": "REQ-0016",
+    "acceptance_criteria": [
+      "AC1-AC5 of REQ-0016"
+    ],
+    "user_notes": [
+      {
+        "raw": "RAW-00049",
+        "note": "spec tmp/input-exam-format.md; answers accepted RAW-00050",
+        "at": "2026-10-29T07:21:38Z"
+      }
+    ]
   }
 ]

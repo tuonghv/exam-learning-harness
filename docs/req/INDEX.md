@@ -36,7 +36,7 @@
 
 | ID | Status | AC | Title | Tasks |
 |---|---|---|---|---|
-| [REQ-0016](items/REQ-0016.md) | TODO | 0/5 | Canonical document schema v1, validator and ingest_document entry point with a Markdown adapter, bridged to the exam file format |  |
+| [REQ-0016](items/REQ-0016.md) | TODO | 0/5 | Canonical document schema v1, validator and ingest_document entry point with a Markdown adapter, bridged to the exam file format | TASK-012 |
 | [REQ-0017](items/REQ-0017.md) | TODO | 0/5 | PDF adapter: inspect, native text with coordinates, selective OCR, page images and crops, warnings |  |
 | [REQ-0018](items/REQ-0018.md) | TODO | 0/4 | DOCX adapter and ingestion tests (synthetic fixtures), usage docs and limitations |  |
 | [REQ-0019](items/REQ-0019.md) | TODO | 0/6 | Image input (PNG, JPG, JPEG, WEBP) as visual source documents in the canonical document, passed to the existing claude -p workflow |  |
