@@ -1,0 +1,13 @@
+# evidence: oracle
+# task: TASK-007
+# cmd: python3 -I -m unittest discover -s tests/unit -p test_examples_oracle.py
+# cwd: /home/tuonghv/Documents/git/online-system/exam-learning-harness
+# head: ea2be07+dirty
+# when: 2026-10-29T06:16:36Z
+# rc: 0
+---
+..........
+----------------------------------------------------------------------
+Ran 10 tests in 0.022s
+
+OK

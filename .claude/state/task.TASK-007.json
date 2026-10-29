@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-007",
   "title": "Math and Physics examples: 2 few-shot + 3 eval each (REQ-0003)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0003",
   "acceptance_criteria": [
     "AC1-AC4 of REQ-0003"
@@ -20,15 +20,19 @@
     ]
   },
   "implementation": {
-    "status": "pending",
+    "status": "completed",
     "files": [
-      "examples/math"
+      "examples/math",
+      "examples/physics",
+      "evals/inputs",
+      "evals/keys",
+      "tests/unit/test_examples_oracle.py"
     ]
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "208 OK incl. 10 oracle tests; wrong key fails the oracle"
   },
   "security": {
     "status": "pending",
@@ -47,11 +51,15 @@
   "roles": {
     "designer": {
       "waiver": "FORMAT.md is the design; coordinator wrote a short plan"
+    },
+    "coder": "work/TASK-007/handoff/code.md",
+    "tester": {
+      "waiver": "coordinator wrote the independent oracle tests and ran the wrong-key mutation; content tests only"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-29T06:11:30Z",
-  "updated_at": "2026-10-29T06:11:31Z",
+  "updated_at": "2026-10-29T06:16:45Z",
   "updated_by": "main",
   "scope": [
     "examples/math/**",
@@ -65,5 +73,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "coders math and physics"
+  "next": "verifier"
 }

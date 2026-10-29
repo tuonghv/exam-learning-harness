@@ -172,3 +172,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: ready.
 - Decision: two coders.
 - Next: coders.
+
+## UNIT_TESTED - TASK-007 - 2026-10-29T06:16:36Z
+- Action: 10 examples written; oracle test recomputes each answer; wrong-key mutation.
+- Result: check-examples OK (11 pairs); suite OK; mutation killed.
+- Decision: advance.
+- Next: verifier.

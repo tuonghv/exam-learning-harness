@@ -1,0 +1,11 @@
+# evidence: wrong-key-mutation
+# task: TASK-007
+# cmd: bash -c cp\ evals/keys/physics/expected-005.md\ /tmp/k5.bak\;\ sed\ -i\ \'s/\^Final\ answer:\ 1\,8\\.10\^-19\ J/Final\ answer:\ 2\,8.10\^-19\ J/\'\ evals/keys/physics/expected-005.md\;\ python3\ -I\ -m\ unittest\ discover\ -s\ tests/unit\ -p\ test_examples_oracle.py\ 2\>\&1\|tail\ -3\;\ cp\ /tmp/k5.bak\ evals/keys/physics/expected-005.md
+# cwd: /home/tuonghv/Documents/git/online-system/exam-learning-harness
+# head: ea2be07+dirty
+# when: 2026-10-29T06:16:36Z
+# rc: 0
+---
+Ran 10 tests in 0.021s
+
+FAILED (failures=1)
