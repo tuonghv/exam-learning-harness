@@ -82,8 +82,7 @@ class Unique(unittest.TestCase):
         for key, pol in router.subjects().items():
             for name in [key] + list(pol.get("aliases", [])):
                 f = fold(name)
-                self.assertNotIn(f, seen, "%s also maps to %s" % (name, seen.get(f)))
-                seen[f] = key
+                self.assertEqual(seen.setdefault(f, key), key, "%s also maps to %s" % (name, seen.get(f)))
 
 
 if __name__ == "__main__":
