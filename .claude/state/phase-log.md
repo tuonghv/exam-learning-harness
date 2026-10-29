@@ -76,3 +76,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: 4 modules + qa.md + validate_exam, 14 mock tests; decisions D1-D8; designer waived (architecture done in TASK-002).
 - Decision: no open questions; go to IMPLEMENTING.
 - Next: coder step A.
+
+## IMPLEMENTING - TASK-004 - 2026-10-29T04:22:11Z
+- Action: state DESIGN -> IMPLEMENTING; coder step A launching (exam_schema, exam_llm, validate_exam, exam_checks).
+- Result: pending coder handoff.
+- Decision: coder B (exam_run, qa.md) follows after A.
+- Next: coder A handoff, review, commit.

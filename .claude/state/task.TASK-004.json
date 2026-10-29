@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-004",
   "title": "Engine core + QA: prompt+exam -> claude -p -> JSON, checks, decision, score (REQ-0010)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0010",
   "acceptance_criteria": [
     "AC1 run_claude+extract_json",
@@ -48,19 +48,21 @@
   },
   "user_notes": [],
   "picked_at": "2026-10-29T04:21:14Z",
-  "updated_at": "2026-10-29T04:21:56Z",
+  "updated_at": "2026-10-29T04:22:11Z",
   "updated_by": "main",
   "scope": [
-    "work/TASK-004/"
+    "tools/examples/**",
+    "docs/design/phase-4-engine-core.md"
   ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
     "done": [
-      "picked for REQ-0010"
+      "picked for REQ-0010",
+      "design committed 2c00760; IMPLEMENTING"
     ],
     "notes": "",
-    "next": "write docs/design/phase-4-engine-core.md (steps, interfaces from phase-2 2.1-2.4), set design, DESIGN, then coder step A"
+    "next": "coder A handoff, then coder B (exam_run, qa.md), tester"
   },
   "next": "IMPLEMENTING: coder step A (schema, llm, validate_exam, checks)"
 }
