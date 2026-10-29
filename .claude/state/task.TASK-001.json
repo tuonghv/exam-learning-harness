@@ -69,7 +69,10 @@
       ".claude/skills/**"
     ],
     "tester": "work/TASK-001/handoff/test.md",
-    "verifier": "work/TASK-001/handoff/verify.md"
+    "verifier": "work/TASK-001/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "no separate crosscheck role: the task changes docs and config, not counts; the verifier applied skill crosscheck and the coordinator re-ran the AC4, AC5, AC11 git checks"
+    }
   },
   "user_notes": [
     {

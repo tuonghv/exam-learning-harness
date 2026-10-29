@@ -59,7 +59,7 @@
       "TASK-002 picked; designer launched (phase-2-exam-pipeline draft)"
     ],
     "notes": "",
-    "next": "install designer draft as docs/design/phase-2-exam-pipeline.md, record design in task, ask open questions"
+    "next": "resume after TASK-001 crosscheck waiver"
   },
   "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
 }
