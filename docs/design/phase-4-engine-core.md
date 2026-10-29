@@ -24,7 +24,8 @@ Markdown and PDF on top.
 | D3 | `reasoning_status` | solver always sends `not_independently_verified`; any other value is a schema error; only `decide` can produce `PASS` | fix 8 of the prompt review |
 | D4 | `answer_status` absent | `uncertain` or `unanswerable` or `answer:null` -> UNCERTAIN with finding `solver_declined`, no code check run | prompt rule 6 |
 | D5 | `validate_exam` in `exam_parse.py` | not there yet; coder adds it (errors list, no raise) | only `parse_exam` exists |
-| D6 | PASS needs one independent pass | independent kinds: `computed` (numeric), `quote` (evidence is a verbatim substring of Passage or the question), `format` (letter A-D / ordering permutation of the given letters), `key_match` | uses fields the prompt now returns |
+| D6 | PASS needs one independent pass | independent kinds are only `computed` (code recompute) and `key_match`. `quote` (evidence is a verbatim substring) and `format` (valid letter / ordering) are sanity checks with `independent=false`: a wrong answer can quote a real line or be a valid letter. Without a key, an item with no `computed` check ends UNCERTAIN (honest: not proven) | decided in review of step A |
+| D9 | call isolation | `run_claude` runs with `cwd` = an empty temp dir and `--tools "" --disable-slash-commands --no-session-persistence --strict-mcp-config`, so a real call cannot read `evals/keys` or the repo | README rule "empty temp cwd, no tools"; flags checked against `claude --help` |
 | D7 | Literature | `answer = Open`, only `quote` checks, `score.basis = none`, status always UNCERTAIN, never PASS (Q5: no rubric means no independent proof); quote results and QA findings are shown | no key to compare |
 | D8 | summary counts | computed in code from `questions[]` | prompt rule: model never counts |
 
