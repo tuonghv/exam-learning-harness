@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-004",
-  "state": "VERIFIED",
-  "next": "report, crosscheck waiver, DONE, backlog complete",
+  "state": "DONE",
+  "next": "DONE",
   "title": "Engine core + QA: prompt+exam -> claude -p -> JSON, checks, decision, score (REQ-0010)",
-  "active": [
-    {
-      "task_id": "TASK-004",
-      "state": "VERIFIED",
-      "next": "report, crosscheck waiver, DONE, backlog complete",
-      "updated_at": "2026-10-29T04:40:41Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

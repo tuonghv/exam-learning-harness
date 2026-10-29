@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0010",
-  "next": "mock end-to-end + key-leak grep, verifier",
-  "updated": "2026-10-29 11:35"
+  "next": "report, DONE",
+  "updated": "2026-10-29 11:40"
 }

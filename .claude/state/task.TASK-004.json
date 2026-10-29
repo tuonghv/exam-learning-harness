@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-004",
   "title": "Engine core + QA: prompt+exam -> claude -p -> JSON, checks, decision, score (REQ-0010)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0010",
   "acceptance_criteria": [
     "AC1 run_claude+extract_json",
@@ -47,8 +47,8 @@
     "result": "AC1-AC6 PASS; defects D1-D3 fixed and regression-tested, D4 accepted (extra ids ignored, AC2 reworded); no real claude call made; model accuracy not claimed (REQ-0009)"
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-4-engine-core.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -58,11 +58,14 @@
     },
     "coder": "work/TASK-004/handoff/code-b.md",
     "tester": "work/TASK-004/handoff/test.md",
-    "verifier": "work/TASK-004/handoff/verify.md"
+    "verifier": "work/TASK-004/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "coordinator ran the independent oracles: fake-claude --real path with a key-sentinel grep, safe_eval probes under ulimit/timeout, and 2 own mutations (evidence.md E6-E11); no separate crosscheck role for this task"
+    }
   },
   "user_notes": [],
   "picked_at": "2026-10-29T04:21:14Z",
-  "updated_at": "2026-10-29T04:40:41Z",
+  "updated_at": "2026-10-29T04:41:16Z",
   "updated_by": "main",
   "scope": [
     "tools/examples/**",
@@ -79,5 +82,5 @@
     "notes": "",
     "next": "tester handoff (14 mock cases), then UNIT_TESTED"
   },
-  "next": "report, crosscheck waiver, DONE, backlog complete"
+  "next": "DONE"
 }

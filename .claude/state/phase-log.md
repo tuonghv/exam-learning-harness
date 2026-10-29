@@ -94,3 +94,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: 108 tests OK; AC1-AC6 PASS; no sentinel or key line in any prompt or output; no real claude call; D4 (extra ids ignored) accepted and AC2 reworded.
 - Decision: VERIFIED; model accuracy is not claimed here (REQ-0009 needs the user's go).
 - Next: report, crosscheck waiver, DONE, backlog complete.
+
+## DONE - TASK-004 - 2026-10-29T04:41:16Z
+- Action: report docs/report/phase-4-engine-core.md written; crosscheck waived with reason; backlog item completed.
+- Result: REQ-0010 AC1-AC6 ticked, 108 tests OK, verifier PASS after the safe_eval fix; no real claude call made.
+- Decision: DONE; model accuracy stays unclaimed until REQ-0009 (needs the user's go).
+- Next: REQ-0011 report stage; then REQ-0009 dry-run and call-count/cap proposal for the user.
