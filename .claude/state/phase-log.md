@@ -130,3 +130,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: REQ-0011 AC1-AC4 verified, 166 tests OK, real Chrome PDF with Vietnamese.
 - Decision: close TASK-005.
 - Next: TASK-006 engine restructure (REQ-0012).
+
+## DESIGN - TASK-006 - 2026-10-29T05:27:43Z
+- Action: design doc docs/design/phase-6-engine-structure.md (final, Q1-Q4 decided); designer waived.
+- Result: file map, differences from the reference and 6 build steps recorded.
+- Decision: enter DESIGN; build in small green steps.
+- Next: IMPLEMENTING, coder step S1.

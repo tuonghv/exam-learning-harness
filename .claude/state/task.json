@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-005",
-  "state": "DONE",
-  "next": "done",
-  "title": "Report stage: Markdown + PDF via copied md2html.py and headless Chrome (REQ-0011)",
-  "active": [],
+  "task_id": "TASK-006",
+  "state": "DESIGN",
+  "next": "S1 skeleton + settings + adapters/claude",
+  "title": "Restructure the engine into the exam_engine package per docs/design/phase-6-engine-structure.md (REQ-0012)",
+  "active": [
+    {
+      "task_id": "TASK-006",
+      "state": "DESIGN",
+      "next": "S1 skeleton + settings + adapters/claude",
+      "updated_at": "2026-10-29T05:27:43Z"
+    }
+  ],
   "max_active": 1
 }

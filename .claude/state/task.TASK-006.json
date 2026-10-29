@@ -1,0 +1,74 @@
+{
+  "task_id": "TASK-006",
+  "title": "Restructure the engine into the exam_engine package per docs/design/phase-6-engine-structure.md (REQ-0012)",
+  "state": "DESIGN",
+  "requirement": "REQ-0012: one package src/exam_engine, prompts/, schemas/, config/, tests/, scripts/exam.py; old tools/examples/*.py become shims; behaviour and 166 tests unchanged",
+  "acceptance_criteria": [
+    "AC1-AC6 of REQ-0012"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-6-engine-structure.md",
+    "summary": "one package src/exam_engine grouped by responsibility, prompts/ schemas/ config/ at top level, scripts/exam.py single entry, tools/examples shims; moved in 6 green steps",
+    "reuse": [
+      "existing tools/examples modules and 166 tests move, not rewritten"
+    ],
+    "risks": [
+      "python3 -I needs explicit sys.path insert in shims",
+      "prompts path change must keep key out of prompts",
+      "tests must keep passing after every step"
+    ]
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": {
+      "waiver": "design written by the coordinator from tmp/engine-architecture.md and the user's delegation (RAW-00038/39)"
+    }
+  },
+  "user_notes": [],
+  "picked_at": "2026-10-29T05:27:31Z",
+  "updated_at": "2026-10-29T05:27:43Z",
+  "updated_by": "main",
+  "scope": [
+    "src/**",
+    "scripts/**",
+    "prompts/**",
+    "schemas/**",
+    "config/**",
+    "tests/**",
+    "tools/examples/**",
+    "README.md",
+    "pyproject.toml",
+    ".gitignore",
+    "docs/design/phase-6-engine-structure.md"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "S1 skeleton + settings + adapters/claude"
+}
