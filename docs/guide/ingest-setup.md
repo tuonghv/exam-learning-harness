@@ -46,3 +46,5 @@ the heuristics are not proof of correctness. A PDF that holds an answer guide af
 (heading such as "Hướng dẫn giải", "Đáp án", "Answer key") gets `parts`; `--exam-out` then fails with
 `answer_key_present` unless you pick the exam pages with `--pages SPEC` (`1-4`, `1,3,5-6`) or pass
 `--allow-key-pages`. An unlabelled guide is not detected.
+
+How to run ingest for each format, error codes and known limits: [ingest-usage.md](ingest-usage.md).
