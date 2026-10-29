@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-008",
-  "state": "UNIT_TESTED",
-  "next": "verifier",
+  "state": "VERIFIED",
+  "next": "done",
   "title": "English and Literature examples (REQ-0004)",
   "active": [
     {
       "task_id": "TASK-008",
-      "state": "UNIT_TESTED",
-      "next": "verifier",
-      "updated_at": "2026-10-29T06:20:45Z"
+      "state": "VERIFIED",
+      "next": "done",
+      "updated_at": "2026-10-29T06:21:52Z"
     }
   ],
   "max_active": 1

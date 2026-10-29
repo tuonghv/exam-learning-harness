@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-008",
   "title": "English and Literature examples (REQ-0004)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0004",
   "acceptance_criteria": [
     "AC1-AC4 of REQ-0004"
@@ -34,16 +34,16 @@
     "result": "suite OK; check-examples OK 20 pairs; English oracle tests"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "eval keys only under evals/keys; check-examples key-leak scan clean; no code executed from content"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": "work/TASK-008/evidence/"
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-8-english-literature-examples.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -54,11 +54,15 @@
     "coder": "work/TASK-008/handoff/code.md",
     "tester": {
       "waiver": "content task; coordinator added oracle tests; check-examples verifies quotes and key leaks"
+    },
+    "verifier": "work/TASK-008/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "English oracle tests recompute order and passage facts; literature quotes machine-checked"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-29T06:18:18Z",
-  "updated_at": "2026-10-29T06:20:45Z",
+  "updated_at": "2026-10-29T06:21:52Z",
   "updated_by": "main",
   "scope": [
     "examples/english/**",
@@ -73,5 +77,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verifier"
+  "next": "done"
 }
