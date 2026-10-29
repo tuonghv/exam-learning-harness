@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-008",
-  "state": "VERIFIED",
+  "state": "DONE",
   "next": "done",
   "title": "English and Literature examples (REQ-0004)",
-  "active": [
-    {
-      "task_id": "TASK-008",
-      "state": "VERIFIED",
-      "next": "done",
-      "updated_at": "2026-10-29T06:21:52Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

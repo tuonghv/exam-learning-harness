@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-008",
   "title": "English and Literature examples (REQ-0004)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0004",
   "acceptance_criteria": [
     "AC1-AC4 of REQ-0004"
