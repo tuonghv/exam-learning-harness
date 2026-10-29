@@ -371,12 +371,20 @@
     "task_id": "TASK-016",
     "title": "Image input adapter (PNG/JPG/WEBP) + image block to claude -p (REQ-0019, EPIC-005)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-10-29T09:10:55Z",
     "requirement": "REQ-0019",
     "acceptance_criteria": [
       "AC1-AC6 of REQ-0019"
     ],
-    "user_notes": []
+    "user_notes": [
+      {
+        "raw": "RAW-00066",
+        "note": "continue autonomously",
+        "at": "2026-10-29T09:10:56Z"
+      }
+    ],
+    "completed_at": "2026-10-29T09:18:43Z",
+    "report": "docs/report/phase-16-image-input.md"
   }
 ]

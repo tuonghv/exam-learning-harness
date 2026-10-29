@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-016",
-  "state": "UNIT_TESTED",
-  "next": "verifier checks AC1-AC6",
+  "state": "DONE",
+  "next": "TASK-017",
   "title": "Image input adapter (PNG/JPG/WEBP) + image block to claude -p (REQ-0019, EPIC-005)",
-  "active": [
-    {
-      "task_id": "TASK-016",
-      "state": "UNIT_TESTED",
-      "next": "verifier checks AC1-AC6",
-      "updated_at": "2026-10-29T09:17:37Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

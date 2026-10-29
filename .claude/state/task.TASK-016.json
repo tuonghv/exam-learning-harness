@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-016",
   "title": "Image input adapter (PNG/JPG/WEBP) + image block to claude -p (REQ-0019, EPIC-005)",
-  "state": "UNIT_TESTED",
+  "state": "DONE",
   "requirement": "REQ-0019",
   "acceptance_criteria": [
     "AC1-AC6 of REQ-0019"
@@ -33,16 +33,20 @@
     "result": "387 OK; 4 mutations bite (test.md)"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "image adapter reads files read-only, copies bytes unchanged under --assets; run_claude_images builds argv as a list with tools off and empty cwd, base64 only, no paths; tests use a mock runner, no real call; no eval keys touched"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-016/evidence/unit.txt",
+      "work/TASK-016/evidence/unit2.txt",
+      "work/TASK-016/handoff/verify.md"
+    ]
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-16-image-input.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -51,7 +55,11 @@
       "waiver": "coordinator wrote the design; verifier reviews it"
     },
     "coder": "work/TASK-016/handoff/code.md",
-    "tester": "work/TASK-016/handoff/test.md"
+    "tester": "work/TASK-016/handoff/test.md",
+    "verifier": "work/TASK-016/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "no exam answers produced; synthetic images checked by verifier and 4 mutations"
+    }
   },
   "user_notes": [
     {
@@ -61,7 +69,7 @@
     }
   ],
   "picked_at": "2026-10-29T09:10:56Z",
-  "updated_at": "2026-10-29T09:17:37Z",
+  "updated_at": "2026-10-29T09:18:43Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/**",
@@ -77,5 +85,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verifier checks AC1-AC6"
+  "next": "TASK-017"
 }
