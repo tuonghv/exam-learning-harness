@@ -69,10 +69,11 @@
   "checkpoint": {
     "done": [
       "picked for REQ-0010",
-      "design committed 2c00760; IMPLEMENTING"
+      "design committed 2c00760; IMPLEMENTING",
+      "coder A and B committed (76bd55b, step B); tester launching"
     ],
     "notes": "",
-    "next": "coder A handoff, then coder B (exam_run, qa.md), tester"
+    "next": "tester handoff (14 mock cases), then UNIT_TESTED"
   },
   "next": "tester writes test_exam_*.py (14 mock cases), mutation notes"
 }
