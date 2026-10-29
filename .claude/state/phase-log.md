@@ -574,3 +574,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: dry run OK; pages 3-6 refused.
 - Decision: waivers for verifier/crosscheck; AC5 (real run) stays open on REQ-0023.
 - Next: report and DONE.
+
+## DONE - TASK-020 - 2026-10-29T15:30:00Z
+- Action: report docs/report/phase-20-cross-solve.md.
+- Result: task done.
+- Decision: REQ-0023 stays open for AC5 (real measurement needs the user's go).
+- Next: trial exam Markdown from refined questions, then the real run.

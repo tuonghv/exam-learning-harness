@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-020",
-  "state": "VERIFIED",
-  "next": "report and DONE",
+  "state": "DONE",
+  "next": "",
   "title": "cross-solve: text route vs page-image route, answer-level agreement (REQ-0023, EPIC-006)",
-  "active": [
-    {
-      "task_id": "TASK-020",
-      "state": "VERIFIED",
-      "next": "report and DONE",
-      "updated_at": "2026-10-29T15:55:32Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

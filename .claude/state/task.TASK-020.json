@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-020",
   "title": "cross-solve: text route vs page-image route, answer-level agreement (REQ-0023, EPIC-006)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0023",
   "acceptance_criteria": [
     "AC1-AC4 of REQ-0023"
@@ -41,8 +41,8 @@
     "result": "dry run exit 0 with route B prompt; pages 3-6 refused (exit 3)"
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-20-cross-solve.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -65,7 +65,7 @@
   },
   "user_notes": [],
   "picked_at": "2026-10-29T15:53:07Z",
-  "updated_at": "2026-10-29T15:55:32Z",
+  "updated_at": "2026-10-29T15:55:42Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-020/"
@@ -76,5 +76,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report and DONE"
+  "next": ""
 }
