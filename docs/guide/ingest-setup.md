@@ -34,3 +34,15 @@ OCR languages found (vie/eng) and the user-site path used by the loader.
 
 Page crops go to `--assets` (default `work/ingest/<sha8>/`). Math in PDFs is kept as text plus a
 page image, not LaTeX.
+
+## Inspect and page selection
+    python3 -I scripts/exam.py ingest-inspect exam.pdf [--out report.md] [--pages 1-4]
+    python3 -I scripts/exam.py ingest exam.pdf --pages 1-4 --exam-out exam.md
+
+`ingest-inspect` (a `.json` argument is a saved document, anything else is ingested first) prints a
+read-only Markdown report: summary, per-page blocks, warnings and suspicious spots (split formulas,
+options without text, numbering gaps, stray characters). It costs nothing and makes no Claude call;
+the heuristics are not proof of correctness. A PDF that holds an answer guide after the exam
+(heading such as "Hướng dẫn giải", "Đáp án", "Answer key") gets `parts`; `--exam-out` then fails with
+`answer_key_present` unless you pick the exam pages with `--pages SPEC` (`1-4`, `1,3,5-6`) or pass
+`--allow-key-pages`. An unlabelled guide is not detected.

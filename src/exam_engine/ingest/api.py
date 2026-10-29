@@ -2,7 +2,7 @@
 import hashlib
 import os
 
-from exam_engine.ingest import adapters
+from exam_engine.ingest import adapters, parts
 from exam_engine.ingest.schema import IngestError, validate_document
 from exam_engine.pipeline import parser
 
@@ -30,6 +30,10 @@ def ingest_document(path, config=None, meta=None):
         name = os.path.basename(path)
         doc["source"] = {"path": name, "name": name, "format": ext.lstrip("."),
                          "sha256": hashlib.sha256(raw).hexdigest(), "size": len(raw)}
+    if doc["source"].get("format") != "md":
+        doc["parts"] = parts.find_parts(doc)
+        if (config or {}).get("pages"):
+            doc = parts.select_pages(doc, config["pages"])
     fields = parser.header_fields(doc["source"]["text"]) if "text" in doc["source"] else {}
     fields.update(meta or {})
     doc["meta"] = fields
@@ -44,8 +48,16 @@ def _is_exam_format(text):
     return all(fields.get(k) for k in REQUIRED) and bool(parser.sections(text, 2))
 
 
-def to_exam_text(doc):
-    """Exam file text for `solve`: an exam-format Markdown source is returned unchanged."""
+def to_exam_text(doc, config=None):
+    """Exam file text for `solve`: an exam-format Markdown source is returned unchanged.
+
+    Refuses a document that still holds answer-key pages unless config["allow_key_pages"].
+    """
+    if parts.has_key(doc) and not (config or {}).get("allow_key_pages"):
+        raise IngestError("answer_key_present", "answer-key pages %s in %s; select the exam "
+                          "pages (--pages) or pass --allow-key-pages"
+                          % (", ".join("%d-%d" % tuple(p["pages"]) for p in doc["parts"]
+                                       if p["kind"] == "answer_key"), doc["source"]["name"]))
     src = doc["source"]
     if src.get("format") == "md":
         text = src.get("text")

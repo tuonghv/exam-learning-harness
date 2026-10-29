@@ -18,7 +18,7 @@ from exam_engine.core.decision import decide
 from exam_engine.pipeline import examples_check, parser, prompts, reporter, scorer, solver, verifier
 
 COMMANDS = ("solve", "parse", "verify", "report", "check-examples", "score", "prompts",
-            "check-prompts", "ingest")
+            "check-prompts", "ingest", "ingest-inspect")
 USAGE = "usage: exam.py {%s} ..." % "|".join(COMMANDS)
 
 
@@ -218,6 +218,9 @@ def ingest_main(argv):
     ap.add_argument("--assets", metavar="DIR")
     ap.add_argument("--ocr", choices=["auto", "off"], default="auto")
     ap.add_argument("--check", action="store_true")
+    ap.add_argument("--pages", metavar="SPEC", help="keep only these pages, e.g. 1-4 or 1,3,5-6")
+    ap.add_argument("--allow-key-pages", action="store_true",
+                    help="allow --exam-out although answer-key pages are present")
     ap.add_argument("--meta", action="append", default=[], metavar="K=V")
     try:
         args = ap.parse_args(argv)
@@ -237,6 +240,8 @@ def ingest_main(argv):
         meta[key.strip()] = val.strip()
     try:
         cfg = {"ocr": args.ocr}
+        if args.pages:
+            cfg["pages"] = args.pages
         if args.assets:
             cfg["asset_dir"] = args.assets
         doc = api.ingest_document(args.file, config=cfg, meta=meta)
@@ -245,7 +250,7 @@ def ingest_main(argv):
             with open(args.out, "w", encoding="utf-8") as fh:
                 fh.write(blob)
         if args.exam_out:
-            text = api.to_exam_text(doc)
+            text = api.to_exam_text(doc, {"allow_key_pages": args.allow_key_pages})
             with open(args.exam_out, "w", encoding="utf-8") as fh:
                 fh.write(text)
     except IngestError as exc:
@@ -259,6 +264,41 @@ def ingest_main(argv):
     return 0
 
 
+def inspect_main(argv):
+    """ingest-inspect DOC.json|FILE [--out REPORT.md] [--pages SPEC]: Markdown report, read-only."""
+    from exam_engine.ingest import api, inspect, parts
+    from exam_engine.ingest.schema import IngestError, validate_document
+    ap = argparse.ArgumentParser(prog="exam.py ingest-inspect")
+    ap.add_argument("file")
+    ap.add_argument("--out")
+    ap.add_argument("--pages", metavar="SPEC")
+    try:
+        args = ap.parse_args(argv)
+    except SystemExit:
+        return 2
+    try:
+        if args.file.lower().endswith(".json"):
+            with open(args.file, encoding="utf-8") as fh:
+                doc = json.load(fh)
+            errs = validate_document(doc)
+            if errs:
+                raise IngestError("invalid_document", "; ".join(errs[:5]))
+            if args.pages:
+                doc = parts.select_pages(doc, args.pages)
+        else:
+            doc = api.ingest_document(args.file, config={"pages": args.pages} if args.pages else {})
+        text = inspect.report(doc)
+        if args.out:
+            with open(args.out, "w", encoding="utf-8") as fh:
+                fh.write(text)
+    except (IngestError, OSError, ValueError) as exc:
+        print("ERROR: ingest-inspect: %s" % exc, file=sys.stderr)
+        return 2
+    if not args.out:
+        sys.stdout.write(text)
+    return 0
+
+
 def main(argv=None):
     argv = list(sys.argv[1:] if argv is None else argv)
     cmd, rest = (argv[0], argv[1:]) if argv else (None, [])
@@ -266,7 +306,7 @@ def main(argv=None):
              "report": report_main, "check-examples": examples_check.main,
              "score": scorer.score_main, "prompts": prompts.prompts_main,
              "check-prompts": prompts.check_prompts_main,
-             "ingest": ingest_main}
+             "ingest": ingest_main, "ingest-inspect": inspect_main}
     if cmd not in table:
         print(USAGE, file=sys.stderr)
         return 2

@@ -3,7 +3,8 @@ from exam_engine.core.schema import validate
 
 SCHEMA_VERSION = "1"
 CODES = ("unsupported_format", "empty", "decode", "missing_asset", "missing_dependency",
-         "invalid_document", "corrupt", "missing_header", "encrypted", "no_questions")
+         "invalid_document", "corrupt", "missing_header", "encrypted", "no_questions",
+         "invalid_pages", "answer_key_present")
 STATUSES = ["native_text", "ocr", "mixed", "needs_review"]
 BLOCK_TYPES = ["heading", "paragraph", "list", "table", "code", "math", "image"]
 ORIGINS = ["source", "extracted", "normalized", "ai"]
@@ -34,6 +35,10 @@ DOCUMENT = {
         "pages": {"type": "array", "items": _PAGE},
         "assets": {"type": "array", "items": _ASSET},
         "questions": {"type": "array"},
+        "parts": {"type": "array", "items": {
+            "type": "object", "required": ["kind", "pages"],
+            "properties": {"kind": {"enum": ["exam", "answer_key"]},
+                           "pages": {"type": "array"}}}},
         "warnings": {"type": "array", "items": {"type": "object",
                                                 "required": ["level", "code", "message"]}},
     },
