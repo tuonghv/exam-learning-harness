@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-006",
-  "state": "IMPLEMENTING",
-  "next": "tester: new-structure tests, mutations",
+  "state": "UNIT_TESTED",
+  "next": "coordinator evidence, verifier",
   "title": "Restructure the engine into the exam_engine package per docs/design/phase-6-engine-structure.md (REQ-0012)",
   "active": [
     {
       "task_id": "TASK-006",
-      "state": "IMPLEMENTING",
-      "next": "tester: new-structure tests, mutations",
-      "updated_at": "2026-10-29T06:03:56Z"
+      "state": "UNIT_TESTED",
+      "next": "coordinator evidence, verifier",
+      "updated_at": "2026-10-29T06:07:32Z"
     }
   ],
   "max_active": 1

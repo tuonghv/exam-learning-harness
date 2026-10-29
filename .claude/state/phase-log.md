@@ -142,3 +142,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: ready to build S1.
 - Decision: enter IMPLEMENTING; coder does S1 then each step is committed green.
 - Next: coder S1.
+
+## UNIT_TESTED - TASK-006 - 2026-10-29T06:07:23Z
+- Action: tester added 12 AC tests (shims, single claude site, prompt isolation, temp subject, cwd independence); 3 mutations.
+- Result: 198 unit + 2 integration OK; mutations 3/3 killed.
+- Decision: advance.
+- Next: coordinator evidence, verifier.

@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-006",
   "title": "Restructure the engine into the exam_engine package per docs/design/phase-6-engine-structure.md (REQ-0012)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0012: one package src/exam_engine, prompts/, schemas/, config/, tests/, scripts/exam.py; old tools/examples/*.py become shims; behaviour and 166 tests unchanged",
   "acceptance_criteria": [
     "AC1-AC6 of REQ-0012"
@@ -24,22 +24,16 @@
     "files": [
       "src/exam_engine/cli.py",
       "src/exam_engine/engine.py",
-      "src/exam_engine/settings.py",
       "scripts/exam.py",
-      "schemas",
-      "config",
-      "prompts",
-      "tests/unit",
-      "tests/integration",
+      "tests/unit/test_req0012_acs.py",
       "tools/examples",
-      "README.md",
-      "pyproject.toml"
+      "README.md"
     ]
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit; ... -s tests/integration",
+    "result": "198 unit + 2 integration OK; 3/3 mutations killed"
   },
   "security": {
     "status": "pending",
@@ -59,7 +53,8 @@
     "designer": {
       "waiver": "design written by the coordinator from tmp/engine-architecture.md and the user's delegation (RAW-00038/39)"
     },
-    "coder": "work/TASK-006/handoff/code.md"
+    "coder": "work/TASK-006/handoff/code.md",
+    "tester": "work/TASK-006/handoff/test.md"
   },
   "user_notes": [
     {
@@ -69,7 +64,7 @@
     }
   ],
   "picked_at": "2026-10-29T05:27:31Z",
-  "updated_at": "2026-10-29T06:03:56Z",
+  "updated_at": "2026-10-29T06:07:32Z",
   "updated_by": "main",
   "scope": [
     "src/**",
@@ -90,5 +85,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tester: new-structure tests, mutations"
+  "next": "coordinator evidence, verifier"
 }
