@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-005",
   "title": "Report stage: Markdown + PDF via copied md2html.py and headless Chrome (REQ-0011)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0011",
   "acceptance_criteria": [
     "AC1 result.json carries evidence kind",
@@ -24,7 +24,13 @@
   },
   "implementation": {
     "status": "pending",
-    "files": []
+    "files": [
+      "tools/examples/md2html.py",
+      "tools/examples/exam_report.py",
+      "tools/examples/exam_run.py",
+      "tools/examples/exam_schema.py"
+    ],
+    "summary": "coder launching"
   },
   "unit_test": {
     "status": "pending",
@@ -58,7 +64,7 @@
     }
   ],
   "picked_at": "2026-10-29T05:12:53Z",
-  "updated_at": "2026-10-29T05:15:22Z",
+  "updated_at": "2026-10-29T05:15:29Z",
   "updated_by": "main",
   "scope": [
     "tools/examples/**",
@@ -70,5 +76,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "coder: md2html.py copy, exam_report.py, exam_run integration, evidence_kind"
+  "next": "coder: md2html copy, exam_report, exam_run hook, evidence_kind"
 }

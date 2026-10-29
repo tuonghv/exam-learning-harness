@@ -106,3 +106,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: design complete, no open questions; designer waived (coordinator wrote it).
 - Decision: go to IMPLEMENTING with one coder; renderer is Chrome (present at /usr/bin/google-chrome).
 - Next: coder (md2html copy, exam_report, exam_run hook, evidence_kind), then tester.
+
+## IMPLEMENTING - TASK-005 - 2026-10-29T05:15:29Z
+- Action: state DESIGN -> IMPLEMENTING; one coder launched (md2html copy, exam_report, exam_run hook, evidence_kind).
+- Result: pending coder handoff.
+- Decision: tester follows the coder; no Chrome needed for unit tests.
+- Next: coder handoff, review, commit.
