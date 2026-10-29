@@ -57,7 +57,7 @@
     "task_id": "TASK-002",
     "title": "Design the exam-solving pipeline: reuse table, gaps, JSON schema, build plan (REQ-0008, EPIC-003)",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-10-29T10:30:00",
     "requirement": "REQ-0008",
     "acceptance_criteria": [
