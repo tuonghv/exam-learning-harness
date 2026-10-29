@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-015",
-  "state": "UNIT_TESTED",
-  "next": "verifier checks AC1-AC4",
+  "state": "DONE",
+  "next": "TASK-016",
   "title": "DOCX adapter, ten-case spec tests, ingest usage docs (REQ-0018, EPIC-005)",
-  "active": [
-    {
-      "task_id": "TASK-015",
-      "state": "UNIT_TESTED",
-      "next": "verifier checks AC1-AC4",
-      "updated_at": "2026-10-29T09:02:14Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

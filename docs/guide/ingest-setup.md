@@ -1,6 +1,6 @@
 # Ingest setup (PDF, DOCX, OCR)
 
-The Markdown adapter needs nothing. PDF (and later DOCX/image) ingest uses optional libraries.
+The Markdown adapter needs nothing. PDF and DOCX ingest use optional libraries (images: TASK-016).
 
 ## Install
     pip install pymupdf python-docx pillow

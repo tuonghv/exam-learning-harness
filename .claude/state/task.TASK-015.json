@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-015",
   "title": "DOCX adapter, ten-case spec tests, ingest usage docs (REQ-0018, EPIC-005)",
-  "state": "UNIT_TESTED",
+  "state": "DONE",
   "requirement": "REQ-0018",
   "acceptance_criteria": [
     "AC1-AC4 of REQ-0018"
@@ -30,16 +30,20 @@
     "result": "356 OK; 5 mutations bite (test.md)"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "docx adapter opens the file read-only via python-docx; no network, subprocess or Claude call; image bytes written only under --assets; no eval keys touched"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-015/evidence/unit.txt",
+      "work/TASK-015/evidence/unit2.txt",
+      "work/TASK-015/handoff/verify.md"
+    ]
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-15-docx-adapter.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -48,7 +52,11 @@
       "waiver": "coordinator wrote the design; verifier reviews it"
     },
     "coder": "work/TASK-015/handoff/code.md",
-    "tester": "work/TASK-015/handoff/test.md"
+    "tester": "work/TASK-015/handoff/test.md",
+    "verifier": "work/TASK-015/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "no exam answers produced; synthetic-fixture adapter checked by verifier and 5 mutations"
+    }
   },
   "user_notes": [
     {
@@ -58,7 +66,7 @@
     }
   ],
   "picked_at": "2026-10-29T08:55:26Z",
-  "updated_at": "2026-10-29T09:02:14Z",
+  "updated_at": "2026-10-29T09:03:25Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/**",
@@ -72,5 +80,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verifier checks AC1-AC4"
+  "next": "TASK-016"
 }

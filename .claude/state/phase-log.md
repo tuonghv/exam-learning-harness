@@ -418,3 +418,15 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: green.
 - Decision: verifier.
 - Next: VERIFIED.
+
+## VERIFIED - TASK-015 - 2026-10-29T09:03:13Z
+- Action: verifier AC1-AC3b pass; D2 doc fixed.
+- Result: 356 tests.
+- Decision: advance.
+- Next: DONE.
+
+## DONE - TASK-015 - 2026-10-29T09:03:13Z
+- Action: report written.
+- Result: REQ-0018 done.
+- Decision: next TASK-016.
+- Next: images.
