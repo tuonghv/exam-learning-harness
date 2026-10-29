@@ -562,3 +562,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: 11 new tests, suite 452 OK.
 - Decision: numeric answers compare number and unit; count mismatch never agrees; engine untouched.
 - Next: UNIT_TESTED.
+
+## UNIT_TESTED - TASK-020 - 2026-10-29T15:15:00Z
+- Action: ran the unit suite.
+- Result: 452 OK; mutation (always-agree) is caught.
+- Decision: dry-run on the real trial document for VERIFIED.
+- Next: VERIFIED.

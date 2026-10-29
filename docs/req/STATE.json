@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0023",
-  "next": "UNIT_TESTED",
+  "next": "dry-run real doc, AC5 real run waits for user go",
   "updated": "2026-10-29 22:55"
 }

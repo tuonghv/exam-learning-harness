@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-020",
   "title": "cross-solve: text route vs page-image route, answer-level agreement (REQ-0023, EPIC-006)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0023",
   "acceptance_criteria": [
     "AC1-AC4 of REQ-0023"
@@ -23,13 +23,13 @@
     "summary": "pipeline/cross.py (routes, canon, compare, review.md) + cross-solve CLI"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "452 tests OK (11 new test_cross_solve)"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "no real call without --real; images rendered locally; empty cwd; key pages refused"
   },
   "verification": {
     "status": "pending",
@@ -47,6 +47,9 @@
     },
     "coder": {
       "waiver": "coordinator implemented, as phases 18-19"
+    },
+    "tester": {
+      "waiver": "coordinator ran the suite"
     }
   },
   "user_notes": [],
@@ -62,5 +65,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "record UNIT_TESTED"
+  "next": "dry-run on the real doc, then report"
 }
