@@ -202,3 +202,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: ready.
 - Decision: two coders.
 - Next: coders.
+
+## UNIT_TESTED - TASK-008 - 2026-10-29T06:20:28Z
+- Action: English+Literature items; check-examples (quotes, leaks) OK, 20 pairs; English oracle.
+- Result: suite OK.
+- Decision: advance.
+- Next: verifier.

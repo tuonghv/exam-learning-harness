@@ -85,5 +85,34 @@ class Physics(unittest.TestCase):
         self.assertAlmostEqual(num(key("physics", 5, True)), float("%.2g" % ek), delta=1e-21)
 
 
+class English(unittest.TestCase):
+    """Keys re-derived from the item text itself (passage facts, fixed grammar rule, segment order)."""
+
+    def read(self, path):
+        with open(os.path.join(ROOT, path), encoding="utf-8") as fh:
+            return fh.read()
+
+    def test_003_reading_detail(self):
+        t = self.read("evals/inputs/english/input-003.md")
+        self.assertIn("slept for eight hours", t)
+        self.assertIn("slept for only four hours", t)
+        self.assertIn("B. They slept longer after studying.", t)
+        self.assertEqual(key("english", 3, True), "B")
+
+    def test_004_ordering_is_permutation_with_markers(self):
+        order = key("english", 4, True).split("-")
+        self.assertEqual(sorted(order), list("abcde"))
+        t = self.read("evals/inputs/english/input-004.md")
+        seg = dict(re.findall(r"(?m)^([a-e])\. (.+)$", t))
+        text = [seg[k] for k in order]
+        self.assertIn("Last year", text[0])      # opener
+        self.assertIn("However", text[2])        # contrast follows the easy start
+        self.assertTrue(text[4].startswith("Now"))  # closing
+
+    def test_002_005_fixed_rules(self):
+        self.assertEqual(key("english", 2), "A")        # take measures
+        self.assertEqual(key("english", 5, True), "A")  # hardly ... when
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-008",
   "title": "English and Literature examples (REQ-0004)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0004",
   "acceptance_criteria": [
     "AC1-AC4 of REQ-0004"
@@ -20,15 +20,18 @@
     ]
   },
   "implementation": {
-    "status": "pending",
+    "status": "completed",
     "files": [
-      "examples/english"
+      "examples/english",
+      "examples/literature",
+      "evals",
+      "tests/unit/test_examples_oracle.py"
     ]
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "suite OK; check-examples OK 20 pairs; English oracle tests"
   },
   "security": {
     "status": "pending",
@@ -47,11 +50,15 @@
   "roles": {
     "designer": {
       "waiver": "FORMAT.md is the design"
+    },
+    "coder": "work/TASK-008/handoff/code.md",
+    "tester": {
+      "waiver": "content task; coordinator added oracle tests; check-examples verifies quotes and key leaks"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-29T06:18:18Z",
-  "updated_at": "2026-10-29T06:18:18Z",
+  "updated_at": "2026-10-29T06:20:45Z",
   "updated_by": "main",
   "scope": [
     "examples/english/**",
@@ -66,5 +73,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "coders"
+  "next": "verifier"
 }
