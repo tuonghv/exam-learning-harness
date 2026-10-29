@@ -532,3 +532,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: 9 new tests, suite 441 OK, check-examples OK (25 pairs).
 - Decision: tolerant checks (only clearly wrong shapes fail); solver prompt untouched.
 - Next: UNIT_TESTED.
+
+## UNIT_TESTED - TASK-019 - 2026-10-29T14:15:00Z
+- Action: ran unit suite and check-examples.
+- Result: 441 OK; mutation per rule bites (split, part format).
+- Decision: replay on the saved real replies for VERIFIED.
+- Next: VERIFIED.

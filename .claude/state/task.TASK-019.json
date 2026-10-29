@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-019",
   "title": "Part-aware refine and Part II/III format checks (REQ-0026, EPIC-006)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0026",
   "acceptance_criteria": [
     "AC1-AC4 of REQ-0026"
@@ -23,13 +23,13 @@
     "summary": "split_part + per-part gaps in refine; _part_format in verifier"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "441 tests OK (9 new test_part_aware); check-examples 25 pairs OK"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "pure text rules, no I/O, no model call"
   },
   "verification": {
     "status": "pending",
@@ -47,11 +47,14 @@
     },
     "coder": {
       "waiver": "small change by coordinator"
+    },
+    "tester": {
+      "waiver": "coordinator ran the suite"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-29T15:41:33Z",
-  "updated_at": "2026-10-29T15:43:16Z",
+  "updated_at": "2026-10-29T15:43:28Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-019/"
@@ -62,5 +65,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "record UNIT_TESTED"
+  "next": "replay on real replies, report"
 }
