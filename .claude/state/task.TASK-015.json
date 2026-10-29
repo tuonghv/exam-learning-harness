@@ -1,0 +1,63 @@
+{
+  "task_id": "TASK-015",
+  "title": "DOCX adapter, ten-case spec tests, ingest usage docs (REQ-0018, EPIC-005)",
+  "state": "DESIGN",
+  "requirement": "REQ-0018",
+  "acceptance_criteria": [
+    "AC1-AC4 of REQ-0018"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {},
+  "user_notes": [
+    {
+      "raw": "RAW-00063",
+      "note": "follow up autonomously",
+      "at": "2026-10-29T08:55:27Z"
+    }
+  ],
+  "picked_at": "2026-10-29T08:55:26Z",
+  "updated_at": "2026-10-29T08:55:43Z",
+  "updated_by": "main",
+  "scope": [
+    "src/exam_engine/ingest/**",
+    "tests/**",
+    "docs/guide/**",
+    "docs/design/phase-15-docx-adapter.md"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}

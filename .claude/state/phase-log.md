@@ -400,3 +400,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: REQ-0020 done.
 - Decision: next TASK-015.
 - Next: DOCX + images.
+
+## DESIGN - TASK-015 - 2026-10-29T08:55:42Z
+- Action: wrote phase-15 design.
+- Result: complete, no open questions.
+- Decision: advance.
+- Next: IMPLEMENTING.

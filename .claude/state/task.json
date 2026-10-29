@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-014",
-  "state": "DONE",
-  "next": "TASK-015",
-  "title": "ingest-inspect report, answer-guide detection, --pages, key-leak guard (REQ-0020, EPIC-005)",
-  "active": [],
+  "task_id": "TASK-015",
+  "state": "DESIGN",
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "title": "DOCX adapter, ten-case spec tests, ingest usage docs (REQ-0018, EPIC-005)",
+  "active": [
+    {
+      "task_id": "TASK-015",
+      "state": "DESIGN",
+      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+      "updated_at": "2026-10-29T08:55:43Z"
+    }
+  ],
   "max_active": 1
 }
