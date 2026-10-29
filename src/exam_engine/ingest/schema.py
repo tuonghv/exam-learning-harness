@@ -55,8 +55,15 @@ def validate_document(doc):
     if errs or not isinstance(doc, dict):
         return errs
     assets = set(a["id"] for a in doc["assets"] if isinstance(a, dict) and "id" in a)
+    for a in doc["assets"]:
+        parts = str(a["path"]).replace("\\", "/").split("/")
+        if a["path"].startswith(("/", "\\")) or ".." in parts or ":" in parts[0]:
+            errs.append("asset %s: path must be relative without '..'" % a["id"])
     seen = set()
     for page in doc["pages"]:
+        orders = [b["order"] for b in page["blocks"]]
+        if len(set(orders)) != len(orders):
+            errs.append("page %s: duplicate block order" % page["n"])
         for blk in page.get("blocks", ()):
             if not isinstance(blk, dict) or "id" not in blk:
                 continue

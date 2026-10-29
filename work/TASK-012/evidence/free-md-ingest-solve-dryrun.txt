@@ -1,0 +1,9 @@
+# evidence: free-md-ingest-solve-dryrun
+# task: TASK-012
+# cmd: bash -c python3\ -I\ scripts/exam.py\ ingest\ /tmp/free.md\ --meta\ Subject=Toan\ --meta\ \"Level=Grade\ 12\"\ --meta\ \"Exam\ type=Practice\"\ --meta\ \"Task=Multiple\ Choice\"\ --meta\ Mode=Solve\ --meta\ Language=vi\ --exam-out\ /tmp/free_exam.md\ \>/dev/null\ \&\&\ python3\ -I\ scripts/exam.py\ solve\ /tmp/free_exam.md\ --dry-run\ \|\ head\ -1
+# cwd: /home/tuonghv/Documents/git/online-system/exam-learning-harness
+# head: 7f93552+dirty
+# when: 2026-10-29T07:28:16Z
+# rc: 0
+---
+calls <= 5, cap $1.00 (dry run: no call made)

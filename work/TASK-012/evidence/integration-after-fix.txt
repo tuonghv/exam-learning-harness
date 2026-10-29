@@ -1,0 +1,13 @@
+# evidence: integration-after-fix
+# task: TASK-012
+# cmd: python3 -I -m unittest discover -s tests/integration
+# cwd: /home/tuonghv/Documents/git/online-system/exam-learning-harness
+# head: 7f93552+dirty
+# when: 2026-10-29T07:28:25Z
+# rc: 0
+---
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.122s
+
+OK

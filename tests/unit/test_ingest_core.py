@@ -83,6 +83,23 @@ class SchemaTest(Base):
         blocks[1]["id"] = blocks[0]["id"]
         self.assertTrue(any("duplicate" in e for e in validate_document(doc)))
 
+    def test_duplicate_order(self):
+        doc = self.good()
+        doc["pages"][0]["blocks"][1]["order"] = 0
+        self.assertTrue(any("order" in e for e in validate_document(doc)))
+
+    def test_asset_path_must_be_relative(self):
+        for bad in ("/etc/x.png", "a/../x.png", "..\\x.png"):
+            doc = self.good()
+            doc["assets"][0]["path"] = bad
+            self.assertTrue(validate_document(doc), bad)
+
+    def test_block_missing_text_or_origin(self):
+        for key in ("text", "origin"):
+            doc = self.good()
+            del doc["pages"][0]["blocks"][0][key]
+            self.assertTrue(validate_document(doc), key)
+
     def test_asset_not_in_assets(self):
         doc = self.good()
         doc["assets"] = []
@@ -117,6 +134,31 @@ class MarkdownTest(Base):
         self.write("secret.png", b"x", "wb")
         path = self.write("sub/a.md", "![x](../secret.png)\n")
         self.assertEqual(self.code_of(api.ingest_document, path), "invalid_document")
+
+    def test_backslash_and_encoded_traversal_rejected(self):
+        self.write("secret.png", b"x", "wb")
+        for ref in ("..\\secret.png", "%2e%2e/secret.png", "%2E%2E%2Fsecret.png"):
+            path = self.write("sub/a.md", "![x](%s)\n" % ref)
+            self.assertIn(self.code_of(api.ingest_document, path),
+                          ("invalid_document", "missing_asset"), ref)
+            self.assertEqual(self.code_of(api.ingest_document, path), "invalid_document", ref)
+
+    def test_unclosed_fence_and_math_keep_text(self):
+        doc = api.ingest_document(self.write("a.md", "```\ncode line\nmore\n"))
+        self.assertIn("more", doc["pages"][0]["blocks"][0]["text"])
+        doc = api.ingest_document(self.write("b.md", "$$\nx^2\ny\n"))
+        self.assertIn("y", doc["pages"][0]["blocks"][0]["text"])
+
+    def test_inline_and_angle_images_warn(self):
+        self.write("my img.png", b"x", "wb")
+        path = self.write("a.md", "![a](<my img.png>)\n\ntext ![b](pic.png) more\n")
+        doc = api.ingest_document(path)
+        self.assertEqual([w["code"] for w in doc["warnings"]], ["unresolved_image"] * 2)
+
+    def test_source_path_is_name_only(self):
+        doc = api.ingest_document(self.write("a.md", "# x\n"))
+        self.assertEqual(doc["source"]["path"], "a.md")
+        self.assertNotIn(self.dir, json.dumps(doc))
 
     def test_absolute_rejected(self):
         path = self.write("a.md", "![x](/etc/passwd)\n")
@@ -164,10 +206,15 @@ class ExamTextTest(Base):
     def test_free_form_with_meta(self):
         meta = {"Subject": "English", "Level": "G12", "Exam type": "X", "Task": "T",
                 "Mode": "Solve"}
-        doc = api.ingest_document(self.write("a.md", "## Question 1\n\ntext\n"), meta=meta)
+        body = "## Question 1\n\nPick one.\n\nA. a\nB. b\nC. c\nD. d\n"
+        doc = api.ingest_document(self.write("a.md", body), meta=meta)
         out = api.to_exam_text(doc)
         self.assertIn("Subject: English", out)
-        self.assertIn("## Question 1", out)
+        path = self.write("exam.md", out)
+        exam = parser.parse_exam(path)
+        self.assertEqual(parser.validate_exam(exam), [])
+        self.assertEqual(len(exam["questions"]), 1)
+        self.assertEqual(sorted(exam["questions"][0]["options"]), ["A", "B", "C", "D"])
 
     def test_examples_backward_compatible(self):
         files = sorted(glob.glob(os.path.join(ROOT, "examples", "**", "input-*.md"),

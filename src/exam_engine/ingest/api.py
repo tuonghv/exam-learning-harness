@@ -3,7 +3,6 @@ import hashlib
 import os
 
 from exam_engine.ingest import adapters
-from exam_engine.ingest.adapters.markdown import read_source
 from exam_engine.ingest.schema import IngestError, validate_document
 from exam_engine.pipeline import parser
 
@@ -11,21 +10,27 @@ REQUIRED = ("Subject", "Level", "Exam type", "Task", "Mode")
 
 
 def ingest_document(path, config=None, meta=None):
+    """Canonical doc for `path`; `config` is reserved for adapters (unused by Markdown).
+
+    source.path is the file name only (no local absolute path); the adapter hashes the
+    same bytes it parsed.
+    """
     ext = os.path.splitext(path)[1].lower()
     fn = adapters.get(ext)
     if fn is None:
         raise IngestError("unsupported_format", "%r not supported (have: %s)"
                           % (ext or path, ", ".join(adapters.extensions())))
     doc = fn(path, config)
-    try:
-        with open(path, "rb") as fh:
-            raw = fh.read()
-    except OSError as exc:
-        raise IngestError("corrupt", "cannot read %s: %s" % (path, exc))
-    doc["source"] = {"path": os.path.abspath(path), "name": os.path.basename(path),
-                     "format": ext.lstrip("."), "sha256": hashlib.sha256(raw).hexdigest(),
-                     "size": len(raw)}
-    fields = parser.header_fields(raw.decode("utf-8")) if ext == ".md" else {}
+    if not doc.get("source"):
+        try:
+            with open(path, "rb") as fh:
+                raw = fh.read()
+        except OSError as exc:
+            raise IngestError("corrupt", "cannot read %s: %s" % (path, exc))
+        name = os.path.basename(path)
+        doc["source"] = {"path": name, "name": name, "format": ext.lstrip("."),
+                         "sha256": hashlib.sha256(raw).hexdigest(), "size": len(raw)}
+    fields = parser.header_fields(doc["source"]["text"]) if "text" in doc["source"] else {}
     fields.update(meta or {})
     doc["meta"] = fields
     errs = validate_document(doc)
@@ -43,10 +48,10 @@ def to_exam_text(doc):
     """Exam file text for `solve`: an exam-format Markdown source is returned unchanged."""
     src = doc["source"]
     if src.get("format") == "md":
-        text = read_source(src["path"])
-        if hashlib.sha256(text.encode("utf-8")).hexdigest() != src["sha256"]:
-            raise IngestError("corrupt", "source changed since ingest: %s" % src["path"])
-        if _is_exam_format(text):
+        text = src.get("text")
+        if text is not None and hashlib.sha256(text.encode("utf-8")).hexdigest() != src["sha256"]:
+            raise IngestError("corrupt", "source text does not match its hash: %s" % src["name"])
+        if text is not None and _is_exam_format(text):
             return text
     meta = doc.get("meta") or {}
     missing = [k for k in REQUIRED if not meta.get(k)]
