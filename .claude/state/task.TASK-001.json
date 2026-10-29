@@ -46,6 +46,11 @@
       "raw": "RAW-00019",
       "note": "agent_setup.json/agent_setup.py/its test: never delete or edit",
       "at": "2026-10-29T01:52:51Z"
+    },
+    {
+      "raw": "RAW-00020",
+      "note": "keep subagent management + monitoring; settings.json dead scan entries removed",
+      "at": "2026-10-29T01:54:41Z"
     }
   ],
   "picked_at": "2026-10-29T01:46:15Z",
