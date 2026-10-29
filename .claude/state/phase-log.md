@@ -70,3 +70,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: REQ-0002 AC1-AC5 ticked; 28 tests OK; limitation L1 documented.
 - Decision: DONE.
 - Next: EPIC-003 engine build (resume TASK-002 or new TASK), REQ-0003/0004 examples, REQ-0009 benchmark after the user's go.
+
+## DESIGN - TASK-004 - 2026-10-29T04:21:56Z
+- Action: RAW-00036 accepted (start REQ-0010); wrote docs/design/phase-4-engine-core.md from phase-2 design; aligned SOLVE_OUT with tools/examples/prompts/solve.md.
+- Result: 4 modules + qa.md + validate_exam, 14 mock tests; decisions D1-D8; designer waived (architecture done in TASK-002).
+- Decision: no open questions; go to IMPLEMENTING.
+- Next: coder step A.

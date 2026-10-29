@@ -1,20 +1,20 @@
 {
   "task_id": "TASK-004",
   "title": "Engine core + QA: prompt+exam -> claude -p -> JSON, checks, decision, score (REQ-0010)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0010",
   "acceptance_criteria": [
-    "AC1 run_claude + extract_json",
-    "AC2 schema + retry",
+    "AC1 run_claude+extract_json",
+    "AC2 schema+retry",
     "AC3 code checks",
     "AC4 key isolation",
     "AC5 mock/dry-run/real gate",
     "AC6 mocked unit tests"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-4-engine-core.md",
+    "summary": "engine core build plan: SOLVE_OUT aligned to solve.md (D1-D8), 4 modules + qa.md + validate_exam, 14 mock tests mapped to REQ-0010 AC1-AC6",
     "reuse": [],
     "risks": []
   },
@@ -41,11 +41,15 @@
   },
   "roles_required": true,
   "crosscheck_required": true,
-  "roles": {},
+  "roles": {
+    "designer": {
+      "waiver": "architecture designed in TASK-002 by the designer (Nova, work/TASK-002/handoff); phase-4 only aligns SOLVE_OUT with solve.md and splits the build"
+    }
+  },
   "user_notes": [],
   "picked_at": "2026-10-29T04:21:14Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-10-29T04:21:56Z",
+  "updated_by": "main",
   "scope": [
     "work/TASK-004/"
   ],
@@ -58,5 +62,5 @@
     "notes": "",
     "next": "write docs/design/phase-4-engine-core.md (steps, interfaces from phase-2 2.1-2.4), set design, DESIGN, then coder step A"
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "IMPLEMENTING: coder step A (schema, llm, validate_exam, checks)"
 }
