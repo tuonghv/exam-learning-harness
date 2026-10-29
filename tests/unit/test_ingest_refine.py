@@ -206,6 +206,136 @@ class TestRefine(Base):
         self.assertEqual(api.to_exam_text(out), base)
 
 
+PNG_HDR = b"\x89PNG\r\n\x1a\n"
+
+
+class FakeFitz:
+    """Synthetic pymupdf: page.get_pixmap(matrix).tobytes('png') sized by zoom."""
+    def __init__(self, sizes, header=PNG_HDR):
+        self.sizes, self.header, self.zooms, self.closed = sizes, header, [], False
+
+    def Matrix(self, a, b):
+        return a
+
+    def open(self, path):
+        outer = self
+
+        class Pix:
+            def __init__(self, z):
+                self.z = z
+
+            def tobytes(self, fmt):
+                outer.zooms.append(self.z)
+                return outer.header + b"0" * outer.sizes[len(outer.zooms) - 1]
+
+        class Page:
+            def get_pixmap(self, matrix):
+                return Pix(matrix)
+
+        class Doc:
+            def __getitem__(self, i):
+                return Page()
+
+            def close(self):
+                outer.closed = True
+        return Doc()
+
+
+class TestRenderPage(unittest.TestCase):
+    def render(self, fz):
+        with mock.patch.object(refine.optional, "load", return_value=fz):
+            return refine.render_page("x.pdf", 1)
+
+    def test_png_bytes_zoom2_first(self):
+        fz = FakeFitz([100])
+        data = self.render(fz)
+        self.assertTrue(data.startswith(PNG_HDR))
+        self.assertEqual(fz.zooms, [2.0])
+        self.assertTrue(fz.closed)
+
+    def test_size_cap_lowers_zoom(self):
+        big = claude.MAX_IMAGE_BYTES
+        fz = FakeFitz([big, big, 100])
+        data = self.render(fz)
+        self.assertEqual(fz.zooms, [2.0, 1.5, 1.0])
+        self.assertLessEqual(len(data), claude.MAX_IMAGE_BYTES)
+
+    def test_always_too_big_is_call_failed(self):
+        big = claude.MAX_IMAGE_BYTES
+        fz = FakeFitz([big] * 4)
+        with self.assertRaises(refine.RefineError) as cm:
+            self.render(fz)
+        self.assertEqual(cm.exception.code, "call_failed")
+        self.assertTrue(fz.closed)
+
+    def test_non_png_header_is_call_failed(self):
+        with self.assertRaises(refine.RefineError) as cm:
+            self.render(FakeFitz([10], header=b"JUNK"))
+        self.assertEqual(cm.exception.code, "call_failed")
+
+    def test_refine_passes_rendered_png_to_llm(self):
+        seen = []
+
+        def llm(prompt, png):
+            seen.append(png)
+            return claude.Call(True, GOOD1, 0.0, "", "", 0.0)
+        refine.refine(make_doc(), "1", llm, source_path="x.pdf", render=lambda p, n: PNG_HDR + b"%d" % n)
+        self.assertEqual(seen, [PNG_HDR + b"1"])
+
+
+class TestPromptFile(unittest.TestCase):
+    def test_no_answers_or_keys_in_prompt(self):
+        import re
+        t = refine.template()
+        self.assertFalse(re.search(r"(?i)(answer|dap an|đáp án)\s*[:=]\s*\"?[A-D]\b", t), t)
+        self.assertNotRegex(t, r"(?i)correct (answer|option)")
+        self.assertEqual(refine.build_prompt(3).splitlines()[-1], "Page: 3")
+
+
+class TestEdges(Base):
+    def test_non_consecutive_ids_rejected_with_retry(self):
+        bad = reply(q(1, "a", {}), q(3, "b", {}))
+        with self.assertRaises(refine.RefineError) as cm:
+            refine.refine(make_doc(), "1", Fake([bad, bad]))
+        self.assertIn("consecutive", str(cm.exception))
+
+    def test_option_count_rule_retried(self):
+        short = reply(q(2, "Colour of grass?", {"A": "green", "B": "red"}))
+        llm = Fake([short, GOOD2])
+        out = refine.refine(make_doc(), "2", llm)
+        self.assertEqual(out["refined"]["calls"], 2)
+
+    def test_threshold_boundary(self):
+        doc = make_doc()
+        out = refine.refine(doc, "2", Fake([GOOD2]), min_similarity=1.01)
+        self.assertTrue(out["refined"]["questions"][0]["needs_review"])
+        out = refine.refine(doc, "2", Fake([GOOD2]), min_similarity=0.0)
+        self.assertFalse(out["refined"]["questions"][0]["needs_review"])
+
+    def test_solution_field_rejected(self):
+        bad = reply(q(1, "a", {}, solution="x"))
+        with self.assertRaises(refine.RefineError):
+            refine.refine(make_doc(), "1", Fake([bad, bad]))
+
+    def test_warning_added_and_info_when_clean(self):
+        out = refine.refine(make_doc(), "1", Fake([GOOD1]))
+        w = [x for x in out["warnings"] if x["code"] == "refined_by_ai"]
+        self.assertEqual(len(w), 1)
+        self.assertIn(w[0]["level"], ("info", "warning"))
+
+    def test_cli_calls_only_flagged_selected(self):
+        m = self.write("m.json", [GOOD1, GOOD2, GOOD1])
+        real = refine.mock_llm(m)
+        n = []
+
+        def counting(prompt, png):
+            n.append(1)
+            return real(prompt, png)
+        with mock.patch.object(refine, "mock_llm", return_value=counting):
+            code, out, _e = run_cli([self.write("d.json", make_doc()), "--pages", "1-3", "--mock", m])
+        self.assertEqual(len(n), 2, out)
+
+
 class TestRealLlm(unittest.TestCase):
     def test_stream_format_error_is_structured(self):
         def runner(argv, **kw):

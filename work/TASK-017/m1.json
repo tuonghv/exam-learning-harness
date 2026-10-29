@@ -1,0 +1,1 @@
+{"design":{"status":"completed","path":"docs/design/phase-17-refine.md","summary":"ingest-refine command: flagged pages only, vision reply via claude -p, validated, stored as refined origin ai, dry-run/mock/real gate"},"roles":{"designer":{"waiver":"coordinator wrote the design; verifier reviews it"}},"next":"coder implements"}

@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-017",
   "title": "Optional Claude refine stage for flagged exam pages (REQ-0021, EPIC-005)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0021",
   "acceptance_criteria": [
     "AC1-AC5 of REQ-0021"
@@ -14,13 +14,19 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/ingest/refine.py",
+      "src/exam_engine/cli.py",
+      "prompts/dev/ingest/refine.md",
+      "tests/unit/test_ingest_refine.py",
+      "docs/guide/ingest-usage.md"
+    ]
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "423 OK; 4 mutations bite (test.md)"
   },
   "security": {
     "status": "pending",
@@ -39,7 +45,9 @@
   "roles": {
     "designer": {
       "waiver": "coordinator wrote the design; verifier reviews it"
-    }
+    },
+    "coder": "work/TASK-017/handoff/code.md",
+    "tester": "work/TASK-017/handoff/test.md"
   },
   "user_notes": [
     {
@@ -49,7 +57,7 @@
     }
   ],
   "picked_at": "2026-10-29T11:45:34Z",
-  "updated_at": "2026-10-29T11:45:34Z",
+  "updated_at": "2026-10-29T11:52:47Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/**",
@@ -66,5 +74,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "coder implements"
+  "next": "verifier checks AC1-AC4"
 }
