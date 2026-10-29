@@ -352,3 +352,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: ready.
 - Decision: advance.
 - Next: coder handoff.
+
+## UNIT_TESTED - TASK-013 - 2026-10-29T07:41:41Z
+- Action: coder built loader, PDF adapter, segmenter, check, setup doc; coordinator ingested a Vietnamese fitz PDF to exam text.
+- Result: suite 301 OK, 1 skip.
+- Decision: advance.
+- Next: verifier.

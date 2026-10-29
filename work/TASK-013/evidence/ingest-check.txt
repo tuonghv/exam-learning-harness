@@ -1,0 +1,15 @@
+# evidence: ingest-check
+# task: TASK-013
+# cmd: python3 -I scripts/exam.py ingest --check
+# cwd: /home/tuonghv/Documents/git/online-system/exam-learning-harness
+# head: fb97b77+dirty
+# when: 2026-10-29T07:41:51Z
+# rc: 0
+---
+fitz: 1.24.11
+docx: 1.1.2
+PIL: 7.0.0
+tesseract: /usr/local/bin/tesseract
+tessdata: /usr/share/tesseract-ocr/4.00/tessdata
+ocr languages (vie/eng): eng
+user site: /home/tuonghv/.local/lib/python3.8/site-packages

@@ -1,0 +1,30 @@
+# evidence: vn-pdf-ingest
+# task: TASK-013
+# cmd: bash -c python3\ -I\ scripts/exam.py\ ingest\ /tmp/vn.pdf\ --assets\ /tmp/vn_assets\ --meta\ Subject=Toan\ --meta\ \"Level=Grade\ 12\"\ --meta\ \"Exam\ type=Practice\"\ --meta\ \"Task=Multiple\ Choice\"\ --meta\ Mode=Solve\ --meta\ Language=vi\ --exam-out\ /tmp/vn_exam.md\ \>/dev/null\ \&\&\ head\ -22\ /tmp/vn_exam.md
+# cwd: /home/tuonghv/Documents/git/online-system/exam-learning-harness
+# head: fb97b77+dirty
+# when: 2026-10-29T07:41:51Z
+# rc: 0
+---
+# Exam Input
+
+Subject: Toan
+Level: Grade 12
+Exam type: Practice
+Task: Multiple Choice
+Mode: Solve
+Language: vi
+
+## Question 1
+
+Giải phương trình x^2 - 5x + 6 = 0.
+
+A. x = 2 hoặc x = 3
+B. x = 1 hoặc x = 6
+C. x = -2 hoặc x = -3
+D. vô nghiệm
+
+## Question 2
+
+Số nhị phân 101 bằng
+

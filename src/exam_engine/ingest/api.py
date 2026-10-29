@@ -61,11 +61,29 @@ def to_exam_text(doc):
     out = ["# Exam Input", ""]
     out += ["%s: %s" % (k, v) for k, v in meta.items()]
     out.append("")
+    if src.get("format") != "md":
+        return _from_questions(doc, out)
     for page in doc["pages"]:
         for blk in page["blocks"]:
             if blk["type"] == "heading":
                 out.append("%s %s" % ("#" * (blk.get("level") or 2), blk["text"]))
             else:
                 out.append(blk["text"])
+            out.append("")
+    return "\n".join(out).rstrip("\n") + "\n"
+
+
+def _from_questions(doc, out):
+    """Exam text from the segmented `questions` (non-Markdown sources); never edits the text."""
+    qs = doc.get("questions") or []
+    if not qs:
+        raise IngestError("no_questions", "no segmented questions in %s; fix the saved "
+                          "document (--out) by hand" % doc["source"]["name"])
+    if doc.get("intro"):
+        out += ["## Instructions", "", doc["intro"], ""]
+    for q in qs:
+        out += ["## Question %d" % q["n"], "", q["text"], ""]
+        out += ["%s. %s" % (o["key"], o["text"]) for o in q["options"]]
+        if q["options"]:
             out.append("")
     return "\n".join(out).rstrip("\n") + "\n"

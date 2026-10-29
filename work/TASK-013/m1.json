@@ -1,0 +1,1 @@
+{"design":{"status":"completed","path":"docs/design/phase-13-pdf-adapter.md","summary":"PDF adapter on PyMuPDF (native first, selective OCR, crops), user-site loader, shared segmenter, ingest --check, setup doc"},"roles":{"designer":{"waiver":"coordinator wrote the design from the accepted spec; verifier reviews it"}},"next":"coder implements"}

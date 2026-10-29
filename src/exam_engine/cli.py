@@ -188,18 +188,45 @@ def report_main(argv):
     return 0
 
 
+def _ingest_check():
+    """Print the optional-library and OCR setup that `ingest` would use."""
+    from exam_engine.ingest import optional
+    from exam_engine.ingest.adapters import pdf
+    for mod, pip in (("fitz", "pymupdf"), ("docx", "python-docx"), ("PIL", "pillow")):
+        try:
+            m = optional.load(mod, pip)
+            ver = getattr(m, "VersionBind", None) or getattr(m, "__version__", None) or "ok"
+            print("%s: %s" % (mod, ver))
+        except Exception as exc:  # noqa: BLE001 - report, keep checking
+            print("%s: MISSING (%s)" % (mod, exc))
+    print("tesseract: %s" % (shutil.which("tesseract") or "not found"))
+    d, lang, have = pdf.pick_ocr_language({})
+    print("tessdata: %s" % (d or "not found"))
+    print("ocr languages (vie/eng): %s" % (", ".join(have) or "none"))
+    print("user site: %s" % (optional.user_site() or "none"))
+    return 0
+
+
 def ingest_main(argv):
     """ingest FILE [--out DOC.json] [--meta K=V ...] [--exam-out EXAM.md]: canonical document."""
     from exam_engine.ingest import api
     from exam_engine.ingest.schema import IngestError
     ap = argparse.ArgumentParser(prog="exam.py ingest")
-    ap.add_argument("file")
+    ap.add_argument("file", nargs="?")
     ap.add_argument("--out")
     ap.add_argument("--exam-out")
+    ap.add_argument("--assets", metavar="DIR")
+    ap.add_argument("--ocr", choices=["auto", "off"], default="auto")
+    ap.add_argument("--check", action="store_true")
     ap.add_argument("--meta", action="append", default=[], metavar="K=V")
     try:
         args = ap.parse_args(argv)
     except SystemExit:
+        return 2
+    if args.check:
+        return _ingest_check()
+    if not args.file:
+        print("ERROR: ingest: FILE required", file=sys.stderr)
         return 2
     meta = {}
     for item in args.meta:
@@ -209,15 +236,18 @@ def ingest_main(argv):
             return 2
         meta[key.strip()] = val.strip()
     try:
-        doc = api.ingest_document(args.file, meta=meta)
-        if args.exam_out:
-            text = api.to_exam_text(doc)
-            with open(args.exam_out, "w", encoding="utf-8") as fh:
-                fh.write(text)
+        cfg = {"ocr": args.ocr}
+        if args.assets:
+            cfg["asset_dir"] = args.assets
+        doc = api.ingest_document(args.file, config=cfg, meta=meta)
         blob = json.dumps(doc, ensure_ascii=False, indent=2) + "\n"
         if args.out:
             with open(args.out, "w", encoding="utf-8") as fh:
                 fh.write(blob)
+        if args.exam_out:
+            text = api.to_exam_text(doc)
+            with open(args.exam_out, "w", encoding="utf-8") as fh:
+                fh.write(text)
     except IngestError as exc:
         print("ERROR: ingest: %s" % exc, file=sys.stderr)
         return 2

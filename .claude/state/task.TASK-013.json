@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-013",
   "title": "PDF adapter (PyMuPDF native text, selective OCR, page images) + optional-lib loader + setup doc (REQ-0017, EPIC-005)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0017",
   "acceptance_criteria": [
     "AC1-AC5 of REQ-0017"
@@ -14,13 +14,18 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/ingest",
+      "src/exam_engine/cli.py",
+      "tests/unit/test_ingest_pdf.py",
+      "docs/guide/ingest-setup.md"
+    ]
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "301 OK, 1 skip (vie data absent); integration OK; mutations bite; Vietnamese PDF ingests to exam text"
   },
   "security": {
     "status": "pending",
@@ -39,6 +44,10 @@
   "roles": {
     "designer": {
       "waiver": "coordinator wrote the design from the accepted spec; verifier reviews it"
+    },
+    "coder": "work/TASK-013/handoff/code.md",
+    "tester": {
+      "waiver": "coder tests plus coordinator real-PDF check; mutations bite"
     }
   },
   "user_notes": [
@@ -49,7 +58,7 @@
     }
   ],
   "picked_at": "2026-10-29T07:36:26Z",
-  "updated_at": "2026-10-29T07:37:14Z",
+  "updated_at": "2026-10-29T07:41:51Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/**",
@@ -65,5 +74,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "coder implements"
+  "next": "verifier"
 }
