@@ -370,3 +370,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: PDF ingestion live on synthetic fixtures.
 - Decision: close.
 - Next: REQ-0018 DOCX.
+
+## DESIGN - TASK-014 - 2026-10-29T08:31:04Z
+- Action: wrote docs/design/phase-14-ingest-inspect.md.
+- Result: complete, no open questions.
+- Decision: advance.
+- Next: IMPLEMENTING.

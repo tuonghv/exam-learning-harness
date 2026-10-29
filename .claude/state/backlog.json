@@ -331,7 +331,7 @@
     "task_id": "TASK-014",
     "title": "ingest-inspect report, answer-guide detection, --pages, key-leak guard (REQ-0020, EPIC-005)",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-10-29T08:31:04Z",
     "requirement": "REQ-0020",
     "acceptance_criteria": [

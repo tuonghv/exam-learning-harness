@@ -1,0 +1,68 @@
+{
+  "task_id": "TASK-014",
+  "title": "ingest-inspect report, answer-guide detection, --pages, key-leak guard (REQ-0020, EPIC-005)",
+  "state": "DESIGN",
+  "requirement": "REQ-0020",
+  "acceptance_criteria": [
+    "AC1-AC5 of REQ-0020"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-14-ingest-inspect.md",
+    "summary": "parts detection, select_pages, suspicious checks, Markdown report, answer_key guard in to_exam_text, ingest-inspect CLI",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": {
+      "waiver": "coordinator wrote the design from the accepted REQ and the real PDF trial; verifier reviews it"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00060",
+      "note": "inspect engine; accept all RAW-00061",
+      "at": "2026-10-29T08:31:04Z"
+    }
+  ],
+  "picked_at": "2026-10-29T08:31:04Z",
+  "updated_at": "2026-10-29T08:31:04Z",
+  "updated_by": "main",
+  "scope": [
+    "src/exam_engine/ingest/**",
+    "src/exam_engine/cli.py",
+    "tests/**",
+    "docs/design/phase-14-ingest-inspect.md",
+    "docs/guide/ingest-setup.md"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "coder implements"
+}
