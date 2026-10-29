@@ -119,6 +119,11 @@
         "raw": "RAW-00035",
         "note": "exam solving = same pattern as scanner review: prompt + source -> claude -p -> result (design 2.1 reuse table)",
         "at": "2026-10-29T03:36:34Z"
+      },
+      {
+        "raw": "RAW-00030",
+        "note": "Q1-Q5 accepted as recommended; FORMAT Skill/Language optional",
+        "at": "2026-10-29T03:38:37Z"
       }
     ],
     "completed_at": "2026-10-29T03:38:25Z",
