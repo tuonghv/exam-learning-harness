@@ -306,5 +306,17 @@
     ],
     "completed_at": "2026-10-29T07:28:54Z",
     "report": "docs/report/phase-12-ingest-core.md"
+  },
+  {
+    "task_id": "TASK-013",
+    "title": "PDF adapter (PyMuPDF native text, selective OCR, page images) + optional-lib loader + setup doc (REQ-0017, EPIC-005)",
+    "priority": 1,
+    "status": "queued",
+    "created_at": "2026-10-29T07:36:26Z",
+    "requirement": "REQ-0017",
+    "acceptance_criteria": [
+      "AC1-AC5 of REQ-0017"
+    ],
+    "user_notes": []
   }
 ]
