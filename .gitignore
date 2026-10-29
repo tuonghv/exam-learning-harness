@@ -21,21 +21,9 @@ docs/req/.lock
 .usage_hold.json
 .usage_hold.json.tmp.*
 
-# ---- inbox-triage (append to the repo's root .gitignore) ----
-
-# Runtime state: inbox messages, staging records, questions, logs.
-# May contain sensitive message content, never commit it.
-# The orchestrator must create these dirs itself (mkdir -p) at startup.
-/.triage/
-
 # Claude Code per-user local overrides (shared agents/skills stay tracked)
 /.claude/settings.local.json
 /.claude/**/*.local.*
-
-# Triage tooling build and test output (fixtures under tests/fixtures/ stay tracked)
-/tools/triage/bin/
-/tools/triage/tests/out/
-/tools/triage/tests/**/.triage/
 
 # Kit delivery helpers, not part of the project
 /INTEGRATION_PROMPT.md

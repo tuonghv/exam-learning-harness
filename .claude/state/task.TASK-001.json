@@ -109,10 +109,11 @@
       "design r5 installed; req-design removed; step A done",
       "step B done: override doc, oracle, Tier-1 note, commands, workflow-roles, lead deleted, role-body pointers",
       "step C done: skills 2066->795 lines (target 1033)",
-      "step D done: role bodies 646->326 lines (each <=71)"
+      "step D done: role bodies 646->326 lines (each <=71)",
+      "step E done: tools/triage, lessons.py+tests+ledger, 3 stale docs deleted; AC6/AC9 greps empty; agent_setup files untouched"
     ],
     "notes": "",
-    "next": "step E deletions, then tester"
+    "next": "tester/verifier for TASK-001 (REQ-0005 ACs)"
   },
   "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
 }
