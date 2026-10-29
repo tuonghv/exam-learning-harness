@@ -1,0 +1,6 @@
+# mutation: marker added to prompts/dev/system.md, then restored with git checkout
+channel='default' marker_count=0
+channel='--channel dev' marker_count=1
+ok
+release verify after dev edit rc=0
+ok
