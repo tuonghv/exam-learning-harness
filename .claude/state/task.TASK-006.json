@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-006",
   "title": "Restructure the engine into the exam_engine package per docs/design/phase-6-engine-structure.md (REQ-0012)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0012: one package src/exam_engine, prompts/, schemas/, config/, tests/, scripts/exam.py; old tools/examples/*.py become shims; behaviour and 166 tests unchanged",
   "acceptance_criteria": [
     "AC1-AC6 of REQ-0012"
@@ -44,8 +44,8 @@
     "evidence": "work/TASK-006/evidence/"
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-6-engine-structure.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -55,7 +55,10 @@
     },
     "coder": "work/TASK-006/handoff/code.md",
     "tester": "work/TASK-006/handoff/test.md",
-    "verifier": "work/TASK-006/handoff/verify.md"
+    "verifier": "work/TASK-006/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "pure move; old and new CLIs compared on the same input in evidence/old-vs-new.txt, 3 mutations killed"
+    }
   },
   "user_notes": [
     {
@@ -86,5 +89,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report, DONE"
+  "next": "done"
 }

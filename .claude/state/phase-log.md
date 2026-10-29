@@ -154,3 +154,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: AC1-AC6 verified; defects low (stale CLAUDE.md path needs the user).
 - Decision: advance.
 - Next: report, DONE.
+
+## DONE - TASK-006 - 2026-10-29T06:09:15Z
+- Action: report written; crosscheck waived; backlog complete.
+- Result: REQ-0012 AC1-AC6 verified, 198+2 tests OK.
+- Decision: close TASK-006.
+- Next: user decides CLAUDE.md/skills path edits; REQ-0003/0004, REQ-0009.
