@@ -19,3 +19,5 @@ Suite 301 unit (1 skip) + 2 integration OK; mutation checks (encrypted, keep-nat
 
 ## Next
 REQ-0018 DOCX, REQ-0019 images; then real PDFs.
+
+User instructions honoured: approve all (loader option A), document setup (docs/guide/ingest-setup.md).
