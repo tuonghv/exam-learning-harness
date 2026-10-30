@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/generated-dgnl/inputs/english/input-103.md",
+    "subject": "English",
+    "level": "Grade 12",
+    "exam_type": "University Entrance (DGNL)",
+    "task": "Multiple Choice",
+    "mode": "Solve",
+    "language": "en"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 0.34821500000000005,
+    "cost_usd": 0.029569,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "key match",
+      "answer": "C",
+      "solution": [
+        "The blank begins a non-defining relative clause that modifies 'The new library' and ends with the time marker 'last spring'.",
+        "A completed past event needs the past simple passive: which + was/were + V3, so 'which was opened'.",
+        "The library is the receiver of the action (someone opened it), so a passive is required.",
+        "Eliminate the others: B is active and has no passive meaning, D refers to the future, and A uses a continuous aspect that does not fit the sentence."
+      ],
+      "explanation": "C is correct. 'which was opened last spring' is a past simple passive relative clause (relative pronoun + was + past participle). It fits 'last spring' and gives a sensible link to the main clause: the library opened, so it has now become popular. A. 'which was being renovated' is a past continuous passive, which describes work in progress. It clashes with 'new library' and with 'has already become the most popular study space', which implies it is already in use. B. 'having renovated' is an active perfect participle and would need a doer. It makes the library the one doing the renovating, which is illogical. D. 'to be opened' is a to-infinitive passive with future or planned meaning, and it conflicts with 'last spring', which is in the past.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "C is the only option that is a grammatical past passive and fits both 'last spring' and 'new library'. A is grammatical but weaker in meaning."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "single letter A-D",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: The new library, ______ last spring, has already become the most popular study s",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 1,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}

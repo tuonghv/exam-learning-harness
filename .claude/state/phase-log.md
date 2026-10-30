@@ -655,3 +655,6 @@ Action: dgnl-en profile with blind double review. Result: written. Decision: cod
 
 ## UNIT_TESTED - TASK-024 - 2026-10-30T11:16:47Z
 Action: ran the suite. Result: 501 OK ($0). Decision: tester waiver. Next: real round (user said auto, cap $0.5).
+
+## VERIFIED - TASK-024 - 2026-10-30T11:20:37Z
+Action: real dgnl-en round n=4. Result: 4/4 pass, $0.16, 0 lessons, item 103 doubtful. Decision: verified, circularity stated. Next: DONE.

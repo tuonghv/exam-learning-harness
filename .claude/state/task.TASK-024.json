@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-024",
   "title": "gen-exams --profile dgnl-en: DGNL English items with blind double-review key QA (REQ-0029)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0029",
   "acceptance_criteria": [
     "REQ-0029 AC1, AC2 with $0 mock",
@@ -30,16 +30,21 @@
     "result": "501 OK incl. dgnl-en tests"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "not applicable: user asked not to security-scan this repo; generator only writes files"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "docs/report/phase-24-dgnl-en.md",
+      "work/exam-runs/2026-10-30-en1/summary.json"
+    ],
+    "command": "exam.py gen-exams --real --profile dgnl-en; exam.py benchmark --real; exam.py lessons",
+    "result": "4 English items, 2 blind reviews each, 0 rejected; benchmark 4/4 pass; 0 lessons; item 103 flagged doubtful by hand"
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-24-dgnl-en.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -52,6 +57,12 @@
     },
     "tester": {
       "waiver": "coordinator ran the suite, as phases 18-23"
+    },
+    "verifier": {
+      "waiver": "coordinator verified with real runs, as phases 18-23"
+    },
+    "crosscheck": {
+      "waiver": "keys checked by hand in the report; circularity stated; 103 flagged doubtful"
     }
   },
   "user_notes": [
@@ -62,7 +73,7 @@
     }
   ],
   "picked_at": "2026-10-30T11:15:19Z",
-  "updated_at": "2026-10-30T11:16:47Z",
+  "updated_at": "2026-10-30T11:20:37Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-024/"
@@ -73,5 +84,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "VERIFIED: real round"
+  "next": "DONE"
 }
