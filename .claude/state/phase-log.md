@@ -865,3 +865,9 @@ Action: report written, quality crosscheck recorded, AC5 waived
 Result: AC1-AC4,AC6 met
 Decision: close TASK-002 and REQ-0008
 Next: TASK-033
+
+## DESIGN - TASK-033 - 2026-10-30T22:39:02Z
+Action: inspector measured hook output (3 lines on a normal prompt); design: join into one line
+Result: docs/design/phase-33-hook-one-line.md
+Decision: coordinator implements, .claude/req is guarded for roles
+Next: IMPLEMENTING
