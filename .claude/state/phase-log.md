@@ -883,3 +883,9 @@ Action: ran req_kit_test and the old-hook mutation
 Result: 41/0 new, 39/2 old
 Decision: advance
 Next: VERIFIED
+
+## VERIFIED - TASK-033 - 2026-10-30T22:39:46Z
+Action: measured old vs new hook output and ran req_kit_test
+Result: old 2 lines, new 1 line, 41/0
+Decision: advance to VERIFIED
+Next: DONE

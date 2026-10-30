@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-033",
   "title": "REQ-0006: one-line UserPromptSubmit hook output (hook_capture.py), tick AC4/AC5; AC6 waits for a later compaction count",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0006",
   "acceptance_criteria": [
     "REQ-0006 AC4 one-line hook output",
@@ -32,12 +32,18 @@
     "result": "pass=41 fail=0; mutation: old hook fails 9.1, 9.3 (pass=39 fail=2)"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "hook only joins existing text lines; never blocks a prompt, errors still exit 0; no settings or wiring change"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-033/evidence/req_kit_test.txt",
+      "work/TASK-033/evidence/hook_lines_old.txt",
+      "work/TASK-033/evidence/hook_lines_new.txt"
+    ],
+    "command": "bash .claude/tests/req_kit_test.sh; hook line count old vs new on a bare slash prompt",
+    "result": "41/0; old hook 2 lines, new hook 1 line; PreToolUse output 0 B (inspector); AC6 (compaction count) stays open"
   },
   "report": {
     "status": "pending",
@@ -51,11 +57,17 @@
     },
     "coder": {
       "waiver": "coordinator: .claude/req is guarded for roles"
+    },
+    "verifier": {
+      "waiver": "small guarded-path change verified by coordinator with old-vs-new line counts and a mutation run; no independent role can edit or run .claude/req"
+    },
+    "crosscheck": {
+      "waiver": "old hook mutation fails tests 9.1/9.3 (work/TASK-033/evidence/req_kit_test.txt, hook_lines_*.txt)"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-30T22:38:25Z",
-  "updated_at": "2026-10-30T22:39:11Z",
+  "updated_at": "2026-10-30T22:39:46Z",
   "updated_by": "main",
   "scope": [
     ".claude/req/hook_capture.py",
@@ -68,5 +80,5 @@
     "notes": "",
     "next": "advance.sh DESIGN..DONE with specs in work/TASK-033"
   },
-  "next": "VERIFIED"
+  "next": "DONE: report; REQ-0006 stays open for AC6"
 }
