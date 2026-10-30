@@ -37,7 +37,13 @@
   "roles_required": true,
   "crosscheck_required": true,
   "roles": {},
-  "user_notes": [],
+  "user_notes": [
+    {
+      "raw": "RAW-00132",
+      "note": "queued REQ-0037/TASK-032: automate transitions via advance.sh + skill",
+      "at": "2026-10-30T21:59:06Z"
+    }
+  ],
   "picked_at": "2026-10-30T21:57:07Z",
   "updated_at": "",
   "updated_by": "",
