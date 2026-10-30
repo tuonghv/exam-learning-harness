@@ -598,7 +598,7 @@ def genexam_main(argv):
     from exam_engine.pipeline import genexam
     d = settings.load_config("engine")
     ap = argparse.ArgumentParser(prog="exam.py gen-exams")
-    ap.add_argument("--subject", default="math")
+    ap.add_argument("--subject")
     ap.add_argument("--n", type=int, default=3)
     ap.add_argument("--seed", default=benchmark_today())
     ap.add_argument("--out", default="evals/generated")
@@ -619,12 +619,17 @@ def genexam_main(argv):
         print("usage: choose exactly one of --mock FILE, --dry-run, --real (never defaults to real); "
               "--n >= 1, --max-cost-usd >= 0", file=sys.stderr)
         return 2
+    a.subject = a.subject or genexam.PROFILE_SUBJECT[a.profile]
+    if a.subject != genexam.PROFILE_SUBJECT[a.profile]:
+        print("ERROR: profile %s writes subject %s, not %s" % (
+            a.profile, genexam.PROFILE_SUBJECT[a.profile], a.subject), file=sys.stderr)
+        return 2
     if a.subject not in genexam.SUBJECTS:
         print("ERROR: subject %r not supported (have: %s)" % (a.subject, ", ".join(sorted(genexam.SUBJECTS))),
               file=sys.stderr)
         return 2
     print("%d exam(s) of %s, calls <= %d, cap $%.2f%s" % (
-        a.n, a.subject, a.n * (genexam.MAX_ATTEMPTS + (0 if a.no_qa else 1)), a.max_cost_usd,
+        a.n, a.subject, a.n * (genexam.MAX_ATTEMPTS + (0 if a.no_qa else 2 if a.profile == "dgnl-en" else 1)), a.max_cost_usd,
         " (dry run: no call made)" if a.dry_run else ""), flush=True)
     if a.dry_run:
         print(genexam.build_prompt(a.subject, a.seed, 1, a.level, a.profile))
@@ -643,6 +648,8 @@ def genexam_main(argv):
         names = genexam.write(a.subject, items, a.out, {"seed": a.seed, "model": a.model,
                                                         "llm": "claude-p" if a.real else "mock",
                                                         "level": a.level, "profile": a.profile,
+                                                        "key_basis": ("2 blind reviews" if a.profile == "dgnl-en"
+                                                                      else "code check"),
                                                         "cost_usd": cost})
     except genexam.GenError as exc:
         print("ERROR: %s" % exc, file=sys.stderr)

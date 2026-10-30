@@ -193,6 +193,73 @@ class Dgnl(unittest.TestCase):
         self.assertIn("A. 39", genexam.qa_prompt(obj))
 
 
+EN = {"skill": "Conditionals", "question": "If I ______ more time, I would travel abroad.", "passage": "",
+      "options": {"A": "have", "B": "had", "C": "will have", "D": "would have"}, "correct": "B",
+      "solution": "Second conditional: past simple in the if-clause."}
+
+
+class DgnlEn(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, self.tmp, True)
+
+    def mockfile(self, replies):
+        p = os.path.join(self.tmp, "mock.json")
+        with open(p, "w", encoding="utf-8") as fh:
+            json.dump([json.dumps(r) for r in replies], fh)
+        return p
+
+    def test_pair_manifest_and_format(self):
+        out = os.path.join(self.tmp, "g")
+        rc, so, _ = run(["gen-exams", "--profile", "dgnl-en", "--n", "1", "--out", out,
+                         "--mock", self.mockfile([EN, {"answer": "B"}, {"answer": "B"}])])
+        self.assertEqual(rc, 0, so)
+        text = open(os.path.join(out, "inputs", "english", "input-101.md"), encoding="utf-8").read()
+        self.assertIn("University Entrance (DGNL)", text)
+        self.assertIn("B. had", text)
+        key = open(os.path.join(out, "keys", "english", "expected-101.md"), encoding="utf-8").read()
+        self.assertIn("Final answer: B\nCorrect answer: B. had", key)
+        self.assertIn("two blind reviews", key)
+        man = json.load(open(os.path.join(out, "manifest.json"), encoding="utf-8"))
+        self.assertEqual(man["runs"][0]["key_basis"], "2 blind reviews")
+        root = os.path.join(self.tmp, "r")
+        os.makedirs(os.path.join(root, "evals"))
+        for k in ("inputs", "keys"):
+            shutil.copytree(os.path.join(out, k), os.path.join(root, "evals", k))
+        rc, so, _ = run(["check-examples", "--root", root])
+        self.assertEqual(rc, 0, so)
+
+    def test_one_disagreeing_reviewer_rejects(self):
+        out = os.path.join(self.tmp, "g")
+        rc, so, _ = run(["gen-exams", "--profile", "dgnl-en", "--n", "1", "--out", out,
+                         "--mock", self.mockfile([EN, {"answer": "B"}, {"answer": "C"}])])
+        self.assertEqual(rc, 0, so)
+        self.assertIn("qa_fail=1", so)
+        self.assertTrue(os.path.isfile(os.path.join(out, "rejected", "english", "qa-101.txt")))
+        self.assertFalse(os.path.exists(os.path.join(out, "inputs", "english", "input-101.md")))
+
+    def test_blind_prompt_has_no_key_or_solution(self):
+        obj = dict(EN, final_answer="B")
+        p = genexam.blind_prompt(obj)
+        self.assertNotIn(EN["solution"], p)
+        self.assertNotIn("Second conditional", p)
+        self.assertNotIn("Final answer", p)
+        self.assertIn("D. would have", p)
+        self.assertIn("Passage:", genexam.blind_prompt(dict(obj, passage="Tom likes tea.")))
+
+    def test_bad_replies(self):
+        for bad in (dict(EN, correct="E"), dict(EN, options={"A": "x", "B": "x", "C": "y", "D": "z"}),
+                    dict(EN, options={"A": "x", "B": "y", "C": "z"}), dict(EN, solution="")):
+            self.assertTrue(genexam.check_mc(dict(bad)), bad)
+        ok = dict(EN)
+        self.assertEqual(genexam.check_mc(ok), [])
+        self.assertEqual(ok["final_answer"], "B")
+
+    def test_subject_must_match_profile(self):
+        self.assertEqual(run(["gen-exams", "--profile", "dgnl-en", "--subject", "math", "--dry-run"])[0], 2)
+        self.assertEqual(run(["gen-exams", "--profile", "dgnl-en", "--dry-run"])[0], 0)
+
+
 class Variety(unittest.TestCase):
     def test_topics_differ_within_a_round_and_prompt_carries_it(self):
         for prof in genexam.PROFILES:

@@ -1,0 +1,1 @@
+{"unit_test":{"status":"passed","command":"python3 -I -m unittest discover -s tests/unit -p test_*.py","result":"501 OK incl. dgnl-en tests"},"roles":{"tester":{"waiver":"coordinator ran the suite, as phases 18-23"}},"next":"VERIFIED: real round"}

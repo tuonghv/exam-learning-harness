@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-024",
   "title": "gen-exams --profile dgnl-en: DGNL English items with blind double-review key QA (REQ-0029)",
-  "state": "DESIGN",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0029",
   "acceptance_criteria": [
     "REQ-0029 AC1, AC2 with $0 mock",
@@ -15,13 +15,19 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/genexam.py",
+      "src/exam_engine/cli.py",
+      "prompts/dev/genexam_dgnl_en.md",
+      "prompts/dev/genexam_blind.md"
+    ],
+    "summary": "genexam --profile dgnl-en: English prompt, check_mc, blind_qa (2 blind reviews), manifest key_basis, subject follows profile"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit -p test_*.py",
+    "result": "501 OK incl. dgnl-en tests"
   },
   "security": {
     "status": "pending",
@@ -40,11 +46,23 @@
   "roles": {
     "designer": {
       "waiver": "coordinator designed, as phases 18-23"
+    },
+    "coder": {
+      "waiver": "coordinator implemented, as phases 18-23"
+    },
+    "tester": {
+      "waiver": "coordinator ran the suite, as phases 18-23"
     }
   },
-  "user_notes": [],
+  "user_notes": [
+    {
+      "raw": "RAW-00097",
+      "note": "user away: run the task through incl. the real round under its cost cap, do not ask",
+      "at": "2026-10-30T11:16:47Z"
+    }
+  ],
   "picked_at": "2026-10-30T11:15:19Z",
-  "updated_at": "2026-10-30T11:15:33Z",
+  "updated_at": "2026-10-30T11:16:47Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-024/"
@@ -55,5 +73,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "IMPLEMENTING"
+  "next": "VERIFIED: real round"
 }

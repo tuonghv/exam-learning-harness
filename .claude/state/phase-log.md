@@ -649,3 +649,9 @@ Action: report docs/report/phase-23-dgnl.md. Result: REQ-0028 AC1-AC4 met, 7 DGN
 
 ## DESIGN - TASK-024 - 2026-10-30T11:15:33Z
 Action: wrote docs/design/phase-24-dgnl-en.md. Result: dgnl-en with blind double review. Decision: designer waiver. Next: IMPLEMENTING.
+
+## IMPLEMENTING - TASK-024 - 2026-10-30T11:16:47Z
+Action: dgnl-en profile with blind double review. Result: written. Decision: coder waiver. Next: UNIT_TESTED.
+
+## UNIT_TESTED - TASK-024 - 2026-10-30T11:16:47Z
+Action: ran the suite. Result: 501 OK ($0). Decision: tester waiver. Next: real round (user said auto, cap $0.5).

@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-024",
-  "state": "DESIGN",
-  "next": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
+  "next": "VERIFIED: real round",
   "title": "gen-exams --profile dgnl-en: DGNL English items with blind double-review key QA (REQ-0029)",
   "active": [
     {
       "task_id": "TASK-024",
-      "state": "DESIGN",
-      "next": "IMPLEMENTING",
-      "updated_at": "2026-10-30T11:15:33Z"
+      "state": "UNIT_TESTED",
+      "next": "VERIFIED: real round",
+      "updated_at": "2026-10-30T11:16:47Z"
     }
   ],
   "max_active": 1

@@ -16,17 +16,22 @@ from exam_engine.pipeline import verifier
 PROMPT_REL = os.path.join("dev", "genexam.md")
 QA_REL = os.path.join("dev", "genexam_qa.md")
 DGNL_REL = os.path.join("dev", "genexam_dgnl.md")
-PROFILES = ("hs", "dgnl")
+PROFILES = ("hs", "dgnl", "dgnl-en")
+PROFILE_SUBJECT = {"hs": "math", "dgnl": "math", "dgnl-en": "english"}
+PROMPT_OF = {"hs": PROMPT_REL, "dgnl": DGNL_REL, "dgnl-en": os.path.join("dev", "genexam_dgnl_en.md")}
+BLIND_REL = os.path.join("dev", "genexam_blind.md")
 LETTERS = "ABCD"
 TOPICS = {
     "hs": ["logarit và phương trình mũ", "tích phân", "số phức", "hình học Oxyz", "xác suất",
            "đạo hàm và cực trị", "cấp số cộng và cấp số nhân", "thể tích khối đa diện"],
+    "dgnl-en": ["verb tenses", "conditionals", "word choice (vocabulary in context)", "collocations and phrasal verbs",
+                "reported speech", "passive voice", "reading: detail question", "reading: inference question"],
     "dgnl": ["cấp số cộng/nhân và quy luật dãy số", "phần trăm, tỉ lệ, lãi suất", "xác suất cơ bản",
              "logic: suy luận từ các điều kiện cho trước", "đọc số liệu cho trong lời (trung bình, tỉ lệ)",
              "chuyển động, công việc chung, bài toán thực tế", "tổ hợp và đếm", "bất phương trình, hàm số đơn giản"],
 }
 SOURCE_NOTE = "model knowledge, not an official exam"
-SUBJECTS = {"math": "Mathematics"}
+SUBJECTS = {"math": "Mathematics", "english": "English"}
 FIRST_NUMBER = 101
 MAX_ATTEMPTS = 2
 
@@ -52,7 +57,7 @@ def topic(seed, idx, profile="hs"):
 
 def build_prompt(subject, seed, idx, level="hard", profile="hs"):
     return "%s\nSeed: %s-%d\nSubject key: %s\nLevel: %s\nTopic (use exactly this): %s\n" % (
-        template(DGNL_REL if profile == "dgnl" else PROMPT_REL).rstrip("\n"), seed, idx, subject, level,
+        template(PROMPT_OF[profile]).rstrip("\n"), seed, idx, subject, level,
         topic(seed, idx, profile))
 
 
@@ -125,6 +130,51 @@ def check_dgnl(obj):
     return []
 
 
+def check_mc(obj):
+    """Problems of a 4-option reply without a code oracle; sets obj["final_answer"] to the letter."""
+    errs = []
+    for k in ("skill", "question", "solution"):
+        if not isinstance(obj.get(k), str) or not obj[k].strip():
+            errs.append("%s must be a non-empty string" % k)
+    if not isinstance(obj.get("passage", ""), str):
+        errs.append("passage must be a string")
+    opts = obj.get("options")
+    if not isinstance(opts, dict) or sorted(opts) != list(LETTERS) or not all(
+            isinstance(v, str) and v.strip() for v in opts.values()):
+        errs.append("options must be exactly A, B, C, D (non-empty strings)")
+    elif len(set(v.strip().casefold() for v in opts.values())) < 4:
+        errs.append("two options have the same text")
+    if obj.get("correct") not in tuple(LETTERS):
+        errs.append("correct must be one of A, B, C, D")
+    if not errs:
+        obj["final_answer"] = obj["correct"]
+    return errs
+
+
+def blind_prompt(obj):
+    """The question (and passage) with options only: no key, no solution."""
+    opts = "".join("%s. %s\n" % (k, obj["options"][k].strip()) for k in LETTERS)
+    text = "%s\n" % obj["question"].strip()
+    if obj.get("passage", "").strip():
+        text = "Passage:\n%s\n\nQuestion:\n%s" % (obj["passage"].strip(), text)
+    return "%s\n%s\n%s" % (template(BLIND_REL).rstrip("\n"), text, opts)
+
+
+def blind_qa(llm, obj, reviews=2):
+    """(status, note, cost): pass only if every blind review picks the key letter."""
+    letters, cost = [], 0.0
+    for _ in range(reviews):
+        call = llm(blind_prompt(obj))
+        cost += call.cost_usd
+        rep = claude.extract_json(call.text)[0] if call.ok else None
+        letters.append(str((rep or {}).get("answer", "")).strip().upper()[:1] or "?")
+    if "?" in letters:
+        return "unknown", "unreadable review: %s" % ",".join(letters), cost
+    if all(x == obj["final_answer"] for x in letters):
+        return "pass", "", cost
+    return "fail", "key %s, blind reviewers %s" % (obj["final_answer"], ",".join(letters)), cost
+
+
 def check_reply(obj):
     """Problems of a reply (empty = ok), including a key whose `check` does not give the answer."""
     errs = []
@@ -156,6 +206,16 @@ def leak_check(input_text, obj):
 
 
 def input_md(subject, obj):
+    if obj.get("options") and subject == "english":
+        body = ["## Instructions", "", "Choose the best answer and explain why.", ""]
+        if obj.get("passage", "").strip():
+            body += ["## Passage", "", obj["passage"].strip(), ""]
+        return "\n".join([
+            "# Exam Input", "", "Subject: English", "Level: Grade 12",
+            "Exam type: University Entrance (DGNL)", "Task: Multiple Choice", "Mode: Solve",
+            "Skill: %s" % obj["skill"].strip(), "Language: en", ""] + body + [
+            "## Question 1", "", obj["question"].strip(), ""] + [
+            "%s. %s" % (k, obj["options"][k].strip()) for k in LETTERS] + [""])
     if obj.get("options"):
         return "\n".join([
             "# Exam Input", "", "Subject: %s" % SUBJECTS[subject], "Level: Grade 12",
@@ -178,7 +238,8 @@ def key_md(obj):
             "# Expected Output", "", "## Question 1", "", "Final answer: %s" % a,
             "Correct answer: %s. %s" % (a, o[a].strip()), "", "### Solution", "", obj["solution"].strip(), "",
             "### Explanation", "", "- Generated item, not reviewed.", "", "### Verification", "",
-            "- Check: %s = %s. Pass" % (obj["check"].strip(), o[a].strip()), "- Final answer: %s" % a,
+            ("- Check: %s = %s. Pass" % (obj["check"].strip(), o[a].strip())) if obj.get("check") else
+            "- Check: two blind reviews chose %s. Pass" % a, "- Final answer: %s" % a,
             "- Status: Verified", "", "### Grading", "", "- 1 point: %s. 0 points: any other answer." % a, ""])
     a = obj["final_answer"].strip()
     return "\n".join([
@@ -187,6 +248,9 @@ def key_md(obj):
         "### Verification", "", "- Check: %s = %s. Pass" % (obj["check"].strip(), a),
         "- Final answer: %s" % a, "- Status: Verified", "", "### Grading", "",
         "- 1 điểm: %s (hoặc giá trị tương đương). 0 điểm: giá trị khác." % a, ""])
+
+
+CHECKS = {"hs": lambda o: check_reply(o), "dgnl": lambda o: check_dgnl(o), "dgnl-en": lambda o: check_mc(o)}
 
 
 def _ask(llm, prompt, profile="hs"):
@@ -199,7 +263,7 @@ def _ask(llm, prompt, profile="hs"):
             raise GenError("call_failed", "%s %s" % (call.cls, call.reason))
         obj, why = claude.extract_json(call.text)
         if obj is not None:
-            why = "; ".join(check_dgnl(obj) if profile == "dgnl" else check_reply(obj))
+            why = "; ".join(CHECKS[profile](obj))
         if not why:
             return obj, cost
     raise GenError("invalid_reply", "%s (after %d attempts)" % (why, MAX_ATTEMPTS))
@@ -221,7 +285,7 @@ def generate(subject, n, seed, llm, max_cost=0.5, level="hard", review=True, pro
         cost += spent
         obj["qa"], obj["qa_note"] = "skipped", ""
         if review:
-            obj["qa"], obj["qa_note"], spent = qa(llm, obj)
+            obj["qa"], obj["qa_note"], spent = (blind_qa if profile == "dgnl-en" else qa)(llm, obj)
             cost += spent
         text = input_md(subject, obj)
         bad = leak_check(text, obj)
