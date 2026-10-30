@@ -699,12 +699,14 @@
     "task_id": "TASK-032",
     "title": "advance.sh + advance skill: one command per TASK transition and REQ catch-up (REQ-0037)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-10-31T01:00:00Z",
     "requirement": "REQ-0037",
     "acceptance_criteria": [
       "REQ-0037 AC1-AC6"
-    ]
+    ],
+    "completed_at": "2026-10-30T22:35:55Z",
+    "report": "docs/report/phase-32-gated-task-advance.md"
   },
   {
     "task_id": "TASK-033",

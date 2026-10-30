@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-032",
   "title": "advance.sh + advance skill: one command per TASK transition and REQ catch-up (REQ-0037)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0037",
   "acceptance_criteria": [
     "REQ-0037 AC1-AC6"
@@ -51,11 +51,20 @@
       "work/TASK-032/handoff/verify.md"
     ],
     "command": "bash .claude/scripts/checks/advance_test.sh; bash .claude/scripts/checks/advance_adv_test.sh; git diff --stat protected files; git grep --force",
-    "result": "58/0 and 32/0, protected files unchanged, no --force; verifier AC2-AC7 PASS, AC1 gap list G1-G8 in design 32.1 checked by coordinator"
+    "result": "58/0 and 32/0, protected files unchanged, no --force; verifier AC2-AC7 PASS, AC1 gap list G1-G8 in design 32.1 checked by coordinator",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-032/evidence/final_advance_test.txt",
+        "work/TASK-032/evidence/final_advance_adv_test.txt",
+        "work/TASK-032/handoff/test.md"
+      ],
+      "reason": "tester adversarial run plus two mutations that failed tests; suites re-run at final code"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-32-gated-task-advance.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -87,7 +96,7 @@
   },
   "user_notes": [],
   "picked_at": "2026-10-30T22:00:29Z",
-  "updated_at": "2026-10-30T22:35:40Z",
+  "updated_at": "2026-10-30T22:35:56Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-032/"
@@ -99,6 +108,6 @@
     "notes": "",
     "next": "RESUME after account switch: (1) verifier on TASK-032 vs REQ-0037 AC1-AC7 (evidence work/TASK-032/evidence, handoffs design/code/test.md; save-evidence first), (2) advance.sh TASK-032 VERIFIED then DO"
   },
-  "next": "DONE: report docs/report/phase-32-gated-task-advance.md, quality block, advance.sh DONE",
+  "next": "",
   "grants": {}
 }
