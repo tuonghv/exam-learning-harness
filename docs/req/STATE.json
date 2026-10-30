@@ -1,5 +1,5 @@
 {
-  "focus": "",
-  "next": "",
-  "updated": "2026-10-30 21:37"
+  "focus": "REQ-0034",
+  "next": "user answers Q1-Q3, then create TASK (reporter.py build_answer_sheet + tests)",
+  "updated": "2026-10-30 22:10"
 }
