@@ -1,0 +1,70 @@
+{
+  "task_id": "TASK-027",
+  "title": "Solve a small slice of the real DGNL 2026 sample PDF with refine + solve (REQ-0032)",
+  "state": "DESIGN",
+  "requirement": "REQ-0032",
+  "acceptance_criteria": [
+    "REQ-0032 AC1, AC2"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-27-real-dgnl.md",
+    "summary": "free ingest, refine math pages with vision, 10-question slice solved by the unchanged engine, no key so hand check and agreement; PDF and question text stay untracked",
+    "reuse": [
+      "ingest-refine",
+      "solve"
+    ],
+    "risks": [
+      "no key",
+      "diagram questions"
+    ]
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": {
+      "waiver": "coordinator designed, as phases 18-26"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00100",
+      "note": "user gave examples/dgnl PDF, do your best",
+      "at": "2026-10-30T12:47:46Z"
+    }
+  ],
+  "picked_at": "2026-10-30T12:47:46Z",
+  "updated_at": "2026-10-30T12:47:46Z",
+  "updated_by": "main",
+  "scope": [
+    "work/TASK-027/"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "IMPLEMENTING"
+}

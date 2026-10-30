@@ -691,3 +691,6 @@ Action: real harder round, 9 items. Result: 9/9 pass, $0.50, 0 lessons. Decision
 
 ## DONE - TASK-026 - 2026-10-30T12:39:00Z
 Action: report written. Result: 9/9 pass. Decision: done. Next: gold exams or another model as solver (user).
+
+## DESIGN - TASK-027 - 2026-10-30T12:47:46Z
+Action: designed the real-exam slice. Result: docs/design/phase-27-real-dgnl.md. Decision: refine then solve, hand check, PDF untracked. Next: IMPLEMENTING.

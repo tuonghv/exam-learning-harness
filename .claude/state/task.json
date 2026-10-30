@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-026",
-  "state": "DONE",
-  "next": "DONE",
-  "title": "gen-exams --level harder for DGNL profiles; real round on 3 sections (REQ-0031)",
-  "active": [],
+  "task_id": "TASK-027",
+  "state": "DESIGN",
+  "next": "IMPLEMENTING",
+  "title": "Solve a small slice of the real DGNL 2026 sample PDF with refine + solve (REQ-0032)",
+  "active": [
+    {
+      "task_id": "TASK-027",
+      "state": "DESIGN",
+      "next": "IMPLEMENTING",
+      "updated_at": "2026-10-30T12:47:46Z"
+    }
+  ],
   "max_active": 1
 }
