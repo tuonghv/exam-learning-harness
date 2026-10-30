@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0037",
-  "next": "VERIFIED: verifier after the account switch; then DONE via advance.sh",
-  "updated": "2026-10-31 05:30"
+  "next": "DONE: report docs/report/phase-32-gated-task-advance.md, quality block, advance.sh DONE",
+  "updated": "2026-10-31 05:35"
 }
