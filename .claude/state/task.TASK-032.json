@@ -83,7 +83,7 @@
   "checkpoint": {
     "done": [],
     "notes": "",
-    "next": "HOLD NEW SUBAGENTS until user switches Claude account (RAW-00134). Tester a2ff1c3b is still running: read work/TASK-032/handoff/test.md, then dogfood advance.sh in main (IMPLEMENTING..DONE), verifier "
+    "next": "RESUME after account switch: (1) verifier on TASK-032 vs REQ-0037 AC1-AC7 (evidence work/TASK-032/evidence, handoffs design/code/test.md; save-evidence first), (2) advance.sh TASK-032 VERIFIED then DO"
   },
   "next": "VERIFIED: verifier after the account switch; then DONE via advance.sh",
   "grants": {}
