@@ -86,6 +86,19 @@ Prompt variants for a language live under `prompts/<channel>/lang/<code>/`.
 - English few-shot #1 (`examples/english/input-001.md`, `expected-001.md`) stays unchanged.
 - Python >= 3.8 stdlib only; Bash 3.2 clean.
 
+## Run and test
+
+Always `python3 -I`. Tests (stdlib `unittest`):
+
+```
+python3 -I -m unittest discover -s tests/unit
+python3 -I -m unittest discover -s tests/integration   # --real against a fake `claude` on a temp PATH, no network
+```
+
+- `python3 -I scripts/exam.py parse EXAM.md` prints the parsed exam as JSON; `verify EXAM.md SOLVE_OUT.json` runs code checks and a decision per question, no model call.
+- `solve` needs exactly one of `--mock FILE`, `--dry-run`, `--real` and `--out DIR`.
+- `workspace/` is runtime output (solve and report results), gitignored; never commit it.
+
 ## Workflow
 
 Work is tracked in the requirement ledger (`docs/req`, EPIC-002) and delivered through TASKs
