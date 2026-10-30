@@ -46,3 +46,6 @@ Record it in `task.json` `verification.evidence`, set `verification.status = pas
 2. Move `state` back to `IMPLEMENTING`, append a phase-log entry (Action, Result, Decision, Next), and commit that revert before writing fix code.
 3. Fix, re-run the unit tests to UNIT_TESTED, re-verify. After repeated failures, reconsider the design or the acceptance criteria instead of retrying blindly.
 Run `workflow-check.sh` after each status change.
+
+## Real exam PDF (ĐGNL or similar, multi-subject)
+Do not read the PDF by hand or guess an extractor: follow `docs/guide/dgnl-real-exam.md` (vision `ingest-refine --all-pages` in batches, one exam file per section, solve per section, no question text in git). Without a key, status stays `uncertain`; verify math by hand computation and list the rest as unresolved.
