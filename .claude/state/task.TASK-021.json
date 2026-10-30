@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-021",
   "title": "benchmark command: engine over evals/inputs with key-only scoring, summary.json + report (REQ-0009)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0009",
   "acceptance_criteria": [
     "AC0-AC6 of REQ-0009 except the real run measurement, which waits for the user's go"
@@ -9,7 +9,7 @@
   "design": {
     "status": "completed",
     "path": "docs/design/phase-21-benchmark.md",
-    "summary": "",
+    "summary": "benchmark command loops engine.run over evals/inputs, key-only scoring, shared budget, summary.json and report",
     "reuse": [],
     "risks": []
   },
@@ -23,13 +23,13 @@
     "summary": "pipeline/benchmark.py + benchmark command"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "463 tests OK (5 new test_benchmark)"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "never defaults to real; budget checked per item; key opened only by scorer; tests assert key text absent from prompts"
   },
   "verification": {
     "status": "pending",
@@ -47,11 +47,14 @@
     },
     "coder": {
       "waiver": "coordinator implemented"
+    },
+    "tester": {
+      "waiver": "coordinator ran the suite"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-30T06:14:13Z",
-  "updated_at": "2026-10-30T06:14:23Z",
+  "updated_at": "2026-10-30T06:14:32Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-021/"
@@ -62,5 +65,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "UNIT_TESTED"
+  "next": "mock benchmark evidence, then report"
 }

@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0009",
-  "next": "UNIT_TESTED",
+  "next": "dry-run evidence; real run waits for go",
   "updated": "2026-10-30 13:14"
 }

@@ -592,3 +592,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: suite 463 OK.
 - Decision: engine untouched.
 - Next: UNIT_TESTED.
+
+## UNIT_TESTED - TASK-021 - 2026-10-30T09:25:00Z
+- Action: ran the unit suite.
+- Result: 463 OK.
+- Decision: verify with a dry run on the real evals set.
+- Next: VERIFIED.
