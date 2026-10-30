@@ -871,3 +871,9 @@ Action: inspector measured hook output (3 lines on a normal prompt); design: joi
 Result: docs/design/phase-33-hook-one-line.md
 Decision: coordinator implements, .claude/req is guarded for roles
 Next: IMPLEMENTING
+
+## IMPLEMENTING - TASK-033 - 2026-10-30T22:39:10Z
+Action: tests 9.1-9.3 written, hook changed
+Result: 41/0, old hook fails 9.1 and 9.3
+Decision: advance
+Next: UNIT_TESTED

@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-033",
   "title": "REQ-0006: one-line UserPromptSubmit hook output (hook_capture.py), tick AC4/AC5; AC6 waits for a later compaction count",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0006",
   "acceptance_criteria": [
     "REQ-0006 AC4 one-line hook output",
@@ -19,8 +19,12 @@
     ]
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      ".claude/req/hook_capture.py",
+      ".claude/tests/req_kit_test.sh"
+    ],
+    "summary": "hook_capture.py joins notice + brief into one line; req_kit_test section 9 (3 tests)"
   },
   "unit_test": {
     "status": "pending",
@@ -44,11 +48,14 @@
   "roles": {
     "designer": {
       "waiver": "coordinator design inline: one-file change in a guarded path (.claude/req) roles cannot edit"
+    },
+    "coder": {
+      "waiver": "coordinator: .claude/req is guarded for roles"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-30T22:38:25Z",
-  "updated_at": "2026-10-30T22:39:02Z",
+  "updated_at": "2026-10-30T22:39:10Z",
   "updated_by": "main",
   "scope": [
     ".claude/req/hook_capture.py",
@@ -61,5 +68,5 @@
     "notes": "",
     "next": "advance.sh DESIGN..DONE with specs in work/TASK-033"
   },
-  "next": "IMPLEMENTING: tests then hook change"
+  "next": "UNIT_TESTED"
 }
