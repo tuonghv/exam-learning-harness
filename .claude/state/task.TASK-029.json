@@ -71,6 +71,9 @@
     },
     "verifier": {
       "waiver": "work/TASK-029/handoff/verify.md"
+    },
+    "crosscheck": {
+      "waiver": "work/TASK-029/handoff/test.md: tester recomputed dash count vs \"answer\": null per result.json independently (grep), 4 subjects, plus 2 mutations"
     }
   },
   "user_notes": [
