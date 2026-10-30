@@ -10,6 +10,6 @@
 .claude/scripts/commit-check.sh | resolves the task from Task: trailer / --task first (guarded file; patch under work/TASK-096/patches)
 .claude/req/task_gate.py | REQ gate follows the linked task id; view only names the focus task (guarded file)
 .claude/hooks/stop-check.sh | multi mode (task.TASK-*.json present): loops the task files, WARN on empty/stale checkpoint.next, workflow-check --task per DONE file; legacy path unchanged (patch hooks-multi.py)
-.claude/hooks/session-start.sh | multi mode: tasks.sh status + workflow-check --task FAIL lines + task_checkpoint brief (patch hooks-multi.py)
+.claude/hooks/session-start-body.sh | multi mode: tasks.sh status + workflow-check --task FAIL lines + task_checkpoint brief (patch hooks-multi.py)
 .claude/hooks/pre-compact-check.sh | multi mode: tasks.sh status + workflow-check --task FAIL lines + task_checkpoint brief, never blocks (patch hooks-multi.py)
 .claude/hooks/agent_setup.py | bound_task(): env CTXGUARD_TASK, sticky bind, launch queue, first work/ write, then task_from (view); per-task grants/waiver read task.<T>.json (patch agent-setup-multi.py)
