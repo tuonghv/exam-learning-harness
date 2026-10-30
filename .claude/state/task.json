@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-033",
-  "state": "VERIFIED",
-  "next": "DONE: report; REQ-0006 stays open for AC6",
+  "state": "DONE",
+  "next": "",
   "title": "REQ-0006: one-line UserPromptSubmit hook output (hook_capture.py), tick AC4/AC5; AC6 waits for a later compaction count",
-  "active": [
-    {
-      "task_id": "TASK-033",
-      "state": "VERIFIED",
-      "next": "DONE: report; REQ-0006 stays open for AC6",
-      "updated_at": "2026-10-30T22:39:46Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
