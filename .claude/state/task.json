@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-002",
-  "state": "IMPLEMENTING",
-  "next": "UNIT_TESTED: cite the unit suite",
+  "state": "UNIT_TESTED",
+  "next": "VERIFIED: AC evidence",
   "title": "Design the exam-solving pipeline: reuse table, gaps, JSON schema, build plan (REQ-0008, EPIC-003)",
   "active": [
     {
       "task_id": "TASK-002",
-      "state": "IMPLEMENTING",
-      "next": "UNIT_TESTED: cite the unit suite",
-      "updated_at": "2026-10-30T22:37:22Z"
+      "state": "UNIT_TESTED",
+      "next": "VERIFIED: AC evidence",
+      "updated_at": "2026-10-30T22:37:23Z"
     }
   ],
   "max_active": 1
