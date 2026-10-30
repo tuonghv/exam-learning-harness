@@ -640,3 +640,9 @@ Action: ran the suite. Result: 494 OK ($0, mock). Decision: tester waiver. Next:
 
 ## UNIT_TESTED - TASK-023 - 2026-10-30T11:02:56Z
 Action: real DGNL round (3 items, QA, benchmark). Result: 3/3 pass, 0 lessons, duplicate item found. Decision: stay UNIT_TESTED until topic variety and the next section (AC4). Next: user go.
+
+## VERIFIED - TASK-023 - 2026-10-30T11:07:28Z
+Action: real DGNL rounds 1-2 (7 items, QA, benchmark). Result: 7/7 pass, 0 lessons, duplicate fixed. Decision: verifier waiver. Next: DONE.
+
+## DONE - TASK-023 - 2026-10-30T11:07:28Z
+Action: report docs/report/phase-23-dgnl.md. Result: REQ-0028 AC1-AC4 met, 7 DGNL math items, 0 lessons. Decision: close; language/science sections are a later REQ. Next: none.

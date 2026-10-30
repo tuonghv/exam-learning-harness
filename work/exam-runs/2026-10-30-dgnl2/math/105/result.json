@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "/tmp/tmp.fI9hLXdbeB/inputs/math/input-105.md",
+    "subject": "Mathematics",
+    "level": "Grade 12",
+    "exam_type": "University Entrance (DGNL)",
+    "task": "Multiple Choice",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 0.356649,
+    "cost_usd": 0.062722,
+    "calls": 4,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "key match",
+      "answer": "A",
+      "solution": [
+        "Cuối năm 1: 100*1,08 = 108 triệu đồng.",
+        "Rút 20 triệu: còn 108 - 20 = 88 triệu đồng.",
+        "Cuối năm 2: 88*1,08 = 95,04 triệu đồng."
+      ],
+      "explanation": "Số dư cuối năm 2 là 95,04 triệu đồng nên chọn A. B (96,64) không ứng với cách tính hợp lý nào từ đề bài. C (93,312) ứng với 100*1,08^2 - 20*1,08... không đúng; thực chất là kết quả của cách tính sai (ví dụ trừ tiền rút trước khi cộng lãi năm đầu rồi nhân 1,08^2: 80*1,08^2 = 93,312). D (96,00) là kết quả làm tròn hoặc tính nhẩm sai, không khớp phép tính đúng.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Phép tính đơn giản, hai cách tính cho cùng kết quả 95,04."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "single letter A-D",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "computed",
+          "detail": "arithmetic only: answer has no number",
+          "result": "unknown",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: Ngay sau khi nhận lãi cuối năm thứ nhất, anh rút ra 20 triệu đồng",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [
+        {
+          "source": "ai_review",
+          "code": "agree",
+          "message": "Tự giải: 100*1,08 = 108; trừ 20 còn 88; 88*1,08 = 95,04 triệu đồng, khớp đáp án A."
+        },
+        {
+          "source": "ai_review",
+          "code": "agree",
+          "message": "Phần giải thích về C hơi lủng củng nhưng 80*1,08^2 = 93,312 đúng là bẫy sai; không ảnh hưởng kết quả."
+        }
+      ],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 2,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}

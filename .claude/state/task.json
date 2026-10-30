@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-023",
-  "state": "UNIT_TESTED",
-  "next": "VERIFIED: real concept round after the user go",
+  "state": "DONE",
+  "next": "",
   "title": "gen-exams --profile dgnl: DGNL-style multiple choice math/logic items with letter keys, code check and QA (REQ-0028)",
-  "active": [
-    {
-      "task_id": "TASK-023",
-      "state": "UNIT_TESTED",
-      "next": "VERIFIED: real concept round after the user go",
-      "updated_at": "2026-10-30T11:00:37Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "/tmp/tmp.fI9hLXdbeB/inputs/math/input-107.md",
+    "subject": "Mathematics",
+    "level": "Grade 12",
+    "exam_type": "University Entrance (DGNL)",
+    "task": "Multiple Choice",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 0.228611,
+    "cost_usd": 0.042465,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "key match",
+      "answer": "B",
+      "solution": [
+        "E đứng ở vị trí 2, 3 hoặc 4. Xét từng trường hợp, rồi xếp A, B (đứng cạnh nhau) và C, D (không đứng cạnh nhau) vào 4 vị trí còn lại.",
+        "E ở vị trí 2: các vị trí còn lại là 1, 3, 4, 5. Hai vị trí kề nhau chỉ có (3,4) và (4,5). A, B chiếm (3,4) hoặc (4,5), mỗi cách có 2 hoán đổi, nên có 4 cách xếp A, B.",
+        "Khi A, B ở (3,4), C, D ở vị trí 1 và 5 (không kề nhau). Khi A, B ở (4,5), C, D ở vị trí 1 và 3 (không kề nhau). Cả hai trường hợp đều thỏa mãn, mỗi trường hợp C, D có 2 cách: 4 x 2 = 8 cách.",
+        "E ở vị trí 4: đối xứng với E ở vị trí 2, có 8 cách.",
+        "E ở vị trí 3: các vị trí còn lại là 1, 2, 4, 5. A, B phải chiếm (1,2) hoặc (4,5), khi đó C, D chiếm cặp còn lại là hai vị trí kề nhau, vi phạm điều kiện. Có 0 cách.",
+        "Tổng: 8 + 8 + 0 = 16 cách."
+      ],
+      "explanation": "A. 12: sai, thiếu cách, ví dụ chỉ đếm 6 cách cho mỗi trường hợp E ở vị trí 2 hoặc 4. B. 16: đúng, bằng 8 + 8 + 0. C. 20: sai, dư cách, chẳng hạn tính cả trường hợp E ở vị trí 3 mà C, D kề nhau. D. 24: sai, dư cách vì không loại hết các trường hợp vi phạm điều kiện C, D không kề nhau hoặc E ở vị trí giữa.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Số trường hợp ít, đếm trực tiếp và có kiểm tra bằng đối xứng."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "single letter A-D",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 1,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}

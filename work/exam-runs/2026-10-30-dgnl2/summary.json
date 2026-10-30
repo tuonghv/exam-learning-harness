@@ -1,0 +1,146 @@
+{
+  "date": "2026-10-30",
+  "model": "sonnet",
+  "prompt": "v1.2.0",
+  "per_subject": {
+    "math": {
+      "items": 4,
+      "pass": 4,
+      "fail": 0,
+      "uncertain": 0,
+      "unresolved": 0,
+      "points": 4,
+      "max_points": 4
+    }
+  },
+  "totals": {
+    "items": 4,
+    "pass": 4,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 4,
+    "max_points": 4
+  },
+  "items": [
+    {
+      "subject": "math",
+      "item": "104",
+      "summary": {
+        "pass": 1,
+        "fail": 0,
+        "uncertain": 0,
+        "unresolved": 0,
+        "points": 1,
+        "max_points": 1
+      },
+      "calls": 2,
+      "cost_usd": 0.043351,
+      "stopped": null,
+      "questions": [
+        {
+          "id": "1",
+          "answer": "C",
+          "verdict": "PASS",
+          "reason": "independent check passed and reviewer agrees",
+          "attempts": 1,
+          "points": 1,
+          "max": 1,
+          "basis": "key match",
+          "findings": []
+        }
+      ]
+    },
+    {
+      "subject": "math",
+      "item": "105",
+      "summary": {
+        "pass": 1,
+        "fail": 0,
+        "uncertain": 0,
+        "unresolved": 0,
+        "points": 1,
+        "max_points": 1
+      },
+      "calls": 4,
+      "cost_usd": 0.062722,
+      "stopped": null,
+      "questions": [
+        {
+          "id": "1",
+          "answer": "A",
+          "verdict": "PASS",
+          "reason": "independent check passed and reviewer agrees",
+          "attempts": 2,
+          "points": 1,
+          "max": 1,
+          "basis": "key match",
+          "findings": [
+            "agree",
+            "agree"
+          ]
+        }
+      ]
+    },
+    {
+      "subject": "math",
+      "item": "106",
+      "summary": {
+        "pass": 1,
+        "fail": 0,
+        "uncertain": 0,
+        "unresolved": 0,
+        "points": 1,
+        "max_points": 1
+      },
+      "calls": 4,
+      "cost_usd": 0.065316,
+      "stopped": null,
+      "questions": [
+        {
+          "id": "1",
+          "answer": "B",
+          "verdict": "PASS",
+          "reason": "independent check passed and reviewer agrees",
+          "attempts": 2,
+          "points": 1,
+          "max": 1,
+          "basis": "key match",
+          "findings": []
+        }
+      ]
+    },
+    {
+      "subject": "math",
+      "item": "107",
+      "summary": {
+        "pass": 1,
+        "fail": 0,
+        "uncertain": 0,
+        "unresolved": 0,
+        "points": 1,
+        "max_points": 1
+      },
+      "calls": 2,
+      "cost_usd": 0.042465,
+      "stopped": null,
+      "questions": [
+        {
+          "id": "1",
+          "answer": "B",
+          "verdict": "PASS",
+          "reason": "independent check passed and reviewer agrees",
+          "attempts": 1,
+          "points": 1,
+          "max": 1,
+          "basis": "key match",
+          "findings": []
+        }
+      ]
+    }
+  ],
+  "calls": 12,
+  "cost_usd": 0.213854,
+  "skipped": [],
+  "regression": []
+}

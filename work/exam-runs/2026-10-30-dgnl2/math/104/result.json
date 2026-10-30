@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "/tmp/tmp.fI9hLXdbeB/inputs/math/input-104.md",
+    "subject": "Mathematics",
+    "level": "Grade 12",
+    "exam_type": "University Entrance (DGNL)",
+    "task": "Multiple Choice",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 0.4,
+    "cost_usd": 0.043351,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "key match",
+      "answer": "C",
+      "solution": [
+        "Gọi ba số là 7-d, 7, 7+d (gọi số giữa là a thì 3a = 21 nên a = 7). Không có điều kiện xác định nào khác, d là số thực bất kỳ.",
+        "Sau khi cộng 2, 3, 9: 9-d, 10, 16+d lập thành cấp số nhân nên (9-d)(16+d) = 10^2 = 100.",
+        "Khai triển: 144 - 7d - d^2 = 100, suy ra d^2 + 7d - 44 = 0, nên d = 4 hoặc d = -11 (cả hai đều nhận, không có nghiệm ngoại lai).",
+        "d = 4: ba số 3, 7, 11, tích = 231. d = -11: ba số 18, 7, -4, tích = -504.",
+        "Tích lớn nhất là 231."
+      ],
+      "explanation": "A. 1000: sai, không ứng với d nào (tích chỉ có thể là 231 hoặc -504). B. -504: là tích ở trường hợp d = -11, nhưng đây là giá trị nhỏ hơn, không phải lớn nhất. C. 231: đúng, là tích ở trường hợp d = 4 và lớn hơn -504. D. 252: sai, không ứng với nghiệm nào của phương trình.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Hai nghiệm d đều được kiểm tra trực tiếp và chỉ có hai giá trị tích để so sánh."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "single letter A-D",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "computed",
+          "detail": "arithmetic only: answer has no number",
+          "result": "unknown",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 1,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}

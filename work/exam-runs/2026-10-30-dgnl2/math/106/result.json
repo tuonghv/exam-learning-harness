@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "/tmp/tmp.fI9hLXdbeB/inputs/math/input-106.md",
+    "subject": "Mathematics",
+    "level": "Grade 12",
+    "exam_type": "University Entrance (DGNL)",
+    "task": "Multiple Choice",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 0.29392700000000005,
+    "cost_usd": 0.065316,
+    "calls": 4,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "key match",
+      "answer": "B",
+      "solution": [
+        "Gọi H1 là biến cố chọn hộp I, H2 là chọn hộp II, D là lấy được bi đỏ. P(H1)=P(H2)=1/2.",
+        "P(D|H1)=3/5; P(D|H2)=4/10=2/5.",
+        "P(D)=1/2*3/5+1/2*2/5=3/10+2/10=1/2.",
+        "Theo công thức Bayes: P(H1|D)=(1/2*3/5)/(1/2)=3/5."
+      ],
+      "explanation": "Đáp án B vì P(H1|D)=3/5. A (3/10) sai vì đó chỉ là P(H1 và D), chưa chia cho P(D). C (3/7) sai vì là tỉ lệ 3/(3+4) giữa số bi đỏ hai hộp, bỏ qua việc mỗi hộp có số bi khác nhau (5 và 10). D (2/5) sai vì là P(D|H2), cũng bằng P(H2|D) nên là xác suất lấy từ hộp II, không phải hộp I.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Bài Bayes cơ bản, số liệu rõ ràng và có hai cách tính cho cùng kết quả."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "single letter A-D",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "computed",
+          "detail": "arithmetic only: answer has no number",
+          "result": "unknown",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 2,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}
