@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0034",
-  "next": "user approves Q1-Q3 (REQ-0034) + Q1 (REQ-0035), then create TASK covering both views",
-  "updated": "2026-10-30 22:16"
+  "next": "TASK-029 queued; pick it (TASK-002 is held/active slot?) and start DESIGN",
+  "updated": "2026-10-30 22:17"
 }
