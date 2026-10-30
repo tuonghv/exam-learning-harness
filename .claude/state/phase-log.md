@@ -661,3 +661,6 @@ Action: real dgnl-en round n=4. Result: 4/4 pass, $0.16, 0 lessons, item 103 dou
 
 ## DONE - TASK-024 - 2026-10-30T11:20:56Z
 Action: report written, AC4 split to REQ-0030. Result: 4/4 pass. Decision: done. Next: REQ-0030 later round (user go).
+
+## DESIGN - TASK-025 - 2026-10-30T12:26:26Z
+Action: designed dgnl-vi. Result: docs/design/phase-25-dgnl-vi.md. Decision: new config subject, no prompt change. Next: IMPLEMENTING.
