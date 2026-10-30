@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/generated-hard/inputs/math/input-102.md",
+    "subject": "Mathematics",
+    "level": "Grade 12",
+    "exam_type": "University Entrance (DGNL)",
+    "task": "Multiple Choice",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 0.354086,
+    "cost_usd": 0.035867,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "key match",
+      "answer": "B",
+      "solution": [
+        "Xếp 5 nam trước: 5! = 120 cách, tạo 6 khoảng trống (2 đầu và 4 giữa).",
+        "Chọn 3 khoảng trống cho 3 nữ để không có hai nữ cạnh nhau: C(6,3) = 20, xếp 3 nữ: 3! = 6. Tổng không điều kiện An: 120*20*6 = 14400.",
+        "Trường hợp An đứng đầu hàng bên trái: xếp 4 nam còn lại 4! = 24 cách. Khoảng trống phía trước An không dùng được nên còn 5 khoảng trống, chọn C(5,3) = 10, xếp nữ 3! = 6. Số cách: 24*10*6 = 1440.",
+        "Đáp số: 14400 - 1440 = 12960."
+      ],
+      "explanation": "B đúng: 12960 là số cách thỏa cả hai điều kiện. A (14400) sai vì chưa loại trường hợp An đứng đầu bên trái. C (11520) sai vì trừ quá nhiều. D (1440) sai vì chỉ là số cách An đứng đầu, đây là số cần loại bỏ chứ không phải đáp số.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Bài đếm bằng phương pháp xếp khoảng trống chuẩn, có kiểm tra bằng đếm trực tiếp."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "single letter A-D",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "computed",
+          "detail": "arithmetic only: answer has no number",
+          "result": "unknown",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 1,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}

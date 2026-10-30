@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/generated-hard/inputs/english/input-103.md",
+    "subject": "English",
+    "level": "Grade 12",
+    "exam_type": "University Entrance (DGNL)",
+    "task": "Multiple Choice",
+    "mode": "Solve",
+    "language": "en"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 0.34634000000000004,
+    "cost_usd": 0.039983,
+    "calls": 3,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "key match",
+      "answer": "B",
+      "solution": [
+        "Residents assumed the library would reopen within a few months.",
+        "The engineers' report found long-ignored cracks in the foundation, a serious problem.",
+        "The mayor refuses to give a reopening date and puts safety before convenience, which implies a long repair.",
+        "So the repairs will likely take longer than residents expected."
+      ],
+      "explanation": "B is supported: residents expected a reopening within a few months, but serious foundation damage and the mayor's refusal to name a date imply a longer wait. A is wrong: the cracks were 'ignored for years', but the passage never says the council hid them on purpose. C is wrong: nothing shows the engineers and the mayor disagree about the cause; the mayor only declines to give a date. D is wrong: the passage speaks of repairs and says nothing about permanent closure or a new building.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "B is the only option the passage supports by inference; the others go beyond the text."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "single letter A-D",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: many residents assumed it would reopen within a few months. However, the enginee",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: The mayor has since declined to give a reopening date, saying only that safety m",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [
+        {
+          "source": "ai_review",
+          "code": "agree",
+          "message": "B is the best-supported inference: residents expected a reopening within months, but serious long-ignored foundation cracks and the mayor's refusal to give a date imply a longer wait."
+        },
+        {
+          "source": "ai_review",
+          "code": "agree",
+          "message": "A, C and D go beyond the passage: no deliberate concealment, no engineer-mayor disagreement, and no permanent closure or replacement building is mentioned."
+        }
+      ],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 2,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}

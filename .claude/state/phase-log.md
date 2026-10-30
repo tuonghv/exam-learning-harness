@@ -685,3 +685,9 @@ Action: IMPLEMENTING. Result: ok (506 OK, $0). Decision: waivers as before. Next
 
 ## UNIT_TESTED - TASK-026 - 2026-10-30T12:33:27Z
 Action: UNIT_TESTED. Result: ok (506 OK, $0). Decision: waivers as before. Next: next phase.
+
+## VERIFIED - TASK-026 - 2026-10-30T12:39:00Z
+Action: real harder round, 9 items. Result: 9/9 pass, $0.50, 0 lessons. Decision: verified, circularity stated. Next: DONE.
+
+## DONE - TASK-026 - 2026-10-30T12:39:00Z
+Action: report written. Result: 9/9 pass. Decision: done. Next: gold exams or another model as solver (user).

@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/generated-hard/inputs/vietnamese/input-101.md",
+    "subject": "Vietnamese",
+    "level": "Grade 12",
+    "exam_type": "University Entrance (DGNL)",
+    "task": "Multiple Choice",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 0.4,
+    "cost_usd": 0.035318,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "key match",
+      "answer": "B",
+      "solution": [
+        "Câu thơ nhắc đến 'thuyền' và 'bến' là vật vô tri nhưng lại 'nhớ', 'một dạ khăng khăng đợi' là những từ chỉ tình cảm, tâm trạng của con người: đây là nhân hóa.",
+        "Thuyền và bến đồng thời tượng trưng cho người đi và người ở lại trong tình yêu đôi lứa: đây là ẩn dụ.",
+        "Vậy biện pháp đặc sắc nhất là nhân hóa kết hợp ẩn dụ."
+      ],
+      "explanation": "B đúng vì thuyền và bến được gán tình cảm của con người (nhớ, đợi, một dạ khăng khăng) và đồng thời ẩn dụ cho người con trai ra đi và người con gái chờ đợi. A sai vì không có việc lấy bộ phận gọi toàn thể. C sai vì câu thơ không có từ so sánh như 'như', 'tựa', 'là'. D sai vì không có cách nói phóng đại mức độ của sự vật.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Đây là câu ca dao quen thuộc và các phương án khác rõ ràng không phù hợp."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "single letter A-D",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: Thuyền về có nhớ bến chăng, / Bến thì một dạ khăng khăng đợi thuyền.",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [
+        {
+          "source": "ai_review",
+          "code": "agree",
+          "message": "Câu ca dao dùng nhân hóa (thuyền nhớ, bến đợi một dạ khăng khăng) và ẩn dụ (thuyền, bến chỉ người đi, người ở lại), nên B đúng; A, C, D không phù hợp."
+        }
+      ],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 1,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}

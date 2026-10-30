@@ -539,11 +539,13 @@
     "task_id": "TASK-026",
     "title": "gen-exams --level harder for DGNL profiles; real round on 3 sections (REQ-0031)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-10-30T12:00:00Z",
     "requirement": "REQ-0031",
     "acceptance_criteria": [
       "REQ-0031 AC1, AC2"
-    ]
+    ],
+    "completed_at": "2026-10-30T12:39:00Z",
+    "report": "docs/report/phase-26-harder.md"
   }
 ]

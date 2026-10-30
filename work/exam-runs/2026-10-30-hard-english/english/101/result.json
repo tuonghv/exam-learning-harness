@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/generated-hard/inputs/english/input-101.md",
+    "subject": "English",
+    "level": "Grade 12",
+    "exam_type": "University Entrance (DGNL)",
+    "task": "Multiple Choice",
+    "mode": "Solve",
+    "language": "en"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 0.4,
+    "cost_usd": 0.029401,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "key match",
+      "answer": "A",
+      "solution": [
+        "The clause 'By the time the committee announced its decision' uses the simple past, so the closure happened before that past moment: past perfect.",
+        "'for almost two years' marks a duration up to that past moment, consistent with past perfect.",
+        "A building does not close itself here; it is closed by someone, so the passive is needed: had + been + past participle = had been closed."
+      ],
+      "explanation": "A is correct: past perfect passive (had been closed) fits 'By the time + simple past' and 'for almost two years'. B. had been closing is an active-form past perfect continuous and is ungrammatical with a passive meaning (the building does not do the closing). C. has been closed is present perfect and does not match the past reference point. D. was closed is simple past and does not show that the closure came before the announcement.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Standard 'by the time' + past perfect passive pattern; only A fits both tense and voice."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "single letter A-D",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: By the time the committee announced its decision, the old library building _____",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [
+        {
+          "source": "ai_review",
+          "code": "agree",
+          "message": "Past perfect passive 'had been closed' is correct: 'By the time + simple past' with 'for almost two years' requires an earlier state, and the building is closed by someone."
+        },
+        {
+          "source": "ai_review",
+          "code": "agree",
+          "message": "Minor nuance: 'had been closed' describes a state, which fits the duration phrase; the explanation of B, C and D is accurate."
+        }
+      ],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 1,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}

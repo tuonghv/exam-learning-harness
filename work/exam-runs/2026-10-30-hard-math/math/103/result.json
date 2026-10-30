@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/generated-hard/inputs/math/input-103.md",
+    "subject": "Mathematics",
+    "level": "Grade 12",
+    "exam_type": "University Entrance (DGNL)",
+    "task": "Multiple Choice",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 0.31821900000000003,
+    "cost_usd": 0.038223,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "key match",
+      "answer": "B",
+      "solution": [
+        "Điều kiện xác định: x^2 - 7x + 10 >= 0, tức là x <= 2 hoặc x >= 5.",
+        "Vế phải phải không âm: x - 1 >= 0, nên x >= 1.",
+        "Bình phương hai vế: x^2 - 7x + 10 <= x^2 - 2x + 1, suy ra 9 <= 5x, tức là x >= 9/5.",
+        "Kết hợp: x thuộc [9/5; 2] hợp [5; +vô cực).",
+        "Số nguyên trong [-3; 9]: x = 2, 5, 6, 7, 8, 9, tổng cộng 6 số."
+      ],
+      "explanation": "B đúng vì có 6 số nguyên thỏa mãn (2, 5, 6, 7, 8, 9). A (5) sai do bỏ sót một giá trị, thường là x = 2 ở khoảng [9/5; 2] hoặc x = 5 khi căn bằng 0. C (7) sai do đếm thêm x = 1 (căn bằng 2 > 0) hoặc x = 3, 4 (biểu thức dưới căn âm, không xác định). D (8) sai do quên điều kiện xác định và đếm thêm x = 3, 4.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Bất phương trình đơn giản, đã thử lại trực tiếp từng giá trị biên."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "single letter A-D",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "computed",
+          "detail": "arithmetic only: node not allowed: Call",
+          "result": "unknown",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 1,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}

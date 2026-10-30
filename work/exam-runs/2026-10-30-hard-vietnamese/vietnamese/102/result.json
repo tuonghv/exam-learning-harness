@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/generated-hard/inputs/vietnamese/input-102.md",
+    "subject": "Vietnamese",
+    "level": "Grade 12",
+    "exam_type": "University Entrance (DGNL)",
+    "task": "Multiple Choice",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 0.364682,
+    "cost_usd": 0.027839,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "key match",
+      "answer": "C",
+      "solution": [
+        "Đối chiếu từng phương án với đoạn văn.",
+        "Đoạn văn nói: mỗi ghe thường treo một cây bẹo để báo mặt hàng mình bán.",
+        "Phương án C khớp với chi tiết này."
+      ],
+      "explanation": "C đúng vì cây bẹo dùng để báo mặt hàng của ghe. A sai vì chợ họp vào lúc rạng sáng, không phải chiều tối. B sai vì đoạn văn nói chợ ít khách du lịch, người mua kẻ bán phần lớn là dân địa phương. D sai vì chợ thưa dần vào khoảng chín giờ sáng khi phần lớn ghe đã bán hết hàng, không phải khi toàn bộ nông sản trong vùng đã bán hết.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Chi tiết được nêu trực tiếp trong đoạn văn, các phương án còn lại mâu thuẫn rõ ràng."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "single letter A-D",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: mỗi ghe thường treo một cây bẹo để báo mặt hàng mình bán",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 1,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}

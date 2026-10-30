@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/generated-hard/inputs/vietnamese/input-103.md",
+    "subject": "Vietnamese",
+    "level": "Grade 12",
+    "exam_type": "University Entrance (DGNL)",
+    "task": "Multiple Choice",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 0.336843,
+    "cost_usd": 0.033577,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "key match",
+      "answer": "A",
+      "solution": [
+        "Đoạn văn nêu: từ khi làng có sóng điện thoại ổn định và hầu hết nhà có kết nối mạng, lượng người mượn sách giảm dần.",
+        "Hai sự kiện đi liền nhau theo thời gian, nên có thể suy ra kết nối mạng là một nguyên nhân khả dĩ khiến thư viện vắng hơn.",
+        "Phương án A dùng từ 'có thể', phù hợp mức độ suy luận; các phương án khác khẳng định quá mức hoặc sai so với văn bản."
+      ],
+      "explanation": "A đúng: đoạn văn đặt sự giảm người đọc ngay sau việc có mạng ổn định, nên suy ra hợp lí và A chỉ nói 'có thể là một nguyên nhân'. B sai: đoạn văn không nói sách cũ hay người dân hết muốn đọc. C sai: người cao tuổi chỉ ghé vào buổi sáng, và không có thông tin họ là đối tượng duy nhất 'vào mọi thời điểm trong ngày'. D sai: cô thủ thư chỉ tính chuyển một phần phòng đọc thành nơi sinh hoạt chung cho trẻ em, không muốn đóng cửa thư viện.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Đoạn văn có căn cứ rõ cho A và loại trừ rõ ràng B, C, D."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "single letter A-D",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: Từ khi làng có sóng điện thoại ổn định và hầu hết các nhà đều có kết nối mạng, l",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: cô đang tính chuyển một phần phòng đọc thành nơi sinh hoạt chung cho trẻ em",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [
+        {
+          "source": "ai_review",
+          "code": "agree",
+          "message": "A là suy luận hợp lí: lượng người mượn sách giảm sau khi có mạng ổn định, và A chỉ nói 'có thể là một nguyên nhân'."
+        },
+        {
+          "source": "ai_review",
+          "code": "agree",
+          "message": "B, C, D đều không có căn cứ hoặc sai so với đoạn văn: không nói sách cũ, người cao tuổi chỉ ghé buổi sáng, cô thủ thư chỉ tính chuyển một phần phòng đọc chứ không đóng cửa."
+        }
+      ],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 1,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}
