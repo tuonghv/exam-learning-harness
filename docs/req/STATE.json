@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0034",
-  "next": "user answers Q1-Q3, then create TASK (reporter.py build_answer_sheet + tests)",
-  "updated": "2026-10-30 22:10"
+  "next": "user approves Q1-Q3 (REQ-0034) + Q1 (REQ-0035), then create TASK covering both views",
+  "updated": "2026-10-30 22:16"
 }
