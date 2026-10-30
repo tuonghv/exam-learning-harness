@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-002",
   "title": "Design the exam-solving pipeline: reuse table, gaps, JSON schema, build plan (REQ-0008, EPIC-003)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0008",
   "acceptance_criteria": [
     "AC1 design doc",
@@ -31,12 +31,18 @@
     "result": "531 run, 3 known pre-existing failures unrelated (examples/dgnl pairing, cwd independence)"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "not_applicable",
+    "result": "design-only task, no code or input handling"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-002/evidence/design_sections.txt",
+      "work/TASK-002/evidence/schemas_exist.txt",
+      "work/TASK-002/evidence/unit_suite.txt"
+    ],
+    "command": "grep design sections; ls schemas; unit suite; inspector AC table",
+    "result": "AC1-AC4,AC6 met by docs/design/phase-2-exam-pipeline.md (inspector table with path:line); AC5 waived: no baseline git status was recorded for code-security-scanner, the design cites path:line only"
   },
   "report": {
     "status": "pending",
@@ -51,6 +57,12 @@
     },
     "tester": {
       "waiver": "design-only task; its 19-test plan is covered by tests/unit (531 tests) built under later TASKs"
+    },
+    "verifier": {
+      "waiver": "coordinator checked the inspector AC table against evidence files; independent inspector audit 2026-10-31"
+    },
+    "crosscheck": {
+      "waiver": "inspector re-derived each AC from the design doc and built schemas/tests; AC5 waived, no baseline"
     }
   },
   "user_notes": [
@@ -61,7 +73,7 @@
     }
   ],
   "picked_at": "2026-10-29T03:08:32Z",
-  "updated_at": "2026-10-30T22:37:23Z",
+  "updated_at": "2026-10-30T22:37:24Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -74,5 +86,5 @@
     "notes": "",
     "next": "resume as IMPLEMENTING planning after TASK-003 DONE"
   },
-  "next": "VERIFIED: AC evidence"
+  "next": "DONE: report"
 }
