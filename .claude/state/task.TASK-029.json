@@ -1,10 +1,10 @@
 {
   "task_id": "TASK-029",
   "title": "Answer sheet + learning view in report stage: build_answer_sheet / build_learning_view in reporter.py, --view sheet|learn (REQ-0034, REQ-0035)",
-  "state": "DESIGN",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0034",
   "acceptance_criteria": [
-    "REQ-0034 AC1-AC4: sheet 'Subject \u2013 N Questions', 5 per row, 2-digit ids as stored, circled A-D, \u2014 for null/Open/non A-D, block at top of report.md/html/pdf plus answers.md, solver/schema unchanged",
+    "REQ-0034 AC1-AC4: sheet 'Subject – N Questions', 5 per row, 2-digit ids as stored, circled A-D, — for null/Open/non A-D, block at top of report.md/html/pdf plus answers.md, solver/schema unchanged",
     "REQ-0035 AC1-AC4 phase 1: --view sheet|learn (default sheet), learn view reuses explanation+solution, optional key_concept/common_mistake only if present, no extra LLM cost",
     "Tests in tests/unit/test_exam_report.py with null-answer results (work/dgnl-real Vietnamese/Science), existing report tests stay green, PDF font check for circled letters"
   ],
@@ -23,13 +23,19 @@
     ]
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "summary": "build_answer_sheet/build_learning_view/--view/answers.md in reporter.py+cli.py, font stack in md2html.py",
+    "files": [
+      "src/exam_engine/pipeline/reporter.py",
+      "src/exam_engine/cli.py",
+      "src/exam_engine/utils/md2html.py",
+      "tests/unit/test_exam_report.py"
+    ]
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "523 run, 12 new pass; 3 failures pre-existing on clean tree (examples/dgnl pairing); 2 mutations caught"
   },
   "security": {
     "status": "pending",
@@ -48,6 +54,12 @@
   "roles": {
     "designer": {
       "waiver": "work/TASK-029/handoff/design.md"
+    },
+    "coder": {
+      "waiver": "work/TASK-029/handoff/code.md"
+    },
+    "tester": {
+      "waiver": "work/TASK-029/handoff/test.md"
     }
   },
   "user_notes": [
@@ -68,7 +80,7 @@
     }
   ],
   "picked_at": "2026-10-30T15:17:31Z",
-  "updated_at": "2026-10-30T15:21:57Z",
+  "updated_at": "2026-10-30T15:28:18Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-029/"
@@ -80,5 +92,5 @@
     "notes": "",
     "next": "await user approval of docs/design/phase-29-answer-sheet-views.md, then coder tests first"
   },
-  "next": "coder: 12 tests first, then reporter.py/cli.py, then md2html font stack (29.5)"
+  "next": "verifier: V1-V5 on work/dgnl-real, then VERIFIED; pre-existing examples/dgnl failures noted as defect"
 }

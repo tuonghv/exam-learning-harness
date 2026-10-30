@@ -727,3 +727,15 @@ Action: designer Nova drafted design; coordinator checked fonts (DejaVu Mono lac
 Result: docs/design/phase-29-answer-sheet-views.md
 Decision: hold implementation for user review/approval (user asked to review).
 Next: coder tests-first.
+
+## UNIT_TESTED - TASK-029 - 2026-10-30T15:28:18Z
+Action: coder implemented, tester QA (mutations caught, 4 subjects dash count == null count).
+Result: 12 new tests pass; 3 pre-existing failures unrelated.
+Decision: proceed to verifier.
+Next: verify V1-V5.
+
+## IMPLEMENTING - TASK-029 - 2026-10-30T15:28:21Z
+Action: coder Titan implemented design phase-29 (tests first).
+Result: committed wip; QA to follow.
+Decision: proceed to tester.
+Next: QA.
