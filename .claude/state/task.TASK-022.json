@@ -58,6 +58,11 @@
       "raw": "RAW-00089",
       "note": "go real round; user wants a report to cross-check",
       "at": "2026-10-30T10:47:36Z"
+    },
+    {
+      "raw": "RAW-00090",
+      "note": "add QA of generated solutions (AC6)",
+      "at": "2026-10-30T10:49:49Z"
     }
   ],
   "picked_at": "2026-10-30T10:43:42Z",
