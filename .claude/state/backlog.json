@@ -501,5 +501,16 @@
     ],
     "completed_at": "2026-10-30T11:07:28Z",
     "report": "docs/report/phase-23-dgnl.md"
+  },
+  {
+    "task_id": "TASK-024",
+    "title": "gen-exams --profile dgnl-en: DGNL English items with blind double-review key QA (REQ-0029)",
+    "priority": 1,
+    "status": "queued",
+    "created_at": "2026-10-30T13:00:00Z",
+    "requirement": "REQ-0029",
+    "acceptance_criteria": [
+      "REQ-0029 AC1, AC2 with $0 mock; real concept round waits for the user's go"
+    ]
   }
 ]
