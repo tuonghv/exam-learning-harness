@@ -664,3 +664,9 @@ Action: report written, AC4 split to REQ-0030. Result: 4/4 pass. Decision: done.
 
 ## DESIGN - TASK-025 - 2026-10-30T12:26:26Z
 Action: designed dgnl-vi. Result: docs/design/phase-25-dgnl-vi.md. Decision: new config subject, no prompt change. Next: IMPLEMENTING.
+
+## IMPLEMENTING - TASK-025 - 2026-10-30T12:28:08Z
+Action: IMPLEMENTING. Result: ok (504 OK, $0). Decision: role waivers as before. Next: UNIT_TESTED.
+
+## UNIT_TESTED - TASK-025 - 2026-10-30T12:28:09Z
+Action: UNIT_TESTED. Result: ok (504 OK, $0). Decision: role waivers as before. Next: real round.

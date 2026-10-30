@@ -13,5 +13,8 @@
                  "language": "vi", "prompt": "subjects/literature.md"},
   "informatics": {"aliases": ["informatics", "tin học", "it", "information technology", "cntt"],
                   "task": "Closed", "checks": ["format", "computed", "quote"],
-                  "score_basis": "official_key", "language": "vi", "prompt": "subjects/informatics.md"}
+                  "score_basis": "official_key", "language": "vi", "prompt": "subjects/informatics.md"},
+  "vietnamese": {"aliases": ["vietnamese", "tiếng việt", "tieng viet"], "task": "Closed",
+                 "checks": ["format", "computed", "quote"], "score_basis": "official_key",
+                 "language": "vi", "prompt": null}
 }

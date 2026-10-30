@@ -302,3 +302,52 @@ class Lessons(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+VI = {"skill": "Spelling", "question": "Từ nào dưới đây viết đúng chính tả?", "passage": "",
+      "options": {"A": "xán lạn", "B": "sán lạn", "C": "sáng lạng", "D": "xáng lạn"}, "correct": "B",
+      "solution": "Viết đúng là 'sán lạn' (rực rỡ)."}
+
+
+class DgnlVi(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, self.tmp, True)
+
+    def mockfile(self, replies):
+        p = os.path.join(self.tmp, "mock.json")
+        with open(p, "w", encoding="utf-8") as fh:
+            json.dump([json.dumps(r) for r in replies], fh)
+        return p
+
+    def test_pair_format_and_checker(self):
+        out = os.path.join(self.tmp, "g")
+        rc, so, _ = run(["gen-exams", "--profile", "dgnl-vi", "--n", "1", "--out", out,
+                         "--mock", self.mockfile([VI, {"answer": "B"}, {"answer": "B"}])])
+        self.assertEqual(rc, 0, so)
+        text = open(os.path.join(out, "inputs", "vietnamese", "input-101.md"), encoding="utf-8").read()
+        self.assertIn("Subject: Vietnamese", text)
+        self.assertIn("Language: vi", text)
+        self.assertIn("Chọn đáp án đúng nhất", text)
+        key = open(os.path.join(out, "keys", "vietnamese", "expected-101.md"), encoding="utf-8").read()
+        self.assertIn("Final answer: B\nCorrect answer: B. sán lạn", key)
+        man = json.load(open(os.path.join(out, "manifest.json"), encoding="utf-8"))
+        self.assertEqual(man["runs"][0]["key_basis"], "2 blind reviews")
+        root = os.path.join(self.tmp, "r")
+        os.makedirs(os.path.join(root, "evals"))
+        for k in ("inputs", "keys"):
+            shutil.copytree(os.path.join(out, k), os.path.join(root, "evals", k))
+        rc, so, _ = run(["check-examples", "--root", root])
+        self.assertEqual(rc, 0, so)
+
+    def test_one_disagreeing_reviewer_rejects(self):
+        out = os.path.join(self.tmp, "g")
+        rc, so, _ = run(["gen-exams", "--profile", "dgnl-vi", "--n", "1", "--out", out,
+                         "--mock", self.mockfile([VI, {"answer": "B"}, {"answer": "A"}])])
+        self.assertEqual(rc, 0, so)
+        self.assertTrue(os.path.isfile(os.path.join(out, "rejected", "vietnamese", "qa-101.txt")))
+
+    def test_subject_must_match_profile_and_topic(self):
+        self.assertEqual(run(["gen-exams", "--profile", "dgnl-vi", "--subject", "english", "--dry-run"])[0], 2)
+        self.assertEqual(run(["gen-exams", "--profile", "dgnl-vi", "--dry-run"])[0], 0)
+        self.assertIn(genexam.topic("s", 1, "dgnl-vi"), genexam.TOPICS["dgnl-vi"])

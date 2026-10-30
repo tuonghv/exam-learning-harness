@@ -16,9 +16,11 @@ from exam_engine.pipeline import verifier
 PROMPT_REL = os.path.join("dev", "genexam.md")
 QA_REL = os.path.join("dev", "genexam_qa.md")
 DGNL_REL = os.path.join("dev", "genexam_dgnl.md")
-PROFILES = ("hs", "dgnl", "dgnl-en")
-PROFILE_SUBJECT = {"hs": "math", "dgnl": "math", "dgnl-en": "english"}
-PROMPT_OF = {"hs": PROMPT_REL, "dgnl": DGNL_REL, "dgnl-en": os.path.join("dev", "genexam_dgnl_en.md")}
+PROFILES = ("hs", "dgnl", "dgnl-en", "dgnl-vi")
+BLIND = ("dgnl-en", "dgnl-vi")
+PROFILE_SUBJECT = {"hs": "math", "dgnl": "math", "dgnl-en": "english", "dgnl-vi": "vietnamese"}
+PROMPT_OF = {"hs": PROMPT_REL, "dgnl": DGNL_REL, "dgnl-en": os.path.join("dev", "genexam_dgnl_en.md"),
+             "dgnl-vi": os.path.join("dev", "genexam_dgnl_vi.md")}
 BLIND_REL = os.path.join("dev", "genexam_blind.md")
 LETTERS = "ABCD"
 TOPICS = {
@@ -26,12 +28,17 @@ TOPICS = {
            "đạo hàm và cực trị", "cấp số cộng và cấp số nhân", "thể tích khối đa diện"],
     "dgnl-en": ["verb tenses", "conditionals", "word choice (vocabulary in context)", "collocations and phrasal verbs",
                 "reported speech", "passive voice", "reading: detail question", "reading: inference question"],
+    "dgnl-vi": ["chính tả và dùng từ đúng", "từ ghép, từ láy và cấu tạo từ", "nghĩa của từ và thành ngữ",
+                "câu: thành phần và lỗi ngữ pháp", "liên kết câu và đoạn", "biện pháp tu từ",
+                "đọc hiểu: chi tiết", "đọc hiểu: suy luận"],
     "dgnl": ["cấp số cộng/nhân và quy luật dãy số", "phần trăm, tỉ lệ, lãi suất", "xác suất cơ bản",
              "logic: suy luận từ các điều kiện cho trước", "đọc số liệu cho trong lời (trung bình, tỉ lệ)",
              "chuyển động, công việc chung, bài toán thực tế", "tổ hợp và đếm", "bất phương trình, hàm số đơn giản"],
 }
 SOURCE_NOTE = "model knowledge, not an official exam"
-SUBJECTS = {"math": "Mathematics", "english": "English"}
+SUBJECTS = {"math": "Mathematics", "english": "English", "vietnamese": "Vietnamese"}
+LANG_MC = {"english": ("en", "Choose the best answer and explain why."),
+           "vietnamese": ("vi", "Chọn đáp án đúng nhất và giải thích ngắn gọn.")}
 FIRST_NUMBER = 101
 MAX_ATTEMPTS = 2
 
@@ -206,14 +213,15 @@ def leak_check(input_text, obj):
 
 
 def input_md(subject, obj):
-    if obj.get("options") and subject == "english":
-        body = ["## Instructions", "", "Choose the best answer and explain why.", ""]
+    if obj.get("options") and subject in LANG_MC:
+        lang, instr = LANG_MC[subject]
+        body = ["## Instructions", "", instr, ""]
         if obj.get("passage", "").strip():
             body += ["## Passage", "", obj["passage"].strip(), ""]
         return "\n".join([
-            "# Exam Input", "", "Subject: English", "Level: Grade 12",
+            "# Exam Input", "", "Subject: %s" % SUBJECTS[subject], "Level: Grade 12",
             "Exam type: University Entrance (DGNL)", "Task: Multiple Choice", "Mode: Solve",
-            "Skill: %s" % obj["skill"].strip(), "Language: en", ""] + body + [
+            "Skill: %s" % obj["skill"].strip(), "Language: %s" % lang, ""] + body + [
             "## Question 1", "", obj["question"].strip(), ""] + [
             "%s. %s" % (k, obj["options"][k].strip()) for k in LETTERS] + [""])
     if obj.get("options"):
@@ -250,7 +258,8 @@ def key_md(obj):
         "- 1 điểm: %s (hoặc giá trị tương đương). 0 điểm: giá trị khác." % a, ""])
 
 
-CHECKS = {"hs": lambda o: check_reply(o), "dgnl": lambda o: check_dgnl(o), "dgnl-en": lambda o: check_mc(o)}
+CHECKS = {"hs": lambda o: check_reply(o), "dgnl": lambda o: check_dgnl(o), "dgnl-en": lambda o: check_mc(o),
+          "dgnl-vi": lambda o: check_mc(o)}
 
 
 def _ask(llm, prompt, profile="hs"):
@@ -285,7 +294,7 @@ def generate(subject, n, seed, llm, max_cost=0.5, level="hard", review=True, pro
         cost += spent
         obj["qa"], obj["qa_note"] = "skipped", ""
         if review:
-            obj["qa"], obj["qa_note"], spent = (blind_qa if profile == "dgnl-en" else qa)(llm, obj)
+            obj["qa"], obj["qa_note"], spent = (blind_qa if profile in BLIND else qa)(llm, obj)
             cost += spent
         text = input_md(subject, obj)
         bad = leak_check(text, obj)

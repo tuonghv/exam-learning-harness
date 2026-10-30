@@ -629,7 +629,7 @@ def genexam_main(argv):
               file=sys.stderr)
         return 2
     print("%d exam(s) of %s, calls <= %d, cap $%.2f%s" % (
-        a.n, a.subject, a.n * (genexam.MAX_ATTEMPTS + (0 if a.no_qa else 2 if a.profile == "dgnl-en" else 1)), a.max_cost_usd,
+        a.n, a.subject, a.n * (genexam.MAX_ATTEMPTS + (0 if a.no_qa else 2 if a.profile in genexam.BLIND else 1)), a.max_cost_usd,
         " (dry run: no call made)" if a.dry_run else ""), flush=True)
     if a.dry_run:
         print(genexam.build_prompt(a.subject, a.seed, 1, a.level, a.profile))
@@ -648,7 +648,7 @@ def genexam_main(argv):
         names = genexam.write(a.subject, items, a.out, {"seed": a.seed, "model": a.model,
                                                         "llm": "claude-p" if a.real else "mock",
                                                         "level": a.level, "profile": a.profile,
-                                                        "key_basis": ("2 blind reviews" if a.profile == "dgnl-en"
+                                                        "key_basis": ("2 blind reviews" if a.profile in genexam.BLIND
                                                                       else "code check"),
                                                         "cost_usd": cost})
     except genexam.GenError as exc:

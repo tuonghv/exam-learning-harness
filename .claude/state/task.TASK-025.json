@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-025",
   "title": "gen-exams --profile dgnl-vi: DGNL Vietnamese-language items (new subject vietnamese, no new prompt) with blind double review (REQ-0030)",
-  "state": "DESIGN",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0030",
   "acceptance_criteria": [
     "REQ-0030 AC1: 4 items under $0.5, benchmark, lessons, report"
@@ -9,18 +9,24 @@
   "design": {
     "status": "completed",
     "path": "docs/design/phase-25-dgnl-vi.md",
-    "summary": "",
+    "summary": "new config subject vietnamese (prompt null), profile dgnl-vi with prompt genexam_dgnl_vi.md and the shared blind double review",
     "reuse": [],
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "config/subjects.json",
+      "src/exam_engine/pipeline/genexam.py",
+      "src/exam_engine/cli.py",
+      "prompts/dev/genexam_dgnl_vi.md"
+    ],
+    "summary": "config subject vietnamese (prompt null), profile dgnl-vi sharing blind_qa/check_mc, prompt genexam_dgnl_vi.md"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit -p test_*.py",
+    "result": "504 OK incl. dgnl-vi tests; check-examples and check-prompts OK"
   },
   "security": {
     "status": "pending",
@@ -39,11 +45,17 @@
   "roles": {
     "designer": {
       "waiver": "coordinator designed, as phases 18-24"
+    },
+    "coder": {
+      "waiver": "coordinator implemented, as phases 18-24"
+    },
+    "tester": {
+      "waiver": "coordinator ran the suite, as phases 18-24"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-30T12:26:38Z",
-  "updated_at": "2026-10-30T12:26:38Z",
+  "updated_at": "2026-10-30T12:29:35Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-025/"
@@ -54,5 +66,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "IMPLEMENTING"
+  "next": "VERIFIED: real round"
 }
