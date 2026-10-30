@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-021",
-  "state": "DONE",
-  "next": "",
-  "title": "benchmark command: engine over evals/inputs with key-only scoring, summary.json + report (REQ-0009)",
-  "active": [],
+  "task_id": "TASK-022",
+  "state": "DESIGN",
+  "next": "IMPLEMENTING",
+  "title": "gen-exams: generate Vietnamese-style math exams with keys, run benchmark, record lessons (REQ-0027 concept round)",
+  "active": [
+    {
+      "task_id": "TASK-022",
+      "state": "DESIGN",
+      "next": "IMPLEMENTING",
+      "updated_at": "2026-10-30T10:44:08Z"
+    }
+  ],
   "max_active": 1
 }

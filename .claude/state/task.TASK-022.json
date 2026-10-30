@@ -1,0 +1,59 @@
+{
+  "task_id": "TASK-022",
+  "title": "gen-exams: generate Vietnamese-style math exams with keys, run benchmark, record lessons (REQ-0027 concept round)",
+  "state": "DESIGN",
+  "requirement": "REQ-0027",
+  "acceptance_criteria": [
+    "REQ-0027 AC0-AC4 with $0 mock",
+    "real concept round waits for the user's go"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-22-gen-exams.md",
+    "summary": "gen-exams + lessons commands over unchanged benchmark; 1 subject (math), mock first",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": {
+      "waiver": "coordinator designed, as phases 18-21"
+    }
+  },
+  "user_notes": [],
+  "picked_at": "2026-10-30T10:43:42Z",
+  "updated_at": "2026-10-30T10:44:08Z",
+  "updated_by": "main",
+  "scope": [
+    "work/TASK-022/"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "IMPLEMENTING"
+}

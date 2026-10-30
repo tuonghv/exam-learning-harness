@@ -1,0 +1,1 @@
+{"design":{"status":"completed","path":"docs/design/phase-22-gen-exams.md","summary":"gen-exams + lessons commands over unchanged benchmark; 1 subject (math), mock first"},"acceptance_criteria":["REQ-0027 AC0-AC4 with $0 mock","real concept round waits for the user's go"],"roles":{"designer":{"waiver":"coordinator designed, as phases 18-21"}},"next":"IMPLEMENTING"}

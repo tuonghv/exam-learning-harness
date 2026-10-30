@@ -610,3 +610,6 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: task done; REQ-0009 AC1 and AC4 open for the real run.
 - Decision: real run needs the user's go (est. $2-3, cap $3.00).
 - Next: real benchmark.
+
+## DESIGN - TASK-022 - 2026-10-30T10:44:08Z
+Action: wrote docs/design/phase-22-gen-exams.md. Result: gen-exams + lessons over unchanged benchmark, math only. Decision: coordinator designed (waiver). Next: IMPLEMENTING.
