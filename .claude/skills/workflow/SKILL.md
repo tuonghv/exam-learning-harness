@@ -9,15 +9,9 @@ Read `.claude/state/task.json`. States: TODO → DESIGN → IMPLEMENTING → UNI
 Never skip a state. Never mark DONE without verification evidence.
 
 ## At each transition
-1. Verify the current state's criteria and run its deterministic check.
-2. Update task state and evidence; stamp `updated_at` (`date -u +%Y-%m-%dT%H:%M:%SZ`) and `updated_by`; set `next`
-   to the concrete next action (empty only at DONE). Keep `state` and the sub-statuses in agreement.
-3. Append `## <STATE> - <TASK-ID> - <ISO8601Z>` to `.claude/state/phase-log.md` (never edit old entries):
-   Action → Result → Decision → Next. The task id is required.
-4. `.claude/scripts/workflow-check.sh` must PASS.
-5. Commit through the gate (`commit` skill). Not committed = not transitioned.
-6. DONE also needs the report (`report` skill), `.claude/scripts/backlog.sh complete <id>` (never hand-edit
-   `backlog.json`; abandon with `complete <id> --force "<reason>"`) and `backlog.json` staged with the rest.
+Verify the current state's criteria first, then make the move with `advance.sh` (skill `advance`: fields, phase-log
+entry, REQ steps, `workflow-check.sh`, gated commit; DONE also needs the report from the `report` skill). Never
+hand-edit `backlog.json`; abandon a task with `backlog.sh complete <id> --force "<reason>"`. Not committed = not transitioned.
 
 Status vocab: `design`, `implementation`, `report`: pending → completed; `unit_test`, `verification`:
 pending → passed | failed. Each phase needs the prior phase's status. `design.path` is
@@ -44,13 +38,12 @@ pending → passed | failed. Each phase needs the prior phase's status. `design.
 
 Roles are required; a skipped role needs a recorded waiver. `task.json` `roles.<role>` = the handoff path under
 `work/<T>/handoff/` (line 1 `PROGRESS: COMPLETE`, line 2 `SKILLS: ...`) or `{"waiver": "<reason>"}`.
+Set it in the spec `set.roles` (skill `advance`).
 
 ## Requirement ledger (`docs/req/`)
 The ledger holds WHAT was asked (skill `req-intake`); the TASK holds HOW and the evidence. Link with
-`req.py task REQ-00NN TASK-0NN`. After a TASK transition, move the REQ in the same turn:
-`req.py status REQ-00NN <STATE> --evidence "..." --next "..."`; tick acceptance items with `req.py ac`
-(no second verification). Stage changed `docs/req` files in the transition commit. A "continue" prompt is
-not a requirement: `req.py raw ignore <RAW> --reason ...`.
+`req.py task REQ-00NN TASK-0NN`. `advance.sh` steps the linked REQs with the TASK (a lagging REQ: `advance.sh req-catchup`;
+skill `advance`). A "continue" prompt is not a requirement: `req.py raw ignore <RAW> --reason ...`.
 
 "What is left": `bash .claude/scripts/status.sh` (rc 0 = nothing pending), not a hand-read of the json.
 

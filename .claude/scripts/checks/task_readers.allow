@@ -13,3 +13,4 @@
 .claude/hooks/session-start-body.sh | multi mode: tasks.sh status + workflow-check --task FAIL lines + task_checkpoint brief (patch hooks-multi.py)
 .claude/hooks/pre-compact-check.sh | multi mode: tasks.sh status + workflow-check --task FAIL lines + task_checkpoint brief, never blocks (patch hooks-multi.py)
 .claude/hooks/agent_setup.py | bound_task(): env CTXGUARD_TASK, sticky bind, launch queue, first work/ write, then task_from (view); per-task grants/waiver read task.<T>.json (patch agent-setup-multi.py)
+.claude/scripts/checks/advance_test.sh | test only: compares the view with task.TASK-9.json of a temp fixture repo

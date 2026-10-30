@@ -1124,7 +1124,7 @@ def _path_ok(t, p):
 def _req_lists(t, p):
     """F-97-7: docs/req/items/REQ-*.md whose `tasks: [...]` line lists t, and docs/req/INDEX.md when any does."""
     items = os.path.join(ROOT, "docs", "req", "items")
-    if p == "docs/req/INDEX.md":
+    if p in ("docs/req/INDEX.md", "docs/req/STATE.json"):  # D2: the REQ status command rewrites both
         names = sorted(os.listdir(items)) if os.path.isdir(items) else []
         return any(_req_lists(t, "docs/req/items/" + n) for n in names if n.startswith("REQ-") and n.endswith(".md"))
     if not (p.startswith("docs/req/items/REQ-") and p.endswith(".md") and p.count("/") == 3):
@@ -1160,7 +1160,9 @@ def cmd_commit(args):
     nolog = entry == "-"
     msg = msg if os.path.isabs(msg) else os.path.join(ROOT, msg)
     entry = entry if nolog or os.path.isabs(entry) else os.path.join(ROOT, entry)
-    if not _need_active(t, held_ok=True):  # 100.2: autohold commits the hold
+    done_task = os.path.isfile(task_path(t)) and load(t).get("state") == "DONE" and any(
+        i.get("task_id") == t and i.get("status") == "done" for i in backlog_items())
+    if not done_task and not _need_active(t, held_ok=True):  # 100.2: autohold commits the hold; D1: the DONE commit follows `complete`
         return 1
     for f in ((msg,) if nolog else (msg, entry)):
         if not os.path.isfile(f):
@@ -1182,6 +1184,8 @@ def cmd_commit(args):
     own = set(_EXTRA_OWN) | {os.path.relpath(task_path(t), ROOT), os.path.relpath(os.path.join(ST, "phase-log.md"), ROOT),
            os.path.relpath(os.path.join(ST, "task.json"), ROOT),
            os.path.relpath(os.path.join(ST, "pending.json"), ROOT)}  # F-97-6: always committed; naming them is fine
+    if done_task:  # D1: `backlog.sh complete` rewrote backlog.json; the DONE commit must carry it
+        own.add(os.path.relpath(BACKLOG, ROOT))
     foreign = [p for p in paths if p not in own and not _path_ok(t, p)]
     if foreign:
         print("FAIL: path(s) outside %s (scope, work/%s/, design/report path): %s" % (t, t, ", ".join(_txt(p, 50) for p in foreign[:5])))

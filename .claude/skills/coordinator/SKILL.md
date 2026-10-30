@@ -24,6 +24,7 @@ The user's latest stated goal beats the active TASK, the backlog and "keep the t
 ## 1. What the coordinator owns
 - **Every user request.** It goes through the requirement ledger (skill `req-intake`): each RAW is triaged before the turn ends, each REQ follows its TASK (skill `workflow`). A role never runs `req.py` or `backlog.sh`.
 - **Workflow state and gates:** `.claude/state`, `workflow-check.sh`, `commit-check.sh`, every commit, `docs/design/`, `docs/report/` (written from the roles' handoffs).
+- **Each TASK transition (fields, phase-log, REQ steps, gates, commit):** one call, `advance.sh`; skill `advance`.
 - **Guarded assets:** hooks, `.claude/settings*.json`, `.claude/agent_setup.json`, CLAUDE.md.
 - It does **not** do a role's work. Reading, editing, testing and re-running checks go to the roles; independent QA is the tester's job. The coordinator reads only pass/fail lines and evidence paths.
 
