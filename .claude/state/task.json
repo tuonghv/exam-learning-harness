@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-021",
-  "state": "UNIT_TESTED",
-  "next": "mock benchmark evidence, then report",
+  "state": "VERIFIED",
+  "next": "report and DONE",
   "title": "benchmark command: engine over evals/inputs with key-only scoring, summary.json + report (REQ-0009)",
   "active": [
     {
       "task_id": "TASK-021",
-      "state": "UNIT_TESTED",
-      "next": "mock benchmark evidence, then report",
-      "updated_at": "2026-10-30T06:14:32Z"
+      "state": "VERIFIED",
+      "next": "report and DONE",
+      "updated_at": "2026-10-30T06:14:46Z"
     }
   ],
   "max_active": 1

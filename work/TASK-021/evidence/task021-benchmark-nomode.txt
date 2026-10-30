@@ -1,0 +1,9 @@
+# evidence: task021-benchmark-nomode
+# task: TASK-021
+# cmd: python3 -I scripts/exam.py benchmark --out /tmp/x
+# cwd: /home/tuonghv/Documents/git/online-system/exam-learning-harness
+# head: 993d362+dirty
+# when: 2026-10-30T06:14:46Z
+# rc: 2
+---
+usage: choose exactly one of --mock FILE, --dry-run, --real (never defaults to real); --out DIR required

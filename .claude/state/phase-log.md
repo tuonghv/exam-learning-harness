@@ -598,3 +598,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: 463 OK.
 - Decision: verify with a dry run on the real evals set.
 - Next: VERIFIED.
+
+## VERIFIED - TASK-021 - 2026-10-30T09:35:00Z
+- Action: dry run on the real evals set; usage error check.
+- Result: 15 pairs, calls <= 75; no-mode exits 2.
+- Decision: waivers; REQ-0009 AC1 and AC4 stay open for the real run.
+- Next: report and DONE.

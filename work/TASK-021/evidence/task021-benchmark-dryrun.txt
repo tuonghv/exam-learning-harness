@@ -1,0 +1,24 @@
+# evidence: task021-benchmark-dryrun
+# task: TASK-021
+# cmd: python3 -I scripts/exam.py benchmark --dry-run
+# cwd: /home/tuonghv/Documents/git/online-system/exam-learning-harness
+# head: 993d362+dirty
+# when: 2026-10-30T06:14:46Z
+# rc: 0
+---
+15 items, calls <= 75, budget $3.00 (dry run: no call made)
+  english/003  evals/inputs/english/input-003.md  (key evals/keys/english/expected-003.md)
+  english/004  evals/inputs/english/input-004.md  (key evals/keys/english/expected-004.md)
+  english/005  evals/inputs/english/input-005.md  (key evals/keys/english/expected-005.md)
+  informatics/003  evals/inputs/informatics/input-003.md  (key evals/keys/informatics/expected-003.md)
+  informatics/004  evals/inputs/informatics/input-004.md  (key evals/keys/informatics/expected-004.md)
+  informatics/005  evals/inputs/informatics/input-005.md  (key evals/keys/informatics/expected-005.md)
+  literature/003  evals/inputs/literature/input-003.md  (key evals/keys/literature/expected-003.md)
+  literature/004  evals/inputs/literature/input-004.md  (key evals/keys/literature/expected-004.md)
+  literature/005  evals/inputs/literature/input-005.md  (key evals/keys/literature/expected-005.md)
+  math/003  evals/inputs/math/input-003.md  (key evals/keys/math/expected-003.md)
+  math/004  evals/inputs/math/input-004.md  (key evals/keys/math/expected-004.md)
+  math/005  evals/inputs/math/input-005.md  (key evals/keys/math/expected-005.md)
+  physics/003  evals/inputs/physics/input-003.md  (key evals/keys/physics/expected-003.md)
+  physics/004  evals/inputs/physics/input-004.md  (key evals/keys/physics/expected-004.md)
+  physics/005  evals/inputs/physics/input-005.md  (key evals/keys/physics/expected-005.md)

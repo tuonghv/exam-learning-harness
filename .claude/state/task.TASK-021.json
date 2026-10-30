@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-021",
   "title": "benchmark command: engine over evals/inputs with key-only scoring, summary.json + report (REQ-0009)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0009",
   "acceptance_criteria": [
     "AC0-AC6 of REQ-0009 except the real run measurement, which waits for the user's go"
@@ -32,8 +32,13 @@
     "result": "never defaults to real; budget checked per item; key opened only by scorer; tests assert key text absent from prompts"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-021/evidence/task021-benchmark-nomode.txt",
+      "work/TASK-021/evidence/task021-benchmark-dryrun.txt"
+    ],
+    "command": "benchmark --dry-run and no-mode usage error",
+    "result": "15 pairs, calls <= 75; no mode exits 2"
   },
   "report": {
     "status": "pending",
@@ -50,11 +55,17 @@
     },
     "tester": {
       "waiver": "coordinator ran the suite"
+    },
+    "verifier": {
+      "waiver": "coordinator ran dry-run"
+    },
+    "crosscheck": {
+      "waiver": "no counts claimed"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-30T06:14:13Z",
-  "updated_at": "2026-10-30T06:14:32Z",
+  "updated_at": "2026-10-30T06:14:46Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-021/"
@@ -65,5 +76,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "mock benchmark evidence, then report"
+  "next": "report and DONE"
 }
