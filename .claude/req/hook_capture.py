@@ -17,16 +17,18 @@ try:
     bare_cmd = re.fullmatch(r"/[\w:.-]+", prompt or "")
     # skip harness events that arrive as prompts (task notifications, subagent hand-backs): no user words
     system_event = re.match(r"\s*(<task-notification>|<agent-message\b|\[SYSTEM NOTIFICATION)", prompt or "")
+    parts = []  # one output line per prompt (REQ-0006 AC4: hook context stays small)
     if prompt and not bare_cmd and not system_event:
         if len(prompt) >= min_chars:
             rid = req.capture_raw(prompt, data.get("session_id", ""))
-            print(f"[REQ] prompt saved as {rid}. Before you stop: triage it (skill req-intake): "
-                  f"link to existing REQ/EPIC, create new REQ/EPIC, or `raw ignore {rid} --reason ...` if it holds no requirement.")
+            parts.append(f"[REQ] prompt saved as {rid}. Before you stop: triage it (skill req-intake): "
+                         f"link to a REQ/EPIC, create one, or `raw ignore {rid} --reason ...`")
         else:
             # short acks ("ok", "run the real migration") are kept on record, already IGNORED, no triage (RAW-00380)
             rid = req.capture_raw(prompt, data.get("session_id", ""), f"short ack (auto, under {min_chars} chars)")
-            print(f"[REQ] short prompt saved as {rid} (auto-ignored; link it if it holds a decision).")
-    print(req.brief_text(limit=4))
+            parts.append(f"[REQ] short prompt saved as {rid} (auto-ignored; link it if it holds a decision)")
+    parts += [x for x in req.brief_text(limit=4).split("\n") if x]
+    print(" | ".join(parts))
 except SystemExit:
     raise
 except Exception:

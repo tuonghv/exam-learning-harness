@@ -714,7 +714,7 @@
     "task_id": "TASK-033",
     "title": "REQ-0006: one-line UserPromptSubmit hook output (hook_capture.py), tick AC4/AC5; AC6 waits for a later compaction count",
     "priority": 2,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-10-31T01:00:00Z",
     "requirement": "REQ-0006",
     "acceptance_criteria": [

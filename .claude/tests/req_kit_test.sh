@@ -156,5 +156,12 @@ expect "8.9 all lists each filled id once" 0 "ticked AC1,AC2; 0 Acceptance item(
 check "8.10 placeholders stay open" grep -q '^- \[ \] AC3:$' docs/req/items/REQ-0004.md
 check "8.11 empty AC1 placeholder not ticked" grep -q '^- \[ \] AC1:$' docs/req/items/REQ-0004.md
 
+# --- 9 hook output size (REQ-0006 AC4): one line per prompt, with or without a captured RAW
+out="$(hook hook_capture '{"prompt":"another long requirement for the one line output check","session_id":"s"}')"
+check "9.1 captured prompt prints exactly one line" [ "$(printf '%s\n' "$out" | wc -l | tr -d ' ')" = 1 ]
+check "9.2 the one line keeps the saved-RAW notice and the focus brief" sh -c "printf '%s' \"\$1\" | grep -q 'prompt saved as RAW-' && printf '%s' \"\$1\" | grep -q '\\[REQ\\]'" _ "$out"
+out="$(hook hook_capture '{"prompt":"/next"}')"
+check "9.3 bare slash command prints at most one line" [ "$(printf '%s' "$out" | grep -c '')" -le 1 ]
+
 echo "SUMMARY(req-kit): pass=$PASS fail=$FAIL"
 [ "$FAIL" -eq 0 ]

@@ -1,0 +1,53 @@
+{
+  "task_id": "TASK-033",
+  "title": "REQ-0006: one-line UserPromptSubmit hook output (hook_capture.py), tick AC4/AC5; AC6 waits for a later compaction count",
+  "state": "TODO",
+  "requirement": "REQ-0006",
+  "acceptance_criteria": [
+    "REQ-0006 AC4, AC5; AC6 measured later"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {},
+  "user_notes": [],
+  "picked_at": "2026-10-30T22:38:25Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": "",
+    "next": "advance.sh DESIGN..DONE with specs in work/TASK-033"
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
