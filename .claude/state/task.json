@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-032",
-  "state": "IMPLEMENTING",
-  "next": "UNIT_TESTED: record test results; then verifier after the account switch",
+  "state": "UNIT_TESTED",
+  "next": "VERIFIED: verifier after the account switch; then DONE via advance.sh",
   "title": "advance.sh + advance skill: one command per TASK transition and REQ catch-up (REQ-0037)",
   "active": [
     {
       "task_id": "TASK-032",
-      "state": "IMPLEMENTING",
-      "next": "UNIT_TESTED: record test results; then verifier after the account switch",
-      "updated_at": "2026-10-30T22:30:42Z"
+      "state": "UNIT_TESTED",
+      "next": "VERIFIED: verifier after the account switch; then DONE via advance.sh",
+      "updated_at": "2026-10-30T22:30:43Z"
     }
   ],
   "max_active": 1

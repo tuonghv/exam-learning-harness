@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0037",
-  "next": "UNIT_TESTED: record test results; then verifier after the account switch",
+  "next": "VERIFIED: verifier after the account switch; then DONE via advance.sh",
   "updated": "2026-10-31 05:30"
 }

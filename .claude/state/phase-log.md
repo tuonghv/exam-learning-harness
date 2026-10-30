@@ -823,3 +823,9 @@ Action: coder Titan implemented design phase-32 tests first; tester Nemesis foun
 Result: advance_test 58/0, advance_adv_test 32/0, neighbours green
 Decision: advance
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-032 - 2026-10-30T22:30:43Z
+Action: tester Nemesis re-ran suites and mutations (AC7 check removed, restore no-op: both caught), coordinator fixed D1 lock and D2 log injection
+Result: all suites green after the fix
+Decision: advance
+Next: VERIFIED needs the verifier role
