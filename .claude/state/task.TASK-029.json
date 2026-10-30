@@ -1,0 +1,57 @@
+{
+  "task_id": "TASK-029",
+  "title": "Answer sheet + learning view in report stage: build_answer_sheet / build_learning_view in reporter.py, --view sheet|learn (REQ-0034, REQ-0035)",
+  "state": "TODO",
+  "requirement": "REQ-0034",
+  "acceptance_criteria": [
+    "REQ-0034 AC1-AC4: sheet 'Subject \u2013 N Questions', 5 per row, 2-digit ids as stored, circled A-D, \u2014 for null/Open/non A-D, block at top of report.md/html/pdf plus answers.md, solver/schema unchanged",
+    "REQ-0035 AC1-AC4 phase 1: --view sheet|learn (default sheet), learn view reuses explanation+solution, optional key_concept/common_mistake only if present, no extra LLM cost",
+    "Tests in tests/unit/test_exam_report.py with null-answer results (work/dgnl-real Vietnamese/Science), existing report tests stay green, PDF font check for circled letters"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {},
+  "user_notes": [],
+  "picked_at": "2026-10-30T15:17:31Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [
+    "work/TASK-029/"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": "",
+    "next": "launch designer: docs/design for REQ-0034/0035 (build_answer_sheet, build_learning_view, --view)"
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
