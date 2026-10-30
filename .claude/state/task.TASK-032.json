@@ -69,7 +69,7 @@
   "checkpoint": {
     "done": [],
     "notes": "",
-    "next": "designer drafts docs/design/phase-32 advance.sh + skill; then coder, tester, verifier"
+    "next": "HOLD NEW SUBAGENTS until user switches Claude account (RAW-00134). Tester a2ff1c3b is still running: read work/TASK-032/handoff/test.md, then dogfood advance.sh in main (IMPLEMENTING..DONE), verifier "
   },
   "next": "coder: advance_test.sh first, then advance.sh/_advance.py, _tasks.py D1/D2, skill advance, workflow/coordinator skill link lines",
   "grants": {}
