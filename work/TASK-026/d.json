@@ -1,0 +1,1 @@
+{"design":{"status":"completed","path":"docs/design/phase-26-harder.md","summary":"--level harder plus a Difficulty paragraph in each DGNL prompt; keys still code-checked or blind double-reviewed; round in evals/generated-hard","reuse":[],"risks":["more bad keys"]},"roles":{"designer":{"waiver":"coordinator designed, as phases 18-25"}},"next":"IMPLEMENTING"}

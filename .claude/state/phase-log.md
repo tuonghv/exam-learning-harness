@@ -676,3 +676,6 @@ Action: real dgnl-vi round n=4. Result: 4/4 pass, $0.24, 0 lessons. Decision: ve
 
 ## DONE - TASK-025 - 2026-10-30T12:31:04Z
 Action: report written. Result: 4/4 pass. Decision: done. Next: harder items or person review (user).
+
+## DESIGN - TASK-026 - 2026-10-30T12:32:57Z
+Action: designed --level harder. Result: docs/design/phase-26-harder.md. Decision: prompt-only change, keys unchanged. Next: IMPLEMENTING.

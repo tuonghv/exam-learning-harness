@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-025",
-  "state": "DONE",
-  "next": "DONE",
-  "title": "gen-exams --profile dgnl-vi: DGNL Vietnamese-language items (new subject vietnamese, no new prompt) with blind double review (REQ-0030)",
-  "active": [],
+  "task_id": "TASK-026",
+  "state": "DESIGN",
+  "next": "IMPLEMENTING",
+  "title": "gen-exams --level harder for DGNL profiles; real round on 3 sections (REQ-0031)",
+  "active": [
+    {
+      "task_id": "TASK-026",
+      "state": "DESIGN",
+      "next": "IMPLEMENTING",
+      "updated_at": "2026-10-30T12:32:57Z"
+    }
+  ],
   "max_active": 1
 }
