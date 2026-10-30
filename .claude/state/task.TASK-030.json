@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-030",
   "title": "Solution language: vi default for all subjects, --lang en|auto override, localized learn-view labels (REQ-0036)",
-  "state": "DESIGN",
+  "state": "DONE",
   "requirement": "REQ-0036",
   "acceptance_criteria": [
     "REQ-0036 AC1-AC4; depends on TASK-029 (learn view)"
@@ -21,31 +21,59 @@
     ]
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "summary": "router.language override+apply_lang, detect_lang, solve --lang, LABELS vi/en, english policy vi, doc fixes",
+    "files": [
+      "config/subjects.json",
+      "src/exam_engine/cli.py",
+      "src/exam_engine/engine.py",
+      "src/exam_engine/pipeline/router.py",
+      "src/exam_engine/pipeline/reporter.py",
+      "src/exam_engine/utils/text.py"
+    ]
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "531 run, 3 known pre-existing failures only; 4 mutations caught"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "--lang restricted by argparse choices; header Language still guarded by settings.CODE_RE; detector is pure stdlib on text; no new subprocess/network"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "command": "solve --dry-run precedence rows; report --view learn on vi/en/auto copies",
+    "result": "AC1-AC3 PASS, AC4 tier 0",
+    "evidence": [
+      "work/TASK-030/evidence/ac-diffstat.txt",
+      "work/TASK-030/evidence/tier0-edge.txt",
+      "work/TASK-030/evidence/tier0-learn.txt",
+      "work/TASK-030/evidence/tier0-precedence.txt",
+      "work/TASK-030/handoff/verify.md"
+    ]
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-30-solution-language.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
   "roles": {
     "designer": {
       "waiver": "work/TASK-030/handoff/design.md"
+    },
+    "coder": {
+      "waiver": "work/TASK-030/handoff/code.md"
+    },
+    "tester": {
+      "waiver": "work/TASK-030/handoff/test.md"
+    },
+    "verifier": {
+      "waiver": "work/TASK-030/handoff/verify.md"
+    },
+    "crosscheck": {
+      "waiver": "work/TASK-030/handoff/test.md"
     }
   },
   "user_notes": [
@@ -56,7 +84,7 @@
     }
   ],
   "picked_at": "2026-10-30T16:14:57Z",
-  "updated_at": "2026-10-30T16:16:10Z",
+  "updated_at": "2026-10-30T16:23:09Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-030/"
@@ -68,5 +96,5 @@
     "notes": "",
     "next": "await designer handoff work/TASK-030/handoff/design.md, write docs/design/phase-30-*, then coder"
   },
-  "next": "coder: tests 1-8 first, then router/cli/engine/text/reporter, config english->vi, docs D1/D2"
+  "next": ""
 }
