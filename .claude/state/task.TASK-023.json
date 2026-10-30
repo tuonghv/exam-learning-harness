@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-023",
   "title": "gen-exams --profile dgnl: DGNL-style multiple choice math/logic items with letter keys, code check and QA (REQ-0028)",
-  "state": "DESIGN",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0028",
   "acceptance_criteria": [
     "REQ-0028 AC1, AC3 with $0 mock",
@@ -15,13 +15,18 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/genexam.py",
+      "src/exam_engine/cli.py",
+      "prompts/dev/genexam_dgnl.md"
+    ],
+    "summary": "genexam --profile dgnl: 4-option prompt, check_dgnl, letter key, QA by letter, manifest source note"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit -p test_*.py",
+    "result": "494 OK incl. 19 in test_genexam.py"
   },
   "security": {
     "status": "pending",
@@ -40,11 +45,17 @@
   "roles": {
     "designer": {
       "waiver": "coordinator designed, as phases 18-22"
+    },
+    "coder": {
+      "waiver": "coordinator implemented, as phases 18-22"
+    },
+    "tester": {
+      "waiver": "coordinator ran the suite, as phases 18-22"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-30T10:59:39Z",
-  "updated_at": "2026-10-30T10:59:39Z",
+  "updated_at": "2026-10-30T11:00:37Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-023/"
@@ -55,5 +66,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "IMPLEMENTING"
+  "next": "VERIFIED: real concept round after the user go"
 }

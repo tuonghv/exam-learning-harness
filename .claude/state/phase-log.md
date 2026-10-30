@@ -631,3 +631,9 @@ Action: report docs/report/phase-22-gen-exams.md. Result: REQ-0027 AC0-AC6 met o
 
 ## DESIGN - TASK-023 - 2026-10-30T10:59:39Z
 Action: wrote docs/design/phase-23-dgnl.md. Result: --profile dgnl, letter keys, code check, QA. Decision: designer waiver. Next: IMPLEMENTING.
+
+## IMPLEMENTING - TASK-023 - 2026-10-30T11:00:36Z
+Action: dgnl profile in genexam and CLI. Result: written. Decision: coder waiver. Next: UNIT_TESTED.
+
+## UNIT_TESTED - TASK-023 - 2026-10-30T11:00:37Z
+Action: ran the suite. Result: 494 OK ($0, mock). Decision: tester waiver. Next: VERIFIED needs the real concept round (go).

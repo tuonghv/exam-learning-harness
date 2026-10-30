@@ -135,6 +135,64 @@ class Gen(unittest.TestCase):
         self.assertEqual(run(["gen-exams", "--subject", "physics", "--dry-run"])[0], 2)
 
 
+DG = {"skill": "Dãy số", "question": "Cho cấp số cộng có u1 = 3 và công sai 4. Tìm u10.",
+      "options": {"A": "39", "B": "43", "C": "36", "D": "40"}, "correct": "A",
+      "solution": "u10 = 3 + 9*4 = 39", "check": "3 + 9*4"}
+
+
+class Dgnl(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, self.tmp, True)
+
+    def mockfile(self, replies):
+        p = os.path.join(self.tmp, "mock.json")
+        with open(p, "w", encoding="utf-8") as fh:
+            json.dump([json.dumps(r) for r in replies], fh)
+        return p
+
+    def test_pair_written_checked_and_manifest_note(self):
+        out = os.path.join(self.tmp, "g")
+        qa_ok = {"verdict": "ok", "bad_step": "", "my_answer": "A"}
+        rc, so, _ = run(["gen-exams", "--profile", "dgnl", "--n", "1", "--out", out,
+                         "--mock", self.mockfile([DG, qa_ok])])
+        self.assertEqual(rc, 0, so)
+        text = open(os.path.join(out, "inputs", "math", "input-101.md"), encoding="utf-8").read()
+        self.assertIn("University Entrance (DGNL)", text)
+        self.assertIn("D. 40", text)
+        self.assertNotIn("Final answer", text)
+        key = open(os.path.join(out, "keys", "math", "expected-101.md"), encoding="utf-8").read()
+        self.assertIn("Final answer: A\nCorrect answer: A. 39", key)
+        man = json.load(open(os.path.join(out, "manifest.json"), encoding="utf-8"))
+        self.assertEqual(man["runs"][0]["profile"], "dgnl")
+        self.assertIn("not an official exam", man["runs"][0]["source"])
+        root = os.path.join(self.tmp, "r")
+        os.makedirs(os.path.join(root, "evals"))
+        for k in ("inputs", "keys"):
+            shutil.copytree(os.path.join(out, k), os.path.join(root, "evals", k))
+        rc, so, _ = run(["check-examples", "--root", root])
+        self.assertEqual(rc, 0, so)
+
+    def test_bad_replies_rejected(self):
+        for bad in (dict(DG, correct="B"),
+                    dict(DG, options={"A": "39", "B": "39", "C": "36", "D": "40"}),
+                    dict(DG, options={"A": "39", "B": "43", "C": "36"}),
+                    dict(DG, correct="E")):
+            self.assertTrue(genexam.check_dgnl(dict(bad)), bad)
+        self.assertEqual(genexam.check_dgnl(dict(DG)), [])
+
+    def test_qa_compares_letters(self):
+        from exam_engine.adapters import claude
+        obj = dict(DG, final_answer="A")
+
+        def reply(letter):
+            return lambda p: claude.Call(True, json.dumps({"verdict": "ok", "bad_step": "", "my_answer": letter}),
+                                         0.0, "", "", 0.0)
+        self.assertEqual(genexam.qa(reply("A"), obj)[0], "pass")
+        self.assertEqual(genexam.qa(reply("B"), obj)[0], "fail")
+        self.assertIn("A. 39", genexam.qa_prompt(obj))
+
+
 class Lessons(unittest.TestCase):
     SUMMARY = {"items": [{"subject": "math", "item": "101", "questions": [
         {"id": "1", "verdict": "PASS", "answer": "1", "reason": "ok", "findings": [], "basis": "key match"},

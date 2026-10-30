@@ -1,0 +1,1 @@
+{"implementation":{"status":"completed","summary":"genexam --profile dgnl: 4-option prompt, check_dgnl, letter key, QA by letter, manifest source note","files":["src/exam_engine/pipeline/genexam.py","src/exam_engine/cli.py","prompts/dev/genexam_dgnl.md"]},"roles":{"coder":{"waiver":"coordinator implemented, as phases 18-22"}},"next":"UNIT_TESTED"}

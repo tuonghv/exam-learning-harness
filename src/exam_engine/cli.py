@@ -606,6 +606,7 @@ def genexam_main(argv):
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--real", action="store_true")
     ap.add_argument("--level", choices=("easy", "hard"), default="hard")
+    ap.add_argument("--profile", choices=genexam.PROFILES, default="hs")
     ap.add_argument("--no-qa", action="store_true", help="skip the solution review call")
     ap.add_argument("--max-cost-usd", type=float, default=0.5)
     ap.add_argument("--timeout", type=float, default=d["timeout"])
@@ -626,7 +627,7 @@ def genexam_main(argv):
         a.n, a.subject, a.n * (genexam.MAX_ATTEMPTS + (0 if a.no_qa else 1)), a.max_cost_usd,
         " (dry run: no call made)" if a.dry_run else ""), flush=True)
     if a.dry_run:
-        print(genexam.build_prompt(a.subject, a.seed, 1, a.level))
+        print(genexam.build_prompt(a.subject, a.seed, 1, a.level, a.profile))
         return 0
     tmp = None
     try:
@@ -638,10 +639,11 @@ def genexam_main(argv):
         else:
             llm = engine.mock_llm(a.mock)
         items, cost = genexam.generate(a.subject, a.n, a.seed, llm, a.max_cost_usd, a.level,
-                                       not a.no_qa)
+                                       not a.no_qa, a.profile)
         names = genexam.write(a.subject, items, a.out, {"seed": a.seed, "model": a.model,
                                                         "llm": "claude-p" if a.real else "mock",
-                                                        "level": a.level, "cost_usd": cost})
+                                                        "level": a.level, "profile": a.profile,
+                                                        "cost_usd": cost})
     except genexam.GenError as exc:
         print("ERROR: %s" % exc, file=sys.stderr)
         return 1 if exc.code == "leak" else 3

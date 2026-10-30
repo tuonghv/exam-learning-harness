@@ -15,6 +15,10 @@ from exam_engine.pipeline import verifier
 
 PROMPT_REL = os.path.join("dev", "genexam.md")
 QA_REL = os.path.join("dev", "genexam_qa.md")
+DGNL_REL = os.path.join("dev", "genexam_dgnl.md")
+PROFILES = ("hs", "dgnl")
+LETTERS = "ABCD"
+SOURCE_NOTE = "model knowledge, not an official exam"
 SUBJECTS = {"math": "Mathematics"}
 FIRST_NUMBER = 101
 MAX_ATTEMPTS = 2
@@ -33,15 +37,16 @@ def template(rel=PROMPT_REL):
         return fh.read()
 
 
-def build_prompt(subject, seed, idx, level="hard"):
+def build_prompt(subject, seed, idx, level="hard", profile="hs"):
     return "%s\nSeed: %s-%d\nSubject key: %s\nLevel: %s\n" % (
-        template().rstrip("\n"), seed, idx, subject, level)
+        template(DGNL_REL if profile == "dgnl" else PROMPT_REL).rstrip("\n"), seed, idx, subject, level)
 
 
 def qa_prompt(obj):
     """Review prompt: the question and the worked solution; the model's own final answer is asked for."""
-    return "%s\nQuestion:\n%s\n\nSolution to review:\n%s\nClaimed final answer: %s\n" % (
-        template(QA_REL).rstrip("\n"), obj["question"].strip(), obj["solution"].strip(),
+    opts = "".join("%s. %s\n" % (k, v) for k, v in sorted((obj.get("options") or {}).items()))
+    return "%s\nQuestion:\n%s\n%s\nSolution to review:\n%s\nClaimed final answer: %s\n" % (
+        template(QA_REL).rstrip("\n"), obj["question"].strip(), opts, obj["solution"].strip(),
         obj["final_answer"].strip())
 
 
@@ -53,8 +58,11 @@ def qa(llm, obj):
     rep, why = claude.extract_json(call.text)
     if rep is None:
         return "unknown", why, call.cost_usd
-    mine, theirs = value(str(rep.get("my_answer", ""))), value(obj["final_answer"])
-    same = mine is not None and theirs is not None and abs(mine[0] - theirs[0]) <= max(theirs[1], 1e-9)
+    if obj.get("options"):
+        same = str(rep.get("my_answer", "")).strip().upper()[:1] == obj["final_answer"]
+    else:
+        mine, theirs = value(str(rep.get("my_answer", ""))), value(obj["final_answer"])
+        same = mine is not None and theirs is not None and abs(mine[0] - theirs[0]) <= max(theirs[1], 1e-9)
     if rep.get("verdict") == "ok" and same:
         return "pass", "", call.cost_usd
     return "fail", "%s | reviewer answer %s" % (rep.get("bad_step") or rep.get("verdict"), rep.get("my_answer")), call.cost_usd
@@ -70,6 +78,37 @@ def value(a):
         except ValueError:
             return None
     return got
+
+
+def check_dgnl(obj):
+    """Problems of a 4-option reply; sets obj["final_answer"] to the correct letter."""
+    errs = []
+    for k in ("skill", "question", "solution", "check"):
+        if not isinstance(obj.get(k), str) or not obj[k].strip():
+            errs.append("%s must be a non-empty string" % k)
+    opts = obj.get("options")
+    if not isinstance(opts, dict) or sorted(opts) != list(LETTERS) or not all(
+            isinstance(v, str) and v.strip() for v in opts.values()):
+        errs.append("options must be exactly A, B, C, D (non-empty strings)")
+    if obj.get("correct") not in tuple(LETTERS):
+        errs.append("correct must be one of A, B, C, D")
+    if errs:
+        return errs
+    vals = [value(opts[k]) for k in LETTERS]
+    if any(v is None for v in vals):
+        return ["every option must be a number or fraction"]
+    nums = [v[0] for v in vals]
+    if any(abs(a - b) <= 1e-9 for i, a in enumerate(nums) for b in nums[i + 1:]):
+        return ["two options have the same value"]
+    try:
+        want = safe_eval(obj["check"])
+    except ValueError as exc:
+        return ["check: %s" % exc]
+    got = vals[LETTERS.index(obj["correct"])]
+    if abs(want - got[0]) > max(got[1], 1e-9):
+        return ["bad_key: check = %g but option %s = %s" % (want, obj["correct"], opts[obj["correct"]])]
+    obj["final_answer"] = obj["correct"]
+    return []
 
 
 def check_reply(obj):
@@ -95,13 +134,21 @@ def check_reply(obj):
 def leak_check(input_text, obj):
     """Problems when the solution or the final-answer line of the key appears in the input."""
     out = []
-    for label, s in (("solution", obj["solution"]), ("final answer line", "Final answer: " + obj["final_answer"])):
+    for label, s in (("solution", obj["solution"]), ("final answer line", "Final answer: " + obj["final_answer"]),
+                     ("correct answer line", "Correct answer:")):
         if s.strip() and s.strip() in input_text:
             out.append("key text (%s) appears in the input" % label)
     return out
 
 
 def input_md(subject, obj):
+    if obj.get("options"):
+        return "\n".join([
+            "# Exam Input", "", "Subject: %s" % SUBJECTS[subject], "Level: Grade 12",
+            "Exam type: University Entrance (DGNL)", "Task: Multiple Choice", "Mode: Solve",
+            "Skill: %s" % obj["skill"].strip(), "Language: vi", "", "## Instructions", "",
+            "Chọn đáp án đúng nhất và giải thích ngắn gọn.", "", "## Question 1", "",
+            obj["question"].strip(), "", ""] + ["%s. %s" % (k, obj["options"][k].strip()) for k in LETTERS] + [""])
     return "\n".join([
         "# Exam Input", "", "Subject: %s" % SUBJECTS[subject], "Level: Grade 12",
         "Exam type: High School Graduation", "Task: Short Answer", "Mode: Solve",
@@ -111,6 +158,14 @@ def input_md(subject, obj):
 
 
 def key_md(obj):
+    if obj.get("options"):
+        a, o = obj["final_answer"], obj["options"]
+        return "\n".join([
+            "# Expected Output", "", "## Question 1", "", "Final answer: %s" % a,
+            "Correct answer: %s. %s" % (a, o[a].strip()), "", "### Solution", "", obj["solution"].strip(), "",
+            "### Explanation", "", "- Generated item, not reviewed.", "", "### Verification", "",
+            "- Check: %s = %s. Pass" % (obj["check"].strip(), o[a].strip()), "- Final answer: %s" % a,
+            "- Status: Verified", "", "### Grading", "", "- 1 point: %s. 0 points: any other answer." % a, ""])
     a = obj["final_answer"].strip()
     return "\n".join([
         "# Expected Output", "", "## Question 1", "", "Final answer: %s" % a, "", "### Solution", "",
@@ -120,7 +175,7 @@ def key_md(obj):
         "- 1 điểm: %s (hoặc giá trị tương đương). 0 điểm: giá trị khác." % a, ""])
 
 
-def _ask(llm, prompt):
+def _ask(llm, prompt, profile="hs"):
     """(obj, cost) with one retry on a bad reply; a reply with a wrong key is a bad reply."""
     cost, why = 0.0, ""
     for _ in range(MAX_ATTEMPTS):
@@ -130,13 +185,13 @@ def _ask(llm, prompt):
             raise GenError("call_failed", "%s %s" % (call.cls, call.reason))
         obj, why = claude.extract_json(call.text)
         if obj is not None:
-            why = "; ".join(check_reply(obj))
+            why = "; ".join(check_dgnl(obj) if profile == "dgnl" else check_reply(obj))
         if not why:
             return obj, cost
     raise GenError("invalid_reply", "%s (after %d attempts)" % (why, MAX_ATTEMPTS))
 
 
-def generate(subject, n, seed, llm, max_cost=0.5, level="hard", review=True):
+def generate(subject, n, seed, llm, max_cost=0.5, level="hard", review=True, profile="hs"):
     """[(obj, input text, key text)] for n exams; each obj gets obj["qa"] / obj["qa_note"].
 
     Stops with cost_cap when the cap is reached.
@@ -148,7 +203,7 @@ def generate(subject, n, seed, llm, max_cost=0.5, level="hard", review=True):
     for i in range(1, n + 1):
         if cost >= max_cost:
             raise GenError("cost_cap", "cost $%.2f reached the cap $%.2f before exam %d" % (cost, max_cost, i))
-        obj, spent = _ask(llm, build_prompt(subject, seed, i, level))
+        obj, spent = _ask(llm, build_prompt(subject, seed, i, level, profile), profile)
         cost += spent
         obj["qa"], obj["qa_note"] = "skipped", ""
         if review:
@@ -194,7 +249,7 @@ def write(subject, items, out, meta):
             man = json.load(fh)
     except (OSError, ValueError):
         man = {"generated": True, "reviewed": False, "runs": []}
-    man["runs"].append(dict(meta, items=names, qa_rejected=rejected,
+    man["runs"].append(dict(meta, source=SOURCE_NOTE, items=names, qa_rejected=rejected,
                             qa_counts={k: sum(1 for o, _, _ in items if o.get("qa") == k)
                                        for k in ("pass", "fail", "unknown", "skipped")},
                             prompt_sha256=hashlib.sha256(template().encode("utf-8")).hexdigest()))
