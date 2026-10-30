@@ -619,3 +619,6 @@ Action: genexam.py, prompt, gen-exams and lessons commands. Result: written. Dec
 
 ## UNIT_TESTED - TASK-022 - 2026-10-30T10:46:26Z
 Action: ran the suite. Result: 487 OK, 13 new ($0, mock). Decision: tester waiver. Next: VERIFIED needs the real concept round (user go, under $1).
+
+## UNIT_TESTED - TASK-022 - 2026-10-30T10:49:29Z
+Action: real concept round (gen 3 math exams $0.035, benchmark $0.136). Result: 3 pass, 0 lessons; AC0-AC4 met, AC5 not. Decision: stay UNIT_TESTED, round 2 harder. Next: user go for round 2.

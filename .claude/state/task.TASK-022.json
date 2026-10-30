@@ -53,7 +53,13 @@
       "waiver": "coordinator ran the suite, as phases 18-21"
     }
   },
-  "user_notes": [],
+  "user_notes": [
+    {
+      "raw": "RAW-00089",
+      "note": "go real round; user wants a report to cross-check",
+      "at": "2026-10-30T10:47:36Z"
+    }
+  ],
   "picked_at": "2026-10-30T10:43:42Z",
   "updated_at": "2026-10-30T10:46:26Z",
   "updated_by": "main",
