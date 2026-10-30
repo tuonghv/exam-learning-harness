@@ -42,6 +42,11 @@
       "raw": "RAW-00132",
       "note": "queued REQ-0037/TASK-032: automate transitions via advance.sh + skill",
       "at": "2026-10-30T21:59:06Z"
+    },
+    {
+      "raw": "RAW-00133",
+      "note": "REQ-0037 AC7: product quality gate in automation",
+      "at": "2026-10-30T21:59:14Z"
     }
   ],
   "picked_at": "2026-10-30T21:57:07Z",

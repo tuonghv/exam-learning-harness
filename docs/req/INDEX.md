@@ -3,10 +3,6 @@
 
 **TODO** 6 | **DESIGN** 0 | **IMPLEMENTING** 0 | **UNIT_TESTED** 0 | **VERIFIED** 0 | **DONE** 30 | **SUPERSEDED** 0 | **REJECTED** 0
 
-## Attention
-
-- GAP: untriaged RAW: RAW-00133 -> use skill req-intake (link to REQ/EPIC, create new, or ignore with reason)
-
 ## [EPIC-002](epics/EPIC-002.md) Few-shot and evaluation example sets (Math, Physics, English, Literature; VN THPT/entrance level) - TODO
 
 | ID | Status | AC | Title | Tasks |
@@ -15,7 +11,7 @@
 | [REQ-0003](items/REQ-0003.md) | DONE | 4/4 | Mathematics and Physics examples (5 each) with independently re-computed answers and edge cases | TASK-007 |
 | [REQ-0004](items/REQ-0004.md) | DONE | 4/4 | English (grammar, vocabulary, reading, sentence ordering) and Literature (rubric, several defensible readings) examples (5 each) | TASK-008 |
 | [REQ-0005](items/REQ-0005.md) | DONE | 13/13 | Audit workflow, roles and skills for fit with the exam-learning domain; list and fix security-scan leftovers that block the examples task | TASK-001 |
-| [REQ-0006](items/REQ-0006.md) | TODO | 3/6 | Find root cause of frequent auto-compaction and reduce per-turn context load |  |
+| [REQ-0006](items/REQ-0006.md) | TODO | 3/6 | Find root cause of frequent auto-compaction and reduce per-turn context load | TASK-033 |
 | [REQ-0007](items/REQ-0007.md) | TODO | 2/3 | Write project purpose and architecture doc for the exam-learning harness | TASK-031 |
 
 ## [EPIC-003](epics/EPIC-003.md) Exam-solving pipeline engine: INPUT, VALIDATE, SOLVE, QA, SCORE, REPORT (claude -p + deterministic checks) - TODO
@@ -71,5 +67,5 @@
 | [REQ-0031](items/REQ-0031.md) | DONE | 2/2 | Harder generated items (level harder) for DGNL math, English, Vietnamese | TASK-026 |
 | [REQ-0032](items/REQ-0032.md) | DONE | 2/2 | Solve the real ĐGNL ĐHQG-HCM 2026 sample exam PDF (examples/dgnl) with the engine, small slice first | TASK-027 |
 | [REQ-0033](items/REQ-0033.md) | DONE | 4/4 | Real DGNL PDF: extract questions (segment, math pages via vision refine) into a solvable exam, then solve one section end to end | TASK-028 |
-| [REQ-0037](items/REQ-0037.md) | TODO | 0/6 | Automate recurring coordinator work: one script + skill to advance a TASK and its REQs through the gated transitions (state fields, phase-log, req status steps, evidence, commit gate) with production-quality checks |  |
+| [REQ-0037](items/REQ-0037.md) | TODO | 0/6 | Automate recurring coordinator work: one script + skill to advance a TASK and its REQs through the gated transitions (state fields, phase-log, req status steps, evidence, commit gate) with production-quality checks | TASK-032 |
 
