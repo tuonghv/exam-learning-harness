@@ -715,3 +715,9 @@ Action: IMPLEMENTING. Result: refine --all-pages, refined exam text, science sub
 
 ## UNIT_TESTED - TASK-028 - 2026-10-30T14:36:36Z
 Action: UNIT_TESTED. Result: 511 unit tests OK; refine tests cover all-pages, context, carry, join, figures. Decision: ok. Next: real verification.
+
+## VERIFIED - TASK-028 - 2026-10-30T14:37:20Z
+Action: VERIFIED. Result: 120 questions extracted, 4 sections solved, math 61-71 equals hand computation. Decision: ok. Next: report.
+
+## DONE - TASK-028 - 2026-10-30T14:37:20Z
+Action: DONE. Result: whole real DGNL sample extracted and solved; guide docs/guide/dgnl-real-exam.md. Decision: ok. Next: next task.
