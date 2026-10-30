@@ -16,6 +16,7 @@ import time
 
 from exam_engine.core.decision import KINDS, evidence_kind  # noqa: F401
 from exam_engine.utils import md2html
+from exam_engine.utils.text import detect_lang
 
 CHROME_NAMES = ("google-chrome", "google-chrome-stable", "chromium", "chromium-browser")
 NO_RENDERER = "no PDF renderer found (Chrome, weasyprint, wkhtmltopdf); HTML kept"
@@ -81,29 +82,52 @@ def build_answer_sheet(result):
     return "\n".join(out + ["```"]) + "\n"
 
 
+LABELS = {
+    "en": {"title": "Learning view", "question": "Question", "answer": "Answer",
+           "open": "Open (needs a human rubric)", "verdict": "verdict", "why": "Why",
+           "steps": "Steps", "key_concept": "Key concept", "common_mistake": "Common mistake"},
+    "vi": {"title": "Ph\u1ea7n h\u1ecdc", "question": "C\u00e2u", "answer": "\u0110\u00e1p \u00e1n",
+           "open": "M\u1edf (c\u1ea7n ch\u1ea5m theo thang \u0111i\u1ec3m)", "verdict": "k\u1ebft qu\u1ea3",
+           "why": "V\u00ec sao", "steps": "C\u00e1c b\u01b0\u1edbc",
+           "key_concept": "Kh\u00e1i ni\u1ec7m ch\u00ednh", "common_mistake": "L\u1ed7i th\u01b0\u1eddng g\u1eb7p"},
+}
+
+
+def learn_lang(result):
+    """Label language: the result's own vi|en, else detected from its explanation text."""
+    lang = (result.get("exam") or {}).get("language")
+    if lang in LABELS:
+        return lang
+    parts = []
+    for q in result.get("questions", []):
+        parts += [q.get("explanation") or ""] + list(q.get("solution") or [])
+    return detect_lang(" ".join(parts))
+
+
 def build_learning_view(result):
     """Markdown study view: the engine's answer, why, steps; verdict only when not PASS."""
     exam = result["exam"]
-    md = ["## Learning view", ""]
+    L = LABELS[learn_lang(result)]
+    md = ["## %s" % L["title"], ""]
     for q in result["questions"]:
-        md += ["### Question %s" % _sheet_id(q["id"]), ""]
+        md += ["### %s %s" % (L["question"], _sheet_id(q["id"])), ""]
         if _is_open(q, exam):
-            ans = "Open (needs a human rubric)"
+            ans = L["open"]
         else:
             mark = _sheet_mark(q, exam)
             ans = mark if mark == DASH else "%s (%s)" % (mark, q["answer"].strip())
         if q["verification_status"] != "PASS":
-            ans += " %s verdict %s" % (DASH, q["verification_status"])
-        md.append("- Answer: %s" % ans)
+            ans += " %s %s %s" % (DASH, L["verdict"], q["verification_status"])
+        md.append("- %s: %s" % (L["answer"], ans))
         if q.get("explanation"):
-            md.append("- Why: %s" % _one_line(q["explanation"]))
+            md.append("- %s: %s" % (L["why"], _one_line(q["explanation"])))
         if q.get("solution"):
-            md.append("- Steps:")
+            md.append("- %s:" % L["steps"])
             md += ["  %d. %s" % (n, _one_line(t)) for n, t in enumerate(q["solution"], 1)]
         if q.get("key_concept"):
-            md.append("- Key concept: %s" % _one_line(q["key_concept"]))
+            md.append("- %s: %s" % (L["key_concept"], _one_line(q["key_concept"])))
         if q.get("common_mistake"):
-            md.append("- Common mistake: %s" % _one_line(q["common_mistake"]))
+            md.append("- %s: %s" % (L["common_mistake"], _one_line(q["common_mistake"])))
         md.append("")
     return "\n".join(md)
 
@@ -316,7 +340,7 @@ def write_reports(result, out_dir, *, pdf=True, renderer=None, runner=subprocess
     info = {"md": md_path, "answers": answers_path, "html": None, "pdf": None, "pdf_status": "not requested"}
     if not pdf:
         return info
-    lang = result.get("exam", {}).get("language") or "en"
+    lang = learn_lang(result)
     ok, note = md_to_pdf(md_path, pdf_path, lang=lang, renderer=renderer, runner=runner)
     if ok:
         info.update(pdf=pdf_path, pdf_status="ok: " + note)

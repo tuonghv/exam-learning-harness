@@ -1,5 +1,6 @@
 """Subject policy lookup from config/subjects.json (a new subject needs no code change)."""
 from exam_engine import settings
+from exam_engine.utils import text
 from exam_engine.utils.text import fold
 
 DEFAULT_POLICY = {"task": "Closed", "checks": ["format", "computed", "quote"],
@@ -36,8 +37,18 @@ def policy(name, config_dir=None):
     return out
 
 
-def language(exam):
+def language(exam, override=None):
+    """Explanation language: override (CLI) > header > subject policy > vi; "auto" is detected."""
     f = exam["fields"]
-    if f.get("Language"):
-        return f["Language"].strip()
-    return policy(f.get("Subject"))["language"] if subject_key(f.get("Subject")) else "vi"
+    lang = (override or "").strip() or (f.get("Language") or "").strip()
+    if not lang:
+        lang = policy(f.get("Subject"))["language"] if subject_key(f.get("Subject")) else "vi"
+    if lang == "auto":
+        lang = text.detect_lang(" ".join(q.get("text", "") for q in exam.get("questions", [])))
+    return lang
+
+
+def apply_lang(exam, lang):
+    """Pin the run's language into the header so every later language() call agrees."""
+    if lang:
+        exam["fields"]["Language"] = lang

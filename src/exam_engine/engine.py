@@ -102,6 +102,7 @@ def run(exam_path, out_dir, cfg, llm):
         print("ERROR: input: cannot read %s: %s" % (exam_path, exc), file=sys.stderr)
         return None, 2
     exam = parser.parse_exam(exam_path)
+    router.apply_lang(exam, cfg.get("lang"))
     errs = parser.validate_exam(exam)
     if errs:
         for e in errs:

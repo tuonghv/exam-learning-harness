@@ -7,7 +7,7 @@
               "language": "vi", "prompt": "subjects/physics.md"},
   "english": {"aliases": ["english", "tiếng anh"], "task": "Closed",
               "checks": ["format", "computed", "quote"], "score_basis": "official_key",
-              "language": "en", "prompt": "subjects/english.md"},
+              "language": "vi", "prompt": "subjects/english.md"},
   "literature": {"aliases": ["literature", "ngữ văn", "văn"], "task": "Open",
                  "checks": ["format", "quote"], "score_basis": "none",
                  "language": "vi", "prompt": "subjects/literature.md"},

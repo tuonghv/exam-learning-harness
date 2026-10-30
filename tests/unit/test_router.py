@@ -41,9 +41,40 @@ class Router(unittest.TestCase):
                          ("Open", ["format", "quote"], "none"))
 
     def test_language_comes_from_config(self):
-        self.assertEqual(router.language({"fields": {"Subject": "English"}}), "en")
+        self.assertEqual(router.language({"fields": {"Subject": "English"}}), "vi")
         self.assertEqual(router.language({"fields": {"Subject": "Physics"}}), "vi")
         self.assertEqual(router.language({"fields": {"Subject": "Physics", "Language": "en"}}), "en")
+
+    def test_language_unknown_subject_is_vi(self):
+        self.assertEqual(router.language({"fields": {"Subject": "Chemistry"}}), "vi")
+
+    def test_override_beats_header_beats_policy(self):
+        ex = {"fields": {"Subject": "Math", "Language": "vi"}, "questions": []}
+        self.assertEqual(router.language(ex, "en"), "en")
+        self.assertEqual(router.language({"fields": {"Subject": "Math", "Language": "en"}}), "en")
+
+    def test_auto_detects_from_question_text(self):
+        def ex(*texts):
+            return {"fields": {"Subject": "English", "Language": "auto"},
+                    "questions": [{"text": t} for t in texts]}
+        self.assertEqual(router.language(ex("Choose the best answer.", "He go to school.")), "en")
+        self.assertEqual(router.language(ex("Tính giá trị của biểu thức sau đây.")), "vi")
+        self.assertEqual(router.language(ex("Choose the correct word for the sentence.",
+                                            "Chọn.", "She was happy because she won the long race.")), "en")
+        self.assertEqual(router.language({"fields": {"Subject": "English"}, "questions": []}, "auto"), "vi")
+
+    def test_apply_lang(self):
+        ex = {"fields": {"Subject": "Math"}}
+        router.apply_lang(ex, None)
+        self.assertNotIn("Language", ex["fields"])
+        router.apply_lang(ex, "en")
+        self.assertEqual(ex["fields"]["Language"], "en")
+
+    def test_detect_lang(self):
+        from exam_engine.utils import text
+        self.assertEqual(text.detect_lang(""), "vi")
+        self.assertEqual(text.detect_lang("Choose the best answer."), "en")
+        self.assertEqual(text.detect_lang("Đáp án đúng là gì?"), "vi")
 
     def test_new_subject_by_config_only(self):
         d = tempfile.mkdtemp()

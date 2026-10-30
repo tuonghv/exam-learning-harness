@@ -51,7 +51,7 @@ class Channels(Base):
         self.assertNotIn(MARK, self.dry())
 
     def test_dev_channel_reads_dev(self):
-        self.assertIn(MARK, self.dry("--channel", "dev"))
+        self.assertIn(MARK, self.dry("--channel", "dev", "--lang", "en"))  # vi reads lang/vi/system.md
 
     def test_prompt_version_selects_release(self):
         shutil.copytree(os.path.join(self.prm, "releases", "v1.0.0"),

@@ -173,6 +173,18 @@ class Decisions(Base):
                             for c in res["questions"][0]["checks"]))
         self.assertEqual(res["summary"]["pass"], 1)
 
+    def test_lang_cfg_sets_result_language(self):
+        for lang, want in ((None, "vi"), ("en", "en")):
+            res, _ = self.go(MATH1, Script(solve(a(1, "3.46", expr="2*sqrt(3)")), qa((1, "agree"))), lang=lang)
+            self.assertEqual(res["exam"]["language"], want)
+
+    def test_cli_lang_dry_run(self):
+        self.assertIn("Language: en", self.main(INPUT_001, "--dry-run", "--lang", "en")[1])
+        self.assertIn("Language: vi", self.main(INPUT_001, "--dry-run")[1])
+        with contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as cm:
+            self.main(INPUT_001, "--dry-run", "--lang", "fr")
+        self.assertEqual(cm.exception.code, 2)
+
     def test_8_declined_is_uncertain_without_check_or_qa_call(self):
         llm = Script(solve(a(1, None, answer_status="unanswerable", expr="1+1")))
         res, code = self.go(MATH1, llm, max_attempts=1)

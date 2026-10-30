@@ -582,6 +582,18 @@ class LearnView(Base):
         self.assertLess(md.index("## Learning view"), md.index("## Question 1"))
         self.assertNotIn("## Answer sheet", md)
 
+    def test_vi_labels(self):
+        qs = [question(1, key_concept="kc", common_mistake="cm"), question(2, answer="Open")]
+        for r in (result(qs, language="vi"), result(qs, language="auto"), result(qs, language=None)):
+            r["questions"][0]["explanation"] = "Vì đây là đáp án đúng."
+            out = rp.build_learning_view(r)
+            for w in ("Phần học", "Câu 01", "Đáp án:", "Vì sao:", "Các bước:", "Khái niệm chính:",
+                      "Lỗi thường gặp:", "Mở (cần chấm theo thang điểm)"):
+                self.assertIn(w, out)
+            self.assertNotIn("- Answer:", out)
+        self.assertEqual(rp.build_answer_sheet(result(qs, language="vi")),
+                         rp.build_answer_sheet(result(qs, language="en")))
+
     def test_11_bad_view(self):
         with self.assertRaises(ValueError):
             rp.write_reports(result(), self.out, pdf=False, view="bogus")

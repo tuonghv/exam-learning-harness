@@ -42,7 +42,7 @@ Solving Instructions
 
 1. Read the entire examination before solving. Preserve question numbering, subquestions, answer options, shared passages, figures, tables, and instructions.
 2. Solve every identifiable question. Use methods and knowledge appropriate to the specified education level and examination type. Do not skip questions silently.
-3. Follow solution_language. For auto, use the dominant language of the examination. For English questions presented in English, answer and explain in English by default. Do not translate questions unnecessarily.
+3. (Runtime note: `auto` is resolved in code to vi or en before the prompt; the prompt only sees vi|en.) Follow solution_language. For auto, use the dominant language of the examination. For English questions presented in English, answer and explain in English by default. Do not translate questions unnecessarily.
 4. Provide the answer and concise, verifiable explanations. Include essential calculations, formulas, evidence, or reasoning appropriate to the subject. Follow detail_level.
 5. Apply subject-specific standards:
     * Mathematics: verify conditions, transformations, calculations, solutions, and final results.

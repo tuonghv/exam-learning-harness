@@ -15,7 +15,7 @@ from exam_engine import engine, settings
 from exam_engine.adapters import claude
 from exam_engine.core import schema as sch
 from exam_engine.core.decision import decide
-from exam_engine.pipeline import examples_check, parser, prompts, reporter, scorer, solver, verifier
+from exam_engine.pipeline import examples_check, parser, prompts, reporter, router, scorer, solver, verifier
 
 COMMANDS = ("solve", "parse", "verify", "report", "check-examples", "score", "prompts",
             "check-prompts", "ingest", "ingest-inspect", "ingest-refine", "cross-solve", "benchmark",
@@ -39,6 +39,8 @@ def solve_main(argv=None):
     ap.add_argument("--timeout", type=float, default=d["timeout"])
     ap.add_argument("--model", default=d["model"])
     ap.add_argument("--no-pdf", action="store_true", help="write report.md only")
+    ap.add_argument("--lang", choices=("vi", "en", "auto"),
+                    help="explanation language (beats the header Language:)")
     ap.add_argument("--channel", choices=("release", "dev"),
                     help="prompt channel (default: prompt_channel in config/engine.json)")
     ap.add_argument("--prompt-version", help="release version, e.g. v1.0.0 (default: prompt_release)")
@@ -64,7 +66,7 @@ def solve_main(argv=None):
         return 2
     cfg = {"max_attempts": a.max_attempts, "max_cost_usd": a.max_cost_usd, "timeout": a.timeout,
            "model": a.model, "key": a.key, "llm_name": "claude-p" if a.real else "mock",
-           "pdf": not a.no_pdf}
+           "pdf": not a.no_pdf, "lang": a.lang}
     if a.dry_run:
         try:
             text = parser.read_text(a.exam)
@@ -72,6 +74,7 @@ def solve_main(argv=None):
             print("ERROR: input: cannot read %s: %s" % (a.exam, exc), file=sys.stderr)
             return 2
         exam = parser.parse_exam(a.exam)
+        router.apply_lang(exam, a.lang)
         errs = parser.validate_exam(exam)
         if errs:
             for e in errs:
