@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-002",
   "title": "Design the exam-solving pipeline: reuse table, gaps, JSON schema, build plan (REQ-0008, EPIC-003)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0008",
   "acceptance_criteria": [
     "AC1 design doc",
@@ -42,11 +42,20 @@
       "work/TASK-002/evidence/unit_suite.txt"
     ],
     "command": "grep design sections; ls schemas; unit suite; inspector AC table",
-    "result": "AC1-AC4,AC6 met by docs/design/phase-2-exam-pipeline.md (inspector table with path:line); AC5 waived: no baseline git status was recorded for code-security-scanner, the design cites path:line only"
+    "result": "AC1-AC4,AC6 met by docs/design/phase-2-exam-pipeline.md (inspector table with path:line); AC5 waived: no baseline git status was recorded for code-security-scanner, the design cites path:line only",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-002/evidence/design_sections.txt",
+        "work/TASK-002/evidence/schemas_exist.txt",
+        "work/TASK-002/evidence/unit_suite.txt"
+      ],
+      "reason": "independent inspector re-derived each AC from the design doc and the built schemas/tests"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-2-exam-pipeline.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -73,7 +82,7 @@
     }
   ],
   "picked_at": "2026-10-29T03:08:32Z",
-  "updated_at": "2026-10-30T22:37:24Z",
+  "updated_at": "2026-10-30T22:37:34Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -86,5 +95,5 @@
     "notes": "",
     "next": "resume as IMPLEMENTING planning after TASK-003 DONE"
   },
-  "next": "DONE: report"
+  "next": ""
 }

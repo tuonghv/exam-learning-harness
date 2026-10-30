@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-002",
-  "state": "VERIFIED",
-  "next": "DONE: report",
+  "state": "DONE",
+  "next": "",
   "title": "Design the exam-solving pipeline: reuse table, gaps, JSON schema, build plan (REQ-0008, EPIC-003)",
-  "active": [
-    {
-      "task_id": "TASK-002",
-      "state": "VERIFIED",
-      "next": "DONE: report",
-      "updated_at": "2026-10-30T22:37:24Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
