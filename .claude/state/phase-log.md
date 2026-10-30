@@ -781,3 +781,33 @@ Action: report written.
 Result: ok.
 Decision: advance.
 Next: close.
+
+## DESIGN - TASK-031 - 2026-10-30T22:00:10Z
+Action: docs-only design recorded.
+Result: ok.
+Decision: advance.
+Next: next phase.
+
+## IMPLEMENTING - TASK-031 - 2026-10-30T22:00:10Z
+Action: coder Titan refreshed architecture.md.
+Result: ok.
+Decision: advance.
+Next: next phase.
+
+## UNIT_TESTED - TASK-031 - 2026-10-30T22:00:10Z
+Action: integration tests OK, docs paths rechecked.
+Result: ok.
+Decision: advance.
+Next: next phase.
+
+## VERIFIED - TASK-031 - 2026-10-30T22:00:10Z
+Action: tester recompute passed, D1/D2 fixed.
+Result: ok.
+Decision: advance.
+Next: next phase.
+
+## DONE - TASK-031 - 2026-10-30T22:00:10Z
+Action: report written.
+Result: ok.
+Decision: advance.
+Next: close.

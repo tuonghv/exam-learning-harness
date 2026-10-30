@@ -621,7 +621,7 @@
     "created_at": "2026-10-30T15:30:00Z",
     "requirement": "REQ-0034",
     "acceptance_criteria": [
-      "REQ-0034 AC1-AC4: sheet 'Subject – N Questions', 5 per row, 2-digit ids as stored, circled A-D, — for null/Open/non A-D, block at top of report.md/html/pdf plus answers.md, solver/schema unchanged",
+      "REQ-0034 AC1-AC4: sheet 'Subject \u2013 N Questions', 5 per row, 2-digit ids as stored, circled A-D, \u2014 for null/Open/non A-D, block at top of report.md/html/pdf plus answers.md, solver/schema unchanged",
       "REQ-0035 AC1-AC4 phase 1: --view sheet|learn (default sheet), learn view reuses explanation+solution, optional key_concept/common_mistake only if present, no extra LLM cost",
       "Tests in tests/unit/test_exam_report.py with null-answer results (work/dgnl-real Vietnamese/Science), existing report tests stay green, PDF font check for circled letters"
     ],
@@ -674,11 +674,25 @@
     "task_id": "TASK-031",
     "title": "Refresh docs/guide/architecture.md to the real tree: src/exam_engine, scripts/exam.py, tools shims, ingest, report views, language (REQ-0007 AC3)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-10-31T00:30:00Z",
     "requirement": "REQ-0007",
     "acceptance_criteria": [
       "architecture.md component list, flow and invariants match the real tree (src/exam_engine/*, scripts/exam.py, tools/examples shims, ingest, evals, report sheet/learn views, language precedence); README <= 10 lines still links it"
+    ],
+    "completed_at": "2026-10-30T22:00:10Z",
+    "report": "docs/report/phase-31-architecture-doc-refresh.md",
+    "user_notes": [
+      {
+        "raw": "RAW-00132",
+        "note": "queued REQ-0037/TASK-032: automate transitions via advance.sh + skill",
+        "at": "2026-10-30T21:59:06Z"
+      },
+      {
+        "raw": "RAW-00133",
+        "note": "REQ-0037 AC7: product quality gate in automation",
+        "at": "2026-10-30T21:59:14Z"
+      }
     ]
   },
   {
