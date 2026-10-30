@@ -1,0 +1,58 @@
+{
+  "task_id": "TASK-025",
+  "title": "gen-exams --profile dgnl-vi: DGNL Vietnamese-language items (new subject vietnamese, no new prompt) with blind double review (REQ-0030)",
+  "state": "DESIGN",
+  "requirement": "REQ-0030",
+  "acceptance_criteria": [
+    "REQ-0030 AC1: 4 items under $0.5, benchmark, lessons, report"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-25-dgnl-vi.md",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": {
+      "waiver": "coordinator designed, as phases 18-24"
+    }
+  },
+  "user_notes": [],
+  "picked_at": "2026-10-30T12:26:38Z",
+  "updated_at": "2026-10-30T12:26:38Z",
+  "updated_by": "main",
+  "scope": [
+    "work/TASK-025/"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "IMPLEMENTING"
+}

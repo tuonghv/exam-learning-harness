@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-024",
-  "state": "DONE",
-  "next": "DONE",
-  "title": "gen-exams --profile dgnl-en: DGNL English items with blind double-review key QA (REQ-0029)",
-  "active": [],
+  "task_id": "TASK-025",
+  "state": "DESIGN",
+  "next": "IMPLEMENTING",
+  "title": "gen-exams --profile dgnl-vi: DGNL Vietnamese-language items (new subject vietnamese, no new prompt) with blind double review (REQ-0030)",
+  "active": [
+    {
+      "task_id": "TASK-025",
+      "state": "DESIGN",
+      "next": "IMPLEMENTING",
+      "updated_at": "2026-10-30T12:26:38Z"
+    }
+  ],
   "max_active": 1
 }
