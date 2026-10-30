@@ -628,7 +628,7 @@
   },
   {
     "task_id": "TASK-030",
-    "title": "Solution language: auto default, --lang override, localized learn-view labels (REQ-0036)",
+    "title": "Solution language: vi default for all subjects, --lang en|auto override, localized learn-view labels (REQ-0036)",
     "priority": 1,
     "status": "queued",
     "created_at": "2026-10-30T16:00:00Z",
