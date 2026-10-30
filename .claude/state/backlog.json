@@ -526,11 +526,13 @@
     "task_id": "TASK-025",
     "title": "gen-exams --profile dgnl-vi: DGNL Vietnamese-language items (new subject vietnamese, no new prompt) with blind double review (REQ-0030)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-10-30T11:40:00Z",
     "requirement": "REQ-0030",
     "acceptance_criteria": [
       "REQ-0030 AC1: 4 items under $0.5, benchmark, lessons, report"
-    ]
+    ],
+    "completed_at": "2026-10-30T12:31:04Z",
+    "report": "docs/report/phase-25-dgnl-vi.md"
   }
 ]

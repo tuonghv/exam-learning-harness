@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-025",
-  "state": "UNIT_TESTED",
-  "next": "VERIFIED: real round",
+  "state": "DONE",
+  "next": "DONE",
   "title": "gen-exams --profile dgnl-vi: DGNL Vietnamese-language items (new subject vietnamese, no new prompt) with blind double review (REQ-0030)",
-  "active": [
-    {
-      "task_id": "TASK-025",
-      "state": "UNIT_TESTED",
-      "next": "VERIFIED: real round",
-      "updated_at": "2026-10-30T12:29:35Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

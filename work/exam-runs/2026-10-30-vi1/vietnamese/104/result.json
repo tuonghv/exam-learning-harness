@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/generated-dgnl/inputs/vietnamese/input-104.md",
+    "subject": "Vietnamese",
+    "level": "Grade 12",
+    "exam_type": "University Entrance (DGNL)",
+    "task": "Multiple Choice",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 0.30035900000000004,
+    "cost_usd": 0.057769,
+    "calls": 3,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "key match",
+      "answer": "C",
+      "solution": [
+        "A sai: 'sơ xuất' là danh từ/động từ chỉ sự sai sót do không cẩn thận, không dùng 'nhiều chỗ sơ xuất' cho nội dung báo cáo cần bổ sung (đúng hơn là 'sơ suất', và nên dùng 'thiếu sót').",
+        "B sai: 'xuất sắc hoàn thành' dùng sai từ loại ('xuất sắc' là tính từ, phải nói 'hoàn thành xuất sắc'); 'tuyên dương' dùng được nhưng cả câu lủng củng.",
+        "C đúng: 'thỏa thuận', 'xúc tiến', 'ký kết' đều đúng chính tả và đúng nghĩa.",
+        "D sai: phải viết 'trau dồi vốn từ', không phải 'chao dồi'."
+      ],
+      "explanation": "C là câu duy nhất dùng từ đúng chính tả và đúng nghĩa. A sai chính tả: đúng là 'sơ suất' (không phải 'sơ xuất'). B sai trật tự/cách dùng từ: 'xuất sắc hoàn thành' đúng phải là 'hoàn thành xuất sắc'. D sai chính tả: đúng là 'trau dồi', không phải 'chao dồi'.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Lỗi chính tả ở A và D rõ ràng, C không có lỗi từ nào; B chỉ yếu hơn về cách dùng từ nhưng vẫn kém hơn C."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "single letter A-D",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: đạt được sự thỏa thuận, cùng nhau xúc tiến việc ký kết hợp đồng",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: sơ xuất",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: chao dồi vốn từ",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [
+        {
+          "source": "ai_review",
+          "code": "agree",
+          "message": "C đúng: 'thỏa thuận', 'xúc tiến', 'ký kết', 'suôn sẻ' đều đúng chính tả và nghĩa; A sai vì phải viết 'sơ suất', D sai vì phải viết 'trau dồi', B sai vì dùng 'xuất sắc hoàn thành' thay vì 'hoàn thành xuất sắc'."
+        },
+        {
+          "source": "ai_review",
+          "code": "agree",
+          "message": "Lời giải thích ở mục A trong solution hơi lẫn lộn (nói 'sơ xuất' là từ có nghĩa rồi mới bảo đúng là 'sơ suất'), nhưng phần explanation nêu đúng lỗi chính tả và không ảnh hưởng đáp án."
+        }
+      ],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 2,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}

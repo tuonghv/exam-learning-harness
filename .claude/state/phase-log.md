@@ -670,3 +670,9 @@ Action: IMPLEMENTING. Result: ok (504 OK, $0). Decision: role waivers as before.
 
 ## UNIT_TESTED - TASK-025 - 2026-10-30T12:28:09Z
 Action: UNIT_TESTED. Result: ok (504 OK, $0). Decision: role waivers as before. Next: real round.
+
+## VERIFIED - TASK-025 - 2026-10-30T12:31:04Z
+Action: real dgnl-vi round n=4. Result: 4/4 pass, $0.24, 0 lessons. Decision: verified, circularity stated. Next: DONE.
+
+## DONE - TASK-025 - 2026-10-30T12:31:04Z
+Action: report written. Result: 4/4 pass. Decision: done. Next: harder items or person review (user).

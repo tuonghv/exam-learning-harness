@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/generated-dgnl/inputs/vietnamese/input-102.md",
+    "subject": "Vietnamese",
+    "level": "Grade 12",
+    "exam_type": "University Entrance (DGNL)",
+    "task": "Multiple Choice",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 0.361175,
+    "cost_usd": 0.028933,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "key match",
+      "answer": "C",
+      "solution": [
+        "Đoạn văn nói người thợ không dùng bàn xoay mà ngồi yên một chỗ, đi quanh khối đất sét đặt trên nền để tạo hình bằng đôi tay.",
+        "Đối chiếu từng phương án với thông tin này.",
+        "Phương án C khớp hoàn toàn với đoạn văn."
+      ],
+      "explanation": "C đúng vì đoạn văn nêu người thợ đi quanh khối đất sét đặt trên nền và tạo hình bằng đôi tay. A sai vì người thợ không dùng bàn xoay. B sai vì sản phẩm không tráng men. D sai vì các nghệ nhân coi sự không đồng đều của màu gốm là nét riêng mà gốm lò công nghiệp khó có được, không phải nhược điểm.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Thông tin được nêu trực tiếp trong đoạn văn, các phương án còn lại mâu thuẫn rõ ràng."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "single letter A-D",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: Người thợ không dùng bàn xoay mà ngồi yên một chỗ, đi quanh khối đất sét đặt trê",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 1,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}

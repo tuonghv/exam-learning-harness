@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/generated-dgnl/inputs/vietnamese/input-103.md",
+    "subject": "Vietnamese",
+    "level": "Grade 12",
+    "exam_type": "University Entrance (DGNL)",
+    "task": "Multiple Choice",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 0.33224200000000004,
+    "cost_usd": 0.031883,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "key match",
+      "answer": "C",
+      "solution": [
+        "Đoạn văn nêu quá khứ: chiều thứ Bảy quán chật kín người, phải kê thêm ghế ra vỉa hè.",
+        "Hiện tại: ghế nhựa cuối cùng đã cất vào kho từ lâu, chỉ thỉnh thoảng có một vị khách, xem sách rồi về tay không.",
+        "Ông chủ vẫn mở cửa đúng giờ, lau kệ mỗi sáng nên vẫn duy trì quán đều đặn. Vậy lượng khách giảm sút nhiều, đáp án C."
+      ],
+      "explanation": "C đúng vì khớp với sự đối lập trước và sau: từ đông đúc đến thưa vắng, trong khi ông chủ vẫn mở cửa và lau kệ đều đặn. A sai vì ông chủ không bỏ bê, ông vẫn mở cửa đúng giờ và lau từng kệ sách mỗi sáng. B sai vì quán vẫn mở cửa và vẫn có khách thỉnh thoảng ghé. D sai vì vị khách hiếm hoi chỉ lật vài trang rồi ra về tay không, tức là không mua gì.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Các chi tiết trong đoạn văn loại trừ rõ ràng ba đáp án còn lại."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "single letter A-D",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: cứ chiều thứ Bảy là quán sách cũ đầu ngõ chật kín người",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: ông vẫn mở cửa đúng giờ, vẫn lau từng kệ sách mỗi sáng",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: chiếc ghế nhựa cuối cùng đã được xếp gọn vào góc kho từ lâu",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: lật vài trang rồi ra về, tay không",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 1,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}

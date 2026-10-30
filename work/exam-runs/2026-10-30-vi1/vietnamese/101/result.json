@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/generated-dgnl/inputs/vietnamese/input-101.md",
+    "subject": "Vietnamese",
+    "level": "Grade 12",
+    "exam_type": "University Entrance (DGNL)",
+    "task": "Multiple Choice",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 0.4,
+    "cost_usd": 0.038825,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "key match",
+      "answer": "A",
+      "solution": [
+        "Câu thơ trích từ bài Khúc hát ru những em bé lớn trên lưng mẹ: Mặt trời của bắp nằm trên đồi, Mặt trời của mẹ em nằm trên lưng.",
+        "Mặt trời thứ nhất là mặt trời thật của thiên nhiên, làm bắp lớn lên.",
+        "Mặt trời thứ hai (của mẹ) là đứa con: hai sự vật có nét tương đồng là nguồn sống, nguồn sáng, niềm hy vọng.",
+        "Đây là phép ẩn dụ (không nêu rõ vế so sánh, gọi tên đứa con bằng hình ảnh mặt trời)."
+      ],
+      "explanation": "A đúng vì mặt trời của mẹ là hình ảnh ẩn dụ chỉ đứa con, dựa trên quan hệ tương đồng về vai trò là nguồn sống và hy vọng. B sai vì hoán dụ dựa trên quan hệ gần gũi (bộ phận - toàn thể), còn ở đây không có quan hệ đó và mặt trời không chỉ toàn thể thiên nhiên. C sai vì không có sự phóng đại quy mô, mức độ để nói quá. D sai vì từ của là quan hệ từ chỉ sở hữu, không phải từ so sánh, và câu thơ không có cấu trúc so sánh.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Đây là kiến thức quen thuộc, ẩn dụ là đáp án được dùng phổ biến khi phân tích câu thơ này."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "single letter A-D",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: Mặt trời của mẹ, em nằm trên lưng",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [
+        {
+          "source": "ai_review",
+          "code": "agree",
+          "message": "Mặt trời của mẹ là ẩn dụ chỉ đứa con (nguồn sống, niềm hy vọng), phù hợp với phân tích thường gặp của bài Khúc hát ru những em bé lớn trên lưng mẹ."
+        },
+        {
+          "source": "ai_review",
+          "code": "agree",
+          "message": "B, C, D đều sai: không có quan hệ bộ phận - toàn thể, không có phóng đại, và không có từ so sánh (như, tựa, bằng)."
+        }
+      ],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 1,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}
