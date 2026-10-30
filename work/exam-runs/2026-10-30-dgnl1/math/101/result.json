@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/generated-dgnl/inputs/math/input-101.md",
+    "subject": "Mathematics",
+    "level": "Grade 12",
+    "exam_type": "University Entrance (DGNL)",
+    "task": "Multiple Choice",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 0.4,
+    "cost_usd": 0.040329,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "key match",
+      "answer": "B",
+      "solution": [
+        "Tổng số cách lấy 3 viên từ 12 viên: C(12,3) = 220.",
+        "Biến cố A: có ít nhất một bi đỏ. Số cách không có bi đỏ: C(7,3) = 35, nên n(A) = 220 - 35 = 185.",
+        "Biến cố B: đủ ba màu, tức 1 đỏ, 1 xanh, 1 vàng: 5*4*3 = 60 cách. Mọi cách này đều có bi đỏ nên B nằm trong A, n(A và B) = 60.",
+        "P(B|A) = n(A và B)/n(A) = 60/185 = 12/37."
+      ],
+      "explanation": "B. 12/37: đúng, bằng 60/185 sau khi rút gọn cho 5. A. 3/11: sai, đây là 60/220, tức xác suất không điều kiện (quên điều kiện có ít nhất một bi đỏ). C. 12/35: sai, đây là 60/175, mẫu số tính nhầm. D. 37/44: sai, đây là 185/220, xác suất của biến cố có ít nhất một bi đỏ, không phải xác suất cần tìm.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Phép đếm đơn giản và đã đối chiếu bằng hai cách."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "single letter A-D",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "computed",
+          "detail": "arithmetic only: answer has no number",
+          "result": "unknown",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: Biết rằng trong 3 viên bi lấy được có ít nhất một viên bi đỏ, xác suất để 3 viên",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 1,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}

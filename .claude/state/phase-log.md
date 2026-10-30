@@ -637,3 +637,6 @@ Action: dgnl profile in genexam and CLI. Result: written. Decision: coder waiver
 
 ## UNIT_TESTED - TASK-023 - 2026-10-30T11:00:37Z
 Action: ran the suite. Result: 494 OK ($0, mock). Decision: tester waiver. Next: VERIFIED needs the real concept round (go).
+
+## UNIT_TESTED - TASK-023 - 2026-10-30T11:02:56Z
+Action: real DGNL round (3 items, QA, benchmark). Result: 3/3 pass, 0 lessons, duplicate item found. Decision: stay UNIT_TESTED until topic variety and the next section (AC4). Next: user go.

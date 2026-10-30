@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/generated-dgnl/inputs/math/input-102.md",
+    "subject": "Mathematics",
+    "level": "Grade 12",
+    "exam_type": "University Entrance (DGNL)",
+    "task": "Multiple Choice",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 0.359671,
+    "cost_usd": 0.037343,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "key match",
+      "answer": "A",
+      "solution": [
+        "Gọi D1 là biến cố bi chuyển sang có màu đỏ, T1 là biến cố bi chuyển sang có màu trắng, D2 là biến cố bi lấy ra từ hộp II có màu đỏ. P(D1) = 3/8, P(T1) = 5/8.",
+        "Nếu chuyển bi đỏ: hộp II có 5 đỏ, 2 trắng (7 bi), nên P(D2|D1) = 5/7.",
+        "Nếu chuyển bi trắng: hộp II có 4 đỏ, 3 trắng (7 bi), nên P(D2|T1) = 4/7.",
+        "Công thức xác suất toàn phần: P(D2) = 3/8 * 5/7 + 5/8 * 4/7 = 15/56 + 20/56 = 35/56 = 5/8.",
+        "Công thức Bayes: P(D1|D2) = (15/56) / (35/56) = 15/35 = 3/7."
+      ],
+      "explanation": "A. 3/7: đúng, là P(D1|D2) theo công thức Bayes. B. 5/8: sai, đây là P(D2), xác suất toàn phần của việc lấy được bi đỏ từ hộp II, chưa phải xác suất có điều kiện. C. 15/56: sai, đây là xác suất đồng thời P(D1 và D2), chưa chia cho P(D2). D. 4/7: sai, đây là P(D2|T1), tức xác suất lấy được bi đỏ từ hộp II khi bi chuyển sang là bi trắng, không phải xác suất cần tìm.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Bài Bayes cơ bản, các phép tính đã đối chiếu bằng hai cách."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "single letter A-D",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "computed",
+          "detail": "arithmetic only: answer has no number",
+          "result": "unknown",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: Biết bi lấy ra từ hộp II có màu đỏ, xác suất để bi chuyển từ hộp I sang hộp II c",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 1,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}
