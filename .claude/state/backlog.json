@@ -463,11 +463,30 @@
     "task_id": "TASK-022",
     "title": "gen-exams: generate Vietnamese-style math exams with keys, run benchmark, record lessons (REQ-0027 concept round)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-10-30T11:00:00Z",
     "requirement": "REQ-0027",
     "acceptance_criteria": [
       "AC0-AC4 of REQ-0027 with a $0 mock; the real concept round waits for the user's go"
+    ],
+    "completed_at": "2026-10-30T10:57:48Z",
+    "report": "docs/report/phase-22-gen-exams.md",
+    "user_notes": [
+      {
+        "raw": "RAW-00089",
+        "note": "go real round; user wants a report to cross-check",
+        "at": "2026-10-30T10:47:36Z"
+      },
+      {
+        "raw": "RAW-00090",
+        "note": "add QA of generated solutions (AC6)",
+        "at": "2026-10-30T10:49:49Z"
+      },
+      {
+        "raw": "RAW-00091",
+        "note": "go round 2; keep rounds short first to save tokens",
+        "at": "2026-10-30T10:50:57Z"
+      }
     ]
   }
 ]

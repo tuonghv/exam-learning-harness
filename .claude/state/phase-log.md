@@ -625,3 +625,6 @@ Action: real concept round (gen 3 math exams $0.035, benchmark $0.136). Result: 
 
 ## VERIFIED - TASK-022 - 2026-10-30T10:57:31Z
 Action: real round 2 (hard exams, QA, benchmark, lessons, scorer fix, rerun). Result: 4/5 -> 5/5, AC0-AC6 met, n=5. Decision: verifier waiver. Next: DONE.
+
+## DONE - TASK-022 - 2026-10-30T10:57:48Z
+Action: report docs/report/phase-22-gen-exams.md. Result: REQ-0027 AC0-AC6 met on n=5 hard + 3 easy math exams, one lesson fixed. Decision: close; generator diversity and more subjects are the next rounds. Next: none.

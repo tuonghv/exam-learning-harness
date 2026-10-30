@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-022",
-  "state": "VERIFIED",
-  "next": "DONE",
+  "state": "DONE",
+  "next": "",
   "title": "gen-exams: generate Vietnamese-style math exams with keys, run benchmark, record lessons (REQ-0027 concept round)",
-  "active": [
-    {
-      "task_id": "TASK-022",
-      "state": "VERIFIED",
-      "next": "DONE",
-      "updated_at": "2026-10-30T10:57:40Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
