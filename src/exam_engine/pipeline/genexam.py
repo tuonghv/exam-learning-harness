@@ -18,6 +18,13 @@ QA_REL = os.path.join("dev", "genexam_qa.md")
 DGNL_REL = os.path.join("dev", "genexam_dgnl.md")
 PROFILES = ("hs", "dgnl")
 LETTERS = "ABCD"
+TOPICS = {
+    "hs": ["logarit và phương trình mũ", "tích phân", "số phức", "hình học Oxyz", "xác suất",
+           "đạo hàm và cực trị", "cấp số cộng và cấp số nhân", "thể tích khối đa diện"],
+    "dgnl": ["cấp số cộng/nhân và quy luật dãy số", "phần trăm, tỉ lệ, lãi suất", "xác suất cơ bản",
+             "logic: suy luận từ các điều kiện cho trước", "đọc số liệu cho trong lời (trung bình, tỉ lệ)",
+             "chuyển động, công việc chung, bài toán thực tế", "tổ hợp và đếm", "bất phương trình, hàm số đơn giản"],
+}
 SOURCE_NOTE = "model knowledge, not an official exam"
 SUBJECTS = {"math": "Mathematics"}
 FIRST_NUMBER = 101
@@ -37,9 +44,16 @@ def template(rel=PROMPT_REL):
         return fh.read()
 
 
+def topic(seed, idx, profile="hs"):
+    """Topic for exam idx of a round: consecutive topics from a seed-dependent start, so no two repeat."""
+    ts = TOPICS[profile]
+    return ts[(int(hashlib.sha256(str(seed).encode("utf-8")).hexdigest(), 16) + idx) % len(ts)]
+
+
 def build_prompt(subject, seed, idx, level="hard", profile="hs"):
-    return "%s\nSeed: %s-%d\nSubject key: %s\nLevel: %s\n" % (
-        template(DGNL_REL if profile == "dgnl" else PROMPT_REL).rstrip("\n"), seed, idx, subject, level)
+    return "%s\nSeed: %s-%d\nSubject key: %s\nLevel: %s\nTopic (use exactly this): %s\n" % (
+        template(DGNL_REL if profile == "dgnl" else PROMPT_REL).rstrip("\n"), seed, idx, subject, level,
+        topic(seed, idx, profile))
 
 
 def qa_prompt(obj):

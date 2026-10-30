@@ -193,6 +193,18 @@ class Dgnl(unittest.TestCase):
         self.assertIn("A. 39", genexam.qa_prompt(obj))
 
 
+class Variety(unittest.TestCase):
+    def test_topics_differ_within_a_round_and_prompt_carries_it(self):
+        for prof in genexam.PROFILES:
+            ts = [genexam.topic("seed-a", i, prof) for i in range(1, len(genexam.TOPICS[prof]) + 1)]
+            self.assertEqual(len(set(ts)), len(ts))
+            self.assertIn(ts[0], genexam.build_prompt("math", "seed-a", 1, "hard", prof))
+
+    def test_seed_changes_the_start(self):
+        starts = set(genexam.topic("s%d" % i, 1, "dgnl") for i in range(12))
+        self.assertGreater(len(starts), 1)
+
+
 class Lessons(unittest.TestCase):
     SUMMARY = {"items": [{"subject": "math", "item": "101", "questions": [
         {"id": "1", "verdict": "PASS", "answer": "1", "reason": "ok", "findings": [], "basis": "key match"},
