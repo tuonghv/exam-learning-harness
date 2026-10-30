@@ -658,3 +658,6 @@ Action: ran the suite. Result: 501 OK ($0). Decision: tester waiver. Next: real 
 
 ## VERIFIED - TASK-024 - 2026-10-30T11:20:37Z
 Action: real dgnl-en round n=4. Result: 4/4 pass, $0.16, 0 lessons, item 103 doubtful. Decision: verified, circularity stated. Next: DONE.
+
+## DONE - TASK-024 - 2026-10-30T11:20:56Z
+Action: report written, AC4 split to REQ-0030. Result: 4/4 pass. Decision: done. Next: REQ-0030 later round (user go).
