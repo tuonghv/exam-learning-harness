@@ -14,3 +14,6 @@ Verdict: adopted. `docs/guide/architecture.md` (106 lines) now matches the real 
 Docs only; the unit suite was not re-run. Product quality checked by recomputing paths against the tree, not by reading alone.
 
 User instructions honoured: RAW-00132, RAW-00133 (quality over speed).
+
+## Correction (2026-10-31)
+The unit suite was not run for this docs task, and the README cut broke `test_6_6_readme_documents_structure` (REQ-0012 AC6.6: README names the layout and the solve/parse/verify/report commands). Found at the next full run and fixed: README is 8 lines and names both again; full suite back to the 3 known pre-existing failures. Lesson: run the full unit suite for docs tasks that touch README or guides.
