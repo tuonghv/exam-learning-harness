@@ -628,3 +628,6 @@ Action: real round 2 (hard exams, QA, benchmark, lessons, scorer fix, rerun). Re
 
 ## DONE - TASK-022 - 2026-10-30T10:57:48Z
 Action: report docs/report/phase-22-gen-exams.md. Result: REQ-0027 AC0-AC6 met on n=5 hard + 3 easy math exams, one lesson fixed. Decision: close; generator diversity and more subjects are the next rounds. Next: none.
+
+## DESIGN - TASK-023 - 2026-10-30T10:59:39Z
+Action: wrote docs/design/phase-23-dgnl.md. Result: --profile dgnl, letter keys, code check, QA. Decision: designer waiver. Next: IMPLEMENTING.

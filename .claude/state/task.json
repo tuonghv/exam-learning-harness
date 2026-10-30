@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-022",
-  "state": "DONE",
-  "next": "",
-  "title": "gen-exams: generate Vietnamese-style math exams with keys, run benchmark, record lessons (REQ-0027 concept round)",
-  "active": [],
+  "task_id": "TASK-023",
+  "state": "DESIGN",
+  "next": "IMPLEMENTING",
+  "title": "gen-exams --profile dgnl: DGNL-style multiple choice math/logic items with letter keys, code check and QA (REQ-0028)",
+  "active": [
+    {
+      "task_id": "TASK-023",
+      "state": "DESIGN",
+      "next": "IMPLEMENTING",
+      "updated_at": "2026-10-30T10:59:39Z"
+    }
+  ],
   "max_active": 1
 }

@@ -1,0 +1,1 @@
+{"design":{"status":"completed","path":"docs/design/phase-23-dgnl.md","summary":"gen-exams --profile dgnl: 4-option items, letter keys, code check and QA, manifest source note"},"acceptance_criteria":["REQ-0028 AC1, AC3 with $0 mock","real concept round waits for the go"],"roles":{"designer":{"waiver":"coordinator designed, as phases 18-22"}},"next":"IMPLEMENTING"}

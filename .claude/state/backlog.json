@@ -493,7 +493,7 @@
     "task_id": "TASK-023",
     "title": "gen-exams --profile dgnl: DGNL-style multiple choice math/logic items with letter keys, code check and QA (REQ-0028)",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-10-30T12:00:00Z",
     "requirement": "REQ-0028",
     "acceptance_criteria": [
