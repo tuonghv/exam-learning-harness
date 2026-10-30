@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-030",
-  "state": "DONE",
-  "next": "",
-  "title": "Solution language: vi default for all subjects, --lang en|auto override, localized learn-view labels (REQ-0036)",
-  "active": [],
+  "task_id": "TASK-031",
+  "state": "TODO",
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "title": "Refresh docs/guide/architecture.md to the real tree: src/exam_engine, scripts/exam.py, tools shims, ingest, report views, language (REQ-0007 AC3)",
+  "active": [
+    {
+      "task_id": "TASK-031",
+      "state": "TODO",
+      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+      "updated_at": ""
+    }
+  ],
   "max_active": 1
 }

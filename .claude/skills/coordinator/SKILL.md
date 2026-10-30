@@ -110,6 +110,7 @@ Alert when: a new or wider guard or permission rule is needed, a REQ has an open
 - Ask as a one-click hint: `AskUserQuestion` with the recommended option first, labelled `(Recommended)`, free text only when no option fits. Ask only what is the user's to decide; everything else goes to a role at once.
 - Never leave work pending while waiting: hand out what roles can do first, then ask, then apply the answer when it comes.
 - No deadlock: if the user has not answered in 10 minutes, set that item aside (`task.json` `next`/`blocked`, or its own queued task) and go on with any task that does not depend on it.
+- **Autonomy (user, RAW-00128, 2026-10-31):** ask only for (a) a high-cost or paid run, (b) missing input only the user has, (c) an unclear requirement that cannot be resolved from the ledger/docs, (d) a new or wider guard/permission rule. Never ask "shall I start the next task": pick the next TODO REQ (`req.py next`) and run it through the workflow at once; choose between options yourself, state the choice and why in one line, and report afterwards. A turn ends with `Wait for <role/background work>` or `Your turn:` only for items (a)-(d).
 - After DONE, pick the next workable task in the same turn and brief its first role. End a turn with `Wait for <what>` or `Your turn: <the decision/command>`, never leave the user guessing.
 - A call refused by permission is the user's to run: never retry another way. End the reply with a `Run this:` section, one fenced block of the exact commands, each prefixed with `!` and a short `# why`.
 
