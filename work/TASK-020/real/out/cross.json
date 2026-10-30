@@ -1,0 +1,170 @@
+{
+  "routes": {
+    "A": "exam text",
+    "B": "page images"
+  },
+  "model": "sonnet",
+  "questions": [
+    {
+      "id": "1",
+      "answer_a": "A",
+      "answer_b": "A",
+      "status": "needs_review",
+      "reason": "count_mismatch"
+    },
+    {
+      "id": "2",
+      "answer_a": "C",
+      "answer_b": "C",
+      "status": "needs_review",
+      "reason": "count_mismatch"
+    },
+    {
+      "id": "3",
+      "answer_a": "B",
+      "answer_b": "B",
+      "status": "needs_review",
+      "reason": "count_mismatch"
+    },
+    {
+      "id": "4",
+      "answer_a": "D",
+      "answer_b": "D",
+      "status": "needs_review",
+      "reason": "count_mismatch"
+    },
+    {
+      "id": "5",
+      "answer_a": "A",
+      "answer_b": "A",
+      "status": "needs_review",
+      "reason": "count_mismatch"
+    },
+    {
+      "id": "6",
+      "answer_a": "D",
+      "answer_b": "D",
+      "status": "needs_review",
+      "reason": "count_mismatch"
+    },
+    {
+      "id": "7",
+      "answer_a": "B",
+      "answer_b": "B",
+      "status": "needs_review",
+      "reason": "count_mismatch"
+    },
+    {
+      "id": "8",
+      "answer_a": "A",
+      "answer_b": "A",
+      "status": "needs_review",
+      "reason": "count_mismatch"
+    },
+    {
+      "id": "9",
+      "answer_a": "B",
+      "answer_b": "B",
+      "status": "needs_review",
+      "reason": "count_mismatch"
+    },
+    {
+      "id": "10",
+      "answer_a": null,
+      "answer_b": "A",
+      "status": "needs_review",
+      "reason": "count_mismatch"
+    },
+    {
+      "id": "11",
+      "answer_a": "A",
+      "answer_b": "A",
+      "status": "needs_review",
+      "reason": "count_mismatch"
+    },
+    {
+      "id": "12",
+      "answer_a": "A",
+      "answer_b": "A",
+      "status": "needs_review",
+      "reason": "count_mismatch"
+    },
+    {
+      "id": "13",
+      "answer_a": "a: Đúng; b: Đúng; c: Sai; d: Sai",
+      "answer_b": null,
+      "status": "needs_review",
+      "reason": "count_mismatch"
+    },
+    {
+      "id": "14",
+      "answer_a": "a: Đúng; b: Đúng; c: Đúng; d: Sai",
+      "answer_b": null,
+      "status": "needs_review",
+      "reason": "count_mismatch"
+    },
+    {
+      "id": "15",
+      "answer_a": "a: Đúng; b: Đúng; c: Sai; d: Sai",
+      "answer_b": null,
+      "status": "needs_review",
+      "reason": "count_mismatch"
+    },
+    {
+      "id": "16",
+      "answer_a": "a: Đúng; b: Sai; c: Đúng; d: Đúng",
+      "answer_b": null,
+      "status": "needs_review",
+      "reason": "count_mismatch"
+    },
+    {
+      "id": "17",
+      "answer_a": "7,35",
+      "answer_b": "7,35 (làm tròn đến hàng phần trăm)",
+      "status": "needs_review",
+      "reason": "count_mismatch"
+    },
+    {
+      "id": "18",
+      "answer_a": null,
+      "answer_b": "1152",
+      "status": "needs_review",
+      "reason": "count_mismatch"
+    },
+    {
+      "id": "19",
+      "answer_a": "5,91 cm^3",
+      "answer_b": "5,91 cm^3 (làm tròn đến hàng phần trăm)",
+      "status": "needs_review",
+      "reason": "count_mismatch"
+    },
+    {
+      "id": "20",
+      "answer_a": "1856",
+      "answer_b": "1856",
+      "status": "needs_review",
+      "reason": "count_mismatch"
+    },
+    {
+      "id": "21",
+      "answer_a": "1275 nghìn đồng",
+      "answer_b": "1275 nghìn đồng",
+      "status": "needs_review",
+      "reason": "count_mismatch"
+    },
+    {
+      "id": "22",
+      "answer_a": "1990 triệu đồng",
+      "answer_b": "1990 triệu đồng",
+      "status": "needs_review",
+      "reason": "count_mismatch"
+    }
+  ],
+  "summary": {
+    "questions": 22,
+    "agree": 0,
+    "needs_review": 22
+  },
+  "calls": 2,
+  "cost_usd": 0.348012
+}

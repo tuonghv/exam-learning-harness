@@ -481,8 +481,10 @@ def cross_main(argv):
             llm_images = lambda prompt, imgs: base(prompt)  # noqa: E731
         res = cross.cross_solve(exam, text, llm_text, llm_images, pngs, a.max_cost_usd, a.model)
         os.makedirs(a.out, exist_ok=True)
-        with open(os.path.join(a.out, "cross.json"), "w", encoding="utf-8") as fh:
-            fh.write(json.dumps(res, ensure_ascii=False, indent=2) + "\n")
+        trace = res.pop("trace")
+        for name, obj in (("cross.json", res), ("cross.trace.json", trace)):
+            with open(os.path.join(a.out, name), "w", encoding="utf-8") as fh:
+                fh.write(json.dumps(obj, ensure_ascii=False, indent=2) + "\n")
         with open(os.path.join(a.out, "review.md"), "w", encoding="utf-8") as fh:
             fh.write(cross.review_md(res))
     except cross.CrossError as exc:

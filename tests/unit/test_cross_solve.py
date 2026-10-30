@@ -213,3 +213,18 @@ class Cli(Base):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class Fixes(Base):
+    def test_trailing_note_ignored_and_unit_kept(self):
+        self.assertTrue(cross.same_answer("7,35", "7,35 (làm tròn đến hàng phần trăm)"))
+        self.assertFalse(cross.same_answer("3,46 m", "3,46 m^2"))
+
+    def test_trace_and_prompt(self):
+        res, _, fb = self.go(A_OK, B_OK)
+        self.assertEqual([t["route"] for t in res["trace"]], ["A", "B"])
+        self.assertIn("exactly 3 questions", fb.calls[0])
+        self.assertIn("do NOT use the printed numbers", fb.calls[0])
+
+    def test_nested_note_ignored(self):
+        self.assertTrue(cross.same_answer("7.35 (làm tròn; đúng 3*sqrt(6))", "7,35 (dài)"))

@@ -1,0 +1,170 @@
+{
+  "routes": {
+    "A": "exam text",
+    "B": "page images"
+  },
+  "model": "sonnet",
+  "questions": [
+    {
+      "id": "1",
+      "answer_a": "A",
+      "answer_b": "A",
+      "status": "agree",
+      "reason": ""
+    },
+    {
+      "id": "2",
+      "answer_a": "C",
+      "answer_b": "C",
+      "status": "agree",
+      "reason": ""
+    },
+    {
+      "id": "3",
+      "answer_a": "B",
+      "answer_b": "B",
+      "status": "agree",
+      "reason": ""
+    },
+    {
+      "id": "4",
+      "answer_a": "D",
+      "answer_b": "D",
+      "status": "agree",
+      "reason": ""
+    },
+    {
+      "id": "5",
+      "answer_a": "A",
+      "answer_b": "A",
+      "status": "agree",
+      "reason": ""
+    },
+    {
+      "id": "6",
+      "answer_a": "D",
+      "answer_b": "D",
+      "status": "agree",
+      "reason": ""
+    },
+    {
+      "id": "7",
+      "answer_a": "B",
+      "answer_b": "B",
+      "status": "agree",
+      "reason": ""
+    },
+    {
+      "id": "8",
+      "answer_a": "A",
+      "answer_b": "A",
+      "status": "agree",
+      "reason": ""
+    },
+    {
+      "id": "9",
+      "answer_a": "B",
+      "answer_b": "B",
+      "status": "agree",
+      "reason": ""
+    },
+    {
+      "id": "10",
+      "answer_a": null,
+      "answer_b": "A",
+      "status": "needs_review",
+      "reason": "declined_a"
+    },
+    {
+      "id": "11",
+      "answer_a": "A",
+      "answer_b": "A",
+      "status": "agree",
+      "reason": ""
+    },
+    {
+      "id": "12",
+      "answer_a": "A",
+      "answer_b": "A",
+      "status": "agree",
+      "reason": ""
+    },
+    {
+      "id": "13",
+      "answer_a": "a:Đ; b:Đ; c:S; d:S",
+      "answer_b": "a-Đúng; b-Đúng; c-Sai; d-Sai",
+      "status": "agree",
+      "reason": ""
+    },
+    {
+      "id": "14",
+      "answer_a": "a:Đ; b:Đ; c:Đ; d:S",
+      "answer_b": "a-Đúng; b-Đúng; c-Đúng; d-Sai",
+      "status": "agree",
+      "reason": ""
+    },
+    {
+      "id": "15",
+      "answer_a": "a:Đ; b:Đ; c:S; d:S",
+      "answer_b": "a-Đúng; b-Đúng; c-Sai; d-Sai",
+      "status": "agree",
+      "reason": ""
+    },
+    {
+      "id": "16",
+      "answer_a": "a:Đ; b:S; c:Đ; d:Đ",
+      "answer_b": "a-Đúng; b-Sai; c-Đúng; d-Đúng",
+      "status": "agree",
+      "reason": ""
+    },
+    {
+      "id": "17",
+      "answer_a": "7.35 (đơn vị dài, làm tròn đến hàng phần trăm; giá trị đúng 3*sqrt(6))",
+      "answer_b": "7,35 (đơn vị độ dài, làm tròn đến hàng phần trăm)",
+      "status": "needs_review",
+      "reason": "differ"
+    },
+    {
+      "id": "18",
+      "answer_a": null,
+      "answer_b": "1152",
+      "status": "needs_review",
+      "reason": "declined_a"
+    },
+    {
+      "id": "19",
+      "answer_a": "5.91 cm^3 (làm tròn đến hàng phần trăm)",
+      "answer_b": "5,91 cm^3 (làm tròn đến hàng phần trăm)",
+      "status": "agree",
+      "reason": ""
+    },
+    {
+      "id": "20",
+      "answer_a": "1856",
+      "answer_b": "1856",
+      "status": "agree",
+      "reason": ""
+    },
+    {
+      "id": "21",
+      "answer_a": "1275 nghìn đồng",
+      "answer_b": "1275 nghìn đồng",
+      "status": "agree",
+      "reason": ""
+    },
+    {
+      "id": "22",
+      "answer_a": "1990 triệu đồng",
+      "answer_b": "1990 triệu đồng",
+      "status": "agree",
+      "reason": ""
+    }
+  ],
+  "summary": {
+    "questions": 22,
+    "agree": 19,
+    "needs_review": 3
+  },
+  "calls": 2,
+  "cost_usd": 0.331868
+}

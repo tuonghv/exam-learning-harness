@@ -15,9 +15,11 @@ from exam_engine.utils.text import fold
 MAX_ATTEMPTS = 2
 _TF = {"đúng": "T", "true": "T", "t": "T", "đ": "T", "sai": "F", "false": "F", "f": "F", "s": "F"}
 IMAGE_RULES = (
-    "The exam is in the attached page images, not in text. Number the questions 1..%d in reading "
-    "order across the pages (ignore a restart of the numbering at a new part) and use these numbers "
-    "as ids. Read figures, tables and formulas from the images. If something is unreadable, set "
+    "The exam is in the attached page images, not in text. There are exactly %d questions in total. "
+    "The printed numbering restarts in each part (Part I 1-12, Part II 1-4, ...); do NOT use the "
+    "printed numbers: count continuously in reading order, so the first question of a later part "
+    "gets the previous count + 1, and use 1..%d as ids. Answer every question, Part II and III "
+    "included. Read figures, tables and formulas from the images. If something is unreadable, set "
     "answer_status to a non-answered value instead of guessing.")
 
 
@@ -37,12 +39,12 @@ def route_b_prompt(exam):
     from exam_engine.pipeline import router
     n = len(exam["questions"])
     return "%s\n\nLanguage: %s\n\n%s\n" % (solver.base_prompt(exam), router.language(exam),
-                                           IMAGE_RULES % n)
+                                           IMAGE_RULES % (n, n))
 
 
 def canon(answer):
     """Comparable form of an answer: letter, four verdicts, a number, else folded text."""
-    s = str(answer).strip()
+    s = re.sub(r"(?<=\d)\s*\(.*$", "", str(answer).strip(), flags=re.S)
     if re.fullmatch(r"[A-Da-d]", s):
         return "L:" + s.upper()
     verdicts = [_TF[w.lower()] for w in verifier._VERDICT.findall(s)]
@@ -109,6 +111,8 @@ def _ask(call, prompt, route, state, max_cost):
             raise CrossError("cost_cap", "cost $%.2f reached the cap $%.2f before route %s"
                              % (state["cost"], max_cost, route))
         c = call(prompt)
+        state["trace"].append({"route": route, "ok": c.ok, "cost_usd": c.cost_usd, "text": c.text,
+                               "reason": c.reason})
         state["calls"] += 1
         state["cost"] += c.cost_usd or 0.0
         if not c.ok:
@@ -121,7 +125,7 @@ def _ask(call, prompt, route, state, max_cost):
 
 def cross_solve(exam, exam_text, llm_text, llm_images, pngs, max_cost=1.0, model="sonnet"):
     """Result dict; `llm_text(prompt)` and `llm_images(prompt, pngs)` return a claude.Call."""
-    state = {"calls": 0, "cost": 0.0}
+    state = {"calls": 0, "cost": 0.0, "trace": []}
     got_a = _ask(llm_text, route_a_prompt(exam, exam_text), "A", state, max_cost)
     got_b = _ask(lambda p: llm_images(p, pngs), route_b_prompt(exam), "B", state, max_cost)
     qs = compare(exam, got_a, got_b)
@@ -129,7 +133,8 @@ def cross_solve(exam, exam_text, llm_text, llm_images, pngs, max_cost=1.0, model
     return {"routes": {"A": "exam text", "B": "page images"}, "model": model, "questions": qs,
             "summary": {"questions": len(qs), "agree": len(qs) - len(bad),
                         "needs_review": len(bad)},
-            "calls": state["calls"], "cost_usd": round(state["cost"], 6)}
+            "calls": state["calls"], "cost_usd": round(state["cost"], 6),
+            "trace": state["trace"]}
 
 
 def review_md(result):
