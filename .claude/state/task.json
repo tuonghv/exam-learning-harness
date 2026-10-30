@@ -2,14 +2,14 @@
   "schema": 2,
   "task_id": "TASK-029",
   "state": "DESIGN",
-  "next": "User reviews/approves design; then coder writes 12 tests first, then reporter.py/cli.py (+md2html font stack)",
+  "next": "coder: 12 tests first, then reporter.py/cli.py, then md2html font stack (29.5)",
   "title": "Answer sheet + learning view in report stage: build_answer_sheet / build_learning_view in reporter.py, --view sheet|learn (REQ-0034, REQ-0035)",
   "active": [
     {
       "task_id": "TASK-029",
       "state": "DESIGN",
-      "next": "User reviews/approves design; then coder writes 12 tests first, then reporter.py/cli.py (+md2html font stack)",
-      "updated_at": "2026-10-30T15:20:34Z"
+      "next": "coder: 12 tests first, then reporter.py/cli.py, then md2html font stack (29.5)",
+      "updated_at": "2026-10-30T15:21:57Z"
     }
   ],
   "max_active": 1

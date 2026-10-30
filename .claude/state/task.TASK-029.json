@@ -4,7 +4,7 @@
   "state": "DESIGN",
   "requirement": "REQ-0034",
   "acceptance_criteria": [
-    "REQ-0034 AC1-AC4: sheet 'Subject \u2013 N Questions', 5 per row, 2-digit ids as stored, circled A-D, \u2014 for null/Open/non A-D, block at top of report.md/html/pdf plus answers.md, solver/schema unchanged",
+    "REQ-0034 AC1-AC4: sheet 'Subject – N Questions', 5 per row, 2-digit ids as stored, circled A-D, — for null/Open/non A-D, block at top of report.md/html/pdf plus answers.md, solver/schema unchanged",
     "REQ-0035 AC1-AC4 phase 1: --view sheet|learn (default sheet), learn view reuses explanation+solution, optional key_concept/common_mistake only if present, no extra LLM cost",
     "Tests in tests/unit/test_exam_report.py with null-answer results (work/dgnl-real Vietnamese/Science), existing report tests stay green, PDF font check for circled letters"
   ],
@@ -55,10 +55,15 @@
       "raw": "RAW-00121",
       "note": "user accepted all recommended answers for REQ-0034/0035 (Q1-Q3, learn Q1)",
       "at": "2026-10-30T15:20:41Z"
+    },
+    {
+      "raw": "RAW-00123",
+      "note": "user approved design phase-29 incl. md2html font-stack item 29.5; coordinator picks best option",
+      "at": "2026-10-30T15:21:57Z"
     }
   ],
   "picked_at": "2026-10-30T15:17:31Z",
-  "updated_at": "2026-10-30T15:20:34Z",
+  "updated_at": "2026-10-30T15:21:57Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-029/"
@@ -70,5 +75,5 @@
     "notes": "",
     "next": "await user approval of docs/design/phase-29-answer-sheet-views.md, then coder tests first"
   },
-  "next": "User reviews/approves design; then coder writes 12 tests first, then reporter.py/cli.py (+md2html font stack)"
+  "next": "coder: 12 tests first, then reporter.py/cli.py, then md2html font stack (29.5)"
 }
