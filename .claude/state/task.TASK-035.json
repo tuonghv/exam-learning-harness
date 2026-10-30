@@ -1,0 +1,53 @@
+{
+  "task_id": "TASK-035",
+  "title": "extract-eval core: per-field exact-match, Wilson 95% interval, verified precision, needs_review rate on mock/synthetic gold, tier 0 (REQ-0025)",
+  "state": "TODO",
+  "requirement": "REQ-0025",
+  "acceptance_criteria": [
+    "REQ-0025 AC1-AC5 at tier 0: >=20 synthetic gold questions outside solver inputs/eval keys; `scripts/exam.py extract-eval` per-field exact match, verified precision, needs_review rate, Wilson 95% interval, n; 99.999% needs ~300000 samples note; corrupted extraction lowers accuracy; $0, no real vision run"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {},
+  "user_notes": [],
+  "picked_at": "2026-10-30T22:41:01Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": "",
+    "next": "designer drafting; then advance.sh DESIGN, coder, tester, verifier"
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
