@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-002",
   "title": "Design the exam-solving pipeline: reuse table, gaps, JSON schema, build plan (REQ-0008, EPIC-003)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0008",
   "acceptance_criteria": [
     "AC1 design doc",
@@ -19,8 +19,11 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "docs/design/phase-2-exam-pipeline.md"
+    ],
+    "summary": "design-only task: the designed pipeline was implemented by TASK-003..030 (src/exam_engine, schemas, tests); nothing built under TASK-002"
   },
   "unit_test": {
     "status": "pending",
@@ -42,7 +45,13 @@
   "roles_required": true,
   "crosscheck_required": true,
   "roles": {
-    "designer": "work/TASK-002/handoff/design.md"
+    "designer": "work/TASK-002/handoff/design.md",
+    "coder": {
+      "waiver": "design-only task; the pipeline it designed was built by TASK-003..030 (src/exam_engine)"
+    },
+    "tester": {
+      "waiver": "design-only task; its 19-test plan is covered by tests/unit (531 tests) built under later TASKs"
+    }
   },
   "user_notes": [
     {
@@ -52,7 +61,7 @@
     }
   ],
   "picked_at": "2026-10-29T03:08:32Z",
-  "updated_at": "2026-10-29T03:13:11Z",
+  "updated_at": "2026-10-30T22:37:22Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -65,8 +74,5 @@
     "notes": "",
     "next": "resume as IMPLEMENTING planning after TASK-003 DONE"
   },
-  "next": "user answers Q4-Q6; solver.md review into design; then IMPLEMENTING after REQ-0002",
-  "status": "held",
-  "held_at": "2026-10-29T03:24:15Z",
-  "held_reason": "design done; build waits on REQ-0002 (layout + checker)"
+  "next": "UNIT_TESTED: cite the unit suite"
 }

@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-032",
-  "state": "DONE",
-  "next": "",
-  "title": "advance.sh + advance skill: one command per TASK transition and REQ catch-up (REQ-0037)",
-  "active": [],
+  "task_id": "TASK-002",
+  "state": "IMPLEMENTING",
+  "next": "UNIT_TESTED: cite the unit suite",
+  "title": "Design the exam-solving pipeline: reuse table, gaps, JSON schema, build plan (REQ-0008, EPIC-003)",
+  "active": [
+    {
+      "task_id": "TASK-002",
+      "state": "IMPLEMENTING",
+      "next": "UNIT_TESTED: cite the unit suite",
+      "updated_at": "2026-10-30T22:37:22Z"
+    }
+  ],
   "max_active": 1
 }
