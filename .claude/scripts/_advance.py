@@ -345,7 +345,8 @@ def backlog_done(t):
 def append_log(st, t, lg):
     ts = _tasks.now()
     entry = "## %s - %s - %s\nAction: %s\nResult: %s\nDecision: %s\nNext: %s" % (
-        st, t, ts, lg["action"], lg["result"], lg["decision"], lg["next"])
+        st, t, ts, one_line(lg["action"]), one_line(lg["result"]), one_line(lg["decision"]),
+        one_line(lg["next"]))
     p = os.path.join(ST, "phase-log.md")
     with _tasks.locked(task=t):
         old = read_head(p)
@@ -661,11 +662,8 @@ def main(argv):
             pos.append(a[i])
             i += 1
     try:
-        if len(pos) == 2 and pos[0] == "req-catchup" and "--spec" not in opts:
-            return catchup(pos[1], opts.get("--ac-evidence", ""), dry)
-        if len(pos) == 2 and re.fullmatch(r"TASK-[0-9]+", pos[0]) and "--ac-evidence" not in opts:
-            return advance(pos[0], pos[1].upper(), opts.get("--spec"), dry)
-        return usage()
+        with run_lock():
+            return dispatch(pos, opts, dry)
     except Fail as e:
         print("FAIL [%s]: %s" % (e.gate, e.msg))
         if e.fix:
@@ -675,6 +673,36 @@ def main(argv):
         print("FAIL [spec]: %s" % short(e, 200))
         print("fix: " + FIX["spec"])
         return 1
+
+
+class run_lock(object):
+    """One advance at a time: non-blocking flock on a gitignored file (state stays clean)."""
+
+    def __enter__(self):
+        import fcntl
+        d = os.path.join(_tasks.ROOT, "work")
+        if not os.path.isdir(d):
+            os.makedirs(d)
+        self.f = open(os.path.join(d, ".advance.lock"), "w")
+        try:
+            fcntl.flock(self.f, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except (IOError, OSError):
+            self.f.close()
+            raise Fail("lock", "another advance is running", "wait for it to finish, then re-run")
+        return self
+
+    def __exit__(self, *exc):
+        self.f.close()
+        return False
+
+
+def dispatch(pos, opts, dry):
+    if True:
+        if len(pos) == 2 and pos[0] == "req-catchup" and "--spec" not in opts:
+            return catchup(pos[1], opts.get("--ac-evidence", ""), dry)
+        if len(pos) == 2 and re.fullmatch(r"TASK-[0-9]+", pos[0]) and "--ac-evidence" not in opts:
+            return advance(pos[0], pos[1].upper(), opts.get("--spec"), dry)
+        return usage()
 
 
 if __name__ == "__main__":
