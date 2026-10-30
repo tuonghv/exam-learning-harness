@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-029",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "User reviews/approves design; then coder writes 12 tests first, then reporter.py/cli.py (+md2html font stack)",
   "title": "Answer sheet + learning view in report stage: build_answer_sheet / build_learning_view in reporter.py, --view sheet|learn (REQ-0034, REQ-0035)",
   "active": [
     {
       "task_id": "TASK-029",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "User reviews/approves design; then coder writes 12 tests first, then reporter.py/cli.py (+md2html font stack)",
+      "updated_at": "2026-10-30T15:20:34Z"
     }
   ],
   "max_active": 1

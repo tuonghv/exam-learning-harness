@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-029",
   "title": "Answer sheet + learning view in report stage: build_answer_sheet / build_learning_view in reporter.py, --view sheet|learn (REQ-0034, REQ-0035)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0034",
   "acceptance_criteria": [
     "REQ-0034 AC1-AC4: sheet 'Subject \u2013 N Questions', 5 per row, 2-digit ids as stored, circled A-D, \u2014 for null/Open/non A-D, block at top of report.md/html/pdf plus answers.md, solver/schema unchanged",
@@ -9,11 +9,18 @@
     "Tests in tests/unit/test_exam_report.py with null-answer results (work/dgnl-real Vietnamese/Science), existing report tests stay green, PDF font check for circled letters"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
-    "reuse": [],
-    "risks": []
+    "status": "completed",
+    "path": "docs/design/phase-29-answer-sheet-views.md",
+    "summary": "build_answer_sheet + build_learning_view in reporter.py, composed in write_reports, --view sheet|learn on exam.py report; answers.md; no schema/solver change",
+    "reuse": [
+      "_one_line",
+      "_is_open",
+      "md2html fence",
+      "md_to_pdf"
+    ],
+    "risks": [
+      "circled letters missing from DejaVu Sans Mono (fc-list); CJK mono fallback may be double width"
+    ]
   },
   "implementation": {
     "status": "pending",
@@ -38,11 +45,21 @@
   },
   "roles_required": true,
   "crosscheck_required": true,
-  "roles": {},
-  "user_notes": [],
+  "roles": {
+    "designer": {
+      "waiver": "work/TASK-029/handoff/design.md"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00121",
+      "note": "user accepted all recommended answers for REQ-0034/0035 (Q1-Q3, learn Q1)",
+      "at": "2026-10-30T15:20:41Z"
+    }
+  ],
   "picked_at": "2026-10-30T15:17:31Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-10-30T15:20:34Z",
+  "updated_by": "main",
   "scope": [
     "work/TASK-029/"
   ],
@@ -51,7 +68,7 @@
   "checkpoint": {
     "done": [],
     "notes": "",
-    "next": "launch designer: docs/design for REQ-0034/0035 (build_answer_sheet, build_learning_view, --view)"
+    "next": "await user approval of docs/design/phase-29-answer-sheet-views.md, then coder tests first"
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "User reviews/approves design; then coder writes 12 tests first, then reporter.py/cli.py (+md2html font stack)"
 }

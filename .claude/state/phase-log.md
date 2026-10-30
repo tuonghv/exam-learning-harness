@@ -721,3 +721,9 @@ Action: VERIFIED. Result: 120 questions extracted, 4 sections solved, math 61-71
 
 ## DONE - TASK-028 - 2026-10-30T14:37:20Z
 Action: DONE. Result: whole real DGNL sample extracted and solved; guide docs/guide/dgnl-real-exam.md. Decision: ok. Next: next task.
+
+## DESIGN - TASK-029 - 2026-10-30T15:20:34Z
+Action: designer Nova drafted design; coordinator checked fonts (DejaVu Mono lacks circled letters).
+Result: docs/design/phase-29-answer-sheet-views.md
+Decision: hold implementation for user review/approval (user asked to review).
+Next: coder tests-first.
