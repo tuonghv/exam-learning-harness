@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/inputs/literature/input-003.md",
+    "subject": "Literature",
+    "level": "Grade 12",
+    "exam_type": "High School Graduation",
+    "task": "Reading Comprehension",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 1.0,
+    "cost_usd": 0.045765,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "Claude review only",
+      "answer": "Open",
+      "solution": [
+        "Xác định chủ đề: tình cha con, lòng biết ơn và nỗi nhớ của người con khi trưởng thành.",
+        "Phân tích hình ảnh người cha lao động: 'cha đi gặt sớm, nắng hồng trên vai' cho thấy sự cần cù, chịu thương chịu khó.",
+        "Phân tích hình ảnh 'Lưng cha cong một vầng trăng': hình ảnh so sánh đẹp, vừa gợi sự vất vả, vừa tôn vinh vẻ đẹp của người cha.",
+        "Phân tích tình cảm thầm lặng của cha: 'chỉ nhìn bờ ruộng, như là nhìn con'.",
+        "Nêu tình cảm người con: yêu thương, biết ơn, khắc ghi 'mùi rơm mới' và 'lời cha ru'."
+      ],
+      "explanation": "Người cha hiện lên qua lao động nhọc nhằn nhưng đẹp: dáng lưng cong được thi vị hóa thành vầng trăng, mồ hôi hóa thành hạt vàng nở hoa. Cha ít nói, thương con bằng hành động và ánh nhìn lặng lẽ. Người con cảm nhận được sự hy sinh ấy nên trân trọng, biết ơn và hứa nhớ mãi. Cách hiểu về bờ ruộng cũng có thể xem là sự gắn bó của cha với đất, và cũng là nơi cha gửi gắm hy vọng về con. Hai cách hiểu không loại trừ nhau.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Bài đọc hiểu mở, các ý chính đều có trích dẫn rõ ràng trong ngữ liệu."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "answer is Open",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: Lưng cha cong một vầng trăng,",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: mồ hôi thấm đất, hạt vàng nở hoa.",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: chỉ nhìn bờ ruộng, như là nhìn con.",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: nhớ mùi rơm mới, nhớ lời cha ru.",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: unsure",
+          "result": "unknown",
+          "independent": false
+        }
+      ],
+      "verification_status": "UNCERTAIN",
+      "status_reason": "open_task_no_rubric",
+      "qa_findings": [
+        {
+          "source": "ai_review",
+          "code": "unsure",
+          "message": "Đây là câu tự luận mở (answer = Open), không có đáp án duy nhất để đối chiếu nên không thể xác nhận đúng/sai tuyệt đối."
+        },
+        {
+          "source": "ai_review",
+          "code": "unsure",
+          "message": "Các ý chính (cha lao động cần cù, lưng cong như vầng trăng, mồ hôi hóa hạt vàng, tình thương thầm lặng, con biết ơn và nhớ mùi rơm, lời ru) bám sát văn bản và hợp lý."
+        },
+        {
+          "source": "ai_review",
+          "code": "unsure",
+          "message": "Phần explanation có câu về hai cách hiểu 'bờ ruộng' hơi lạc, không liên quan đến lời giải trước đó, và bài chưa đạt khuôn 8-10 dòng như yêu cầu."
+        }
+      ],
+      "score": {
+        "points": null,
+        "max": null,
+        "basis": "none",
+        "detail": "no key"
+      },
+      "attempts": 1,
+      "unresolved": true,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 0,
+    "fail": 0,
+    "uncertain": 1,
+    "unresolved": 1,
+    "points": null,
+    "max_points": null
+  }
+}

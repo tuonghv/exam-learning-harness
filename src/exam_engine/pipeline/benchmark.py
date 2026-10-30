@@ -61,7 +61,11 @@ def run_all(items, out_dir, cfg, llm, budget):
             rows.append({"subject": sub, "item": n, "skipped": "budget_reached"})
             continue
         c = dict(cfg, key=key, max_cost_usd=min(cfg["max_cost_usd"], budget - spent))
-        result, _ = engine.run(path, os.path.join(out_dir, sub, n), c, llm)
+        try:
+            result, _ = engine.run(path, os.path.join(out_dir, sub, n), c, llm)
+        except (OSError, ValueError) as exc:
+            rows.append({"subject": sub, "item": n, "skipped": "error: %s" % exc})
+            continue
         if result is None:
             rows.append({"subject": sub, "item": n, "skipped": "invalid_input"})
             continue

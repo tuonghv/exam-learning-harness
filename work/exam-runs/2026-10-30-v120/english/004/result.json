@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/inputs/english/input-004.md",
+    "subject": "English",
+    "level": "Grade 12",
+    "exam_type": "High School Graduation",
+    "task": "Sentence Ordering",
+    "mode": "Solve",
+    "language": "en"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 1.0,
+    "cost_usd": 0.032827,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "key match",
+      "answer": "b-d-a-e-c",
+      "solution": [
+        "b opens the story: it introduces Linh and her decision (Last year, Linh decided...).",
+        "d follows b: it gives her reason for the choice (She had always loved children, so the choice seemed easy at first).",
+        "a follows d: 'However' contrasts with 'seemed easy at first' and shows the problem (the job needed more patience).",
+        "e follows a: 'Because of this' refers to the lack of patience and gives her response (extra training courses).",
+        "c closes the story: 'Now, after finishing the courses' is the result and present outcome."
+      ],
+      "explanation": "The paragraph follows a chronological order: decision (b), reason (d), problem (a), action (e), result (c). 'However' in a needs the earlier idea that the choice seemed easy, so a cannot come before d. 'Because of this' in e needs a problem before it, so e must follow a. 'the courses' in c refers back to the courses in e, so c must be last. Placing a before b or d would leave 'she' and 'the job' without a clear referent.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Discourse markers (However, Because of this, Now, the courses) fix the order uniquely."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "ordering uses each given letter once",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: b: Last year, Linh decided to become a primary school teacher.",
+          "result": "fail",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: d: She had always loved children, so the choice seemed easy at first.",
+          "result": "fail",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: a: However, she soon realised that the job required far more patience than she h",
+          "result": "fail",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: e: Because of this, she began to attend extra training courses on classroom mana",
+          "result": "fail",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: c: Now, after finishing the courses, she says it is the most rewarding decision ",
+          "result": "fail",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "FAIL",
+      "status_reason": "check_failed: quote",
+      "qa_findings": [
+        {
+          "source": "deterministic",
+          "code": "quote",
+          "message": "verbatim in passage/question: b: Last year, Linh decided to become a primary school teacher."
+        },
+        {
+          "source": "deterministic",
+          "code": "quote",
+          "message": "verbatim in passage/question: d: She had always loved children, so the choice seemed easy at first."
+        },
+        {
+          "source": "deterministic",
+          "code": "quote",
+          "message": "verbatim in passage/question: a: However, she soon realised that the job required far more patience than she h"
+        },
+        {
+          "source": "deterministic",
+          "code": "quote",
+          "message": "verbatim in passage/question: e: Because of this, she began to attend extra training courses on classroom mana"
+        },
+        {
+          "source": "deterministic",
+          "code": "quote",
+          "message": "verbatim in passage/question: c: Now, after finishing the courses, she says it is the most rewarding decision "
+        }
+      ],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 2,
+      "unresolved": true,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 0,
+    "fail": 1,
+    "uncertain": 0,
+    "unresolved": 1,
+    "points": 1,
+    "max_points": 1
+  }
+}

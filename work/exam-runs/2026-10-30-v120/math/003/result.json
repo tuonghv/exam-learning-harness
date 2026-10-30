@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/inputs/math/input-003.md",
+    "subject": "Mathematics",
+    "level": "Grade 12",
+    "exam_type": "High School Graduation",
+    "task": "Multiple Choice",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 1.0,
+    "cost_usd": 0.032879,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "key match",
+      "answer": "A",
+      "solution": [
+        "Tập xác định: R. Đạo hàm f'(x) = 3x^2 - 6x + m.",
+        "Hàm bậc ba có hai điểm cực trị khi và chỉ khi f'(x) = 0 có hai nghiệm phân biệt (đổi dấu).",
+        "Điều kiện: delta' = 9 - 3m > 0, suy ra m < 3.",
+        "Với m nguyên thuộc [-5; 5]: m = -5, -4, -3, -2, -1, 0, 1, 2.",
+        "Biên m = 3: f'(x) = 3(x - 1)^2 >= 0, không đổi dấu nên không có cực trị, bị loại.",
+        "Vậy có 8 giá trị nguyên của m."
+      ],
+      "explanation": "A. 8: đúng, m thuộc {-5,...,2} gồm 8 số nguyên. B. 9: sai, nhầm khi tính cả m = 3 (delta' = 0, nghiệm kép, f' không đổi dấu nên không có cực trị). C. 7: sai, bỏ sót một giá trị (ví dụ m = -5 hoặc m = 2). D. 6: sai, đếm thiếu hai giá trị.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Điều kiện delta' > 0 chuẩn cho hàm bậc ba, biên m = 3 đã kiểm tra riêng."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "single letter A-D",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "computed",
+          "detail": "arithmetic only: node not allowed: Call",
+          "result": "unknown",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 1,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}

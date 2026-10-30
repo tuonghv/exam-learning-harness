@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/inputs/english/input-003.md",
+    "subject": "English",
+    "level": "Grade 12",
+    "exam_type": "High School Graduation",
+    "task": "Reading Comprehension",
+    "mode": "Solve",
+    "language": "en"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 1.0,
+    "cost_usd": 0.031512,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "key match",
+      "answer": "B",
+      "solution": [
+        "The passage compares two groups given the same list of fifty words.",
+        "Group 1 studied for two hours before midnight and slept for eight hours; group 2 studied after midnight and slept for only four hours.",
+        "Group 1 recalled 38 words versus 26 for group 2.",
+        "The researchers explain that sleep helps the brain store new information, so the longer sleep after studying is the reason."
+      ],
+      "explanation": "B is correct: the first group slept eight hours after studying versus four hours, and the researchers link better recall to sleep. A is wrong: both groups' study time is not said to differ in a way that explains the result; the first group studied for two hours and no study time is given for the second. C is wrong: both groups learned the same list of fifty words. D is wrong: the passage says nothing about reviewing the words again in the morning; they were simply tested the next morning.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "The passage directly contrasts sleep duration and gives sleep as the explanation."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "single letter A-D",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: The first group studied for two hours before midnight and then slept for eight h",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: The researchers explained that sleep helps the brain store new information.",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [
+        {
+          "source": "ai_review",
+          "code": "agree",
+          "message": "B matches the passage: the first group slept eight hours versus four, and the researchers say sleep helps the brain store information."
+        }
+      ],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 1,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}

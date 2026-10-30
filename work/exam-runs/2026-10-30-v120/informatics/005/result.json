@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/inputs/informatics/input-005.md",
+    "subject": "Tin hoc",
+    "level": "Grade 12",
+    "exam_type": "High School Graduation",
+    "task": "Short Answer",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 1.0,
+    "cost_usd": 0.028315,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "code oracle",
+      "answer": "62 host",
+      "solution": [
+        "Biểu diễn: địa chỉ IPv4 32 bit, tiền tố /26 nghĩa là 26 bit mạng, 32 - 26 = 6 bit host.",
+        "Tổng số địa chỉ trong mạng con = 2^6 = 64.",
+        "Trừ địa chỉ mạng (192.168.10.0) và địa chỉ quảng bá (192.168.10.63): 64 - 2 = 62."
+      ],
+      "explanation": "Số host tối đa = 2^(32-26) - 2 = 62. Dải host dùng được là 192.168.10.1 đến 192.168.10.62. Không làm tròn vì là số nguyên.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Phép tính chuẩn về chia mạng con IPv4, không có chỗ mơ hồ trong đề."
+      },
+      "checks": [
+        {
+          "kind": "computed",
+          "detail": "arithmetic only: 2**(32-26) - 2 = 62, answer 62",
+          "result": "pass",
+          "independent": true
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: 192.168.10.0/26",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        }
+      ],
+      "verification_status": "FAIL",
+      "status_reason": "differs_from_key",
+      "qa_findings": [
+        {
+          "source": "score",
+          "code": "differs_from_key",
+          "message": "answer differs from the key"
+        }
+      ],
+      "score": {
+        "points": 0,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "differs_from_key"
+      },
+      "attempts": 1,
+      "unresolved": true,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 0,
+    "fail": 1,
+    "uncertain": 0,
+    "unresolved": 1,
+    "points": 0,
+    "max_points": 1
+  }
+}

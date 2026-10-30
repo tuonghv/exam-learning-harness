@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/inputs/physics/input-005.md",
+    "subject": "Physics",
+    "level": "Grade 12",
+    "exam_type": "High School Graduation",
+    "task": "Short Answer",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 1.0,
+    "cost_usd": 0.047435,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "Claude review only",
+      "answer": "1.8e-19 J (làm tròn đến 2 chữ số có nghĩa)",
+      "solution": [
+        "Given: lambda = 0.30 um = 0.30e-6 m; A = 3.0 eV = 3.0*1.6e-19 = 4.8e-19 J; h = 6.625e-34 J.s; c = 3e8 m/s.",
+        "Find: động năng ban đầu cực đại W0max (J).",
+        "Định luật: hc/lambda = A + W0max, suy ra W0max = hc/lambda - A.",
+        "Năng lượng photon: hc/lambda = 6.625e-34*3e8/0.30e-6 = 6.625e-19 J.",
+        "W0max = 6.625e-19 - 4.8e-19 = 1.825e-19 J, làm tròn 2 chữ số có nghĩa: 1.8e-19 J."
+      ],
+      "explanation": "Áp dụng phương trình Einstein về hiệu ứng quang điện: năng lượng photon bằng công thoát cộng động năng ban đầu cực đại. Năng lượng photon 6.625e-19 J lớn hơn công thoát 4.8e-19 J nên có hiện tượng quang điện và động năng dương. Đổi đơn vị: um sang m (nhân 1e-6) và eV sang J (nhân 1.6e-19).",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Bài áp dụng trực tiếp công thức Einstein, phép tính đơn giản."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "answer holds a number",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "computed",
+          "detail": "arithmetic only: 6.625e-34*3e8/0.30e-6 - 3.0*1.6e-19 = 1.825e-19, answer 1.8",
+          "result": "fail",
+          "independent": true
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: Chiếu bức xạ có bước sóng 0,30 μm vào bề mặt một tấm kim loại có công thoát elec",
+          "result": "pass",
+          "independent": false
+        }
+      ],
+      "verification_status": "FAIL",
+      "status_reason": "differs_from_key",
+      "qa_findings": [
+        {
+          "source": "deterministic",
+          "code": "computed",
+          "message": "arithmetic only: 6.625e-34*3e8/0.30e-6 - 3.0*1.6e-19 = 1.825e-19, answer 1.8"
+        },
+        {
+          "source": "score",
+          "code": "differs_from_key",
+          "message": "answer differs from the key"
+        }
+      ],
+      "score": {
+        "points": 0,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "differs_from_key"
+      },
+      "attempts": 2,
+      "unresolved": true,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 0,
+    "fail": 1,
+    "uncertain": 0,
+    "unresolved": 1,
+    "points": 0,
+    "max_points": 1
+  }
+}

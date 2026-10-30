@@ -111,3 +111,16 @@ class Bench(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class Robust(Bench):
+    def test_engine_error_skips_item_not_run(self):
+        real = engine.run
+        def boom(path, out, cfg, llm):
+            if "english2" in path:
+                raise OSError("missing prompt")
+            return real(path, out, cfg, llm)
+        with mock.patch.object(engine, "run", boom):
+            rows = benchmark.run_all(self.items, os.path.join(self.root, "o"), self.cfg, Fake(), 5.0)
+        self.assertEqual(rows[1]["skipped"], "error: missing prompt")
+        self.assertNotIn("skipped", rows[0])

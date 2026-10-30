@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/inputs/math/input-004.md",
+    "subject": "Mathematics",
+    "level": "Grade 12",
+    "exam_type": "High School Graduation",
+    "task": "Short Answer",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 1.0,
+    "cost_usd": 0.037423,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "key match",
+      "answer": "37/42",
+      "solution": [
+        "Số cách lấy 3 viên bất kỳ từ 9 viên: C(9,3) = 84, nên không gian mẫu có 84 phần tử.",
+        "Biến cố đối: cả 3 viên đều đỏ, số cách là C(5,3) = 10.",
+        "Xác suất của biến cố đối là 10/84 = 5/42.",
+        "Xác suất cần tìm: 1 - 5/42 = 37/42."
+      ],
+      "explanation": "Biến cố 'có ít nhất một bi xanh' là biến cố đối của 'cả 3 viên đều đỏ', nên P = 1 - P(3 đỏ) = 1 - 10/84 = 74/84 = 37/42. 37 và 42 nguyên tố cùng nhau (37 là số nguyên tố không chia hết 42), nên phân số đã tối giản.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Bài xác suất cổ điển đơn giản, hai cách tính cho cùng kết quả."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "answer holds a number",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "computed",
+          "detail": "arithmetic only: 1 - 10/84 = 0.880952381, answer 37",
+          "result": "fail",
+          "independent": true
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: Một hộp chứa 5 viên bi đỏ và 4 viên bi xanh",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: Lấy ngẫu nhiên đồng thời 3 viên bi từ hộp",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "FAIL",
+      "status_reason": "check_failed: computed",
+      "qa_findings": [
+        {
+          "source": "deterministic",
+          "code": "computed",
+          "message": "arithmetic only: 1 - 10/84 = 0.880952381, answer 37"
+        }
+      ],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 2,
+      "unresolved": true,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 0,
+    "fail": 1,
+    "uncertain": 0,
+    "unresolved": 1,
+    "points": 1,
+    "max_points": 1
+  }
+}

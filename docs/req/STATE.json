@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0009",
-  "next": "AC1/AC4: real benchmark run needs user go (est $2-3, cap $3.00)",
-  "updated": "2026-10-30 13:14"
+  "next": "AC4: fix engine false-FAILs (computed first-number, quote label, key-match remarks) per FINDINGS.md and re-measure; needs user ok to change engine",
+  "updated": "2026-10-30 17:28"
 }

@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/inputs/literature/input-004.md",
+    "subject": "Literature",
+    "level": "Grade 12",
+    "exam_type": "High School Graduation",
+    "task": "Essay",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 1.0,
+    "cost_usd": 0.046927,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "Claude review only",
+      "answer": "Open",
+      "solution": [
+        "Xác định vấn đề: ý nghĩa của những hành động nhỏ bé (nụ cười, chỗ ngồi, lời hỏi han, người bạn đồng hành) trong cuộc sống.",
+        "Mở đoạn: nêu luận điểm, hành động nhỏ tuy giản dị nhưng mang giá trị lớn, làm ấm lòng và gắn kết con người.",
+        "Thân đoạn: giải thích, phân tích và dẫn chứng từ đoạn thơ (hạt mưa nhỏ làm xanh lá, lời hỏi han làm ấm lòng, bạn chung bước làm đường xa thành gần), bổ sung một ví dụ đời sống.",
+        "Mở rộng, phản biện nhẹ: không coi thường việc nhỏ, đồng thời tránh làm cho có; hành động phải xuất phát từ sự chân thành.",
+        "Kết đoạn: liên hệ bản thân, bắt đầu từ việc nhỏ như chào hỏi, giúp bạn, chia sẻ."
+      ],
+      "explanation": "Đây là bài nghị luận xã hội dạng đoạn văn khoảng 200 chữ, không có đáp án đúng-sai duy nhất. Bài đạt yêu cầu khi nêu đúng vấn đề, có lập luận và dẫn chứng từ đoạn thơ, đồng thời liên hệ thực tế và bản thân. Hướng lạc đề: chỉ phân tích nghệ thuật của đoạn thơ mà không bàn về ý nghĩa của hành động nhỏ; hoặc nêu chung chung, không dẫn chứng.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Đề mở, yêu cầu rõ; chỉ khác biệt ở cách triển khai, không có đáp án duy nhất."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "answer is Open",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: Hạt mưa nhỏ cũng làm xanh lá,",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: một lời hỏi han cũng ấm lòng.",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: Đường dài có bạn chung bước,",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: Đời không cần những điều to lớn,",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: unsure",
+          "result": "unknown",
+          "independent": false
+        }
+      ],
+      "verification_status": "UNCERTAIN",
+      "status_reason": "open_task_no_rubric",
+      "qa_findings": [
+        {
+          "source": "ai_review",
+          "code": "unsure",
+          "message": "Đây là câu tự luận mở (đoạn văn nghị luận xã hội khoảng 200 chữ), không có đáp án đúng-sai duy nhất để đối chiếu."
+        },
+        {
+          "source": "ai_review",
+          "code": "unsure",
+          "message": "Dàn ý của người giải hợp lý: nêu đúng vấn đề, dẫn chứng từ đoạn thơ (các trích dẫn khớp nguyên văn), có mở rộng và liên hệ bản thân."
+        },
+        {
+          "source": "ai_review",
+          "code": "unsure",
+          "message": "Người giải không đưa ra đoạn văn hoàn chỉnh nên không thể xác nhận độ dài khoảng 200 chữ hay chất lượng diễn đạt."
+        }
+      ],
+      "score": {
+        "points": null,
+        "max": null,
+        "basis": "none",
+        "detail": "no key"
+      },
+      "attempts": 1,
+      "unresolved": true,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 0,
+    "fail": 0,
+    "uncertain": 1,
+    "unresolved": 1,
+    "points": null,
+    "max_points": null
+  }
+}

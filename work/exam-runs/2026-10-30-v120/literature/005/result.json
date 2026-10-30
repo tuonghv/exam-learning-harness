@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/inputs/literature/input-005.md",
+    "subject": "Literature",
+    "level": "Grade 12",
+    "exam_type": "High School Graduation",
+    "task": "Reading Comprehension",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 1.0,
+    "cost_usd": 0.046697,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "Claude review only",
+      "answer": "Open",
+      "solution": [
+        "Cách hiểu 1: nhận diện so sánh và ẩn dụ ở hai câu đầu, nêu tác dụng làm nổi bật sức sống và nhịp sống hối hả của thành phố.",
+        "Cách hiểu 2: nhận diện nhân hóa ở câu về nhà cao tầng và so sánh ở hình ảnh bó cúc, nêu tác dụng làm thành phố có hồn và làm nổi bật sự cô đơn của cụ già.",
+        "Dàn ý: mở bài nêu hai biện pháp; thân bài lần lượt chỉ ra biện pháp, dẫn chứng, tác dụng; kết bài nêu giá trị biểu đạt chung."
+      ],
+      "explanation": "Cách hiểu 1 (so sánh và ẩn dụ): 'Thành phố thức dậy như một con thú khổng lồ' là so sánh, vừa kèm nhân hóa 'thức dậy'. 'Những con đường là mạch máu, xe cộ là dòng hồng cầu tất bật' là ẩn dụ (hoặc so sánh ngầm). Tác dụng: thành phố hiện lên như một cơ thể sống, to lớn, đầy năng lượng, nhịp sống gấp gáp. Cách hiểu 2 (nhân hóa và so sánh): 'Nhà cao tầng đứng im, nhìn xuống người đi bộ nhỏ bé' là nhân hóa, tạo cái nhìn lạnh lùng, xa cách của đô thị với con người. 'Bó cúc vàng của cụ như một mảnh nắng bị bỏ quên' là so sánh, kết hợp nhân hóa 'bị bỏ quên', gợi vẻ đẹp ấm áp nhưng lẻ loi, đồng thời gợi sự cảm thông với người già nghèo giữa phố thị ồn ào. Cả hai cách hiểu đều chấp nhận được vì các biện pháp có trong đoạn văn; đáp án nên nêu đúng hai biện pháp, kèm dẫn chứng và tác dụng. Lưu ý: nếu chỉ chọn hai biện pháp thì so sánh và nhân hóa là lựa chọn bao quát nhất, vì cả hai xuất hiện nhiều lần trong đoạn.",
+      "uncertainty": {
+        "level": "medium",
+        "reason": "Đề không chỉ định hai biện pháp cụ thể, đoạn văn có nhiều biện pháp (so sánh, ẩn dụ, nhân hóa) nên đáp án chuẩn có thể chọn cặp khác nhau."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "answer is Open",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: Thành phố thức dậy như một con thú khổng lồ.",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: Những con đường là mạch máu, xe cộ là dòng hồng cầu tất bật.",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: Nhà cao tầng đứng im, nhìn xuống người đi bộ nhỏ bé.",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: Bó cúc vàng của cụ như một mảnh nắng bị bỏ quên.",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: unsure",
+          "result": "unknown",
+          "independent": false
+        }
+      ],
+      "verification_status": "UNCERTAIN",
+      "status_reason": "open_task_no_rubric",
+      "qa_findings": [
+        {
+          "source": "ai_review",
+          "code": "unsure",
+          "message": "Câu hỏi mở (tự luận), không có đáp án duy nhất: đoạn văn có so sánh, ẩn dụ, nhân hóa nên nhiều cặp biện pháp đều chấp nhận được."
+        },
+        {
+          "source": "ai_review",
+          "code": "unsure",
+          "message": "Người giải đưa hai cách hiểu thay vì chốt một đáp án; nhận diện từng biện pháp (so sánh 'như con thú', ẩn dụ 'mạch máu/hồng cầu', nhân hóa 'nhà cao tầng nhìn xuống', so sánh 'như mảnh nắng') là hợp lý."
+        },
+        {
+          "source": "ai_review",
+          "code": "unsure",
+          "message": "Lời giải không đạt yêu cầu về độ dài 6-8 dòng và không viết thành đoạn văn hoàn chỉnh, chỉ có dàn ý và phân tích; không thể chấm đúng/sai chắc chắn."
+        }
+      ],
+      "score": {
+        "points": null,
+        "max": null,
+        "basis": "none",
+        "detail": "no key"
+      },
+      "attempts": 1,
+      "unresolved": true,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 0,
+    "fail": 0,
+    "uncertain": 1,
+    "unresolved": 1,
+    "points": null,
+    "max_points": null
+  }
+}

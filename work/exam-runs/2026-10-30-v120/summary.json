@@ -1,0 +1,520 @@
+{
+  "date": "2026-10-30",
+  "model": "sonnet",
+  "prompt": "v1.2.0",
+  "per_subject": {
+    "english": {
+      "items": 3,
+      "pass": 2,
+      "fail": 1,
+      "uncertain": 0,
+      "unresolved": 1,
+      "points": 3,
+      "max_points": 3
+    },
+    "informatics": {
+      "items": 3,
+      "pass": 2,
+      "fail": 1,
+      "uncertain": 0,
+      "unresolved": 1,
+      "points": 2,
+      "max_points": 3
+    },
+    "literature": {
+      "items": 3,
+      "pass": 0,
+      "fail": 0,
+      "uncertain": 3,
+      "unresolved": 3,
+      "points": 0,
+      "max_points": 0
+    },
+    "math": {
+      "items": 3,
+      "pass": 1,
+      "fail": 2,
+      "uncertain": 0,
+      "unresolved": 2,
+      "points": 3,
+      "max_points": 3
+    },
+    "physics": {
+      "items": 3,
+      "pass": 1,
+      "fail": 2,
+      "uncertain": 0,
+      "unresolved": 2,
+      "points": 1,
+      "max_points": 3
+    }
+  },
+  "totals": {
+    "items": 15,
+    "pass": 6,
+    "fail": 6,
+    "uncertain": 3,
+    "unresolved": 9,
+    "points": 9,
+    "max_points": 12
+  },
+  "items": [
+    {
+      "subject": "english",
+      "item": "003",
+      "summary": {
+        "pass": 1,
+        "fail": 0,
+        "uncertain": 0,
+        "unresolved": 0,
+        "points": 1,
+        "max_points": 1
+      },
+      "calls": 2,
+      "cost_usd": 0.031512,
+      "stopped": null,
+      "questions": [
+        {
+          "id": "1",
+          "answer": "B",
+          "verdict": "PASS",
+          "reason": "independent check passed and reviewer agrees",
+          "attempts": 1,
+          "points": 1,
+          "max": 1,
+          "basis": "key match",
+          "findings": [
+            "agree"
+          ]
+        }
+      ]
+    },
+    {
+      "subject": "english",
+      "item": "004",
+      "summary": {
+        "pass": 0,
+        "fail": 1,
+        "uncertain": 0,
+        "unresolved": 1,
+        "points": 1,
+        "max_points": 1
+      },
+      "calls": 2,
+      "cost_usd": 0.032827,
+      "stopped": null,
+      "questions": [
+        {
+          "id": "1",
+          "answer": "b-d-a-e-c",
+          "verdict": "FAIL",
+          "reason": "check_failed: quote",
+          "attempts": 2,
+          "points": 1,
+          "max": 1,
+          "basis": "key match",
+          "findings": [
+            "quote",
+            "quote",
+            "quote",
+            "quote",
+            "quote"
+          ]
+        }
+      ]
+    },
+    {
+      "subject": "english",
+      "item": "005",
+      "summary": {
+        "pass": 1,
+        "fail": 0,
+        "uncertain": 0,
+        "unresolved": 0,
+        "points": 1,
+        "max_points": 1
+      },
+      "calls": 2,
+      "cost_usd": 0.021035,
+      "stopped": null,
+      "questions": [
+        {
+          "id": "1",
+          "answer": "A",
+          "verdict": "PASS",
+          "reason": "independent check passed and reviewer agrees",
+          "attempts": 1,
+          "points": 1,
+          "max": 1,
+          "basis": "key match",
+          "findings": []
+        }
+      ]
+    },
+    {
+      "subject": "informatics",
+      "item": "003",
+      "summary": {
+        "pass": 1,
+        "fail": 0,
+        "uncertain": 0,
+        "unresolved": 0,
+        "points": 1,
+        "max_points": 1
+      },
+      "calls": 2,
+      "cost_usd": 0.031541,
+      "stopped": null,
+      "questions": [
+        {
+          "id": "1",
+          "answer": "B",
+          "verdict": "PASS",
+          "reason": "independent check passed and reviewer agrees",
+          "attempts": 1,
+          "points": 1,
+          "max": 1,
+          "basis": "key match",
+          "findings": []
+        }
+      ]
+    },
+    {
+      "subject": "informatics",
+      "item": "004",
+      "summary": {
+        "pass": 1,
+        "fail": 0,
+        "uncertain": 0,
+        "unresolved": 0,
+        "points": 1,
+        "max_points": 1
+      },
+      "calls": 3,
+      "cost_usd": 0.053219,
+      "stopped": null,
+      "questions": [
+        {
+          "id": "1",
+          "answer": "3",
+          "verdict": "PASS",
+          "reason": "independent check passed and reviewer agrees",
+          "attempts": 2,
+          "points": 1,
+          "max": 1,
+          "basis": "key match",
+          "findings": []
+        }
+      ]
+    },
+    {
+      "subject": "informatics",
+      "item": "005",
+      "summary": {
+        "pass": 0,
+        "fail": 1,
+        "uncertain": 0,
+        "unresolved": 1,
+        "points": 0,
+        "max_points": 1
+      },
+      "calls": 2,
+      "cost_usd": 0.028315,
+      "stopped": null,
+      "questions": [
+        {
+          "id": "1",
+          "answer": "62 host",
+          "verdict": "FAIL",
+          "reason": "differs_from_key",
+          "attempts": 1,
+          "points": 0,
+          "max": 1,
+          "basis": "key match",
+          "findings": [
+            "differs_from_key"
+          ]
+        }
+      ]
+    },
+    {
+      "subject": "literature",
+      "item": "003",
+      "summary": {
+        "pass": 0,
+        "fail": 0,
+        "uncertain": 1,
+        "unresolved": 1,
+        "points": null,
+        "max_points": null
+      },
+      "calls": 2,
+      "cost_usd": 0.045765,
+      "stopped": null,
+      "questions": [
+        {
+          "id": "1",
+          "answer": "Open",
+          "verdict": "UNCERTAIN",
+          "reason": "open_task_no_rubric",
+          "attempts": 1,
+          "points": null,
+          "max": null,
+          "basis": "claude review only",
+          "findings": [
+            "unsure",
+            "unsure",
+            "unsure"
+          ]
+        }
+      ]
+    },
+    {
+      "subject": "literature",
+      "item": "004",
+      "summary": {
+        "pass": 0,
+        "fail": 0,
+        "uncertain": 1,
+        "unresolved": 1,
+        "points": null,
+        "max_points": null
+      },
+      "calls": 2,
+      "cost_usd": 0.046927,
+      "stopped": null,
+      "questions": [
+        {
+          "id": "1",
+          "answer": "Open",
+          "verdict": "UNCERTAIN",
+          "reason": "open_task_no_rubric",
+          "attempts": 1,
+          "points": null,
+          "max": null,
+          "basis": "claude review only",
+          "findings": [
+            "unsure",
+            "unsure",
+            "unsure"
+          ]
+        }
+      ]
+    },
+    {
+      "subject": "literature",
+      "item": "005",
+      "summary": {
+        "pass": 0,
+        "fail": 0,
+        "uncertain": 1,
+        "unresolved": 1,
+        "points": null,
+        "max_points": null
+      },
+      "calls": 2,
+      "cost_usd": 0.046697,
+      "stopped": null,
+      "questions": [
+        {
+          "id": "1",
+          "answer": "Open",
+          "verdict": "UNCERTAIN",
+          "reason": "open_task_no_rubric",
+          "attempts": 1,
+          "points": null,
+          "max": null,
+          "basis": "claude review only",
+          "findings": [
+            "unsure",
+            "unsure",
+            "unsure"
+          ]
+        }
+      ]
+    },
+    {
+      "subject": "math",
+      "item": "003",
+      "summary": {
+        "pass": 1,
+        "fail": 0,
+        "uncertain": 0,
+        "unresolved": 0,
+        "points": 1,
+        "max_points": 1
+      },
+      "calls": 2,
+      "cost_usd": 0.032879,
+      "stopped": null,
+      "questions": [
+        {
+          "id": "1",
+          "answer": "A",
+          "verdict": "PASS",
+          "reason": "independent check passed and reviewer agrees",
+          "attempts": 1,
+          "points": 1,
+          "max": 1,
+          "basis": "key match",
+          "findings": []
+        }
+      ]
+    },
+    {
+      "subject": "math",
+      "item": "004",
+      "summary": {
+        "pass": 0,
+        "fail": 1,
+        "uncertain": 0,
+        "unresolved": 1,
+        "points": 1,
+        "max_points": 1
+      },
+      "calls": 2,
+      "cost_usd": 0.037423,
+      "stopped": null,
+      "questions": [
+        {
+          "id": "1",
+          "answer": "37/42",
+          "verdict": "FAIL",
+          "reason": "check_failed: computed",
+          "attempts": 2,
+          "points": 1,
+          "max": 1,
+          "basis": "key match",
+          "findings": [
+            "computed"
+          ]
+        }
+      ]
+    },
+    {
+      "subject": "math",
+      "item": "005",
+      "summary": {
+        "pass": 0,
+        "fail": 1,
+        "uncertain": 0,
+        "unresolved": 1,
+        "points": 1,
+        "max_points": 1
+      },
+      "calls": 2,
+      "cost_usd": 0.038317,
+      "stopped": null,
+      "questions": [
+        {
+          "id": "1",
+          "answer": "sqrt(2)",
+          "verdict": "FAIL",
+          "reason": "check_failed: computed",
+          "attempts": 2,
+          "points": 1,
+          "max": 1,
+          "basis": "key match",
+          "findings": [
+            "computed"
+          ]
+        }
+      ]
+    },
+    {
+      "subject": "physics",
+      "item": "003",
+      "summary": {
+        "pass": 1,
+        "fail": 0,
+        "uncertain": 0,
+        "unresolved": 0,
+        "points": 1,
+        "max_points": 1
+      },
+      "calls": 2,
+      "cost_usd": 0.038371,
+      "stopped": null,
+      "questions": [
+        {
+          "id": "1",
+          "answer": "B",
+          "verdict": "PASS",
+          "reason": "independent check passed and reviewer agrees",
+          "attempts": 1,
+          "points": 1,
+          "max": 1,
+          "basis": "key match",
+          "findings": [
+            "agree"
+          ]
+        }
+      ]
+    },
+    {
+      "subject": "physics",
+      "item": "004",
+      "summary": {
+        "pass": 0,
+        "fail": 1,
+        "uncertain": 0,
+        "unresolved": 1,
+        "points": 0,
+        "max_points": 1
+      },
+      "calls": 2,
+      "cost_usd": 0.034433,
+      "stopped": null,
+      "questions": [
+        {
+          "id": "1",
+          "answer": "9 điểm",
+          "verdict": "FAIL",
+          "reason": "differs_from_key",
+          "attempts": 1,
+          "points": 0,
+          "max": 1,
+          "basis": "key match",
+          "findings": [
+            "differs_from_key"
+          ]
+        }
+      ]
+    },
+    {
+      "subject": "physics",
+      "item": "005",
+      "summary": {
+        "pass": 0,
+        "fail": 1,
+        "uncertain": 0,
+        "unresolved": 1,
+        "points": 0,
+        "max_points": 1
+      },
+      "calls": 2,
+      "cost_usd": 0.047435,
+      "stopped": null,
+      "questions": [
+        {
+          "id": "1",
+          "answer": "1.8e-19 J (làm tròn đến 2 chữ số có nghĩa)",
+          "verdict": "FAIL",
+          "reason": "differs_from_key",
+          "attempts": 2,
+          "points": 0,
+          "max": 1,
+          "basis": "key match",
+          "findings": [
+            "computed",
+            "differs_from_key"
+          ]
+        }
+      ]
+    }
+  ],
+  "calls": 31,
+  "cost_usd": 0.566696,
+  "skipped": [],
+  "regression": []
+}

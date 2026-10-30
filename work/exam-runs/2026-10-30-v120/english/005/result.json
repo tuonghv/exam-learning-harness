@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/inputs/english/input-005.md",
+    "subject": "English",
+    "level": "Grade 12",
+    "exam_type": "High School Graduation",
+    "task": "Multiple Choice",
+    "mode": "Solve",
+    "language": "en"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 1.0,
+    "cost_usd": 0.021035,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "key match",
+      "answer": "A",
+      "solution": [
+        "The sentence starts with 'Hardly had she entered the room', a negative adverb with inversion (past perfect).",
+        "The fixed pattern is: Hardly + had + subject + past participle ... when + past simple.",
+        "So the blank needs 'when'."
+      ],
+      "explanation": "Hardly ... when is a fixed correlative pair meaning 'as soon as'. B. than is used with 'No sooner ... than', not with 'Hardly'. C. then is an adverb and cannot join two clauses in this pattern. D. while expresses simultaneous or contrasting actions and does not fit the 'immediately after' meaning.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Standard fixed structure Hardly + had + S + V3 + when."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "single letter A-D",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 1,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}
