@@ -709,3 +709,9 @@ Action: DONE. Result: slice 10/10 equals hand computation, $0.166. Decision: ok.
 
 ## DESIGN - TASK-028 - 2026-10-30T14:36:17Z
 Action: DESIGN. Result: design docs/design/phase-28-extract-real-dgnl.md. Decision: ok. Next: implement.
+
+## IMPLEMENTING - TASK-028 - 2026-10-30T14:36:36Z
+Action: IMPLEMENTING. Result: refine --all-pages, refined exam text, science subject; 43 refine tests. Decision: ok. Next: unit tests.
+
+## UNIT_TESTED - TASK-028 - 2026-10-30T14:36:36Z
+Action: UNIT_TESTED. Result: 511 unit tests OK; refine tests cover all-pages, context, carry, join, figures. Decision: ok. Next: real verification.

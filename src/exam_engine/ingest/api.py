@@ -1,6 +1,7 @@
 """Ingestion boundary: ingest_document(path) -> validated canonical doc; to_exam_text(doc)."""
 import hashlib
 import os
+import re
 
 from exam_engine.ingest import adapters, parts
 from exam_engine.ingest.schema import IngestError, validate_document
@@ -59,6 +60,8 @@ def to_exam_text(doc, config=None):
                           % (", ".join("%d-%d" % tuple(p["pages"]) for p in doc["parts"]
                                        if p["kind"] == "answer_key"), doc["source"]["name"]))
     src = doc["source"]
+    if (config or {}).get("use_refined"):
+        return _from_refined(doc, config.get("questions"))
     if (doc.get("extraction") or {}).get("method") == "image" and not any(
             b["type"] != "image" and b["text"].strip()
             for pg in doc["pages"] for b in pg["blocks"]):
@@ -87,6 +90,63 @@ def to_exam_text(doc, config=None):
                 out.append("%s %s" % ("#" * (blk.get("level") or 2), blk["text"]))
             else:
                 out.append(blk["text"])
+            out.append("")
+    return "\n".join(out).rstrip("\n") + "\n"
+
+
+GROUP_RE = re.compile(r"(?:Questions?|Câu|câu)\s*(?:từ\s*)?(\d+)\s*(?:-|–|đến|to)\s*(\d+)")
+
+
+def _share_context(qs):
+    """Repeat a passage with every question of its group ("Questions 46-52", "câu từ 103 đến 105")."""
+    out, cur = [], None
+    for q in qs:
+        ctx = q.get("context") or ""
+        m = GROUP_RE.search(ctx)
+        if m:
+            cur = (int(m.group(1)), int(m.group(2)), ctx)
+        elif cur and q["id"].isdigit() and cur[0] < int(q["id"]) <= cur[1]:
+            q = dict(q, context=cur[2])
+        out.append(q)
+    return out
+
+
+def _from_refined(doc, spec=None):
+    """Exam text from doc["refined"] questions (origin ai); `spec` keeps question numbers like 61-90."""
+    meta = doc.get("meta") or {}
+    missing = [k for k in REQUIRED if not meta.get(k)]
+    if missing:
+        raise IngestError("missing_header", "missing exam header(s): %s (use --meta K=V)"
+                          % ", ".join(missing))
+    qs = []
+    for q in (doc.get("refined") or {}).get("questions") or []:
+        if qs and qs[-1]["id"] == q["id"]:
+            # one question cut by a page break: stem on the first page, options on the next
+            qs[-1] = dict(qs[-1], text=(qs[-1]["text"] + "\n" + q["text"]).strip(),
+                          options=q["options"] or qs[-1]["options"])
+        else:
+            qs.append(q)
+    if spec:
+        want = set(parts.parse_pages(spec))
+        qs = [q for q in qs if q["id"].isdigit() and int(q["id"]) in want]
+    if not qs:
+        raise IngestError("no_questions", "no refined questions selected in %s" % doc["source"]["name"])
+    out = ["# Exam Input", ""] + ["%s: %s" % (k, v) for k, v in meta.items()]
+    qs = _share_context(qs)
+    first = int(qs[0]["id"])
+    out += ["", "## Instructions", "", "Choose the best answer and explain why."]
+    if first != 1:
+        out += ["", "Questions are numbered from 1 here; the printed exam number of question N is N + %d "
+                "(passages may refer to printed numbers)." % (first - 1)]
+    out.append("")
+    for k, q in enumerate(qs, 1):
+        out += ["## Question %d" % k, ""]
+        if q.get("context"):
+            out += [q["context"], ""]
+        out += [q["text"], ""]
+        out += ["[Figure/table: %s]" % f for f in q.get("figures") or ()]
+        out += ["%s. %s" % (k, q["options"][k]) for k in sorted(q["options"])]
+        if q["options"]:
             out.append("")
     return "\n".join(out).rstrip("\n") + "\n"
 

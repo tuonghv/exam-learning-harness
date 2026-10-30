@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-028",
-  "state": "DESIGN",
-  "next": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
+  "next": "VERIFIED: real run",
   "title": "Extract and solve the whole real DGNL 2026 sample PDF (REQ-0033)",
   "active": [
     {
       "task_id": "TASK-028",
-      "state": "DESIGN",
-      "next": "IMPLEMENTING",
-      "updated_at": "2026-10-30T14:36:18Z"
+      "state": "UNIT_TESTED",
+      "next": "VERIFIED: real run",
+      "updated_at": "2026-10-30T14:36:36Z"
     }
   ],
   "max_active": 1

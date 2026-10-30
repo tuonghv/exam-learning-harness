@@ -31,7 +31,7 @@ Relative atomic mass of oxygen?
 
 class Router(unittest.TestCase):
     def test_default_subjects(self):
-        self.assertEqual(sorted(router.subjects()), ["english", "informatics", "literature", "math", "physics", "vietnamese"])
+        self.assertEqual(sorted(router.subjects()), ["english", "informatics", "literature", "math", "physics", "science", "vietnamese"])
         self.assertEqual(router.subject_key("Mathematics"), "math")
         self.assertIsNone(router.subject_key("Chemistry"))
 

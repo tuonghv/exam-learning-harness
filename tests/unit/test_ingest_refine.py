@@ -428,3 +428,59 @@ class TestCli(Base):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class AllPagesAndRefinedText(unittest.TestCase):
+    DOC = {"source": {"name": "x.pdf"}, "pages": [{"n": 1, "blocks": []}, {"n": 2, "blocks": []}],
+           "warnings": [], "meta": {"Subject": "math", "Level": "x", "Exam type": "t",
+                                    "Task": "solve", "Mode": "m"}}
+
+    def test_all_pages_picks_unflagged(self):
+        from exam_engine.ingest import refine
+        self.assertEqual(refine.pick_pages(self.DOC, "1-2"), [])
+        self.assertEqual(refine.pick_pages(self.DOC, "1-2", True), [1, 2])
+
+    def test_refined_text_context_order_and_filter(self):
+        from exam_engine.ingest import api
+        q = lambda i, **k: dict({"id": str(i), "text": "t%d" % i, "options": {"B": "b", "A": "a"}}, **k)
+        doc = dict(self.DOC, refined={"questions": [q(1, context="PASSAGE"), q(2), q(3)]})
+        text = api.to_exam_text(doc, {"use_refined": True, "questions": "1-2"})
+        self.assertIn("## Question 1\n\nPASSAGE\n\nt1\n\nA. a\nB. b", text)
+        self.assertNotIn("Question 3", text)
+        with self.assertRaises(api.IngestError):
+            api.to_exam_text(doc, {"use_refined": True, "questions": "9"})
+
+    def test_question_split_by_page_is_joined(self):
+        from exam_engine.ingest import api
+        doc = dict(self.DOC, refined={"questions": [
+            {"id": "6", "text": "stem", "options": {}},
+            {"id": "6", "text": "more", "options": {"A": "a", "B": "b", "C": "c", "D": "d"}}]})
+        text = api.to_exam_text(doc, {"use_refined": True})
+        self.assertEqual(text.count("## Question 1"), 1)
+        self.assertIn("stem\nmore\n\nA. a", text)
+
+    def test_group_passage_repeated_for_its_questions(self):
+        from exam_engine.ingest import api
+        o = {"A": "a", "B": "b", "C": "c", "D": "d"}
+        doc = dict(self.DOC, refined={"questions": [
+            {"id": "1", "text": "t1", "options": o, "context": "Questions 1-2: Read.\nPASSAGE"},
+            {"id": "2", "text": "t2", "options": o, "context": ""},
+            {"id": "3", "text": "t3", "options": o, "context": ""}]})
+        text = api.to_exam_text(doc, {"use_refined": True})
+        self.assertEqual(text.count("PASSAGE"), 2)
+
+    def test_carry_goes_to_next_pages_first_question_and_figures_shown(self):
+        from exam_engine.ingest import api, refine
+        doc = dict(self.DOC, source={"name": "x.pdf"})
+        doc["pages"] = [{"n": 1, "blocks": []}, {"n": 2, "blocks": []}]
+        o = {"A": "a", "B": "b", "C": "c", "D": "d"}
+        replies = iter([{"questions": [], "carry": "Questions 1-2: PASSAGE"},
+                        {"questions": [{"id": "1", "text": "t1", "options": o, "figures": ["pie 30%"]}]}])
+        from collections import namedtuple
+        import json
+        C = namedtuple("C", "ok text cost_usd cls reason duration_s")
+        llm = lambda prompt, png: C(True, json.dumps(next(replies)), 0.0, "", "", 0.0)
+        out = refine.refine(doc, "1-2", llm, None, all_pages=True)
+        self.assertIn("PASSAGE", out["refined"]["questions"][0]["context"])
+        text = api.to_exam_text(out, {"use_refined": True})
+        self.assertIn("[Figure/table: pie 30%]", text)

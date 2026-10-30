@@ -223,6 +223,8 @@ def ingest_main(argv):
     ap.add_argument("--pages", metavar="SPEC", help="keep only these pages, e.g. 1-4 or 1,3,5-6")
     ap.add_argument("--allow-key-pages", action="store_true",
                     help="allow --exam-out although answer-key pages are present")
+    ap.add_argument("--refined", metavar="DOC.json", help="exam text from the AI-refined questions of this document")
+    ap.add_argument("--questions", metavar="SPEC", help="with --refined: keep only these question numbers, e.g. 61-90")
     ap.add_argument("--meta", action="append", default=[], metavar="K=V")
     try:
         args = ap.parse_args(argv)
@@ -252,7 +254,12 @@ def ingest_main(argv):
             with open(args.out, "w", encoding="utf-8") as fh:
                 fh.write(blob)
         if args.exam_out:
-            text = api.to_exam_text(doc, {"allow_key_pages": args.allow_key_pages})
+            cfg2 = {"allow_key_pages": args.allow_key_pages}
+            if args.refined:
+                with open(args.refined, encoding="utf-8") as fh:
+                    doc["refined"] = json.load(fh)["refined"]
+                cfg2.update(use_refined=True, questions=args.questions)
+            text = api.to_exam_text(doc, cfg2)
             with open(args.exam_out, "w", encoding="utf-8") as fh:
                 fh.write(text)
     except IngestError as exc:
@@ -336,6 +343,7 @@ def refine_main(argv):
     ap.add_argument("--timeout", type=float, default=d["timeout"])
     ap.add_argument("--model", default="sonnet")
     ap.add_argument("--allow-key-pages", action="store_true")
+    ap.add_argument("--all-pages", action="store_true", help="send every selected page, not only flagged ones")
     try:
         a = ap.parse_args(argv)
     except SystemExit:
@@ -359,7 +367,7 @@ def refine_main(argv):
         else:
             doc = api.ingest_document(a.file, config={"ocr": "auto"})
         refine.check_key_pages(doc, a.pages, a.allow_key_pages)
-        pages = refine.pick_pages(doc, a.pages)
+        pages = refine.pick_pages(doc, a.pages, a.all_pages)
         if a.dry_run:
             print("pages %s, calls <= %d, cap $%.2f (dry run: no call made)" % (
                 pages or "none", len(pages) * refine.MAX_ATTEMPTS, a.max_cost_usd))
@@ -376,7 +384,8 @@ def refine_main(argv):
                 pages, len(pages) * refine.MAX_ATTEMPTS, a.max_cost_usd), flush=True)
         else:
             llm = refine.mock_llm(a.mock)
-        out = refine.refine(doc, a.pages, llm, src, a.max_cost_usd, a.model, a.allow_key_pages)
+        out = refine.refine(doc, a.pages, llm, src, a.max_cost_usd, a.model, a.allow_key_pages,
+                            all_pages=a.all_pages)
         if a.out:
             with open(a.out, "w", encoding="utf-8") as fh:
                 fh.write(json.dumps(out, ensure_ascii=False, indent=2) + "\n")

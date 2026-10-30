@@ -16,5 +16,8 @@
                   "score_basis": "official_key", "language": "vi", "prompt": "subjects/informatics.md"},
   "vietnamese": {"aliases": ["vietnamese", "tiếng việt", "tieng viet"], "task": "Closed",
                  "checks": ["format", "computed", "quote"], "score_basis": "official_key",
-                 "language": "vi", "prompt": null}
+                 "language": "vi", "prompt": null},
+  "science": {"aliases": ["science", "khoa học", "khoa hoc", "tư duy khoa học"], "task": "Closed",
+              "checks": ["format", "computed", "quote"], "score_basis": "official_key",
+              "language": "vi", "prompt": null}
 }

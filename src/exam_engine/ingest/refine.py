@@ -40,14 +40,16 @@ def build_prompt(n):
     return "%s\nPage: %d\n" % (template().rstrip("\n"), n)
 
 
-def pick_pages(doc, spec):
-    """Pages in `spec` that are flagged unreliable; a page not in the document is refused."""
+def pick_pages(doc, spec, all_pages=False):
+    """Pages in `spec` that are flagged unreliable (all of them with all_pages); a page not in the document is refused."""
     want = partsmod.parse_pages(spec)
     have = [p["n"] for p in doc["pages"]]
     bad = [n for n in want if n not in have]
     if bad:
         raise IngestError("invalid_pages", "page(s) %s not in the document"
                           % ", ".join(map(str, bad)))
+    if all_pages:
+        return want
     flagged = set(w["page"] for w in doc.get("warnings", ())
                   if w.get("page") and w.get("code") in FLAG_CODES)
     flagged |= set(p["n"] for p in doc["pages"] if p.get("status") == "ocr")
@@ -149,9 +151,11 @@ def validate_refined(obj, originals=None):
         errs += ["question %d: forbidden field %r (solver-like reply)" % (i, k)
                  for k in FORBIDDEN if k in q]
         qid = norm_id(q.get("id"))
-        if qid is None:
+        frag = isinstance(q.get("text"), str) and isinstance(q.get("options"), dict) \
+            and bool(q["options"])
+        if qid is None and not frag:
             errs.append("question %d: id must be the question number" % i)
-        if not isinstance(q.get("text"), str) or not q["text"].strip():
+        if not isinstance(q.get("text"), str) or (not q["text"].strip() and not q.get("unreadable") and not frag):
             errs.append("question %d: text must be a non-empty string" % i)
         opts = q.get("options", {})
         if not isinstance(opts, dict) or not all(isinstance(v, str) for v in opts.values()):
@@ -206,16 +210,16 @@ def _ask(llm, n, png, originals):
 
 
 def refine(doc, spec, llm, source_path=None, max_cost=1.0, model="sonnet", allow_key=False,
-           min_similarity=MIN_SIMILARITY, render=render_page):
+           min_similarity=MIN_SIMILARITY, render=render_page, all_pages=False):
     """Copy of `doc` plus doc["refined"]; the source pages are untouched.
 
     `source_path` is the file to render pages from (None: no image is sent, mock runs).
     """
     check_key_pages(doc, spec, allow_key)
-    pages = pick_pages(doc, spec)
+    pages = pick_pages(doc, spec, all_pages)
     out = copy.deepcopy(doc)
     by_id = dict((str(q["n"]), q) for q in doc.get("questions") or ())
-    qs, calls, cost, part = [], 0, 0.0, None
+    qs, calls, cost, part, carry = [], 0, 0.0, None, ""
     for n in pages:
         if cost >= max_cost:
             raise RefineError("cost_cap", "cost $%.2f reached the cap $%.2f before page %d"
@@ -225,7 +229,19 @@ def refine(doc, spec, llm, source_path=None, max_cost=1.0, model="sonnet", allow
         cost += spent
         text = _page_text(doc, n)
         items = []
+        carried, carry = carry, str(obj.get("carry") or "").strip()
         for q in obj["questions"]:
+            if carried and norm_id(q.get("id")) is not None:
+                # passage printed on the previous page whose questions start here
+                q = dict(q, context=(carried + "\n" + str(q.get("context") or "")).strip())
+                carried = ""
+            if norm_id(q.get("id")) is None:
+                # options continuing a question from the previous page: join the last one without options
+                tail = [x for x in qs if not x["options"]]
+                if tail:
+                    tail[-1].update(text=(tail[-1]["text"] + "\n" + q["text"]).strip(),
+                                    options=q["options"], needs_review=True, joined_page=n)
+                continue
             found, rest = split_part(q["text"])
             part = found or part
             if not rest and not q.get("options"):
@@ -236,7 +252,7 @@ def refine(doc, spec, llm, source_path=None, max_cost=1.0, model="sonnet", allow
             qid = norm_id(q["id"])
             sim = similarity(q, by_id.get(qid), text)
             qs.append({"id": qid, "part": q["part"], "text": q["text"],
-                       "options": q.get("options", {}),
+                       "options": q.get("options", {}), "context": str(q.get("context") or ""),
                        "figures": q.get("figures", []), "origin": "ai", "page": n,
                        "similarity": sim,
                        "needs_review": bool(q.get("unreadable")) or sim < min_similarity

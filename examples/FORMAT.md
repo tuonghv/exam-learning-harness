@@ -11,7 +11,7 @@ Markdown files with the same number: `input-NNN.md` (what the solver sees) and `
 | Few-shot (may be shown to the solver) | `examples/<subject>/input-NNN.md` | `examples/<subject>/expected-NNN.md` |
 | Evaluation (never shown with its key) | `evals/inputs/<subject>/input-NNN.md` | `evals/keys/<subject>/expected-NNN.md` |
 
-`<subject>` = `math`, `physics`, `english`, `literature`, `informatics`, `vietnamese`. A question used in one set is never
+`<subject>` = `math`, `physics`, `english`, `literature`, `informatics`, `vietnamese`, `science`. A question used in one set is never
 reused, reworded, in the other.
 
 ## Input: `input-NNN.md`
