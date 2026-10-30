@@ -1,0 +1,93 @@
+{
+  "task_id": "TASK-028",
+  "title": "Extract and solve the whole real DGNL 2026 sample PDF (REQ-0033)",
+  "state": "DESIGN",
+  "requirement": "REQ-0033",
+  "acceptance_criteria": [
+    "REQ-0033 AC1-AC4"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-28-extract-real-dgnl.md",
+    "summary": "vision refine of all pages in batches, refined questions to per-section exam files with shared passages, carry and figures, unchanged solver; no key so hand check and agreement",
+    "reuse": [
+      "ingest",
+      "ingest-refine",
+      "to_exam_text",
+      "solve"
+    ],
+    "risks": [
+      "no key",
+      "vision transcription errors",
+      "figure questions"
+    ]
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "designer": {
+      "waiver": "coordinator designed, as phases 18-27"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00102",
+      "note": "user: extract the whole PDF first, then solve one exam",
+      "at": "2026-10-30T14:34:58Z"
+    },
+    {
+      "raw": "RAW-00103",
+      "note": "user: dgnl has many subjects, do your best",
+      "at": "2026-10-30T14:34:58Z"
+    },
+    {
+      "raw": "RAW-00105",
+      "note": "user guide tmp/solve-dgnl.md, reference only",
+      "at": "2026-10-30T14:34:58Z"
+    },
+    {
+      "raw": "RAW-00109",
+      "note": "user: write skill/doc for later sessions",
+      "at": "2026-10-30T14:34:59Z"
+    },
+    {
+      "raw": "RAW-00110",
+      "note": "user: learn deeply how to solve a dgnl pdf for later sessions",
+      "at": "2026-10-30T14:34:59Z"
+    }
+  ],
+  "picked_at": "2026-10-30T14:35:06Z",
+  "updated_at": "2026-10-30T14:36:18Z",
+  "updated_by": "main",
+  "scope": [
+    "work/TASK-028/"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "IMPLEMENTING"
+}

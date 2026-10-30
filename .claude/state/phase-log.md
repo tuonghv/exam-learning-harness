@@ -706,3 +706,6 @@ Action: VERIFIED. Result: slice 10/10 equals hand computation, $0.166. Decision:
 
 ## DONE - TASK-027 - 2026-10-30T12:50:17Z
 Action: DONE. Result: slice 10/10 equals hand computation, $0.166. Decision: ok. Next: next phase.
+
+## DESIGN - TASK-028 - 2026-10-30T14:36:17Z
+Action: DESIGN. Result: design docs/design/phase-28-extract-real-dgnl.md. Decision: ok. Next: implement.

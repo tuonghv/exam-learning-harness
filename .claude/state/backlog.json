@@ -577,7 +577,7 @@
     "task_id": "TASK-028",
     "title": "Extract and solve the whole real DGNL 2026 sample PDF (REQ-0033)",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-10-30T14:00:00Z",
     "requirement": "REQ-0033",
     "acceptance_criteria": [
