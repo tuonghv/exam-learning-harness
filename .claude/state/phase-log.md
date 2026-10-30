@@ -694,3 +694,15 @@ Action: report written. Result: 9/9 pass. Decision: done. Next: gold exams or an
 
 ## DESIGN - TASK-027 - 2026-10-30T12:47:46Z
 Action: designed the real-exam slice. Result: docs/design/phase-27-real-dgnl.md. Decision: refine then solve, hand check, PDF untracked. Next: IMPLEMENTING.
+
+## IMPLEMENTING - TASK-027 - 2026-10-30T12:50:17Z
+Action: IMPLEMENTING. Result: slice 10/10 equals hand computation, $0.166. Decision: ok. Next: next phase.
+
+## UNIT_TESTED - TASK-027 - 2026-10-30T12:50:17Z
+Action: UNIT_TESTED. Result: slice 10/10 equals hand computation, $0.166. Decision: ok. Next: next phase.
+
+## VERIFIED - TASK-027 - 2026-10-30T12:50:17Z
+Action: VERIFIED. Result: slice 10/10 equals hand computation, $0.166. Decision: ok. Next: next phase.
+
+## DONE - TASK-027 - 2026-10-30T12:50:17Z
+Action: DONE. Result: slice 10/10 equals hand computation, $0.166. Decision: ok. Next: next phase.

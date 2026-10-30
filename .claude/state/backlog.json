@@ -552,11 +552,25 @@
     "task_id": "TASK-027",
     "title": "Solve a small slice of the real DGNL 2026 sample PDF with refine + solve (REQ-0032)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-10-30T12:30:00Z",
     "requirement": "REQ-0032",
     "acceptance_criteria": [
       "REQ-0032 AC1, AC2"
+    ],
+    "completed_at": "2026-10-30T12:50:17Z",
+    "report": "docs/report/phase-27-real-dgnl.md",
+    "user_notes": [
+      {
+        "raw": "RAW-00100",
+        "note": "user gave examples/dgnl PDF, do your best",
+        "at": "2026-10-30T12:47:46Z"
+      },
+      {
+        "raw": "RAW-00101",
+        "note": "user: comment less, short, needed only",
+        "at": "2026-10-30T12:47:59Z"
+      }
     ]
   }
 ]
