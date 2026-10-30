@@ -679,3 +679,9 @@ Action: report written. Result: 4/4 pass. Decision: done. Next: harder items or 
 
 ## DESIGN - TASK-026 - 2026-10-30T12:32:57Z
 Action: designed --level harder. Result: docs/design/phase-26-harder.md. Decision: prompt-only change, keys unchanged. Next: IMPLEMENTING.
+
+## IMPLEMENTING - TASK-026 - 2026-10-30T12:33:27Z
+Action: IMPLEMENTING. Result: ok (506 OK, $0). Decision: waivers as before. Next: next phase.
+
+## UNIT_TESTED - TASK-026 - 2026-10-30T12:33:27Z
+Action: UNIT_TESTED. Result: ok (506 OK, $0). Decision: waivers as before. Next: next phase.

@@ -605,7 +605,7 @@ def genexam_main(argv):
     ap.add_argument("--mock")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--real", action="store_true")
-    ap.add_argument("--level", choices=("easy", "hard"), default="hard")
+    ap.add_argument("--level", choices=("easy", "hard", "harder"), default="hard")
     ap.add_argument("--profile", choices=genexam.PROFILES, default="hs")
     ap.add_argument("--no-qa", action="store_true", help="skip the solution review call")
     ap.add_argument("--max-cost-usd", type=float, default=0.5)

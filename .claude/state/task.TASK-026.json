@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-026",
   "title": "gen-exams --level harder for DGNL profiles; real round on 3 sections (REQ-0031)",
-  "state": "DESIGN",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0031",
   "acceptance_criteria": [
     "REQ-0031 AC1, AC2"
@@ -16,13 +16,19 @@
     ]
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/cli.py",
+      "prompts/dev/genexam_dgnl.md",
+      "prompts/dev/genexam_dgnl_en.md",
+      "prompts/dev/genexam_dgnl_vi.md"
+    ],
+    "summary": "--level harder plus Difficulty paragraph in the three DGNL prompts"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit -p test_*.py",
+    "result": "506 OK; check-prompts OK"
   },
   "security": {
     "status": "pending",
@@ -41,11 +47,17 @@
   "roles": {
     "designer": {
       "waiver": "coordinator designed, as phases 18-25"
+    },
+    "coder": {
+      "waiver": "coordinator implemented, as phases 18-25"
+    },
+    "tester": {
+      "waiver": "coordinator ran the suite, as phases 18-25"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-30T12:32:57Z",
-  "updated_at": "2026-10-30T12:32:57Z",
+  "updated_at": "2026-10-30T12:33:27Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-026/"
@@ -56,5 +68,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "IMPLEMENTING"
+  "next": "VERIFIED: real round"
 }

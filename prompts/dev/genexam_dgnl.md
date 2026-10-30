@@ -11,3 +11,6 @@ Reply with ONE JSON object and nothing else:
 Rules: a different topic and numbers for each seed (sequences, percent and ratio, probability,
 logic puzzles, reading a small data set given in words); wrong options are plausible slips; the
 question must not contain the answer or the solution.
+
+Difficulty (field "Level" below): "hard" means a common trap and 3-4 steps; "harder" means 4-6 steps,
+a trap, and no one-formula shortcut; the answer must still be one exact value checkable by `check`.

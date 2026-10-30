@@ -351,3 +351,14 @@ class DgnlVi(unittest.TestCase):
         self.assertEqual(run(["gen-exams", "--profile", "dgnl-vi", "--subject", "english", "--dry-run"])[0], 2)
         self.assertEqual(run(["gen-exams", "--profile", "dgnl-vi", "--dry-run"])[0], 0)
         self.assertIn(genexam.topic("s", 1, "dgnl-vi"), genexam.TOPICS["dgnl-vi"])
+
+
+class Harder(unittest.TestCase):
+    def test_prompt_carries_level_and_difficulty(self):
+        for prof, sub in (("dgnl", "math"), ("dgnl-en", "english"), ("dgnl-vi", "vietnamese")):
+            p = genexam.build_prompt(sub, "s", 1, "harder", prof)
+            self.assertIn("Level: harder", p)
+            self.assertIn('"harder" means', p)
+
+    def test_cli_accepts_harder(self):
+        self.assertEqual(run(["gen-exams", "--profile", "dgnl-en", "--level", "harder", "--dry-run"])[0], 0)

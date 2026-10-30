@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-026",
-  "state": "DESIGN",
-  "next": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
+  "next": "VERIFIED: real round",
   "title": "gen-exams --level harder for DGNL profiles; real round on 3 sections (REQ-0031)",
   "active": [
     {
       "task_id": "TASK-026",
-      "state": "DESIGN",
-      "next": "IMPLEMENTING",
-      "updated_at": "2026-10-30T12:32:57Z"
+      "state": "UNIT_TESTED",
+      "next": "VERIFIED: real round",
+      "updated_at": "2026-10-30T12:33:27Z"
     }
   ],
   "max_active": 1

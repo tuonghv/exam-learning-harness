@@ -11,3 +11,7 @@ Reply with ONE JSON object and nothing else:
 
 Rules: use exactly the topic given below; new sentences for each seed; the question must not
 contain the answer or the explanation.
+
+Difficulty (field "Level" below): "harder" means near-correct distractors that each fail for a
+specific reason, a rule with an exception, or a reading item that needs inference across sentences;
+exactly one option must still be defensible by a rule or by the text. "hard" or "easy": a plainer item.
