@@ -623,7 +623,7 @@
     "created_at": "2026-10-30T15:30:00Z",
     "requirement": "REQ-0034",
     "acceptance_criteria": [
-      "REQ-0034 AC1-AC4: sheet 'Subject \u2013 N Questions', 5 per row, 2-digit ids as stored, circled A-D, \u2014 for null/Open/non A-D, block at top of report.md/html/pdf plus answers.md, solver/schema unchanged",
+      "REQ-0034 AC1-AC4: sheet 'Subject – N Questions', 5 per row, 2-digit ids as stored, circled A-D, — for null/Open/non A-D, block at top of report.md/html/pdf plus answers.md, solver/schema unchanged",
       "REQ-0035 AC1-AC4 phase 1: --view sheet|learn (default sheet), learn view reuses explanation+solution, optional key_concept/common_mistake only if present, no extra LLM cost",
       "Tests in tests/unit/test_exam_report.py with null-answer results (work/dgnl-real Vietnamese/Science), existing report tests stay green, PDF font check for circled letters"
     ],
@@ -732,6 +732,17 @@
     "requirement": "REQ-0038",
     "acceptance_criteria": [
       "REQ-0038 AC1-AC2"
+    ]
+  },
+  {
+    "task_id": "TASK-035",
+    "title": "extract-eval core: per-field exact-match, Wilson 95% interval, verified precision, needs_review rate on mock/synthetic gold, tier 0 (REQ-0025)",
+    "priority": 1,
+    "status": "queued",
+    "created_at": "2026-10-31T06:30:00Z",
+    "requirement": "REQ-0025",
+    "acceptance_criteria": [
+      "REQ-0025 AC1-AC5 at tier 0: >=20 synthetic gold questions outside solver inputs/eval keys; `scripts/exam.py extract-eval` per-field exact match, verified precision, needs_review rate, Wilson 95% interval, n; 99.999% needs ~300000 samples note; corrupted extraction lowers accuracy; $0, no real vision run"
     ]
   }
 ]
