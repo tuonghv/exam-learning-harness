@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-032",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "coder: advance_test.sh first, then advance.sh/_advance.py, _tasks.py D1/D2, skill advance, workflow/coordinator skill link lines",
   "title": "advance.sh + advance skill: one command per TASK transition and REQ catch-up (REQ-0037)",
   "active": [
     {
       "task_id": "TASK-032",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "coder: advance_test.sh first, then advance.sh/_advance.py, _tasks.py D1/D2, skill advance, workflow/coordinator skill link lines",
+      "updated_at": "2026-10-30T22:04:04Z"
     }
   ],
   "max_active": 1

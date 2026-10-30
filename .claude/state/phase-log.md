@@ -811,3 +811,9 @@ Action: report written.
 Result: ok.
 Decision: advance.
 Next: close.
+
+## DESIGN - TASK-032 - 2026-10-30T22:04:04Z
+Action: designer Nova drafted; coordinator installed doc, test path moved under .claude/scripts/checks (grantable).
+Result: docs/design/phase-32-gated-task-advance.md
+Decision: implement now.
+Next: coder tests first.
