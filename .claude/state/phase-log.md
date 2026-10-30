@@ -751,3 +751,9 @@ Action: report written.
 Result: answer sheet + learn view adopted.
 Decision: close TASK-029, REQ-0034/0035.
 Next: TASK-030 (language).
+
+## DESIGN - TASK-030 - 2026-10-30T16:16:10Z
+Action: designer drafted; coordinator accepted decisions 1-4.
+Result: docs/design/phase-30-solution-language.md
+Decision: implement now (user: do not wait).
+Next: coder tests first.

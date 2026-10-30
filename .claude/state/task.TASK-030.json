@@ -1,17 +1,24 @@
 {
   "task_id": "TASK-030",
   "title": "Solution language: vi default for all subjects, --lang en|auto override, localized learn-view labels (REQ-0036)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0036",
   "acceptance_criteria": [
     "REQ-0036 AC1-AC4; depends on TASK-029 (learn view)"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
-    "reuse": [],
-    "risks": []
+    "status": "completed",
+    "path": "docs/design/phase-30-solution-language.md",
+    "summary": "vi default for all subjects, router.language(exam, override) + apply_lang, detect_lang for auto, solve --lang, LABELS vi/en in learn view",
+    "reuse": [
+      "router.language",
+      "settings.read_prompt",
+      "build_learning_view"
+    ],
+    "risks": [
+      "english vi switches to lang/vi prompt variants in paid runs",
+      "generated English exams keep Language: en header"
+    ]
   },
   "implementation": {
     "status": "pending",
@@ -36,11 +43,21 @@
   },
   "roles_required": true,
   "crosscheck_required": true,
-  "roles": {},
-  "user_notes": [],
+  "roles": {
+    "designer": {
+      "waiver": "work/TASK-030/handoff/design.md"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00126",
+      "note": "work autonomously, do not wait",
+      "at": "2026-10-30T16:16:10Z"
+    }
+  ],
   "picked_at": "2026-10-30T16:14:57Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-10-30T16:16:10Z",
+  "updated_by": "main",
   "scope": [
     "work/TASK-030/"
   ],
@@ -51,5 +68,5 @@
     "notes": "",
     "next": "await designer handoff work/TASK-030/handoff/design.md, write docs/design/phase-30-*, then coder"
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder: tests 1-8 first, then router/cli/engine/text/reporter, config english->vi, docs D1/D2"
 }
