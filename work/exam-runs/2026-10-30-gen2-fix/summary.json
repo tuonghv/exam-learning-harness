@@ -1,0 +1,59 @@
+{
+  "date": "2026-10-30",
+  "model": "sonnet",
+  "prompt": "v1.2.0",
+  "per_subject": {
+    "math": {
+      "items": 1,
+      "pass": 1,
+      "fail": 0,
+      "uncertain": 0,
+      "unresolved": 0,
+      "points": 1,
+      "max_points": 1
+    }
+  },
+  "totals": {
+    "items": 1,
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  },
+  "items": [
+    {
+      "subject": "math",
+      "item": "106",
+      "summary": {
+        "pass": 1,
+        "fail": 0,
+        "uncertain": 0,
+        "unresolved": 0,
+        "points": 1,
+        "max_points": 1
+      },
+      "calls": 3,
+      "cost_usd": 0.057578,
+      "stopped": null,
+      "questions": [
+        {
+          "id": "1",
+          "answer": "x = 8 (nghiệm duy nhất); tổng các nghiệm = 8",
+          "verdict": "PASS",
+          "reason": "independent check passed and reviewer agrees",
+          "attempts": 2,
+          "points": 1,
+          "max": 1,
+          "basis": "key match",
+          "findings": []
+        }
+      ]
+    }
+  ],
+  "calls": 3,
+  "cost_usd": 0.057578,
+  "skipped": [],
+  "regression": []
+}

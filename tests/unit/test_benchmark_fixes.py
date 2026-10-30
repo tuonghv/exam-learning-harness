@@ -12,6 +12,12 @@ def comp(expr, answer):
 
 
 class Fixes(unittest.TestCase):
+    def test_trailing_equals_value_of_a_sentence_answer(self):
+        m = scorer.match
+        self.assertTrue(m("x = 8 là nghiệm duy nhất; tổng các nghiệm = 8", "8"))
+        self.assertFalse(m("x = 8 là nghiệm duy nhất; tổng các nghiệm = 9", "8"))
+        self.assertFalse(m("tổng các nghiệm bằng 8 hoặc 9", "8"))
+
     def test_computed_fraction_sqrt_sci(self):  # math/004, math/005, physics/005
         self.assertEqual(comp("1 - 10/84", "37/42"), "pass")
         self.assertEqual(comp("(10/5)**0.5", "sqrt(2)"), "pass")

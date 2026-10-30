@@ -122,6 +122,15 @@ class Gen(unittest.TestCase):
             True, json.dumps({"verdict": "ok", "bad_step": "", "my_answer": "5/6"}), 0.0, "", "", 0.0), GOOD)
         self.assertEqual(status, "fail")
 
+    def test_qa_plain_integer_answers_match(self):
+        obj = dict(GOOD, final_answer="7", check="3+4")
+        status, _, _ = genexam.qa(lambda p: __import__("exam_engine.adapters.claude", fromlist=["x"]).Call(
+            True, json.dumps({"verdict": "ok", "bad_step": "", "my_answer": "7"}), 0.0, "", "", 0.0), obj)
+        self.assertEqual(status, "pass")
+        self.assertEqual(genexam.check_reply(obj), [])
+        self.assertEqual(genexam.value("x = 3"), genexam.value("3"))
+        self.assertEqual(genexam.value("I = 26/3")[0], genexam.value("26/3")[0])
+
     def test_unsupported_subject(self):
         self.assertEqual(run(["gen-exams", "--subject", "physics", "--dry-run"])[0], 2)
 

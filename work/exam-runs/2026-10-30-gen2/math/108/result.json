@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "/tmp/tmp.rzPDevOfmp/inputs/math/input-108.md",
+    "subject": "Mathematics",
+    "level": "Grade 12",
+    "exam_type": "High School Graduation",
+    "task": "Short Answer",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 0.411092,
+    "cost_usd": 0.047552,
+    "calls": 3,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "code oracle",
+      "answer": "15",
+      "solution": [
+        "Điều kiện xác định: x + 2 > 0 và x - 4 > 0, suy ra x > 4.",
+        "Phương trình tương đương log_3[(x + 2)(x - 4)] = 3, tức (x + 2)(x - 4) = 27.",
+        "Khai triển: x^2 - 2x - 8 = 27, suy ra x^2 - 2x - 35 = 0, nên x = 7 hoặc x = -5.",
+        "Loại x = -5 vì không thỏa x > 4. Nghiệm là x0 = 7.",
+        "T = 2*7 + 1 = 15."
+      ],
+      "explanation": "Nghiệm x = -5 là nghiệm ngoại lai vì không thuộc tập xác định (4; +vô cùng). Chỉ x0 = 7 thỏa, nên T = 2x0 + 1 = 15. Ghi chú xem xét nêu đáp án 13 nhưng chính phép tính trong ghi chú (2*7 + 1 = 15) cho kết quả 15, nên 13 không phù hợp.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Phương trình đơn giản, nghiệm kiểm tra bằng cách thay lại; ghi chú xem xét tự mâu thuẫn với phép tính của nó."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "answer holds a number",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "computed",
+          "detail": "arithmetic only: 2*7 + 1 = 15, answer 15",
+          "result": "pass",
+          "independent": true
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: log₃(x + 2) + log₃(x − 4) = 3",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 2,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}

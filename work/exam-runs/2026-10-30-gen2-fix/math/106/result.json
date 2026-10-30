@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "/tmp/tmp.Mk9zsGxlpM/inputs/math/input-106.md",
+    "subject": "Mathematics",
+    "level": "Grade 12",
+    "exam_type": "High School Graduation",
+    "task": "Short Answer",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 0.3,
+    "cost_usd": 0.057578,
+    "calls": 3,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "code oracle",
+      "answer": "x = 8 (nghiệm duy nhất); tổng các nghiệm = 8",
+      "solution": [
+        "Điều kiện: x + 1 > 0 và x - 5 > 0, suy ra x > 5.",
+        "Gộp logarit: log_3((x + 1)(x - 5)) = 3, suy ra (x + 1)(x - 5) = 27.",
+        "Khai triển: x^2 - 4x - 5 = 27, suy ra x^2 - 4x - 32 = 0, có nghiệm x = 8 hoặc x = -4.",
+        "Đối chiếu điều kiện x > 5: loại x = -4, nhận x = 8.",
+        "Phương trình chỉ có một nghiệm x = 8 nên tổng các nghiệm bằng 8."
+      ],
+      "explanation": "Với x > 5, hai logarit cùng cơ số 3 được gộp thành log_3((x+1)(x-5)) = 3 nên tích bằng 3^3 = 27. Phương trình bậc hai cho x = 8 hoặc x = -4. Nghiệm x = -4 không thuộc tập xác định (x + 1 = -3 < 0, x - 5 = -9 < 0) nên là nghiệm ngoại lai, bị loại. Chỉ x = 8 thỏa mãn.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Phép biến đổi đơn giản, nghiệm thử lại trực tiếp đúng."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "answer holds a number",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "computed",
+          "detail": "arithmetic only: 8 = 8, answer 8",
+          "result": "pass",
+          "independent": true
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: log_3(x + 1) + log_3(x − 5) = 3",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 2,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}

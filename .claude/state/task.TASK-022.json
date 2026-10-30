@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-022",
   "title": "gen-exams: generate Vietnamese-style math exams with keys, run benchmark, record lessons (REQ-0027 concept round)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0027",
   "acceptance_criteria": [
     "REQ-0027 AC0-AC4 with $0 mock",
@@ -29,12 +29,19 @@
     "result": "487 OK incl. 13 in test_genexam.py"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "not applicable: user asked not to security-scan this repo; generator only writes files and never reads keys at solve time"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "docs/report/phase-22-gen-exams.md",
+      "work/exam-runs/2026-10-30-gen1/summary.json",
+      "work/exam-runs/2026-10-30-gen2/summary.json",
+      "work/exam-runs/2026-10-30-gen2-fix/summary.json"
+    ],
+    "command": "exam.py gen-exams --real; exam.py benchmark --real on generated math; exam.py lessons",
+    "result": "round1 3/3 pass; round2 4/5 then 5/5 after scorer fix; 1 lesson fixed; QA bug found+fixed"
   },
   "report": {
     "status": "pending",
@@ -51,6 +58,9 @@
     },
     "tester": {
       "waiver": "coordinator ran the suite, as phases 18-21"
+    },
+    "verifier": {
+      "waiver": "coordinator verified with real runs, as phases 18-21"
     }
   },
   "user_notes": [
@@ -71,7 +81,7 @@
     }
   ],
   "picked_at": "2026-10-30T10:43:42Z",
-  "updated_at": "2026-10-30T10:46:26Z",
+  "updated_at": "2026-10-30T10:57:40Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-022/"
@@ -82,5 +92,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "VERIFIED: real concept round after the user's go"
+  "next": "DONE"
 }

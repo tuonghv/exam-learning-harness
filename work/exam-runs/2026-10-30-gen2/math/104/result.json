@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "/tmp/tmp.rzPDevOfmp/inputs/math/input-104.md",
+    "subject": "Mathematics",
+    "level": "Grade 12",
+    "exam_type": "High School Graduation",
+    "task": "Short Answer",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 0.6,
+    "cost_usd": 0.037074,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "code oracle",
+      "answer": "9/11",
+      "solution": [
+        "Điều kiện xác định: x + 2 > 0 và x - 6 > 0, nên x > 6.",
+        "Phương trình tương đương log_3((x + 2)(x - 6)) = 2, suy ra (x + 2)(x - 6) = 9.",
+        "x^2 - 4x - 12 = 9, nên x^2 - 4x - 21 = 0, suy ra x = 7 hoặc x = -3.",
+        "Đối chiếu điều kiện x > 6: loại x = -3 (nghiệm ngoại lai), nhận x = 7, nên x0 = 7.",
+        "P = (7 + 2)/(2*7 - 3) = 9/11."
+      ],
+      "explanation": "Phương trình có nghiệm duy nhất x0 = 7 thỏa x > 6. Nghiệm x = -3 làm x + 2 = -1 < 0 và x - 6 = -9 < 0 nên log không xác định, bị loại. Do đó P = 9/11. Nếu quên loại x = -3 sẽ ra P = (-1)/(-9) = 1/9, là sai.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Phương trình bậc hai đơn giản, nghiệm duy nhất sau khi đối chiếu điều kiện."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "answer holds a number",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "computed",
+          "detail": "arithmetic only: (7+2)/(2*7-3) = 0.8181818182, answer 0.8181818182",
+          "result": "pass",
+          "independent": true
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 1,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}

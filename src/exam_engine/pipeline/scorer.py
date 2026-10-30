@@ -36,6 +36,9 @@ def match(answer, key):
     if _ORDER.match(sk):
         return sa == sk
     mk, ma = _numparse(k), _numparse(a)
+    if mk and not ma:
+        tail = re.search(r"=\s*(-?\d+(?:[.,]\d+)?)\s*[.)]?\s*$", a)
+        ma = _numparse(tail.group(1)) if tail else None
     if mk and ma:
         (kv, d, ke, unit_k), (av, _, ae, unit_a) = mk, ma
         return (_unit_ok(unit_k, unit_a)

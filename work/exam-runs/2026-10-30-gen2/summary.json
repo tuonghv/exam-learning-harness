@@ -1,0 +1,176 @@
+{
+  "date": "2026-10-30",
+  "model": "sonnet",
+  "prompt": "v1.2.0",
+  "per_subject": {
+    "math": {
+      "items": 5,
+      "pass": 4,
+      "fail": 1,
+      "uncertain": 0,
+      "unresolved": 1,
+      "points": 4,
+      "max_points": 5
+    }
+  },
+  "totals": {
+    "items": 5,
+    "pass": 4,
+    "fail": 1,
+    "uncertain": 0,
+    "unresolved": 1,
+    "points": 4,
+    "max_points": 5
+  },
+  "items": [
+    {
+      "subject": "math",
+      "item": "104",
+      "summary": {
+        "pass": 1,
+        "fail": 0,
+        "uncertain": 0,
+        "unresolved": 0,
+        "points": 1,
+        "max_points": 1
+      },
+      "calls": 2,
+      "cost_usd": 0.037074,
+      "stopped": null,
+      "questions": [
+        {
+          "id": "1",
+          "answer": "9/11",
+          "verdict": "PASS",
+          "reason": "independent check passed and reviewer agrees",
+          "attempts": 1,
+          "points": 1,
+          "max": 1,
+          "basis": "key match",
+          "findings": []
+        }
+      ]
+    },
+    {
+      "subject": "math",
+      "item": "105",
+      "summary": {
+        "pass": 1,
+        "fail": 0,
+        "uncertain": 0,
+        "unresolved": 0,
+        "points": 1,
+        "max_points": 1
+      },
+      "calls": 3,
+      "cost_usd": 0.048492,
+      "stopped": null,
+      "questions": [
+        {
+          "id": "1",
+          "answer": "15",
+          "verdict": "PASS",
+          "reason": "independent check passed and reviewer agrees",
+          "attempts": 2,
+          "points": 1,
+          "max": 1,
+          "basis": "key match",
+          "findings": [
+            "agree",
+            "agree"
+          ]
+        }
+      ]
+    },
+    {
+      "subject": "math",
+      "item": "106",
+      "summary": {
+        "pass": 0,
+        "fail": 1,
+        "uncertain": 0,
+        "unresolved": 1,
+        "points": 0,
+        "max_points": 1
+      },
+      "calls": 3,
+      "cost_usd": 0.051781,
+      "stopped": null,
+      "questions": [
+        {
+          "id": "1",
+          "answer": "x = 8 là nghiệm duy nhất; tổng các nghiệm = 8",
+          "verdict": "FAIL",
+          "reason": "differs_from_key",
+          "attempts": 2,
+          "points": 0,
+          "max": 1,
+          "basis": "key match",
+          "findings": [
+            "differs_from_key"
+          ]
+        }
+      ]
+    },
+    {
+      "subject": "math",
+      "item": "107",
+      "summary": {
+        "pass": 1,
+        "fail": 0,
+        "uncertain": 0,
+        "unresolved": 0,
+        "points": 1,
+        "max_points": 1
+      },
+      "calls": 3,
+      "cost_usd": 0.051561,
+      "stopped": null,
+      "questions": [
+        {
+          "id": "1",
+          "answer": "7",
+          "verdict": "PASS",
+          "reason": "independent check passed and reviewer agrees",
+          "attempts": 2,
+          "points": 1,
+          "max": 1,
+          "basis": "key match",
+          "findings": []
+        }
+      ]
+    },
+    {
+      "subject": "math",
+      "item": "108",
+      "summary": {
+        "pass": 1,
+        "fail": 0,
+        "uncertain": 0,
+        "unresolved": 0,
+        "points": 1,
+        "max_points": 1
+      },
+      "calls": 3,
+      "cost_usd": 0.047552,
+      "stopped": null,
+      "questions": [
+        {
+          "id": "1",
+          "answer": "15",
+          "verdict": "PASS",
+          "reason": "independent check passed and reviewer agrees",
+          "attempts": 2,
+          "points": 1,
+          "max": 1,
+          "basis": "key match",
+          "findings": []
+        }
+      ]
+    }
+  ],
+  "calls": 14,
+  "cost_usd": 0.23646,
+  "skipped": [],
+  "regression": []
+}

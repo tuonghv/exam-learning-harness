@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "/tmp/tmp.rzPDevOfmp/inputs/math/input-105.md",
+    "subject": "Mathematics",
+    "level": "Grade 12",
+    "exam_type": "High School Graduation",
+    "task": "Short Answer",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 0.5629259999999999,
+    "cost_usd": 0.048492,
+    "calls": 3,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "code oracle",
+      "answer": "15",
+      "solution": [
+        "Tập xác định: x + 2 > 0 và x - 4 > 0, suy ra x > 4.",
+        "Phương trình tương đương log_3[(x + 2)(x - 4)] = 3, tức (x + 2)(x - 4) = 27.",
+        "Khai triển: x^2 - 2x - 8 = 27, suy ra x^2 - 2x - 35 = 0, nên x = 7 hoặc x = -5.",
+        "Loại x = -5 vì không thỏa x > 4. Nghiệm duy nhất x0 = 7.",
+        "T = 2*7 + 1 = 15."
+      ],
+      "explanation": "Nghiệm x = -5 nằm ngoài tập xác định (x > 4) nên là nghiệm ngoại lai. Chỉ x0 = 7 thỏa mãn, do đó T = 2x0 + 1 = 15. Ghi chú xét lại cho đáp án 13 không nhất quán: chính phép tính 2*7 + 1 trong ghi chú cho 15, không phải 13.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Phương trình đơn giản, đã thay ngược nghiệm vào để kiểm tra."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "answer holds a number",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "computed",
+          "detail": "arithmetic only: 2*7 + 1 = 15, answer 15",
+          "result": "pass",
+          "independent": true
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [
+        {
+          "source": "ai_review",
+          "code": "agree",
+          "message": "Giải đúng: x>4, (x+2)(x-4)=27 cho x^2-2x-35=0, x=7 (loại -5), T=2*7+1=15."
+        },
+        {
+          "source": "ai_review",
+          "code": "agree",
+          "message": "Phần giải thích nhắc đến 'đáp án 13' và 'ghi chú xét lại' là thừa, không ảnh hưởng kết quả 15."
+        }
+      ],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 2,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}

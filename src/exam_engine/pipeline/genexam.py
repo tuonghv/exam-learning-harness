@@ -6,6 +6,7 @@ opened later only by the scorer. Python 3.8 stdlib only.
 import hashlib
 import json
 import os
+import re
 
 from exam_engine import settings
 from exam_engine.adapters import claude
@@ -52,12 +53,23 @@ def qa(llm, obj):
     rep, why = claude.extract_json(call.text)
     if rep is None:
         return "unknown", why, call.cost_usd
-    mine = verifier._answer_value(str(rep.get("my_answer", "")))
-    theirs = verifier._answer_value(obj["final_answer"])
+    mine, theirs = value(str(rep.get("my_answer", ""))), value(obj["final_answer"])
     same = mine is not None and theirs is not None and abs(mine[0] - theirs[0]) <= max(theirs[1], 1e-9)
     if rep.get("verdict") == "ok" and same:
         return "pass", "", call.cost_usd
     return "fail", "%s | reviewer answer %s" % (rep.get("bad_step") or rep.get("verdict"), rep.get("my_answer")), call.cost_usd
+
+
+def value(a):
+    """(number, tolerance) of an answer: fraction, sqrt, sci form, or a plain number; None if unreadable."""
+    a = re.sub(r"^\s*[A-Za-z]\w*\s*=\s*", "", a)
+    got = verifier._answer_value(a)
+    if got is None:
+        try:
+            got = (safe_eval(re.sub(r"\s+\([^)]*\)\s*$", "", a.strip()).replace(",", ".")), 1e-9)
+        except ValueError:
+            return None
+    return got
 
 
 def check_reply(obj):
@@ -72,12 +84,9 @@ def check_reply(obj):
         want = safe_eval(obj["check"])
     except ValueError as exc:
         return ["check: %s" % exc]
-    got = verifier._answer_value(obj["final_answer"])
+    got = value(obj["final_answer"])
     if got is None:
-        try:
-            got = (safe_eval(obj["final_answer"].replace(",", ".")), 1e-9)
-        except ValueError:
-            return ["final_answer is not a number or fraction"]
+        return ["final_answer is not a number or fraction"]
     if abs(want - got[0]) > max(got[1], 1e-9):
         errs.append("bad_key: check = %g but final_answer = %s" % (want, obj["final_answer"]))
     return errs

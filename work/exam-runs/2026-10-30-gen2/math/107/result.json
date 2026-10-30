@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "/tmp/tmp.rzPDevOfmp/inputs/math/input-107.md",
+    "subject": "Mathematics",
+    "level": "Grade 12",
+    "exam_type": "High School Graduation",
+    "task": "Short Answer",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 0.462653,
+    "cost_usd": 0.051561,
+    "calls": 3,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "code oracle",
+      "answer": "7",
+      "solution": [
+        "Dieu kien xac dinh: x + 2 > 0 va x - 4 > 0, suy ra x > 4.",
+        "Phuong trinh tro thanh log_3((x + 2)(x - 4)) = 3, tuc la (x + 2)(x - 4) = 27.",
+        "Khai trien: x^2 - 2x - 8 = 27, suy ra x^2 - 2x - 35 = 0, nghiem x = 7 hoac x = -5.",
+        "Doi chieu dieu kien x > 4: loai x = -5, giu x = 7.",
+        "Phuong trinh chi co mot nghiem thuc x = 7 nen tong cac nghiem la 7."
+      ],
+      "explanation": "Voi x > 4, hai logarit cung co so 3 gop thanh log_3((x + 2)(x - 4)) = 3, dan den x^2 - 2x - 35 = 0. Nghiem x = -5 khong thoa dieu kien x > 4 (x + 2 = -3 < 0 va x - 4 = -9 < 0 nen log_3(x + 2) va log_3(x - 4) khong xac dinh), do do bi loai. Chi con x = 7 nen tong cac nghiem bang 7. Dap an 2 trong ghi chu ra soat chi dung neu bao gom ca nghiem ngoai lai -5 (7 + (-5) = 2), dieu nay sai vi -5 nam ngoai tap xac dinh.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Phuong trinh co dang chuan, tap xac dinh x > 4 loai ro rang nghiem -5."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "answer holds a number",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "computed",
+          "detail": "arithmetic only: 7 = 7, answer 7",
+          "result": "pass",
+          "independent": true
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 2,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}

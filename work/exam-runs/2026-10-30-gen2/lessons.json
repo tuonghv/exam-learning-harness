@@ -1,0 +1,14 @@
+[
+  {
+    "item": "math/106",
+    "question": "1",
+    "verdict": "FAIL",
+    "cause": "variance",
+    "answer": "x = 8 là nghiệm duy nhất; tổng các nghiệm = 8",
+    "reason": "differs_from_key",
+    "evidence": [
+      "differs_from_key"
+    ],
+    "status": "open"
+  }
+]
