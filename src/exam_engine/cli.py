@@ -172,18 +172,29 @@ def verify_main(argv):
 
 
 def report_main(argv):
-    """report RESULT.json --out DIR [--no-pdf]: write report.md/html/pdf from a result."""
-    args = [x for x in argv if x != "--no-pdf"]
-    if len(args) != 3 or args[1] != "--out":
-        print("usage: exam.py report RESULT.json --out DIR [--no-pdf]", file=sys.stderr)
+    """report RESULT.json --out DIR [--no-pdf] [--view sheet|learn]: write report files from a result."""
+    usage = "usage: exam.py report RESULT.json --out DIR [--no-pdf] [--view sheet|learn]"
+    args, view, i = [], "sheet", 0
+    while i < len(argv):
+        a = argv[i]
+        if a == "--view":
+            view = argv[i + 1] if i + 1 < len(argv) else None
+            i += 1
+        elif a.startswith("--view="):
+            view = a.split("=", 1)[1]
+        elif a != "--no-pdf":
+            args.append(a)
+        i += 1
+    if len(args) != 3 or args[1] != "--out" or view not in reporter.VIEWS:
+        print(usage, file=sys.stderr)
         return 2
     try:
         result = settings.load_json(args[0])
-        rep = reporter.write_reports(result, args[2], pdf="--no-pdf" not in argv)
+        rep = reporter.write_reports(result, args[2], pdf="--no-pdf" not in argv, view=view)
     except (OSError, ValueError) as exc:
         print("ERROR: %s" % exc, file=sys.stderr)
         return 2
-    for key in ("md", "html", "pdf"):
+    for key in ("md", "answers", "html", "pdf"):
         if rep.get(key):
             print("report %s -> %s" % (key, rep[key]))
     return 0

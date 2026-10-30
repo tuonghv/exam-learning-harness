@@ -308,7 +308,7 @@ class Pdf(Base):
         self.assertTrue(info["pdf_status"].startswith("skipped"))
         self.assertIsNone(info["pdf"])
         self.assertEqual(info["html"], os.path.join(self.out, "report.html"))
-        self.assertEqual(self.files(), ["report.html", "report.md"])
+        self.assertEqual(self.files(), ["answers.md", "report.html", "report.md"])
         self.assertIn("PDF skipped: no PDF renderer found", self.read("report.md"))
 
     def test_7_fake_renderer_ok_pdf_written_html_removed(self):
@@ -316,7 +316,7 @@ class Pdf(Base):
         self.assertTrue(info["pdf_status"].startswith("ok"))
         self.assertEqual(info["pdf"], os.path.join(self.out, "report.pdf"))
         self.assertIsNone(info["html"])
-        self.assertEqual(self.files(), ["report.md", "report.pdf"])
+        self.assertEqual(self.files(), ["answers.md", "report.md", "report.pdf"])
         self.assertNotIn("PDF skipped", self.read("report.md"))
         with open(info["pdf"], "rb") as fh:
             self.assertEqual(fh.read(4), b"%PDF")
@@ -350,7 +350,7 @@ class Pdf(Base):
         self.assertTrue(info["pdf_status"].startswith("skipped"))
         self.assertIn("timed out", info["pdf_status"])
         self.assertIsNone(info["pdf"])
-        self.assertEqual(self.files(), ["report.html", "report.md"])
+        self.assertEqual(self.files(), ["answers.md", "report.html", "report.md"])
         self.assertIn("PDF skipped: ", self.read("report.md"))
         for p in self.profile_dirs(runner):
             self.assertFalse(os.path.exists(p))
@@ -408,7 +408,7 @@ class Pdf(Base):
 
     def test_pdf_false_writes_only_md(self):
         info = rp.write_reports(result(), self.out, pdf=False, runner=Runner("pdf"))
-        self.assertEqual(self.files(), ["report.md"])
+        self.assertEqual(self.files(), ["answers.md", "report.md"])
         self.assertEqual(info["pdf_status"], "not requested")
 
 
@@ -428,7 +428,7 @@ class RunIntegration(Base):
 
     def test_9_run_writes_report_md_and_valid_result_with_evidence_kind(self):
         res, _ = self.go()
-        self.assertEqual(self.files(), ["report.md", "result.json"])
+        self.assertEqual(self.files(), ["answers.md", "report.md", "result.json"])
         with open(os.path.join(self.out, "result.json"), encoding="utf-8") as fh:
             disk = json.load(fh)
         self.assertEqual(sch.validate(disk, sch.RESULT), [])
@@ -451,7 +451,7 @@ class RunIntegration(Base):
             os.environ.pop("CHROME_BIN", None)
             res, _ = self.go(pdf=True)
         self.assertTrue(res["reports"]["pdf_status"].startswith("skipped"))
-        self.assertEqual(self.files(), ["report.html", "report.md", "result.json"])
+        self.assertEqual(self.files(), ["answers.md", "report.html", "report.md", "result.json"])
 
     def test_schema_rejects_bad_evidence_kind(self):
         res, _ = self.go()
@@ -471,7 +471,7 @@ class Cli(Base):
     def test_10_mock_no_pdf_end_to_end(self):
         code, out, _ = self.main(INPUT_001, "--mock", MOCK, "--no-pdf", "--out", self.out)
         self.assertEqual(code, 1)
-        self.assertEqual(self.files(), ["report.md", "result.json"])
+        self.assertEqual(self.files(), ["answers.md", "report.md", "result.json"])
         with open(os.path.join(self.out, "result.json"), encoding="utf-8") as fh:
             res = json.load(fh)
         self.assertEqual(sch.validate(res, sch.RESULT), [])
@@ -482,6 +482,115 @@ class Cli(Base):
         self.assertIn("Totals: PASS %d, FAIL %d, UNCERTAIN %d, unresolved %d" % (
             s["pass"], s["fail"], s["uncertain"], s["unresolved"]), md)
         self.assertIn("report.md", out)
+
+
+def sheet_qs(ids, answers=None):
+    answers = answers or ["A", "B", "C", "D"]
+    return [question(i, answer=answers[n % len(answers)]) for n, i in enumerate(ids)]
+
+
+class AnswerSheet(Base):
+    def test_1_exact_layout(self):
+        r = result(sheet_qs(range(1, 11)))
+        exp = ("```text\nMath \u2013 10 Questions\n\n"
+               "01   02   03   04   05\n\u24b6   \u24b7   \u24b8   \u24b9   \u24b6\n\n"
+               "06   07   08   09   10\n\u24b7   \u24b8   \u24b9   \u24b6   \u24b7\n```\n")
+        self.assertEqual(rp.build_answer_sheet(r), exp)
+
+    def test_2_dash_marks(self):
+        for a in (None, "Open", "a", "D.", "3.46", ""):
+            self.assertEqual(rp._sheet_mark(question(1, answer=a), {}), "\u2014", a)
+        lit = {"task": "Literature"}
+        self.assertEqual(rp._sheet_mark(question(1, answer="A"), lit), "\u2014")
+        self.assertEqual(rp._sheet_mark(question(1, answer="A"), {}), "\u24b6")
+
+    def test_3_no_offset(self):
+        s = rp.build_answer_sheet(result(sheet_qs(range(31, 61))))
+        self.assertIn("\n31   32   33   34   35\n", s)
+
+    def test_4_width_and_zfill(self):
+        s = rp.build_answer_sheet(result(sheet_qs([98, 99, 100, 101, 102])))
+        self.assertIn("\n98    99    100   101   102\n", s)
+        self.assertEqual(rp._sheet_id("7"), "07")
+        self.assertEqual(rp._sheet_id("007"), "007")
+        self.assertEqual(rp._sheet_id(""), "?")
+
+    def test_5_odd_ids_stay_one_block(self):
+        from exam_engine.utils import md2html
+        qs = [question("1a"), question("```x")]
+        s = rp.build_answer_sheet(result(qs))
+        self.assertIn("1a", s)
+        self.assertIn("x", s)
+        html = md2html.convert("# T\n\n" + s)
+        self.assertEqual(html.count("<pre>"), 1)
+        self.assertEqual(s.count("\n```"), 1)
+
+    def test_6_partial_row_and_empty(self):
+        s = rp.build_answer_sheet(result(sheet_qs(range(1, 8))))
+        rows = s.split("\n")
+        self.assertEqual(rows[-4], "06   07")
+        self.assertTrue(all(x == x.rstrip() for x in rows))
+        self.assertEqual(rp.build_answer_sheet(result([])), "```text\nMath \u2013 0 Questions\n```\n")
+
+    def test_7_no_extras(self):
+        s = rp.build_answer_sheet(result())
+        for w in ("Verdict", "cost", "Explanation", "PASS"):
+            self.assertNotIn(w, s)
+
+    def test_8_write_reports_files(self):
+        r = result(sheet_qs(range(1, 4)))
+        before = rp.build_markdown(r)
+        info = rp.write_reports(r, self.out, pdf=False)
+        md = self.read("report.md")
+        self.assertTrue(md.startswith("# Exam report:"))
+        self.assertLess(md.index("## Answer sheet"), md.index("## Question 1"))
+        self.assertEqual(self.read("answers.md"), rp.build_answer_sheet(r))
+        self.assertEqual(info["answers"], os.path.join(self.out, "answers.md"))
+        self.assertEqual(rp.build_markdown(r), before)
+        self.assertNotIn("\n```", before)
+
+    def test_9_html_pre(self):
+        r = result(sheet_qs(range(1, 5), ["D"]) + [question(5, answer=None)])
+        rp.write_reports(r, self.out, pdf=True, renderer=CHROME, runner=Runner("junk"))
+        h = self.read("report.html")
+        i = h.index('<pre><code class="lang-text">')
+        blk = h[i:h.index("</pre>", i)]
+        self.assertIn("\u24b9", blk)
+        self.assertIn("\u2014", blk)
+
+    def test_12_vietnamese(self):
+        r = result(sheet_qs(range(1, 3)), subject="Ti\u1ebfng Vi\u1ec7t", language="vi")
+        self.assertIn("Ti\u1ebfng Vi\u1ec7t \u2013 2 Questions", rp.build_answer_sheet(r))
+        rp.write_reports(r, self.out, pdf=True, renderer=CHROME, runner=Runner("junk"))
+        self.assertIn('lang="vi"', self.read("report.html"))
+
+
+class LearnView(Base):
+    def test_10_learn(self):
+        qs = [question(1), question(2, verdict="FAIL", key_concept="kc", common_mistake="cm"),
+              question(3, answer="Open", explanation=None, solution=None)]
+        out = rp.build_learning_view(result(qs))
+        self.assertIn("## Learning view", out)
+        self.assertIn("Why: because", out)
+        self.assertIn("Steps:", out)
+        self.assertIn("Answer: Open (needs a human rubric)", out)
+        self.assertEqual(out.count("Key concept:"), 1)
+        self.assertIn("FAIL", out.split("### Question 02")[1].split("### Question 03")[0])
+        self.assertNotIn("verdict", out.split("### Question 01")[1].split("### Question 02")[0])
+        rp.write_reports(result(qs), self.out, pdf=False, view="learn")
+        md = self.read("report.md")
+        self.assertLess(md.index("## Learning view"), md.index("## Question 1"))
+        self.assertNotIn("## Answer sheet", md)
+
+    def test_11_bad_view(self):
+        with self.assertRaises(ValueError):
+            rp.write_reports(result(), self.out, pdf=False, view="bogus")
+        self.assertFalse(os.path.exists(self.out))
+        for argv in (["r.json", "--out", self.out, "--view", "bogus"], ["r.json", "--out", self.out, "--view"]):
+            e = io.StringIO()
+            with contextlib.redirect_stderr(e):
+                self.assertEqual(cli.report_main(argv), 2)
+            self.assertIn("usage", e.getvalue())
 
 
 if __name__ == "__main__":

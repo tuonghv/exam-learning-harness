@@ -49,7 +49,8 @@ th, td { border: 1px solid #d0d0d0; padding: 3.5pt 5pt; text-align: left;
 th { background: #eef1f5; font-weight: 600; }
 tr { page-break-inside: avoid; }
 tbody tr:nth-child(even) { background: #fafbfc; }
-code { font-family: "DejaVu Sans Mono", "Noto Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;
+code { font-family: "DejaVu Sans Mono", "Noto Sans Mono", "Liberation Mono", Menlo, Consolas,
+       "Noto Sans Mono CJK SC", monospace;
        font-size: 0.88em;
        background: #f0f2f4; padding: 0.5pt 3pt; border-radius: 3px;
        overflow-wrap: anywhere; }

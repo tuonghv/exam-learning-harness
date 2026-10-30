@@ -20,6 +20,9 @@ from exam_engine.utils import md2html
 CHROME_NAMES = ("google-chrome", "google-chrome-stable", "chromium", "chromium-browser")
 NO_RENDERER = "no PDF renderer found (Chrome, weasyprint, wkhtmltopdf); HTML kept"
 ZWSP = "\u200b"
+CIRCLED = {"A": "\u24b6", "B": "\u24b7", "C": "\u24b8", "D": "\u24b9"}
+DASH = "\u2014"
+VIEWS = ("sheet", "learn")
 
 
 def _one_line(text):
@@ -42,6 +45,76 @@ def _is_open(q, exam):
 
 def _num(x):
     return "-" if x is None else ("%g" % x)
+
+
+def _sheet_id(qid):
+    """Question id as stored; pure digits are zero-padded to 2 ("7" -> "07")."""
+    s = _one_line(qid)
+    if re.fullmatch(r"[0-9]+", s):
+        return s.zfill(2)
+    return s or "?"
+
+
+def _sheet_mark(q, exam):
+    """Circled A-D, else a dash (null, Open, anything that is not exactly A-D)."""
+    if _is_open(q, exam):
+        return DASH
+    a = q.get("answer")
+    return CIRCLED.get(a.strip(), DASH) if isinstance(a, str) else DASH
+
+
+def _pad(mark, w):
+    """Pad a mark to w columns; circled letters render 2 columns wide (Noto Mono CJK in the PDF)."""
+    return mark + " " * (w - (2 if mark in CIRCLED.values() else 1))
+
+
+def build_answer_sheet(result):
+    """Fenced monospace answer grid: 5 questions per row, ids over circled letters."""
+    exam, qs = result["exam"], result["questions"]
+    out = ["```text", "%s \u2013 %d Questions" % (_one_line(exam.get("subject")) or "Exam", len(qs))]
+    ids = [_sheet_id(q["id"]) for q in qs]
+    marks = [_sheet_mark(q, exam) for q in qs]
+    w = max([2] + [len(i) for i in ids])
+    for k in range(0, len(qs), 5):
+        out += ["", "   ".join(i.ljust(w) for i in ids[k:k + 5]).rstrip(),
+                "   ".join(_pad(m, w) for m in marks[k:k + 5]).rstrip()]
+    return "\n".join(out + ["```"]) + "\n"
+
+
+def build_learning_view(result):
+    """Markdown study view: the engine's answer, why, steps; verdict only when not PASS."""
+    exam = result["exam"]
+    md = ["## Learning view", ""]
+    for q in result["questions"]:
+        md += ["### Question %s" % _sheet_id(q["id"]), ""]
+        if _is_open(q, exam):
+            ans = "Open (needs a human rubric)"
+        else:
+            mark = _sheet_mark(q, exam)
+            ans = mark if mark == DASH else "%s (%s)" % (mark, q["answer"].strip())
+        if q["verification_status"] != "PASS":
+            ans += " %s verdict %s" % (DASH, q["verification_status"])
+        md.append("- Answer: %s" % ans)
+        if q.get("explanation"):
+            md.append("- Why: %s" % _one_line(q["explanation"]))
+        if q.get("solution"):
+            md.append("- Steps:")
+            md += ["  %d. %s" % (n, _one_line(t)) for n, t in enumerate(q["solution"], 1)]
+        if q.get("key_concept"):
+            md.append("- Key concept: %s" % _one_line(q["key_concept"]))
+        if q.get("common_mistake"):
+            md.append("- Common mistake: %s" % _one_line(q["common_mistake"]))
+        md.append("")
+    return "\n".join(md)
+
+
+def _compose(result, view):
+    """report.md text: the title, then the chosen view, then the full body."""
+    body = build_markdown(result)
+    title, rest = body.split("\n", 1)
+    block = ("## Answer sheet\n\n" + build_answer_sheet(result)) if view == "sheet" \
+        else build_learning_view(result)
+    return title + "\n\n" + block + "\n" + rest.lstrip("\n")
 
 
 def build_markdown(result):
@@ -225,17 +298,22 @@ def md_to_pdf(md_path, pdf_path, *, lang="en", renderer=None, timeout=None,
             shutil.rmtree(profile, ignore_errors=True)
 
 
-def write_reports(result, out_dir, *, pdf=True, renderer=None, runner=subprocess.Popen):
-    """Write report.md always; report.html/report.pdf when a render is asked for.
-    Returns dict(md, html, pdf, pdf_status); html/pdf are paths or None."""
+def write_reports(result, out_dir, *, pdf=True, renderer=None, runner=subprocess.Popen,
+                  view="sheet"):
+    """Write report.md and answers.md always; report.html/report.pdf when a render is asked for.
+    Returns dict(md, answers, html, pdf, pdf_status); html/pdf are paths or None."""
+    if view not in VIEWS:
+        raise ValueError("unknown view %r" % view)
     os.makedirs(out_dir, exist_ok=True)
     md_path = os.path.join(out_dir, "report.md")
     html_path = os.path.join(out_dir, "report.html")
     pdf_path = os.path.join(out_dir, "report.pdf")
-    md = build_markdown(result)
+    answers_path = os.path.join(out_dir, "answers.md")
     with open(md_path, "w", encoding="utf-8") as fh:
-        fh.write(md)
-    info = {"md": md_path, "html": None, "pdf": None, "pdf_status": "not requested"}
+        fh.write(_compose(result, view))
+    with open(answers_path, "w", encoding="utf-8") as fh:
+        fh.write(build_answer_sheet(result))
+    info = {"md": md_path, "answers": answers_path, "html": None, "pdf": None, "pdf_status": "not requested"}
     if not pdf:
         return info
     lang = result.get("exam", {}).get("language") or "en"
