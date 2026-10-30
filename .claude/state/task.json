@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-029",
-  "state": "VERIFIED",
-  "next": "verifier: V1-V5 on work/dgnl-real, then VERIFIED; pre-existing examples/dgnl failures noted as defect",
+  "state": "DONE",
+  "next": "",
   "title": "Answer sheet + learning view in report stage: build_answer_sheet / build_learning_view in reporter.py, --view sheet|learn (REQ-0034, REQ-0035)",
-  "active": [
-    {
-      "task_id": "TASK-029",
-      "state": "VERIFIED",
-      "next": "verifier: V1-V5 on work/dgnl-real, then VERIFIED; pre-existing examples/dgnl failures noted as defect",
-      "updated_at": "2026-10-30T16:14:26Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

@@ -745,3 +745,9 @@ Action: verifier Argus checked ACs; coordinator saved diffstat and bad-view rc e
 Result: PASS, no defects.
 Decision: write report, DONE.
 Next: report, backlog complete.
+
+## DONE - TASK-029 - 2026-10-30T16:14:37Z
+Action: report written.
+Result: answer sheet + learn view adopted.
+Decision: close TASK-029, REQ-0034/0035.
+Next: TASK-030 (language).

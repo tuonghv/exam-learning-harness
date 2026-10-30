@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-029",
   "title": "Answer sheet + learning view in report stage: build_answer_sheet / build_learning_view in reporter.py, --view sheet|learn (REQ-0034, REQ-0035)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0034",
   "acceptance_criteria": [
     "REQ-0034 AC1-AC4: sheet 'Subject – N Questions', 5 per row, 2-digit ids as stored, circled A-D, — for null/Open/non A-D, block at top of report.md/html/pdf plus answers.md, solver/schema unchanged",
@@ -54,8 +54,8 @@
     ]
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-29-answer-sheet-views.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -96,7 +96,7 @@
     }
   ],
   "picked_at": "2026-10-30T15:17:31Z",
-  "updated_at": "2026-10-30T16:14:26Z",
+  "updated_at": "2026-10-30T16:14:37Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-029/"
@@ -108,5 +108,5 @@
     "notes": "",
     "next": "await user approval of docs/design/phase-29-answer-sheet-views.md, then coder tests first"
   },
-  "next": "verifier: V1-V5 on work/dgnl-real, then VERIFIED; pre-existing examples/dgnl failures noted as defect"
+  "next": ""
 }
