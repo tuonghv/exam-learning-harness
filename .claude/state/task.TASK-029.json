@@ -1,10 +1,10 @@
 {
   "task_id": "TASK-029",
   "title": "Answer sheet + learning view in report stage: build_answer_sheet / build_learning_view in reporter.py, --view sheet|learn (REQ-0034, REQ-0035)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0034",
   "acceptance_criteria": [
-    "REQ-0034 AC1-AC4: sheet 'Subject \u2013 N Questions', 5 per row, 2-digit ids as stored, circled A-D, \u2014 for null/Open/non A-D, block at top of report.md/html/pdf plus answers.md, solver/schema unchanged",
+    "REQ-0034 AC1-AC4: sheet 'Subject – N Questions', 5 per row, 2-digit ids as stored, circled A-D, — for null/Open/non A-D, block at top of report.md/html/pdf plus answers.md, solver/schema unchanged",
     "REQ-0035 AC1-AC4 phase 1: --view sheet|learn (default sheet), learn view reuses explanation+solution, optional key_concept/common_mistake only if present, no extra LLM cost",
     "Tests in tests/unit/test_exam_report.py with null-answer results (work/dgnl-real Vietnamese/Science), existing report tests stay green, PDF font check for circled letters"
   ],
@@ -38,12 +38,20 @@
     "result": "523 run, 12 new pass; 3 failures pre-existing on clean tree (examples/dgnl pairing); 2 mutations caught"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "untrusted ids/subject/explanations pass through _one_line (ZWSP before fence/heading); test 5 covers id starting with ```; html via md2html escaping; no new subprocess, network or file reads beyond result.json; --view validated against VIEWS"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "command": "python3 -I exam.py report work/dgnl-real/run-*/result.json --no-pdf; unit suite",
+    "result": "dash==null count on 4 subjects, rc 2 on bad view, verifier PASS",
+    "evidence": [
+      "work/TASK-029/evidence/ac3-diffstat.txt",
+      "work/TASK-029/evidence/unit-full.txt",
+      "work/TASK-029/evidence/view-bad-rc.txt",
+      "work/TASK-029/v/sci/pg-01.png",
+      "work/TASK-029/handoff/verify.md"
+    ]
   },
   "report": {
     "status": "pending",
@@ -60,6 +68,9 @@
     },
     "tester": {
       "waiver": "work/TASK-029/handoff/test.md"
+    },
+    "verifier": {
+      "waiver": "work/TASK-029/handoff/verify.md"
     }
   },
   "user_notes": [
@@ -85,7 +96,7 @@
     }
   ],
   "picked_at": "2026-10-30T15:17:31Z",
-  "updated_at": "2026-10-30T15:28:18Z",
+  "updated_at": "2026-10-30T16:14:26Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-029/"

@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0034",
-  "next": "await tester handoff TASK-029, then verify; TASK-030 (REQ-0036) queued next",
-  "updated": "2026-10-30 22:28"
+  "next": "verifier TASK-029, then DONE, then TASK-030 design/implement",
+  "updated": "2026-10-30 23:13"
 }
