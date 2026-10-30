@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-032",
   "title": "advance.sh + advance skill: one command per TASK transition and REQ catch-up (REQ-0037)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0037",
   "acceptance_criteria": [
     "REQ-0037 AC1-AC6"
@@ -21,8 +21,16 @@
     ]
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      ".claude/scripts/advance.sh",
+      ".claude/scripts/_advance.py",
+      ".claude/scripts/_tasks.py",
+      ".claude/scripts/checks/advance_test.sh",
+      ".claude/scripts/checks/advance_adv_test.sh",
+      ".claude/skills/advance/SKILL.md"
+    ],
+    "summary": "advance.sh + _advance.py (gated one-step advance, snapshot/restore, AC7 quality gate, req-catchup, whole-run lock), skill advance, D1/D2 staging fixes in _tasks.py, tester fixes (lock, one-line log)"
   },
   "unit_test": {
     "status": "pending",
@@ -55,11 +63,14 @@
       "tester": [
         ".claude/scripts/*"
       ]
+    },
+    "coder": {
+      "waiver": "work/TASK-032/handoff/code.md"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-30T22:00:29Z",
-  "updated_at": "2026-10-30T22:04:04Z",
+  "updated_at": "2026-10-30T22:30:42Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-032/"
@@ -71,6 +82,6 @@
     "notes": "",
     "next": "HOLD NEW SUBAGENTS until user switches Claude account (RAW-00134). Tester a2ff1c3b is still running: read work/TASK-032/handoff/test.md, then dogfood advance.sh in main (IMPLEMENTING..DONE), verifier "
   },
-  "next": "coder: advance_test.sh first, then advance.sh/_advance.py, _tasks.py D1/D2, skill advance, workflow/coordinator skill link lines",
+  "next": "UNIT_TESTED: record test results; then verifier after the account switch",
   "grants": {}
 }

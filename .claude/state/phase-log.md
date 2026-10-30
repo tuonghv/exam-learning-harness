@@ -817,3 +817,9 @@ Action: designer Nova drafted; coordinator installed doc, test path moved under 
 Result: docs/design/phase-32-gated-task-advance.md
 Decision: implement now.
 Next: coder tests first.
+
+## IMPLEMENTING - TASK-032 - 2026-10-30T22:30:42Z
+Action: coder Titan implemented design phase-32 tests first; tester Nemesis found lock and log-injection defects; coordinator fixed both
+Result: advance_test 58/0, advance_adv_test 32/0, neighbours green
+Decision: advance
+Next: UNIT_TESTED
