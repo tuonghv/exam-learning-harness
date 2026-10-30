@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-021",
   "title": "benchmark command: engine over evals/inputs with key-only scoring, summary.json + report (REQ-0009)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0009",
   "acceptance_criteria": [
     "AC0-AC6 of REQ-0009 except the real run measurement, which waits for the user's go"
@@ -41,8 +41,8 @@
     "result": "15 pairs, calls <= 75; no mode exits 2"
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-21-benchmark.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -65,7 +65,7 @@
   },
   "user_notes": [],
   "picked_at": "2026-10-30T06:14:13Z",
-  "updated_at": "2026-10-30T06:14:46Z",
+  "updated_at": "2026-10-30T06:14:53Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-021/"
@@ -76,5 +76,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report and DONE"
+  "next": ""
 }

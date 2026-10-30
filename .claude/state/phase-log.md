@@ -604,3 +604,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: 15 pairs, calls <= 75; no-mode exits 2.
 - Decision: waivers; REQ-0009 AC1 and AC4 stay open for the real run.
 - Next: report and DONE.
+
+## DONE - TASK-021 - 2026-10-30T09:45:00Z
+- Action: report docs/report/phase-21-benchmark.md.
+- Result: task done; REQ-0009 AC1 and AC4 open for the real run.
+- Decision: real run needs the user's go (est. $2-3, cap $3.00).
+- Next: real benchmark.
