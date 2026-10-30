@@ -69,3 +69,11 @@ to the solver as a visual (later REQ-0021).
   `no_question_numbering` or `segmentation_skipped` means fix the saved document by hand.
 - Multi-column order and table cells in PDFs are best effort (`reading_order_uncertain`).
 - Nothing here proves extraction is 100% correct; the warnings are hints, not guarantees.
+
+## Cross-solve (REQ-0023): second opinion at answer level
+
+```
+python3 -I scripts/exam.py cross-solve EXAM.md --pdf FILE.pdf --pages 1-4 --dry-run          # $0: prompts, call bound
+python3 -I scripts/exam.py cross-solve EXAM.md --pdf FILE.pdf --pages 1-4 --real --max-cost-usd 1.00 --out DIR
+```
+Route A solves the exam text, route B the page images; per question `agree` or `needs_review` (`differ`, `missing_*`, `declined_*`, `count_mismatch`). Outputs `cross.json`, `review.md`, `cross.trace.json` (raw replies). Exit 0 all agree, 1 review needed, 2 usage, 3 call/cost/key-page stop. At most 4 calls (about $0.35 for 22 questions). Never defaults to real; answer-guide pages are refused. Agreement is evidence, not proof (one exam, n=22, same model).
