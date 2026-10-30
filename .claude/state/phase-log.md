@@ -586,3 +586,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: command spec, budget, exit codes, tests defined.
 - Decision: reuse engine.run and scorer unchanged; real run waits for the user's go.
 - Next: IMPLEMENTING.
+
+## IMPLEMENTING - TASK-021 - 2026-10-30T09:15:00Z
+- Action: added pipeline/benchmark.py, benchmark command, 5 tests.
+- Result: suite 463 OK.
+- Decision: engine untouched.
+- Next: UNIT_TESTED.

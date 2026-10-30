@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-021",
   "title": "benchmark command: engine over evals/inputs with key-only scoring, summary.json + report (REQ-0009)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0009",
   "acceptance_criteria": [
     "AC0-AC6 of REQ-0009 except the real run measurement, which waits for the user's go"
@@ -14,8 +14,13 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/benchmark.py",
+      "src/exam_engine/cli.py",
+      "tests/unit/test_benchmark.py"
+    ],
+    "summary": "pipeline/benchmark.py + benchmark command"
   },
   "unit_test": {
     "status": "pending",
@@ -39,6 +44,9 @@
   "roles": {
     "designer": {
       "waiver": "coordinator designed, as phases 18-20"
+    },
+    "coder": {
+      "waiver": "coordinator implemented"
     }
   },
   "user_notes": [],
@@ -54,5 +62,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "IMPLEMENTING"
+  "next": "UNIT_TESTED"
 }

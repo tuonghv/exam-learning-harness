@@ -18,7 +18,7 @@ from exam_engine.core.decision import decide
 from exam_engine.pipeline import examples_check, parser, prompts, reporter, scorer, solver, verifier
 
 COMMANDS = ("solve", "parse", "verify", "report", "check-examples", "score", "prompts",
-            "check-prompts", "ingest", "ingest-inspect", "ingest-refine", "cross-solve")
+            "check-prompts", "ingest", "ingest-inspect", "ingest-refine", "cross-solve", "benchmark")
 USAGE = "usage: exam.py {%s} ..." % "|".join(COMMANDS)
 
 
@@ -505,6 +505,93 @@ def cross_main(argv):
     return 1 if sm["needs_review"] else 0
 
 
+def benchmark_main(argv):
+    """benchmark --out DIR (--dry-run|--mock FILE|--real): solve + score evals/inputs; exit 0/1/2/3."""
+    from exam_engine.pipeline import benchmark
+    d = settings.load_config("engine")
+    ap = argparse.ArgumentParser(prog="exam.py benchmark")
+    ap.add_argument("--inputs", default="evals/inputs")
+    ap.add_argument("--keys", default="evals/keys")
+    ap.add_argument("--subject")
+    ap.add_argument("--out")
+    ap.add_argument("--previous", metavar="summary.json")
+    ap.add_argument("--mock")
+    ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--real", action="store_true")
+    ap.add_argument("--budget-usd", type=float, default=3.0)
+    ap.add_argument("--max-cost-usd", type=float, default=d["max_cost_usd"])
+    ap.add_argument("--max-attempts", type=int, default=d["max_attempts"])
+    ap.add_argument("--timeout", type=float, default=d["timeout"])
+    ap.add_argument("--model", default=d["model"])
+    ap.add_argument("--channel", choices=("release", "dev"))
+    ap.add_argument("--prompt-version")
+    try:
+        a = ap.parse_args(argv)
+    except SystemExit:
+        return 2
+    try:
+        settings.use_prompts(a.channel, a.prompt_version)
+    except ValueError as exc:
+        print("ERROR: %s" % exc, file=sys.stderr)
+        return 2
+    if sum([bool(a.mock), a.dry_run, a.real]) != 1 or (not a.dry_run and not a.out):
+        print("usage: choose exactly one of --mock FILE, --dry-run, --real (never defaults to real); "
+              "--out DIR required", file=sys.stderr)
+        return 2
+    if a.max_attempts < 1 or a.budget_usd < 0 or a.max_cost_usd < 0 or a.timeout <= 0:
+        print("usage: --max-attempts >= 1, costs >= 0, --timeout > 0", file=sys.stderr)
+        return 2
+    items = benchmark.discover(a.inputs, a.keys, a.subject)
+    if not items:
+        print("ERROR: no input/key pairs under %s and %s" % (a.inputs, a.keys), file=sys.stderr)
+        return 2
+    cfg = {"max_attempts": a.max_attempts, "max_cost_usd": a.max_cost_usd, "timeout": a.timeout,
+           "model": a.model, "llm_name": "claude-p" if a.real else "mock", "pdf": False}
+    calls = len(items) * engine.call_cap(cfg)
+    print("%d items, calls <= %d, budget $%.2f%s" % (
+        len(items), calls, a.budget_usd, " (dry run: no call made)" if a.dry_run else ""), flush=True)
+    if a.dry_run:
+        for sub, n, path, key in items:
+            print("  %s/%s  %s  (key %s)" % (sub, n, path, key))
+        return 0
+    prev = None
+    if a.previous:
+        try:
+            with open(a.previous, encoding="utf-8") as fh:
+                prev = json.load(fh)
+        except (OSError, ValueError) as exc:
+            print("ERROR: --previous: %s" % exc, file=sys.stderr)
+            return 2
+    tmp = None
+    try:
+        if a.real:
+            tmp = tempfile.mkdtemp(prefix="exam_bench_")
+
+            def llm(prompt):
+                return claude.run_claude(prompt, model=a.model, timeout_s=a.timeout, cwd=tmp)
+        else:
+            llm = engine.mock_llm(a.mock)
+        rows = benchmark.run_all(items, a.out, cfg, llm, a.budget_usd)
+    except (OSError, ValueError) as exc:
+        print("ERROR: %s" % exc, file=sys.stderr)
+        return 2
+    finally:
+        if tmp:
+            shutil.rmtree(tmp, ignore_errors=True)
+    sm = benchmark.summarize(rows, {"date": benchmark.today(), "model": a.model,
+                                    "prompt": os.path.basename(settings.prompt_root())})
+    worse = benchmark.regression(prev, sm) if prev else []
+    sm["regression"] = worse
+    benchmark.write(sm, a.out)
+    t = sm["totals"]
+    print("items=%d pass=%d fail=%d uncertain=%d unresolved=%d calls=%d cost=$%.4f skipped=%d -> %s" % (
+        t["items"], t["pass"], t["fail"], t["uncertain"], t["unresolved"], sm["calls"],
+        sm["cost_usd"], len(sm["skipped"]), a.out))
+    if worse:
+        print("REGRESSION: pass count fell for %s" % ", ".join(worse))
+    return 3 if sm["skipped"] else (1 if worse or t["fail"] or t["unresolved"] else 0)
+
+
 def main(argv=None):
     argv = list(sys.argv[1:] if argv is None else argv)
     cmd, rest = (argv[0], argv[1:]) if argv else (None, [])
@@ -513,7 +600,7 @@ def main(argv=None):
              "score": scorer.score_main, "prompts": prompts.prompts_main,
              "check-prompts": prompts.check_prompts_main,
              "ingest": ingest_main, "ingest-inspect": inspect_main,
-             "ingest-refine": refine_main, "cross-solve": cross_main}
+             "ingest-refine": refine_main, "cross-solve": cross_main, "benchmark": benchmark_main}
     if cmd not in table:
         print(USAGE, file=sys.stderr)
         return 2
