@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/inputs/literature/input-003.md",
+    "subject": "Literature",
+    "level": "Grade 12",
+    "exam_type": "High School Graduation",
+    "task": "Reading Comprehension",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 0.820247,
+    "cost_usd": 0.047751,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "Claude review only",
+      "answer": "Open",
+      "solution": [
+        "Xác định chủ đề: hình ảnh người cha lam lũ, lặng lẽ yêu thương con và tình cảm biết ơn, nhớ thương của người con.",
+        "Phân tích dáng cha: 'cha đi gặt sớm, nắng hồng trên vai' và 'Lưng cha cong một vầng trăng' cho thấy sự cần cù, vất vả nhưng đẹp đẽ.",
+        "Phân tích sự hi sinh: 'mồ hôi thấm đất, hạt vàng nở hoa' cho thấy thành quả được đổi bằng mồ hôi của cha.",
+        "Phân tích tình cha: 'Cha không nói chuyện đường xa, chỉ nhìn bờ ruộng, như là nhìn con' cho thấy tình thương kín đáo, ít lời.",
+        "Tình cảm người con: 'nhớ mùi rơm mới, nhớ lời cha ru' thể hiện lòng biết ơn, nỗi nhớ và sự trân trọng cha."
+      ],
+      "explanation": "Cách hiểu 1: người cha là hình ảnh của sự lao động cần cù, hi sinh thầm lặng; dáng lưng cong được thi vị hóa thành vầng trăng nên vừa vất vả vừa đẹp, vừa gợi lòng xót thương của con. Cách hiểu 2: người cha là người gửi gắm tình yêu và hi vọng vào con qua cách im lặng nhìn ruộng; ruộng đồng và con là hai điều cha trân quý như nhau. Tình cảm của người con là biết ơn và nhớ thương, hướng về tương lai khi con trưởng thành ('Mai này con lớn khôn rồi'). Các cách hiểu khác chỉ được chấp nhận khi có trích dẫn từ đoạn thơ làm căn cứ.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Câu hỏi mở, ngữ liệu rõ ràng; các hiểu biết đều có trích dẫn nguyên văn làm căn cứ."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "answer is Open",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: Lưng cha cong một vầng trăng,",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: chỉ nhìn bờ ruộng, như là nhìn con.",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: nhớ mùi rơm mới, nhớ lời cha ru.",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: unsure",
+          "result": "unknown",
+          "independent": false
+        }
+      ],
+      "verification_status": "UNCERTAIN",
+      "status_reason": "open_task_no_rubric",
+      "qa_findings": [
+        {
+          "source": "ai_review",
+          "code": "unsure",
+          "message": "Đây là câu tự luận mở (answer = Open), không có đáp án duy nhất để đối chiếu nên không thể xác nhận đúng/sai tuyệt đối."
+        },
+        {
+          "source": "ai_review",
+          "code": "unsure",
+          "message": "Lời giải hợp lý: bám đúng văn bản, trích dẫn chính xác, nêu được hình ảnh người cha (cần cù, hi sinh, thương con kín đáo) và tình cảm biết ơn, nhớ thương của người con."
+        },
+        {
+          "source": "ai_review",
+          "code": "unsure",
+          "message": "Phần giải thích chỉ là ý chính dạng gạch đầu dòng, chưa phải bài viết 8-10 dòng như yêu cầu của đề."
+        }
+      ],
+      "score": {
+        "points": null,
+        "max": null,
+        "basis": "none",
+        "detail": "no key"
+      },
+      "attempts": 1,
+      "unresolved": true,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 0,
+    "fail": 0,
+    "uncertain": 1,
+    "unresolved": 1,
+    "points": null,
+    "max_points": null
+  }
+}

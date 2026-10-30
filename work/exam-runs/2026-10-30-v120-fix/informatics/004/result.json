@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/inputs/informatics/input-004.md",
+    "subject": "Tin hoc",
+    "level": "Grade 12",
+    "exam_type": "High School Graduation",
+    "task": "Short Answer",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 0.883445,
+    "cost_usd": 0.033369,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "code oracle",
+      "answer": "3",
+      "solution": [
+        "Điều kiện WHERE diem < 5 chỉ giữ các dòng có kết quả TRUE; dòng có diem = NULL cho kết quả UNKNOWN nên bị loại.",
+        "Bảng theo dõi: ma1 (4.5) TRUE; ma2 (7.0) FALSE; ma3 (NULL) UNKNOWN; ma4 (3.0) TRUE; ma5 (4.5) TRUE; ma6 (NULL) UNKNOWN; ma7 (5.0) FALSE.",
+        "Các dòng thỏa: ma 1, 4, 5 nên COUNT(*) = 3."
+      ],
+      "explanation": "Kết quả là 3 vì COUNT(*) đếm các dòng thỏa WHERE, và NULL < 5 cho UNKNOWN nên không được tính. Đáp án 5 sai vì tính nhầm cả 2 dòng NULL như thể thỏa điều kiện. Đáp án 4 sai vì chỉ tính thêm một dòng NULL hoặc tính nhầm điểm 5.0 (5.0 < 5 là FALSE). Đáp án 2 sai vì bỏ sót một trong hai học sinh có 4.5.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Quy tắc logic ba trị của SQL với NULL là chuẩn và dữ liệu bảng nhỏ, rõ ràng."
+      },
+      "checks": [
+        {
+          "kind": "computed",
+          "detail": "arithmetic only: 1 + 1 + 1 = 3, answer 3",
+          "result": "pass",
+          "independent": true
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: SELECT COUNT(*) FROM HOCSINH WHERE diem < 5;",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [
+        {
+          "source": "ai_review",
+          "code": "agree",
+          "message": "Các dòng có diem < 5 là ma 1 (4.5), 4 (3.0), 5 (4.5); dòng NULL cho UNKNOWN bị loại và 5.0 < 5 là FALSE, nên COUNT(*) = 3."
+        }
+      ],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 1,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/inputs/physics/input-003.md",
+    "subject": "Physics",
+    "level": "Grade 12",
+    "exam_type": "High School Graduation",
+    "task": "Multiple Choice",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 0.5949570000000001,
+    "cost_usd": 0.055191,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "key match",
+      "answer": "B",
+      "solution": [
+        "Given: u = 100*sqrt(2)*cos(100*pi*t) V, nên omega = 100*pi rad/s; R = 30 ohm; L = 0,4/pi H; C = 1,25.10^-4/pi F. Find: phi = phi_u - phi_i (rad).",
+        "Cảm kháng: ZL = omega*L = 100*pi*0,4/pi = 40 ohm.",
+        "Dung kháng: ZC = 1/(omega*C) = 1/(100*pi*1,25.10^-4/pi) = 80 ohm.",
+        "Định luật: tan(phi) = (ZL - ZC)/R = (40 - 80)/30 = -4/3.",
+        "phi = arctan(-4/3) = -0,927 rad, làm tròn -0,93 rad (ZC > ZL nên mạch có tính dung kháng, u trễ pha so với i)."
+      ],
+      "explanation": "B đúng: ZC = 80 ohm lớn hơn ZL = 40 ohm nên tan(phi) = -4/3, phi = -0,93 rad. A sai: đúng độ lớn nhưng sai dấu (dấu + ứng với mạch có tính cảm kháng, ZL > ZC). C sai: -0,64 rad là arctan(3/4), do lấy tỉ số R/(ZC - ZL) thay vì (ZL - ZC)/R. D sai: vừa sai dấu vừa nhầm tỉ số như C.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Phép tính trực tiếp, đáp án khớp đúng một lựa chọn."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "single letter A-D",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "computed",
+          "detail": "arithmetic only: node not allowed: Call",
+          "result": "unknown",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: u = 100*sqrt(2)*cos(100*pi*t) (V)",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: R = 30 ohm, L = 0,4/pi H, C = 1,25.10^-4/pi F",
+          "result": "fail",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "FAIL",
+      "status_reason": "check_failed: quote",
+      "qa_findings": [
+        {
+          "source": "deterministic",
+          "code": "quote",
+          "message": "verbatim in passage/question: R = 30 ohm, L = 0,4/pi H, C = 1,25.10^-4/pi F"
+        },
+        {
+          "source": "deterministic",
+          "code": "malformed_output",
+          "message": "no valid JSON object found"
+        }
+      ],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 2,
+      "unresolved": true,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 0,
+    "fail": 1,
+    "uncertain": 0,
+    "unresolved": 1,
+    "points": 1,
+    "max_points": 1
+  }
+}

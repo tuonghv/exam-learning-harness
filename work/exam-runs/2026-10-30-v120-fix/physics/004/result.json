@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/inputs/physics/input-004.md",
+    "subject": "Physics",
+    "level": "Grade 12",
+    "exam_type": "High School Graduation",
+    "task": "Short Answer",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 0.5397660000000001,
+    "cost_usd": 0.034709,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "key match",
+      "answer": "9 điểm",
+      "solution": [
+        "Given: AB = 10 cm; f = 15 Hz; v = 30 cm/s; hai nguồn cùng pha. Find: số điểm cực đại trên AB (không tính A, B).",
+        "Bước sóng: lambda = v/f = 30/15 = 2 cm.",
+        "Điều kiện cực đại (cùng pha): d1 - d2 = k*lambda, với -AB < d1 - d2 < AB (không tính hai nguồn).",
+        "Suy ra -AB/lambda < k < AB/lambda, tức -5 < k < 5.",
+        "k nguyên: k = -4, -3, ..., 3, 4 nên có 9 giá trị."
+      ],
+      "explanation": "Hai nguồn cùng pha nên cực đại thỏa d1 - d2 = k*lambda, trung điểm AB ứng với k = 0. Do k = +5 và k = -5 ứng với đúng vị trí hai nguồn A và B (bị loại theo đề bài) nên chỉ lấy |k| <= 4, được 9 điểm. Nếu dùng công thức bao gồm cả biên thì sẽ được 11 điểm (sai vì đề không tính A, B). Nếu dùng công thức của hai nguồn ngược pha hoặc lấy 2*[AB/lambda] thì sẽ ra 10 điểm (sai).",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Bài chuẩn, AB/lambda = 5 nguyên nên chỉ cần loại hai điểm biên theo đề."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "answer holds a number",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "computed",
+          "detail": "arithmetic only: node not allowed: Call",
+          "result": "unknown",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: cách nhau 10 cm, dao động cùng pha",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: tần số 15 Hz",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: Tốc độ truyền sóng trên mặt nước là 30 cm/s",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: không tính hai nguồn A và B",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 1,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}

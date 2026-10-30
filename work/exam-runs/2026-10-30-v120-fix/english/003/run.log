@@ -1,0 +1,2 @@
+call 1 ok=True cls=- dur=7.6s cost=0.0210 prompt_bytes=4777 answer_bytes=1598
+call 2 ok=True cls=- dur=4.8s cost=0.0178 prompt_bytes=3947 answer_bytes=306

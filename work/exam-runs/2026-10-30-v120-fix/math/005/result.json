@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/inputs/math/input-005.md",
+    "subject": "Mathematics",
+    "level": "Grade 12",
+    "exam_type": "High School Graduation",
+    "task": "Short Answer",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 0.6236,
+    "cost_usd": 0.028643,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "code oracle",
+      "answer": "sqrt(2)",
+      "solution": [
+        "Ta có |1 + 2i| = sqrt(1^2 + 2^2) = sqrt(5) và |3 - i| = sqrt(3^2 + 1^2) = sqrt(10).",
+        "Lấy môđun hai vế: |1 + 2i| * |z| = |3 - i|.",
+        "Suy ra |z| = sqrt(10) / sqrt(5) = sqrt(2)."
+      ],
+      "explanation": "Môđun của tích bằng tích các môđun nên |z| = |3 - i| / |1 + 2i| = sqrt(2). Số phức 1 + 2i khác 0 nên phép chia hợp lệ, không có nghiệm ngoại lai.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Phép tính ngắn, đã đối chiếu bằng hai cách độc lập."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "answer holds a number",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "computed",
+          "detail": "arithmetic only: (10/5)**0.5 = 1.414213562, answer 1.414213562",
+          "result": "pass",
+          "independent": true
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: (1 + 2i)z = 3 - i",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 1,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}

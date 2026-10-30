@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/inputs/english/input-004.md",
+    "subject": "English",
+    "level": "Grade 12",
+    "exam_type": "High School Graduation",
+    "task": "Sentence Ordering",
+    "mode": "Solve",
+    "language": "en"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 0.961224,
+    "cost_usd": 0.025597,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "key match",
+      "answer": "b-d-a-e-c",
+      "solution": [
+        "b opens the story: Linh decides to become a primary school teacher (Last year).",
+        "d gives the reason for the choice: she loved children, so it seemed easy at first.",
+        "a contrasts with d using However: the job needed more patience than expected.",
+        "e follows as the result of a (Because of this): she attended extra training courses.",
+        "c closes with Now, after finishing the courses, she feels it was the most rewarding decision."
+      ],
+      "explanation": "b introduces the topic and time (Last year). d explains why she chose it, and 'at first' sets up a change. a begins with 'However' and 'soon realised', which contrasts with the easy choice in d. e starts with 'Because of this', so it must follow a, the difficulty that caused the training. c begins with 'Now, after finishing the courses', so it must come last, after e mentions the courses. Other orders break these links: a cannot precede d because 'However' needs a prior positive idea, and c cannot come before e because the courses have not yet been mentioned.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Clear chronological and cohesive devices (However, Because of this, Now) fix a unique order."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "ordering uses each given letter once",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: a: However, she soon realised that the job required far more patience than she h",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: e: Because of this, she began to attend extra training courses on classroom mana",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: c: Now, after finishing the courses, she says it is the most rewarding decision ",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 1,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}

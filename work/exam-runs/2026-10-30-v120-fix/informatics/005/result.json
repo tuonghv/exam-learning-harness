@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/inputs/informatics/input-005.md",
+    "subject": "Tin hoc",
+    "level": "Grade 12",
+    "exam_type": "High School Graduation",
+    "task": "Short Answer",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 0.850076,
+    "cost_usd": 0.029829,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "code oracle",
+      "answer": "62 host",
+      "solution": [
+        "Biểu diễn: địa chỉ IPv4 32 bit, tiền tố /26 nghĩa là 26 bit mạng, số bit host = 32 - 26 = 6.",
+        "Tổng số địa chỉ trong mạng con = 2^6 = 64 (từ 192.168.10.0 đến 192.168.10.63).",
+        "Trừ địa chỉ mạng (192.168.10.0) và địa chỉ quảng bá (192.168.10.63): 64 - 2 = 62."
+      ],
+      "explanation": "Số host tối đa = 2^(32-26) - 2 = 62, có thể gán từ 192.168.10.1 đến 192.168.10.62. Nếu không trừ 2 địa chỉ đặc biệt sẽ ra 64 là sai theo yêu cầu đề. Nếu nhầm số bit host (ví dụ 2^5 - 2 = 30 hoặc 2^7 - 2 = 126) thì tương ứng /27 hoặc /25, không phải /26.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Phép tính chuẩn về chia mạng con IPv4, đề nêu rõ không tính địa chỉ mạng và quảng bá."
+      },
+      "checks": [
+        {
+          "kind": "computed",
+          "detail": "arithmetic only: 2**(32-26) - 2 = 62, answer 62",
+          "result": "pass",
+          "independent": true
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: 192.168.10.0/26",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 1,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}

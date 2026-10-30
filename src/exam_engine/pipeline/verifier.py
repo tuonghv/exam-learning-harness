@@ -78,6 +78,29 @@ def _answer_number(a):
     return m.group(0).replace(",", ".") if m else None
 
 
+_SCI = re.compile(r"(\d+(?:[.,]\d+)?)\s*(?:[.·×x*]|\s)\s*10\s*\^\s*\{?(-?\d+)\}?")
+_EXACT = re.compile(r"^[-+0-9.()*/\s^]*(?:sqrt\([^)]*\)[-+0-9.()*/\s^]*)*")
+
+
+def _answer_value(a):
+    """(value, tolerance) of the answer, reading a fraction, sqrt(..), a x.10^n or xe-n form."""
+    t = re.sub(r"\s+\([^)]*\)\s*$", "", a.replace("−", "-").replace("√", "sqrt")).strip()
+    t = _SCI.sub(lambda m: "%se%s" % (m.group(1).replace(",", "."), m.group(2)), t)
+    m = re.match(r"^(-?\d+(?:[.,]\d+)?)e(-?\d+)", t)
+    if m:
+        mant, exp = m.group(1).replace(",", "."), int(m.group(2))
+        dec = len(mant.split(".")[1]) if "." in mant else 0
+        return float(mant) * 10 ** exp, 0.5 * 10 ** (-dec) * 10 ** exp
+    e = _EXACT.match(t.replace(",", ".").replace("^", "**"))
+    if e and ("/" in e.group(0) or "sqrt" in e.group(0)):
+        try:
+            v = safe_eval(e.group(0).strip())
+        except ValueError:
+            return None
+        return v, 1e-6 * max(1.0, abs(v))
+    return None
+
+
 def _computed(ans):
     expr = ans.get("expr")
     if not expr:
@@ -87,6 +110,11 @@ def _computed(ans):
         val = safe_eval(expr)
     except ValueError as exc:
         return _chk("computed", "arithmetic only: %s" % exc, "unknown", False)
+    exact = _answer_value(str(ans.get("answer")))
+    if exact:
+        ok = abs(val - exact[0]) <= exact[1]
+        return _chk("computed", detail + " = %.10g, answer %.10g" % (val, exact[0]),
+                    "pass" if ok else "fail", True)
     num = _answer_number(str(ans.get("answer")))
     if num is None:
         return _chk("computed", "arithmetic only: answer has no number", "unknown", False)
@@ -104,7 +132,7 @@ def _quotes(q, ans, exam):
                          " ".join((q.get("options") or {}).values())]))
     out = []
     for x in quotes:
-        ok = _ws(x) in hay
+        ok = _ws(x) in hay or _ws(re.sub(r"^\s*[A-Za-z0-9]\s*[:.)]\s+", "", x)) in hay
         out.append(_chk("quote", "verbatim in passage/question: %s" % x[:80],
                         "pass" if ok else "fail", False))
     if not out and is_open(ans):

@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/inputs/math/input-003.md",
+    "subject": "Mathematics",
+    "level": "Grade 12",
+    "exam_type": "High School Graduation",
+    "task": "Multiple Choice",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 0.68522,
+    "cost_usd": 0.032291,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "key match",
+      "answer": "A",
+      "solution": [
+        "Tập xác định: R. Đạo hàm: f'(x) = 3x^2 - 6x + m.",
+        "Hàm bậc ba có hai điểm cực trị khi và chỉ khi f'(x) = 0 có hai nghiệm phân biệt (đổi dấu).",
+        "Delta' = 9 - 3m > 0, suy ra m < 3.",
+        "Kết hợp m nguyên thuộc [-5; 5]: m thuộc {-5, -4, -3, -2, -1, 0, 1, 2}, có 8 giá trị."
+      ],
+      "explanation": "A. 8: đúng, có 8 số nguyên từ -5 đến 2. B. 9: sai, nhầm khi lấy cả m = 3, khi đó f'(x) = 3(x-1)^2 có nghiệm kép, không đổi dấu nên không có cực trị. C. 7: sai, bỏ sót một giá trị (ví dụ đếm thiếu m = 0 hoặc m = -5). D. 6: sai, đếm thiếu hai giá trị.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Điều kiện Delta' > 0 chuẩn và biên m = 3 đã được kiểm tra riêng."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "single letter A-D",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "computed",
+          "detail": "arithmetic only: answer has no number",
+          "result": "unknown",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [
+        {
+          "source": "ai_review",
+          "code": "agree",
+          "message": "f'(x) = 3x^2 - 6x + m có hai nghiệm phân biệt khi Delta' = 9 - 3m > 0, tức m < 3; m nguyên thuộc [-5; 2] gồm -5,-4,-3,-2,-1,0,1,2 là 8 giá trị, đáp án A đúng."
+        }
+      ],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 1,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}

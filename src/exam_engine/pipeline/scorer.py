@@ -35,14 +35,36 @@ def match(answer, key):
     sa, sk = na.replace(" ", ""), nk.replace(" ", "")
     if _ORDER.match(sk):
         return sa == sk
-    mk, ma = _NUM.match(k.replace("−", "-")), _NUM.match(a.replace("−", "-"))
+    mk, ma = _numparse(k), _numparse(a)
     if mk and ma:
-        kv, av = mk.group(1).replace(",", "."), ma.group(1).replace(",", ".")
-        d = len(kv.split(".")[1]) if "." in kv else 0
-        unit_k = norm(mk.group(2)).replace(" ", "")
-        unit_a = norm(ma.group(2)).replace(" ", "")
-        return unit_k == unit_a and abs(float(av) - float(kv)) <= 0.5 * 10 ** (-d) + 1e-12
+        (kv, d, ke, unit_k), (av, _, ae, unit_a) = mk, ma
+        return (_unit_ok(unit_k, unit_a)
+                and abs(av * 10 ** ae - kv * 10 ** ke) <= (0.5 * 10 ** (-d) + 1e-12) * 10 ** ke)
     return na == nk
+
+
+_SCI = re.compile(r"(\d+(?:[.,]\d+)?)\s*(?:[.·×x*]|\s)\s*10\s*\^\s*\{?(-?\d+)\}?")
+_NUMX = re.compile(r"^(-?\d+(?:[.,]\d+)?)(?:e(-?\d+))?\s*(.*)$")
+
+
+def _numparse(s):
+    """(mantissa, decimals, exponent, unit) of a leading number; remarks in (...) are dropped."""
+    t = re.sub(r"\s\([^)]*\)", " ", s.replace("−", "-"))
+    t = _SCI.sub(lambda m: "%se%s" % (m.group(1), m.group(2)), t.strip())
+    m = _NUMX.match(t.strip())
+    if not m:
+        return None
+    mant = m.group(1).replace(",", ".")
+    return (float(mant), len(mant.split(".")[1]) if "." in mant else 0,
+            int(m.group(2) or 0), norm(m.group(3)).strip())
+
+
+def _unit_ok(uk, ua):
+    """Equal, one side bare, or one unit's words contained in the other's ('host' in 'dia chi host')."""
+    if uk == ua or not uk or not ua:
+        return True
+    wk, wa = set(uk.split()), set(ua.split())
+    return wk <= wa or wa <= wk
 
 
 def score_file(ans, key):

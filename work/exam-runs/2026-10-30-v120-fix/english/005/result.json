@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/inputs/english/input-005.md",
+    "subject": "English",
+    "level": "Grade 12",
+    "exam_type": "High School Graduation",
+    "task": "Multiple Choice",
+    "mode": "Solve",
+    "language": "en"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 0.935627,
+    "cost_usd": 0.020899,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "key match",
+      "answer": "A",
+      "solution": [
+        "The structure 'Hardly had + subject + past participle' is an inversion meaning 'as soon as'.",
+        "Hardly is followed by 'when' to link the two past events.",
+        "So the blank is 'when'."
+      ],
+      "explanation": "The fixed correlative pattern is 'Hardly ... when' (also 'No sooner ... than'). B. than is paired with 'no sooner', not 'hardly'. C. then is not a conjunction and cannot join the clauses. D. while expresses simultaneous or contrasting actions, not one action immediately following another.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Standard fixed correlative 'hardly ... when' taught in Grade 12 grammar."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "single letter A-D",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 1,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}

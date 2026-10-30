@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/inputs/informatics/input-003.md",
+    "subject": "Tin hoc",
+    "level": "Grade 12",
+    "exam_type": "High School Graduation",
+    "task": "Multiple Choice",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 0.914728,
+    "cost_usd": 0.031283,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "key match",
+      "answer": "B",
+      "solution": [
+        "Biểu diễn: s là tổng tích lũy các giá trị i; i bắt đầu từ 1, tăng 3 mỗi lượt, lặp khi i < 10.",
+        "Bảng theo dõi (i trước lượt, s sau lượt, i sau lượt): i=1 -> s=1, i=4; i=4 -> s=5, i=7; i=7 -> s=12, i=10.",
+        "Khi i = 10 thì điều kiện i < 10 sai, vòng lặp dừng. Vậy s = 1 + 4 + 7 = 12."
+      ],
+      "explanation": "B. 12: đúng, s = 1 + 4 + 7. A. 22: sai, tương ứng cộng thêm cả i = 10 (và 1+4+7+10 = 22), nhưng i = 10 không thỏa i < 10 nên không được cộng. C. 5: sai, mới chỉ chạy 2 lượt (1+4). D. 10: sai, là giá trị cuối của i, không phải của s.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Vòng lặp ngắn, chỉ 3 lượt, dễ theo dõi bằng tay."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "single letter A-D",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: while i < 10:",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 1,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}

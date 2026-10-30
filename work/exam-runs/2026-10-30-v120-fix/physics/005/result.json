@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "evals/inputs/physics/input-005.md",
+    "subject": "Physics",
+    "level": "Grade 12",
+    "exam_type": "High School Graduation",
+    "task": "Short Answer",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "claude-p",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 0.5050570000000001,
+    "cost_usd": 0.038617,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.2.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "code oracle",
+      "answer": "1,8.10^-19 J (làm tròn đến 2 chữ số có nghĩa)",
+      "solution": [
+        "Given: lambda = 0,30 um = 0,30.10^-6 m; A = 3,0 eV = 3,0.1,6.10^-19 = 4,8.10^-19 J; h = 6,625.10^-34 J.s; c = 3.10^8 m/s. Find: W_d0max (J).",
+        "Law (Einstein): h*c/lambda = A + W_d0max, nên W_d0max = h*c/lambda - A.",
+        "h*c/lambda = 6,625.10^-34 * 3.10^8 / (0,30.10^-6) = 6,625.10^-19 J.",
+        "W_d0max = 6,625.10^-19 - 4,8.10^-19 = 1,825.10^-19 J, làm tròn thành 1,8.10^-19 J."
+      ],
+      "explanation": "Năng lượng photon 6,625.10^-19 J lớn hơn công thoát 4,8.10^-19 J nên có hiện tượng quang điện. Phần năng lượng dư là động năng ban đầu cực đại của electron: 1,825.10^-19 J, làm tròn 1,8.10^-19 J. Cần đổi um sang m và eV sang J trước khi tính.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "Áp dụng trực tiếp công thức Einstein với dữ kiện đầy đủ, phép tính đơn giản."
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "answer holds a number",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "computed",
+          "detail": "arithmetic only: 6.625e-34*3e8/0.30e-6 - 3.0*1.6e-19 = 1.825e-19, answer 1.8e-19",
+          "result": "pass",
+          "independent": true
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: Chiếu bức xạ có bước sóng 0,30 μm vào bề mặt một tấm kim loại có công thoát elec",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "key_match",
+          "detail": "matches the key",
+          "result": "pass",
+          "independent": true
+        }
+      ],
+      "verification_status": "PASS",
+      "status_reason": "independent check passed and reviewer agrees",
+      "qa_findings": [],
+      "score": {
+        "points": 1,
+        "max": 1,
+        "basis": "official_key",
+        "detail": "matches key"
+      },
+      "attempts": 1,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 1,
+    "fail": 0,
+    "uncertain": 0,
+    "unresolved": 0,
+    "points": 1,
+    "max_points": 1
+  }
+}
