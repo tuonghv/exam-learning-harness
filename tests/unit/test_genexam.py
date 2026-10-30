@@ -48,7 +48,7 @@ class Gen(unittest.TestCase):
 
     def test_mock_writes_pair_manifest_and_passes_checker(self):
         out = os.path.join(self.tmp, "g")
-        rc, so, _ = run(["gen-exams", "--n", "2", "--out", out, "--mock", self.mockfile([GOOD, GOOD])])
+        rc, so, _ = run(["gen-exams", "--no-qa", "--n", "2", "--out", out, "--mock", self.mockfile([GOOD, GOOD])])
         self.assertEqual(rc, 0, so)
         for n in (101, 102):
             self.assertTrue(os.path.isfile(os.path.join(out, "inputs", "math", "input-%d.md" % n)))
@@ -58,12 +58,12 @@ class Gen(unittest.TestCase):
         self.assertTrue(man["generated"] and not man["reviewed"])
         self.assertEqual(man["runs"][0]["items"], ["math/101", "math/102"])
         # a second run continues the numbering
-        run(["gen-exams", "--n", "1", "--out", out, "--mock", self.mockfile([GOOD])])
+        run(["gen-exams", "--no-qa", "--n", "1", "--out", out, "--mock", self.mockfile([GOOD])])
         self.assertTrue(os.path.isfile(os.path.join(out, "inputs", "math", "input-103.md")))
 
     def test_generated_pair_passes_format_checker(self):
         out = os.path.join(self.tmp, "g")
-        run(["gen-exams", "--n", "1", "--out", out, "--mock", self.mockfile([GOOD])])
+        run(["gen-exams", "--no-qa", "--n", "1", "--out", out, "--mock", self.mockfile([GOOD])])
         root = os.path.join(self.tmp, "r")
         os.makedirs(os.path.join(root, "evals"))
         for k in ("inputs", "keys"):
@@ -74,20 +74,20 @@ class Gen(unittest.TestCase):
 
     def test_no_key_text_in_input(self):
         out = os.path.join(self.tmp, "g")
-        run(["gen-exams", "--n", "1", "--out", out, "--mock", self.mockfile([GOOD])])
+        run(["gen-exams", "--no-qa", "--n", "1", "--out", out, "--mock", self.mockfile([GOOD])])
         text = open(os.path.join(out, "inputs", "math", "input-101.md"), encoding="utf-8").read()
         self.assertNotIn("37/42", text)
         self.assertNotIn("C(5,3)", text)
 
     def test_wrong_key_rejected_after_retry(self):
         bad = dict(GOOD, final_answer="5/6")
-        rc, _, err = run(["gen-exams", "--n", "1", "--out", os.path.join(self.tmp, "g"),
+        rc, _, err = run(["gen-exams", "--no-qa", "--n", "1", "--out", os.path.join(self.tmp, "g"),
                           "--mock", self.mockfile([bad, bad])])
         self.assertEqual(rc, 3)
         self.assertIn("bad_key", err)
 
     def test_retry_recovers(self):
-        rc, _, _ = run(["gen-exams", "--n", "1", "--out", os.path.join(self.tmp, "g"),
+        rc, _, _ = run(["gen-exams", "--no-qa", "--n", "1", "--out", os.path.join(self.tmp, "g"),
                         "--mock", self.mockfile(["not json", GOOD])])
         self.assertEqual(rc, 0)
 
@@ -101,6 +101,26 @@ class Gen(unittest.TestCase):
             genexam.generate("math", 2, "s", lambda p: __import__("exam_engine.adapters.claude", fromlist=["x"]).Call(
                 True, json.dumps(GOOD), 0.6, "", "", 0.0), max_cost=0.5)
         self.assertEqual(cm.exception.code, "cost_cap")
+
+    def test_qa_pass_fail_and_rejected_dir(self):
+        out = os.path.join(self.tmp, "g")
+        ok = {"verdict": "ok", "bad_step": "", "my_answer": "37/42"}
+        wrong = {"verdict": "wrong", "bad_step": "step 2", "my_answer": "5/6"}
+        rc, so, _ = run(["gen-exams", "--n", "2", "--out", out,
+                         "--mock", self.mockfile([GOOD, ok, GOOD, wrong])])
+        self.assertEqual(rc, 0, so)
+        self.assertIn("qa_fail=1", so)
+        self.assertTrue(os.path.isfile(os.path.join(out, "inputs", "math", "input-101.md")))
+        self.assertFalse(os.path.exists(os.path.join(out, "inputs", "math", "input-102.md")))
+        self.assertTrue(os.path.isfile(os.path.join(out, "rejected", "math", "qa-102.txt")))
+        man = json.load(open(os.path.join(out, "manifest.json"), encoding="utf-8"))
+        self.assertEqual(man["runs"][0]["qa_counts"]["fail"], 1)
+        self.assertEqual(man["runs"][0]["qa_rejected"], ["math/102"])
+
+    def test_qa_ok_verdict_but_different_answer_fails(self):
+        status, _, _ = genexam.qa(lambda p: __import__("exam_engine.adapters.claude", fromlist=["x"]).Call(
+            True, json.dumps({"verdict": "ok", "bad_step": "", "my_answer": "5/6"}), 0.0, "", "", 0.0), GOOD)
+        self.assertEqual(status, "fail")
 
     def test_unsupported_subject(self):
         self.assertEqual(run(["gen-exams", "--subject", "physics", "--dry-run"])[0], 2)

@@ -13,6 +13,7 @@ from exam_engine.core.safe_eval import safe_eval
 from exam_engine.pipeline import verifier
 
 PROMPT_REL = os.path.join("dev", "genexam.md")
+QA_REL = os.path.join("dev", "genexam_qa.md")
 SUBJECTS = {"math": "Mathematics"}
 FIRST_NUMBER = 101
 MAX_ATTEMPTS = 2
@@ -26,13 +27,37 @@ class GenError(Exception):
         self.code = code
 
 
-def template():
-    with open(os.path.join(settings.PROMPTS_DIR, PROMPT_REL), encoding="utf-8") as fh:
+def template(rel=PROMPT_REL):
+    with open(os.path.join(settings.PROMPTS_DIR, rel), encoding="utf-8") as fh:
         return fh.read()
 
 
-def build_prompt(subject, seed, idx):
-    return "%s\nSeed: %s-%d\nSubject key: %s\n" % (template().rstrip("\n"), seed, idx, subject)
+def build_prompt(subject, seed, idx, level="hard"):
+    return "%s\nSeed: %s-%d\nSubject key: %s\nLevel: %s\n" % (
+        template().rstrip("\n"), seed, idx, subject, level)
+
+
+def qa_prompt(obj):
+    """Review prompt: the question and the worked solution; the model's own final answer is asked for."""
+    return "%s\nQuestion:\n%s\n\nSolution to review:\n%s\nClaimed final answer: %s\n" % (
+        template(QA_REL).rstrip("\n"), obj["question"].strip(), obj["solution"].strip(),
+        obj["final_answer"].strip())
+
+
+def qa(llm, obj):
+    """(status 'pass'|'fail'|'unknown', note, cost): independent review; its own answer must match the key."""
+    call = llm(qa_prompt(obj))
+    if not call.ok:
+        return "unknown", "%s %s" % (call.cls, call.reason), call.cost_usd
+    rep, why = claude.extract_json(call.text)
+    if rep is None:
+        return "unknown", why, call.cost_usd
+    mine = verifier._answer_value(str(rep.get("my_answer", "")))
+    theirs = verifier._answer_value(obj["final_answer"])
+    same = mine is not None and theirs is not None and abs(mine[0] - theirs[0]) <= max(theirs[1], 1e-9)
+    if rep.get("verdict") == "ok" and same:
+        return "pass", "", call.cost_usd
+    return "fail", "%s | reviewer answer %s" % (rep.get("bad_step") or rep.get("verdict"), rep.get("my_answer")), call.cost_usd
 
 
 def check_reply(obj):
@@ -102,8 +127,11 @@ def _ask(llm, prompt):
     raise GenError("invalid_reply", "%s (after %d attempts)" % (why, MAX_ATTEMPTS))
 
 
-def generate(subject, n, seed, llm, max_cost=0.5):
-    """[(obj, input text, key text)] for n exams; stops with cost_cap when the cap is reached."""
+def generate(subject, n, seed, llm, max_cost=0.5, level="hard", review=True):
+    """[(obj, input text, key text)] for n exams; each obj gets obj["qa"] / obj["qa_note"].
+
+    Stops with cost_cap when the cap is reached.
+    """
     if subject not in SUBJECTS:
         raise GenError("invalid_reply", "subject %r not supported (have: %s)"
                        % (subject, ", ".join(sorted(SUBJECTS))))
@@ -111,8 +139,12 @@ def generate(subject, n, seed, llm, max_cost=0.5):
     for i in range(1, n + 1):
         if cost >= max_cost:
             raise GenError("cost_cap", "cost $%.2f reached the cap $%.2f before exam %d" % (cost, max_cost, i))
-        obj, spent = _ask(llm, build_prompt(subject, seed, i))
+        obj, spent = _ask(llm, build_prompt(subject, seed, i, level))
         cost += spent
+        obj["qa"], obj["qa_note"] = "skipped", ""
+        if review:
+            obj["qa"], obj["qa_note"], spent = qa(llm, obj)
+            cost += spent
         text = input_md(subject, obj)
         bad = leak_check(text, obj)
         if bad:
@@ -127,11 +159,21 @@ def write(subject, items, out, meta):
     for d in (d_in, d_key):
         os.makedirs(d, exist_ok=True)
     start = FIRST_NUMBER
-    while os.path.exists(os.path.join(d_in, "input-%d.md" % start)):
+    while os.path.exists(os.path.join(d_in, "input-%d.md" % start)) or os.path.exists(
+            os.path.join(out, "rejected", subject, "input-%d.md" % start)):
         start += 1
-    names = []
+    names, rejected = [], []
     for i, (obj, text, key) in enumerate(items):
         n = start + i
+        if obj.get("qa") == "fail":
+            rd = os.path.join(out, "rejected", subject)
+            os.makedirs(rd, exist_ok=True)
+            for f, body in (("input-%d.md" % n, text), ("expected-%d.md" % n, key),
+                            ("qa-%d.txt" % n, obj["qa_note"] + "\n")):
+                with open(os.path.join(rd, f), "w", encoding="utf-8") as fh:
+                    fh.write(body)
+            rejected.append("%s/%d" % (subject, n))
+            continue
         with open(os.path.join(d_in, "input-%d.md" % n), "w", encoding="utf-8") as fh:
             fh.write(text)
         with open(os.path.join(d_key, "expected-%d.md" % n), "w", encoding="utf-8") as fh:
@@ -143,7 +185,9 @@ def write(subject, items, out, meta):
             man = json.load(fh)
     except (OSError, ValueError):
         man = {"generated": True, "reviewed": False, "runs": []}
-    man["runs"].append(dict(meta, items=names,
+    man["runs"].append(dict(meta, items=names, qa_rejected=rejected,
+                            qa_counts={k: sum(1 for o, _, _ in items if o.get("qa") == k)
+                                       for k in ("pass", "fail", "unknown", "skipped")},
                             prompt_sha256=hashlib.sha256(template().encode("utf-8")).hexdigest()))
     with open(mp, "w", encoding="utf-8") as fh:
         json.dump(man, fh, ensure_ascii=False, indent=2)

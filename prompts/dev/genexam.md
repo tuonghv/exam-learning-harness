@@ -10,3 +10,6 @@ Reply with ONE JSON object and nothing else:
 
 Rules: a different topic and different numbers for each seed; no figure or table; the question
 must not contain the answer or the solution.
+
+Difficulty (field "Level" below): "hard" means 3-4 solving steps, a common trap (sign, domain,
+unit, forgetting to simplify) and a topic other than the simplest formula; "easy" is one step.

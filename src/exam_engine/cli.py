@@ -605,6 +605,8 @@ def genexam_main(argv):
     ap.add_argument("--mock")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--real", action="store_true")
+    ap.add_argument("--level", choices=("easy", "hard"), default="hard")
+    ap.add_argument("--no-qa", action="store_true", help="skip the solution review call")
     ap.add_argument("--max-cost-usd", type=float, default=0.5)
     ap.add_argument("--timeout", type=float, default=d["timeout"])
     ap.add_argument("--model", default=d["model"])
@@ -621,10 +623,10 @@ def genexam_main(argv):
               file=sys.stderr)
         return 2
     print("%d exam(s) of %s, calls <= %d, cap $%.2f%s" % (
-        a.n, a.subject, a.n * genexam.MAX_ATTEMPTS, a.max_cost_usd,
+        a.n, a.subject, a.n * (genexam.MAX_ATTEMPTS + (0 if a.no_qa else 1)), a.max_cost_usd,
         " (dry run: no call made)" if a.dry_run else ""), flush=True)
     if a.dry_run:
-        print(genexam.build_prompt(a.subject, a.seed, 1))
+        print(genexam.build_prompt(a.subject, a.seed, 1, a.level))
         return 0
     tmp = None
     try:
@@ -635,10 +637,11 @@ def genexam_main(argv):
                 return claude.run_claude(prompt, model=a.model, timeout_s=a.timeout, cwd=tmp)
         else:
             llm = engine.mock_llm(a.mock)
-        items, cost = genexam.generate(a.subject, a.n, a.seed, llm, a.max_cost_usd)
+        items, cost = genexam.generate(a.subject, a.n, a.seed, llm, a.max_cost_usd, a.level,
+                                       not a.no_qa)
         names = genexam.write(a.subject, items, a.out, {"seed": a.seed, "model": a.model,
                                                         "llm": "claude-p" if a.real else "mock",
-                                                        "cost_usd": cost})
+                                                        "level": a.level, "cost_usd": cost})
     except genexam.GenError as exc:
         print("ERROR: %s" % exc, file=sys.stderr)
         return 1 if exc.code == "leak" else 3
@@ -648,7 +651,10 @@ def genexam_main(argv):
     finally:
         if tmp:
             shutil.rmtree(tmp, ignore_errors=True)
-    print("wrote %s cost=$%.4f -> %s" % (", ".join(names), cost, a.out))
+    bad = [o["qa_note"] for o, _, _ in items if o["qa"] == "fail"]
+    print("wrote %s cost=$%.4f qa_fail=%d -> %s" % (", ".join(names) or "-", cost, len(bad), a.out))
+    for b in bad:
+        print("  QA FAIL: %s" % b)
     return 0
 
 
