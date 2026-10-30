@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-033",
   "title": "REQ-0006: one-line UserPromptSubmit hook output (hook_capture.py), tick AC4/AC5; AC6 waits for a later compaction count",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0006",
   "acceptance_criteria": [
     "REQ-0006 AC4 one-line hook output",
@@ -27,9 +27,9 @@
     "summary": "hook_capture.py joins notice + brief into one line; req_kit_test section 9 (3 tests)"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "bash .claude/tests/req_kit_test.sh",
+    "result": "pass=41 fail=0; mutation: old hook fails 9.1, 9.3 (pass=39 fail=2)"
   },
   "security": {
     "status": "pending",
@@ -55,7 +55,7 @@
   },
   "user_notes": [],
   "picked_at": "2026-10-30T22:38:25Z",
-  "updated_at": "2026-10-30T22:39:10Z",
+  "updated_at": "2026-10-30T22:39:11Z",
   "updated_by": "main",
   "scope": [
     ".claude/req/hook_capture.py",
@@ -68,5 +68,5 @@
     "notes": "",
     "next": "advance.sh DESIGN..DONE with specs in work/TASK-033"
   },
-  "next": "UNIT_TESTED"
+  "next": "VERIFIED"
 }

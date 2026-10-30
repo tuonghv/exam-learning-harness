@@ -877,3 +877,9 @@ Action: tests 9.1-9.3 written, hook changed
 Result: 41/0, old hook fails 9.1 and 9.3
 Decision: advance
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-033 - 2026-10-30T22:39:10Z
+Action: ran req_kit_test and the old-hook mutation
+Result: 41/0 new, 39/2 old
+Decision: advance
+Next: VERIFIED
