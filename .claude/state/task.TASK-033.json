@@ -50,7 +50,10 @@
   "picked_at": "2026-10-30T22:38:25Z",
   "updated_at": "2026-10-30T22:39:02Z",
   "updated_by": "main",
-  "scope": [],
+  "scope": [
+    ".claude/req/hook_capture.py",
+    ".claude/tests/req_kit_test.sh"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
