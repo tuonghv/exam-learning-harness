@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-020",
-  "state": "DONE",
-  "next": "",
-  "title": "cross-solve: text route vs page-image route, answer-level agreement (REQ-0023, EPIC-006)",
-  "active": [],
+  "task_id": "TASK-021",
+  "state": "DESIGN",
+  "next": "IMPLEMENTING",
+  "title": "benchmark command: engine over evals/inputs with key-only scoring, summary.json + report (REQ-0009)",
+  "active": [
+    {
+      "task_id": "TASK-021",
+      "state": "DESIGN",
+      "next": "IMPLEMENTING",
+      "updated_at": "2026-10-30T06:14:23Z"
+    }
+  ],
   "max_active": 1
 }

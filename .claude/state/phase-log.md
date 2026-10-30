@@ -580,3 +580,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 - Result: task done.
 - Decision: REQ-0023 stays open for AC5 (real measurement needs the user's go).
 - Next: trial exam Markdown from refined questions, then the real run.
+
+## DESIGN - TASK-021 - 2026-10-30T09:10:00Z
+- Action: design docs/design/phase-21-benchmark.md.
+- Result: command spec, budget, exit codes, tests defined.
+- Decision: reuse engine.run and scorer unchanged; real run waits for the user's go.
+- Next: IMPLEMENTING.

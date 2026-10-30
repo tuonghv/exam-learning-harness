@@ -450,7 +450,7 @@
     "task_id": "TASK-021",
     "title": "benchmark command: engine over evals/inputs with key-only scoring, summary.json + report (REQ-0009)",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-10-30T09:00:00Z",
     "requirement": "REQ-0009",
     "acceptance_criteria": [
