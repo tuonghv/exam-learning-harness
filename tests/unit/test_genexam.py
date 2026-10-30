@@ -1,0 +1,138 @@
+"""REQ-0027: gen-exams writes paired exams with keys, rejects wrong keys and leaks, lessons classify; $0."""
+import contextlib
+import io
+import json
+import os
+import shutil
+import sys
+import tempfile
+import unittest
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(HERE, "..", "..", "src"))
+
+from exam_engine import cli  # noqa: E402
+from exam_engine.pipeline import genexam  # noqa: E402
+
+GOOD = {"skill": "Xác suất", "question": "Một hộp có 5 bi đỏ và 4 bi xanh, lấy 3 bi. Tính xác suất có ít nhất một bi xanh.",
+        "final_answer": "37/42", "solution": "1 - C(5,3)/C(9,3) = 37/42", "check": "1 - 10/84"}
+
+
+def run(argv):
+    out, err = io.StringIO(), io.StringIO()
+    with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+        rc = cli.main(argv)
+    return rc, out.getvalue(), err.getvalue()
+
+
+class Gen(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, self.tmp, True)
+
+    def mockfile(self, replies):
+        p = os.path.join(self.tmp, "mock.json")
+        with open(p, "w", encoding="utf-8") as fh:
+            json.dump([json.dumps(r) if isinstance(r, dict) else r for r in replies], fh)
+        return p
+
+    def test_dry_run_writes_nothing(self):
+        out = os.path.join(self.tmp, "g")
+        rc, so, _ = run(["gen-exams", "--dry-run", "--out", out])
+        self.assertEqual(rc, 0)
+        self.assertIn("no call made", so)
+        self.assertFalse(os.path.exists(out))
+
+    def test_no_mode_is_usage_error(self):
+        self.assertEqual(run(["gen-exams"])[0], 2)
+
+    def test_mock_writes_pair_manifest_and_passes_checker(self):
+        out = os.path.join(self.tmp, "g")
+        rc, so, _ = run(["gen-exams", "--n", "2", "--out", out, "--mock", self.mockfile([GOOD, GOOD])])
+        self.assertEqual(rc, 0, so)
+        for n in (101, 102):
+            self.assertTrue(os.path.isfile(os.path.join(out, "inputs", "math", "input-%d.md" % n)))
+            key = open(os.path.join(out, "keys", "math", "expected-%d.md" % n), encoding="utf-8").read()
+            self.assertIn("Final answer: 37/42", key)
+        man = json.load(open(os.path.join(out, "manifest.json"), encoding="utf-8"))
+        self.assertTrue(man["generated"] and not man["reviewed"])
+        self.assertEqual(man["runs"][0]["items"], ["math/101", "math/102"])
+        # a second run continues the numbering
+        run(["gen-exams", "--n", "1", "--out", out, "--mock", self.mockfile([GOOD])])
+        self.assertTrue(os.path.isfile(os.path.join(out, "inputs", "math", "input-103.md")))
+
+    def test_generated_pair_passes_format_checker(self):
+        out = os.path.join(self.tmp, "g")
+        run(["gen-exams", "--n", "1", "--out", out, "--mock", self.mockfile([GOOD])])
+        root = os.path.join(self.tmp, "r")
+        os.makedirs(os.path.join(root, "evals"))
+        for k in ("inputs", "keys"):
+            shutil.copytree(os.path.join(out, k), os.path.join(root, "evals", k))
+        rc, so, _ = run(["check-examples", "--root", root])
+        self.assertEqual(rc, 0, so)
+        self.assertIn("1 pairs", so)
+
+    def test_no_key_text_in_input(self):
+        out = os.path.join(self.tmp, "g")
+        run(["gen-exams", "--n", "1", "--out", out, "--mock", self.mockfile([GOOD])])
+        text = open(os.path.join(out, "inputs", "math", "input-101.md"), encoding="utf-8").read()
+        self.assertNotIn("37/42", text)
+        self.assertNotIn("C(5,3)", text)
+
+    def test_wrong_key_rejected_after_retry(self):
+        bad = dict(GOOD, final_answer="5/6")
+        rc, _, err = run(["gen-exams", "--n", "1", "--out", os.path.join(self.tmp, "g"),
+                          "--mock", self.mockfile([bad, bad])])
+        self.assertEqual(rc, 3)
+        self.assertIn("bad_key", err)
+
+    def test_retry_recovers(self):
+        rc, _, _ = run(["gen-exams", "--n", "1", "--out", os.path.join(self.tmp, "g"),
+                        "--mock", self.mockfile(["not json", GOOD])])
+        self.assertEqual(rc, 0)
+
+    def test_leak_detected(self):
+        leaky = dict(GOOD, question="Đáp số là 37/42?", solution="Đáp số là 37/42?")
+        self.assertTrue(genexam.leak_check(genexam.input_md("math", leaky), leaky))
+        self.assertFalse(genexam.leak_check(genexam.input_md("math", GOOD), GOOD))
+
+    def test_cost_cap(self):
+        with self.assertRaises(genexam.GenError) as cm:
+            genexam.generate("math", 2, "s", lambda p: __import__("exam_engine.adapters.claude", fromlist=["x"]).Call(
+                True, json.dumps(GOOD), 0.6, "", "", 0.0), max_cost=0.5)
+        self.assertEqual(cm.exception.code, "cost_cap")
+
+    def test_unsupported_subject(self):
+        self.assertEqual(run(["gen-exams", "--subject", "physics", "--dry-run"])[0], 2)
+
+
+class Lessons(unittest.TestCase):
+    SUMMARY = {"items": [{"subject": "math", "item": "101", "questions": [
+        {"id": "1", "verdict": "PASS", "answer": "1", "reason": "ok", "findings": [], "basis": "key match"},
+        {"id": "2", "verdict": "FAIL", "answer": "3", "reason": "key mismatch", "findings": ["check_failed"],
+         "basis": "key match"},
+        {"id": "3", "verdict": "UNCERTAIN", "answer": "x", "reason": "reviewers differ", "findings": ["disagree"],
+         "basis": "claude review only"}]}]}
+
+    def test_one_lesson_per_non_pass(self):
+        ls = genexam.lessons(self.SUMMARY)
+        self.assertEqual([x["question"] for x in ls], ["2", "3"])
+        self.assertTrue(all(x["status"] == "open" for x in ls))
+        self.assertEqual(ls[1]["cause"], "variance")
+
+    def test_cli_writes_files(self):
+        tmp = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, tmp, True)
+        p = os.path.join(tmp, "summary.json")
+        json.dump(self.SUMMARY, open(p, "w"))
+        rc, so, _ = run(["lessons", "--summary", p])
+        self.assertEqual(rc, 0, so)
+        self.assertEqual(len(json.load(open(os.path.join(tmp, "lessons.json")))), 2)
+        self.assertIn("2 open", open(os.path.join(tmp, "lessons.md")).read())
+
+    def test_cli_missing_summary(self):
+        self.assertEqual(run(["lessons", "--summary", "/nonexistent.json"])[0], 2)
+
+
+if __name__ == "__main__":
+    unittest.main()

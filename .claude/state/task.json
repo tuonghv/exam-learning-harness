@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-022",
-  "state": "DESIGN",
-  "next": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
+  "next": "VERIFIED: real concept round after the user's go",
   "title": "gen-exams: generate Vietnamese-style math exams with keys, run benchmark, record lessons (REQ-0027 concept round)",
   "active": [
     {
       "task_id": "TASK-022",
-      "state": "DESIGN",
-      "next": "IMPLEMENTING",
-      "updated_at": "2026-10-30T10:44:08Z"
+      "state": "UNIT_TESTED",
+      "next": "VERIFIED: real concept round after the user's go",
+      "updated_at": "2026-10-30T10:46:26Z"
     }
   ],
   "max_active": 1

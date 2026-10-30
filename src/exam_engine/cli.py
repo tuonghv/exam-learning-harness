@@ -18,7 +18,8 @@ from exam_engine.core.decision import decide
 from exam_engine.pipeline import examples_check, parser, prompts, reporter, scorer, solver, verifier
 
 COMMANDS = ("solve", "parse", "verify", "report", "check-examples", "score", "prompts",
-            "check-prompts", "ingest", "ingest-inspect", "ingest-refine", "cross-solve", "benchmark")
+            "check-prompts", "ingest", "ingest-inspect", "ingest-refine", "cross-solve", "benchmark",
+            "gen-exams", "lessons")
 USAGE = "usage: exam.py {%s} ..." % "|".join(COMMANDS)
 
 
@@ -592,6 +593,95 @@ def benchmark_main(argv):
     return 3 if sm["skipped"] else (1 if worse or t["fail"] or t["unresolved"] else 0)
 
 
+def genexam_main(argv):
+    """gen-exams --subject math --n N --out DIR (--dry-run|--mock FILE|--real): exit 0/1/2/3."""
+    from exam_engine.pipeline import genexam
+    d = settings.load_config("engine")
+    ap = argparse.ArgumentParser(prog="exam.py gen-exams")
+    ap.add_argument("--subject", default="math")
+    ap.add_argument("--n", type=int, default=3)
+    ap.add_argument("--seed", default=benchmark_today())
+    ap.add_argument("--out", default="evals/generated")
+    ap.add_argument("--mock")
+    ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--real", action="store_true")
+    ap.add_argument("--max-cost-usd", type=float, default=0.5)
+    ap.add_argument("--timeout", type=float, default=d["timeout"])
+    ap.add_argument("--model", default=d["model"])
+    try:
+        a = ap.parse_args(argv)
+    except SystemExit:
+        return 2
+    if sum([bool(a.mock), a.dry_run, a.real]) != 1 or a.n < 1 or a.max_cost_usd < 0 or a.timeout <= 0:
+        print("usage: choose exactly one of --mock FILE, --dry-run, --real (never defaults to real); "
+              "--n >= 1, --max-cost-usd >= 0", file=sys.stderr)
+        return 2
+    if a.subject not in genexam.SUBJECTS:
+        print("ERROR: subject %r not supported (have: %s)" % (a.subject, ", ".join(sorted(genexam.SUBJECTS))),
+              file=sys.stderr)
+        return 2
+    print("%d exam(s) of %s, calls <= %d, cap $%.2f%s" % (
+        a.n, a.subject, a.n * genexam.MAX_ATTEMPTS, a.max_cost_usd,
+        " (dry run: no call made)" if a.dry_run else ""), flush=True)
+    if a.dry_run:
+        print(genexam.build_prompt(a.subject, a.seed, 1))
+        return 0
+    tmp = None
+    try:
+        if a.real:
+            tmp = tempfile.mkdtemp(prefix="exam_gen_")
+
+            def llm(prompt):
+                return claude.run_claude(prompt, model=a.model, timeout_s=a.timeout, cwd=tmp)
+        else:
+            llm = engine.mock_llm(a.mock)
+        items, cost = genexam.generate(a.subject, a.n, a.seed, llm, a.max_cost_usd)
+        names = genexam.write(a.subject, items, a.out, {"seed": a.seed, "model": a.model,
+                                                        "llm": "claude-p" if a.real else "mock",
+                                                        "cost_usd": cost})
+    except genexam.GenError as exc:
+        print("ERROR: %s" % exc, file=sys.stderr)
+        return 1 if exc.code == "leak" else 3
+    except (OSError, ValueError) as exc:
+        print("ERROR: %s" % exc, file=sys.stderr)
+        return 2
+    finally:
+        if tmp:
+            shutil.rmtree(tmp, ignore_errors=True)
+    print("wrote %s cost=$%.4f -> %s" % (", ".join(names), cost, a.out))
+    return 0
+
+
+def benchmark_today():
+    from exam_engine.pipeline import benchmark
+    return benchmark.today()
+
+
+def lessons_main(argv):
+    """lessons --summary summary.json [--out DIR]: write lessons.json/.md from a benchmark run; exit 0/2."""
+    from exam_engine.pipeline import genexam
+    ap = argparse.ArgumentParser(prog="exam.py lessons")
+    ap.add_argument("--summary", required=True)
+    ap.add_argument("--out")
+    try:
+        a = ap.parse_args(argv)
+        with open(a.summary, encoding="utf-8") as fh:
+            ls = genexam.lessons(json.load(fh))
+    except SystemExit:
+        return 2
+    except (OSError, ValueError) as exc:
+        print("ERROR: --summary: %s" % exc, file=sys.stderr)
+        return 2
+    out = a.out or os.path.dirname(os.path.abspath(a.summary))
+    with open(os.path.join(out, "lessons.json"), "w", encoding="utf-8") as fh:
+        json.dump(ls, fh, ensure_ascii=False, indent=2)
+        fh.write("\n")
+    with open(os.path.join(out, "lessons.md"), "w", encoding="utf-8") as fh:
+        fh.write(genexam.lessons_md(ls))
+    print("%d lesson(s) -> %s" % (len(ls), out))
+    return 0
+
+
 def main(argv=None):
     argv = list(sys.argv[1:] if argv is None else argv)
     cmd, rest = (argv[0], argv[1:]) if argv else (None, [])
@@ -600,7 +690,8 @@ def main(argv=None):
              "score": scorer.score_main, "prompts": prompts.prompts_main,
              "check-prompts": prompts.check_prompts_main,
              "ingest": ingest_main, "ingest-inspect": inspect_main,
-             "ingest-refine": refine_main, "cross-solve": cross_main, "benchmark": benchmark_main}
+             "ingest-refine": refine_main, "cross-solve": cross_main, "benchmark": benchmark_main,
+             "gen-exams": genexam_main, "lessons": lessons_main}
     if cmd not in table:
         print(USAGE, file=sys.stderr)
         return 2

@@ -613,3 +613,9 @@ Inherited sample history (security harness template): docs/templates/sample-stat
 
 ## DESIGN - TASK-022 - 2026-10-30T10:44:08Z
 Action: wrote docs/design/phase-22-gen-exams.md. Result: gen-exams + lessons over unchanged benchmark, math only. Decision: coordinator designed (waiver). Next: IMPLEMENTING.
+
+## IMPLEMENTING - TASK-022 - 2026-10-30T10:46:14Z
+Action: genexam.py, prompt, gen-exams and lessons commands. Result: written. Decision: coder waiver. Next: UNIT_TESTED.
+
+## UNIT_TESTED - TASK-022 - 2026-10-30T10:46:26Z
+Action: ran the suite. Result: 487 OK, 13 new ($0, mock). Decision: tester waiver. Next: VERIFIED needs the real concept round (user go, under $1).

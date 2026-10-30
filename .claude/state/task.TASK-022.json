@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-022",
   "title": "gen-exams: generate Vietnamese-style math exams with keys, run benchmark, record lessons (REQ-0027 concept round)",
-  "state": "DESIGN",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0027",
   "acceptance_criteria": [
     "REQ-0027 AC0-AC4 with $0 mock",
@@ -15,13 +15,18 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/genexam.py",
+      "src/exam_engine/cli.py",
+      "prompts/dev/genexam.md"
+    ],
+    "summary": "pipeline/genexam.py, prompts/dev/genexam.md, gen-exams and lessons commands in cli.py"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit -p 'test_*.py'",
+    "result": "487 OK incl. 13 in test_genexam.py"
   },
   "security": {
     "status": "pending",
@@ -40,11 +45,17 @@
   "roles": {
     "designer": {
       "waiver": "coordinator designed, as phases 18-21"
+    },
+    "coder": {
+      "waiver": "coordinator implemented, as phases 18-21"
+    },
+    "tester": {
+      "waiver": "coordinator ran the suite, as phases 18-21"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-30T10:43:42Z",
-  "updated_at": "2026-10-30T10:44:08Z",
+  "updated_at": "2026-10-30T10:46:26Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-022/"
@@ -55,5 +66,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "IMPLEMENTING"
+  "next": "VERIFIED: real concept round after the user's go"
 }
