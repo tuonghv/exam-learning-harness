@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-023",
-  "state": "DONE",
-  "next": "",
-  "title": "gen-exams --profile dgnl: DGNL-style multiple choice math/logic items with letter keys, code check and QA (REQ-0028)",
-  "active": [],
+  "task_id": "TASK-024",
+  "state": "DESIGN",
+  "next": "IMPLEMENTING",
+  "title": "gen-exams --profile dgnl-en: DGNL English items with blind double-review key QA (REQ-0029)",
+  "active": [
+    {
+      "task_id": "TASK-024",
+      "state": "DESIGN",
+      "next": "IMPLEMENTING",
+      "updated_at": "2026-10-30T11:15:33Z"
+    }
+  ],
   "max_active": 1
 }

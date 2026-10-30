@@ -646,3 +646,6 @@ Action: real DGNL rounds 1-2 (7 items, QA, benchmark). Result: 7/7 pass, 0 lesso
 
 ## DONE - TASK-023 - 2026-10-30T11:07:28Z
 Action: report docs/report/phase-23-dgnl.md. Result: REQ-0028 AC1-AC4 met, 7 DGNL math items, 0 lessons. Decision: close; language/science sections are a later REQ. Next: none.
+
+## DESIGN - TASK-024 - 2026-10-30T11:15:33Z
+Action: wrote docs/design/phase-24-dgnl-en.md. Result: dgnl-en with blind double review. Decision: designer waiver. Next: IMPLEMENTING.
