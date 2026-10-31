@@ -907,3 +907,9 @@ Action: coder Titan implemented design phase-35 tests first; coordinator fixed d
 Result: 15 new tests pass, corrupted fixture 14/20
 Decision: advance
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-035 - 2026-10-31T01:20:29Z
+Action: tester Nemesis recomputed every metric independently, 15 adversarial cases, 4 mutations
+Result: all match and caught
+Decision: advance
+Next: VERIFIED
