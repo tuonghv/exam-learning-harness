@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0042",
-  "next": "run",
+  "next": "UNIT_TESTED: record the tier-0 check outputs",
   "updated": "2026-10-31 09:27"
 }

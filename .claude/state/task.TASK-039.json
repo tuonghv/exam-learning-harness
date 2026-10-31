@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-039",
   "title": "Cross-check real DGNL 2026 solution against the PDF: independent extraction + answers, defects, improvement list (REQ-0042)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0042",
   "acceptance_criteria": [
     "REQ-0042 AC1-AC5"
@@ -21,8 +21,11 @@
     ]
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "docs/design/phase-39-dgnl-cross-check.md"
+    ],
+    "summary": "4 independent section solves, 4 extraction checks, 2 adjudications, compare.py, Q66 recomputation, needs_review statistics (all under work/TASK-039, untracked)"
   },
   "unit_test": {
     "status": "pending",
@@ -53,7 +56,7 @@
   },
   "user_notes": [],
   "picked_at": "2026-10-31T02:22:08Z",
-  "updated_at": "2026-10-31T02:27:09Z",
+  "updated_at": "2026-10-31T02:27:10Z",
   "updated_by": "main",
   "scope": [
     "docs/design/phase-39-dgnl-cross-check.md",
@@ -67,5 +70,5 @@
     "notes": "",
     "next": "4 verifier subagents solving independently (work/TASK-039/handoff/indep-*.md); then run work/TASK-039/compare.py, adjudicate disagreements with a 2nd independent solve, extraction cross-check, improve"
   },
-  "next": "IMPLEMENTING: run the cross-check"
+  "next": "UNIT_TESTED: record the tier-0 check outputs"
 }
