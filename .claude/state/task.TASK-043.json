@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-043",
   "title": "Question completeness guide: gap analysis + best design of remaining gaps (REQ-0045)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0045",
   "acceptance_criteria": [
     "REQ-0045 AC1 gap table",
@@ -31,9 +31,9 @@
     "summary": "design-only task: deliverable is the design doc and the queued tasks TASK-044..048"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "git grep path:line claims of the gap table against HEAD (coordinator spot check)",
+    "result": "design-only; the gap table cites path:line, spot-checked by the coordinator"
   },
   "security": {
     "status": "pending",
@@ -62,7 +62,7 @@
   },
   "user_notes": [],
   "picked_at": "2026-10-31T03:05:36Z",
-  "updated_at": "2026-10-31T03:06:06Z",
+  "updated_at": "2026-10-31T03:06:07Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -71,5 +71,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "UNIT_TESTED"
+  "next": "VERIFIED"
 }

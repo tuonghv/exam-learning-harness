@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-043",
-  "state": "IMPLEMENTING",
-  "next": "UNIT_TESTED",
+  "state": "UNIT_TESTED",
+  "next": "VERIFIED",
   "title": "Question completeness guide: gap analysis + best design of remaining gaps (REQ-0045)",
   "active": [
     {
       "task_id": "TASK-043",
-      "state": "IMPLEMENTING",
-      "next": "UNIT_TESTED",
-      "updated_at": "2026-10-31T03:06:06Z"
+      "state": "UNIT_TESTED",
+      "next": "VERIFIED",
+      "updated_at": "2026-10-31T03:06:07Z"
     }
   ],
   "max_active": 1

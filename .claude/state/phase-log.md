@@ -1087,3 +1087,9 @@ Action: no code in this task
 Result: design doc is the deliverable
 Decision: advance
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-043 - 2026-10-31T03:06:07Z
+Action: spot check of gap-table path:line claims
+Result: see evidence
+Decision: advance
+Next: VERIFIED
