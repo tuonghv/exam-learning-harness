@@ -931,3 +931,9 @@ Action: designer Nova drafted; coordinator installed doc, checked fitz/tesseract
 Result: docs/design/phase-36-gold-pdf-extraction-benchmark.md
 Decision: implement now
 Next: IMPLEMENTING
+
+## IMPLEMENTING - TASK-036 - 2026-10-31T01:48:36Z
+Action: coder Titan implemented design phase-36 tests first; real numbers equal the designer hand count
+Result: 553 tests, 7 new pass
+Decision: advance
+Next: UNIT_TESTED

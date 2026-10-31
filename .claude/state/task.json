@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-036",
-  "state": "DESIGN",
-  "next": "coder: test_gold_pdf.py first, then pipeline/gold_pdf.py and gold-pdf CLI",
+  "state": "IMPLEMENTING",
+  "next": "UNIT_TESTED",
   "title": "PDF-level extraction benchmark: render synthetic gold to PDFs, ingest, score (REQ-0039); real pages wait for the user",
   "active": [
     {
       "task_id": "TASK-036",
-      "state": "DESIGN",
-      "next": "coder: test_gold_pdf.py first, then pipeline/gold_pdf.py and gold-pdf CLI",
-      "updated_at": "2026-10-31T01:41:34Z"
+      "state": "IMPLEMENTING",
+      "next": "UNIT_TESTED",
+      "updated_at": "2026-10-31T01:48:36Z"
     }
   ],
   "max_active": 1

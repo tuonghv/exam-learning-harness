@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-036",
   "title": "PDF-level extraction benchmark: render synthetic gold to PDFs, ingest, score (REQ-0039); real pages wait for the user",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0039",
   "acceptance_criteria": [
     "REQ-0039 AC1 renderer tier 0",
@@ -23,8 +23,15 @@
     ]
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/gold_pdf.py",
+      "src/exam_engine/cli.py",
+      "tests/unit/test_gold_pdf.py",
+      "docs/guide/ingest-usage.md",
+      "docs/guide/architecture.md"
+    ],
+    "summary": "pipeline/gold_pdf.py (fitz render, text + formula-image variants), exam.py gold-pdf, end-to-end ingest + extract-eval, docs"
   },
   "unit_test": {
     "status": "pending",
@@ -48,11 +55,14 @@
   "roles": {
     "designer": {
       "waiver": "work/TASK-036/handoff/design.md"
+    },
+    "coder": {
+      "waiver": "work/TASK-036/handoff/code.md"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-31T01:37:17Z",
-  "updated_at": "2026-10-31T01:41:34Z",
+  "updated_at": "2026-10-31T01:48:36Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/gold_pdf.py",
@@ -70,5 +80,5 @@
     "notes": "",
     "next": "designer drafting PDF-level benchmark design (work/TASK-036/handoff/design.md)"
   },
-  "next": "coder: test_gold_pdf.py first, then pipeline/gold_pdf.py and gold-pdf CLI"
+  "next": "UNIT_TESTED"
 }
