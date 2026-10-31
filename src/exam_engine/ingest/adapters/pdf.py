@@ -153,7 +153,7 @@ def _suspect(text):
     return flags
 
 
-_PAGE_NO = re.compile(r"^\s*(?:(?:Trang|Page)\s*\d+(?:\s*/\s*\d+)?|-\s*\d+\s*-)\s*$", re.I)
+_PAGE_NO = re.compile(r"^\s*(?:(?:Trang|Page)\s*\d+(?:\s*(?:/|of)\s*\d+)?|-\s*\d+\s*-)\s*$", re.I)
 FURNITURE_EDGE = 2   # first / last non-empty lines of a page that can be furniture
 FURNITURE_PAGES = 3  # a repeated header / footer needs at least max(3, half the pages)
 

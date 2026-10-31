@@ -4,7 +4,12 @@ import re
 _Q = re.compile(r"^\s*(?:(?:Câu|Cau|Question)\s*(\d+)\s*[.:)]?|(\d+)\s*[.)])\s*(.*)$", re.I)
 _OPT = re.compile(r"^\s*([A-D])\s*[.)]\s*(.*)$")
 # a group passage intro ("Questions 46-52 ...") or a part heading is not part of option D
-GROUP_RE = re.compile(r"(?:Questions?|Câu|câu)\s*(?:từ\s*)?(\d+)\s*(?:-|–|đến|to)\s*(\d+)")
+GROUP_RE = re.compile(r"(?:Questions?|[Cc]âu(?:\s*hỏi)?)\s*(?:từ\s*)?(\d+)\s*(?:-|–|đến|to)\s*(\d+)")
+# opens a context only at the line start (short prefix allowed), so a wrapped option that
+# mentions "câu 3-5" stays in option D
+_INTRO = re.compile(r"^\s*(?:(?:Dựa vào|Đọc|Hãy đọc|Based on|Read|Use|Study)\b[^\n]{0,120}?)?"
+                    r"(?:Questions?|[Cc]âu(?:\s*hỏi)?)\s*(?:từ\s*)?\d+\s*(?:-|–|đến|to)\s*\d+")
+_READ = re.compile(r"^\s*(?:Read|Study|Use)\s+the\s+(?:following\s+)?(?:passage|text|article)\b", re.I)
 _PART = re.compile(r"^\s*PH[ẦA]N\s+(IV|V|I{1,3})\b", re.I)  # as refine.PART_RE (refine imports this module)
 
 
@@ -35,7 +40,7 @@ def segment(lines):
         if o:
             qs[-1]["options"].append({"key": o.group(1), "text": o.group(2).strip()})
         elif line.strip():
-            if qs[-1]["options"] and (GROUP_RE.search(line) or _PART.match(line)):
+            if qs[-1]["options"] and (_INTRO.match(line) or _READ.match(line) or _PART.match(line)):
                 pending.append(line.strip())
             elif qs[-1]["options"]:
                 qs[-1]["options"][-1]["text"] += " " + line.strip()

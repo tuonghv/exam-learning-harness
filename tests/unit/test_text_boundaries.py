@@ -33,6 +33,7 @@ def strip(pages):
 
 class TestFurniture(unittest.TestCase):
     def test_page_number_lines_removed(self):
+        self.assertEqual(strip([["Page 3 of 22", "Câu 1. s"]])[0], [["Câu 1. s"]])
         pages = [["Trang 3/22", "Câu 1. stem", "A. a", "- 3 -"],
                  ["Page 4", "B. b", "Trang 4"]]
         out, n = strip(pages)
@@ -121,6 +122,21 @@ class TestPassageAfterOption(unittest.TestCase):
                  "Câu 2. s2", *OPTS]
         _i, qs, _ok = segment.segment(lines)
         self.assertEqual(qs[0]["options"][3]["text"], "four and more words")
+
+    def test_vietnamese_and_english_intros_open_context(self):
+        for intro in ("Dựa vào thông tin dưới đây để trả lời câu hỏi từ 21 đến 25",
+                      "Đọc đoạn trích và trả lời câu từ 21 đến 25", "Câu hỏi 21 - 25 dùng chung",
+                      "Read the passage below and answer questions 3-4",
+                      "Read the passage below."):
+            _i, qs, _ok = segment.segment(["Câu 1. s", *OPTS, intro, "Câu 2. s2", *OPTS])
+            self.assertEqual(qs[0]["options"][3]["text"], "four", intro)
+            self.assertEqual(qs[1]["context"], intro)
+
+    def test_wrapped_option_mentioning_range_stays_in_d(self):
+        lines = ["Câu 1. s", *OPTS[:3], "D. see câu 3-5 for", "details", "Câu 2. s2", *OPTS]
+        _i, qs, _ok = segment.segment(lines)
+        self.assertEqual(qs[0]["options"][3]["text"], "see câu 3-5 for details")
+        self.assertNotIn("context", qs[1])
 
     def test_group_regex_shared_with_api(self):
         self.assertIs(api.GROUP_RE, segment.GROUP_RE)
