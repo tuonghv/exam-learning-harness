@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-044",
-  "state": "DESIGN",
-  "next": "coder: tests first, pdf furniture filter, segment pending_context, golden diff",
+  "state": "IMPLEMENTING",
+  "next": "UNIT_TESTED",
   "title": "Text-path boundaries: furniture filter (headers/footers/page numbers) and passage intro/heading after option D (design 43.1, REQ-0045)",
   "active": [
     {
       "task_id": "TASK-044",
-      "state": "DESIGN",
-      "next": "coder: tests first, pdf furniture filter, segment pending_context, golden diff",
-      "updated_at": "2026-10-31T03:22:27Z"
+      "state": "IMPLEMENTING",
+      "next": "UNIT_TESTED",
+      "updated_at": "2026-10-31T03:36:07Z"
     }
   ],
   "max_active": 1

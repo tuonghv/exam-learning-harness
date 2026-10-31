@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-044",
   "title": "Text-path boundaries: furniture filter (headers/footers/page numbers) and passage intro/heading after option D (design 43.1, REQ-0045)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0045",
   "acceptance_criteria": [
     "REQ-0045 gap 43.1 furniture filter",
@@ -23,8 +23,16 @@
     ]
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/ingest/adapters/pdf.py",
+      "src/exam_engine/ingest/segment.py",
+      "src/exam_engine/ingest/api.py",
+      "tests/unit/test_text_boundaries.py",
+      "tests/unit/test_text_boundaries_qa.py",
+      "docs/guide/ingest-usage.md"
+    ],
+    "summary": "pdf page furniture filter (page numbers, repeated first/last-2 header/footer lines, Page n of m) with info warning; segment group-intro/part heading after option D opens a pending context (vi/en, line-start anchored)"
   },
   "unit_test": {
     "status": "pending",
@@ -48,11 +56,14 @@
   "roles": {
     "designer": {
       "waiver": "work/TASK-043/handoff/design.md section 43.1 (Nova) scoped in phase-44"
+    },
+    "coder": {
+      "waiver": "work/TASK-044/handoff/code.md"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-31T03:22:26Z",
-  "updated_at": "2026-10-31T03:22:27Z",
+  "updated_at": "2026-10-31T03:36:07Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/adapters/pdf.py",
@@ -71,5 +82,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "coder: tests first, pdf furniture filter, segment pending_context, golden diff"
+  "next": "UNIT_TESTED"
 }
