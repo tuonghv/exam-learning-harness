@@ -1039,3 +1039,9 @@ Action: verifier Argus judged AC1-AC4 verified; coordinator saved inspect run an
 Result: no new defects
 Decision: advance
 Next: DONE
+
+## DONE - TASK-041 - 2026-10-31T02:43:22Z
+Action: report written; quality crosscheck recorded
+Result: AC1-AC4 met; heuristic safety net, not the page-break fix
+Decision: close TASK-041 and REQ-0044
+Next: TASK-040 multi-page assembly

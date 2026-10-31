@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-041",
   "title": "Extraction-suspect report and referenced-part check (REQ-0044)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0044",
   "acceptance_criteria": [
     "REQ-0044 AC1 referenced_part_missing check with tests",
@@ -58,11 +58,22 @@
       "work/TASK-041/handoff/verify.md"
     ],
     "command": "unit suite vs base; refcheck oracle; real refined3 regression (printed numbers); ingest-inspect on refined3; protected-file and removed-assertion diffs",
-    "result": "605 tests, 3 known failures identical at base; new check flags 23 and 66, suspects {6,10,23,66,67,89,102}; inspect reports 7 of 120; verifier AC1-AC4 verified"
+    "result": "605 tests, 3 known failures identical at base; new check flags 23 and 66, suspects {6,10,23,66,67,89,102}; inspect reports 7 of 120; verifier AC1-AC4 verified",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-041/evidence/final_unit_suite.txt",
+        "work/TASK-041/evidence/final_refcheck_tests.txt",
+        "work/TASK-041/evidence/final_diff_protected.txt",
+        "work/TASK-041/evidence/inspect_refined3.txt",
+        "work/TASK-041/evidence/flagged_printed_numbers.txt"
+      ],
+      "reason": "independent oracle on the real refined3 file, byte-identical exam files, 6 mutations, hostile-input timing"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-41-extraction-suspect-report.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -96,7 +107,7 @@
     }
   ],
   "picked_at": "2026-10-31T02:27:33Z",
-  "updated_at": "2026-10-31T02:43:21Z",
+  "updated_at": "2026-10-31T02:43:22Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/core/refcheck.py",
@@ -115,5 +126,5 @@
     "notes": "",
     "next": "designer drafting; then advance.sh DESIGN, coder, tester, verifier"
   },
-  "next": "DONE: report"
+  "next": ""
 }

@@ -623,7 +623,7 @@
     "created_at": "2026-10-30T15:30:00Z",
     "requirement": "REQ-0034",
     "acceptance_criteria": [
-      "REQ-0034 AC1-AC4: sheet 'Subject – N Questions', 5 per row, 2-digit ids as stored, circled A-D, — for null/Open/non A-D, block at top of report.md/html/pdf plus answers.md, solver/schema unchanged",
+      "REQ-0034 AC1-AC4: sheet 'Subject \u2013 N Questions', 5 per row, 2-digit ids as stored, circled A-D, \u2014 for null/Open/non A-D, block at top of report.md/html/pdf plus answers.md, solver/schema unchanged",
       "REQ-0035 AC1-AC4 phase 1: --view sheet|learn (default sheet), learn view reuses explanation+solution, optional key_concept/common_mistake only if present, no extra LLM cost",
       "Tests in tests/unit/test_exam_report.py with null-answer results (work/dgnl-real Vietnamese/Science), existing report tests stay green, PDF font check for circled letters"
     ],
@@ -812,11 +812,25 @@
     "task_id": "TASK-041",
     "title": "Extraction-suspect report and referenced-part check (REQ-0044)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-10-31T11:00:00Z",
     "requirement": "REQ-0044",
     "acceptance_criteria": [
       "REQ-0044 AC1-AC4 tier 0"
+    ],
+    "completed_at": "2026-10-31T02:43:22Z",
+    "report": "docs/report/phase-41-extraction-suspect-report.md",
+    "user_notes": [
+      {
+        "raw": "RAW-00144",
+        "note": "REQ-0043 widened (multi-page questions, skill exam-extraction, go for ~$0.3 re-extract); TASK-040 right after TASK-041",
+        "at": "2026-10-31T02:32:16Z"
+      },
+      {
+        "raw": "RAW-00145",
+        "note": "REQ-0043 covers pictures and docx too",
+        "at": "2026-10-31T02:32:49Z"
+      }
     ]
   },
   {
