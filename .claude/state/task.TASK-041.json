@@ -37,7 +37,13 @@
   "roles_required": true,
   "crosscheck_required": true,
   "roles": {},
-  "user_notes": [],
+  "user_notes": [
+    {
+      "raw": "RAW-00144",
+      "note": "REQ-0043 widened (multi-page questions, skill exam-extraction, go for ~$0.3 re-extract); TASK-040 right after TASK-041",
+      "at": "2026-10-31T02:32:16Z"
+    }
+  ],
   "picked_at": "2026-10-31T02:27:33Z",
   "updated_at": "",
   "updated_by": "",
