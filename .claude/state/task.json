@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-040",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "coder: tests first (design list 1-14), then refine/prompt/bridge, refcheck incomplete_reasons, engine decline, docx text boxes; main writes the skill",
   "title": "Page-break continuation in refine (REQ-0043): design + tier-0 tests; paid re-extract of about 8 pages only after the user's go",
   "active": [
     {
       "task_id": "TASK-040",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "coder: tests first (design list 1-14), then refine/prompt/bridge, refcheck incomplete_reasons, engine decline, docx text boxes; main writes the skill",
+      "updated_at": "2026-10-31T02:43:35Z"
     }
   ],
   "max_active": 1

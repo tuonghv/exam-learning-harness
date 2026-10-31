@@ -1045,3 +1045,9 @@ Action: report written; quality crosscheck recorded
 Result: AC1-AC4 met; heuristic safety net, not the page-break fix
 Decision: close TASK-041 and REQ-0044
 Next: TASK-040 multi-page assembly
+
+## DESIGN - TASK-040 - 2026-10-31T02:43:35Z
+Action: designer Nova drafted; coordinator split image sequences to TASK-042 and added the cache-key check
+Result: docs/design/phase-40-multipage-question-assembly.md
+Decision: implement now
+Next: IMPLEMENTING

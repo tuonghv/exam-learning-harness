@@ -1,17 +1,29 @@
 {
   "task_id": "TASK-040",
   "title": "Page-break continuation in refine (REQ-0043): design + tier-0 tests; paid re-extract of about 8 pages only after the user's go",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0043",
   "acceptance_criteria": [
-    "REQ-0043 AC1-AC3 tier 0; AC4 after go"
+    "REQ-0043 AC1 design",
+    "REQ-0043 AC2 tier-0 tests with mock replies",
+    "REQ-0043 AC3 regression on real DGNL counts and clean questions",
+    "REQ-0043 AC4 paid re-extract after tests (user go)",
+    "REQ-0043 AC6 skill exam-extraction"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
-    "reuse": [],
-    "risks": []
+    "status": "completed",
+    "path": "docs/design/phase-40-multipage-question-assembly.md",
+    "summary": "refine `continues` field + bridge with owner rule, completeness check via core/refcheck, incomplete -> missing_text decline, DOCX text boxes inline, skill exam-extraction; image sequences split to TASK-042",
+    "reuse": [
+      "refine loop carry",
+      "core/refcheck.py",
+      "engine decline path"
+    ],
+    "risks": [
+      "continuation attached to the wrong question",
+      "solve cache key must include question text",
+      "vision cost about $0.9 per 22 pages"
+    ]
   },
   "implementation": {
     "status": "pending",
@@ -36,11 +48,15 @@
   },
   "roles_required": true,
   "crosscheck_required": true,
-  "roles": {},
+  "roles": {
+    "designer": {
+      "waiver": "work/TASK-040/handoff/design.md"
+    }
+  },
   "user_notes": [],
   "picked_at": "2026-10-31T02:43:34Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-10-31T02:43:35Z",
+  "updated_by": "main",
   "scope": [
     "prompts/**/ingest/refine.md",
     "src/exam_engine/ingest/**",
@@ -61,5 +77,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder: tests first (design list 1-14), then refine/prompt/bridge, refcheck incomplete_reasons, engine decline, docx text boxes; main writes the skill"
 }
