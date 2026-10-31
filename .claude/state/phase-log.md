@@ -961,3 +961,9 @@ Action: designer Nova drafted; coordinator reproduced the defect (0 questions fo
 Result: docs/design/phase-38-ingest-numbering-gaps.md
 Decision: implement now
 Next: IMPLEMENTING
+
+## IMPLEMENTING - TASK-038 - 2026-10-31T02:08:38Z
+Action: coder Titan implemented design phase-38 tests first; refine guard deviation judged safe by tester; coordinator fixed run-span text (D1)
+Result: 571 tests, 18 new pass
+Decision: advance
+Next: UNIT_TESTED

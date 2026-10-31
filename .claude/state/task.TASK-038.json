@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-038",
   "title": "Ingest segmentation for non-consecutive or restarting question numbers (REQ-0041)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0041",
   "acceptance_criteria": [
     "REQ-0041 AC1 ids 1 and 150 kept with gap warning",
@@ -23,8 +23,19 @@
     ]
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/ingest/segment.py",
+      "src/exam_engine/ingest/api.py",
+      "src/exam_engine/ingest/parts.py",
+      "src/exam_engine/ingest/refine.py",
+      "src/exam_engine/ingest/inspect.py",
+      "src/exam_engine/ingest/adapters/pdf.py",
+      "src/exam_engine/ingest/adapters/docx.py",
+      "tests/unit/test_numbering_gaps.py",
+      "docs/guide/ingest-usage.md"
+    ],
+    "summary": "segment.numbering + warnings, adapters/parts keep usable questions, api renumber with mapping line, refine guard (repeat-only), inspect de-dup, >999 cap, run-span text fix"
   },
   "unit_test": {
     "status": "pending",
@@ -48,11 +59,14 @@
   "roles": {
     "designer": {
       "waiver": "work/TASK-038/handoff/design.md"
+    },
+    "coder": {
+      "waiver": "work/TASK-038/handoff/code.md"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-31T01:49:58Z",
-  "updated_at": "2026-10-31T01:53:40Z",
+  "updated_at": "2026-10-31T02:08:38Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/**",
@@ -68,5 +82,5 @@
     "notes": "",
     "next": "designer drafting; then advance.sh DESIGN, coder, tester, verifier"
   },
-  "next": "coder: tests first, then segment.numbering, adapters, api renumber, refine guard, inspect, docs"
+  "next": "UNIT_TESTED"
 }
