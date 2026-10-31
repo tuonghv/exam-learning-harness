@@ -1,17 +1,27 @@
 {
   "task_id": "TASK-043",
   "title": "Question completeness guide: gap analysis + best design of remaining gaps (REQ-0045)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0045",
   "acceptance_criteria": [
-    "REQ-0045 AC1-AC4"
+    "REQ-0045 AC1 gap table",
+    "REQ-0045 AC2 design of remaining gaps with options and why",
+    "REQ-0045 AC3 measurement plan with Wilson reporting",
+    "REQ-0045 AC4 tasks TASK-044..048 derived"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
-    "reuse": [],
-    "risks": []
+    "status": "completed",
+    "path": "docs/design/phase-43-question-completeness-gate.md",
+    "summary": "gap table vs the guide and designs 43.1-43.7, measurement plan, task order TASK-044..048",
+    "reuse": [
+      "phase-40/41 code",
+      "extract-eval",
+      "gold-pdf"
+    ],
+    "risks": [
+      "text path golden diff on examples",
+      "recovery cost cap"
+    ]
   },
   "implementation": {
     "status": "pending",
@@ -36,11 +46,21 @@
   },
   "roles_required": true,
   "crosscheck_required": true,
-  "roles": {},
+  "roles": {
+    "designer": {
+      "waiver": "work/TASK-043/handoff/design.md"
+    },
+    "coder": {
+      "waiver": "analysis/design task: no code"
+    },
+    "tester": {
+      "waiver": "analysis/design task: no code"
+    }
+  },
   "user_notes": [],
   "picked_at": "2026-10-31T03:05:36Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-10-31T03:05:42Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -48,5 +68,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "IMPLEMENTING: design-only task"
 }

@@ -1075,3 +1075,9 @@ Action: report written with real-run evidence and honest cost
 Result: AC1-AC6 met for PDF and DOCX; pictures moved to REQ-0046
 Decision: close TASK-040 and REQ-0043
 Next: TASK-042 pictures, TASK-044..048 design phase 43, TASK-049 quote check
+
+## DESIGN - TASK-043 - 2026-10-31T03:05:42Z
+Action: designer Nova delivered gap table and designs; coordinator installed the doc and queued TASK-044..048
+Result: docs/design/phase-43-question-completeness-gate.md
+Decision: close as design-only
+Next: IMPLEMENTING
