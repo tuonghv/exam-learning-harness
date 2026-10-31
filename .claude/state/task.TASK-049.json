@@ -1,17 +1,24 @@
 {
   "task_id": "TASK-049",
   "title": "Quote check tolerant of missing diacritics (REQ-0047)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0047",
   "acceptance_criteria": [
-    "REQ-0047 AC1-AC3"
+    "REQ-0047 AC1 reproduce with a test",
+    "REQ-0047 AC2 folded accept, fabricated reject",
+    "REQ-0047 AC3 real run-21-25 re-evaluation, no paid call"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
-    "reuse": [],
-    "risks": []
+    "status": "completed",
+    "path": "docs/design/phase-49-quote-check-diacritics.md",
+    "summary": "verifier._quotes falls back to fold() substring match (min 4 chars) after the exact match; exact results unchanged",
+    "reuse": [
+      "utils.text.fold",
+      "verifier._quotes"
+    ],
+    "risks": [
+      "diacritics-only differences accepted"
+    ]
   },
   "implementation": {
     "status": "pending",
@@ -36,11 +43,15 @@
   },
   "roles_required": true,
   "crosscheck_required": true,
-  "roles": {},
+  "roles": {
+    "designer": {
+      "waiver": "coordinator design inline, one function"
+    }
+  },
   "user_notes": [],
   "picked_at": "2026-10-31T03:15:17Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-10-31T03:15:44Z",
+  "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/verifier.py",
     "tests/unit/test_exam_checks.py",
@@ -53,5 +64,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder: tests first, verifier._quotes, real regression"
 }

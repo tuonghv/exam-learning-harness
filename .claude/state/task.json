@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-049",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "coder: tests first, verifier._quotes, real regression",
   "title": "Quote check tolerant of missing diacritics (REQ-0047)",
   "active": [
     {
       "task_id": "TASK-049",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "coder: tests first, verifier._quotes, real regression",
+      "updated_at": "2026-10-31T03:15:44Z"
     }
   ],
   "max_active": 1

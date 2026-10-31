@@ -1135,3 +1135,9 @@ Action: report written
 Result: AC1-AC3 met; AC4 (real pictures) waits for the user
 Decision: close TASK-042 and REQ-0046 with AC4 split
 Next: TASK-044
+
+## DESIGN - TASK-049 - 2026-10-31T03:15:44Z
+Action: coordinator wrote the short design for the quote check
+Result: docs/design/phase-49-quote-check-diacritics.md
+Decision: implement now
+Next: IMPLEMENTING
