@@ -201,11 +201,18 @@ def _extract(docx, doc, raw, name, config):
                            % ", ".join(sorted(state["unsupported"])), 1))
     warnings = pwarn + warnings
     intro, qs, ok = segment.segment(lines)
+    keep = ok
     if not qs:
         warnings.append(_warn("no_question_numbering", "no question numbering found"))
-    elif not ok:
+    elif ok:
+        pass
+    elif segment.numbering(qs)["usable"]:
+        keep = True
+        warnings.extend(_warn(c, m) for c, m in segment.numbering_warnings(qs))
+    else:
         warnings.append(_warn("segmentation_skipped",
                               "question numbering not consecutive or a question has no text"))
+        warnings.extend(_warn(c, m) for c, m in segment.numbering_warnings(qs))
     out = {"schema_version": SCHEMA_VERSION, "status": "native_text",
            "extraction": {"method": "python-docx",
                           "tool": "python-docx %s" % getattr(docx, "__version__", "?")},
@@ -216,7 +223,7 @@ def _extract(docx, doc, raw, name, config):
            "assets": assets, "warnings": warnings,
            "source": {"path": name, "name": name, "format": "docx", "sha256": sha,
                       "size": len(raw)}}
-    if ok:
+    if keep:
         out["questions"] = qs
         out["intro"] = "\n".join(intro).strip()
     return out

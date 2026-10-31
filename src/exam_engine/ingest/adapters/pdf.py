@@ -322,11 +322,18 @@ def _extract(fitz, pdf, raw, path, config):
     if not any_content:
         raise IngestError("empty", "%s has no text and no images" % name)
     intro, qs, ok = segment.segment(all_lines)
+    keep = ok
     if not qs:
         warnings.append(_warn("no_question_numbering", "no question numbering found"))
-    elif not ok:
+    elif ok:
+        pass
+    elif segment.numbering(qs)["usable"]:
+        keep = True
+        warnings.extend(_warn(c, m) for c, m in segment.numbering_warnings(qs))
+    else:
         warnings.append(_warn("segmentation_skipped",
                               "question numbering not consecutive or a question has no text"))
+        warnings.extend(_warn(c, m) for c, m in segment.numbering_warnings(qs))
     sts = [p["status"] for p in pages]
     if "needs_review" in sts:
         status = "needs_review"
@@ -342,7 +349,7 @@ def _extract(fitz, pdf, raw, path, config):
            "meta": {}, "pages": pages, "assets": assets, "warnings": warnings,
            "source": {"path": name, "name": name, "format": "pdf", "sha256": sha,
                       "size": len(raw)}}
-    if ok:
+    if keep:
         doc["questions"] = qs
         doc["intro"] = "\n".join(intro).strip()
     return doc

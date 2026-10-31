@@ -218,7 +218,11 @@ def refine(doc, spec, llm, source_path=None, max_cost=1.0, model="sonnet", allow
     check_key_pages(doc, spec, allow_key)
     pages = pick_pages(doc, spec, all_pages)
     out = copy.deepcopy(doc)
-    by_id = dict((str(q["n"]), q) for q in doc.get("questions") or ())
+    dq = doc.get("questions") or ()
+    # restarted numbering repeats ids: originals are ambiguous, so none (as before for such docs)
+    by_id = dict((str(q["n"]), q) for q in dq)
+    if len(by_id) != len(dq):
+        by_id = {}
     qs, calls, cost, part, carry = [], 0, 0.0, None, ""
     for n in pages:
         if cost >= max_cost:

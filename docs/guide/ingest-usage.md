@@ -67,6 +67,9 @@ to the solver as a visual (later REQ-0021).
 - Password-protected or old `.doc` files are refused (`encrypted`); convert to `.docx` first.
 - Question segmentation and answer-key detection are heuristics (`Câu N` / `Question N`);
   `no_question_numbering` or `segmentation_skipped` means fix the saved document by hand.
+  Numbering with gaps (a page slice, `1, 150`) or clean restarts at 1 keeps the questions and adds
+  `numbering_gap` (missing numbers) / `numbering_restarted`; exam text renumbers 1..N with a mapping line.
+  A restart that also has a gap, a backward jump or a number above 999 stays skipped (flagged).
 - Multi-column order and table cells in PDFs are best effort (`reading_order_uncertain`).
 - Nothing here proves extraction is 100% correct; the warnings are hints, not guarantees.
 

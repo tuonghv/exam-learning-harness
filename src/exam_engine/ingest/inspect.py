@@ -36,7 +36,8 @@ def suspicious(doc):
                     out.append({"page": n, "block": blk["id"], "code": "stray_chars",
                                 "detail": "%d of %d chars unusual" % (bad, len(text))})
     qs = [q["n"] for q in doc.get("questions") or ()]
-    if qs and qs != list(range(1, len(qs) + 1)):
+    if qs and qs != list(range(1, len(qs) + 1)) and not any(
+            w["code"] == "numbering_gap" for w in doc.get("warnings", ())):
         out.append({"page": None, "block": None, "code": "numbering_gap",
                     "detail": "questions %s" % qs})
     for w in doc.get("warnings", ()):

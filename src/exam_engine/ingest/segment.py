@@ -32,3 +32,71 @@ def segment(lines):
     ok = bool(qs) and [q["n"] for q in qs] == list(range(1, len(qs) + 1)) \
         and all(q["text"] for q in qs)
     return intro, qs, ok
+
+
+MAX_N = 999  # a larger "question number" is a year or a stray figure, never a question
+
+
+def ranges(nums):
+    """[2, 3, 4, 9] -> "2-4, 9"."""
+    out, nums = [], sorted(nums)
+    i = 0
+    while i < len(nums):
+        j = i
+        while j + 1 < len(nums) and nums[j + 1] == nums[j] + 1:
+            j += 1
+        out.append(str(nums[i]) if i == j else "%d-%d" % (nums[i], nums[j]))
+        i = j + 1
+    return ", ".join(out)
+
+
+def runs(qs):
+    """Question numbers split into runs; a new run starts at each n == 1 after the first."""
+    out = []
+    for q in qs:
+        if not out or q["n"] == 1:
+            out.append([])
+        out[-1].append(q["n"])
+    return out
+
+
+def _span(run):
+    return str(run[0]) if len(run) == 1 else "%d-%d" % (run[0], run[-1])
+
+
+def numbering(qs):
+    """-> {usable, runs, missing}: numbering that keeps the questions found (gaps / restarts).
+
+    usable: every question has text, numbers in 1..MAX_N, and either one strictly increasing
+    run (gaps allowed) or several runs that each count 1..k. missing: [[run_idx, "2-149"], ...].
+    """
+    rs = runs(qs)
+    flat = [n for r in rs for n in r]
+    sane = bool(qs) and all(q["text"] for q in qs) and all(1 <= n <= MAX_N for n in flat)
+    if len(rs) == 1:
+        usable = sane and all(a < b for a, b in zip(rs[0], rs[0][1:]))
+    else:
+        usable = sane and all(r == list(range(1, len(r) + 1)) for r in rs)
+    missing = []
+    for i, r in enumerate(rs):
+        if len(set(r)) == len(r):
+            gone = sorted(set(range(1, max(r) + 1)) - set(r))
+            if gone:
+                missing.append([i, ranges(gone)])
+    return {"usable": usable, "runs": rs, "missing": missing}
+
+
+def numbering_warnings(qs):
+    """[(code, message)] for the adapters: numbering_gap and / or numbering_restarted."""
+    info = numbering(qs)
+    out = []
+    if len(info["runs"]) > 1:
+        out.append(("numbering_restarted", "numbering restarts at 1: %d sections (%s)"
+                    % (len(info["runs"]), ", ".join(_span(r) for r in info["runs"]))))
+    if info["usable"] and info["missing"]:
+        if len(info["runs"]) == 1:
+            msg = "missing question numbers: %s" % info["missing"][0][1]
+        else:
+            msg = "; ".join("section %d: missing %s" % (i + 1, m) for i, m in info["missing"])
+        out.append(("numbering_gap", msg))
+    return out

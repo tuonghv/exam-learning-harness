@@ -3,7 +3,7 @@ import hashlib
 import os
 import re
 
-from exam_engine.ingest import adapters, parts
+from exam_engine.ingest import adapters, parts, segment
 from exam_engine.ingest.schema import IngestError, validate_document
 from exam_engine.pipeline import parser
 
@@ -151,16 +151,32 @@ def _from_refined(doc, spec=None):
     return "\n".join(out).rstrip("\n") + "\n"
 
 
+def _printed(qs):
+    """"1=1, 2=150" (restarts: "11=s2.1"): exam position = printed number."""
+    sec, parts_ = 0, []
+    multi = len(segment.runs(qs)) > 1
+    for k, q in enumerate(qs, 1):
+        if q["n"] == 1 and k > 1:
+            sec += 1
+        parts_.append("%d=%s" % (k, "s%d.%d" % (sec + 1, q["n"]) if multi else q["n"]))
+    return ", ".join(parts_)
+
+
 def _from_questions(doc, out):
     """Exam text from the segmented `questions` (non-Markdown sources); never edits the text."""
     qs = doc.get("questions") or []
     if not qs:
         raise IngestError("no_questions", "no segmented questions in %s; fix the saved "
                           "document (--out) by hand" % doc["source"]["name"])
-    if doc.get("intro"):
-        out += ["## Instructions", "", doc["intro"], ""]
-    for q in qs:
-        out += ["## Question %d" % q["n"], "", q["text"], ""]
+    renum = [q["n"] for q in qs] != list(range(1, len(qs) + 1))
+    if doc.get("intro") or renum:
+        out += ["## Instructions", ""]
+        if doc.get("intro"):
+            out += [doc["intro"], ""]
+        if renum:
+            out += ["Questions are numbered from 1 here; printed numbers: %s." % _printed(qs), ""]
+    for k, q in enumerate(qs, 1):
+        out += ["## Question %d" % k, "", q["text"], ""]
         out += ["%s. %s" % (o["key"], o["text"]) for o in q["options"]]
         if q["options"]:
             out.append("")

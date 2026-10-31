@@ -67,7 +67,8 @@ def select_pages(doc, spec):
     keep_ids = set(b["asset"] for p in new["pages"] for b in p["blocks"] if b.get("asset"))
     new["assets"] = [a for a in new["assets"] if a["id"] in keep_ids]
     new["warnings"] = [w for w in new["warnings"] if w.get("page") in (None,) + tuple(want)
-                       and w["code"] not in ("no_question_numbering", "segmentation_skipped")]
+                       and w["code"] not in ("no_question_numbering", "segmentation_skipped",
+                                        "numbering_gap", "numbering_restarted")]
     new.pop("questions", None)
     new.pop("intro", None)
     if new["source"].get("format") != "md":
@@ -77,12 +78,16 @@ def select_pages(doc, spec):
                 if b["type"] == "paragraph":
                     lines.extend(b["text"].split("\n"))
         intro, qs, ok = segment.segment(lines)
-        if ok:
+        if ok or segment.numbering(qs)["usable"]:
             new["questions"], new["intro"] = qs, "\n".join(intro).strip()
+            new["warnings"].extend({"level": "warning", "code": c, "message": m}
+                                   for c, m in ([] if ok else segment.numbering_warnings(qs)))
         else:
             code = "segmentation_skipped" if qs else "no_question_numbering"
             new["warnings"].append({"level": "warning", "code": code,
                                     "message": "question numbering not usable after page selection"})
+            new["warnings"].extend({"level": "warning", "code": c, "message": m}
+                                   for c, m in segment.numbering_warnings(qs))
     new["warnings"].append({"level": "info", "code": "pages_selected",
                             "message": "pages %s of %d kept" % (spec, len(have))})
     new["parts"] = find_parts(new)
