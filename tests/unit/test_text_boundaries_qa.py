@@ -112,6 +112,25 @@ class TestSegmentAdversarial(unittest.TestCase):
             self.assertEqual(qs[0]["options"][3]["text"], "d", intro)
             self.assertEqual(qs[1].get("context"), intro + "\ntail", intro)
 
+    def test_44_4_d1_vi_en_variants_move_to_context(self):
+        for intro in ("Dựa vào thông tin dưới đây, trả lời câu hỏi từ 46 đến 52",
+                      "Dựa vào bảng sau, trả lời câu từ 46 đến 52",
+                      "Read the passage below and answer the questions",
+                      "Questions 46-52 Read the passage"):
+            qs = seg(self.D + [intro] + self.NEXT)
+            self.assertEqual(qs[0]["options"][3]["text"], "d", intro)
+            self.assertEqual(qs[1].get("context"), intro, intro)
+
+    def test_44_4_d2_wrapped_d_line_mentioning_cau_range_stays_in_d(self):
+        for extra in ("see câu 3-5 for this", "so Câu 3-5 words wrapped", "refer to Questions 3 to 5"):
+            qs = seg(self.D + [extra] + self.NEXT)
+            self.assertEqual(qs[0]["options"][3]["text"], "d " + extra, extra)
+            self.assertNotIn("context", qs[1])
+
+    def test_44_4_d3_page_n_of_m_removed_on_one_page(self):
+        out, removed = pdfmod._strip_furniture([page(1, extra_bottom=["Page 3 of 22"])])
+        self.assertEqual((removed, out), (1, [page(1)]))
+
     def test_44_4_part_heading_after_d_moves_to_context(self):
         qs = seg(self.D + ["PHAN II", "heading text"] + self.NEXT)
         self.assertEqual(qs[0]["options"][3]["text"], "d")
