@@ -1,14 +1,14 @@
 {
   "schema": 2,
   "task_id": "TASK-042",
-  "state": "IMPLEMENTING",
-  "next": "UNIT_TESTED",
+  "state": "UNIT_TESTED",
+  "next": "VERIFIED",
   "title": "Image-sequence refine: ingest-refine FILE [FILE...] with the same continuation bridge (REQ-0043, design 40.3)",
   "active": [
     {
       "task_id": "TASK-042",
-      "state": "IMPLEMENTING",
-      "next": "UNIT_TESTED",
+      "state": "UNIT_TESTED",
+      "next": "VERIFIED",
       "updated_at": "2026-10-31T03:15:09Z"
     }
   ],

@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-042",
   "title": "Image-sequence refine: ingest-refine FILE [FILE...] with the same continuation bridge (REQ-0043, design 40.3)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0046",
   "acceptance_criteria": [
     "REQ-0046 AC1 ingest-refine accepts images",
@@ -38,9 +38,9 @@
     "summary": "image.ingest_sequence + image_seq source, ingest-refine FILE [FILE...] with per-file hash check over the unchanged bridge; tester D1 (empty file hint) fixed"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "660 run, 19 new pass, 3 known failures identical at base (641 run); single-image and PDF refine outputs identical to base; 24 CLI scenarios without crash or silent loss; mutations caught (4, after the tester added the owner-rule bypass test)"
   },
   "security": {
     "status": "pending",
@@ -62,6 +62,9 @@
     },
     "coder": {
       "waiver": "work/TASK-042/handoff/code.md"
+    },
+    "tester": {
+      "waiver": "work/TASK-042/handoff/test.md"
     }
   },
   "user_notes": [],
@@ -86,5 +89,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "UNIT_TESTED"
+  "next": "VERIFIED"
 }
