@@ -839,12 +839,14 @@
     "task_id": "TASK-042",
     "title": "Image-sequence refine: ingest-refine FILE [FILE...] with the same continuation bridge (REQ-0043, design 40.3)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-10-31T12:00:00Z",
     "requirement": "REQ-0046",
     "acceptance_criteria": [
       "REQ-0046 AC1-AC3 tier 0; AC4 after the user go"
-    ]
+    ],
+    "completed_at": "2026-10-31T03:15:11Z",
+    "report": "docs/report/phase-42-image-sequence-refine.md"
   },
   {
     "task_id": "TASK-043",

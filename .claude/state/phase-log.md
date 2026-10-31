@@ -1129,3 +1129,9 @@ Action: coordinator checked the evidence set and re-ran the suite and image test
 Result: consistent
 Decision: advance
 Next: DONE
+
+## DONE - TASK-042 - 2026-10-31T03:15:10Z
+Action: report written
+Result: AC1-AC3 met; AC4 (real pictures) waits for the user
+Decision: close TASK-042 and REQ-0046 with AC4 split
+Next: TASK-044
