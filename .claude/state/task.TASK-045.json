@@ -1,17 +1,26 @@
 {
   "task_id": "TASK-045",
   "title": "Completeness reasons: formula_unbalanced, trailing_operator, merge_suspect, unreadable stored (D2), same-id join keeps cut/continued_pages (D3) (design 43.2, REQ-0045)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0049",
   "acceptance_criteria": [
-    "REQ-0049 AC1-AC4"
+    "REQ-0049 AC1 formula/operator reasons scoped",
+    "REQ-0049 AC2 merge_suspect and unreadable stored",
+    "REQ-0049 AC3 same-id join fix",
+    "REQ-0049 AC4 no new false declines on real refined3"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
-    "reuse": [],
-    "risks": []
+    "status": "completed",
+    "path": "docs/design/phase-45-completeness-reasons.md",
+    "summary": "refcheck.incomplete_reasons gains formula_unbalanced, trailing_operator, merge_suspect, unreadable; same-id join keeps cut/continued_pages",
+    "reuse": [
+      "core/refcheck.incomplete_reasons",
+      "refine validate",
+      "api same-id join"
+    ],
+    "risks": [
+      "unbalanced brackets by design in math stems (scoped to page-end questions)"
+    ]
   },
   "implementation": {
     "status": "pending",
@@ -36,11 +45,15 @@
   },
   "roles_required": true,
   "crosscheck_required": true,
-  "roles": {},
+  "roles": {
+    "designer": {
+      "waiver": "work/TASK-043/handoff/design.md section 43.2 (Nova) scoped in phase-45"
+    }
+  },
   "user_notes": [],
   "picked_at": "2026-10-31T03:36:31Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-10-31T03:36:32Z",
+  "updated_by": "main",
   "scope": [
     "src/exam_engine/core/refcheck.py",
     "src/exam_engine/ingest/refine.py",
@@ -58,5 +71,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder: tests first, refcheck reasons, refine unreadable, api join fix, real regression"
 }
