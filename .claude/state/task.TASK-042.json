@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-042",
   "title": "Image-sequence refine: ingest-refine FILE [FILE...] with the same continuation bridge (REQ-0043, design 40.3)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0046",
   "acceptance_criteria": [
     "REQ-0046 AC1 ingest-refine accepts images",
@@ -25,8 +25,17 @@
     ]
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/ingest/adapters/image.py",
+      "src/exam_engine/ingest/api.py",
+      "src/exam_engine/ingest/refine.py",
+      "src/exam_engine/cli.py",
+      "tests/unit/test_image_sequence.py",
+      "docs/guide/ingest-usage.md",
+      "docs/guide/architecture.md"
+    ],
+    "summary": "image.ingest_sequence + image_seq source, ingest-refine FILE [FILE...] with per-file hash check over the unchanged bridge; tester D1 (empty file hint) fixed"
   },
   "unit_test": {
     "status": "pending",
@@ -50,11 +59,14 @@
   "roles": {
     "designer": {
       "waiver": "design inline: phase-40 item 40.3 already designed by Nova; this doc scopes it"
+    },
+    "coder": {
+      "waiver": "work/TASK-042/handoff/code.md"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-31T03:06:16Z",
-  "updated_at": "2026-10-31T03:06:33Z",
+  "updated_at": "2026-10-31T03:15:09Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/adapters/image.py",
@@ -74,5 +86,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "coder: tests first, image.ingest_sequence, refine_main multi-file, docs"
+  "next": "UNIT_TESTED"
 }
