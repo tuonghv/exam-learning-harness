@@ -106,5 +106,24 @@ class Grouped(unittest.TestCase):
         self.assertEqual(refcheck.missing_by_question([None, ""]), [[], []])
 
 
+class Robust(unittest.TestCase):
+    def test_nfd_matches_like_nfc(self):
+        import unicodedata
+        for t in ("(1) a\n(2) b\nÝ của đoạn (5)?", "Sơ đồ dưới đây", "Cho bảng số liệu sau",
+                  "Quan sát hình 2"):
+            d = unicodedata.normalize("NFD", t)
+            self.assertNotEqual(d, t) if t != "Quan sát hình 2" else None
+            self.assertEqual(P(d), P(t))
+            self.assertTrue(P(d), t)
+
+    def test_hostile_inputs_are_fast(self):
+        import time
+        for t in ("\n" * 100000, " \n" * 50000, " " * 100000, "(1)" * 33000,
+                  "đoạn " * 20000, "- " * 50000 + "x", "\n\n(" * 33000, "hình " * 20000):
+            t0 = time.time()
+            P(t)
+            self.assertLess(time.time() - t0, 0.5, repr(t[:10]))
+
+
 if __name__ == "__main__":
     unittest.main()

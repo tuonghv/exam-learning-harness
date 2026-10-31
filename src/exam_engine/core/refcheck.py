@@ -3,10 +3,11 @@
 No model, no key, no IO. Heuristic: a miss is a false negative, never a claim of correctness.
 """
 import re
+import unicodedata
 
 _PAR_VI = re.compile(r"\bđoạn(?:\s+(?:văn|thơ|trích))?\s*(?:(\()(\d{1,2})\)|(?<=\s)(\d{1,2})\b)", re.I)
 _PAR_EN = re.compile(r"\bparagraph\s*(?:(\()(\d{1,2})\)?|(\d{1,2})\b)", re.I)
-_MARKER = re.compile(r"(?m)^[\s\"“”'‘’*_\-\[]*\((\d{1,2})\)\s")
+_MARKER = re.compile(r"(?m)^[ \t\"“”'‘’*_\-\[]*\((\d{1,2})\)\s")
 _FIG = re.compile(
     r"\b(?:hình|bảng|biểu đồ|đồ thị|sơ đồ)(?:\s+vẽ)?\s+(?:bên|dưới|trên|sau|\d+)\b"
     r"|\bbảng số liệu\b"
@@ -30,7 +31,7 @@ def has_figure(text):
 
 def referenced_parts(text, shared_figure=False):
     """-> missing references like ["paragraph (5)", "figure/table"]; [] = nothing missing."""
-    text = text or ""
+    text = unicodedata.normalize("NFC", text or "")
     markers = {int(n) for n in _MARKER.findall(text)}
     out = []
     for n, paren in _refs(text):
@@ -42,7 +43,7 @@ def referenced_parts(text, shared_figure=False):
 
 
 def _first_line(text):
-    for ln in (text or "").split("\n"):
+    for ln in unicodedata.normalize("NFC", text or "").split("\n"):
         if ln.strip():
             return ln.strip()
     return None
