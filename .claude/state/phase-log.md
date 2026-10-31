@@ -925,3 +925,9 @@ Action: report written; quality crosscheck recorded
 Result: AC1-AC5 met at tier 0
 Decision: close TASK-035 and REQ-0025
 Next: REQ-0039 / TASK-036
+
+## DESIGN - TASK-036 - 2026-10-31T01:41:34Z
+Action: designer Nova drafted; coordinator installed doc, checked fitz/tesseract/DejaVu via ingest --check
+Result: docs/design/phase-36-gold-pdf-extraction-benchmark.md
+Decision: implement now
+Next: IMPLEMENTING

@@ -1,17 +1,26 @@
 {
   "task_id": "TASK-036",
   "title": "PDF-level extraction benchmark: render synthetic gold to PDFs, ingest, score (REQ-0039); real pages wait for the user",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0039",
   "acceptance_criteria": [
-    "REQ-0039 AC1-AC2 tier 0; AC3 when the user provides pages"
+    "REQ-0039 AC1 renderer tier 0",
+    "REQ-0039 AC2 ingest then extract-eval, accuracy and interval recorded"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
-    "reuse": [],
-    "risks": []
+    "status": "completed",
+    "path": "docs/design/phase-36-gold-pdf-extraction-benchmark.md",
+    "summary": "pipeline/gold_pdf.py renders synthetic gold to PDF with fitz+DejaVu (text and formula-image variants), `exam.py gold-pdf`, ingest text route doc.json scored by extract-eval; honest optimistic-upper-bound statement",
+    "reuse": [
+      "fitz as in test_ingest_pdf.py",
+      "extract_eval",
+      "ingest api"
+    ],
+    "risks": [
+      "fitz/DejaVu availability (skipIf)",
+      "parser splits questions wrongly",
+      "NFC/NFD"
+    ]
   },
   "implementation": {
     "status": "pending",
@@ -36,11 +45,15 @@
   },
   "roles_required": true,
   "crosscheck_required": true,
-  "roles": {},
+  "roles": {
+    "designer": {
+      "waiver": "work/TASK-036/handoff/design.md"
+    }
+  },
   "user_notes": [],
   "picked_at": "2026-10-31T01:37:17Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-10-31T01:41:34Z",
+  "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/gold_pdf.py",
     "src/exam_engine/cli.py",
@@ -57,5 +70,5 @@
     "notes": "",
     "next": "designer drafting PDF-level benchmark design (work/TASK-036/handoff/design.md)"
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder: test_gold_pdf.py first, then pipeline/gold_pdf.py and gold-pdf CLI"
 }
