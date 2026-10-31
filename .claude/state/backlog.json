@@ -775,7 +775,7 @@
     "task_id": "TASK-038",
     "title": "Ingest segmentation for non-consecutive or restarting question numbers (REQ-0041)",
     "priority": 2,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-10-31T09:00:00Z",
     "requirement": "REQ-0041",
     "acceptance_criteria": [
