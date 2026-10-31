@@ -1033,3 +1033,9 @@ Action: tester Nemesis oracle, backward-compat byte compare, adversarial, 6 muta
 Result: D1 quadratic regex and D2 NFD fixed and re-verified
 Decision: advance
 Next: VERIFIED
+
+## VERIFIED - TASK-041 - 2026-10-31T02:43:21Z
+Action: verifier Argus judged AC1-AC4 verified; coordinator saved inspect run and flagged numbers as evidence
+Result: no new defects
+Decision: advance
+Next: DONE
