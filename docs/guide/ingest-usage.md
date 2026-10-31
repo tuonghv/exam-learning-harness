@@ -90,4 +90,4 @@ python3 -I scripts/exam.py extract-eval evals/extract/gold/synthetic-001.json wo
 Measures: text and option fidelity of the text-layer route on clean, single-column, generator-made PDFs with an
 embedded Unicode font (an optimistic upper bound). The `formula-image` variant rasterises the formula line, so
 text/options 20/20 show fidelity alone. Does not measure: scanned or photographed pages, OCR, two-column or grid
-tables, real exams. The text route never fills formula or figures, so overall is 8/20 (40%) by construction; 99.999% is not claimed (n=20).
+tables, real exams. This is not real-exam accuracy. The text route never fills formula or figures, so overall is 8/20 (40%) by construction; 99.999% is not claimed (n=20).

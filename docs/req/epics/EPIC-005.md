@@ -3,7 +3,7 @@ id: EPIC-005
 title: Document ingestion: PDF (primary), DOCX, Markdown to one canonical document, then the existing engine
 source: [RAW-00049, RAW-00051, RAW-00055, RAW-00060]
 created: 2026-10-29 14:04
-updated: 2026-10-29 15:28
+updated: 2026-10-31 08:49
 ---
 ## Original (verbatim, never edit)
 > **[RAW-00049]** 2026-10-29 14:04
@@ -27,6 +27,7 @@ One ingestion boundary, not a second engine: `tmp/input-exam-format.md` (spec, r
 - REQ-0019
 - REQ-0020
 - REQ-0021
+- REQ-0041
 
 ## Notes
 Conflict to settle: CLAUDE.md says Python stdlib only; the spec names pymupdf, pymupdf4llm, python-docx (not installed here; tesseract and pdftotext are). See open questions on the first REQ.
