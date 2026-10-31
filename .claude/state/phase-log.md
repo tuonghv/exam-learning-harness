@@ -1147,3 +1147,9 @@ Action: coder Titan implemented; real regression showed diacritics alone insuffi
 Result: 672 tests, 12 new pass
 Decision: advance
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-049 - 2026-10-31T03:22:07Z
+Action: tester Nemesis: tests bite check on base, 300-case oracle, perf, mutations
+Result: added a test killing two surviving mutations
+Decision: advance
+Next: VERIFIED

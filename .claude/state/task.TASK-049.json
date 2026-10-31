@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-049",
   "title": "Quote check tolerant of missing diacritics (REQ-0047)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0047",
   "acceptance_criteria": [
     "REQ-0047 AC1 reproduce with a test",
@@ -29,9 +29,9 @@
     "summary": "verifier._quotes: exact match unchanged; fallback folds diacritics and accepts elided quotes (segments in order, min 4 chars dropped, one of 8+ required)"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "672 run, 12 new pass (6 of 11 fail on base code), 3 known failures identical at base; oracle 300 cases 0 mismatches; perf linear (worst 0.7 s on 1 MB); 2 mutations that survived the coder tests are now killed"
   },
   "security": {
     "status": "pending",
@@ -53,6 +53,9 @@
     },
     "coder": {
       "waiver": "work/TASK-049/handoff/code.md"
+    },
+    "tester": {
+      "waiver": "work/TASK-049/handoff/test.md"
     }
   },
   "user_notes": [],
@@ -71,5 +74,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "UNIT_TESTED"
+  "next": "VERIFIED"
 }
