@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-044",
   "title": "Text-path boundaries: furniture filter (headers/footers/page numbers) and passage intro/heading after option D (design 43.1, REQ-0045)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0045",
   "acceptance_criteria": [
     "REQ-0045 gap 43.1 furniture filter",
@@ -57,11 +57,21 @@
       "work/TASK-044/evidence/t044-suite-head.txt"
     ],
     "command": "unit suite vs base; independent classifier of golden base-vs-head on the real DGNL native text and all other fixtures; adversarial page sets; mutations",
-    "result": "19 removed lines are bare page numbers 1..19 at page starts of pages 4-22; no stem or option word deleted; other fixtures unchanged; 0 old assertions removed; no schema/solver/prompt change"
+    "result": "19 removed lines are bare page numbers 1..19 at page starts of pages 4-22; no stem or option word deleted; other fixtures unchanged; 0 old assertions removed; no schema/solver/prompt change",
+    "quality": {
+      "kind": "real-run",
+      "evidence": [
+        "work/TASK-044/evidence/final2_classify.txt",
+        "work/TASK-044/evidence/final_boundary_tests.txt",
+        "work/TASK-044/evidence/final_unit_suite.txt",
+        "work/TASK-044/evidence/t044-classify.txt"
+      ],
+      "reason": "read-only golden of the real DGNL text route: every changed line classified by an independent script; 0 unexplained"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-44-text-path-boundaries.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -84,7 +94,7 @@
   },
   "user_notes": [],
   "picked_at": "2026-10-31T03:22:26Z",
-  "updated_at": "2026-10-31T03:36:08Z",
+  "updated_at": "2026-10-31T03:36:09Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/adapters/pdf.py",
@@ -103,5 +113,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "DONE: report"
+  "next": ""
 }

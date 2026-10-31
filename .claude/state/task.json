@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-044",
-  "state": "VERIFIED",
-  "next": "DONE: report",
+  "state": "DONE",
+  "next": "",
   "title": "Text-path boundaries: furniture filter (headers/footers/page numbers) and passage intro/heading after option D (design 43.1, REQ-0045)",
-  "active": [
-    {
-      "task_id": "TASK-044",
-      "state": "VERIFIED",
-      "next": "DONE: report",
-      "updated_at": "2026-10-31T03:36:08Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
