@@ -68,6 +68,13 @@ class Elision(unittest.TestCase):
     def test_short_segment_dropped(self):
         self.assertEqual(chk("ban lan di hoc (...) xy")[0]["result"], "pass")
 
+    def test_min8_and_overlap_and_repeat(self):
+        # mutation-found gaps: segments of 4-7 chars only, overlapping segments, a segment needed twice
+        for x in ("lan di (...) xe dap",
+                  "ban lan di hoc bang (...) hoc bang xe dap",
+                  "xe dap moi (...) xe dap moi"):
+            self.assertEqual(chk(x)[0]["result"], "fail", x)
+
 
 if __name__ == "__main__":
     unittest.main()
