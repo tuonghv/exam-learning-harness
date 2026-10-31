@@ -47,7 +47,16 @@
   "picked_at": "2026-10-31T02:27:33Z",
   "updated_at": "",
   "updated_by": "",
-  "scope": [],
+  "scope": [
+    "src/exam_engine/core/refcheck.py",
+    "src/exam_engine/ingest/inspect.py",
+    "src/exam_engine/ingest/api.py",
+    "src/exam_engine/engine.py",
+    "tests/unit/test_refcheck.py",
+    "tests/unit/fixtures/**",
+    "docs/guide/ingest-usage.md",
+    "docs/guide/architecture.md"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
