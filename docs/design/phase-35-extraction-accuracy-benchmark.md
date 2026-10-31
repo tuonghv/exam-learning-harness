@@ -43,9 +43,9 @@ printed "n/a (0 verified)". needs_review: count status "needs_review" / n gold.
 p=k/n; d=1+z²/n; c=(p+z²/2n)/d; h=z·sqrt(p(1-p)/n+z²/4n²)/d; (max(0,c-h), min(1,c+h)); n=0 -> None.
 Known values (4 dp): (20,20)->(0.8389,1.0); (0,20)->(0.0,0.1611); (10,20)->(0.2993,0.7007); (8,10)->(0.4902,0.9433).
 ### 35.5 claims `zero_error_n(target, conf=0.95) = ceil(log(1-conf)/log(target))`
-Computed, never hardcoded: 0.99->299, 0.999->2995, 0.99999->299573 (rule of three 3/ε ≈ 300000).
+Computed, never hardcoded: 0.99->299, 0.999->2995, 0.99999->299572 (rule of three 3/ε ≈ 300000).
 `claims = {"targets": {t: n_needed} for t in (0.99, 0.999, 0.99999), "supported_lower": overall.wilson[0]}`.
-Report line: "99.999% is NOT claimed: needs >= 299573 error-free questions (n=20); 95% lower bound 83.89%."
+Report line: "99.999% is NOT claimed: needs >= 299572 error-free questions (n=20); 95% lower bound 83.89%."
 ### 35.6 report `report_md(sm)`, `write(sm, out_dir)` -> `extract_eval.json` + `extract_eval.md`
 md: header (gold path, extracted path, n, matched/missing/extra), metrics table (Metric | k/n | rate |
 Wilson 95%), Claims section (35.5 table "target | n needed"), "Wrong questions" list (id, fields, status).
@@ -73,7 +73,7 @@ Args: `gold`, `extracted`, `--out DIR` (optional). Exit 0 = report produced (any
 | extracted empty | all missing, rate 0/n | missing list in report |
 ## Unit tests (tests first: tests/unit/test_extract_eval.py)
 1. wilson known values (35.4) to 4 dp, n=0 -> None, bounds clamp to [0,1].
-2. zero_error_n: 0.99->299, 0.999->2995, 0.99999->299573; report text contains "299573" and "NOT claimed".
+2. zero_error_n: 0.99->299, 0.999->2995, 0.99999->299572; report text contains "299572" and "NOT claimed".
 3. canon: NFC vs NFD "Tính" equal; "Tinh" != "Tính"; "x^2" != "x^3"; "-1" != "+1"; "A" != "a"; extra spaces equal.
 4. perfect -> every rate 1.0, missing [], extra [].
 5. corrupted -> exact k values of 35.8 (metric bites, AC4); assert perfect overall > corrupted overall.
@@ -88,7 +88,7 @@ Anti-trivial: test 5 must assert the exact counts, not just "< 1.0"; test 8 coun
 | Item | command -> expected |
 |---|---|
 | 35.1-35.6 | `python3 -I -m unittest discover -s tests/unit` -> all pass |
-| 35.7 perfect | `python3 -I scripts/exam.py extract-eval evals/extract/gold/synthetic-001.json tests/unit/fixtures/extract_eval/perfect.json --out work/TASK-035/ev` -> exit 0, "overall 20/20", "NOT claimed", "299573" |
+| 35.7 perfect | `python3 -I scripts/exam.py extract-eval evals/extract/gold/synthetic-001.json tests/unit/fixtures/extract_eval/perfect.json --out work/TASK-035/ev` -> exit 0, "overall 20/20", "NOT claimed", "299572" |
 | 35.7 bite | same with corrupted.json -> "overall 14/20", "verified precision 14/19" |
 | 35.7 error | gold vs nonexistent path -> exit 2, `ERROR: extract-eval:` |
 | 35.8 leak | `python3 -I scripts/exam.py check-examples` -> unchanged PASS |

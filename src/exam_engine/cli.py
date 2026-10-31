@@ -19,7 +19,7 @@ from exam_engine.pipeline import examples_check, parser, prompts, reporter, rout
 
 COMMANDS = ("solve", "parse", "verify", "report", "check-examples", "score", "prompts",
             "check-prompts", "ingest", "ingest-inspect", "ingest-refine", "cross-solve", "benchmark",
-            "gen-exams", "lessons")
+            "extract-eval", "gen-exams", "lessons")
 USAGE = "usage: exam.py {%s} ..." % "|".join(COMMANDS)
 
 
@@ -720,6 +720,29 @@ def lessons_main(argv):
     return 0
 
 
+def extract_eval_main(argv):
+    """extract-eval GOLD EXTRACTED [--out DIR]: exact extraction accuracy report; exit 0 or 2 (no gate)."""
+    from exam_engine.pipeline import extract_eval
+    ap = argparse.ArgumentParser(prog="exam.py extract-eval")
+    ap.add_argument("gold")
+    ap.add_argument("extracted")
+    ap.add_argument("--out")
+    try:
+        a = ap.parse_args(argv)
+    except SystemExit:
+        return 2
+    try:
+        sm = extract_eval.evaluate(extract_eval.load_questions(a.gold),
+                                   extract_eval.load_questions(a.extracted))
+        if a.out:
+            extract_eval.write(sm, a.out, a.gold, a.extracted)
+    except (ValueError, OSError) as exc:
+        print("ERROR: extract-eval: %s" % exc, file=sys.stderr)
+        return 2
+    print("\n".join(extract_eval.report_lines(sm)))
+    return 0
+
+
 def main(argv=None):
     argv = list(sys.argv[1:] if argv is None else argv)
     cmd, rest = (argv[0], argv[1:]) if argv else (None, [])
@@ -729,6 +752,7 @@ def main(argv=None):
              "check-prompts": prompts.check_prompts_main,
              "ingest": ingest_main, "ingest-inspect": inspect_main,
              "ingest-refine": refine_main, "cross-solve": cross_main, "benchmark": benchmark_main,
+             "extract-eval": extract_eval_main,
              "gen-exams": genexam_main, "lessons": lessons_main}
     if cmd not in table:
         print(USAGE, file=sys.stderr)

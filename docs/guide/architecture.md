@@ -49,7 +49,7 @@ docs/req/ (WHAT)  docs/design/phase-N-*.md (HOW, phases 1-30)  docs/guide/  .cla
 ```
 
 `exam.py` subcommands: `solve parse verify report check-examples score prompts check-prompts ingest
-ingest-inspect ingest-refine cross-solve benchmark gen-exams lessons`. Common `solve` flags:
+ingest-inspect ingest-refine cross-solve benchmark extract-eval gen-exams lessons`. Common `solve` flags:
 `--out --key --mock|--dry-run|--real --max-attempts --max-cost-usd --timeout --model --lang vi|en|auto
 --channel release|dev --prompt-version --no-pdf`. A new subject is a `config/subjects.json` entry plus an
 optional `prompts/dev/subjects/<name>.md`; no engine code.
