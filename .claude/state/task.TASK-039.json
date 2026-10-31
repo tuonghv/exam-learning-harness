@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-039",
   "title": "Cross-check real DGNL 2026 solution against the PDF: independent extraction + answers, defects, improvement list (REQ-0042)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0042",
   "acceptance_criteria": [
     "REQ-0042 AC1-AC5"
@@ -33,12 +33,28 @@
     "result": "compare output matches the handoff tables; Q66 recomputed to 780 = option A; needs_review precision 2/6, recall of blocking 2/3 (no repo code changed, so the unit suite is unaffected)"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "not_applicable",
+    "result": "analysis only; PDF is local input, question text kept out of the repo (work/ untracked, report cites printed numbers only)"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-039/evidence/compare_engine_vs_independent.txt",
+      "work/TASK-039/evidence/q66_kruskal_check.txt",
+      "work/TASK-039/evidence/needs_review_vs_extraction.txt",
+      "work/TASK-039/handoff/indep-vietnamese.md",
+      "work/TASK-039/handoff/indep-english.md",
+      "work/TASK-039/handoff/indep-math.md",
+      "work/TASK-039/handoff/indep-science.md",
+      "work/TASK-039/handoff/extract-vietnamese.md",
+      "work/TASK-039/handoff/extract-english.md",
+      "work/TASK-039/handoff/extract-math.md",
+      "work/TASK-039/handoff/extract-science.md",
+      "work/TASK-039/handoff/adjud-vietnamese.md",
+      "work/TASK-039/handoff/adjud-science.md"
+    ],
+    "command": "independent reads vs engine; extraction vs PDF; coordinator viewed PDF page 15 and recomputed Q66",
+    "result": "findings consistent across independent readers; the Q66 extraction defect confirmed by the coordinator from the page image and the extracted file"
   },
   "report": {
     "status": "pending",
@@ -52,11 +68,17 @@
     },
     "coder": {
       "waiver": "no code change: analysis task, comparison scripts live in work/TASK-039 (untracked)"
+    },
+    "verifier": {
+      "waiver": "work/TASK-039/handoff/ verifier role subagents did the independent reads and checks"
+    },
+    "crosscheck": {
+      "waiver": "the task itself is the cross-check; key findings recomputed by the coordinator (Q66, needs_review statistics)"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-31T02:22:08Z",
-  "updated_at": "2026-10-31T02:27:10Z",
+  "updated_at": "2026-10-31T02:27:11Z",
   "updated_by": "main",
   "scope": [
     "docs/design/phase-39-dgnl-cross-check.md",
@@ -70,5 +92,5 @@
     "notes": "",
     "next": "4 verifier subagents solving independently (work/TASK-039/handoff/indep-*.md); then run work/TASK-039/compare.py, adjudicate disagreements with a 2nd independent solve, extraction cross-check, improve"
   },
-  "next": "VERIFIED"
+  "next": "DONE: report with ranked improvements"
 }

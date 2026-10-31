@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-039",
-  "state": "UNIT_TESTED",
-  "next": "VERIFIED",
+  "state": "VERIFIED",
+  "next": "DONE: report with ranked improvements",
   "title": "Cross-check real DGNL 2026 solution against the PDF: independent extraction + answers, defects, improvement list (REQ-0042)",
   "active": [
     {
       "task_id": "TASK-039",
-      "state": "UNIT_TESTED",
-      "next": "VERIFIED",
-      "updated_at": "2026-10-31T02:27:10Z"
+      "state": "VERIFIED",
+      "next": "DONE: report with ranked improvements",
+      "updated_at": "2026-10-31T02:27:11Z"
     }
   ],
   "max_active": 1
