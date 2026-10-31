@@ -3,6 +3,7 @@ crops only where text cannot carry the content. No network, original never writt
 import glob
 import hashlib
 import os
+import re
 import unicodedata
 
 from exam_engine.ingest import optional, segment
@@ -152,6 +153,42 @@ def _suspect(text):
     return flags
 
 
+_PAGE_NO = re.compile(r"^\s*(?:(?:Trang|Page)\s*\d+(?:\s*/\s*\d+)?|-\s*\d+\s*-)\s*$", re.I)
+FURNITURE_EDGE = 2   # first / last non-empty lines of a page that can be furniture
+FURNITURE_PAGES = 3  # a repeated header / footer needs at least max(3, half the pages)
+
+
+def _strip_furniture(pages):
+    """-> (pages without page numbers and repeated headers/footers, removed count).
+
+    pages: one list of text lines per page. Only the first / last FURNITURE_EDGE non-empty
+    lines count; a line is furniture when it is a page number or its digit-folded form sits
+    in the edge of >= max(FURNITURE_PAGES, half) pages. Blocks are not touched.
+    """
+    def edge(lines):
+        idx = [i for i, ln in enumerate(lines) if ln.strip()]
+        return sorted(set(idx[:FURNITURE_EDGE] + idx[-FURNITURE_EDGE:]))
+
+    def content(ln):  # a numbered question / option line is never a repeated header
+        return bool(segment._Q.match(ln) or segment._OPT.match(ln))
+
+    def fold_digits(ln):
+        return re.sub(r"\d+", "#", ln.strip())
+
+    seen = {}
+    for lines in pages:
+        for k in set(fold_digits(lines[i]) for i in edge(lines) if not content(lines[i])):
+            seen[k] = seen.get(k, 0) + 1
+    need = max(FURNITURE_PAGES, (len(pages) + 1) // 2)
+    out, removed = [], 0
+    for lines in pages:
+        drop = set(i for i in edge(lines)
+                   if _PAGE_NO.match(lines[i]) or (not content(lines[i]) and seen[fold_digits(lines[i])] >= need))
+        removed += len(drop)
+        out.append([ln for i, ln in enumerate(lines) if i not in drop])
+    return out, removed
+
+
 def _save_crop(page, rect, folder, rel_dir, name):
     os.makedirs(folder, exist_ok=True)
     full = os.path.join(folder, name)
@@ -196,7 +233,7 @@ def _extract(fitz, pdf, raw, path, config):
     ocr_mode = config.get("ocr", "auto")
     asset_dir = config.get("asset_dir") or os.path.join("work", "ingest", sha[:8])
     rel_dir = _rel_dir(asset_dir)
-    warnings, assets, pages, all_lines = [], [], [], []
+    warnings, assets, pages, page_lines = [], [], [], []
     counter = [0]
     tess_dir, lang, have = (None, None, [])
     if ocr_mode != "off":
@@ -311,9 +348,10 @@ def _extract(fitz, pdf, raw, path, config):
             blocks.append(blk)
         if native_text.strip() or images or drawings:
             any_content = True
+        page_lines.append([])
         for kind, _bb, text, _ex in items:
             if kind == "paragraph":
-                all_lines.extend(text.split("\n"))
+                page_lines[-1].extend(text.split("\n"))
         pages.append({"n": n, "width": round(pw, 2), "height": round(ph, 2), "blocks": blocks,
                       "chars": len(native_text.strip()), "images": len(images),
                       "drawings": len(drawings), "status": status, "method": method,
@@ -321,7 +359,12 @@ def _extract(fitz, pdf, raw, path, config):
         warnings.extend(pwarn)
     if not any_content:
         raise IngestError("empty", "%s has no text and no images" % name)
-    intro, qs, ok = segment.segment(all_lines)
+    page_lines, removed = _strip_furniture(page_lines)
+    if removed:
+        warnings.append(_warn("page_furniture_removed", "%d page number / repeated header or "
+                              "footer line(s) left out of the question text" % removed,
+                              level="info"))
+    intro, qs, ok = segment.segment([ln for lines in page_lines for ln in lines])
     keep = ok
     if not qs:
         warnings.append(_warn("no_question_numbering", "no question numbering found"))

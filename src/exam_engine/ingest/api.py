@@ -104,7 +104,7 @@ def to_exam_text(doc, config=None):
     return "\n".join(out).rstrip("\n") + "\n"
 
 
-GROUP_RE = re.compile(r"(?:Questions?|Câu|câu)\s*(?:từ\s*)?(\d+)\s*(?:-|–|đến|to)\s*(\d+)")
+GROUP_RE = segment.GROUP_RE
 
 
 def _share_context(qs):
@@ -200,9 +200,11 @@ def _from_questions(doc, out):
             out += [doc["intro"], ""]
         if renum:
             out += ["Questions are numbered from 1 here; printed numbers: %s." % _printed(qs), ""]
+    ctx = _share_context([dict(q, id=str(q["n"])) for q in qs])
     why = refcheck.incomplete_by_question(qs, [q["text"] for q in qs])
-    for k, (q, w) in enumerate(zip(qs, why), 1):
-        out += ["## Question %d" % k, "", q["text"], ""]
+    for k, (q, w) in enumerate(zip(ctx, why), 1):
+        out += ["## Question %d" % k, ""] + ([q["context"], ""] if q.get("context") else [])
+        out += [q["text"], ""]
         if w:
             out += [refcheck.marker(w), ""]
         out += ["%s. %s" % (o["key"], o["text"]) for o in q["options"]]

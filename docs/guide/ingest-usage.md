@@ -87,6 +87,11 @@ so they are sent without `--all-pages` too.
   Numbering with gaps (a page slice, `1, 150`) or clean restarts at 1 keeps the questions and adds
   `numbering_gap` (missing numbers) / `numbering_restarted`; exam text renumbers 1..N with a mapping line.
   A restart that also has a gap, a backward jump or a number above 999 stays skipped (flagged).
+- Text route (PDF/DOCX without vision refine): page numbers (`Trang 3/22`, `- 3 -`) and headers/footers repeated on
+  >= max(3, half) pages (first/last 2 lines, digits folded; never a `Câu N`/`A.` line) are left out of the question
+  text, info `page_furniture_removed` (count). A group passage intro (`Questions 46-52`, `câu từ 21 đến 25`) or a
+  `PHẦN` heading after option D is not glued to D: it becomes the `context` of the next question and is repeated
+  for every question of its group in the exam text. The vision route is unchanged.
 - Multi-column order and table cells in PDFs are best effort (`reading_order_uncertain`).
 - Nothing here proves extraction is 100% correct; the warnings are hints, not guarantees.
 
