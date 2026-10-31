@@ -943,3 +943,9 @@ Action: tester Nemesis regenerated PDFs, recomputed scores with its own oracle, 
 Result: numbers hold up
 Decision: advance
 Next: VERIFIED
+
+## VERIFIED - TASK-036 - 2026-10-31T01:49:45Z
+Action: verifier Argus judged AC1-AC2 PASS; coordinator saved oracle outputs as evidence, added not-real-exam-accuracy sentence, opened REQ-0041 for D2
+Result: numbers recomputed
+Decision: advance
+Next: DONE

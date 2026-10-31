@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-036",
   "title": "PDF-level extraction benchmark: render synthetic gold to PDFs, ingest, score (REQ-0039); real pages wait for the user",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0039",
   "acceptance_criteria": [
     "REQ-0039 AC1 renderer tier 0",
@@ -39,12 +39,23 @@
     "result": "553 run, 7 new pass (not skipped), 3 known pre-existing failures; tester oracle matches extract-eval, 3 mutations caught after tester fixed a weak NFC test"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "renderer writes only the requested PDF (OSError wrapped, exit 2), no network or subprocess, no ingest/solver/schema change"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-036/evidence/final_unit_suite.txt",
+      "work/TASK-036/evidence/final_gold_pdf_tests.txt",
+      "work/TASK-036/evidence/final_diff_protected.txt",
+      "work/TASK-036/evidence/oracle_text.txt",
+      "work/TASK-036/evidence/oracle_formula-image.txt",
+      "work/TASK-036/evidence/cli_text.txt",
+      "work/TASK-036/evidence/cli_formula-image.txt",
+      "work/TASK-036/handoff/verify.md"
+    ],
+    "command": "unit suite; gold-pdf then ingest then extract-eval on both variants; independent oracle; protected-file diff",
+    "result": "553 tests, 7 new pass, 3 known failures; CLI 8/20 text 10/20 options 20/20 equals oracle; verifier AC1-AC2 PASS"
   },
   "report": {
     "status": "pending",
@@ -61,11 +72,17 @@
     },
     "tester": {
       "waiver": "work/TASK-036/handoff/test.md"
+    },
+    "verifier": {
+      "waiver": "work/TASK-036/handoff/verify.md"
+    },
+    "crosscheck": {
+      "waiver": "work/TASK-036/handoff/test.md independent oracle plus mutations; oracle outputs saved as evidence"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-31T01:37:17Z",
-  "updated_at": "2026-10-31T01:48:37Z",
+  "updated_at": "2026-10-31T01:49:46Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/gold_pdf.py",
@@ -83,5 +100,5 @@
     "notes": "",
     "next": "designer drafting PDF-level benchmark design (work/TASK-036/handoff/design.md)"
   },
-  "next": "VERIFIED"
+  "next": "DONE: report"
 }
