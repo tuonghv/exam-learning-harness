@@ -1,5 +1,5 @@
 {
-  "focus": "",
-  "next": "",
+  "focus": "REQ-0040",
+  "next": "waits for the user's labelled real pages (ask which exam/pages); REQ-0038 waits for a later session transcript; REQ-0024 parked by user RAW-00079",
   "updated": "2026-10-31 09:09"
 }
