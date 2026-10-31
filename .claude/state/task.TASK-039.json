@@ -41,7 +41,11 @@
   "picked_at": "2026-10-31T02:22:08Z",
   "updated_at": "",
   "updated_by": "",
-  "scope": [],
+  "scope": [
+    "docs/design/phase-39-dgnl-cross-check.md",
+    "docs/report/phase-39-dgnl-cross-check.md",
+    "work/TASK-039/**"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {

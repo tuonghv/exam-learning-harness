@@ -1,0 +1,2 @@
+# Phase 39: cross-check of the real DGNL solution (TASK-039; REQ-0042)
+Analysis task, no code change. Method: independent solves per section from the PDF only (no engine output), extraction comparison of e3-*.md against PDF pages, adjudication of contested items by a third read, tier-0 recomputation (compare.py, Q66 spanning tree, needs_review statistics). No paid claude -p run. Outputs stay under work/TASK-039 (untracked, copyright); the report cites printed numbers only. Limit: same model family as the engine, so agreement is not accuracy.
