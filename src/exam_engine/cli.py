@@ -19,7 +19,7 @@ from exam_engine.pipeline import examples_check, parser, prompts, reporter, rout
 
 COMMANDS = ("solve", "parse", "verify", "report", "check-examples", "score", "prompts",
             "check-prompts", "ingest", "ingest-inspect", "ingest-refine", "cross-solve", "benchmark",
-            "extract-eval", "gen-exams", "lessons")
+            "extract-eval", "gold-pdf", "gen-exams", "lessons")
 USAGE = "usage: exam.py {%s} ..." % "|".join(COMMANDS)
 
 
@@ -743,6 +743,28 @@ def extract_eval_main(argv):
     return 0
 
 
+def gold_pdf_main(argv):
+    """gold-pdf GOLD OUT.pdf [--variant text|formula-image] [--font TTF]: gold -> born-digital PDF; exit 0 or 2."""
+    from exam_engine.ingest.schema import IngestError
+    from exam_engine.pipeline import gold_pdf
+    ap = argparse.ArgumentParser(prog="exam.py gold-pdf")
+    ap.add_argument("gold")
+    ap.add_argument("out")
+    ap.add_argument("--variant", choices=gold_pdf.VARIANTS, default="text")
+    ap.add_argument("--font")
+    try:
+        a = ap.parse_args(argv)
+    except SystemExit:
+        return 2
+    try:
+        info = gold_pdf.render(a.gold, a.out, a.variant, a.font)
+    except (ValueError, IngestError, OSError) as exc:
+        print("ERROR: gold-pdf: %s" % exc, file=sys.stderr)
+        return 2
+    print("wrote %s pages=%d" % (a.out, info["pages"]))
+    return 0
+
+
 def main(argv=None):
     argv = list(sys.argv[1:] if argv is None else argv)
     cmd, rest = (argv[0], argv[1:]) if argv else (None, [])
@@ -752,7 +774,7 @@ def main(argv=None):
              "check-prompts": prompts.check_prompts_main,
              "ingest": ingest_main, "ingest-inspect": inspect_main,
              "ingest-refine": refine_main, "cross-solve": cross_main, "benchmark": benchmark_main,
-             "extract-eval": extract_eval_main,
+             "extract-eval": extract_eval_main, "gold-pdf": gold_pdf_main,
              "gen-exams": genexam_main, "lessons": lessons_main}
     if cmd not in table:
         print(USAGE, file=sys.stderr)

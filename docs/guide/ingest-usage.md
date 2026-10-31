@@ -79,3 +79,15 @@ python3 -I scripts/exam.py cross-solve EXAM.md --pdf FILE.pdf --pages 1-4 --real
 Route A solves the exam text, route B the page images; per question `agree` or `needs_review` (`differ`, `missing_*`, `declined_*`, `count_mismatch`). Outputs `cross.json`, `review.md`, `cross.trace.json` (raw replies). Exit 0 all agree, 1 review needed, 2 usage, 3 call/cost/key-page stop. At most 4 calls (about $0.35 for 22 questions). Never defaults to real; answer-guide pages are refused. Agreement is evidence, not proof (one exam, n=22, same model).
 
 Real multi-subject exam PDF (ĐGNL): see `dgnl-real-exam.md`.
+
+## PDF extraction benchmark (REQ-0039, tier 0, $0)
+Renders the synthetic gold to a PDF, ingests it on the text route and scores the result:
+```
+python3 -I scripts/exam.py gold-pdf evals/extract/gold/synthetic-001.json work/x/text.pdf [--variant text|formula-image] [--font TTF]
+python3 -I scripts/exam.py ingest work/x/text.pdf --ocr off --assets work/x/a --out work/x/text.doc.json
+python3 -I scripts/exam.py extract-eval evals/extract/gold/synthetic-001.json work/x/text.doc.json --out work/x/eval
+```
+Measures: text and option fidelity of the text-layer route on clean, single-column, generator-made PDFs with an
+embedded Unicode font (an optimistic upper bound). The `formula-image` variant rasterises the formula line, so
+text/options 20/20 show fidelity alone. Does not measure: scanned or photographed pages, OCR, two-column or grid
+tables, real exams. The text route never fills formula or figures, so overall is 8/20 (40%) by construction; 99.999% is not claimed (n=20).
