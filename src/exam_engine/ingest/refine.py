@@ -294,8 +294,8 @@ def _files_hint(doc, orphans):
     files = doc["source"].get("files")
     if not files:
         return ""
-    return " (file(s) %s)" % ", ".join(files[o["page"] - 2]["name"] for o in orphans
-                                       if 2 <= o["page"] <= len(files) + 1)
+    names = [files[o["page"] - 2]["name"] for o in orphans if 2 <= o["page"] <= len(files) + 1]
+    return " (file(s) %s)" % ", ".join(names) if names else ""
 
 
 def refine(doc, spec, llm, source_path=None, max_cost=1.0, model="sonnet", allow_key=False,

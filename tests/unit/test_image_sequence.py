@@ -111,6 +111,16 @@ class TestAssembly(Base):
         msg = [w["message"] for w in out["warnings"] if w["code"] == "orphan_continuation"][0]
         self.assertIn("p1.png", msg)
 
+    def test_skipped_image_is_orphan_naming_missing_file(self):
+        # QA TASK-042: image 2 left out of --pages -> image 3 must not join image 1
+        out = self.run_refine(3, "1,3", [reply(q(1, STEM)), cont(options=OPTS)])
+        r = out["refined"]
+        self.assertEqual(r["orphans"], [{"page": 3, "kind": "no_owner"}])
+        self.assertEqual(r["questions"][0]["options"], {})
+        msg = [w["message"] for w in out["warnings"] if w["code"] == "orphan_continuation"][0]
+        self.assertIn("add page(s) 2", msg)
+        self.assertIn("p2.png", msg)
+
     def test_no_continuation_unchanged(self):
         out = self.run_refine(2, "1-2", [reply(q(1, STEM, OPTS)), reply(q(2, "Another stem here", OPTS))])
         qs = out["refined"]["questions"]
@@ -188,6 +198,13 @@ class TestCli(Base):
     def test_mixed_inputs_usage_error(self):
         code, _, err = self.run_cli(self.files(1) + ["x.pdf", "--pages", "1", "--dry-run"])
         self.assertEqual(code, 2)
+
+class OrphanHint(unittest.TestCase):
+    def test_hint_empty_for_first_file_orphan(self):
+        from exam_engine.ingest import refine
+        doc = {"source": {"files": [{"name": "a.png"}, {"name": "b.png"}]}}
+        self.assertEqual(refine._files_hint(doc, [{"page": 1}]), "")
+        self.assertEqual(refine._files_hint(doc, [{"page": 2}]), " (file(s) a.png)")
 
 
 if __name__ == "__main__":
