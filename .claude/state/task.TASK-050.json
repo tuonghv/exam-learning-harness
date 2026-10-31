@@ -1,0 +1,67 @@
+{
+  "task_id": "TASK-050",
+  "title": "Cheap-model (Haiku) fallback for uncertain question/subject boundaries (REQ-0053)",
+  "state": "TODO",
+  "requirement": "REQ-0053",
+  "acceptance_criteria": [
+    "REQ-0053 AC1-AC5"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {},
+  "user_notes": [],
+  "picked_at": "2026-10-31T03:47:34Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [
+    "src/exam_engine/ingest/boundary.py",
+    "src/exam_engine/ingest/replycache.py",
+    "src/exam_engine/ingest/segment.py",
+    "src/exam_engine/ingest/parts.py",
+    "src/exam_engine/ingest/api.py",
+    "src/exam_engine/ingest/adapters/pdf.py",
+    "src/exam_engine/ingest/adapters/docx.py",
+    "src/exam_engine/cli.py",
+    "config/engine.json",
+    "prompts/dev/ingest/boundary.md",
+    "tests/unit/test_boundary*.py",
+    "tests/unit/fixtures/**",
+    "docs/guide/ingest-usage.md",
+    "docs/guide/architecture.md"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
