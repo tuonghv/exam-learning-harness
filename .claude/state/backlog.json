@@ -920,7 +920,7 @@
     "task_id": "TASK-049",
     "title": "Quote check tolerant of missing diacritics (REQ-0047)",
     "priority": 2,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-10-31T14:30:00Z",
     "requirement": "REQ-0047",
     "acceptance_criteria": [
