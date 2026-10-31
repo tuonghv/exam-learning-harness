@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-043",
   "title": "Question completeness guide: gap analysis + best design of remaining gaps (REQ-0045)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0045",
   "acceptance_criteria": [
     "REQ-0045 AC1 gap table",
@@ -36,12 +36,17 @@
     "result": "design-only; the gap table cites path:line, spot-checked by the coordinator"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "not_applicable",
+    "result": "design only"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-043/evidence/gap_table_claims_spotcheck.txt",
+      "work/TASK-043/handoff/design.md"
+    ],
+    "command": "spot check of the gap table's path:line claims against HEAD",
+    "result": "claims resolve to existing files and lines within length (existence, not meaning)"
   },
   "report": {
     "status": "pending",
@@ -58,6 +63,12 @@
     },
     "tester": {
       "waiver": "analysis/design task: no code"
+    },
+    "verifier": {
+      "waiver": "design-only task; the gap table was produced from code reading by the designer and spot-checked by the coordinator"
+    },
+    "crosscheck": {
+      "waiver": "design-only task: path:line claims spot-checked (gap_table_claims_spotcheck.txt)"
     }
   },
   "user_notes": [],
@@ -71,5 +82,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "VERIFIED"
+  "next": "DONE: report"
 }
