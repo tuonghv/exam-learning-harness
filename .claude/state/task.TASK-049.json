@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-049",
   "title": "Quote check tolerant of missing diacritics (REQ-0047)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0047",
   "acceptance_criteria": [
     "REQ-0047 AC1 reproduce with a test",
@@ -34,12 +34,23 @@
     "result": "672 run, 12 new pass (6 of 11 fail on base code), 3 known failures identical at base; oracle 300 cases 0 mismatches; perf linear (worst 0.7 s on 1 MB); 2 mutations that survived the coder tests are now killed"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "pure string matching, no regex backtracking, linear time (worst 0.7 s on 1 MB), no IO"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-049/evidence/final_unit_suite.txt",
+      "work/TASK-049/evidence/final_quote_tests.txt",
+      "work/TASK-049/evidence/final_diff_protected.txt",
+      "work/TASK-049/evidence/final_old_assertions_removed.txt",
+      "work/TASK-049/evidence/t049-full.txt",
+      "work/TASK-049/evidence/t049-oracle.txt",
+      "work/TASK-049/evidence/t049-perf.txt",
+      "work/TASK-049/evidence/real_regression_run_21_25.txt"
+    ],
+    "command": "unit suite vs base; oracle; perf; real regression of the stored quote evidence of printed 21-25 (no paid call)",
+    "result": "printed 22 and 24 FAIL -> PASS, 21/23/25 unchanged; 0 old assertions removed; no schema/solver/ingest change; limit: stored evidence is cut to 80 characters so the real re-check ran on truncated quotes"
   },
   "report": {
     "status": "pending",
@@ -56,11 +67,17 @@
     },
     "tester": {
       "waiver": "work/TASK-049/handoff/test.md"
+    },
+    "verifier": {
+      "waiver": "small single-function change verified by the tester with an independent oracle and real regression; coordinator re-ran the suite"
+    },
+    "crosscheck": {
+      "waiver": "work/TASK-049/handoff/test.md independent 300-case oracle plus mutations; real regression saved as evidence"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-31T03:15:17Z",
-  "updated_at": "2026-10-31T03:22:07Z",
+  "updated_at": "2026-10-31T03:22:08Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/verifier.py",
@@ -74,5 +91,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "VERIFIED"
+  "next": "DONE: report"
 }
