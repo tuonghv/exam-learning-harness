@@ -850,7 +850,7 @@
     "task_id": "TASK-043",
     "title": "Question completeness guide: gap analysis + best design of remaining gaps (REQ-0045)",
     "priority": 0,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-10-31T13:00:00Z",
     "requirement": "REQ-0045",
     "acceptance_criteria": [
