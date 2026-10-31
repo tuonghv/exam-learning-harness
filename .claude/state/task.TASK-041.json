@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-041",
   "title": "Extraction-suspect report and referenced-part check (REQ-0044)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0044",
   "acceptance_criteria": [
     "REQ-0044 AC1 referenced_part_missing check with tests",
@@ -37,9 +37,9 @@
     "summary": "core/refcheck.py referenced-part check, ingest inspect suspect list, api refactor, engine decline suffix missing_text; tester defects fixed (linear regex, NFC)"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "605 run, 25 new pass, 3 known failures identical at base (571 run); tester oracle flags {23,66} like refcheck, 6 mutations caught, e3-*.md byte-identical"
   },
   "security": {
     "status": "pending",
@@ -61,6 +61,9 @@
     },
     "coder": {
       "waiver": "work/TASK-041/handoff/code.md"
+    },
+    "tester": {
+      "waiver": "work/TASK-041/handoff/test.md"
     }
   },
   "user_notes": [
@@ -95,5 +98,5 @@
     "notes": "",
     "next": "designer drafting; then advance.sh DESIGN, coder, tester, verifier"
   },
-  "next": "UNIT_TESTED"
+  "next": "VERIFIED"
 }

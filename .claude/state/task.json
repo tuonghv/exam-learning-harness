@@ -1,14 +1,14 @@
 {
   "schema": 2,
   "task_id": "TASK-041",
-  "state": "IMPLEMENTING",
-  "next": "UNIT_TESTED",
+  "state": "UNIT_TESTED",
+  "next": "VERIFIED",
   "title": "Extraction-suspect report and referenced-part check (REQ-0044)",
   "active": [
     {
       "task_id": "TASK-041",
-      "state": "IMPLEMENTING",
-      "next": "UNIT_TESTED",
+      "state": "UNIT_TESTED",
+      "next": "VERIFIED",
       "updated_at": "2026-10-31T02:42:30Z"
     }
   ],

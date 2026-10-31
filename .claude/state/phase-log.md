@@ -1027,3 +1027,9 @@ Action: coder Titan implemented design phase-41 tests first; tester found regex 
 Result: 605 tests, 25 new pass
 Decision: advance
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-041 - 2026-10-31T02:42:30Z
+Action: tester Nemesis oracle, backward-compat byte compare, adversarial, 6 mutations
+Result: D1 quadratic regex and D2 NFD fixed and re-verified
+Decision: advance
+Next: VERIFIED
