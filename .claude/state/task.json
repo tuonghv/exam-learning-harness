@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-050",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "coder: tests first (design list 15), boundary.py, replycache.py, segment hints, ingest flags, D1 rule fix first",
   "title": "Cheap-model (Haiku) fallback for uncertain question/subject boundaries (REQ-0053)",
   "active": [
     {
       "task_id": "TASK-050",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "coder: tests first (design list 15), boundary.py, replycache.py, segment hints, ingest flags, D1 rule fix first",
+      "updated_at": "2026-10-31T03:47:35Z"
     }
   ],
   "max_active": 1

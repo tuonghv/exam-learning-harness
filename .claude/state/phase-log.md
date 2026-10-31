@@ -1225,3 +1225,9 @@ Action: report written
 Result: AC1-AC4 met
 Decision: close TASK-045 and REQ-0049
 Next: TASK-050
+
+## DESIGN - TASK-050 - 2026-10-31T03:47:35Z
+Action: designer Nova drafted (resumed after the limit); coordinator installed doc with decisions (haiku alias, shared cache, default off)
+Result: docs/design/phase-50-haiku-boundary-fallback.md
+Decision: implement now
+Next: IMPLEMENTING

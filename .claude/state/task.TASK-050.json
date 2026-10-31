@@ -1,17 +1,30 @@
 {
   "task_id": "TASK-050",
   "title": "Cheap-model (Haiku) fallback for uncertain question/subject boundaries (REQ-0053)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0053",
   "acceptance_criteria": [
-    "REQ-0053 AC1-AC5"
+    "REQ-0053 AC1 uncertainty signal",
+    "REQ-0053 AC2 validated JSON window classification",
+    "REQ-0053 AC3 hint-only use, cost cap, cache, mock/dry-run, default off",
+    "REQ-0053 AC4 tier-0 tests and measurement",
+    "REQ-0053 AC5 real Haiku run after the user go"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
-    "reuse": [],
-    "risks": []
+    "status": "completed",
+    "path": "docs/design/phase-50-haiku-boundary-fallback.md",
+    "summary": "boundary.py suspects/windows/validate/Reviewer, hints consulted by segment only where rules are uncertain, shared reply cache, default off, haiku alias, V2 real run needs the user go",
+    "reuse": [
+      "segment.segment",
+      "claude adapter run_claude",
+      "refine mock/dry-run pattern",
+      "core/refcheck gates"
+    ],
+    "risks": [
+      "Haiku accuracy unknown (measured not claimed)",
+      "hint must never become proof",
+      "page selection drops hints (D2)"
+    ]
   },
   "implementation": {
     "status": "pending",
@@ -36,11 +49,15 @@
   },
   "roles_required": true,
   "crosscheck_required": true,
-  "roles": {},
+  "roles": {
+    "designer": {
+      "waiver": "work/TASK-050/handoff/design.md"
+    }
+  },
   "user_notes": [],
   "picked_at": "2026-10-31T03:47:34Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-10-31T03:47:35Z",
+  "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/boundary.py",
     "src/exam_engine/ingest/replycache.py",
@@ -63,5 +80,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder: tests first (design list 15), boundary.py, replycache.py, segment hints, ingest flags, D1 rule fix first"
 }
