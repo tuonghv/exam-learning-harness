@@ -895,3 +895,9 @@ Action: report written, quality crosscheck recorded
 Result: AC4, AC5 met; AC6 moved to REQ-0038
 Decision: close TASK-033
 Next: TASK-034 later
+
+## DESIGN - TASK-035 - 2026-10-31T01:15:48Z
+Action: designer Nova drafted; coordinator installed doc, split AC1 PDF part to REQ-0039/TASK-036
+Result: docs/design/phase-35-extraction-accuracy-benchmark.md
+Decision: implement now
+Next: IMPLEMENTING
