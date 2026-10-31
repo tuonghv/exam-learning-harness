@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-044",
   "title": "Text-path boundaries: furniture filter (headers/footers/page numbers) and passage intro/heading after option D (design 43.1, REQ-0045)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0045",
   "acceptance_criteria": [
     "REQ-0045 gap 43.1 furniture filter",
@@ -40,12 +40,24 @@
     "result": "707 run, 30+ new pass, 3 known failures identical at base; tester classifier on real DGNL text: 126 questions unchanged, 18 lose a page-number token, 14 passage moved from D, 0 unexplained; 4 mutations caught; D1-D3 tests fail on base"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "pure text processing, no IO beyond existing adapters; 500-page and hostile inputs tested for time"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-044/evidence/final2_classify.txt",
+      "work/TASK-044/evidence/final2_suite.txt",
+      "work/TASK-044/evidence/final_boundary_tests.txt",
+      "work/TASK-044/evidence/final_diff_protected.txt",
+      "work/TASK-044/evidence/final_old_assertions_removed.txt",
+      "work/TASK-044/evidence/final_unit_suite.txt",
+      "work/TASK-044/evidence/t044-classify.txt",
+      "work/TASK-044/evidence/t044-suite-final.txt",
+      "work/TASK-044/evidence/t044-suite-head.txt"
+    ],
+    "command": "unit suite vs base; independent classifier of golden base-vs-head on the real DGNL native text and all other fixtures; adversarial page sets; mutations",
+    "result": "19 removed lines are bare page numbers 1..19 at page starts of pages 4-22; no stem or option word deleted; other fixtures unchanged; 0 old assertions removed; no schema/solver/prompt change"
   },
   "report": {
     "status": "pending",
@@ -62,11 +74,17 @@
     },
     "tester": {
       "waiver": "work/TASK-044/handoff/test.md"
+    },
+    "verifier": {
+      "waiver": "tester independent classifier and mutations; coordinator re-ran the suite; no real-run claim beyond the read-only text-route golden"
+    },
+    "crosscheck": {
+      "waiver": "work/TASK-044/handoff/test.md independent classifier plus mutations"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-31T03:22:26Z",
-  "updated_at": "2026-10-31T03:36:07Z",
+  "updated_at": "2026-10-31T03:36:08Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/adapters/pdf.py",
@@ -85,5 +103,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "VERIFIED"
+  "next": "DONE: report"
 }
