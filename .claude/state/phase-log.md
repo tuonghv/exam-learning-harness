@@ -1069,3 +1069,9 @@ Action: verifier Argus judged AC1-AC6; coordinator ran the real section regressi
 Result: counts unchanged, only the 7 questions changed, no incomplete markers left
 Decision: advance
 Next: DONE
+
+## DONE - TASK-040 - 2026-10-31T03:05:24Z
+Action: report written with real-run evidence and honest cost
+Result: AC1-AC6 met for PDF and DOCX; pictures moved to REQ-0046
+Decision: close TASK-040 and REQ-0043
+Next: TASK-042 pictures, TASK-044..048 design phase 43, TASK-049 quote check

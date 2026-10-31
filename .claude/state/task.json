@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-040",
-  "state": "VERIFIED",
-  "next": "DONE: report",
+  "state": "DONE",
+  "next": "",
   "title": "Page-break continuation in refine (REQ-0043): design + tier-0 tests; paid re-extract of about 8 pages only after the user's go",
-  "active": [
-    {
-      "task_id": "TASK-040",
-      "state": "VERIFIED",
-      "next": "DONE: report",
-      "updated_at": "2026-10-31T03:05:24Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
