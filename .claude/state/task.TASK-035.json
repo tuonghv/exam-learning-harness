@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-035",
   "title": "extract-eval core: per-field exact-match, Wilson 95% interval, verified precision, needs_review rate on mock/synthetic gold, tier 0 (REQ-0025)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0025",
   "acceptance_criteria": [
     "REQ-0025 AC1-AC5 at tier 0 (AC1 as gold JSON; PDF level split to REQ-0039)"
@@ -21,8 +21,16 @@
     ]
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/extract_eval.py",
+      "src/exam_engine/cli.py",
+      "docs/guide/architecture.md",
+      "tests/unit/test_extract_eval.py",
+      "tests/unit/fixtures/extract_eval/perfect.json",
+      "evals/extract/gold/synthetic-001.json"
+    ],
+    "summary": "pipeline/extract_eval.py + exam.py extract-eval, 20-question synthetic gold, 4 extracted fixtures, 15 tests"
   },
   "unit_test": {
     "status": "pending",
@@ -46,11 +54,14 @@
   "roles": {
     "designer": {
       "waiver": "work/TASK-035/handoff/design.md"
+    },
+    "coder": {
+      "waiver": "work/TASK-035/handoff/code.md"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-30T22:41:01Z",
-  "updated_at": "2026-10-31T01:15:48Z",
+  "updated_at": "2026-10-31T01:20:29Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/extract_eval.py",
@@ -67,5 +78,5 @@
     "notes": "",
     "next": "designer drafting; then advance.sh DESIGN, coder, tester, verifier"
   },
-  "next": "coder: tests first (tests/unit/test_extract_eval.py), then extract_eval.py, cli, fixtures"
+  "next": "UNIT_TESTED"
 }

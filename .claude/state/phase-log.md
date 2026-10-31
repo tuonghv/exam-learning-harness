@@ -901,3 +901,9 @@ Action: designer Nova drafted; coordinator installed doc, split AC1 PDF part to 
 Result: docs/design/phase-35-extraction-accuracy-benchmark.md
 Decision: implement now
 Next: IMPLEMENTING
+
+## IMPLEMENTING - TASK-035 - 2026-10-31T01:20:29Z
+Action: coder Titan implemented design phase-35 tests first; coordinator fixed design 299573 -> 299572
+Result: 15 new tests pass, corrupted fixture 14/20
+Decision: advance
+Next: UNIT_TESTED
