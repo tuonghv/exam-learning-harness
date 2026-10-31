@@ -1105,3 +1105,9 @@ Action: report written
 Result: design delivered, tasks queued
 Decision: close TASK-043
 Next: TASK-042 pictures
+
+## DESIGN - TASK-042 - 2026-10-31T03:06:33Z
+Action: scoped design 40.3 into phase-42
+Result: docs/design/phase-42-image-sequence-refine.md
+Decision: implement now
+Next: IMPLEMENTING
