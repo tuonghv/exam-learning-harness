@@ -1165,3 +1165,9 @@ Action: report written
 Result: AC1-AC3 met
 Decision: close TASK-049 and REQ-0047
 Next: TASK-044
+
+## DESIGN - TASK-044 - 2026-10-31T03:22:27Z
+Action: scoped design 43.1 into phase-44
+Result: docs/design/phase-44-text-path-boundaries.md
+Decision: implement now
+Next: IMPLEMENTING

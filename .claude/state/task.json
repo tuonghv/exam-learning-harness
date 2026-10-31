@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-044",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "coder: tests first, pdf furniture filter, segment pending_context, golden diff",
   "title": "Text-path boundaries: furniture filter (headers/footers/page numbers) and passage intro/heading after option D (design 43.1, REQ-0045)",
   "active": [
     {
       "task_id": "TASK-044",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "coder: tests first, pdf furniture filter, segment pending_context, golden diff",
+      "updated_at": "2026-10-31T03:22:27Z"
     }
   ],
   "max_active": 1
