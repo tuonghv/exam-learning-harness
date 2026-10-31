@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-045",
   "title": "Completeness reasons: formula_unbalanced, trailing_operator, merge_suspect, unreadable stored (D2), same-id join keeps cut/continued_pages (D3) (design 43.2, REQ-0045)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0049",
   "acceptance_criteria": [
     "REQ-0049 AC1 formula/operator reasons scoped",
@@ -34,9 +34,9 @@
     "summary": "refcheck.incomplete_reasons: formula_unbalanced (enumerator markers ignored), trailing_operator, merge_suspect, unreadable stored by refine; same-id join keeps continued_pages and the last part's cut"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "727 run, 22 new pass (11 of 20 first-round tests fail on base), 3 known failures identical at base; oracle 500/500; render of all 24 refined files byte-identical to base apart from the known 23 and 66; 4 mutations killed"
   },
   "security": {
     "status": "pending",
@@ -58,6 +58,9 @@
     },
     "coder": {
       "waiver": "work/TASK-045/handoff/code.md"
+    },
+    "tester": {
+      "waiver": "work/TASK-045/handoff/test.md"
     }
   },
   "user_notes": [
@@ -68,7 +71,7 @@
     }
   ],
   "picked_at": "2026-10-31T03:36:31Z",
-  "updated_at": "2026-10-31T03:47:24Z",
+  "updated_at": "2026-10-31T03:47:25Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/core/refcheck.py",
@@ -87,5 +90,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "UNIT_TESTED"
+  "next": "VERIFIED"
 }
