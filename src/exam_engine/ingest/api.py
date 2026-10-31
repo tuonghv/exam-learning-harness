@@ -111,13 +111,8 @@ def _share_context(qs):
     return out
 
 
-def _from_refined(doc, spec=None):
-    """Exam text from doc["refined"] questions (origin ai); `spec` keeps question numbers like 61-90."""
-    meta = doc.get("meta") or {}
-    missing = [k for k in REQUIRED if not meta.get(k)]
-    if missing:
-        raise IngestError("missing_header", "missing exam header(s): %s (use --meta K=V)"
-                          % ", ".join(missing))
+def refined_questions(doc):
+    """doc["refined"] questions with a question cut by a page break merged into one."""
     qs = []
     for q in (doc.get("refined") or {}).get("questions") or []:
         if qs and qs[-1]["id"] == q["id"]:
@@ -126,6 +121,26 @@ def _from_refined(doc, spec=None):
                           options=q["options"] or qs[-1]["options"])
         else:
             qs.append(q)
+    return qs
+
+
+def question_lines(q):
+    """Question block lines of the exam text, without options: context, text, figure lines."""
+    out = []
+    if q.get("context"):
+        out += [q["context"], ""]
+    out += [q.get("text") or "", ""]
+    return out + ["[Figure/table: %s]" % f for f in q.get("figures") or ()]
+
+
+def _from_refined(doc, spec=None):
+    """Exam text from doc["refined"] questions (origin ai); `spec` keeps question numbers like 61-90."""
+    meta = doc.get("meta") or {}
+    missing = [k for k in REQUIRED if not meta.get(k)]
+    if missing:
+        raise IngestError("missing_header", "missing exam header(s): %s (use --meta K=V)"
+                          % ", ".join(missing))
+    qs = refined_questions(doc)
     if spec:
         want = set(parts.parse_pages(spec))
         qs = [q for q in qs if q["id"].isdigit() and int(q["id"]) in want]
@@ -141,10 +156,7 @@ def _from_refined(doc, spec=None):
     out.append("")
     for k, q in enumerate(qs, 1):
         out += ["## Question %d" % k, ""]
-        if q.get("context"):
-            out += [q["context"], ""]
-        out += [q["text"], ""]
-        out += ["[Figure/table: %s]" % f for f in q.get("figures") or ()]
+        out += question_lines(q)
         out += ["%s. %s" % (k, q["options"][k]) for k in sorted(q["options"])]
         if q["options"]:
             out.append("")

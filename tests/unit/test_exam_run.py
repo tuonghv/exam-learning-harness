@@ -194,6 +194,19 @@ class Decisions(Base):
         self.assertEqual(len(llm.prompts), 1)  # no QA call for nothing to review
         self.assertEqual(code, 1)
 
+    def test_8b_decline_on_missing_referenced_part_says_missing_text(self):
+        exam = MATH1.replace("Compute 2*sqrt(3).", "(1) aa\n(2) bb\nMain idea of paragraph (5)?")
+        llm = Script(solve(a(1, None, answer_status="unanswerable")))
+        res, _ = self.go(exam, llm, max_attempts=1)
+        self.assertEqual(res["questions"][0]["status_reason"],
+                         "solver_declined: missing_text (paragraph (5))")
+
+    def test_8c_answered_flagged_question_reason_unchanged(self):
+        exam = MATH1.replace("Compute 2*sqrt(3).", "Main idea of paragraph (5)?")
+        llm = Script(solve(a(1, "B")), qa((1, "agree")))
+        res, _ = self.go(exam, llm)
+        self.assertNotIn("missing_text", res["questions"][0]["status_reason"])
+
     def test_9_literature_open_always_uncertain_basis_none(self):
         llm = Script(solve(a(1, "Open", evidence=["Quote line one."])), qa((1, "agree")))
         res, code = self.go(LIT1, llm)

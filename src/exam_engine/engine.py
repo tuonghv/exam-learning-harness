@@ -9,7 +9,7 @@ import os
 import sys
 
 from exam_engine.adapters import claude
-from exam_engine.core import schema as sch
+from exam_engine.core import refcheck, schema as sch
 from exam_engine.core.decision import decide_rec, evidence_kind, is_open, new_rec
 from exam_engine.pipeline import parser, prompts, reporter, router, scorer, solver, verifier
 
@@ -56,6 +56,8 @@ def retry_ids(recs):
 
 
 def build_result(exam, exam_path, recs, cfg, rn, stopped):
+    miss = dict(zip((q["id"] for q in exam["questions"]), refcheck.missing_by_question(
+        [q["text"] + "\n" + exam["passage"] for q in exam["questions"]])))
     qs = []
     for i in sorted(recs):
         r = recs[i]
@@ -64,6 +66,8 @@ def build_result(exam, exam_path, recs, cfg, rn, stopped):
             r["error"] = {"cls": stopped[0], "message": claude.mask(stopped[1])[:200]}
         if r["status"] is None:
             r["status"], r["reason"] = "UNCERTAIN", "not_solved"
+        if r["reason"] == "solver_declined" and miss.get(i):
+            r["reason"] = "solver_declined: missing_text (%s)" % ", ".join(miss[i])
         sc = r["score"] or {"points": None, "max": None, "basis": "none", "detail": "no key"}
         qs.append({
             "id": str(i), "evidence_kind": evidence_kind(r), "answer": a.get("answer"), "solution": a.get("solution") or [],

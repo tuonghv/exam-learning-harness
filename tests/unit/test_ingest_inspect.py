@@ -296,3 +296,67 @@ class NoPartsKey(unittest.TestCase):
         d = fake([["Q1"], ["Answer key"]])
         d.pop("parts", None)
         self.assertTrue(parts.has_key(d))
+
+
+def rq(i, text, page=1, sim=0.9, nr=False, **kw):
+    q = {"id": str(i), "part": None, "text": text, "options": {"A": "x"}, "context": "",
+         "figures": [], "origin": "ai", "page": page, "similarity": sim, "needs_review": nr}
+    q.update(kw)
+    return q
+
+
+class ExtractionSuspects(unittest.TestCase):
+    def doc(self):
+        d = fake([["Question 1. What is two plus two?"]])
+        d["refined"] = {"questions": [
+            rq(1, "Clean stem"),
+            rq(2, "(1) aa\n(2) bb\nMain idea of paragraph (3)?", page=2),
+            rq(3, "Low sim stem", sim=0.4, nr=True),
+            rq(4, "Joined stem", nr=True, joined_page=5),
+            rq(5, "Flagged only", nr=True),
+            rq(6, "Look at the chart below", figures=["a chart"]),
+            rq(6, "continued", page=3, nr=True),
+        ]}
+        return d
+
+    def test_suspect_list_exact(self):
+        got = {s["id"]: s["reasons"] for s in inspect.extraction_suspects(self.doc())}
+        self.assertEqual(got, {
+            "2": ["referenced_part_missing paragraph (3)"],
+            "3": ["low_similarity 0.4"],
+            "4": ["joined_page 5"],
+            "5": ["needs_review"],
+            "6": ["needs_review"]})
+
+    def test_without_refined_empty(self):
+        self.assertEqual(inspect.extraction_suspects(fake([["Question 1. x"]])), [])
+
+    def test_malformed_refined_no_crash(self):
+        d = fake([["Question 1. x"]])
+        d["refined"] = {"questions": [{"id": "1", "text": None, "options": {}}]}
+        self.assertEqual(inspect.extraction_suspects(d), [])
+
+    def test_report_section_and_count(self):
+        out = inspect.report(self.doc())
+        self.assertIn("- extraction suspects: 5 of 6 refined questions", out)
+        self.assertIn("## Extraction suspects", out)
+        self.assertIn("### no part", out)
+        self.assertIn("- printed 2 (p2): referenced_part_missing paragraph (3)", out)
+
+    def test_report_without_refined_unchanged(self):
+        d = fake([["Question 1. What is two plus two?"]])
+        self.assertNotIn("xtraction suspects", inspect.report(d))
+
+    def test_does_not_mutate(self):
+        d = self.doc()
+        before = copy.deepcopy(d)
+        inspect.report(d)
+        self.assertEqual(d, before)
+
+    def test_refined_blocks_helpers(self):
+        from exam_engine.ingest import api
+        qs = api.refined_questions(self.doc())
+        self.assertEqual([q["id"] for q in qs], ["1", "2", "3", "4", "5", "6"])
+        self.assertEqual(qs[5]["text"], "Look at the chart below\ncontinued")
+        self.assertEqual(api.question_lines(qs[5]),
+                         ["Look at the chart below\ncontinued", "", "[Figure/table: a chart]"])

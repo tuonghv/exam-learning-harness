@@ -31,7 +31,7 @@ Engine: one stdlib package `src/exam_engine/`, entry `scripts/exam.py` (always `
 ```
 src/exam_engine/
   cli.py engine.py settings.py   subcommands; solve loop -> result.json + reports; config loading
-  core/       schema.py (validator) safe_eval.py decision.py (decide, evidence_kind)
+  core/       schema.py (validator) safe_eval.py decision.py (decide, evidence_kind) refcheck.py (referenced-part check)
   adapters/   claude.py          the ONLY module that runs the claude CLI
   pipeline/   parser router (subject policy, language) prompts solver verifier scorer
               reporter (answer sheet, learn view) examples_check cross benchmark genexam

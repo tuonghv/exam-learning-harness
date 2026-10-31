@@ -15,6 +15,11 @@ Setup and OCR data: see [ingest-setup.md](ingest-setup.md). Ingest is free and l
 - `--pages SPEC` (`1-4`, `1,3,5-6`) keeps only those pages; DOCX is one logical page.
 - `ingest-inspect` prints a read-only report (blocks, warnings, suspicious spots). Read it before
   trusting a document.
+  On a refined document (`ingest-refine` output) it adds `## Extraction suspects`: per part, the
+  printed numbers whose text looks incomplete, with reasons `referenced_part_missing paragraph (N)` /
+  `figure/table` (the text names a paragraph or figure/table it does not contain), `low_similarity`,
+  `joined_page`, `needs_review`. Heuristic (misses are possible); `solve` marks a declined question
+  of this kind `solver_declined: missing_text (...)` in `status_reason`.
 - Key guard: a document with an answer guide after the exam (heading "Hướng dẫn giải", "Đáp án",
   "Answer key") gets `parts`; `--exam-out` fails with `answer_key_present` unless you select the
   exam pages with `--pages` or pass `--allow-key-pages`. An unlabelled guide is not detected.
