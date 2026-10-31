@@ -11,13 +11,14 @@ import os
 
 from exam_engine import settings
 from exam_engine.adapters import claude
-from exam_engine.ingest import optional, parts as partsmod
+from exam_engine.ingest import optional, parts as partsmod, segment
 from exam_engine.ingest.adapters import image as imgmod
 from exam_engine.ingest.schema import IngestError
 from exam_engine.utils.text import fold
 
 MIN_SIMILARITY = 0.6
 MAX_ATTEMPTS = 2
+MIN_OVERLAP = 20  # chars of a repeated continuation prefix treated as overlap
 FLAG_CODES = ("missing_text", "bad_encoding", "no_question_numbering", "math_possible")
 FORBIDDEN = ("answer", "answers", "solution", "solutions", "key", "explanation")
 PROMPT_REL = os.path.join("dev", "ingest", "refine.md")
@@ -139,11 +140,30 @@ def _gaps(questions):
     return out
 
 
+def _continues_errors(c):
+    if c is None:
+        return []
+    if not isinstance(c, dict):
+        return ["continues must be an object"]
+    errs = []
+    if not isinstance(c.get("text", ""), str):
+        errs.append("continues: text must be a string")
+    if not isinstance(c.get("options", {}), dict) or not all(
+            isinstance(v, str) for v in c.get("options", {}).values()):
+        errs.append("continues: options must be an object of strings")
+    if not isinstance(c.get("figures", []), list):
+        errs.append("continues: figures must be a list")
+    if not isinstance(c.get("passage", False), bool):
+        errs.append("continues: passage must be a boolean")
+    return errs
+
+
 def validate_refined(obj, originals=None):
     """Problems of a reply (empty = valid). `originals` = {id: source question}."""
     if not isinstance(obj, dict) or not isinstance(obj.get("questions"), list):
         return ["reply needs a 'questions' list"]
     errs = ["forbidden field %r (solver-like reply)" % k for k in FORBIDDEN if k in obj]
+    errs += _continues_errors(obj.get("continues"))
     for i, q in enumerate(obj["questions"], 1):
         if not isinstance(q, dict):
             errs.append("question %d: not an object" % i)
@@ -151,8 +171,10 @@ def validate_refined(obj, originals=None):
         errs += ["question %d: forbidden field %r (solver-like reply)" % (i, k)
                  for k in FORBIDDEN if k in q]
         qid = norm_id(q.get("id"))
-        frag = isinstance(q.get("text"), str) and isinstance(q.get("options"), dict) \
-            and bool(q["options"])
+        # an entry without a number is a continuation of the previous page (legacy form)
+        frag = isinstance(q.get("text"), str) and (
+            (isinstance(q.get("options"), dict) and bool(q["options"]))
+            or (bool(q["text"].strip()) and q.get("id") in ("", None)))
         if qid is None and not frag:
             errs.append("question %d: id must be the question number" % i)
         if not isinstance(q.get("text"), str) or (not q["text"].strip() and not q.get("unreadable") and not frag):
@@ -165,6 +187,8 @@ def validate_refined(obj, originals=None):
             errs.append("question %d: unreadable must be a boolean" % i)
         if not isinstance(q.get("figures", []), list):
             errs.append("question %d: figures must be a list" % i)
+        if not isinstance(q.get("cut", False), bool):
+            errs.append("question %d: cut must be a boolean" % i)
         orig = (originals or {}).get(qid)
         if orig and orig["options"] and not q.get("unreadable") and not set("ABCD") <= set(opts):
             errs.append("question %s: options A-D expected (the source has options)" % qid)
@@ -209,6 +233,61 @@ def _ask(llm, n, png, originals):
     raise RefineError("invalid_reply", "page %d: %s (after %d attempts)" % (n, why, calls))
 
 
+def _cont(obj):
+    """(continuation, numbered entries): the legacy `id:""` entries are folded into the continuation."""
+    c = obj.get("continues") or {}
+    cont = {"text": str(c.get("text") or "").strip(), "options": dict(c.get("options") or {}),
+            "figures": list(c.get("figures") or []), "passage": bool(c.get("passage")),
+            "legacy": False}
+    rest = []
+    for q in obj["questions"]:
+        if norm_id(q.get("id")) is not None:
+            rest.append(q)
+            continue
+        cont["legacy"] = True
+        cont["text"] = (cont["text"] + "\n" + str(q.get("text") or "")).strip()
+        cont["options"].update(q.get("options") or {})
+        cont["figures"] += list(q.get("figures") or [])
+    return cont, rest
+
+
+def _dedupe(owner, text):
+    """`text` without a prefix the owner already ends with (tile overlap, repeated line) or "" when contained."""
+    for k in range(min(len(owner), len(text)), MIN_OVERLAP - 1, -1):
+        if owner.endswith(text[:k]):
+            return text[k:].strip()
+    if len(text) >= MIN_OVERLAP and fold(text) in fold(owner):
+        return ""
+    return text
+
+
+def _attach(qs, st, n, cont):
+    """Merge continuation `cont` of page n into the open question of page n-1 -> orphan kind or None."""
+    if st["open"] is None or st["page"] != n - 1:
+        return "no_owner"
+    o = qs[st["open"]]
+    if segment._Q.match(cont["text"]):
+        kind = "starts_with_number"
+    elif cont["options"] and o["options"]:
+        kind = "owner_has_options"
+    else:
+        kind = None
+    if kind:
+        o.update(needs_review=True, orphan_page=n)
+        return kind
+    text = _dedupe(o["context"] if cont["passage"] and o["context"] else o["text"], cont["text"])
+    if text:
+        key = "context" if cont["passage"] and o["context"] else "text"
+        o[key] = (o[key] + "\n" + text).strip()
+    if cont["options"]:
+        o["options"] = cont["options"]
+    o["figures"] = list(o["figures"]) + cont["figures"]
+    o["continued_pages"] = o.get("continued_pages", []) + [n]
+    if cont["legacy"]:
+        o.update(needs_review=True, joined_page=n)
+    return None
+
+
 def refine(doc, spec, llm, source_path=None, max_cost=1.0, model="sonnet", allow_key=False,
            min_similarity=MIN_SIMILARITY, render=render_page, all_pages=False):
     """Copy of `doc` plus doc["refined"]; the source pages are untouched.
@@ -224,6 +303,7 @@ def refine(doc, spec, llm, source_path=None, max_cost=1.0, model="sonnet", allow
     if len(by_id) != len(dq):
         by_id = {}
     qs, calls, cost, part, carry = [], 0, 0.0, None, ""
+    st, orphans = {"open": None, "page": None}, []  # open: index in qs of the last question of page st["page"]
     for n in pages:
         if cost >= max_cost:
             raise RefineError("cost_cap", "cost $%.2f reached the cap $%.2f before page %d"
@@ -234,23 +314,34 @@ def refine(doc, spec, llm, source_path=None, max_cost=1.0, model="sonnet", allow
         text = _page_text(doc, n)
         items = []
         carried, carry = carry, str(obj.get("carry") or "").strip()
-        for q in obj["questions"]:
-            if carried and norm_id(q.get("id")) is not None:
+        cont, numbered = _cont(obj)
+        if cont["text"] or cont["options"] or cont["figures"]:
+            if cont["passage"] and carried:
+                # more paragraphs of a passage whose questions start on a later page
+                carried = "\n".join([carried, cont["text"]] + ["[Figure/table: %s]" % f
+                                                               for f in cont["figures"]]).strip()
+            else:
+                kind = _attach(qs, st, n, cont)
+                if kind:
+                    orphans.append({"page": n, "kind": kind})
+        for q in numbered:
+            if carried:
                 # passage printed on the previous page whose questions start here
                 q = dict(q, context=(carried + "\n" + str(q.get("context") or "")).strip())
                 carried = ""
-            if norm_id(q.get("id")) is None:
-                # options continuing a question from the previous page: join the last one without options
-                tail = [x for x in qs if not x["options"]]
-                if tail:
-                    tail[-1].update(text=(tail[-1]["text"] + "\n" + q["text"]).strip(),
-                                    options=q["options"], needs_review=True, joined_page=n)
-                continue
             found, rest = split_part(q["text"])
             part = found or part
             if not rest and not q.get("options"):
                 continue
             items.append(dict(q, text=rest, part=part))
+        if carried and "continues" in obj and not numbered:
+            carry = (carried + "\n" + carry).strip()  # the passage goes on over this page
+        if items:
+            st["open"], st["page"] = len(qs) + len(items) - 1, n
+        elif st["open"] is not None and st["page"] == n - 1:
+            st["page"] = n  # a page of pure continuation: the chain goes on
+        else:
+            st["open"] = None
         gaps = _gaps(items)
         for q in items:
             qid = norm_id(q["id"])
@@ -261,13 +352,24 @@ def refine(doc, spec, llm, source_path=None, max_cost=1.0, model="sonnet", allow
                        "similarity": sim,
                        "needs_review": bool(q.get("unreadable")) or sim < min_similarity
                        or (q["part"], qid) in gaps})
+            if q.get("cut") is True:
+                qs[-1]["cut"] = True
     out["refined"] = {"model": model,
                       "prompt_sha256": hashlib.sha256(template().encode("utf-8")).hexdigest(),
                       "pages": pages, "questions": qs, "calls": calls,
                       "cost_usd": round(cost, 6)}
+    if orphans:
+        out["refined"]["orphans"] = orphans
     nr = sum(1 for q in qs if q["needs_review"])
     out["warnings"].append({
         "level": "warning" if nr else "info", "code": "refined_by_ai",
         "message": "%d question(s) from %d page(s) suggested by AI, %d need review"
                    % (len(qs), len(pages), nr)})
+    if orphans:
+        out["warnings"].append({
+            "level": "warning", "code": "orphan_continuation",
+            "message": "continuation on page(s) %s not merged (no question on the page before, or it "
+                       "does not fit): add page(s) %s to --pages" % (
+                           ", ".join(str(o["page"]) for o in orphans),
+                           ", ".join(str(o["page"] - 1) for o in orphans))})
     return out

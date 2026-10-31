@@ -420,8 +420,9 @@ def refine_main(argv):
                 fh.write(json.dumps(trace, ensure_ascii=False, indent=2) + "\n")
     r = out["refined"]
     nr = [q["id"] for q in r["questions"] if q["needs_review"]]
-    print("refined pages=%s questions=%d needs_review=%s calls=%d cost=$%.4f%s" % (
+    print("refined pages=%s questions=%d needs_review=%s calls=%d cost=$%.4f%s%s" % (
         r["pages"], len(r["questions"]), nr or "none", r["calls"], r["cost_usd"],
+        " orphans=%d" % len(r["orphans"]) if r.get("orphans") else "",
         " -> %s" % a.out if a.out else ""))
     return 1 if nr else 0
 

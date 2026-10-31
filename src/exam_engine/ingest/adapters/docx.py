@@ -1,7 +1,7 @@
 """DOCX adapter (python-docx via the optional loader): body in file order, one logical page.
 
 Reads only the body: paragraphs, headings, list items, tables, inline images and the plain text of
-OMML math. Headers, footers, text boxes and footnotes are not read (warning `unsupported_content`).
+OMML math. Text boxes are read inline at their anchor (own lines). Headers, footers and footnotes are not read (warning `unsupported_content`).
 The original file is only read; no network.
 """
 import hashlib
@@ -17,6 +17,7 @@ from exam_engine.ingest.schema import SCHEMA_VERSION, IngestError
 W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
 M = "{http://schemas.openxmlformats.org/officeDocument/2006/math}"
 A = "{http://schemas.openxmlformats.org/drawingml/2006/main}"
+MC = "{http://schemas.openxmlformats.org/markup-compatibility/2006}"
 R = "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}"
 OLE_MAGIC = b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1"  # password-protected docx is an OLE container
 _HEADING = re.compile(r"^Heading\s+(\d+)$", re.I)
@@ -36,12 +37,18 @@ def _nfc(s):
 
 
 def _text(para, state):
-    """Paragraph text in document order incl. OMML text; text-box content is skipped."""
+    """Paragraph text in document order incl. OMML text; a text box is read inline on its own lines."""
     out = []
     for el in para.iter():
         tag = el.tag
         if tag == W + "txbxContent":
-            state["unsupported"].add("text box")
+            # the mc:Fallback copy of a text box repeats the mc:Choice one; nested boxes are inside the outer text
+            if not any(a.tag in (W + "txbxContent", MC + "Fallback") for a in el.iterancestors()):
+                box = "\n".join(t for t in ("".join(x.text or "" for x in p.iter(W + "t")).strip()
+                                            for p in el.iter(W + "p")) if t)
+                if box:
+                    out.append("\n" + box + "\n")
+                    state["text_box"] = True
         if tag in (W + "t", M + "t"):
             if any(a.tag == W + "txbxContent" for a in el.iterancestors()):
                 continue
@@ -196,6 +203,9 @@ def _extract(docx, doc, raw, name, config):
     pwarn = []
     if state["math"]:
         pwarn.append(_warn("math_possible", "equation text kept as plain text, not LaTeX", 1))
+    if state.get("text_box"):
+        pwarn.append({"level": "info", "code": "text_box_inlined", "page": 1,
+                      "message": "text box content read inline at its anchor"})
     if state["unsupported"]:
         pwarn.append(_warn("unsupported_content", "not read: %s"
                            % ", ".join(sorted(state["unsupported"])), 1))

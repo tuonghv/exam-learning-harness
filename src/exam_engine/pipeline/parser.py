@@ -5,6 +5,7 @@ Python 3.8 stdlib only.
 import re
 import unicodedata
 
+from exam_engine.core import refcheck
 from exam_engine.pipeline import router
 from exam_engine.utils.text import norm  # noqa: F401  (re-exported)
 
@@ -171,6 +172,7 @@ def validate_exam(exam):
     for q in qs:
         if not q["text"].strip() and not q["options"]:
             errs.append("question %d: empty body" % q["id"])
-        if (mc or q["options"]) and sorted(q["options"]) != ["A", "B", "C", "D"]:
+        if ((mc or q["options"]) and sorted(q["options"]) != ["A", "B", "C", "D"]
+                and refcheck.marker_reasons(q["text"]) is None):  # a marked one is declined, not solved
             errs.append("question %d: options must be exactly A-D" % q["id"])
     return errs

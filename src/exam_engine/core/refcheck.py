@@ -49,8 +49,57 @@ def _first_line(text):
     return None
 
 
+def _shared_figure_flags(texts):
+    """True per text whose first line is shared with a text that holds a figure."""
+    with_fig = {_first_line(t) for t in texts if has_figure(t)} - {None}
+    return [_first_line(t) in with_fig for t in texts]
+
+
 def missing_by_question(texts):
     """Per text, as referenced_parts; a figure on any text with the same first line (a passage
     repeated with every question of its group) counts for all of them."""
-    with_fig = {_first_line(t) for t in texts if has_figure(t)} - {None}
-    return [referenced_parts(t, shared_figure=_first_line(t) in with_fig) for t in texts]
+    return [referenced_parts(t, shared_figure=s)
+            for t, s in zip(texts, _shared_figure_flags(texts))]
+
+
+def _option_keys(options):
+    if isinstance(options, dict):
+        return set(options)
+    return {o.get("key") for o in options or ()}
+
+
+def incomplete_reasons(q, shared_figure=False, text=None):
+    """Structural signs that a question is not whole -> reasons ([] = complete).
+
+    `q`: text, options (dict or [{key,text}]), cut, continued_pages, orphan_page; `text` overrides
+    q["text"] for the referenced-part check (context and figure lines included)."""
+    out = []
+    if 0 < len(_option_keys(q.get("options")) & set("ABCD")) < 4:
+        out.append("options_incomplete")
+    if q.get("cut") and not q.get("continued_pages"):
+        out.append("cut_unresolved")
+    out += ["referenced_part_missing " + x
+            for x in referenced_parts(q.get("text") if text is None else text, shared_figure)]
+    if q.get("orphan_page"):
+        out.append("orphan_on_page %s" % q["orphan_page"])
+    return out
+
+
+def incomplete_by_question(qs, texts):
+    """incomplete_reasons per question; `texts[i]` = full text of qs[i] (shared figures as above)."""
+    return [incomplete_reasons(q, s, t)
+            for q, t, s in zip(qs, texts, _shared_figure_flags(texts))]
+
+
+_MARKER_LINE = re.compile(r"(?m)^\[Incomplete: missing_text ([^\]\n]*)\]\s*$")
+
+
+def marker(reasons):
+    """The exam-text line that makes the engine decline the question (never sent to the solver)."""
+    return "[Incomplete: missing_text %s]" % ", ".join(reasons)
+
+
+def marker_reasons(text):
+    """Reasons string of the marker line in `text`, or None."""
+    m = _MARKER_LINE.search(text or "")
+    return m.group(1) if m else None

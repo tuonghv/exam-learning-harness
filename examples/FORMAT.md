@@ -44,6 +44,8 @@ B. had
 C. will have
 D. would have
 
+(A line `[Incomplete: missing_text <reasons>]` after a question text, written by ingest, makes the engine decline that question without a solver call.)
+
 ## Learner answer                    # only with Mode: Grade
 
 ...

@@ -442,7 +442,7 @@ class AllPagesAndRefinedText(unittest.TestCase):
 
     def test_refined_text_context_order_and_filter(self):
         from exam_engine.ingest import api
-        q = lambda i, **k: dict({"id": str(i), "text": "t%d" % i, "options": {"B": "b", "A": "a"}}, **k)
+        q = lambda i, **k: dict({"id": str(i), "text": "t%d" % i, "options": {"B": "b", "A": "a", "C": "c", "D": "d"}}, **k)
         doc = dict(self.DOC, refined={"questions": [q(1, context="PASSAGE"), q(2), q(3)]})
         text = api.to_exam_text(doc, {"use_refined": True, "questions": "1-2"})
         self.assertIn("## Question 1\n\nPASSAGE\n\nt1\n\nA. a\nB. b", text)

@@ -60,6 +60,10 @@ to the solver as a visual (later REQ-0021).
 - The reply is checked (schema, consecutive ids, options A-D, no `answer`/`solution` field) and
   stored as `refined` with `origin: "ai"`, a difflib `similarity` and `needs_review`; source blocks
   are never changed and `to_exam_text` ignores `refined`. Similarity is a hint, not an accuracy claim.
+- A question cut over pages: the reply's top-level `continues` (text, options, figures, passage) and per-question `cut`
+  are merged into the last question of the previous page only; an unmergeable one is listed in `refined.orphans` with
+  warning `orphan_continuation` (add the page before it to `--pages`). Exam text then marks questions that are not whole
+  with `[Incomplete: missing_text ...]`; the engine declines them (`solver_declined: missing_text (...)`).
 - Exit 0 ok; 1 some question needs review; 2 usage/input; 3 blocked or call/reply error
   (`stream_format`, `call_failed`, `invalid_reply`, `cost_cap`, `answer_key_present`).
 
@@ -67,8 +71,8 @@ to the solver as a visual (later REQ-0021).
 - Math stays text. PDF: math fonts give `math_possible` plus a page image. DOCX: equation (OMML)
   text is kept as plain text with `math_possible`, not LaTeX; check formulas by eye.
 - OCR can garble characters (Vietnamese diacritics, digits, option letters); OCR pages are marked.
-- DOCX headers, footers, text boxes, footnotes and images inside tables are not read
-  (`unsupported_content`). Auto-numbered lists lose their numbers (Word keeps them outside the text).
+- DOCX text boxes are read inline at their anchor (info `text_box_inlined`). Headers, footers, footnotes and images
+  inside tables are not read (`unsupported_content`). Auto-numbered lists lose their numbers (Word keeps them outside the text).
 - Password-protected or old `.doc` files are refused (`encrypted`); convert to `.docx` first.
 - Question segmentation and answer-key detection are heuristics (`Câu N` / `Question N`);
   `no_question_numbering` or `segmentation_skipped` means fix the saved document by hand.

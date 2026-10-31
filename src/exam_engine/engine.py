@@ -6,6 +6,7 @@ Counts calls and cost, enforces the caps, logs one line per call. run() returns
 """
 import json
 import os
+import re
 import sys
 
 from exam_engine.adapters import claude
@@ -53,6 +54,26 @@ def retry_ids(recs):
     return [i for i, r in recs.items()
             if r["status"] in ("FAIL", "UNCERTAIN") and not is_open(r["ans"])
             and r["reason"] != "no_independent_check"]  # a re-solve cannot create one
+
+
+def incomplete_ids(exam):
+    """{id: reasons} of questions carrying the `[Incomplete: missing_text ...]` marker line."""
+    out = {}
+    for q in exam["questions"]:
+        why = refcheck.marker_reasons(q["text"])
+        if why is not None:
+            out[q["id"]] = why
+    return out
+
+
+def without_questions(text, ids):
+    """Exam text without the `## Question N` sections of `ids` (a fragment is never sent to the solver)."""
+    keep = []
+    for chunk in re.split(r"(?m)^(?=## )", text):
+        m = re.match(r"## Question\s+(\d+)\s*$", chunk.split("\n", 1)[0])
+        if not (m and int(m.group(1)) in ids):
+            keep.append(chunk)
+    return "".join(keep)
 
 
 def build_result(exam, exam_path, recs, cfg, rn, stopped):
@@ -116,13 +137,19 @@ def run(exam_path, out_dir, cfg, llm):
     rn = Runner(cfg, llm, log)
     recs = {q["id"]: new_rec() for q in exam["questions"]}
     stopped = None
+    skip = incomplete_ids(exam)
+    for i, why in skip.items():
+        recs[i]["status"], recs[i]["reason"] = "UNCERTAIN", "solver_declined: missing_text (%s)" % why
     try:
-        ids = sorted(recs)
-        prompt = solver.solve_prompt(exam, text, cfg.get("key"))
+        ids = [i for i in sorted(recs) if i not in skip]
+        prompt = solver.solve_prompt(exam, without_questions(text, skip) if skip else text,
+                                     cfg.get("key"))
         for attempt in range(1, cfg["max_attempts"] + 1):
+            if not ids:
+                break
             solver.solve_round(exam, rn, recs, ids, prompt if attempt == 1 else solver.retry_prompt(exam, recs, ids))
             verifier.qa_round(exam, rn, recs, ids)
-            ids = retry_ids(recs)
+            ids = [i for i in retry_ids(recs) if i not in skip]
             if not ids:
                 break
     except Stop as stop:

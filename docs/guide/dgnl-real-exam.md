@@ -32,6 +32,13 @@ agreement and hand checks, status stays `uncertain`.
 - Passage on the previous page than its questions: the vision call sees one page. Fix: refine prompt `carry`
   field handed to the next page's first question.
 - Question cut by a page break (stem on one page, options on the next): joined in `_from_refined`.
+- Question over N pages (phase 40): the reply field `continues` (text, options, figures, passage) holds what is printed above
+  the first number of page N+1; `refine._attach` merges it into the last question of page N-1 only, chains over pages,
+  drops overlap and refuses a number-led or wrong-owner continuation (`orphans`, warning `orphan_continuation`: re-run with
+  page N-1). Always select the page before a continuation in `--pages`.
+- Completeness at render time (`refcheck.incomplete_reasons`: `options_incomplete`, `cut_unresolved`, `referenced_part_missing`,
+  `orphan_on_page`): the exam text gets `[Incomplete: missing_text ...]` and the engine records `solver_declined: missing_text (...)`
+  without sending the question to the solver.
 - Figures/tables: written as `[Figure/table: ...]` text from the refine reply. A question needing pixels that
   the reply cannot describe is still guessed from the description: re-check those by hand (e.g. cable diagram).
 - Numeric science answers come back as the value ("230%") not the letter: format check fails although the value

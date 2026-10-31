@@ -3,6 +3,7 @@ import hashlib
 import os
 import re
 
+from exam_engine.core import refcheck
 from exam_engine.ingest import adapters, parts, segment
 from exam_engine.ingest.schema import IngestError, validate_document
 from exam_engine.pipeline import parser
@@ -154,9 +155,12 @@ def _from_refined(doc, spec=None):
         out += ["", "Questions are numbered from 1 here; the printed exam number of question N is N + %d "
                 "(passages may refer to printed numbers)." % (first - 1)]
     out.append("")
-    for k, q in enumerate(qs, 1):
-        out += ["## Question %d" % k, ""]
-        out += question_lines(q)
+    lines = [question_lines(q) for q in qs]
+    why = refcheck.incomplete_by_question(qs, ["\n".join(ln) for ln in lines])
+    for k, (q, ln, w) in enumerate(zip(qs, lines, why), 1):
+        out += ["## Question %d" % k, ""] + ln
+        if w:
+            out += [refcheck.marker(w), ""]
         out += ["%s. %s" % (k, q["options"][k]) for k in sorted(q["options"])]
         if q["options"]:
             out.append("")
@@ -187,8 +191,11 @@ def _from_questions(doc, out):
             out += [doc["intro"], ""]
         if renum:
             out += ["Questions are numbered from 1 here; printed numbers: %s." % _printed(qs), ""]
-    for k, q in enumerate(qs, 1):
+    why = refcheck.incomplete_by_question(qs, [q["text"] for q in qs])
+    for k, (q, w) in enumerate(zip(qs, why), 1):
         out += ["## Question %d" % k, "", q["text"], ""]
+        if w:
+            out += [refcheck.marker(w), ""]
         out += ["%s. %s" % (o["key"], o["text"]) for o in q["options"]]
         if q["options"]:
             out.append("")
