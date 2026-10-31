@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-038",
   "title": "Ingest segmentation for non-consecutive or restarting question numbers (REQ-0041)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0041",
   "acceptance_criteria": [
     "REQ-0041 AC1 ids 1 and 150 kept with gap warning",
@@ -38,9 +38,9 @@
     "summary": "segment.numbering + warnings, adapters/parts keep usable questions, api renumber with mapping line, refine guard (repeat-only), inspect de-dup, >999 cap, run-span text fix"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "571 run, 18 new pass, 3 known failures identical at base (553 run); tester: strict docs byte-identical, DGNL e3-*.md identical, 3 mutations caught"
   },
   "security": {
     "status": "pending",
@@ -62,11 +62,14 @@
     },
     "coder": {
       "waiver": "work/TASK-038/handoff/code.md"
+    },
+    "tester": {
+      "waiver": "work/TASK-038/handoff/test.md"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-31T01:49:58Z",
-  "updated_at": "2026-10-31T02:08:38Z",
+  "updated_at": "2026-10-31T02:08:39Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/**",
@@ -82,5 +85,5 @@
     "notes": "",
     "next": "designer drafting; then advance.sh DESIGN, coder, tester, verifier"
   },
-  "next": "UNIT_TESTED"
+  "next": "VERIFIED"
 }

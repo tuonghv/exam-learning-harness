@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-038",
-  "state": "IMPLEMENTING",
-  "next": "UNIT_TESTED",
+  "state": "UNIT_TESTED",
+  "next": "VERIFIED",
   "title": "Ingest segmentation for non-consecutive or restarting question numbers (REQ-0041)",
   "active": [
     {
       "task_id": "TASK-038",
-      "state": "IMPLEMENTING",
-      "next": "UNIT_TESTED",
-      "updated_at": "2026-10-31T02:08:38Z"
+      "state": "UNIT_TESTED",
+      "next": "VERIFIED",
+      "updated_at": "2026-10-31T02:08:39Z"
     }
   ],
   "max_active": 1

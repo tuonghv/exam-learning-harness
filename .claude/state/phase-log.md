@@ -967,3 +967,9 @@ Action: coder Titan implemented design phase-38 tests first; refine guard deviat
 Result: 571 tests, 18 new pass
 Decision: advance
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-038 - 2026-10-31T02:08:38Z
+Action: tester Nemesis compared base vs HEAD ingest on every fixture, adversarial cases, refine deviation case, 3 mutations
+Result: no blocker; minor D1 fixed, D2 additive by design, D3 out of scope
+Decision: advance
+Next: VERIFIED
