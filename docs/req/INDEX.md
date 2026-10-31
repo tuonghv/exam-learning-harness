@@ -5,7 +5,6 @@
 
 ## Attention
 
-- GAP: untriaged RAW: RAW-00142 -> use skill req-intake (link to REQ/EPIC, create new, or ignore with reason)
 - WARN: questions waiting for user: REQ-0040(1)
 
 ## [EPIC-002](epics/EPIC-002.md) Few-shot and evaluation example sets (Math, Physics, English, Literature; VN THPT/entrance level) - TODO

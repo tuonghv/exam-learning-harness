@@ -72,7 +72,7 @@ for s in "TASK-900 item 900.1: First item, do the thing" "tasks.sh show TASK-900
          "Scope: .claude/scripts/foo.sh, tests/run_all.sh" "Grants (coder): .claude/scripts/*" \
          "Forbidden: " "reports/" "Edit/Write only" "Peers: Nova (designer)=abc" \
          "Turns: 20. Expect: 4 min." "Checks: tests/run_all.sh --changed" \
-         "Output: work/TASK-900/handoff/code.md. Reply ≤ 8 lines."; do
+         "Output: work/TASK-900/handoff/code.md. Reply ≤ 5 lines."; do
   printf '%s' "$out" | grep -qF -- "$s" || { p10=0; echo "    missing: $s"; }
 done
 if [ "$p10" -eq 1 ]; then ok "P10 brief has every field"; else bad "P10 brief has every field"; printf '%s\n' "$out" | sed 's/^/    /'; fi

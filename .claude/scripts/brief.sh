@@ -157,4 +157,4 @@ printf 'Rules: Edit/Write only; no Bash writes into the repo. A refusal means st
 [ -z "$PEERS" ] || printf 'Peers: %s\n' "$PEERS"
 printf 'Turns: %s. Expect: %s min.\n' "$TURNS" "$EXPECT"
 printf 'Checks: %s\n' "$CHECKS"
-printf 'Output: work/%s/handoff/%s.md. Reply ≤ 8 lines.\n' "$T" "$OUT"
+printf 'Output: work/%s/handoff/%s.md. Reply ≤ 5 lines.\n' "$T" "$OUT"

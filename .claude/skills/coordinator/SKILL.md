@@ -40,7 +40,7 @@ The user's latest stated goal beats the active TASK, the backlog and "keep the t
 Skip a role only for a truly trivial step and record the reason in `task.json` (`roles.<role> = {"waiver": "..."}`); `workflow-check.sh` fails a transition whose role is neither a COMPLETE handoff nor waived.
 
 Brief format (one design item or range per brief, by path, never pasted content):
-`TASK-0NN item <N.x>: <goal>. Inputs: <design §, files>. Scope: <files>. Rules: <rules that apply>. Checks: <commands that must pass>. Peers: <role=id, or none>. Turns: <N>. Expect: <~M min>. Output: work/TASK-0NN/handoff/<f>.md. Reply ≤ 8 lines.`
+`TASK-0NN item <N.x>: <goal>. Inputs: <design §, files>. Scope: <files>. Rules: <rules that apply>. Checks: <commands that must pass>. Peers: <role=id, or none>. Turns: <N>. Expect: <~M min>. Output: work/TASK-0NN/handoff/<f>.md. Reply ≤ 5 lines.`
 `bash .claude/scripts/brief.sh TASK-0NN <N.x> <role> [--turns N] [--peers "<text>"] [--checks "<cmd>"]` prints it from the design heading `### <N.x>`; add decisions and the do-not-touch list by hand.
 Give the role everything it needs to finish without asking: line anchors, decisions already made, what not to touch.
 
@@ -52,6 +52,8 @@ Turn and time budget: every brief sets `Turns:` and `Expect:`. The hard stop is 
 
 Skills: each role preloads its skills from the `skills:` frontmatter of `.claude/agents/<role>.md`, and every role has the `Skill` tool for the language or domain skill its step needs. State-moving skills (workflow, commit, req-*, coordinator) are the coordinator's only. The brief's `Load:` line names extra ones. Accept a handoff only when its second line is `SKILLS: ...`; otherwise send it back once, then escalate. After editing an agent file, restart the session so new agents pick it up.
 When a role needs a path the guard reserves, grant it per task (`roles.grants.<role> = ["<glob>"]`, only `protect.grantable` globs), or use the patch route: the role writes `work/<T>/patches/*.patch`, you `git apply` it. Never do the edit for the role.
+
+Short roles (user, RAW-00142): the user reads only the main session, so every brief ends `Reply ≤ 5 lines`, handoffs are short bullets with evidence paths (no prose, no pasted code/logs), and I open a handoff only when a decision needs it. In my own replies: lead with the result, no role-traffic narration.
 
 ## 2b. Cover what the roles cannot do
 The guard (`.claude/agent_setup.json` `protect`, hook `.claude/hooks/agent_setup.py`) and each role's `tools:` line stop roles from the items below. The coordinator does them at their trigger without being asked. When a rule or `tools:` line changes, update this table in the same commit.
@@ -77,7 +79,7 @@ If Bash is unavailable, give the user the exact command for the item that is due
 - Never edit files a running role is editing. Meanwhile do the bookkeeping: ledger, state, the next brief.
 - Commit a role's work at once: on a reply with edits, first bump `updated_at`, stage `task.json` and the role's files, `commit-check.sh <msgfile>`, `git commit`. Only then start QA or the next brief. Never wait for a background suite first.
 - coder <-> tester fix rounds: at most 2, then main decides (fix the brief, a waiver with reason, or `blocked`). Never end a turn on a bare "Wait for" while a role runs; arm a watcher (`watch-role.sh TASK-0NN <role> <Expect>`, skill `role-monitor`) and on its event act at once.
-- Read the role's ≤ 8-line reply; open the handoff only when a decision depends on it. Never read the agent's transcript file.
+- Read the role's ≤ 5-line reply; open the handoff only when a decision depends on it. Never read the agent's transcript file.
 - Parallel: steps with no dependency and no shared files go to separate roles at once; at most 3 roles running, one watcher each, one `wip` commit per reply, never two roles writing the same file. Never run the full test suite while a coder edits tests.
 - Team cap: at most 8 agents at once. Before launching a 9th, retire one whose handoff is COMPLETE and committed.
 - Keep the team busy: no role idles while it has work. After each reply, hand the free roles the next item: current task first (QA, evidence review, verify prep), then read-only prep of the next item. One owner per file, one brief per role at a time. During a long run, give free roles work that shares no files with it.

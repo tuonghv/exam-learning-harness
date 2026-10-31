@@ -57,7 +57,7 @@ Removed: this harness runs one active task (`max_active` 1); main briefs the rol
   the user the exact commit command instead of leaving the work uncommitted.
 - Everything the guard or a role's `tools:` line stops a role from doing is the main session's job,
   done at its trigger without being asked: table in skill `coordinator` §2b (user, RAW-00101).
-- Read the reply (≤ 8 lines); open a handoff only when a decision depends on it.
+- Read the reply (≤ 5 lines); open a handoff only when a decision depends on it.
 - The verifier has no Bash: save each check to `work/TASK-0NN/evidence/` with
   `.claude/scripts/save-evidence.sh <name> -- <cmd>` before calling it (checklist: skill `verify`).
 - coder ↔ tester: at most 2 rounds, then main decides (fix brief, waiver, or `blocked`); the tester iterates with
