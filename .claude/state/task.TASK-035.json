@@ -41,7 +41,14 @@
   "picked_at": "2026-10-30T22:41:01Z",
   "updated_at": "",
   "updated_by": "",
-  "scope": [],
+  "scope": [
+    "src/exam_engine/pipeline/extract_eval.py",
+    "src/exam_engine/cli.py",
+    "scripts/exam.py",
+    "tests/unit/test_extract_eval.py",
+    "evals/extract/**",
+    "docs/guide/architecture.md"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
