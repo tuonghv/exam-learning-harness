@@ -801,7 +801,7 @@
     "task_id": "TASK-040",
     "title": "Page-break continuation in refine (REQ-0043): design + tier-0 tests; paid re-extract of about 8 pages only after the user's go",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-10-31T11:00:00Z",
     "requirement": "REQ-0043",
     "acceptance_criteria": [

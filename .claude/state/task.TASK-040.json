@@ -1,0 +1,65 @@
+{
+  "task_id": "TASK-040",
+  "title": "Page-break continuation in refine (REQ-0043): design + tier-0 tests; paid re-extract of about 8 pages only after the user's go",
+  "state": "TODO",
+  "requirement": "REQ-0043",
+  "acceptance_criteria": [
+    "REQ-0043 AC1-AC3 tier 0; AC4 after go"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {},
+  "user_notes": [],
+  "picked_at": "2026-10-31T02:43:34Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [
+    "prompts/**/ingest/refine.md",
+    "src/exam_engine/ingest/**",
+    "src/exam_engine/core/refcheck.py",
+    "src/exam_engine/engine.py",
+    "src/exam_engine/cli.py",
+    "examples/FORMAT.md",
+    "tests/unit/test_multipage*.py",
+    "tests/unit/test_ingest_*.py",
+    "tests/unit/test_refcheck.py",
+    "tests/unit/fixtures/**",
+    "docs/guide/ingest-usage.md",
+    "docs/guide/dgnl-real-exam.md"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
