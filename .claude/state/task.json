@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-049",
-  "state": "VERIFIED",
-  "next": "DONE: report",
+  "state": "DONE",
+  "next": "",
   "title": "Quote check tolerant of missing diacritics (REQ-0047)",
-  "active": [
-    {
-      "task_id": "TASK-049",
-      "state": "VERIFIED",
-      "next": "DONE: report",
-      "updated_at": "2026-10-31T03:22:08Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

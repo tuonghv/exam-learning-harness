@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-049",
   "title": "Quote check tolerant of missing diacritics (REQ-0047)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0047",
   "acceptance_criteria": [
     "REQ-0047 AC1 reproduce with a test",
@@ -50,11 +50,21 @@
       "work/TASK-049/evidence/real_regression_run_21_25.txt"
     ],
     "command": "unit suite vs base; oracle; perf; real regression of the stored quote evidence of printed 21-25 (no paid call)",
-    "result": "printed 22 and 24 FAIL -> PASS, 21/23/25 unchanged; 0 old assertions removed; no schema/solver/ingest change; limit: stored evidence is cut to 80 characters so the real re-check ran on truncated quotes"
+    "result": "printed 22 and 24 FAIL -> PASS, 21/23/25 unchanged; 0 old assertions removed; no schema/solver/ingest change; limit: stored evidence is cut to 80 characters so the real re-check ran on truncated quotes",
+    "quality": {
+      "kind": "real-run",
+      "evidence": [
+        "work/TASK-049/evidence/final_unit_suite.txt",
+        "work/TASK-049/evidence/t049-oracle.txt",
+        "work/TASK-049/evidence/t049-perf.txt",
+        "work/TASK-049/evidence/real_regression_run_21_25.txt"
+      ],
+      "reason": "real stored evidence of the DGNL re-solve re-checked: 22 and 24 fail->pass, others unchanged; 300-case independent oracle"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-49-quote-check-diacritics.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -77,7 +87,7 @@
   },
   "user_notes": [],
   "picked_at": "2026-10-31T03:15:17Z",
-  "updated_at": "2026-10-31T03:22:08Z",
+  "updated_at": "2026-10-31T03:22:09Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/verifier.py",
@@ -91,5 +101,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "DONE: report"
+  "next": ""
 }
