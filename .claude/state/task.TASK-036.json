@@ -41,7 +41,15 @@
   "picked_at": "2026-10-31T01:37:17Z",
   "updated_at": "",
   "updated_by": "",
-  "scope": [],
+  "scope": [
+    "src/exam_engine/pipeline/gold_pdf.py",
+    "src/exam_engine/cli.py",
+    "scripts/exam.py",
+    "tests/unit/test_gold_pdf.py",
+    "evals/extract/**",
+    "docs/guide/ingest-usage.md",
+    "docs/guide/architecture.md"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
