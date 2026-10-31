@@ -973,3 +973,9 @@ Action: tester Nemesis compared base vs HEAD ingest on every fixture, adversaria
 Result: no blocker; minor D1 fixed, D2 additive by design, D3 out of scope
 Decision: advance
 Next: VERIFIED
+
+## VERIFIED - TASK-038 - 2026-10-31T02:09:39Z
+Action: verifier Argus judged AC1-AC3 verified; coordinator saved the removed-assertion check (0 lines)
+Result: no old assertion changed
+Decision: advance
+Next: DONE
