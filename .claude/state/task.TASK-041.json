@@ -1,17 +1,27 @@
 {
   "task_id": "TASK-041",
   "title": "Extraction-suspect report and referenced-part check (REQ-0044)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0044",
   "acceptance_criteria": [
-    "REQ-0044 AC1-AC4 tier 0"
+    "REQ-0044 AC1 referenced_part_missing check with tests",
+    "REQ-0044 AC2 regression on refined3: 23 flagged, <=2 clean newly flagged",
+    "REQ-0044 AC3 inspect lists suspects, decline names missing_text",
+    "REQ-0044 AC4 no solver prompt/schema change"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
-    "reuse": [],
-    "risks": []
+    "status": "completed",
+    "path": "docs/design/phase-41-extraction-suspect-report.md",
+    "summary": "pure core/refcheck.py referenced-part check, inspect-only suspect list (needs_review unchanged), decline suffix solver_declined: missing_text in engine.build_result",
+    "reuse": [
+      "ingest/inspect.py",
+      "engine.build_result",
+      "refined3.json for regression"
+    ],
+    "risks": [
+      "false positives on numbers in formulas/options",
+      "part null so one group per exam"
+    ]
   },
   "implementation": {
     "status": "pending",
@@ -36,7 +46,11 @@
   },
   "roles_required": true,
   "crosscheck_required": true,
-  "roles": {},
+  "roles": {
+    "designer": {
+      "waiver": "work/TASK-041/handoff/design.md"
+    }
+  },
   "user_notes": [
     {
       "raw": "RAW-00144",
@@ -45,8 +59,8 @@
     }
   ],
   "picked_at": "2026-10-31T02:27:33Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-10-31T02:32:38Z",
+  "updated_by": "main",
   "scope": [
     "src/exam_engine/core/refcheck.py",
     "src/exam_engine/ingest/inspect.py",
@@ -64,5 +78,5 @@
     "notes": "",
     "next": "designer drafting; then advance.sh DESIGN, coder, tester, verifier"
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder: tests first, core/refcheck.py, inspect, engine decline suffix, docs"
 }

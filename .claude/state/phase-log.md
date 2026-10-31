@@ -1015,3 +1015,9 @@ Action: report written with ranked improvements; REQ-0043 and REQ-0044 opened
 Result: AC1-AC5 met
 Decision: close TASK-039 and REQ-0042
 Next: TASK-040 and TASK-041 tier 0
+
+## DESIGN - TASK-041 - 2026-10-31T02:32:38Z
+Action: designer Nova drafted with grep-based prediction (flags 23 and 66)
+Result: docs/design/phase-41-extraction-suspect-report.md
+Decision: implement now
+Next: IMPLEMENTING
