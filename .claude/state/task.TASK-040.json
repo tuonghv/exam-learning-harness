@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-040",
   "title": "Page-break continuation in refine (REQ-0043): design + tier-0 tests; paid re-extract of about 8 pages only after the user's go",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0043",
   "acceptance_criteria": [
     "REQ-0043 AC1 design",
@@ -26,8 +26,23 @@
     ]
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/ingest/refine.py",
+      "src/exam_engine/ingest/api.py",
+      "src/exam_engine/ingest/adapters/docx.py",
+      "src/exam_engine/core/refcheck.py",
+      "src/exam_engine/engine.py",
+      "src/exam_engine/pipeline/parser.py",
+      "src/exam_engine/cli.py",
+      "prompts/dev/ingest/refine.md",
+      "examples/FORMAT.md",
+      "tests/unit/test_multipage_assembly.py",
+      "tests/unit/test_multipage_adversarial.py",
+      "docs/guide/ingest-usage.md",
+      "docs/guide/dgnl-real-exam.md"
+    ],
+    "summary": "refine `continues`/`cut` + owner-rule bridge (chain over N pages, orphans warning), completeness marker and missing_text decline, DOCX text boxes inline, parser accepts the marker; skill exam-extraction (main)"
   },
   "unit_test": {
     "status": "pending",
@@ -51,11 +66,14 @@
   "roles": {
     "designer": {
       "waiver": "work/TASK-040/handoff/design.md"
+    },
+    "coder": {
+      "waiver": "work/TASK-040/handoff/code.md"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-31T02:43:34Z",
-  "updated_at": "2026-10-31T02:43:35Z",
+  "updated_at": "2026-10-31T03:03:39Z",
   "updated_by": "main",
   "scope": [
     "prompts/**/ingest/refine.md",
@@ -79,5 +97,5 @@
     "notes": "",
     "next": "tester acb3989a running (work/TASK-040/handoff/test.md): then fix defects (esp options_incomplete on legit 2-3 option questions), advance IMPLEMENTING/UNIT_TESTED, verifier, paid re-extract ~8 pages ("
   },
-  "next": "coder: tests first (design list 1-14), then refine/prompt/bridge, refcheck incomplete_reasons, engine decline, docx text boxes; main writes the skill"
+  "next": "UNIT_TESTED"
 }

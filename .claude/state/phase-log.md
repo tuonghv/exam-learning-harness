@@ -1051,3 +1051,9 @@ Action: designer Nova drafted; coordinator split image sequences to TASK-042 and
 Result: docs/design/phase-40-multipage-question-assembly.md
 Decision: implement now
 Next: IMPLEMENTING
+
+## IMPLEMENTING - TASK-040 - 2026-10-31T03:03:38Z
+Action: coder Titan implemented design phase-40 tests first; tester Nemesis added 16 adversarial tests
+Result: 641 tests, 36 new pass
+Decision: advance
+Next: UNIT_TESTED
