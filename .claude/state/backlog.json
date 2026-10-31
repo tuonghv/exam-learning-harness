@@ -775,11 +775,13 @@
     "task_id": "TASK-038",
     "title": "Ingest segmentation for non-consecutive or restarting question numbers (REQ-0041)",
     "priority": 2,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-10-31T09:00:00Z",
     "requirement": "REQ-0041",
     "acceptance_criteria": [
       "REQ-0041 AC1-AC3"
-    ]
+    ],
+    "completed_at": "2026-10-31T02:09:39Z",
+    "report": "docs/report/phase-38-ingest-numbering-gaps.md"
   }
 ]

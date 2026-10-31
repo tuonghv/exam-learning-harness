@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-038",
   "title": "Ingest segmentation for non-consecutive or restarting question numbers (REQ-0041)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0041",
   "acceptance_criteria": [
     "REQ-0041 AC1 ids 1 and 150 kept with gap warning",
@@ -60,11 +60,22 @@
       "work/TASK-038/handoff/verify.md"
     ],
     "command": "unit suite (571) vs base (553); repro before/after; base-vs-HEAD ingest diff on all fixtures; DGNL regression; protected-file diff; removed-assertion diff",
-    "result": "3 known failures identical at base; 0 old test lines removed; strict docs and DGNL e3 files byte-identical; verifier AC1-AC3 verified"
+    "result": "3 known failures identical at base; 0 old test lines removed; strict docs and DGNL e3 files byte-identical; verifier AC1-AC3 verified",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-038/evidence/final_unit_suite.txt",
+        "work/TASK-038/evidence/final_numbering_tests.txt",
+        "work/TASK-038/evidence/final_diff_protected.txt",
+        "work/TASK-038/evidence/t38_base_vs_head.txt",
+        "work/TASK-038/evidence/t38_dgnl.txt"
+      ],
+      "reason": "base-vs-HEAD ingest diff on every fixture, DGNL e3 files byte-identical, 3 mutations caught"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-38-ingest-numbering-gaps.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -87,7 +98,7 @@
   },
   "user_notes": [],
   "picked_at": "2026-10-31T01:49:58Z",
-  "updated_at": "2026-10-31T02:09:39Z",
+  "updated_at": "2026-10-31T02:09:40Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/**",
@@ -103,5 +114,5 @@
     "notes": "",
     "next": "designer drafting; then advance.sh DESIGN, coder, tester, verifier"
   },
-  "next": "DONE: report"
+  "next": ""
 }
