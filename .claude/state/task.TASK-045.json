@@ -50,7 +50,13 @@
       "waiver": "work/TASK-043/handoff/design.md section 43.2 (Nova) scoped in phase-45"
     }
   },
-  "user_notes": [],
+  "user_notes": [
+    {
+      "raw": "RAW-00147",
+      "note": "REQ-0053 queued: Haiku fallback for uncertain boundaries",
+      "at": "2026-10-31T03:38:45Z"
+    }
+  ],
   "picked_at": "2026-10-31T03:36:31Z",
   "updated_at": "2026-10-31T03:36:32Z",
   "updated_by": "main",
