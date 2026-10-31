@@ -623,7 +623,7 @@
     "created_at": "2026-10-30T15:30:00Z",
     "requirement": "REQ-0034",
     "acceptance_criteria": [
-      "REQ-0034 AC1-AC4: sheet 'Subject \u2013 N Questions', 5 per row, 2-digit ids as stored, circled A-D, \u2014 for null/Open/non A-D, block at top of report.md/html/pdf plus answers.md, solver/schema unchanged",
+      "REQ-0034 AC1-AC4: sheet 'Subject – N Questions', 5 per row, 2-digit ids as stored, circled A-D, — for null/Open/non A-D, block at top of report.md/html/pdf plus answers.md, solver/schema unchanged",
       "REQ-0035 AC1-AC4 phase 1: --view sheet|learn (default sheet), learn view reuses explanation+solution, optional key_concept/common_mistake only if present, no extra LLM cost",
       "Tests in tests/unit/test_exam_report.py with null-answer results (work/dgnl-real Vietnamese/Science), existing report tests stay green, PDF font check for circled letters"
     ],
@@ -817,6 +817,17 @@
     "requirement": "REQ-0044",
     "acceptance_criteria": [
       "REQ-0044 AC1-AC4 tier 0"
+    ]
+  },
+  {
+    "task_id": "TASK-042",
+    "title": "Image-sequence refine: ingest-refine FILE [FILE...] with the same continuation bridge (REQ-0043, design 40.3)",
+    "priority": 1,
+    "status": "queued",
+    "created_at": "2026-10-31T12:00:00Z",
+    "requirement": "REQ-0043",
+    "acceptance_criteria": [
+      "REQ-0043 AC5 picture sources: image sequence and tiles assembled by the same mechanism, tier-0 tests per source type"
     ]
   }
 ]
