@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-049",
   "title": "Quote check tolerant of missing diacritics (REQ-0047)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0047",
   "acceptance_criteria": [
     "REQ-0047 AC1 reproduce with a test",
@@ -21,8 +21,12 @@
     ]
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/verifier.py",
+      "tests/unit/test_quote_diacritics.py"
+    ],
+    "summary": "verifier._quotes: exact match unchanged; fallback folds diacritics and accepts elided quotes (segments in order, min 4 chars dropped, one of 8+ required)"
   },
   "unit_test": {
     "status": "pending",
@@ -46,11 +50,14 @@
   "roles": {
     "designer": {
       "waiver": "coordinator design inline, one function"
+    },
+    "coder": {
+      "waiver": "work/TASK-049/handoff/code.md"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-31T03:15:17Z",
-  "updated_at": "2026-10-31T03:15:44Z",
+  "updated_at": "2026-10-31T03:22:07Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/verifier.py",
@@ -64,5 +71,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "coder: tests first, verifier._quotes, real regression"
+  "next": "UNIT_TESTED"
 }

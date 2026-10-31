@@ -1141,3 +1141,9 @@ Action: coordinator wrote the short design for the quote check
 Result: docs/design/phase-49-quote-check-diacritics.md
 Decision: implement now
 Next: IMPLEMENTING
+
+## IMPLEMENTING - TASK-049 - 2026-10-31T03:22:06Z
+Action: coder Titan implemented; real regression showed diacritics alone insufficient, design amended for elisions; tester proved the tests bite
+Result: 672 tests, 12 new pass
+Decision: advance
+Next: UNIT_TESTED

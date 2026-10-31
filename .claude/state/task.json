@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-049",
-  "state": "DESIGN",
-  "next": "coder: tests first, verifier._quotes, real regression",
+  "state": "IMPLEMENTING",
+  "next": "UNIT_TESTED",
   "title": "Quote check tolerant of missing diacritics (REQ-0047)",
   "active": [
     {
       "task_id": "TASK-049",
-      "state": "DESIGN",
-      "next": "coder: tests first, verifier._quotes, real regression",
-      "updated_at": "2026-10-31T03:15:44Z"
+      "state": "IMPLEMENTING",
+      "next": "UNIT_TESTED",
+      "updated_at": "2026-10-31T03:22:07Z"
     }
   ],
   "max_active": 1
