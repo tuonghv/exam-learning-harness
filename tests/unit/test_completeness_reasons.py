@@ -42,6 +42,18 @@ class Unbalanced(unittest.TestCase):
                          ["formula_unbalanced"])
 
 
+    def test_1f_enumerators_ignored_other_brackets_counted(self):
+        enum = "a) one (x)\nb) two\n1) three\niv) four"
+        self.assertEqual(r(enum, continued_pages=[2]), [])
+        self.assertEqual(r(enum + "\nand (y", continued_pages=[2]), ["formula_unbalanced"])
+        self.assertEqual(F({"text": enum, "options": ABCD}, last_on_page=True), [])
+        self.assertEqual(r(enum + "\nand (y"), [])  # mid-page: scope kept
+
+    def test_1g_half_open_interval_page_end(self):
+        self.assertEqual(F({"text": "x in [a;b)", "options": ABCD}, last_on_page=True), [])
+        self.assertEqual(F({"text": "x in (a;b]", "options": ABCD}, last_on_page=True), [])
+
+
 class Trailing(unittest.TestCase):
     def test_2_operator_end_no_options(self):
         for ch in "=+-×÷/^\\":

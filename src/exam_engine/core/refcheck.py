@@ -72,6 +72,7 @@ def _option_keys(options):
 
 _OPEN, _CLOSE = "([{", ")]}"
 _TRAIL = "=+-×÷/^\\"
+_ENUM = re.compile(r"(?m)^[ \t]*(?:[A-Za-z]|\d{1,2}|[ivxIVX]+)\)")
 _OPT_LINE = re.compile(r"(?m)^\s*A\s*[.)]\s")
 
 
@@ -84,6 +85,7 @@ def _option_texts(options):
 def _unbalanced(q):
     """Brackets counted together ([a;b) stays balanced), or an odd number of unescaped `$`."""
     t = "\n".join([q.get("text") or ""] + _option_texts(q.get("options")))
+    t = _ENUM.sub("", t)  # a line-start `a)` / `1)` / `iv)` marker closes nothing
     if sum(map(t.count, _OPEN)) != sum(map(t.count, _CLOSE)):
         return True
     return len(re.findall(r"(?<!\\)\$", t)) % 2 == 1
