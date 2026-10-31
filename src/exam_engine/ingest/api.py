@@ -127,8 +127,11 @@ def refined_questions(doc):
     for q in (doc.get("refined") or {}).get("questions") or []:
         if qs and qs[-1]["id"] == q["id"]:
             # one question cut by a page break: stem on the first page, options on the next
+            cp = sorted(set(qs[-1].get("continued_pages", [])) | set(q.get("continued_pages", [])))
             qs[-1] = dict(qs[-1], text=(qs[-1]["text"] + "\n" + q["text"]).strip(),
-                          options=q["options"] or qs[-1]["options"])
+                          options=q["options"] or qs[-1]["options"], cut=bool(q.get("cut")))
+            if cp:
+                qs[-1]["continued_pages"] = cp  # the last part's cut stays; the first part's is joined
         else:
             qs.append(q)
     return qs

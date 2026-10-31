@@ -5,6 +5,8 @@ No model, no key, no IO. Heuristic: a miss is a false negative, never a claim of
 import re
 import unicodedata
 
+from ..ingest.segment import _Q
+
 _PAR_VI = re.compile(r"\bđoạn(?:\s+(?:văn|thơ|trích))?\s*(?:(\()(\d{1,2})\)|(?<=\s)(\d{1,2})\b)", re.I)
 _PAR_EN = re.compile(r"\bparagraph\s*(?:(\()(\d{1,2})\)?|(\d{1,2})\b)", re.I)
 _MARKER = re.compile(r"(?m)^[ \t\"“”'‘’*_\-\[]*\((\d{1,2})\)\s")
@@ -68,11 +70,44 @@ def _option_keys(options):
     return {o.get("key") for o in options or ()}
 
 
-def incomplete_reasons(q, shared_figure=False, text=None):
+_OPEN, _CLOSE = "([{", ")]}"
+_TRAIL = "=+-×÷/^\\"
+_OPT_LINE = re.compile(r"(?m)^\s*A\s*[.)]\s")
+
+
+def _option_texts(options):
+    if isinstance(options, dict):
+        return [str(v) for v in options.values()]
+    return [str(o.get("text") or "") for o in options or ()]
+
+
+def _unbalanced(q):
+    """Brackets counted together ([a;b) stays balanced), or an odd number of unescaped `$`."""
+    t = "\n".join([q.get("text") or ""] + _option_texts(q.get("options")))
+    if sum(map(t.count, _OPEN)) != sum(map(t.count, _CLOSE)):
+        return True
+    return len(re.findall(r"(?<!\\)\$", t)) % 2 == 1
+
+
+def _merge_suspect(q):
+    """Another question's number starts a line of the stem, or the stem holds two A-D option runs.
+    Limit: a numbered sub-list inside a stem that uses the question-number form matches too."""
+    text = q.get("text") or ""
+    own = str(q.get("id") if q.get("id") is not None else q.get("n", ""))
+    for ln in text.split("\n"):
+        m = _Q.match(ln)
+        if m and (m.group(1) or m.group(2)) != own and (m.group(1) or "").strip():
+            return True
+    return len(_OPT_LINE.findall(text)) >= 2
+
+
+def incomplete_reasons(q, shared_figure=False, text=None, last_on_page=False):
     """Structural signs that a question is not whole -> reasons ([] = complete).
 
-    `q`: text, options (dict or [{key,text}]), cut, continued_pages, orphan_page; `text` overrides
-    q["text"] for the referenced-part check (context and figure lines included)."""
+    `q`: text, options (dict or [{key,text}]), cut, continued_pages, orphan_page, unreadable; `text`
+    overrides q["text"] for the referenced-part check (context and figure lines included);
+    `last_on_page`: no later question on its page (formula/operator checks run only for those,
+    cut or continued questions: a mid-page unbalanced bracket is usually the exam's own math)."""
     out = []
     if 0 < len(_option_keys(q.get("options")) & set("ABCD")) < 4:
         out.append("options_incomplete")
@@ -82,13 +117,24 @@ def incomplete_reasons(q, shared_figure=False, text=None):
             for x in referenced_parts(q.get("text") if text is None else text, shared_figure)]
     if q.get("orphan_page"):
         out.append("orphan_on_page %s" % q["orphan_page"])
+    if q.get("unreadable"):
+        out.append("unreadable")
+    if q.get("cut") or q.get("continued_pages") or last_on_page:
+        if _unbalanced(q):
+            out.append("formula_unbalanced")
+        if (q.get("text") or "").rstrip()[-1:] in tuple(_TRAIL) and not _option_keys(q.get("options")):
+            out.append("trailing_operator")
+    if _merge_suspect(q):
+        out.append("merge_suspect")
     return out
 
 
 def incomplete_by_question(qs, texts):
     """incomplete_reasons per question; `texts[i]` = full text of qs[i] (shared figures as above)."""
-    return [incomplete_reasons(q, s, t)
-            for q, t, s in zip(qs, texts, _shared_figure_flags(texts))]
+    pages = [q.get("page") for q in qs]
+    last = [i + 1 == len(qs) or pages[i] != pages[i + 1] for i in range(len(qs))]
+    return [incomplete_reasons(q, s, t, bool(pages[i]) and last[i])
+            for i, (q, t, s) in enumerate(zip(qs, texts, _shared_figure_flags(texts)))]
 
 
 _MARKER_LINE = re.compile(r"(?m)^\[Incomplete: missing_text ([^\]\n]*)\]\s*$")

@@ -364,6 +364,8 @@ def refine(doc, spec, llm, source_path=None, max_cost=1.0, model="sonnet", allow
                        or (q["part"], qid) in gaps})
             if q.get("cut") is True:
                 qs[-1]["cut"] = True
+            if q.get("unreadable") is True:
+                qs[-1]["unreadable"] = True
     out["refined"] = {"model": model,
                       "prompt_sha256": hashlib.sha256(template().encode("utf-8")).hexdigest(),
                       "pages": pages, "questions": qs, "calls": calls,

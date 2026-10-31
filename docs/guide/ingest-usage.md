@@ -64,6 +64,10 @@ to the solver as a visual (later REQ-0021).
   are merged into the last question of the previous page only; an unmergeable one is listed in `refined.orphans` with
   warning `orphan_continuation` (add the page before it to `--pages`). Exam text then marks questions that are not whole
   with `[Incomplete: missing_text ...]`; the engine declines them (`solver_declined: missing_text (...)`).
+  Reasons: `options_incomplete`, `cut_unresolved`, `referenced_part_missing ...`, `orphan_on_page`, `unreadable`,
+  `merge_suspect` (another question number or two A-D runs inside the stem; a numbered sub-list in the
+  question-number form is a known limit), and for cut / continued / last-on-page questions `formula_unbalanced`
+  (brackets or `$` unpaired) and `trailing_operator` (text ends in an operator, no options).
 - Exit 0 ok; 1 some question needs review; 2 usage/input; 3 blocked or call/reply error
   (`stream_format`, `call_failed`, `invalid_reply`, `cost_cap`, `answer_key_present`).
 - Picture exams (REQ-0046): `ingest-refine p1.png p2.png p3.png --pages 1-3 --all-pages --mock replies.json` takes the
