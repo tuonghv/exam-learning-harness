@@ -937,3 +937,9 @@ Action: coder Titan implemented design phase-36 tests first; real numbers equal 
 Result: 553 tests, 7 new pass
 Decision: advance
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-036 - 2026-10-31T01:48:36Z
+Action: tester Nemesis regenerated PDFs, recomputed scores with its own oracle, looked at a page, 3 mutations; found and fixed a weak NFC test (D1)
+Result: numbers hold up
+Decision: advance
+Next: VERIFIED
