@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-043",
-  "state": "DONE",
-  "next": "",
-  "title": "Question completeness guide: gap analysis + best design of remaining gaps (REQ-0045)",
-  "active": [],
+  "task_id": "TASK-042",
+  "state": "TODO",
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "title": "Image-sequence refine: ingest-refine FILE [FILE...] with the same continuation bridge (REQ-0043, design 40.3)",
+  "active": [
+    {
+      "task_id": "TASK-042",
+      "state": "TODO",
+      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+      "updated_at": ""
+    }
+  ],
   "max_active": 1
 }

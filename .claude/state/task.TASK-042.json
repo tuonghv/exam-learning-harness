@@ -1,0 +1,63 @@
+{
+  "task_id": "TASK-042",
+  "title": "Image-sequence refine: ingest-refine FILE [FILE...] with the same continuation bridge (REQ-0043, design 40.3)",
+  "state": "TODO",
+  "requirement": "REQ-0046",
+  "acceptance_criteria": [
+    "REQ-0046 AC1-AC3 tier 0; AC4 after the user go"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {},
+  "user_notes": [],
+  "picked_at": "2026-10-31T03:06:16Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [
+    "src/exam_engine/ingest/adapters/image.py",
+    "src/exam_engine/ingest/refine.py",
+    "src/exam_engine/ingest/api.py",
+    "src/exam_engine/ingest/schema.py",
+    "src/exam_engine/cli.py",
+    "tests/unit/test_image_sequence*.py",
+    "tests/unit/test_ingest_*.py",
+    "tests/unit/fixtures/**",
+    "docs/guide/ingest-usage.md",
+    "docs/guide/architecture.md"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
