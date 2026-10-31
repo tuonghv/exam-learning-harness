@@ -22,6 +22,7 @@ Output `PASS: <T> -> <S> committed <sha>` or `FAIL [gate]: ...` + `fix:`. Unsure
 | UNIT_TESTED | unit_test{status,command,result} |
 | VERIFIED | verification{status,command,result,evidence[]}, security{status,result}; `req.ac: "all"` |
 | DONE | report{status} (path derived), `quality` {kind: crosscheck/rendered/real-run/n/a, evidence[], reason} |
+Write the report file only after VERIFIED (its path is accepted at DONE; earlier it fails the commit scope).
 Add `roles` (handoff paths or `{"waiver": ".."}`) when the task needs them. Design/report paths and the REQ files are staged for you.
 
 ## Gates (first failure wins)
