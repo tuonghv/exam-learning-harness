@@ -623,7 +623,7 @@
     "created_at": "2026-10-30T15:30:00Z",
     "requirement": "REQ-0034",
     "acceptance_criteria": [
-      "REQ-0034 AC1-AC4: sheet 'Subject \u2013 N Questions', 5 per row, 2-digit ids as stored, circled A-D, \u2014 for null/Open/non A-D, block at top of report.md/html/pdf plus answers.md, solver/schema unchanged",
+      "REQ-0034 AC1-AC4: sheet 'Subject – N Questions', 5 per row, 2-digit ids as stored, circled A-D, — for null/Open/non A-D, block at top of report.md/html/pdf plus answers.md, solver/schema unchanged",
       "REQ-0035 AC1-AC4 phase 1: --view sheet|learn (default sheet), learn view reuses explanation+solution, optional key_concept/common_mistake only if present, no extra LLM cost",
       "Tests in tests/unit/test_exam_report.py with null-answer results (work/dgnl-real Vietnamese/Science), existing report tests stay green, PDF font check for circled letters"
     ],
@@ -842,6 +842,17 @@
     "requirement": "REQ-0043",
     "acceptance_criteria": [
       "REQ-0043 AC5 picture sources: image sequence and tiles assembled by the same mechanism, tier-0 tests per source type"
+    ]
+  },
+  {
+    "task_id": "TASK-043",
+    "title": "Question completeness guide: gap analysis + best design of remaining gaps (REQ-0045)",
+    "priority": 0,
+    "status": "queued",
+    "created_at": "2026-10-31T13:00:00Z",
+    "requirement": "REQ-0045",
+    "acceptance_criteria": [
+      "REQ-0045 AC1-AC4"
     ]
   }
 ]
