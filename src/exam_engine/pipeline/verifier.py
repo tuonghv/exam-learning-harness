@@ -11,7 +11,7 @@ from exam_engine.core import schema as sch
 from exam_engine.core.decision import declined, decide_rec, finding, is_open
 from exam_engine.core.safe_eval import safe_eval
 from exam_engine.pipeline import router
-from exam_engine.utils.text import norm
+from exam_engine.utils.text import fold, norm
 
 _NUM = re.compile(r"-?\d+(?:[.,]\d+)?")
 
@@ -125,16 +125,44 @@ def _computed(ans):
                 "pass" if ok else "fail", True)
 
 
+_ELISION = re.compile(r"\(\.\.\.\)|\[\.\.\.\]|\.\.\.|\u2026")
+
+
+def _elided_ok(fhay, x):
+    """Quote abbreviated with an elision marker: kept segments occur in order in the folded source."""
+    if not _ELISION.search(x):
+        return False
+    segs = [fold(t).strip(" ,;:.-") for t in _ELISION.split(x)]
+    segs = [t for t in segs if len(t) >= 4]
+    if not any(len(t) >= 8 for t in segs):
+        return False
+    pos = 0
+    for t in segs:
+        i = fhay.find(t, pos)
+        if i < 0:
+            return False
+        pos = i + len(t)
+    return True
+
+
 def _quotes(q, ans, exam):
     quotes = [x for x in (ans.get("evidence") or [])
               if isinstance(x, str) and x.strip() and x.strip().casefold() != "null"]
     hay = _ws("\n".join([exam.get("passage") or "", q.get("text", ""),
                          " ".join((q.get("options") or {}).values())]))
     out = []
+    fhay = fold(hay)
     for x in quotes:
-        ok = _ws(x) in hay or _ws(re.sub(r"^\s*[A-Za-z0-9]\s*[:.)]\s+", "", x)) in hay
-        out.append(_chk("quote", "verbatim in passage/question: %s" % x[:80],
-                        "pass" if ok else "fail", False))
+        bare = re.sub(r"^\s*[A-Za-z0-9]\s*[:.)]\s+", "", x)
+        if _ws(x) in hay or _ws(bare) in hay:
+            out.append(_chk("quote", "verbatim in passage/question: %s" % x[:80], "pass", False))
+            continue
+        # diacritics lost by the solver; >= 4 folded chars so "mat" cannot match by accident
+        ok = any(len(f) >= 4 and f in fhay for f in (fold(x), fold(bare)))
+        el = not ok and _elided_ok(fhay, bare)
+        out.append(_chk("quote", "verbatim (diacritics-insensitive)" if ok else
+                        "verbatim (elided, diacritics-insensitive)" if el else
+                        "verbatim in passage/question: %s" % x[:80], "pass" if ok or el else "fail", False))
     if not out and is_open(ans):
         out.append(_chk("quote", "no quote given", "unknown", False))
     return out
