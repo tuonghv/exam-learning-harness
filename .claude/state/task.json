@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-045",
-  "state": "VERIFIED",
-  "next": "DONE: report",
+  "state": "DONE",
+  "next": "",
   "title": "Completeness reasons: formula_unbalanced, trailing_operator, merge_suspect, unreadable stored (D2), same-id join keeps cut/continued_pages (D3) (design 43.2, REQ-0045)",
-  "active": [
-    {
-      "task_id": "TASK-045",
-      "state": "VERIFIED",
-      "next": "DONE: report",
-      "updated_at": "2026-10-31T03:47:25Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

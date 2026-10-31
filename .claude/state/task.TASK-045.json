@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-045",
   "title": "Completeness reasons: formula_unbalanced, trailing_operator, merge_suspect, unreadable stored (D2), same-id join keeps cut/continued_pages (D3) (design 43.2, REQ-0045)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0049",
   "acceptance_criteria": [
     "REQ-0049 AC1 formula/operator reasons scoped",
@@ -55,11 +55,20 @@
       "work/TASK-045/evidence/final_unit_suite.txt"
     ],
     "command": "unit suite vs base; independent oracle; render regression on 24 real/synthetic refined files; scope and join checks; mutations",
-    "result": "3 known failures identical at base; 0 old assertions removed; no schema/solver/prompt/config change; a false decline on a real older refined file found by the regression and fixed; no new flag beyond the known 23 and 66"
+    "result": "3 known failures identical at base; 0 old assertions removed; no schema/solver/prompt/config change; a false decline on a real older refined file found by the regression and fixed; no new flag beyond the known 23 and 66",
+    "quality": {
+      "kind": "real-run",
+      "evidence": [
+        "work/TASK-045/evidence/final2_oracle.txt",
+        "work/TASK-045/evidence/final2_render_head.txt",
+        "work/TASK-045/evidence/final_unit_suite.txt"
+      ],
+      "reason": "render regression on 24 real/synthetic refined files by an independent tester; independent oracle; a real false decline found and fixed"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-45-completeness-reasons.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -88,7 +97,7 @@
     }
   ],
   "picked_at": "2026-10-31T03:36:31Z",
-  "updated_at": "2026-10-31T03:47:25Z",
+  "updated_at": "2026-10-31T03:47:26Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/core/refcheck.py",
@@ -107,5 +116,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "DONE: report"
+  "next": ""
 }
