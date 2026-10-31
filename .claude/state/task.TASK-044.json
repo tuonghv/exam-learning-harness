@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-044",
   "title": "Text-path boundaries: furniture filter (headers/footers/page numbers) and passage intro/heading after option D (design 43.1, REQ-0045)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0045",
   "acceptance_criteria": [
     "REQ-0045 gap 43.1 furniture filter",
@@ -35,9 +35,9 @@
     "summary": "pdf page furniture filter (page numbers, repeated first/last-2 header/footer lines, Page n of m) with info warning; segment group-intro/part heading after option D opens a pending context (vi/en, line-start anchored)"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "707 run, 30+ new pass, 3 known failures identical at base; tester classifier on real DGNL text: 126 questions unchanged, 18 lose a page-number token, 14 passage moved from D, 0 unexplained; 4 mutations caught; D1-D3 tests fail on base"
   },
   "security": {
     "status": "pending",
@@ -59,6 +59,9 @@
     },
     "coder": {
       "waiver": "work/TASK-044/handoff/code.md"
+    },
+    "tester": {
+      "waiver": "work/TASK-044/handoff/test.md"
     }
   },
   "user_notes": [],
@@ -82,5 +85,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "UNIT_TESTED"
+  "next": "VERIFIED"
 }
