@@ -69,13 +69,15 @@
     "tests/unit/test_refcheck.py",
     "tests/unit/fixtures/**",
     "docs/guide/ingest-usage.md",
-    "docs/guide/dgnl-real-exam.md"
+    "docs/guide/dgnl-real-exam.md",
+    "src/exam_engine/pipeline/parser.py"
   ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
     "done": [],
-    "notes": ""
+    "notes": "",
+    "next": "tester acb3989a running (work/TASK-040/handoff/test.md): then fix defects (esp options_incomplete on legit 2-3 option questions), advance IMPLEMENTING/UNIT_TESTED, verifier, paid re-extract ~8 pages ("
   },
   "next": "coder: tests first (design list 1-14), then refine/prompt/bridge, refcheck incomplete_reasons, engine decline, docx text boxes; main writes the skill"
 }
