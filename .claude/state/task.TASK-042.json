@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-042",
   "title": "Image-sequence refine: ingest-refine FILE [FILE...] with the same continuation bridge (REQ-0043, design 40.3)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0046",
   "acceptance_criteria": [
     "REQ-0046 AC1 ingest-refine accepts images",
@@ -43,12 +43,23 @@
     "result": "660 run, 19 new pass, 3 known failures identical at base (641 run); single-image and PDF refine outputs identical to base; 24 CLI scenarios without crash or silent loss; mutations caught (4, after the tester added the owner-rule bypass test)"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "per-file sha256 check before any real render; --mock/--dry-run have no network or subprocess path (tester checked); file paths handled as data (spaces, unicode, leading dash tested)"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-042/evidence/final_unit_suite.txt",
+      "work/TASK-042/evidence/final_image_tests.txt",
+      "work/TASK-042/evidence/final_diff_protected.txt",
+      "work/TASK-042/evidence/final_old_assertions_removed.txt",
+      "work/TASK-042/evidence/full-base.txt",
+      "work/TASK-042/evidence/scenarios.txt",
+      "work/TASK-042/evidence/compat-single-image-base.txt",
+      "work/TASK-042/evidence/compat-single-image-head.txt"
+    ],
+    "command": "unit suite vs base; single-image and PDF compat compare; 24 CLI scenarios with real tiny images and mock replies; protected-file and removed-assertion diffs",
+    "result": "3 known failures identical at base; outputs identical to base; 0 old assertions removed; no schema/solver/config change; no real picture run (needs the user's go and pictures)"
   },
   "report": {
     "status": "pending",
@@ -65,11 +76,17 @@
     },
     "tester": {
       "waiver": "work/TASK-042/handoff/test.md"
+    },
+    "verifier": {
+      "waiver": "coordinator verification with the tester's independent compat compare, scenarios and mutations; no real-data claim is made, so no independent read was needed"
+    },
+    "crosscheck": {
+      "waiver": "work/TASK-042/handoff/test.md independent base-vs-HEAD compare and mutations"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-31T03:06:16Z",
-  "updated_at": "2026-10-31T03:15:09Z",
+  "updated_at": "2026-10-31T03:15:10Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/adapters/image.py",
@@ -89,5 +106,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "VERIFIED"
+  "next": "DONE: report"
 }
