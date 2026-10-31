@@ -949,3 +949,9 @@ Action: verifier Argus judged AC1-AC2 PASS; coordinator saved oracle outputs as 
 Result: numbers recomputed
 Decision: advance
 Next: DONE
+
+## DONE - TASK-036 - 2026-10-31T01:49:46Z
+Action: report written; quality crosscheck recorded
+Result: AC1-AC2 met at tier 0
+Decision: close TASK-036 and REQ-0039
+Next: TASK-038, REQ-0040 question

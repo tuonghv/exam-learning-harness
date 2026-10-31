@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-036",
-  "state": "VERIFIED",
-  "next": "DONE: report",
+  "state": "DONE",
+  "next": "",
   "title": "PDF-level extraction benchmark: render synthetic gold to PDFs, ingest, score (REQ-0039); real pages wait for the user",
-  "active": [
-    {
-      "task_id": "TASK-036",
-      "state": "VERIFIED",
-      "next": "DONE: report",
-      "updated_at": "2026-10-31T01:49:46Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-036",
   "title": "PDF-level extraction benchmark: render synthetic gold to PDFs, ingest, score (REQ-0039); real pages wait for the user",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0039",
   "acceptance_criteria": [
     "REQ-0039 AC1 renderer tier 0",
@@ -55,11 +55,22 @@
       "work/TASK-036/handoff/verify.md"
     ],
     "command": "unit suite; gold-pdf then ingest then extract-eval on both variants; independent oracle; protected-file diff",
-    "result": "553 tests, 7 new pass, 3 known failures; CLI 8/20 text 10/20 options 20/20 equals oracle; verifier AC1-AC2 PASS"
+    "result": "553 tests, 7 new pass, 3 known failures; CLI 8/20 text 10/20 options 20/20 equals oracle; verifier AC1-AC2 PASS",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-036/evidence/oracle_text.txt",
+        "work/TASK-036/evidence/oracle_formula-image.txt",
+        "work/TASK-036/evidence/cli_text.txt",
+        "work/TASK-036/evidence/cli_formula-image.txt",
+        "work/TASK-036/evidence/final_unit_suite.txt"
+      ],
+      "reason": "independent oracle on regenerated PDFs equals extract-eval; three mutations fail tests after the NFC test fix"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-36-gold-pdf-extraction-benchmark.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -100,5 +111,5 @@
     "notes": "",
     "next": "designer drafting PDF-level benchmark design (work/TASK-036/handoff/design.md)"
   },
-  "next": "DONE: report"
+  "next": ""
 }
