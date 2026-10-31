@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-040",
   "title": "Page-break continuation in refine (REQ-0043): design + tier-0 tests; paid re-extract of about 8 pages only after the user's go",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0043",
   "acceptance_criteria": [
     "REQ-0043 AC1 design",
@@ -45,9 +45,9 @@
     "summary": "refine `continues`/`cut` + owner-rule bridge (chain over N pages, orphans warning), completeness marker and missing_text decline, DOCX text boxes inline, parser accepts the marker; skill exam-extraction (main)"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "641 run, 36 new pass, 3 known failures identical at base; refined3 rendering differs from base only by markers on printed 23 and 66; no legitimate question newly declined; 5 mutations caught, 13 of 16 adversarial tests fail on base"
   },
   "security": {
     "status": "pending",
@@ -69,6 +69,9 @@
     },
     "coder": {
       "waiver": "work/TASK-040/handoff/code.md"
+    },
+    "tester": {
+      "waiver": "work/TASK-040/handoff/test.md"
     }
   },
   "user_notes": [],
@@ -97,5 +100,5 @@
     "notes": "",
     "next": "tester acb3989a running (work/TASK-040/handoff/test.md): then fix defects (esp options_incomplete on legit 2-3 option questions), advance IMPLEMENTING/UNIT_TESTED, verifier, paid re-extract ~8 pages ("
   },
-  "next": "UNIT_TESTED"
+  "next": "VERIFIED: verifier incl. real-run evidence"
 }

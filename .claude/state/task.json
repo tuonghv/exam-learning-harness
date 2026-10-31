@@ -1,14 +1,14 @@
 {
   "schema": 2,
   "task_id": "TASK-040",
-  "state": "IMPLEMENTING",
-  "next": "UNIT_TESTED",
+  "state": "UNIT_TESTED",
+  "next": "VERIFIED: verifier incl. real-run evidence",
   "title": "Page-break continuation in refine (REQ-0043): design + tier-0 tests; paid re-extract of about 8 pages only after the user's go",
   "active": [
     {
       "task_id": "TASK-040",
-      "state": "IMPLEMENTING",
-      "next": "UNIT_TESTED",
+      "state": "UNIT_TESTED",
+      "next": "VERIFIED: verifier incl. real-run evidence",
       "updated_at": "2026-10-31T03:03:39Z"
     }
   ],

@@ -1057,3 +1057,9 @@ Action: coder Titan implemented design phase-40 tests first; tester Nemesis adde
 Result: 641 tests, 36 new pass
 Decision: advance
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-040 - 2026-10-31T03:03:39Z
+Action: tester Nemesis: base-vs-HEAD compare, adversarial bridge/engine/docx, 5 mutations; one old fixture line changed (options C,D added to a 2-option fixture; exam files must have A-D)
+Result: no High defect
+Decision: advance
+Next: VERIFIED
