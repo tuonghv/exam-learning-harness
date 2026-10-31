@@ -61,7 +61,15 @@ def runs(qs):
 
 
 def _span(run):
-    return str(run[0]) if len(run) == 1 else "%d-%d" % (run[0], run[-1])
+    """Run as printed, consecutive stretches compacted: [1,2,3,6] -> "1-3, 6"; [3,2,1] -> "3, 2, 1"."""
+    out, i = [], 0
+    while i < len(run):
+        j = i
+        while j + 1 < len(run) and run[j + 1] == run[j] + 1:
+            j += 1
+        out.append(str(run[i]) if i == j else "%d-%d" % (run[i], run[j]))
+        i = j + 1
+    return ", ".join(out)
 
 
 def numbering(qs):

@@ -218,6 +218,14 @@ class TestPartsExamRefineInspect(unittest.TestCase):
         self.assertEqual(len(own), 1)
         self.assertEqual(len(after), 1)
 
+class SpanText(unittest.TestCase):
+    def test_span_shows_gaps_and_descents(self):
+        from exam_engine.ingest import segment
+        self.assertEqual(segment._span([1, 2, 3, 4, 5]), "1-5")
+        self.assertEqual(segment._span([1, 2, 3, 6]), "1-3, 6")
+        self.assertEqual(segment._span([3, 2, 1]), "3, 2, 1")
+        self.assertEqual(segment._span([7]), "7")
+
 
 if __name__ == "__main__":
     unittest.main()
