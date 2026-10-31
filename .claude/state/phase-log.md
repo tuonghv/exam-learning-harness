@@ -1063,3 +1063,9 @@ Action: tester Nemesis: base-vs-HEAD compare, adversarial bridge/engine/docx, 5 
 Result: no High defect
 Decision: advance
 Next: VERIFIED
+
+## VERIFIED - TASK-040 - 2026-10-31T03:05:23Z
+Action: verifier Argus judged AC1-AC6; coordinator ran the real section regression the verifier flagged as missing
+Result: counts unchanged, only the 7 questions changed, no incomplete markers left
+Decision: advance
+Next: DONE

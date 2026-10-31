@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-040",
   "title": "Page-break continuation in refine (REQ-0043): design + tier-0 tests; paid re-extract of about 8 pages only after the user's go",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0043",
   "acceptance_criteria": [
     "REQ-0043 AC1 design",
@@ -50,12 +50,28 @@
     "result": "641 run, 36 new pass, 3 known failures identical at base; refined3 rendering differs from base only by markers on printed 23 and 66; no legitimate question newly declined; 5 mutations caught, 13 of 16 adversarial tests fail on base"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "continuation text is data, attached by an owner rule with number guard and duplicate guard; no new subprocess or network beyond the existing engine adapter; real runs capped by --max-cost-usd; copyrighted exam text stays in untracked work/"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-040/evidence/final_unit_suite.txt",
+      "work/TASK-040/evidence/final_multipage_tests.txt",
+      "work/TASK-040/evidence/final_diff_protected.txt",
+      "work/TASK-040/evidence/final_old_assertions_removed.txt",
+      "work/TASK-040/evidence/real_refine_7-8.txt",
+      "work/TASK-040/evidence/real_refine_9-11.txt",
+      "work/TASK-040/evidence/real_refine_14-15.txt",
+      "work/TASK-040/evidence/real_solve_10.txt",
+      "work/TASK-040/evidence/real_solve_21-25.txt",
+      "work/TASK-040/evidence/real_solve_66.txt",
+      "work/TASK-040/evidence/real_content_checks.txt",
+      "work/TASK-040/evidence/real_section_regression.txt",
+      "work/TASK-040/handoff/verify.md"
+    ],
+    "command": "unit suite (641) vs base; real vision re-extract of PDF pages 7-8, 9-11, 14-15 and real solve of printed 10, 21-25, 66; token checks on the rendered exam files; section regression with the new questions merged into refined3",
+    "result": "3 known failures identical at base; 66 has all 8 graph weights and its sentence, 10 its stem and paragraph, 21-25 paragraph (5) and attribution; markers on 23 and 66 gone; solve B, B, A equals independent reads and the Q66 spanning tree (780); per-section counts 30/30/30/30, only the 7 expected questions changed; verifier AC1,AC2,AC4,AC6 verified, AC3 verified in tests and by the coordinator's real section regression"
   },
   "report": {
     "status": "pending",
@@ -72,11 +88,17 @@
     },
     "tester": {
       "waiver": "work/TASK-040/handoff/test.md"
+    },
+    "verifier": {
+      "waiver": "work/TASK-040/handoff/verify.md"
+    },
+    "crosscheck": {
+      "waiver": "work/TASK-040/handoff/test.md independent compare base vs HEAD plus 5 mutations, and independent reads from work/TASK-039 for the real-run answers"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-31T02:43:34Z",
-  "updated_at": "2026-10-31T03:03:39Z",
+  "updated_at": "2026-10-31T03:05:24Z",
   "updated_by": "main",
   "scope": [
     "prompts/**/ingest/refine.md",
@@ -100,5 +122,5 @@
     "notes": "",
     "next": "tester acb3989a running (work/TASK-040/handoff/test.md): then fix defects (esp options_incomplete on legit 2-3 option questions), advance IMPLEMENTING/UNIT_TESTED, verifier, paid re-extract ~8 pages ("
   },
-  "next": "VERIFIED: verifier incl. real-run evidence"
+  "next": "DONE: report"
 }
