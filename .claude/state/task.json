@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-041",
-  "state": "DESIGN",
-  "next": "coder: tests first, core/refcheck.py, inspect, engine decline suffix, docs",
+  "state": "IMPLEMENTING",
+  "next": "UNIT_TESTED",
   "title": "Extraction-suspect report and referenced-part check (REQ-0044)",
   "active": [
     {
       "task_id": "TASK-041",
-      "state": "DESIGN",
-      "next": "coder: tests first, core/refcheck.py, inspect, engine decline suffix, docs",
-      "updated_at": "2026-10-31T02:32:38Z"
+      "state": "IMPLEMENTING",
+      "next": "UNIT_TESTED",
+      "updated_at": "2026-10-31T02:42:30Z"
     }
   ],
   "max_active": 1

@@ -1021,3 +1021,9 @@ Action: designer Nova drafted with grep-based prediction (flags 23 and 66)
 Result: docs/design/phase-41-extraction-suspect-report.md
 Decision: implement now
 Next: IMPLEMENTING
+
+## IMPLEMENTING - TASK-041 - 2026-10-31T02:42:30Z
+Action: coder Titan implemented design phase-41 tests first; tester found regex and NFC defects; coder fixed both, coordinator re-timed hostile input and NFD
+Result: 605 tests, 25 new pass
+Decision: advance
+Next: UNIT_TESTED

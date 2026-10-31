@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-041",
   "title": "Extraction-suspect report and referenced-part check (REQ-0044)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0044",
   "acceptance_criteria": [
     "REQ-0044 AC1 referenced_part_missing check with tests",
@@ -24,8 +24,17 @@
     ]
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/core/refcheck.py",
+      "src/exam_engine/ingest/inspect.py",
+      "src/exam_engine/ingest/api.py",
+      "src/exam_engine/engine.py",
+      "tests/unit/test_refcheck.py",
+      "docs/guide/ingest-usage.md",
+      "docs/guide/architecture.md"
+    ],
+    "summary": "core/refcheck.py referenced-part check, ingest inspect suspect list, api refactor, engine decline suffix missing_text; tester defects fixed (linear regex, NFC)"
   },
   "unit_test": {
     "status": "pending",
@@ -49,6 +58,9 @@
   "roles": {
     "designer": {
       "waiver": "work/TASK-041/handoff/design.md"
+    },
+    "coder": {
+      "waiver": "work/TASK-041/handoff/code.md"
     }
   },
   "user_notes": [
@@ -64,7 +76,7 @@
     }
   ],
   "picked_at": "2026-10-31T02:27:33Z",
-  "updated_at": "2026-10-31T02:32:38Z",
+  "updated_at": "2026-10-31T02:42:30Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/core/refcheck.py",
@@ -83,5 +95,5 @@
     "notes": "",
     "next": "designer drafting; then advance.sh DESIGN, coder, tester, verifier"
   },
-  "next": "coder: tests first, core/refcheck.py, inspect, engine decline suffix, docs"
+  "next": "UNIT_TESTED"
 }
