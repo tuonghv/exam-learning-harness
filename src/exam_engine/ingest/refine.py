@@ -19,7 +19,8 @@ from exam_engine.utils.text import fold
 MIN_SIMILARITY = 0.6
 MAX_ATTEMPTS = 2
 MIN_OVERLAP = 20  # chars of a repeated continuation prefix treated as overlap
-FLAG_CODES = ("missing_text", "bad_encoding", "no_question_numbering", "math_possible")
+FLAG_CODES = ("missing_text", "bad_encoding", "no_question_numbering", "math_possible",
+              "image_only", "ocr_unavailable")  # the last two: picture pages
 FORBIDDEN = ("answer", "answers", "solution", "solutions", "key", "explanation")
 PROMPT_REL = os.path.join("dev", "ingest", "refine.md")
 
@@ -288,6 +289,15 @@ def _attach(qs, st, n, cont):
     return None
 
 
+def _files_hint(doc, orphans):
+    """" (file(s) a.png)" naming the files of the pages before an orphan, for image sequences."""
+    files = doc["source"].get("files")
+    if not files:
+        return ""
+    return " (file(s) %s)" % ", ".join(files[o["page"] - 2]["name"] for o in orphans
+                                       if 2 <= o["page"] <= len(files) + 1)
+
+
 def refine(doc, spec, llm, source_path=None, max_cost=1.0, model="sonnet", allow_key=False,
            min_similarity=MIN_SIMILARITY, render=render_page, all_pages=False):
     """Copy of `doc` plus doc["refined"]; the source pages are untouched.
@@ -371,5 +381,5 @@ def refine(doc, spec, llm, source_path=None, max_cost=1.0, model="sonnet", allow
             "message": "continuation on page(s) %s not merged (no question on the page before, or it "
                        "does not fit): add page(s) %s to --pages" % (
                            ", ".join(str(o["page"]) for o in orphans),
-                           ", ".join(str(o["page"] - 1) for o in orphans))})
+                           ", ".join(str(o["page"] - 1) for o in orphans)) + _files_hint(doc, orphans)})
     return out

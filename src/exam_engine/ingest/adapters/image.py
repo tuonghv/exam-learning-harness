@@ -201,3 +201,55 @@ def ingest(path, config=None):
             "assets": assets, "warnings": warnings,
             "source": {"path": name, "name": name, "format": ext.lstrip("."),
                        "sha256": sha, "size": len(raw)}}
+
+
+def ingest_sequence(paths, config=None):
+    """One document from several image files: file k = page k, in the given order (source format
+    `image_seq`; per-file name + sha256 under source.files). Tiles of one tall image are such a
+    sequence. Each file goes through `ingest` (OCR, resize); ids are made unique per page."""
+    if not paths:
+        raise IngestError("empty", "no image files given")
+    docs = [ingest(p, config) for p in paths]
+    pages, assets, warnings, files = [], [], [], []
+    for k, d in enumerate(docs, 1):
+        amap = dict((a["id"], "a%d_%s" % (k, a["id"][1:])) for a in d["assets"])
+        page = d["pages"][0]
+        blocks = [dict(b, id="p%d%s" % (k, b["id"]), asset=amap.get(b.get("asset")))
+                  for b in page["blocks"]]
+        warns = [dict(w, page=k) for w in d["warnings"]]
+        pages.append(dict(page, n=k, blocks=blocks, warnings=warns[:]))
+        assets += [dict(a, id=amap[a["id"]], page=k,
+                        **({"derived_from": amap[a["derived_from"]]} if "derived_from" in a
+                           else {})) for a in d["assets"]]
+        warnings += warns
+        s = d["source"]
+        files.append({"name": s["name"], "sha256": s["sha256"], "size": s["size"]})
+    names = [f["name"] for f in files]
+    joined = "\n".join(f["sha256"] for f in files)
+    return {"schema_version": SCHEMA_VERSION, "status": "needs_review",
+            "extraction": dict(docs[0]["extraction"]), "meta": {},
+            "pages": pages, "assets": assets, "warnings": warnings,
+            "source": {"path": names[0], "name": names[0], "format": "image_seq",
+                       "sha256": hashlib.sha256(joined.encode("ascii")).hexdigest(),
+                       "size": sum(f["size"] for f in files), "files": files}}
+
+
+def render(paths, n, limit=MAX_IMAGE_BYTES):
+    """PNG bytes of file n (1-based) of `paths` for a vision call: a JPEG/WEBP is re-encoded as PNG,
+    anything above `limit` is shrunk (lazy PIL); a small PNG is returned as it is."""
+    if not 1 <= n <= len(paths):
+        raise IngestError("invalid_pages", "file %d not in the sequence of %d" % (n, len(paths)))
+    try:
+        with open(paths[n - 1], "rb") as fh:
+            raw = fh.read()
+    except OSError as exc:
+        raise IngestError("corrupt", "cannot read %s: %s" % (paths[n - 1], exc))
+    fmt = sniff(raw)
+    if fmt is None:
+        raise IngestError("corrupt", "%s is not a PNG, JPEG or WEBP image" % paths[n - 1])
+    if fmt != "png":
+        pil = optional.load("PIL.Image", "pillow")
+        buf = io.BytesIO()
+        pil.open(io.BytesIO(raw)).convert("RGB").save(buf, format="PNG")
+        raw = buf.getvalue()
+    return _shrink(raw, "png", limit) if len(raw) > limit else raw

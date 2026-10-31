@@ -322,32 +322,48 @@ def inspect_main(argv):
     return 0
 
 
-def _refine_source(args, doc):
-    """Path of the file to render pages from (real mode); IngestError if it is missing or changed."""
+IMAGE_FORMATS = ("png", "jpg", "jpeg", "webp", "image_seq")
+
+
+def _refine_source(args, doc, images=False):
+    """File to render pages from (real mode): a PDF path, or with `images` the list of image paths
+    in page order; IngestError if one is missing or changed (content or order)."""
     import hashlib
     from exam_engine.ingest.schema import IngestError
     src = doc["source"]
-    path = args.file
-    if path.lower().endswith(".json"):
-        path = os.path.join(os.path.dirname(os.path.abspath(path)), src["name"])
-    if not os.path.isfile(path):
-        raise IngestError("corrupt", "source file %s not found next to the document" % src["name"])
-    with open(path, "rb") as fh:
-        if hashlib.sha256(fh.read()).hexdigest() != src["sha256"]:
-            raise IngestError("corrupt", "source file %s differs from the ingested hash" % src["name"])
-    if src.get("format") != "pdf":
-        raise IngestError("unsupported_format", "refine renders PDF pages only (got %s)"
-                          % src.get("format"))
-    return path
+    fmt = src.get("format")
+    if fmt != "pdf" and not (images and fmt in IMAGE_FORMATS):
+        raise IngestError("unsupported_format", "refine renders PDF pages only (got %s)" % fmt)
+    given = getattr(args, "files", None)
+    if given and not given[0].lower().endswith(".json"):
+        paths = list(given)
+    else:
+        base = os.path.dirname(os.path.abspath(args.file))
+        names = [f["name"] for f in src.get("files") or ()] or [src["name"]]
+        paths = [os.path.join(base, n) for n in names] if args.file.lower().endswith(".json") \
+            else [args.file]
+    want = [f["sha256"] for f in src.get("files") or ()] or [src["sha256"]]
+    if len(paths) != len(want):
+        raise IngestError("corrupt", "%d file(s) given, the document has %d" % (len(paths), len(want)))
+    for k, (path, sha) in enumerate(zip(paths, want), 1):
+        if not os.path.isfile(path):
+            raise IngestError("corrupt", "source file %s not found next to the document"
+                              % os.path.basename(path))
+        with open(path, "rb") as fh:
+            if hashlib.sha256(fh.read()).hexdigest() != sha:
+                raise IngestError("corrupt", "source file %d (%s) differs from the ingested hash "
+                                  "(content or file order changed)" % (k, os.path.basename(path)))
+    return paths if fmt != "pdf" else paths[0]
 
 
 def refine_main(argv):
     """ingest-refine FILE --pages SPEC (--dry-run|--mock FILE|--real): AI suggestion, exit 0/1/2/3."""
     from exam_engine.ingest import api, refine
+    from exam_engine.ingest.adapters import image as imgmod
     from exam_engine.ingest.schema import IngestError, validate_document
     d = settings.load_config("engine")
     ap = argparse.ArgumentParser(prog="exam.py ingest-refine")
-    ap.add_argument("file")
+    ap.add_argument("file", nargs="+", help="PDF/DOCX/MD/JSON, or image files in page order")
     ap.add_argument("--pages", required=True, metavar="SPEC")
     ap.add_argument("--out")
     ap.add_argument("--mock")
@@ -369,10 +385,18 @@ def refine_main(argv):
     if a.max_cost_usd < 0 or a.timeout <= 0:
         print("usage: --max-cost-usd >= 0, --timeout > 0", file=sys.stderr)
         return 2
+    a.files, a.file = a.file, a.file[0]
+    exts = [os.path.splitext(f)[1].lower().lstrip(".") for f in a.files]
+    if len(a.files) > 1 and not all(e in IMAGE_FORMATS for e in exts):
+        print("usage: several FILEs are allowed for image files only (png, jpg, jpeg, webp)",
+              file=sys.stderr)
+        return 2
     tmp = None
     trace = []
     try:
-        if a.file.lower().endswith(".json"):
+        if len(a.files) > 1:
+            doc = api.ingest_sequence(a.files, config={"ocr": "auto"})
+        elif a.file.lower().endswith(".json"):
             with open(a.file, encoding="utf-8") as fh:
                 doc = json.load(fh)
             errs = validate_document(doc)
@@ -391,15 +415,17 @@ def refine_main(argv):
             return 0
         src = None
         if a.real:
-            src = _refine_source(a, doc)
+            src = _refine_source(a, doc, images=True)
             tmp = tempfile.mkdtemp(prefix="exam_refine_")
             llm = refine.make_real_llm(a.model, a.timeout, tmp, trace=trace)
             print("pages %s, calls <= %d, cap $%.2f" % (
                 pages, len(pages) * refine.MAX_ATTEMPTS, a.max_cost_usd), flush=True)
         else:
             llm = refine.mock_llm(a.mock)
+        is_img = doc["source"].get("format") in IMAGE_FORMATS
         out = refine.refine(doc, a.pages, llm, src, a.max_cost_usd, a.model, a.allow_key_pages,
-                            all_pages=a.all_pages)
+                            all_pages=a.all_pages,
+                            **({"render": imgmod.render} if is_img else {}))
         if a.out:
             with open(a.out, "w", encoding="utf-8") as fh:
                 fh.write(json.dumps(out, ensure_ascii=False, indent=2) + "\n")

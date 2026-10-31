@@ -32,6 +32,15 @@ def ingest_document(path, config=None, meta=None):
         name = os.path.basename(path)
         doc["source"] = {"path": name, "name": name, "format": ext.lstrip("."),
                          "sha256": hashlib.sha256(raw).hexdigest(), "size": len(raw)}
+    return _finish(doc, config, meta)
+
+
+def ingest_sequence(paths, config=None, meta=None):
+    """Canonical doc for several image files (file k = page k); same post-steps as ingest_document."""
+    return _finish(adapters.image.ingest_sequence(paths, config), config, meta)
+
+
+def _finish(doc, config, meta):
     if doc["source"].get("format") != "md":
         doc["parts"] = parts.find_parts(doc)
         if (config or {}).get("pages"):

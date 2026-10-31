@@ -66,6 +66,14 @@ to the solver as a visual (later REQ-0021).
   with `[Incomplete: missing_text ...]`; the engine declines them (`solver_declined: missing_text (...)`).
 - Exit 0 ok; 1 some question needs review; 2 usage/input; 3 blocked or call/reply error
   (`stream_format`, `call_failed`, `invalid_reply`, `cost_cap`, `answer_key_present`).
+- Picture exams (REQ-0046): `ingest-refine p1.png p2.png p3.png --pages 1-3 --all-pages --mock replies.json` takes the
+files in page order (file k = page k; source format `image_seq`, per-file name + sha256 in `source.files`). A question
+split over several pictures (stem / figure / options) or a tall page cut into tiles is assembled by the same
+continuation bridge as PDF pages (`continues` goes to the previous file only; tile overlap is not repeated). A single
+image is page 1. Several FILEs are for images only. With `--real` the files must sit next to a saved `doc.json`
+unchanged and in the same order (else `corrupt`: content or order changed); JPEG/WEBP are sent as PNG, over 5 MB shrunk.
+An `orphan_continuation` warning names the previous file to add. Image pages carry `image_only`/`ocr_unavailable`,
+so they are sent without `--all-pages` too.
 
 ## Limits and unresolved risks
 - Math stays text. PDF: math fonts give `math_possible` plus a page image. DOCX: equation (OMML)

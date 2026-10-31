@@ -57,7 +57,7 @@ optional `prompts/dev/subjects/<name>.md`; no engine code.
 ## Flow
 
 1. **Author or ingest** an exam as `.md` per `examples/FORMAT.md`; `ingest` converts pdf/docx/md/image
-   (`ingest-inspect` previews, `ingest-refine` AI-refines questions; see `docs/guide/ingest-usage.md`).
+   (`ingest-inspect` previews, `ingest-refine` AI-refines questions, also from a sequence of page images; see `docs/guide/ingest-usage.md`).
 2. **Check** with `check-examples` (structure, verification lines, eval/few-shot separation).
 3. **Solve** `exam.py solve EXAM.md --out DIR`: parse, route (subject policy), prompt (channel + language),
    call claude via the adapter, verify (checks per subject), QA review, decide, then score if `--key`.
