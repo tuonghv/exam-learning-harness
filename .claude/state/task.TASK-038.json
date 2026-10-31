@@ -1,17 +1,26 @@
 {
   "task_id": "TASK-038",
   "title": "Ingest segmentation for non-consecutive or restarting question numbers (REQ-0041)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0041",
   "acceptance_criteria": [
-    "REQ-0041 AC1-AC3"
+    "REQ-0041 AC1 ids 1 and 150 kept with gap warning",
+    "REQ-0041 AC2 restarts segmented or flagged, never silent",
+    "REQ-0041 AC3 existing ingest tests unchanged in meaning, no solver/schema change"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
-    "reuse": [],
-    "risks": []
+    "status": "completed",
+    "path": "docs/design/phase-38-ingest-numbering-gaps.md",
+    "summary": "segment.numbering() keeps gaps and clean restarts, numbering_gap/numbering_restarted warnings, exam text renumbered 1..N with a printed-number mapping line, refine guard, numbers >999 never questions",
+    "reuse": [
+      "segment.segment",
+      "pdf/docx/parts adapters branch",
+      "inspect numbering_gap row"
+    ],
+    "risks": [
+      "over-segmentation by stray numbers (guarded by backward-jump rule and the 999 cap)",
+      "real DGNL doc.json now yields native questions"
+    ]
   },
   "implementation": {
     "status": "pending",
@@ -36,11 +45,15 @@
   },
   "roles_required": true,
   "crosscheck_required": true,
-  "roles": {},
+  "roles": {
+    "designer": {
+      "waiver": "work/TASK-038/handoff/design.md"
+    }
+  },
   "user_notes": [],
   "picked_at": "2026-10-31T01:49:58Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-10-31T01:53:40Z",
+  "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/**",
     "tests/unit/test_ingest_*.py",
@@ -55,5 +68,5 @@
     "notes": "",
     "next": "designer drafting; then advance.sh DESIGN, coder, tester, verifier"
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder: tests first, then segment.numbering, adapters, api renumber, refine guard, inspect, docs"
 }
