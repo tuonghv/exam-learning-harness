@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-039",
-  "state": "DONE",
-  "next": "",
-  "title": "Cross-check real DGNL 2026 solution against the PDF: independent extraction + answers, defects, improvement list (REQ-0042)",
-  "active": [],
+  "task_id": "TASK-041",
+  "state": "TODO",
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "title": "Extraction-suspect report and referenced-part check (REQ-0044)",
+  "active": [
+    {
+      "task_id": "TASK-041",
+      "state": "TODO",
+      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+      "updated_at": ""
+    }
+  ],
   "max_active": 1
 }
