@@ -41,7 +41,13 @@
   "picked_at": "2026-10-31T01:49:58Z",
   "updated_at": "",
   "updated_by": "",
-  "scope": [],
+  "scope": [
+    "src/exam_engine/ingest/**",
+    "tests/unit/test_ingest_*.py",
+    "tests/unit/test_numbering_gaps.py",
+    "tests/unit/fixtures/**",
+    "docs/guide/ingest-usage.md"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
