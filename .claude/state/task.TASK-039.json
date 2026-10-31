@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-039",
   "title": "Cross-check real DGNL 2026 solution against the PDF: independent extraction + answers, defects, improvement list (REQ-0042)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0042",
   "acceptance_criteria": [
     "REQ-0042 AC1-AC5"
@@ -54,11 +54,20 @@
       "work/TASK-039/handoff/adjud-science.md"
     ],
     "command": "independent reads vs engine; extraction vs PDF; coordinator viewed PDF page 15 and recomputed Q66",
-    "result": "findings consistent across independent readers; the Q66 extraction defect confirmed by the coordinator from the page image and the extracted file"
+    "result": "findings consistent across independent readers; the Q66 extraction defect confirmed by the coordinator from the page image and the extracted file",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-039/evidence/compare_engine_vs_independent.txt",
+        "work/TASK-039/evidence/q66_kruskal_check.txt",
+        "work/TASK-039/evidence/needs_review_vs_extraction.txt"
+      ],
+      "reason": "independent per-section reads and extraction comparison; coordinator recomputed Q66 and the needs_review statistics; limits stated (same model family)"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-39-dgnl-cross-check.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -78,7 +87,7 @@
   },
   "user_notes": [],
   "picked_at": "2026-10-31T02:22:08Z",
-  "updated_at": "2026-10-31T02:27:11Z",
+  "updated_at": "2026-10-31T02:27:17Z",
   "updated_by": "main",
   "scope": [
     "docs/design/phase-39-dgnl-cross-check.md",
@@ -92,5 +101,5 @@
     "notes": "",
     "next": "4 verifier subagents solving independently (work/TASK-039/handoff/indep-*.md); then run work/TASK-039/compare.py, adjudicate disagreements with a 2nd independent solve, extraction cross-check, improve"
   },
-  "next": "DONE: report with ranked improvements"
+  "next": ""
 }
