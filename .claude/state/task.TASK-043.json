@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-043",
   "title": "Question completeness guide: gap analysis + best design of remaining gaps (REQ-0045)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0045",
   "acceptance_criteria": [
     "REQ-0045 AC1 gap table",
@@ -46,11 +46,18 @@
       "work/TASK-043/handoff/design.md"
     ],
     "command": "spot check of the gap table's path:line claims against HEAD",
-    "result": "claims resolve to existing files and lines within length (existence, not meaning)"
+    "result": "claims resolve to existing files and lines within length (existence, not meaning)",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-043/evidence/gap_table_claims_spotcheck.txt"
+      ],
+      "reason": "path:line claims of the gap table spot-checked against HEAD"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-43-question-completeness-gate.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -73,7 +80,7 @@
   },
   "user_notes": [],
   "picked_at": "2026-10-31T03:05:36Z",
-  "updated_at": "2026-10-31T03:06:07Z",
+  "updated_at": "2026-10-31T03:06:08Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -82,5 +89,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "DONE: report"
+  "next": ""
 }

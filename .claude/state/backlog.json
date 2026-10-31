@@ -850,12 +850,14 @@
     "task_id": "TASK-043",
     "title": "Question completeness guide: gap analysis + best design of remaining gaps (REQ-0045)",
     "priority": 0,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-10-31T13:00:00Z",
     "requirement": "REQ-0045",
     "acceptance_criteria": [
       "REQ-0045 AC1-AC4"
-    ]
+    ],
+    "completed_at": "2026-10-31T03:06:08Z",
+    "report": "docs/report/phase-43-question-completeness-gate.md"
   },
   {
     "task_id": "TASK-044",
