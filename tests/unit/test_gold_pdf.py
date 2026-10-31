@@ -75,6 +75,13 @@ class GoldPdf(unittest.TestCase):
 
     def test_diacritics_preserved(self):
         pdf, _ = self.render()
+        d = fitz.open(pdf)
+        try:
+            raw = "".join(p.get_text() for p in d)
+        finally:
+            d.close()
+        # 36.1 the text layer itself is NFC (no normalising here: an NFD renderer must fail)
+        self.assertEqual(raw, unicodedata.normalize("NFC", raw))
         text = " ".join(self.pages_text(pdf)).replace("\n", " ")
         for s in ("Tính giá trị của biểu thức dưới đây.", "Sĩ số", "Bằng nhau",
                   "Hãy nêu ý nghĩa của định luật bảo toàn năng lượng."):
