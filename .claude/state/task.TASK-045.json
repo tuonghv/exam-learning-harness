@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-045",
   "title": "Completeness reasons: formula_unbalanced, trailing_operator, merge_suspect, unreadable stored (D2), same-id join keeps cut/continued_pages (D3) (design 43.2, REQ-0045)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0049",
   "acceptance_criteria": [
     "REQ-0049 AC1 formula/operator reasons scoped",
@@ -39,12 +39,23 @@
     "result": "727 run, 22 new pass (11 of 20 first-round tests fail on base), 3 known failures identical at base; oracle 500/500; render of all 24 refined files byte-identical to base apart from the known 23 and 66; 4 mutations killed"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "pure string/list logic, no IO or network; linear time (0.1 s on 600 KB); no regex backtracking"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-045/evidence/final2_full.txt",
+      "work/TASK-045/evidence/final2_mutations.txt",
+      "work/TASK-045/evidence/final2_oracle.txt",
+      "work/TASK-045/evidence/final2_render_head.txt",
+      "work/TASK-045/evidence/final_diff_protected.txt",
+      "work/TASK-045/evidence/final_old_assertions_removed.txt",
+      "work/TASK-045/evidence/final_reasons_tests.txt",
+      "work/TASK-045/evidence/final_unit_suite.txt"
+    ],
+    "command": "unit suite vs base; independent oracle; render regression on 24 real/synthetic refined files; scope and join checks; mutations",
+    "result": "3 known failures identical at base; 0 old assertions removed; no schema/solver/prompt/config change; a false decline on a real older refined file found by the regression and fixed; no new flag beyond the known 23 and 66"
   },
   "report": {
     "status": "pending",
@@ -61,6 +72,12 @@
     },
     "tester": {
       "waiver": "work/TASK-045/handoff/test.md"
+    },
+    "verifier": {
+      "waiver": "tester independent oracle and render regression, coordinator re-ran the suite; real-data claim limited to render comparison"
+    },
+    "crosscheck": {
+      "waiver": "work/TASK-045/handoff/test.md oracle plus render regression plus mutations"
     }
   },
   "user_notes": [
@@ -90,5 +107,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "VERIFIED"
+  "next": "DONE: report"
 }
