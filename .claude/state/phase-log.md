@@ -1609,3 +1609,9 @@ Action: Argus verified; evidence published
 Result: AC2, AC3 passed; AC1, AC4 delivered with honest limits
 Decision: VERIFIED
 Next: report then DONE
+
+## DONE - TASK-051 - 2026-11-02T16:04:18Z
+Action: Report written
+Result: TASK-051 partly achieved, docs/report/phase-51-ocr-route-quality.md; REQ-0065 holds the residual
+Decision: DONE
+Next: REQ-0065 / paid questions

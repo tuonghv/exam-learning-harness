@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-051",
-  "state": "VERIFIED",
-  "next": "report, DONE",
+  "state": "DONE",
+  "next": "",
   "title": "OCR route quality: spaces, page furniture, doubt marker (REQ-0054)",
-  "active": [
-    {
-      "task_id": "TASK-051",
-      "state": "VERIFIED",
-      "next": "report, DONE",
-      "updated_at": "2026-11-02T16:04:03Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-051",
   "title": "OCR route quality: spaces, page furniture, doubt marker (REQ-0054)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0054",
   "acceptance_criteria": [
     "AC1 diagnosis and cheap fix for lost spaces",
@@ -66,11 +66,19 @@
       "docs/report/evidence/TASK-051/test.md",
       "docs/report/evidence/TASK-051/verify.md",
       "docs/report/evidence/TASK-051/diagnosis.md"
-    ]
+    ],
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-051/evidence/qa-recount.tsv",
+        "work/TASK-051/evidence/ocr-before-after.tsv"
+      ],
+      "reason": "tester recounted before/after numbers independently on synthetic scanned families; mismatch table in qa-recount-mismatch.tsv"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-51-ocr-route-quality.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -79,7 +87,10 @@
     "designer": "work/TASK-051/handoff/design.md",
     "coder": "work/TASK-051/handoff/code.md",
     "tester": "work/TASK-051/handoff/test.md",
-    "verifier": "work/TASK-051/handoff/verify.md"
+    "verifier": "work/TASK-051/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "independent oracle = tester recount of ocr-before-after.tsv with its own script (docs/report/evidence/TASK-051/qa-recount.tsv) and mutation checks; mock/local only, no paid call"
+    }
   },
   "user_notes": [
     {
@@ -89,7 +100,7 @@
     }
   ],
   "picked_at": "2026-11-02T14:33:48Z",
-  "updated_at": "2026-11-02T16:04:03Z",
+  "updated_at": "2026-11-02T16:04:18Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -99,5 +110,5 @@
     "notes": "",
     "next": "coder 51.7 sweep + 51.1 running (a4ca5fb7); then 51.2-51.6 brief, tester, verifier; vie.traineddata install is the user's (commands given); paid questions Q-1793619815 and Q-1793622303 wait for the user"
   },
-  "next": "report, DONE"
+  "next": ""
 }
