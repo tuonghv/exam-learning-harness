@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-055",
   "title": "Group-aware solving: slice-after-share, group model, group-aware render/retry/QA, missing-context decline, source pages (REQ-0058)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0058",
   "acceptance_criteria": [
     "AC1 group kind derived",
@@ -39,12 +39,19 @@
     "result": "890 run; only the known failures (lxml docx, check_examples x2, cwd_independence, scripts_exam), identical to baseline; golden solve/retry/QA prompts unchanged for 25 inputs; mutations caught"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "no eval/shell/new AI call, no ReDoS (verify.md)"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-055/evidence/ac-tests.txt",
+      "work/TASK-055/evidence/head-after-fix.txt",
+      "work/TASK-055/evidence/qa-e2e.txt",
+      "work/TASK-055/evidence/qa-dryrun.txt"
+    ],
+    "command": "python3 -I -m unittest discover -s tests/unit (+ per-file group tests, ac-tests.txt)",
+    "result": "AC1 kinds/deps (test_group_model.test_kinds_and_deps); AC2 independent keeps guide+own stem (test_group_render.test_unlabelled_unchanged, golden); AC3 passage once per group (test_group_e2e dry-run and round-1, test_round1_passage_once_and_content_equal), missing passage declined (test_passage_promised_but_empty); AC4 sibling answers on retry/QA (test_dependent_retry_has_sibling_answer, test_qa_prompt_context_and_siblings), q99 declined (test_missing_dependency_declined_no_call); AC5 design phase-55 states why option A, tests-first. Suite = baseline failures only. No paid run."
   },
   "report": {
     "status": "pending",
@@ -55,7 +62,8 @@
   "roles": {
     "designer": "work/TASK-055/handoff/design.md",
     "coder": "work/TASK-055/handoff/code.md",
-    "tester": "work/TASK-055/handoff/test.md"
+    "tester": "work/TASK-055/handoff/test.md",
+    "verifier": "work/TASK-055/handoff/verify.md"
   },
   "user_notes": [
     {
@@ -65,7 +73,7 @@
     }
   ],
   "picked_at": "2026-11-02T09:39:02Z",
-  "updated_at": "2026-11-02T10:01:32Z",
+  "updated_at": "2026-11-02T10:03:43Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-055/"
@@ -77,5 +85,5 @@
     "notes": "",
     "next": "coder 55.4-55.5 running; designer addendum (RAW-00169) running; on return commit wip, tester golden, advance IMPLEMENTING"
   },
-  "next": "verifier: AC check + security pass"
+  "next": "write report, backlog complete, DONE"
 }

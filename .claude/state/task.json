@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-055",
-  "state": "UNIT_TESTED",
-  "next": "verifier: AC check + security pass",
+  "state": "VERIFIED",
+  "next": "write report, backlog complete, DONE",
   "title": "Group-aware solving: slice-after-share, group model, group-aware render/retry/QA, missing-context decline, source pages (REQ-0058)",
   "active": [
     {
       "task_id": "TASK-055",
-      "state": "UNIT_TESTED",
-      "next": "verifier: AC check + security pass",
-      "updated_at": "2026-11-02T10:01:32Z"
+      "state": "VERIFIED",
+      "next": "write report, backlog complete, DONE",
+      "updated_at": "2026-11-02T10:03:43Z"
     }
   ],
   "max_active": 1
