@@ -221,7 +221,7 @@ def _selected_questions(doc):
     return ctx, refcheck.incomplete_by_question(qs, [q["text"] for q in qs])
 
 
-UNCERTAIN = ("cut_unresolved", "orphan_on_page", "merge_suspect", "unreadable")
+UNCERTAIN = ("cut_unresolved", "orphan_on_page", "merge_suspect", "unreadable", "ocr_doubt")
 
 
 def assembly(doc, config=None):

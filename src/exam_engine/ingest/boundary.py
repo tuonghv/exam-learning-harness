@@ -418,15 +418,15 @@ def report_warnings(rep):
     return out
 
 
-def segment_reviewed(config, lines, page_of=None):
+def segment_reviewed(config, lines, page_of=None, starts=None):
     """-> (intro, questions, ok, warnings): segment.segment, with AI hints when config["boundary"]."""
     rv = (config or {}).get("boundary")
     if rv is None:
-        intro, qs, ok = segment.segment(lines)
+        intro, qs, ok = segment.segment(lines, starts=starts)
         return intro, qs, ok, []
     hints = rv(lines, page_of)
     rep = []
-    intro, qs, ok = segment.segment(lines, hints, rep)
+    intro, qs, ok = segment.segment(lines, hints, rep, starts)
     return intro, qs, ok, list(rv.warnings) + report_warnings(rep)
 
 

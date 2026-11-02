@@ -1,5 +1,6 @@
 """PDF adapter (PyMuPDF via the optional loader): native text first, OCR only on flagged pages,
 crops only where text cannot carry the content. No network, original never written."""
+import difflib
 import glob
 import hashlib
 import os
@@ -203,15 +204,20 @@ def _suspect(text):
 
 _PAGE_NO = re.compile(r"^\s*(?:(?:Trang|Page)\s*\d+(?:\s*(?:/|of)\s*\d+)?|-\s*\d+\s*-)\s*$", re.I)
 FURNITURE_EDGE = 2   # first / last non-empty lines of a page that can be furniture
+LEAK_RATIO = 0.8      # edge line this close to a dropped header is an OCR-garbled leak
+LEAK_MIN_KEY = 8      # shorter keys are too easy to match by chance
 FURNITURE_PAGES = 3  # a repeated header / footer needs at least max(3, half the pages)
 
 
-def _strip_furniture(pages):
+def _strip_furniture(pages, leaks=None):
     """-> (pages without page numbers and repeated headers/footers, removed count).
 
     pages: one list of text lines per page. Only the first / last FURNITURE_EDGE non-empty
-    lines count; a line is furniture when it is a page number or its digit-folded form sits
-    in the edge of >= max(FURNITURE_PAGES, half) pages. Blocks are not touched.
+    lines count; a line is furniture when it is a page number or its key (digits folded,
+    whitespace removed, case folded: OCR spacing differs per page) sits in the edge of
+    >= max(FURNITURE_PAGES, half) pages. Blocks are not touched. A kept edge line that nearly
+    equals a dropped key (OCR garble) is a leak: (page, line index in the returned pages) is
+    added to `leaks` when given.
     """
     def edge(lines):
         idx = [i for i, ln in enumerate(lines) if ln.strip()]
@@ -220,21 +226,93 @@ def _strip_furniture(pages):
     def content(ln):  # a numbered question / option line is never a repeated header
         return bool(segment._Q.match(ln) or segment._OPT.match(ln))
 
-    def fold_digits(ln):
-        return re.sub(r"\d+", "#", ln.strip())
+    def key(ln):
+        return re.sub(r"\s+", "", re.sub(r"\d+", "#", _nfc(ln))).casefold()
 
     seen = {}
     for lines in pages:
-        for k in set(fold_digits(lines[i]) for i in edge(lines) if not content(lines[i])):
+        for k in set(key(lines[i]) for i in edge(lines) if not content(lines[i])):
             seen[k] = seen.get(k, 0) + 1
     need = max(FURNITURE_PAGES, (len(pages) + 1) // 2)
+    dropped = [k for k, c in seen.items() if c >= need and len(k) >= LEAK_MIN_KEY]
     out, removed = [], 0
-    for lines in pages:
+    for pi, lines in enumerate(pages):
         drop = set(i for i in edge(lines)
-                   if _PAGE_NO.match(lines[i]) or (not content(lines[i]) and seen[fold_digits(lines[i])] >= need))
+                   if _PAGE_NO.match(lines[i]) or (not content(lines[i]) and seen[key(lines[i])] >= need))
         removed += len(drop)
-        out.append([ln for i, ln in enumerate(lines) if i not in drop])
+        kept = [i for i in range(len(lines)) if i not in drop]
+        if leaks is not None and dropped:
+            for i in edge(lines):
+                if i in drop or content(lines[i]):
+                    continue
+                k = key(lines[i])
+                if any(difflib.SequenceMatcher(None, d, k).ratio() >= LEAK_RATIO for d in dropped):
+                    leaks.add((pi, kept.index(i)))
+        out.append([lines[i] for i in kept])
     return out, removed
+
+
+_VOWELS = frozenset("aeiouyAEIOUY")
+_MATH_OK = frozenset("+-*/=<>()[]{}^_.,;:%'\"≤≥≠±×÷√π°")
+_TOKEN = re.compile(r"[^\W\d_]+")
+
+
+def _glued(word):
+    """True when a letter run holds >= 2 vowel clusters that each carry a mark (words run together)."""
+    clusters, cur, marked = 0, False, False
+    for ch in unicodedata.normalize("NFD", word) + " ":
+        if unicodedata.combining(ch):
+            marked = marked or cur
+        elif ch in _VOWELS:
+            cur = True
+        else:
+            if cur and marked:
+                clusters += 1
+            cur, marked = False, False
+    return clusters >= 2
+
+
+def _odd_chars(tok):
+    """True when a token holds a char outside Latin/Vietnamese letters, digits, punctuation, common math."""
+    for ch in unicodedata.normalize("NFC", tok):
+        if ch.isspace() or ch in _MATH_OK or ch.isdigit() or ord(ch) < 128:
+            continue
+        cat = unicodedata.category(ch)
+        if cat.startswith("L") and unicodedata.name(ch, "").startswith("LATIN"):
+            continue
+        if cat in ("Sm", "Mn", "Mc") or 0x2010 <= ord(ch) <= 0x2027:
+            continue
+        return True
+    return False
+
+
+def _ocr_doubt(qs, starts, lines, page_len, ocr_pages, leaks, lang_ok, suspect_pages=()):
+    """Set q["ocr_doubt"] = sorted kinds (glued / chars / furniture / lang_missing) on every question
+    with lines on an OCR page. starts: first flat line of each question; page_len: lines per page;
+    leaks: {(page, line)} from _strip_furniture; lang_ok: vie.traineddata was available."""
+    if len(starts) != len(qs):
+        return
+    flat = [(pi, j) for pi, ln in enumerate(page_len) for j in range(ln)]
+    for k, q in enumerate(qs):
+        end = starts[k + 1] if k + 1 < len(starts) else len(flat)
+        idx = [i for i in range(starts[k], end) if flat[i][0] in ocr_pages]
+        if not idx:
+            continue
+        kinds = set()
+        if not lang_ok:
+            kinds.add("lang_missing")
+        if any(flat[i] in leaks for i in idx):
+            kinds.add("furniture")
+        if any(flat[i][0] in suspect_pages for i in idx):
+            kinds.add("chars")
+        for i in idx:
+            for tok in lines[i].split():
+                if _odd_chars(tok):
+                    kinds.add("chars")
+                if any(_glued(w) for w in _TOKEN.findall(tok)):
+                    kinds.add("glued")
+        if kinds:
+            q["ocr_doubt"] = sorted(kinds)
 
 
 def _cut_boundaries(pages, page_lines):
@@ -452,14 +530,16 @@ def _extract(fitz, pdf, raw, path, config):
         warnings.extend(pwarn)
     if not any_content:
         raise IngestError("empty", "%s has no text and no images" % name)
-    page_lines, removed = _strip_furniture(page_lines)
+    leaks = set()
+    page_lines, removed = _strip_furniture(page_lines, leaks)
     if removed:
         warnings.append(_warn("page_furniture_removed", "%d page number / repeated header or "
                               "footer line(s) left out of the question text" % removed,
                               level="info"))
     warnings.extend(_cut_boundaries(pages, page_lines))
-    intro, qs, ok, bw = boundary.segment_reviewed(
-        config, [ln for lines in page_lines for ln in lines])
+    flat = [ln for lines in page_lines for ln in lines]
+    starts = []
+    intro, qs, ok, bw = boundary.segment_reviewed(config, flat, starts=starts)
     warnings.extend(bw)
     keep = ok
     if not qs:
@@ -489,6 +569,12 @@ def _extract(fitz, pdf, raw, path, config):
            "source": {"path": name, "name": name, "format": "pdf", "sha256": sha,
                       "size": len(raw)}}
     if keep:
+        ocr_pages = set(i for i, p in enumerate(pages) if p["method"] == "ocr")
+        if ocr_pages:
+            sus = set(i for i, p in enumerate(pages) if p["method"] == "ocr"
+                      and any(w.get("code") == "bad_encoding" for w in p["warnings"]))
+            _ocr_doubt(qs, starts, flat, [len(x) for x in page_lines], ocr_pages, leaks,
+                       "vie" in have, sus)
         doc["questions"] = qs
         doc["intro"] = "\n".join(intro).strip()
     return doc

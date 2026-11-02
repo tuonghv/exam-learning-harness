@@ -128,6 +128,7 @@ def incomplete_reasons(q, shared_figure=False, text=None, last_on_page=False):
             out.append("trailing_operator")
     if _merge_suspect(q):
         out.append("merge_suspect")
+    out += ["ocr_doubt " + k for k in q.get("ocr_doubt") or ()]
     return out
 
 

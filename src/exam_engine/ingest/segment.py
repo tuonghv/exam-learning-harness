@@ -111,11 +111,13 @@ def _hint_start(line, qs, lines, i):
     return None
 
 
-def segment(lines, hints=None, report=None):
+def segment(lines, hints=None, report=None, starts=None):
     """-> (intro_lines, questions, ok). questions: [{n, text, options}].
 
     ok only when numbering is consecutive from 1 and every question has text; the source
     text is never corrected.
+
+    starts, when a list, receives the start line index of each question (parallel to the result).
 
     hints {line index: (label, confidence)} (boundary.py, AI origin) are consulted only at those
     lines and only where the rules are silent: a strong rule match always wins, a start that
@@ -153,6 +155,8 @@ def segment(lines, hints=None, report=None):
                         qs[-1]["text"] = (qs[-1]["text"] + " " + line.strip()).strip()
                     continue
             qs.append({"n": n, "text": m.group(3).strip(), "options": []})
+            if starts is not None:
+                starts.append(i)
             closed = False
             if pending:
                 qs[-1]["context"] = "\n".join(pending)
@@ -174,6 +178,8 @@ def segment(lines, hints=None, report=None):
                     note("boundary_ai_rejected", i, hint, reason="numbering")
                 else:
                     qs.append({"n": got[0], "text": got[1], "options": []})
+                    if starts is not None:
+                        starts.append(i)
                     closed = False
                     if pending:
                         qs[-1]["context"] = "\n".join(pending)
