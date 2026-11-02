@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-050",
   "title": "Cheap-model (Haiku) fallback for uncertain question/subject boundaries (REQ-0053)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0053",
   "acceptance_criteria": [
     "REQ-0053 AC1 uncertainty signal",
@@ -47,9 +47,9 @@
     "summary": "boundary fallback (suspects, windows, validated hints, Reviewer, shared reply cache, --boundary-ai off|haiku with exactly one of --mock/--dry-run/--real); rule fixes first: PH\u1ea6N headings, select_pages hints, N.M sub-numbers not questions, N.M sub-headings to context; reply parser survives deep nesting"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "779 run, 52 boundary tests OK (2 documented expected failures DEF-6/DEF-7), 3 known failures identical at base; cost safety: 0 invocations with flag off, no mode, two modes, mock, dry-run; real mode uses model haiku in an isolated cwd, cap and cache honoured; 8 mutations killed; DGNL native text with flag off: exactly 4 blocks differ vs the pre-rule render, 143 identical"
   },
   "security": {
     "status": "pending",
@@ -71,11 +71,14 @@
     },
     "coder": {
       "waiver": "work/TASK-050/handoff/code.md"
+    },
+    "tester": {
+      "waiver": "work/TASK-050/handoff/test.md"
     }
   },
   "user_notes": [],
   "picked_at": "2026-10-31T03:47:34Z",
-  "updated_at": "2026-11-02T04:34:46Z",
+  "updated_at": "2026-11-02T04:34:47Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/boundary.py",
@@ -99,5 +102,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "UNIT_TESTED"
+  "next": "VERIFIED"
 }
