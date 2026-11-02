@@ -82,6 +82,9 @@ class Base(unittest.TestCase):
         p = mock.patch("subprocess.Popen", side_effect=AssertionError("real subprocess reached"))
         p.start()
         self.addCleanup(p.stop)
+        g = mock.patch("exam_engine.pipeline.reporter.git_info", return_value=None)  # plan.json git: its own test
+        g.start()
+        self.addCleanup(g.stop)
         self.out = os.path.join(self.tmp, "out")
 
     def write(self, name, text):

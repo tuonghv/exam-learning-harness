@@ -107,6 +107,9 @@ class Base(unittest.TestCase):
         p = mock.patch("subprocess.Popen", side_effect=AssertionError("real subprocess reached"))
         p.start()
         self.addCleanup(p.stop)
+        g = mock.patch("exam_engine.pipeline.reporter.git_info", return_value=None)  # plan.json git: its own test
+        g.start()
+        self.addCleanup(g.stop)
         self.out = os.path.join(self.tmp, "out")
 
     def read(self, name):
@@ -428,7 +431,8 @@ class RunIntegration(Base):
 
     def test_9_run_writes_report_md_and_valid_result_with_evidence_kind(self):
         res, _ = self.go()
-        self.assertEqual(self.files(), ["answers.md", "report.md", "result.json"])
+        self.assertEqual([f for f in self.files() if f not in ("calls", "config.json", "input", "plan.json", "run.log")],
+                         ["answers.md", "report.md", "result.json"])  # plan files beside them (58.5)
         with open(os.path.join(self.out, "result.json"), encoding="utf-8") as fh:
             disk = json.load(fh)
         self.assertEqual(sch.validate(disk, sch.RESULT), [])
@@ -471,7 +475,8 @@ class Cli(Base):
     def test_10_mock_no_pdf_end_to_end(self):
         code, out, _ = self.main(INPUT_001, "--mock", MOCK, "--no-pdf", "--out", self.out)
         self.assertEqual(code, 1)
-        self.assertEqual(self.files(), ["answers.md", "report.md", "result.json"])
+        self.assertEqual([f for f in self.files() if f not in ("calls", "config.json", "input", "plan.json", "run.log")],
+                         ["answers.md", "report.md", "result.json"])  # plan files beside them (58.5)
         with open(os.path.join(self.out, "result.json"), encoding="utf-8") as fh:
             res = json.load(fh)
         self.assertEqual(sch.validate(res, sch.RESULT), [])

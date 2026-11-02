@@ -200,7 +200,8 @@ def history_line(result, m, meta):
     ex = result.get("exam") or {}
     keep = {k: v for k, v in m.items() if k != "questions" and not (k.startswith("by_") and not v)}
     # keyword form: the literal quoted key trips the config-via-settings guard (test_req0012_acs 6.4)
-    return dict(v=1, run_id=meta.get("run_id"), ts=meta.get("ts") or _now(),
+    extra = {"plan_dir": meta["plan_dir"]} if meta.get("plan_dir") else {}
+    return dict(extra, v=1, run_id=meta.get("run_id"), ts=meta.get("ts") or _now(),
                 exam_id=meta.get("exam_id"), exam_sha256=meta.get("exam_sha256"),
                 subject=ex.get("subject"), git=meta.get("git"), prompt=run.get("prompt"),
                 model=run.get("model"), llm=run.get("llm"),

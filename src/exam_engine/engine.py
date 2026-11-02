@@ -30,11 +30,11 @@ class Stop(Exception):
 class Runner(object):
     """Counts calls and cost, enforces the caps, logs one line per call."""
 
-    def __init__(self, cfg, llm, log):
-        self.cfg, self.llm, self.log = cfg, llm, log
+    def __init__(self, cfg, llm, log, sink=None):
+        self.cfg, self.llm, self.log, self.sink = cfg, llm, log, sink
         self.calls, self.cost = 0, 0.0
 
-    def call(self, prompt):
+    def call(self, prompt, tag=None):
         if self.cost >= self.cfg["max_cost_usd"]:
             raise Stop("cost_cap", "cost cap $%.2f reached" % self.cfg["max_cost_usd"])
         if self.calls >= call_cap(self.cfg):
@@ -45,6 +45,8 @@ class Runner(object):
         self.log.append("call %d ok=%s cls=%s dur=%.1fs cost=%.4f prompt_bytes=%d answer_bytes=%d" % (
             self.calls, c.ok, c.cls or "-", c.duration_s or 0.0, c.cost_usd or 0.0,
             len(prompt.encode("utf-8")), len((c.text or "").encode("utf-8"))))
+        if self.sink:
+            self.sink(self.calls, tag, prompt, c)  # before any Stop, so a crash loses no paid reply
         if not c.ok and c.cls in BLOCKING:
             raise Stop(c.cls, c.reason)
         return c
@@ -125,7 +127,7 @@ def build_result(exam, exam_path, recs, cfg, rn, stopped):
                     "points": sum(pts) if pts else None, "max_points": sum(mx) if mx else None}}
 
 
-def run(exam_path, out_dir, cfg, llm):
+def run(exam_path, out_dir, cfg, llm, sink=None):
     """(result, exit_code); result is None on exit 2."""
     try:
         text = parser.read_text(exam_path)
@@ -142,7 +144,7 @@ def run(exam_path, out_dir, cfg, llm):
     for w in parser.exam_warnings(exam):
         print("WARN: %s" % w, file=sys.stderr)
     log = []
-    rn = Runner(cfg, llm, log)
+    rn = Runner(cfg, llm, log, sink)
     recs = {q["id"]: new_rec() for q in exam["questions"]}
     stopped = None
     skip = incomplete_ids(exam)
@@ -155,7 +157,8 @@ def run(exam_path, out_dir, cfg, llm):
         for attempt in range(1, cfg["max_attempts"] + 1):
             if not ids:
                 break
-            solver.solve_round(exam, rn, recs, ids, prompt if attempt == 1 else solver.retry_prompt(exam, recs, ids))
+            solver.solve_round(exam, rn, recs, ids, prompt if attempt == 1 else solver.retry_prompt(exam, recs, ids),
+                               tag="solve" if attempt == 1 else "retry")
             verifier.qa_round(exam, rn, recs, ids)
             ids = [i for i in retry_ids(recs) if i not in skip]
             if not ids:

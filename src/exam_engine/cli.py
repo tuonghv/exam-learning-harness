@@ -16,14 +16,16 @@ from exam_engine import engine, settings
 from exam_engine.adapters import claude
 from exam_engine.core import schema as sch
 from exam_engine.core.decision import decide
-from exam_engine.pipeline import examples_check, metrics, parser, prompts, reporter, router, scorer, solver, verifier
+from exam_engine.pipeline import examples_check, metrics, parser, planrun, prompts, reporter, router, scorer, solver, verifier
 
 COMMANDS = ("solve", "parse", "verify", "report", "check-examples", "score", "prompts",
             "check-prompts", "ingest", "ingest-inspect", "ingest-refine", "cross-solve", "benchmark",
             "extract-eval", "gold-pdf", "gen-exams", "lessons", "review-pack", "review-apply", "run-stats")
-DEFAULT_HISTORY = os.path.join("reports", "run-history.jsonl")
-LEGACY_HISTORY = os.path.join("results", "run-history.jsonl")  # read-only fallback (pre RAW-00174)
-DEFAULT_OUT_ROOT = "reports"  # git-ignored; solve output must never be tracked
+DEFAULT_HISTORY = os.path.join("plans", "run-history.jsonl")
+LEGACY_HISTORY = (os.path.join("reports", "run-history.jsonl"),  # read-only fallbacks (RAW-00174, phase 58)
+                  os.path.join("results", "run-history.jsonl"))
+DEFAULT_OUT_ROOT = "plans"  # git-ignored; solve output must never be tracked
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 USAGE = "usage: exam.py {%s} ..." % "|".join(COMMANDS)
 
 
@@ -44,7 +46,7 @@ def solve_main(argv=None):
     ap.add_argument("--model", default=d["model"])
     ap.add_argument("--no-pdf", action="store_true", help="write report.md only")
     ap.add_argument("--history", metavar="FILE",
-                    help="append a metrics line to FILE (default with --real: results/run-history.jsonl)")
+                    help="append a metrics line to FILE (default with --real: plans/run-history.jsonl)")
     ap.add_argument("--lang", choices=("vi", "en", "auto"),
                     help="explanation language (beats the header Language:)")
     ap.add_argument("--channel", choices=("release", "dev"),
@@ -68,7 +70,7 @@ def solve_main(argv=None):
         print("usage: --max-attempts >= 1, --max-cost-usd >= 0, --timeout > 0", file=sys.stderr)
         return 2
     if not a.dry_run and not a.out:
-        a.out = _default_out(a.exam)
+        a.out = planrun.claim_run_dir(DEFAULT_OUT_ROOT, planrun.exam_id_of(a.exam))
     cfg = {"max_attempts": a.max_attempts, "max_cost_usd": a.max_cost_usd, "timeout": a.timeout,
            "model": a.model, "key": a.key, "llm_name": "claude-p" if a.real else "mock",
            "pdf": not a.no_pdf, "lang": a.lang}
@@ -107,7 +109,13 @@ def solve_main(argv=None):
         else:
             llm = engine.mock_llm(a.mock)
         t0 = time.time()
-        result, code = engine.run(a.exam, a.out, cfg, llm)
+        pw = planrun.PlanWriter(a.out, a.exam, cfg, repo_root=_REPO_ROOT)
+        pw.start()
+        result, code = None, None
+        try:
+            result, code = engine.run(a.exam, a.out, cfg, llm, sink=pw.record)
+        finally:  # a crash still leaves plan.json (failed) and the captured calls
+            pw.finish(result, code, time.time() - t0)
         wall = round(time.time() - t0, 1)
     except (OSError, ValueError) as exc:
         print("ERROR: %s" % exc, file=sys.stderr)
@@ -136,26 +144,16 @@ def solve_main(argv=None):
     return code
 
 
-def _default_out(exam_path, root=DEFAULT_OUT_ROOT):
-    """reports/<exam-id>/<run-id>/ (UTC timestamp, -N suffix on a collision); not created here."""
-    base = os.path.join(root, os.path.splitext(os.path.basename(exam_path))[0])
-    stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
-    out, n = os.path.join(base, stamp), 1
-    while os.path.exists(out):
-        n += 1
-        out = os.path.join(base, "%s-%d" % (stamp, n))
-    return out
-
-
 def _append_history(a, result, m):
     """One history line per real (or --history) run; a history failure never changes the exit code."""
     hist = a.history or DEFAULT_HISTORY
     try:
-        root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        root = _REPO_ROOT
         meta = {"run_id": "%s@%s" % (os.path.basename(os.path.abspath(a.out)), time.strftime("%Y%m%dT%H%M%S")),
                 "exam_id": os.path.splitext(os.path.basename(a.exam))[0],
                 "exam_sha256": metrics.file_sha256(a.exam), "git": reporter.git_info(root),
                 "result_path": os.path.abspath(os.path.join(a.out, "result.json")), "source": "solve",
+                "plan_dir": os.path.abspath(a.out),
                 "lang": a.lang}
         metrics.append(hist, metrics.history_line(result, m, meta))
     except (OSError, ValueError) as exc:
@@ -982,8 +980,8 @@ def main(argv=None):
 def _rs_lines(a):
     """(history lines, malformed count); the default history also reads the legacy results/ file."""
     lines, bad = metrics.read_history(a.history)
-    if a.legacy:
-        lines2, bad2 = metrics.read_history(a.legacy)
+    for leg in ([a.legacy] if isinstance(a.legacy, str) else a.legacy or ()):
+        lines2, bad2 = metrics.read_history(leg)
         lines, bad = lines2 + lines, bad + bad2
     return lines, bad
 
@@ -1008,6 +1006,8 @@ def _rs_compute(ref, a):
     keymap = scorer.key_letters(a.ans_key) if a.ans_key else None
     if a.exam:
         exam, _code = _load_exam(a.exam)
+    elif os.path.isfile(os.path.join(ref, "input", "exam.md")):  # plan run: exam copy beside the result
+        exam, _code = _load_exam(os.path.join(ref, "input", "exam.md"))
     if a.review_pack:
         qa = metrics.load_qa(a.review_pack, a.offset)
     sha = metrics.file_sha256(a.exam) if a.exam else (line or {}).get("exam_sha256")

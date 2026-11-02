@@ -135,10 +135,10 @@ def retry_prompt(exam, recs, ids):
                 base, router.language(exam), "\n".join(notes), ctx, render_questions(exam, set(ids), recs)))
 
 
-def solve_round(exam, rn, recs, ids, prompt):
+def solve_round(exam, rn, recs, ids, prompt, tag="solve"):
     for i in ids:
         recs[i]["attempts"] += 1
-    c = rn.call(prompt)
+    c = rn.call(prompt, tag)
     if not c.ok:
         for i in ids:
             recs[i]["error"] = {"cls": c.cls, "message": c.reason}

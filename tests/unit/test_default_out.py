@@ -1,4 +1,4 @@
-"""TASK-057 57.8 (RAW-00174): solve without --out writes under git-ignored reports/. Mock runner, temp git repo."""
+"""TASK-057 57.8 (RAW-00174): solve without --out writes under git-ignored plans/. Mock runner, temp git repo."""
 import contextlib
 import io
 import os
@@ -38,7 +38,7 @@ class DefaultOutTest(unittest.TestCase):
 
     def test_no_out_goes_to_ignored_reports_dir(self):
         self.assertIn(self.solve(), (0, 1))
-        base = os.path.join(self.tmp, "reports", "input-001")
+        base = os.path.join(self.tmp, "plans", "input-001")
         runs = os.listdir(base)
         self.assertEqual(len(runs), 1)
         self.assertTrue(os.path.isfile(os.path.join(base, runs[0], "result.json")))
@@ -47,22 +47,22 @@ class DefaultOutTest(unittest.TestCase):
     def test_two_runs_do_not_collide(self):
         self.solve()
         self.solve()
-        self.assertEqual(len(os.listdir(os.path.join(self.tmp, "reports", "input-001"))), 2)
+        self.assertEqual(len(os.listdir(os.path.join(self.tmp, "plans", "input-001"))), 2)
 
     def test_explicit_out_honoured(self):
         self.solve("--out", "mine")
         self.assertTrue(os.path.isfile(os.path.join(self.tmp, "mine", "result.json")))
-        self.assertFalse(os.path.exists(os.path.join(self.tmp, "reports")))
+        self.assertFalse(os.path.exists(os.path.join(self.tmp, "plans")))
 
     def test_dry_run_creates_nothing(self):
         with contextlib.redirect_stdout(io.StringIO()):
             cli.solve_main([EXAM, "--dry-run"])
-        self.assertEqual(os.listdir(self.tmp).count("reports"), 0)
+        self.assertEqual(os.listdir(self.tmp).count("plans"), 0)
 
     def test_history_default_and_legacy_fallback(self):
-        self.assertEqual(cli.DEFAULT_HISTORY, os.path.join("reports", "run-history.jsonl"))
+        self.assertEqual(cli.DEFAULT_HISTORY, os.path.join("plans", "run-history.jsonl"))
         os.makedirs("results")
-        with open(cli.LEGACY_HISTORY, "w", encoding="utf-8") as f:
+        with open(cli.LEGACY_HISTORY[1], "w", encoding="utf-8") as f:
             f.write('{"run_id": "old", "exam_id": "x", "ts": "2026-01-01T00:00:00Z", "metrics": {}}\n')
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(io.StringIO()):

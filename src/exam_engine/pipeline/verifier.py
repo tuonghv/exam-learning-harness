@@ -221,7 +221,7 @@ def qa_round(exam, rn, recs, ids):
     try:
         if not cand:
             return
-        c = rn.call(qa_prompt(exam, recs, cand))
+        c = rn.call(qa_prompt(exam, recs, cand), "qa")
         if not c.ok:
             for i in cand:
                 recs[i]["findings"].append(finding("ai_review", "review_failed", c.reason))
