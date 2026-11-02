@@ -149,3 +149,6 @@ Nova
 - Q1 yes: _evidence.py scan/publish refuse any path under plans/ or reports/ (plans hold exam text and answers).
 - Q2 accepted: mask secrets in raw replies with the existing claude.mask token pattern, keep sha256 of the unmasked reply.
 - Order: TASK-058 starts after TASK-057 is DONE; 58.1+58.2 (raw call capture) first, it also fixes D-4 (paid replies lost on crash).
+
+## Existing raw AI output found (RAW-00176, coordinator inspection)
+Raw AI output exists today only for INGEST/REFINE, not for solve: `<out>.trace.json` beside each refine output (e.g. work/dgnl-real/v3/5-12.json.trace.json: list of {ok, cls, cost_usd, text(raw reply), reason} per call) and the reply cache `work/dgnl-real/work/ingest/<hash>/` (boundary/page entries, REPLY CACHE in ingest/replycache.py). Solve runs (run*/) keep only result.json, report.md, run.log: raw solve replies were never stored. 58.7 `plan-import` must also pick up `*.trace.json` and the ingest cache dir of the same exam into `plans/<exam>/<run>/ingest/` as raw AI output, so a plan holds both ingest and solve raw output.
