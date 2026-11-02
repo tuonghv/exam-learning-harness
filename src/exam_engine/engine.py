@@ -4,6 +4,7 @@ Counts calls and cost, enforces the caps, logs one line per call. run() returns
 (result, exit_code); exit 0 all PASS, 1 any FAIL/UNCERTAIN/unresolved, 2 invalid input,
 3 blocking stop.
 """
+import hashlib
 import json
 import os
 import re
@@ -20,6 +21,10 @@ BLOCKING = ("auth", "rate_limit", "service")
 
 def call_cap(cfg):
     return 1 + 2 * cfg["max_attempts"] + (1 if cfg.get("image_pdf") else 0)
+
+
+PNG_SIG = b"\x89PNG\r\n\x1a\n"
+MAX_PNG_BYTES = 8 * 1024 * 1024
 
 
 class Stop(Exception):
@@ -50,7 +55,8 @@ class Runner(object):
             + (" images=%d" % len(images) if images else ""))
         if self.sink:  # before any Stop, so a crash loses no paid reply
             if images:
-                self.sink(self.calls, tag, prompt, c, pages=pages)
+                self.sink(self.calls, tag, prompt, c, pages=pages,
+                          page_sha256=[hashlib.sha256(b).hexdigest() for b in images])
             else:
                 self.sink(self.calls, tag, prompt, c)
         if not c.ok and c.cls in BLOCKING:
@@ -187,6 +193,9 @@ def image_check(exam, recs, rn, flags, skip, cfg, image):
         return
     try:
         pngs = [image["render"](n) for n in pages]
+        for b in pngs:  # the render is injected: send only real, bounded PNGs
+            if not isinstance(b, bytes) or not b.startswith(PNG_SIG) or len(b) > MAX_PNG_BYTES:
+                raise ValueError("render did not return a PNG within %d bytes" % MAX_PNG_BYTES)
     except Exception as exc:  # noqa: BLE001 - render is injected; any failure means no call
         apply_image(exam, recs, {}, targets, flags, ("image_unavailable", str(exc)[:200]))
         return

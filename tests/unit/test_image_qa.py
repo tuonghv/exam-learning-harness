@@ -33,7 +33,7 @@ class Qa(TI.Base):
     def test_2a_unflagged_never_get_pages_or_source(self):
         im, image = self.img(None, T.solve(T.a(2, "5"), T.a(3, "6"), T.a(5, "8")))
         res, _ = self.run_img(self.text5(), self.llm5(), image)
-        self.assertEqual(im.calls[0][1], [b"PNG3", b"PNG4", b"PNG7"])  # page 9 (unflagged q4) never rendered
+        self.assertEqual(im.calls[0][1], [TI.png(3), TI.png(4), TI.png(7)])  # page 9 (unflagged q4) never rendered
         self.assertNotIn("id 1:", im.calls[0][0])
         self.assertNotIn("id 4:", im.calls[0][0])
         for i in (0, 3):
@@ -43,7 +43,7 @@ class Qa(TI.Base):
     def test_2b_page_cap_end_to_end(self):
         im, image = self.img(None, T.solve(T.a(2, "5"), T.a(3, "6")))
         res, _ = self.run_img(self.text5(), self.llm5(), image, cap=2)
-        self.assertEqual(im.calls[0][1], [b"PNG3", b"PNG4"])
+        self.assertEqual(im.calls[0][1], [TI.png(3), TI.png(4)])
         q5 = res["questions"][4]
         self.assertIn("page_cap", msgs(q5))
         self.assertNotIn("source", q5)
@@ -52,7 +52,7 @@ class Qa(TI.Base):
     def test_2c_key_page_refused_others_still_checked(self):
         im, image = self.img(None, T.solve(T.a(2, "5"), T.a(5, "8")), key_pages={4})
         res, _ = self.run_img(self.text5(), self.llm5(), image)
-        self.assertEqual(im.calls[0][1], [b"PNG3", b"PNG7"])
+        self.assertEqual(im.calls[0][1], [TI.png(3), TI.png(7)])
         self.assertNotIn("id 3:", im.calls[0][0])
         q3 = res["questions"][2]
         self.assertIn("answer_key_page", msgs(q3))

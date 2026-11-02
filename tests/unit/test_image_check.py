@@ -27,6 +27,10 @@ def load(tmp, text):
     return parser.parse_exam(p)
 
 
+def png(n):
+    return b"\x89PNG\r\n\x1a\n" + b"%d" % n
+
+
 class Imgs(object):
     def __init__(self, *items):
         self.items, self.calls = list(items), []
@@ -39,7 +43,7 @@ class Imgs(object):
 class Base(T.Base):
     def img(self, text, *reply, **kw):
         im = Imgs(*reply)
-        image = {"llm": im, "render": lambda n: b"PNG%d" % n,
+        image = {"llm": im, "render": lambda n: png(n),
                  "key_pages": kw.get("key_pages", set()), "have_pages": kw.get("have_pages")}
         return im, image
 
@@ -66,6 +70,21 @@ class Flags(Base):
         self.assertIn("WARN: question 1 refers to figure/table not in text (pages unknown); "
                       "image check: off (no --pdf)", err.getvalue())
         self.assertNotIn("question 2 refers", err.getvalue())
+
+    def test_1a_warn_printed_before_solve(self):
+        text = exam(FIG, "Compute 3+4.")
+        seen = []
+
+        class Spy(T.Script):
+            def __call__(self, prompt):
+                seen.append(sys.stderr.getvalue())
+                return T.Script.__call__(self, prompt)
+
+        llm = Spy(T.solve(T.a(1, "5"), T.a(2, "7")), T.qa((1, "agree"), (2, "agree")))
+        err = io.StringIO()
+        with contextlib.redirect_stderr(err):
+            er.run(self.write("x.md", text), self.out, T.cfg(), llm)
+        self.assertIn("WARN: question 1 refers to figure/table", seen[0])
 
     def test_1b_declined_missing_text_is_flagged(self):
         ex = load(self.tmp, exam("Main idea of paragraph (5)?\n\n(1) aa\n(2) bb"))
@@ -94,6 +113,25 @@ class Flags(Base):
         self.assertEqual(er.call_cap(T.cfg(image_pdf=True)), 6)
 
 
+class BadRender(Base):
+    def check(self, render):
+        text = exam("Source pages: 3\n\n" + FIG, "Compute 3+4.")
+        im, image = self.img(None, T.solve(T.a(1, "9")))
+        image["render"] = render
+        llm = T.Script(T.solve(T.a(1, "5"), T.a(2, "7")), T.qa((1, "agree"), (2, "agree")))
+        res, _ = self.run_img(text, llm, image)
+        self.assertEqual(im.calls, [])
+        q = res["questions"][0]
+        self.assertEqual(q["answer"], "5")
+        self.assertTrue([f for f in q["qa_findings"] if f["code"] == "image_unavailable"])
+
+    def test_7_non_png_bytes_not_sent(self):
+        self.check(lambda n: b"PNG3")
+
+    def test_7b_oversize_png_not_sent(self):
+        self.check(lambda n: png(n) + b"0" * (er.MAX_PNG_BYTES + 1))
+
+
 class ImageCall(Base):
     def text(self):
         return exam("Source pages: 3\n\n" + FIG, "Compute 3+4.")
@@ -119,7 +157,7 @@ class ImageCall(Base):
         im, image = self.img(None, T.solve(T.a(1, "5"), T.a(99, "Z")))
         res, err = self.run_img(self.text(), self.llm(T.a(1, "5")), image)
         self.assertEqual(len(im.calls), 1)
-        self.assertEqual(im.calls[0][1], [b"PNG3"])
+        self.assertEqual(im.calls[0][1], [png(3)])
         self.assertIn("ignored: 99", err)
         q = res["questions"][0]
         self.assertEqual(q["source"], "text+image")

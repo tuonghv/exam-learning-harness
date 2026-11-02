@@ -1,4 +1,5 @@
 """TASK-059 59.5-59.6: result source, plan-run image call, report/metrics, CLI wiring. Mock LLM only."""
+import hashlib
 import json
 import os
 import sys
@@ -46,6 +47,7 @@ class Run(TI.Base):
         img = [x for x in lines if x["tag"] == "image"]
         self.assertEqual(len(img), 1)
         self.assertEqual(img[0]["pages"], [3])
+        self.assertEqual(img[0]["page_sha256"], [hashlib.sha256(TI.png(3)).hexdigest()])
         self.assertTrue(all("pages" not in x for x in lines if x["tag"] != "image"))
         self.assertTrue(os.path.isfile(os.path.join(self.out, "calls", "%03d-prompt.txt" % img[0]["n"])))
         self.assertFalse([f for f in os.listdir(os.path.join(self.out, "calls")) if f.endswith(".png")])
