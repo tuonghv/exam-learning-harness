@@ -39,7 +39,7 @@ class QaTests(Base):
         t = self.read("s.md")
         self.assertIn("QA: A conf high | agrees | same as engine", t)
         self.assertIn("QA: C conf low | differs |", t)
-        self.assertIn("QA: B conf mid | flawed |", t)
+        self.assertIn("QA: B conf mid | flawed (engine A vs QA B) |", t)
         self.assertIn("QA: D conf high | qa-only |", t)
         self.assertIn("QA: - conf low | unresolved |", t)
         self.assertIn("not an official key", t)
@@ -139,7 +139,19 @@ class QaTests(Base):
         self.pack_qa([self.qa(QA1)])
         self.pack_qa([])
         self.pack_qa([])
-        self.assertIn("QA: B conf mid | flawed | broken stem", self.read("s.md"))
+        self.assertIn("QA: B conf mid | flawed (engine A vs QA B) | broken stem", self.read("s.md"))
+
+    def test_flawed_differs_shows_pair(self):
+        self.pack_qa([self.qa("1 | C | high | yes | bad\n2 | A | high | yes | same\n")])
+        s = self.read("s.md")
+        self.assertIn("QA: C conf high | flawed (engine A vs QA C) | bad", s)
+        self.assertIn("QA: A conf high | flawed | same", s)
+        ix = self.read("INDEX.md")
+        self.assertIn("flawed (engine A vs QA C) |", ix)
+        self.assertIn("flawed 2,", ix)
+        self.assertIn("flawed_differs 1", ix)
+        self.pack_qa([])
+        self.assertIn("QA: C conf high | flawed (engine A vs QA C) | bad", self.read("s.md"))
 
     def test_rerun_with_partial_qa_replaces_only_covered(self):
         self.pack_qa([self.qa(QA1)])
@@ -180,6 +192,24 @@ class QaTests(Base):
         s = self.read("s.md")
         self.assertIn("QA: A conf high | agrees | yes it matches", s)
         self.assertIn("QA: C conf low | differs | five col reason", s)
+
+
+    def test_d4_roundtrip_differs_flawed_and_marks(self):
+        self.pack_qa([self.qa(QA1)])
+        self.fill("s", 1, tick(ext="ok", note="m1"))
+        self.fill("s", 3, tick(ext="defect", note="m3"))
+        qs = self.qs()
+        qs[0] = q(1, "B")  # QA A vs engine B -> differs
+        qs[2] = q(3, "D")  # flawed row stays flawed
+        r = self.result(qs, "s2.json")
+        e = self.w("s.md", "\n".join(["# E", ""] + ["## Question %d\n\nStem %d?\n" % (i, i) for i in range(1, 6)]))
+        review.pack("X1", "s", r, e, None, 0, self.out, False, "", [])
+        t = self.read("s.md")
+        self.assertIn("QA: A conf high | differs | same as engine", t)
+        self.assertIn("QA: B conf mid | flawed (engine D vs QA B) | broken stem", t)
+        self.assertIn(tick(ext="ok", note="m1"), t)
+        self.assertIn(tick(ext="defect", note="m3"), t)
+        self.assertIn("| s | 1 |", self.read("INDEX.md"))
 
 
 if __name__ == "__main__":

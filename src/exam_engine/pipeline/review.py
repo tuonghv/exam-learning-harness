@@ -27,7 +27,7 @@ LOOSE_RE = re.compile(r"^##\s*Q?\s*(\d+)")
 QA_HEAD = ("QA: in-session independent reads of the source (same model family as the engine: not an official "
            "key, agreement is not proof). You review the extraction; the answer is QA's job. Verdicts: agrees, "
            "differs, flawed, qa-only, unresolved, engine-nonletter.")
-QA_RE = re.compile(r"^QA: (\S+) conf (\S+) \| (\S+) \|")
+QA_RE = re.compile(r"^QA: (\S+) conf (\S+) \| ([^|]+?) \|")
 VERDICTS = ("agrees", "differs", "flawed", "qa-only", "unresolved", "engine-nonletter")
 OPT_RE = re.compile(r"(?m)^\s*\(?([A-D])[.)]\s*(.+?)\s*$")
 QA_HEADER_CELLS = ("n", "#", "no", "no.", "q", "number")
@@ -151,6 +151,15 @@ def parse_qa(paths):
     return rows, bad
 
 
+def verdict_text(engine, qa):
+    """Verdict plus, for a flawed question whose engine and QA letters both exist and differ, the pair."""
+    v = qa_verdict(engine, qa)
+    if v == "flawed" and engine in ("A", "B", "C", "D") and qa["answer"] in ("A", "B", "C", "D") \
+            and engine != qa["answer"]:
+        return "flawed (engine %s vs QA %s)" % (engine, qa["answer"])
+    return v
+
+
 def _norm_value(t):
     t = unicodedata.normalize("NFC", str(t)).lower()
     t = re.sub(r"(?<=\d),(?=\d)", ".", t)
@@ -182,7 +191,7 @@ def _parse_qaline(ln):
     m = QA_RE.match(ln or "")
     if not m:
         return None
-    return {"answer": m.group(1), "conf": m.group(2), "flawed": m.group(3) == "flawed",
+    return {"answer": m.group(1), "conf": m.group(2), "flawed": m.group(3).split(" ")[0] == "flawed",
             "why": ln.split(" | ", 2)[2] if ln.count(" | ") >= 2 else "-"}
 
 
@@ -208,7 +217,7 @@ def build_sections(result, exam, refined, offset, qa=None, keep=None):
         x = qa[n] if qa and n in qa else (keep or {}).get(n)
         if x:
             qline = "QA: %s conf %s | %s | %s" % (x["answer"], x["conf"].replace(" ", "_"),
-                                                  qa_verdict(h["eff"], x), x["why"])
+                                                  verdict_text(h["eff"], x), x["why"])
         lines = ["## Q%d  p.%s  %s  answer %s  conf %s" % (n, h["page"], h["status"], h["answer"], h["conf"]),
                  "", _guard(stem), "", _engine_line(q), qline, "Flags: " + h["flags"], TEMPLATE, ""]
         secs.append((n, h, lines))
@@ -223,7 +232,7 @@ def parse_subject(text):
         if ln.startswith("## "):
             m, lm = HEAD_RE.match(ln), LOOSE_RE.match(ln)
             cur = {"n": int((m or lm).group(1)) if (m or lm) else None, "page": "-", "status": "-",
-                   "answer": "-", "conf": "-", "flags": "none", "qa": "-", "verdict": "-", "review": None, "changed": None,
+                   "answer": "-", "conf": "-", "flags": "none", "qa": "-", "verdict": "-", "vfull": "-", "review": None, "changed": None,
                    "bad": not m, "qaline": None}
             if m:
                 cur.update(page=m.group(2), status=m.group(3), answer=m.group(4), conf=m.group(5))
@@ -233,7 +242,8 @@ def parse_subject(text):
                 cur["qaline"] = ln.rstrip()
                 qm = QA_RE.match(ln)
                 if qm:
-                    cur["qa"], cur["verdict"] = qm.group(1), qm.group(3)
+                    cur["qa"], cur["verdict"] = qm.group(1), qm.group(3).split(" ")[0]
+                    cur["vfull"] = qm.group(3)
             elif ln.startswith("Flags: "):
                 cur["flags"] = ln[7:].strip() or "none"
             elif ln.startswith("Answer changed:"):
@@ -369,7 +379,8 @@ def _state(r):
 
 def _verdict_counts(rs):
     c = [(v, sum(1 for r in rs if r["verdict"] == v)) for v in VERDICTS]
-    return ", ".join("%s %d" % (v, k) for v, k in c if k or v != "engine-nonletter")
+    c.append(("flawed_differs", sum(1 for r in rs if r["vfull"].startswith("flawed ("))))
+    return ", ".join("%s %d" % (v, k) for v, k in c if k or v not in ("engine-nonletter", "flawed_differs"))
 
 
 def write_index(d, exam_id):
@@ -396,7 +407,7 @@ def write_index(d, exam_id):
                 fl.append("heading_edited")
             md.append("| %s | %s | %s | %s | %s | %s | %s | %s | %s |" % (
                 sub, "?" if r["n"] is None else r["n"], r["page"], r["status"], r["answer"], r["conf"],
-                ",".join(fl) or "none", ext, sol) + (" %s | %s |" % (r["qa"], r["verdict"]) if has_qa else ""))
+                ",".join(fl) or "none", ext, sol) + (" %s | %s |" % (r["qa"], r["vfull"]) if has_qa else ""))
     md += ["", "Totals (extraction review state per subject):"]
     for sub, rs in rows:
         c = tot.get(sub, {})
