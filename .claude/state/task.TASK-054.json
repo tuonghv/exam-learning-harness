@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-054",
   "title": "Section headings once per section, group instruction per question (REQ-0057)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0057",
   "acceptance_criteria": [
     "AC0 four labelled levels in FORMAT.md, parser, ingest, solve prompt",
@@ -32,9 +32,9 @@
     "summary": "Four-level labelled format: split_heading, ## Section once, ### Instruction/Passage/Question text, parser, heading_subject, labelled render_questions, WARN lines"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "865 run; only the 4 pre-existing failures (lxml, examples/dgnl unknown subject dir x3); golden: 25 unlabelled inputs identical to baseline 2461f4f; DGNL re-emit 30 q/subject, options equal"
   },
   "security": {
     "status": "pending",
@@ -52,7 +52,8 @@
   "crosscheck_required": true,
   "roles": {
     "designer": "work/TASK-054/handoff/design.md",
-    "coder": "work/TASK-054/handoff/code.md"
+    "coder": "work/TASK-054/handoff/code.md",
+    "tester": "work/TASK-054/handoff/test.md"
   },
   "user_notes": [
     {
@@ -62,7 +63,7 @@
     }
   ],
   "picked_at": "2026-11-02T06:09:12Z",
-  "updated_at": "2026-11-02T09:32:46Z",
+  "updated_at": "2026-11-02T09:32:55Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-054/"
@@ -74,5 +75,5 @@
     "notes": "",
     "next": "RESUME after account switch: write/brief the design for REQ-0057 (AC0 four-level clean exam format, AC4 section->subject by alias table, AC5 instruction block in the solve prompt; update examples/FORM"
   },
-  "next": "unit-test gate: tester handoff, full suite"
+  "next": "verifier: real verification (DGNL re-emit prompt, evidence saved)"
 }
