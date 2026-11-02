@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-060",
   "title": "Quality deep-dive: design the slower higher-quality solve path from the cause table (REQ-0066)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0066",
   "acceptance_criteria": [
     "AC1 cause table from saved runs",
@@ -35,12 +35,20 @@
     "result": "1142 run, only the known baseline failures (head-failures identical to baseline); mutations on option_for_value and recheck killed; prompts identical on 15 inputs; recheck on saved runs 7 cleared 2 still failed; mock only"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "no finding; pure mapping returns None when unsure, no network"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-060/evidence/suite-last.txt",
+      "work/TASK-060/evidence/head-failures-final.txt",
+      "work/TASK-060/evidence/baseline-failures.txt",
+      "work/TASK-060/evidence/recheck-Science-final.txt",
+      "work/TASK-060/evidence/recheck-Vietnamese-final.txt"
+    ],
+    "command": "python3 -I -m unittest discover -s tests/unit; run-stats recheck on saved runs; mutations",
+    "result": "slice A (60.1-60.3, 60.7) verified: 1144 tests, only baseline failures; recheck on saved runs clears 7 of 8 Science false alarms, q17 and Vietnamese q20 stay failed; default solve path unchanged; defects D1 D2 D4 (tester) and option_for_value multi-number (verifier) fixed; 60.4-60.6 image scope open for a follow-up task; mapped letters not compared to a key"
   },
   "report": {
     "status": "pending",
@@ -52,11 +60,12 @@
   "roles": {
     "designer": "work/TASK-060/handoff/design.md",
     "coder": "work/TASK-060/handoff/code.md",
-    "tester": "work/TASK-060/handoff/test.md"
+    "tester": "work/TASK-060/handoff/test.md",
+    "verifier": "work/TASK-060/handoff/verify.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-02T22:22:04Z",
-  "updated_at": "2026-11-02T23:03:14Z",
+  "updated_at": "2026-11-02T23:26:54Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -65,5 +74,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verifier + publish evidence"
+  "next": "report, DONE; follow-up task for 60.4-60.6"
 }
