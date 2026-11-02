@@ -47,7 +47,13 @@
       ]
     }
   },
-  "user_notes": [],
+  "user_notes": [
+    {
+      "raw": "RAW-00175",
+      "note": "plans/ = per-exam plan runs (config,input,raw AI); reports/ rebuilt from plans, no AI; new REQ-0062; 57.8 default out to be revised",
+      "at": "2026-11-02T10:41:03Z"
+    }
+  ],
   "picked_at": "2026-11-02T10:30:45Z",
   "updated_at": "2026-11-02T10:35:03Z",
   "updated_by": "main",
