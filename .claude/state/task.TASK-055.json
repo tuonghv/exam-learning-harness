@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-055",
   "title": "Group-aware solving: slice-after-share, group model, group-aware render/retry/QA, missing-context decline, source pages (REQ-0058)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0058",
   "acceptance_criteria": [
     "AC1 group kind derived",
@@ -34,9 +34,9 @@
     "summary": "Slice after share, wider group forms, groups()/deps(), group-aware render/retry/QA, missing-context decline, source pages, dry-run grouped prompt"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "890 run; only the known failures (lxml docx, check_examples x2, cwd_independence, scripts_exam), identical to baseline; golden solve/retry/QA prompts unchanged for 25 inputs; mutations caught"
   },
   "security": {
     "status": "pending",
@@ -54,7 +54,8 @@
   "crosscheck_required": true,
   "roles": {
     "designer": "work/TASK-055/handoff/design.md",
-    "coder": "work/TASK-055/handoff/code.md"
+    "coder": "work/TASK-055/handoff/code.md",
+    "tester": "work/TASK-055/handoff/test.md"
   },
   "user_notes": [
     {
@@ -64,7 +65,7 @@
     }
   ],
   "picked_at": "2026-11-02T09:39:02Z",
-  "updated_at": "2026-11-02T10:01:31Z",
+  "updated_at": "2026-11-02T10:01:32Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-055/"
@@ -76,5 +77,5 @@
     "notes": "",
     "next": "coder 55.4-55.5 running; designer addendum (RAW-00169) running; on return commit wip, tester golden, advance IMPLEMENTING"
   },
-  "next": "unit-test gate with tester evidence"
+  "next": "verifier: AC check + security pass"
 }

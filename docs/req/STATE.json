@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0058",
-  "next": "unit-test gate with tester evidence",
+  "next": "verifier: AC check + security pass",
   "updated": "2026-11-02 17:01"
 }
