@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-056",
   "title": "Solve-run metrics: metrics.py catalogue, run history, run-stats stats/compare/trend, metrics block in solve output and report (REQ-0060)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0060",
   "acceptance_criteria": [
     "AC1 catalogue with formulas",
@@ -36,12 +36,21 @@
     "result": "only known failures (lxml docx, check_examples x2, cwd_independence, scripts_exam); independent recount of 3 real DGNL runs matches run-stats (English cost 0.3417 vs 0.3418 rounding); mutations killed after 3 proxy-label tests added"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "no finding (verify.md)"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "docs/report/evidence/TASK-056/recount-oracle.txt",
+      "docs/report/evidence/TASK-056/recount.tsv",
+      "docs/report/evidence/TASK-056/compare-check.txt",
+      "docs/report/evidence/TASK-056/run-stats-backfill-stats.txt",
+      "docs/report/evidence/TASK-056/suite-final.txt",
+      "docs/report/evidence/TASK-056/baseline-failures.txt"
+    ],
+    "command": "python3 -I -m unittest discover -s tests/unit; independent jq/awk recount of 3 real DGNL runs; compare/noise/exit-code checks; mutations",
+    "result": "AC1-AC5 verified on fixtures + real run3 result.json (no paid run); recount matches run-stats (English cost 0.3417 vs 0.3418 rounding); suite failures identical to baseline 083d0e4"
   },
   "report": {
     "status": "pending",
@@ -52,7 +61,8 @@
   "roles": {
     "designer": "work/TASK-056/handoff/design.md",
     "coder": "work/TASK-056/handoff/code.md",
-    "tester": "work/TASK-056/handoff/test.md"
+    "tester": "work/TASK-056/handoff/test.md",
+    "verifier": "work/TASK-056/handoff/verify.md"
   },
   "user_notes": [
     {
@@ -62,7 +72,7 @@
     }
   ],
   "picked_at": "2026-11-02T10:07:38Z",
-  "updated_at": "2026-11-02T10:28:25Z",
+  "updated_at": "2026-11-02T10:30:07Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-056/"
@@ -73,5 +83,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verifier: AC check + security pass"
+  "next": "write report, DONE"
 }
