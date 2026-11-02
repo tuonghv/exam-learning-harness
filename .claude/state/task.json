@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-057",
-  "state": "UNIT_TESTED",
-  "next": "verifier + publish evidence",
+  "state": "VERIFIED",
+  "next": "write report citing docs/report/evidence/TASK-057/, DONE",
   "title": "Standard user-facing crosscheck paths: docs/report/evidence/TASK-NNN, INDEX generator, gate in advance/workflow-check (REQ-0061)",
   "active": [
     {
       "task_id": "TASK-057",
-      "state": "UNIT_TESTED",
-      "next": "verifier + publish evidence",
-      "updated_at": "2026-11-02T10:59:35Z"
+      "state": "VERIFIED",
+      "next": "write report citing docs/report/evidence/TASK-057/, DONE",
+      "updated_at": "2026-11-02T11:02:25Z"
     }
   ],
   "max_active": 1

@@ -1,0 +1,22 @@
+# evidence: e2e57
+# task: TASK-057
+# cmd: bash .claude/tests/evidence_e2e_test.sh
+# cwd: .
+# head: c1559b7+dirty
+# when: 2026-11-02T10:47:10Z
+# rc: 0
+---
+PASS: 7.1 flagged VERIFIED, evidence refused by scan (url) -> evidence
+PASS: 7.1b nothing published after refusal
+PASS: 7.2 flagged VERIFIED publishes and passes
+PASS: 7.2b published file is tracked
+PASS: 7.2c verification.published recorded
+PASS: 7.3 flagged workflow-check fails when published is empty
+PASS: 7.4 flagged DONE fails when the report cites no evidence file
+PASS: 7.5 flagged DONE passes with citation + INDEX row
+PASS: 7.5b INDEX.md has the TASK-9 row
+PASS: 7.5c INDEX.md tracked
+PASS: 7.6 flagged DONE without an INDEX row fails workflow-check
+PASS: 7.7 unflagged VERIFIED: WARN only, no publish
+PASS: 7.7b unflagged publishes nothing
+SUMMARY(evidence-e2e): pass=13 fail=0

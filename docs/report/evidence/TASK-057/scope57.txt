@@ -1,0 +1,14 @@
+# evidence: scope57
+# task: TASK-057
+# cmd: bash .claude/tests/evidence_scope_test.sh
+# cwd: .
+# head: c1559b7+dirty
+# when: 2026-11-02T10:50:11Z
+# rc: 0
+---
+PASS: E1 another task's unstaged evidence dir is foreign (OK)
+PASS: E2 own unstaged evidence file FAILs
+PASS: E3 own evidence staged passes
+PASS: E4 unstaged INDEX.md FAILs (only a DONE commit rewrites it)
+PASS: E5 staged INDEX.md passes
+SUMMARY(evidence-scope): pass=5 fail=0

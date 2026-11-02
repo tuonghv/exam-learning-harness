@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-057",
   "title": "Standard user-facing crosscheck paths: docs/report/evidence/TASK-NNN, INDEX generator, gate in advance/workflow-check (REQ-0061)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0061",
   "acceptance_criteria": [
     "AC1 convention documented and enforced at VERIFIED/DONE",
@@ -40,12 +40,31 @@
     "result": "951 unit tests, only the known failures (identical names to baseline); evidence_e2e 13/0, evidence_scope 6/0, advance 58/0, advance_adv 32/0; mutations killed; calibration scan of committed evidence rc 0"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "clean; S1 symlink in publish fixed (_evidence.py), see verify.md"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-057/evidence/suite-final.txt",
+      "work/TASK-057/evidence/head-failures.txt",
+      "work/TASK-057/evidence/baseline-failures.txt",
+      "work/TASK-057/evidence/e2e57.txt",
+      "work/TASK-057/evidence/scope57.txt",
+      "work/TASK-057/evidence/test.md",
+      "work/TASK-057/evidence/verify.md"
+    ],
+    "command": "python3 -I -m unittest discover -s tests/unit; bash .claude/scripts/checks/{evidence_e2e,evidence_scope,advance,advance_adv}_test.sh; _evidence.py scan docs/report/evidence; index --check",
+    "result": "REQ-0061 AC1-AC6: gates enforced only when evidence_required (e2e 13/0), scan refuses exam-like content and plans/ reports/ (22 unit tests), scope fix (6/0), INDEX deterministic and --check ok, solve without --out leaves git clean, CLAUDE.md pointer + roles \u00a79 in, TASK-054..056 evidence backfilled by hand; publish symlink refused (verifier S1 fixed by main); unit failures identical to baseline 083d0e4. No real run needed (tooling).",
+    "published": [
+      "docs/report/evidence/TASK-057/suite-final.txt",
+      "docs/report/evidence/TASK-057/head-failures.txt",
+      "docs/report/evidence/TASK-057/baseline-failures.txt",
+      "docs/report/evidence/TASK-057/e2e57.txt",
+      "docs/report/evidence/TASK-057/scope57.txt",
+      "docs/report/evidence/TASK-057/test.md",
+      "docs/report/evidence/TASK-057/verify.md"
+    ]
   },
   "report": {
     "status": "pending",
@@ -61,7 +80,8 @@
       ]
     },
     "coder": "work/TASK-057/handoff/code.md",
-    "tester": "work/TASK-057/handoff/test.md"
+    "tester": "work/TASK-057/handoff/test.md",
+    "verifier": "work/TASK-057/handoff/verify.md"
   },
   "user_notes": [
     {
@@ -71,7 +91,7 @@
     }
   ],
   "picked_at": "2026-11-02T10:30:45Z",
-  "updated_at": "2026-11-02T10:59:35Z",
+  "updated_at": "2026-11-02T11:02:25Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-057/"
@@ -83,6 +103,6 @@
     "notes": "",
     "next": "coder 57.8 (reports/ default out+history) then 57.2-57.7 in .claude/scripts; tester; advance IMPLEMENTING"
   },
-  "next": "verifier + publish evidence",
+  "next": "write report citing docs/report/evidence/TASK-057/, DONE",
   "evidence_required": true
 }
