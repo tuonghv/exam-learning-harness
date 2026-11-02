@@ -119,6 +119,8 @@ def publish(root, task, srcs):
             errs.append("FAIL: %s name (want %s)" % (s, NAME_RE.pattern))
         elif not os.path.isfile(os.path.join(root, s)):
             errs.append("FAIL: %s missing" % s)
+        elif os.path.islink(os.path.join(root, s)) or os.path.realpath(os.path.join(root, s)).find(os.path.realpath(os.path.join(root, prefix))) != 0:
+            errs.append("FAIL: %s symlink or outside %s" % (s, prefix))
         else:
             with open(os.path.join(root, s), "rb") as f:
                 raw = f.read()
