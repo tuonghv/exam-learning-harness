@@ -152,7 +152,7 @@ def render(gold_path, out_pdf, variant="text", font=None, layout="block", furnit
         if gold_out:
             _write_gold(gold_path, gold_out, pages_of, figs if split else None)
         return {"pages": pno, "placed": placed, "pages_of": dict((k, sorted(v)) for k, v in pages_of.items()),
-                "page_lines": page_lines}
+                "page_lines": page_lines, "figs": dict(figs)}
     finally:
         doc.close()
 
@@ -191,9 +191,30 @@ def scan_pdf(src_pdf, out_pdf, zoom=2.0):
         out.close()
 
 
-def vision_replies(info):
+def _page_parts(info, p):
+    """[(qid, text, options)] in order for page p; a leading entry whose stem is not on p is a continuation."""
+    parts, idx = [], {}
+    for qid, role, t in info["page_lines"][p]:
+        if qid not in idx:
+            idx[qid] = len(parts)
+            parts.append([qid, [], {}])
+        e = parts[idx[qid]]
+        body = t.split(". ", 1)[1] if (role == "stem0" or role.startswith("opt:")) and ". " in t else t
+        if role.startswith("opt:"):
+            e[2][role[4:]] = body
+        else:
+            e[1].append(body)
+    return [(q, "\n".join(t), o) for q, t, o in parts]
+
+
+def vision_replies(info, windows=False):
     """Oracle mock replies (JSON text per page) built from the rendered lines: what a perfect vision
-    model would read. A question cut by the page break gets `cut`; its rest is `continues` on the next page."""
+    model would read. A question cut by the page break gets `cut`; its rest is `continues` on the next page.
+
+    windows=True: a dict keyed by the prompt's page label instead ("8" single page, "7-8" window): the
+    single-page replies plus, for every question cut at page p and ending on page L, the windows p..e
+    (e = p+1..L): the open question whole over p..e (`cut` while e < L), then the questions that start on
+    page e. A figure drawn for a question is a stand-in under its `figures`."""
     last = dict((q, ps[-1]) for q, ps in info["pages_of"].items())
     out = []
     for p in sorted(info["page_lines"]):
@@ -212,8 +233,37 @@ def vision_replies(info):
                                     **({"cut": True} if last[q["id"]] > p else {})) for q in qs]}
         if cont["text"] or cont["options"]:
             reply["continues"] = {"text": "\n".join(cont["text"]), "options": cont["options"], "figures": []}
-        out.append(json.dumps(reply, ensure_ascii=False))
-    return out
+        out.append(reply)
+    figs = info.get("figs") or {}
+    for r, p in zip(out, sorted(info["page_lines"])):
+        for q in r["questions"]:
+            if figs.get(q["id"]) == p:
+                q["figures"] = ["figure"]
+    texts = [json.dumps(r, ensure_ascii=False) for r in out]
+    if not windows:
+        return texts
+    keyed = dict((str(p), t) for p, t in zip(sorted(info["page_lines"]), texts))
+    for p in sorted(info["page_lines"]):
+        for qid, _, _ in _page_parts(info, p):
+            if last[qid] <= p or info["pages_of"][qid][0] != p:
+                continue
+            for e in range(p + 1, last[qid] + 1):
+                text, opts, fg = [], {}, False
+                for pg in range(p, e + 1):
+                    for q, t, o in _page_parts(info, pg):
+                        if q == qid:
+                            text.append(t)
+                            opts.update(o)
+                            fg = fg or figs.get(qid) == pg
+                whole = {"id": qid, "text": "\n".join(x for x in text if x), "options": opts,
+                         "figures": ["figure"] if fg else [], "unreadable": False}
+                if last[qid] > e:
+                    whole["cut"] = True
+                rest = [dict(r) for r in out[sorted(info["page_lines"]).index(e)]["questions"]
+                        if r["id"] != qid and info["pages_of"][int(r["id"])][0] == e]
+                reply = {"questions": [whole] + rest}
+                keyed["%d-%d" % (p, e)] = json.dumps(reply, ensure_ascii=False)
+    return keyed
 
 
 def _too_wide(fitz, text, font, width):

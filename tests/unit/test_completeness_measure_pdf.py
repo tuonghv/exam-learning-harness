@@ -189,6 +189,37 @@ class Families(unittest.TestCase):
             self.assertEqual(cm["incomplete_to_solver"]["k"], 0, name)
             self.assertEqual(cm["false_merge"]["k"], 0, name)
 
+    def test_window_oracle_whole_questions_no_orphans(self):
+        """Tier-0 end to end: scan -> cut last question -> window call -> whole questions, gold counts."""
+        for name in self.fam:
+            scan = os.path.join(self.dir, name + ".scan.pdf")
+            gold_pdf.scan_pdf(self.fam[name]["pdf"], scan)
+            doc = api.ingest_document(scan, config={"asset_dir": os.path.join(self.dir, "w" + name),
+                                                    "ocr": "off"})
+            keyed = gold_pdf.vision_replies(self.fam[name]["info"], windows=True)
+            rp = os.path.join(self.dir, name + ".keyed.json")
+            with open(rp, "w", encoding="utf-8") as fh:
+                json.dump(keyed, fh, ensure_ascii=False)
+            pages = len(self.fam[name]["info"]["page_lines"])
+            out = refine.refine(doc, "1-%d" % pages, refine.mock_llm(rp), all_pages=True)
+            self.assertFalse(out["refined"].get("orphans"), name)
+            self.assertEqual(len(out["refined"]["questions"]), 25, name)
+            if CROSS[name]:
+                self.assertTrue(out["refined"].get("windows"), name)
+            cm = self.rates(name, out, refined=True)
+            self.assertEqual((cm["boundary"]["k"], cm["boundary"]["n"]), (25, 25), name)
+            self.assertEqual((cm["cross_page"]["k"], cm["cross_page"]["n"]), (CROSS[name],) * 2, name)
+            self.assertEqual(cm["incomplete_to_solver"]["k"], 0, name)
+            self.assertEqual(cm["false_merge"]["k"], 0, name)
+
+    def test_vision_replies_list_unchanged_dict_has_windows(self):
+        info = self.fam["F3"]["info"]
+        lst = gold_pdf.vision_replies(info)
+        d = gold_pdf.vision_replies(info, windows=True)
+        self.assertIsInstance(lst, list)
+        self.assertEqual([d[str(i + 1)] for i in range(len(lst))], lst)
+        self.assertTrue([k for k in d if "-" in k])
+
     def test_bite_dropped_continuation_lowers_cross_page_and_is_marked(self):
         out, replies = self.vision("F3")
         broken = []

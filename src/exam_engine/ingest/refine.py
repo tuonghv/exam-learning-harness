@@ -25,7 +25,9 @@ FLAG_CODES = ("missing_text", "bad_encoding", "no_question_numbering", "math_pos
               "page_cut_suspect")  # boundary n|n+1 (page n is selected; n+1 comes by window)
 WINDOW_MAX = 3   # pages one window call may span (K)
 CHAIN_EXTRA = 2  # pages added outside the selection per cut chain
-EST_CALL_USD = 0.08  # rough cost of one vision call (estimate; measure on the slice)
+# ESTIMATE only (dry-run line, never a cap): about $0.08 per page-image call with the sonnet CLI, read off
+# the ingest-refine traces under work/dgnl-real; a 2-3 image window costs more. Measure on the real slice.
+EST_CALL_USD = 0.08
 RUN_EXTRA = 4    # pages added outside the selection per run
 FORBIDDEN = ("answer", "answers", "solution", "solutions", "key", "explanation")
 PROMPT_REL = os.path.join("dev", "ingest", "refine.md")

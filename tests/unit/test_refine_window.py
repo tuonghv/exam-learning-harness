@@ -388,3 +388,19 @@ class TestCacheTrace(unittest.TestCase):
         d = doc(2, w)
         self.assertEqual(refine.planned_windows(d, [1, 2]), [1])
         self.assertEqual(refine.planned_windows(d, [2]), [])
+        import contextlib
+        import io
+        import tempfile
+        from exam_engine import cli
+        path = os.path.join(tempfile.mkdtemp(), "d.json")
+        with open(path, "w") as fh:
+            json.dump(d, fh)
+        for extra, wn in (([], 1), (["--no-window"], 0)):
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                rc = cli.refine_main([path, "--pages", "1-2", "--all-pages", "--dry-run"] + extra)
+            head = buf.getvalue().splitlines()[0]
+            self.assertEqual(rc, 0)
+            self.assertIn("windows planned %d (native)" % wn, head)
+            self.assertIn("calls <= %d" % ((2 + wn) * refine.MAX_ATTEMPTS), head)
+            self.assertIn("est cost $%.2f" % ((2 + wn) * refine.EST_CALL_USD), head)
