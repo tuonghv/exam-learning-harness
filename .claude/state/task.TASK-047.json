@@ -37,7 +37,13 @@
   "roles_required": true,
   "crosscheck_required": true,
   "roles": {},
-  "user_notes": [],
+  "user_notes": [
+    {
+      "raw": "RAW-00156",
+      "note": "REQ-0055/TASK-052 queued: human review packs per subject and question",
+      "at": "2026-11-02T05:27:10Z"
+    }
+  ],
   "picked_at": "2026-11-02T05:25:02Z",
   "updated_at": "",
   "updated_by": "",
