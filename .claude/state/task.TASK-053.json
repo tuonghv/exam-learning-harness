@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-053",
   "title": "Solve QA by a senior solver merged into the review pack: --qa import, QA line, skill solve-qa, first DGNL QA data (REQ-0056)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0056",
   "acceptance_criteria": [
     "REQ-0056 AC1 --qa merge",
@@ -50,11 +50,21 @@
       "work/TASK-053/evidence/final_unit_suite.txt"
     ],
     "command": "unit suite vs base; independent oracle on the rebuilt DGNL pack; round trips on copies; mutations; real pack rebuilt with QA lines and marks kept",
-    "result": "3 known failures identical at base; 0 old assertions removed except 3 own-test assertions changed by D5 (flawed pair form); Vietnamese agrees 21 flawed 8 qa-only 1, English agrees 30, Math agrees 29 qa-only 1, Science agrees 23 flawed 3 (112: flawed engine D vs QA A) engine-nonletter 4; QA reads are same model family: header says so"
+    "result": "3 known failures identical at base; 0 old assertions removed except 3 own-test assertions changed by D5 (flawed pair form); Vietnamese agrees 21 flawed 8 qa-only 1, English agrees 30, Math agrees 29 qa-only 1, Science agrees 23 flawed 3 (112: flawed engine D vs QA A) engine-nonletter 4; QA reads are same model family: header says so",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-053/evidence/final2_full.txt",
+        "work/TASK-053/evidence/final3_full.txt",
+        "work/TASK-053/evidence/final3_oracle.txt",
+        "work/TASK-053/evidence/final_unit_suite.txt"
+      ],
+      "reason": "independent oracle on the real rebuilt pack, round trips, mutations"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-53-solve-qa-in-pack.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -94,7 +104,7 @@
     }
   ],
   "picked_at": "2026-11-02T05:46:42Z",
-  "updated_at": "2026-11-02T06:09:00Z",
+  "updated_at": "2026-11-02T06:09:12Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/review.py",
@@ -111,5 +121,5 @@
     "notes": "",
     "next": "RESUME after account switch (no agents were pending except Titan a5b72b2d D5): (1) git status/log; if Titan's D5 edit is uncommitted review it, run unit tests test_review*.py then full suite in backgr"
   },
-  "next": "DONE: report"
+  "next": ""
 }

@@ -997,11 +997,20 @@
     "task_id": "TASK-053",
     "title": "Solve QA by a senior solver merged into the review pack: --qa import, QA line, skill solve-qa, first DGNL QA data (REQ-0056)",
     "priority": 0,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-02T15:00:00Z",
     "requirement": "REQ-0056",
     "acceptance_criteria": [
       "REQ-0056 AC1-AC4"
+    ],
+    "completed_at": "2026-11-02T06:09:12Z",
+    "report": "docs/report/phase-53-solve-qa-in-pack.md",
+    "user_notes": [
+      {
+        "raw": "RAW-00161",
+        "note": "REQ-0057 widened: section->subject, instruction as a labelled block",
+        "at": "2026-11-02T05:49:13Z"
+      }
     ]
   },
   {
