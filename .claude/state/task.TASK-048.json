@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-048",
   "title": "Provenance sidecar assembly.json + prompt lines (never transcribe headers; decline incomplete/merged) (design 43.6-43.7, REQ-0045)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0052",
   "acceptance_criteria": [
     "AC1 sidecar assembly.json per exam",
@@ -31,9 +31,9 @@
     "summary": "assembly sidecar <exam-out>.assembly.json (printed number, source_pages, assembly/validation status, reasons), ingest-inspect Assembly table, copy into plan run input/, dev-channel prompt lines (refine.md headers rule; system.md decline incomplete/merged with missing_text:)"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "21 assembly tests, only the known failures (identical names to baseline); golden byte-identical vs 63a5299 (sidecar is the only new file); 5 mutations killed; mock only, no paid run"
   },
   "security": {
     "status": "pending",
@@ -52,7 +52,8 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-048/handoff/design.md",
-    "coder": "work/TASK-048/handoff/code.md"
+    "coder": "work/TASK-048/handoff/code.md",
+    "tester": "work/TASK-048/handoff/test.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-02T14:14:23Z",
@@ -65,5 +66,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "unit-test gate"
+  "next": "verifier + publish evidence"
 }

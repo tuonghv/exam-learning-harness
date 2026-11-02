@@ -1,14 +1,14 @@
 {
   "schema": 2,
   "task_id": "TASK-048",
-  "state": "IMPLEMENTING",
-  "next": "unit-test gate",
+  "state": "UNIT_TESTED",
+  "next": "verifier + publish evidence",
   "title": "Provenance sidecar assembly.json + prompt lines (never transcribe headers; decline incomplete/merged) (design 43.6-43.7, REQ-0045)",
   "active": [
     {
       "task_id": "TASK-048",
-      "state": "IMPLEMENTING",
-      "next": "unit-test gate",
+      "state": "UNIT_TESTED",
+      "next": "verifier + publish evidence",
       "updated_at": "2026-11-02T14:30:39Z"
     }
   ],
