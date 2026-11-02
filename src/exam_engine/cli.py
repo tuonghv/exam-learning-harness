@@ -10,16 +10,18 @@ import os
 import shutil
 import sys
 import tempfile
+import time
 
 from exam_engine import engine, settings
 from exam_engine.adapters import claude
 from exam_engine.core import schema as sch
 from exam_engine.core.decision import decide
-from exam_engine.pipeline import examples_check, parser, prompts, reporter, router, scorer, solver, verifier
+from exam_engine.pipeline import examples_check, metrics, parser, prompts, reporter, router, scorer, solver, verifier
 
 COMMANDS = ("solve", "parse", "verify", "report", "check-examples", "score", "prompts",
             "check-prompts", "ingest", "ingest-inspect", "ingest-refine", "cross-solve", "benchmark",
-            "extract-eval", "gold-pdf", "gen-exams", "lessons", "review-pack", "review-apply")
+            "extract-eval", "gold-pdf", "gen-exams", "lessons", "review-pack", "review-apply", "run-stats")
+DEFAULT_HISTORY = os.path.join("results", "run-history.jsonl")
 USAGE = "usage: exam.py {%s} ..." % "|".join(COMMANDS)
 
 
@@ -39,6 +41,8 @@ def solve_main(argv=None):
     ap.add_argument("--timeout", type=float, default=d["timeout"])
     ap.add_argument("--model", default=d["model"])
     ap.add_argument("--no-pdf", action="store_true", help="write report.md only")
+    ap.add_argument("--history", metavar="FILE",
+                    help="append a metrics line to FILE (default with --real: results/run-history.jsonl)")
     ap.add_argument("--lang", choices=("vi", "en", "auto"),
                     help="explanation language (beats the header Language:)")
     ap.add_argument("--channel", choices=("release", "dev"),
@@ -101,7 +105,9 @@ def solve_main(argv=None):
                 return claude.run_claude(prompt, model=a.model, timeout_s=a.timeout, cwd=tmp)
         else:
             llm = engine.mock_llm(a.mock)
+        t0 = time.time()
         result, code = engine.run(a.exam, a.out, cfg, llm)
+        wall = round(time.time() - t0, 1)
     except (OSError, ValueError) as exc:
         print("ERROR: %s" % exc, file=sys.stderr)
         return 2
@@ -119,7 +125,29 @@ def solve_main(argv=None):
                 print("report %s -> %s" % (key, rep_[key]))
         if rep_.get("pdf_status", "").startswith("skipped"):
             print("PDF %s" % rep_["pdf_status"])
+        m = result.get("metrics")
+        if m:
+            m["cost"]["wall_s"] = wall
+            for ln in metrics.block(m):
+                print(ln)
+            if a.real or a.history:
+                _append_history(a, result, m)
     return code
+
+
+def _append_history(a, result, m):
+    """One history line per real (or --history) run; a history failure never changes the exit code."""
+    hist = a.history or DEFAULT_HISTORY
+    try:
+        root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        meta = {"run_id": "%s@%s" % (os.path.basename(os.path.abspath(a.out)), time.strftime("%Y%m%dT%H%M%S")),
+                "exam_id": os.path.splitext(os.path.basename(a.exam))[0],
+                "exam_sha256": metrics.file_sha256(a.exam), "git": reporter.git_info(root),
+                "result_path": os.path.abspath(os.path.join(a.out, "result.json")), "source": "solve",
+                "lang": a.lang}
+        metrics.append(hist, metrics.history_line(result, m, meta))
+    except (OSError, ValueError) as exc:
+        print("WARN: history not written: %s" % exc, file=sys.stderr)
 
 
 def _load_exam(path):
@@ -196,7 +224,9 @@ def report_main(argv):
         return 2
     try:
         result = settings.load_json(args[0])
-        rep = reporter.write_reports(result, args[2], pdf="--no-pdf" not in argv, view=view)
+        log = metrics.load_log(os.path.join(os.path.dirname(os.path.abspath(args[0])), "run.log"))
+        rep = reporter.write_reports(result, args[2], pdf="--no-pdf" not in argv, view=view,
+                                     metrics=metrics.compute(result, log) if log is not None else None)
     except (OSError, ValueError) as exc:
         print("ERROR: %s" % exc, file=sys.stderr)
         return 2
@@ -929,8 +959,165 @@ def main(argv=None):
              "ingest-refine": refine_main, "cross-solve": cross_main, "benchmark": benchmark_main,
              "extract-eval": extract_eval_main, "gold-pdf": gold_pdf_main,
              "gen-exams": genexam_main, "lessons": lessons_main,
-             "review-pack": review_pack_main, "review-apply": review_apply_main}
+             "review-pack": review_pack_main, "review-apply": review_apply_main,
+             "run-stats": run_stats_main}
     if cmd not in table:
         print(USAGE, file=sys.stderr)
         return 2
     return table[cmd](rest)
+
+
+def _rs_resolve(ref, hist):
+    """(result, log lines, history line or None) for a result dir or a history run_id; ValueError if unknown."""
+    lines = metrics.read_history(hist)[0]
+    path = ref
+    if not os.path.isfile(os.path.join(ref, "result.json")):
+        hit = [ln for ln in lines if ln.get("run_id") == ref]
+        if not hit:
+            raise ValueError("%s: not a result dir and not a run_id in %s" % (ref, hist))
+        path = os.path.dirname(hit[-1]["result_path"])
+    rp = os.path.abspath(os.path.join(path, "result.json"))
+    line = ([ln for ln in lines if ln.get("result_path") == rp] or [None])[-1]
+    return settings.load_json(rp), metrics.load_log(os.path.join(path, "run.log")), line
+
+
+def _rs_compute(ref, a):
+    result, log, line = _rs_resolve(ref, a.history)
+    exam = qa = None
+    keymap = scorer.key_letters(a.ans_key) if a.ans_key else None
+    if a.exam:
+        exam, _code = _load_exam(a.exam)
+    if a.review_pack:
+        qa = metrics.load_qa(a.review_pack, a.offset)
+    sha = metrics.file_sha256(a.exam) if a.exam else (line or {}).get("exam_sha256")
+    return metrics.compute(result, log, exam=exam, key=keymap, qa=qa), sha, line, qa
+
+
+def _rs_stats(a):
+    m = _rs_compute(a.refs[0], a)[0]
+    if a.json:
+        print(json.dumps(m, ensure_ascii=False, indent=2, sort_keys=True))
+    else:
+        print("\n".join(metrics.block(m)))
+    return 0
+
+
+def _rs_commit(x):
+    return (x.get("git") or {}).get("commit")
+
+
+def _rs_diff_header(la, lb):
+    if not (la and lb):
+        return "changed: unknown (no history line for one run)"
+    ch = [n for n, get in (("commit", _rs_commit), ("prompt", lambda x: x.get("prompt")),
+                           ("model", lambda x: x.get("model"))) if get(la) != get(lb)]
+    ca, cb = la.get(metrics.CFG_FIELD) or {}, lb.get(metrics.CFG_FIELD) or {}
+    ch += ["config." + k for k in sorted(set(ca) | set(cb)) if ca.get(k) != cb.get(k)]
+    return "changed: " + (", ".join(ch) if ch else "nothing")
+
+
+def _rs_compare(a):
+    if len(a.refs) != 2:
+        print("usage: exam.py run-stats compare A B", file=sys.stderr)
+        return 2
+    ma, sa, la, qa = _rs_compute(a.refs[0], a)
+    mb, sb, lb, _qb = _rs_compute(a.refs[1], a)
+    if sa and sb and sa != sb:
+        print("ERROR: different exam (sha %s vs %s)" % (sa[:12], sb[:12]), file=sys.stderr)
+        return 2
+    if not (sa and sb):
+        print("WARN: exam sha unknown for one run; same exam not checked", file=sys.stderr)
+    print(_rs_diff_header(la, lb))
+    for name, m in (("A", ma), ("B", mb)):
+        print("%s %s" % (name, " | ".join(metrics.block(m)[:2])))
+    d = metrics.classify(ma, mb, qa)
+    f, r = len(d["fixed"]), len(d["regressed"])
+    label = {"key": "vs key", "QA": "vs QA"}.get(d["basis"], "no reference")
+    for name, shown, note in (("fixed", "fixed", label), ("regressed", "regressed", label),
+                              ("changed", "changed", "answer differs"), ("status_up", "status+", "H"),
+                              ("status_down", "status-", "H")):
+        if d[name]:
+            print("%s (%s): %s" % (shown, note, ", ".join(d[name])))
+    print("unchanged: %d" % d["unchanged"])
+    sig = not metrics.noise(f, r)
+    verdict = ("signal (%s)" % ("improved" if f > r else "regressed")) if sig else "within noise"
+    print("n=%d flips=%d fixed=%d regressed=%d: %s" % (ma["n"], f + r, f, r, verdict))
+    return 1 if sig and r > f else 0
+
+
+def _pct_rate(x):
+    return "-" if x is None else "%d%%" % round(x * 100)
+
+
+def _rs_group(ln):
+    return (_rs_commit(ln), json.dumps(ln.get("prompt"), sort_keys=True), ln.get("model"))
+
+
+def _rs_trend(a):
+    lines, bad = metrics.read_history(a.history)
+    if bad:
+        print("WARN: %d history line(s) skipped" % bad, file=sys.stderr)
+    rows = [ln for ln in lines if (not a.exam_id or ln.get("exam_id") == a.exam_id)
+            and (not a.subject or ln.get("subject") == a.subject)]
+    rows.sort(key=lambda ln: ln.get("ts") or "")
+    if a.last:
+        rows = rows[-a.last:]
+    groups = {}
+    for ln in rows:
+        groups.setdefault(_rs_group(ln), []).append(ln)
+    for ln in rows:
+        m = ln.get("metrics") or {}
+        acc = m.get("accuracy") or {}
+        k, q = acc.get("key"), acc.get("qa")
+        print("%s commit %s prompt %s model %s n %s answered %s key %s qa %s cost %s%s" % (
+            ln.get("ts"), (_rs_commit(ln) or "-")[:7], (ln.get("prompt") or {}).get("version", "-"),
+            ln.get("model") or "-", m.get("n", "-"), (m.get("counts") or {}).get("answered", "-"),
+            "%d/%d" % (k["correct"], k["keyed"]) if k else "-",
+            _pct_rate(q.get("agree_rate")) if q else "-", (m.get("cost") or {}).get("cost_usd", "-"),
+            " repeat" if len(groups[_rs_group(ln)]) > 1 else ""))
+    for gk, grp in groups.items():
+        rates = [g["metrics"]["accuracy"]["key"]["rate"] for g in grp
+                 if ((g.get("metrics") or {}).get("accuracy") or {}).get("key")]
+        if len(grp) > 1 and rates:
+            print("noise band (%d repeats, commit %s): key rate %.2f..%.2f" % (
+                len(grp), (gk[0] or "-")[:7], min(rates), max(rates)))
+    return 0
+
+
+def _rs_backfill(a):
+    dirs = [d for d in a.refs if os.path.isfile(os.path.join(d, "result.json"))]
+    added, skipped = metrics.backfill(dirs, a.history, a.exam)
+    bad = metrics.read_history(a.history)[1]
+    if bad:
+        print("WARN: %d history line(s) skipped" % bad, file=sys.stderr)
+    print("backfill: added %d skipped %d -> %s" % (added, skipped, a.history))
+    return 0
+
+
+def run_stats_main(argv):
+    """run-stats stats|compare|trend|backfill: metrics of solve runs (TASK-056); exit 0 ok, 1 regression, 2 error."""
+    ap = argparse.ArgumentParser(prog="exam run-stats")
+    ap.add_argument("sub", choices=("stats", "compare", "trend", "backfill"))
+    ap.add_argument("refs", nargs="*", help="stats: RESULT_DIR; compare: A B; backfill: DIR...")
+    ap.add_argument("--exam")
+    ap.add_argument("--key", dest="ans_key")
+    ap.add_argument("--review-pack", metavar="FILE", action="append")
+    ap.add_argument("--offset", type=int, default=0)
+    ap.add_argument("--history", default=DEFAULT_HISTORY)
+    ap.add_argument("--json", action="store_true")
+    ap.add_argument("--exam-id")
+    ap.add_argument("--subject")
+    ap.add_argument("--last", type=int, default=0)
+    try:
+        a = ap.parse_args(argv)
+    except SystemExit as exc:
+        return 2 if exc.code else 0
+    try:
+        if a.sub == "stats" and len(a.refs) != 1:
+            print("usage: exam.py run-stats stats RESULT_DIR", file=sys.stderr)
+            return 2
+        return {"stats": _rs_stats, "compare": _rs_compare, "trend": _rs_trend,
+                "backfill": _rs_backfill}[a.sub](a)
+    except (OSError, ValueError) as exc:
+        print("ERROR: %s" % exc, file=sys.stderr)
+        return 2

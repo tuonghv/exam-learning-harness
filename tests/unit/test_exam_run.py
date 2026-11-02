@@ -434,9 +434,11 @@ class Cli(Base):
                         timeout=timeout_s, isdir=os.path.isdir(cwd))
             return exam_llm.Call(False, "", 0.0, "auth", "401", 0.0)
         with mock.patch.object(exam_llm, "run_claude", fake), \
+                mock.patch.object(cli.reporter, "git_info", return_value=None), \
                 contextlib.redirect_stdout(o), contextlib.redirect_stderr(io.StringIO()):
             code = cli.solve_main([INPUT_001, "--real", "--out", self.out, "--max-cost-usd", "0.5",
-                            "--model", "haiku", "--timeout", "9"])
+                                   "--model", "haiku", "--timeout", "9",
+                                   "--history", os.path.join(self.tmp, "h.jsonl")])
         self.assertEqual(code, 3)
         self.assertIn("calls <= 5, cap $0.50", seen["printed"])
         self.assertTrue(seen["isdir"])

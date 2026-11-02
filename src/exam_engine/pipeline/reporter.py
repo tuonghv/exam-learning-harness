@@ -132,16 +132,29 @@ def build_learning_view(result):
     return "\n".join(md)
 
 
-def _compose(result, view):
+def git_info(root):
+    """{commit, dirty} of the repo at root (dirty = uncommitted change under src/prompts/config), None on error.
+    Lives here because only the reporter and the claude adapter may call subprocess (test_guards)."""
+    def git(*args):
+        return subprocess.run(("git",) + args, cwd=root, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+                              universal_newlines=True, timeout=10, check=True).stdout
+    try:
+        return {"commit": git("rev-parse", "HEAD").strip(),
+                "dirty": bool(git("status", "--porcelain", "--", "src/", "prompts/", "config/").strip())}
+    except (OSError, subprocess.SubprocessError):
+        return None
+
+
+def _compose(result, view, metrics=None):
     """report.md text: the title, then the chosen view, then the full body."""
-    body = build_markdown(result)
+    body = build_markdown(result, metrics)
     title, rest = body.split("\n", 1)
     block = ("## Answer sheet\n\n" + build_answer_sheet(result)) if view == "sheet" \
         else build_learning_view(result)
     return title + "\n\n" + block + "\n" + rest.lstrip("\n")
 
 
-def build_markdown(result):
+def build_markdown(result, metrics=None):
     exam, run, s = result["exam"], result["run"], result["summary"]
     md = ["# Exam report: %s" % _one_line(exam.get("subject") or exam.get("path")), ""]
     md.append("- Exam: %s, %s, %s, task %s, mode %s" % (
@@ -155,6 +168,9 @@ def build_markdown(result):
     if s.get("points") is not None or s.get("max_points") is not None:
         md.append("- Points: %s / %s" % (_num(s.get("points")), _num(s.get("max_points"))))
     md.append("")
+    if metrics:
+        from exam_engine.pipeline import metrics as _metrics
+        md += ["## Metrics", ""] + ["- " + ln for ln in _metrics.block(metrics)] + [""]
     for q in result["questions"]:
         verdict = q["verification_status"]
         opened = _is_open(q, exam)
@@ -323,7 +339,7 @@ def md_to_pdf(md_path, pdf_path, *, lang="en", renderer=None, timeout=None,
 
 
 def write_reports(result, out_dir, *, pdf=True, renderer=None, runner=subprocess.Popen,
-                  view="sheet"):
+                  view="sheet", metrics=None):
     """Write report.md and answers.md always; report.html/report.pdf when a render is asked for.
     Returns dict(md, answers, html, pdf, pdf_status); html/pdf are paths or None."""
     if view not in VIEWS:
@@ -334,7 +350,7 @@ def write_reports(result, out_dir, *, pdf=True, renderer=None, runner=subprocess
     pdf_path = os.path.join(out_dir, "report.pdf")
     answers_path = os.path.join(out_dir, "answers.md")
     with open(md_path, "w", encoding="utf-8") as fh:
-        fh.write(_compose(result, view))
+        fh.write(_compose(result, view, metrics))
     with open(answers_path, "w", encoding="utf-8") as fh:
         fh.write(build_answer_sheet(result))
     info = {"md": md_path, "answers": answers_path, "html": None, "pdf": None, "pdf_status": "not requested"}

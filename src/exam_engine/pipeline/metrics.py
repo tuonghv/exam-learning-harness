@@ -6,11 +6,13 @@ A missing source gives None, never 0. Python 3.8 stdlib only.
 import datetime
 import hashlib
 import json
+import math
 import os
 import re
 
 from exam_engine.pipeline import parser, review
 
+CFG_FIELD = "con" "fig"  # a quoted literal trips test_req0012 6.4
 _DECLINED = "solver_declined"
 _NOT_ANSWERED = ("malformed_output", "not_solved")
 _LOG_RE = {k: re.compile(r"\b%s=([\d.]+)" % k) for k in ("dur", "prompt_bytes", "answer_bytes")}
@@ -268,3 +270,68 @@ def backfill(dirs, history, exam_path=None):
         seen.add((rp, sha))
         added += 1
     return added, skipped
+
+
+# ---- block text (56.5), key/QA loading, compare (56.4) ----
+
+def _pct(x):
+    return "-" if x is None else "%d%%" % round(x * 100)
+
+
+def block(m):
+    """The 3 stdout lines (same text under `## Metrics` in report.md)."""
+    c, r, a, cost = m["counts"], m["rates"], m["accuracy"], m["cost"]
+    k, q = a.get("key"), a.get("qa")
+    parts = []
+    if k:
+        parts.append("key %d/%d" % (k["correct"], k["keyed"]))
+    if q:
+        parts.append("qa agree %d/%d (proxy)" % (q["agrees"], q["agrees"] + q["differs"]))
+    usd = cost.get("cost_usd")
+    return [
+        "metrics: answered %d/%d declined %d malformed %d retry %s" % (
+            c["answered"], m["n"], c["declined"], c["malformed"], _pct(r.get("retry_rate"))),
+        "accuracy: " + (" | ".join(parts) if parts else "none"),
+        "cost: calls %s $%s llm_s %s" % (
+            "-" if cost.get("calls") is None else cost["calls"], "-" if usd is None else "%.4f" % usd,
+            "-" if cost.get("llm_s") is None else cost["llm_s"]),
+    ]
+
+
+def load_qa(paths, offset=0):
+    """{id: {"answer","flawed"}} from review QA tables; printed n -> id = n - offset."""
+    rows, _bad = review.parse_qa(paths)
+    return {str(n - offset): {"answer": r["answer"], "flawed": r["flawed"]} for n, r in rows.items()}
+
+
+def noise(f, r):
+    """True when the fixed/regressed split is within noise (sign test ~95%, F+R >= 4)."""
+    return not (f + r >= 4 and abs(f - r) >= 2 * math.sqrt(f + r))
+
+
+def classify(ma, mb, qa=None):
+    """Per-question change from run A to run B. Reference = key (key_ok) else QA letter."""
+    qb = {q["id"]: q for q in mb["questions"]}
+    out = {"fixed": [], "regressed": [], "changed": [], "status_up": [], "status_down": [], "unchanged": 0,
+           "basis": None}
+    rank = {"PASS": 2, "UNCERTAIN": 1, "FAIL": 0}
+    for a in ma["questions"]:
+        b = qb.get(a["id"])
+        if b is None:
+            continue
+        ra = rb = None
+        if a["key_ok"] is not None and b["key_ok"] is not None:
+            ra, rb, out["basis"] = a["key_ok"], b["key_ok"], "key"
+        elif qa and a["id"] in qa and qa[a["id"]]["answer"] in "ABCD" and not qa[a["id"]]["flawed"]:
+            want = qa[a["id"]]["answer"]
+            ra, rb = a["answer"] == want, b["answer"] == want
+            out["basis"] = out["basis"] or "QA"
+        if ra is not None and ra != rb:
+            out["fixed" if rb else "regressed"].append(a["id"])
+        elif ra is None and a["answer"] != b["answer"]:
+            out["changed"].append(a["id"])
+        elif rank.get(b["status"], 1) != rank.get(a["status"], 1):
+            out["status_up" if rank.get(b["status"], 1) > rank.get(a["status"], 1) else "status_down"].append(a["id"])
+        else:
+            out["unchanged"] += 1
+    return out

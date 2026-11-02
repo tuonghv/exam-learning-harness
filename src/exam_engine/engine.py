@@ -12,7 +12,7 @@ import sys
 from exam_engine.adapters import claude
 from exam_engine.core import refcheck, schema as sch
 from exam_engine.core.decision import decide_rec, evidence_kind, is_open, new_rec
-from exam_engine.pipeline import parser, prompts, reporter, router, scorer, solver, verifier
+from exam_engine.pipeline import metrics, parser, prompts, reporter, router, scorer, solver, verifier
 
 BLOCKING = ("auth", "rate_limit", "service")
 
@@ -179,7 +179,12 @@ def run(exam_path, out_dir, cfg, llm):
         fh.write("\n")
     with open(os.path.join(out_dir, "run.log"), "w", encoding="utf-8") as fh:
         fh.write("\n".join(log) + ("\n" if log else ""))
-    result["reports"] = reporter.write_reports(result, out_dir, pdf=cfg.get("pdf", False))
+    try:
+        result["metrics"] = metrics.compute(result, metrics.load_log(os.path.join(out_dir, "run.log")), exam=exam)
+    except Exception:  # noqa: BLE001 - metrics are extra; they must never fail a run
+        result["metrics"] = None
+    result["reports"] = reporter.write_reports(result, out_dir, pdf=cfg.get("pdf", False),
+                                               metrics=result["metrics"])
     if stopped:
         return result, 3
     s = result["summary"]

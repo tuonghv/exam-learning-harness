@@ -169,3 +169,12 @@ def score_main(argv=None):
     print("TOTAL %d/%d" % (correct, total))
     return 0
 
+
+def key_letters(path):
+    """{id: letter} from an answer key file; non-letter keys are left out (None when nothing is keyed)."""
+    out = {}
+    for q in parser.parse_expected(path, legacy=True)["questions"]:
+        f = re.match(r"^\s*([A-Da-d])\b", q.get("final") or "")
+        if f:
+            out[str(q["id"])] = f.group(1).upper()
+    return out or None
