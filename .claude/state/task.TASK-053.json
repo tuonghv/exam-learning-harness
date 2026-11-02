@@ -1,17 +1,25 @@
 {
   "task_id": "TASK-053",
   "title": "Solve QA by a senior solver merged into the review pack: --qa import, QA line, skill solve-qa, first DGNL QA data (REQ-0056)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0056",
   "acceptance_criteria": [
-    "REQ-0056 AC1-AC4"
+    "REQ-0056 AC1 --qa merge",
+    "REQ-0056 AC2 header says extraction is yours, answer is QA's",
+    "REQ-0056 AC3 skill solve-qa",
+    "REQ-0056 AC4 first DGNL QA data merged"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
-    "reuse": [],
-    "risks": []
+    "status": "completed",
+    "path": "docs/design/phase-53-solve-qa-in-pack.md",
+    "summary": "review-pack --qa FILE merges QA tables (adjudication overrides) into a QA line and verdict per question, INDEX columns and counts; merge script for the existing DGNL reads; skill solve-qa",
+    "reuse": [
+      "review.py",
+      "TASK-039 independent reads and adjudications"
+    ],
+    "risks": [
+      "same-family QA is not an official key"
+    ]
   },
   "implementation": {
     "status": "pending",
@@ -47,12 +55,15 @@
     },
     "grants_auto": [
       ".claude/skills/solve-qa/SKILL.md"
-    ]
+    ],
+    "designer": {
+      "waiver": "coordinator design inline: one option and a table format that already exists"
+    }
   },
   "user_notes": [],
   "picked_at": "2026-11-02T05:46:42Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-02T05:47:03Z",
+  "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/review.py",
     "src/exam_engine/cli.py",
@@ -67,5 +78,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder: tests first, --qa import, INDEX columns; main: merge script, skill solve-qa, DGNL rebuild"
 }
