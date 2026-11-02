@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-057",
   "title": "Standard user-facing crosscheck paths: docs/report/evidence/TASK-NNN, INDEX generator, gate in advance/workflow-check (REQ-0061)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0061",
   "acceptance_criteria": [
     "AC1 convention documented and enforced at VERIFIED/DONE",
@@ -35,9 +35,9 @@
     "summary": "reports/ default out + history; _evidence.py scan/publish/index; opt-in evidence_required gates; _path_ok scope fix; roles \u00a79; CLAUDE.md pointer"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit; bash .claude/scripts/checks/{evidence_e2e,evidence_scope,advance,advance_adv}_test.sh",
+    "result": "951 unit tests, only the known failures (identical names to baseline); evidence_e2e 13/0, evidence_scope 6/0, advance 58/0, advance_adv 32/0; mutations killed; calibration scan of committed evidence rc 0"
   },
   "security": {
     "status": "pending",
@@ -60,7 +60,8 @@
         ".claude/scripts/*"
       ]
     },
-    "coder": "work/TASK-057/handoff/code.md"
+    "coder": "work/TASK-057/handoff/code.md",
+    "tester": "work/TASK-057/handoff/test.md"
   },
   "user_notes": [
     {
@@ -70,7 +71,7 @@
     }
   ],
   "picked_at": "2026-11-02T10:30:45Z",
-  "updated_at": "2026-11-02T10:59:34Z",
+  "updated_at": "2026-11-02T10:59:35Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-057/"
@@ -82,6 +83,6 @@
     "notes": "",
     "next": "coder 57.8 (reports/ default out+history) then 57.2-57.7 in .claude/scripts; tester; advance IMPLEMENTING"
   },
-  "next": "unit-test gate",
+  "next": "verifier + publish evidence",
   "evidence_required": true
 }

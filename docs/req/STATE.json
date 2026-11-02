@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0061",
-  "next": "unit-test gate",
+  "next": "verifier + publish evidence",
   "updated": "2026-11-02 17:59"
 }
