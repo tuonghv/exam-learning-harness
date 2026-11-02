@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-056",
   "title": "Solve-run metrics: metrics.py catalogue, run history, run-stats stats/compare/trend, metrics block in solve output and report (REQ-0060)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0060",
   "acceptance_criteria": [
     "AC1 catalogue with formulas",
@@ -31,9 +31,9 @@
     "summary": "metrics.py catalogue, history JSONL + backfill, run-stats stats/compare/trend/backfill, metrics block in solve and report"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "only known failures (lxml docx, check_examples x2, cwd_independence, scripts_exam); independent recount of 3 real DGNL runs matches run-stats (English cost 0.3417 vs 0.3418 rounding); mutations killed after 3 proxy-label tests added"
   },
   "security": {
     "status": "pending",
@@ -51,7 +51,8 @@
   "crosscheck_required": true,
   "roles": {
     "designer": "work/TASK-056/handoff/design.md",
-    "coder": "work/TASK-056/handoff/code.md"
+    "coder": "work/TASK-056/handoff/code.md",
+    "tester": "work/TASK-056/handoff/test.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-02T10:07:38Z",
@@ -66,5 +67,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "unit-test gate"
+  "next": "verifier: AC check + security pass"
 }

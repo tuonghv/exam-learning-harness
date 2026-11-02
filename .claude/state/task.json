@@ -1,14 +1,14 @@
 {
   "schema": 2,
   "task_id": "TASK-056",
-  "state": "IMPLEMENTING",
-  "next": "unit-test gate",
+  "state": "UNIT_TESTED",
+  "next": "verifier: AC check + security pass",
   "title": "Solve-run metrics: metrics.py catalogue, run history, run-stats stats/compare/trend, metrics block in solve output and report (REQ-0060)",
   "active": [
     {
       "task_id": "TASK-056",
-      "state": "IMPLEMENTING",
-      "next": "unit-test gate",
+      "state": "UNIT_TESTED",
+      "next": "verifier: AC check + security pass",
       "updated_at": "2026-11-02T10:28:25Z"
     }
   ],
