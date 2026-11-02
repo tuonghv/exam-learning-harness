@@ -1615,3 +1615,9 @@ Action: Report written
 Result: TASK-051 partly achieved, docs/report/phase-51-ocr-route-quality.md; REQ-0065 holds the residual
 Decision: DONE
 Next: REQ-0065 / paid questions
+
+## DESIGN - TASK-060 - 2026-11-02T22:26:13Z
+Action: Nova designed the quality solve path from the cause table
+Result: design COMPLETE; free slice 60.1-60.3 first
+Decision: order A,B,C,measure; slow path opt-in by flag; paid checks inside caps decided by coordinator
+Next: coder tests-first
