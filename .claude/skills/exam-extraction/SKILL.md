@@ -21,6 +21,9 @@ A question is ONE unit however many pages, images, tiles or DOCX breaks it spans
 - Compare the blocked questions with an independent read of the source pages (a verifier role reading the PDF, not the engine output).
 - Read `ingest-inspect`: "extraction suspects" and `missing_text` declines are the to-do list; zero left or each one explained.
 
+## Develop small (user, RAW-00152)
+Develop, test and fix on 2-page slices, never the whole 100-page exam: generated fixtures (`gold-pdf`, families F1-F8) or a real 2-3 page slice (`--pages`, always include the page before a continuation). Fix and re-run many times at about $0.04 per page; run the full exam once, at the end, for the final check. Ask the user for a 2-page sample, not a whole exam.
+
 ## Does not
 Copy question text into the repo or reports (cite printed numbers, pages, statuses); run paid vision calls without the user's go and a cost estimate (about $0.04 per page).
 
