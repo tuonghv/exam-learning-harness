@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-054",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "Titan (coder) writes tests first per design Unit tests, then implements 54.1-54.6 on 2-page slices",
   "title": "Section headings once per section, group instruction per question (REQ-0057)",
   "active": [
     {
       "task_id": "TASK-054",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "Titan (coder) writes tests first per design Unit tests, then implements 54.1-54.6 on 2-page slices",
+      "updated_at": "2026-11-02T09:20:32Z"
     }
   ],
   "max_active": 1
