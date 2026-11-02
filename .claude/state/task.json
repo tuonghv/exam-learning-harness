@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-061",
-  "state": "DESIGN",
-  "next": "Titan: tests first, 61.1-61.4",
+  "state": "IMPLEMENTING",
+  "next": "tester QA",
   "title": "Image scope for cut/declined and doubtful questions, optional adjudication (REQ-0067; phase-60 items 60.4-60.6)",
   "active": [
     {
       "task_id": "TASK-061",
-      "state": "DESIGN",
-      "next": "Titan: tests first, 61.1-61.4",
-      "updated_at": "2026-11-02T23:27:47Z"
+      "state": "IMPLEMENTING",
+      "next": "tester QA",
+      "updated_at": "2026-11-02T23:35:41Z"
     }
   ],
   "max_active": 1

@@ -1651,3 +1651,9 @@ Action: Design for image scope taken from phase-60 items 60.4-60.6
 Result: design COMPLETE
 Decision: coder tests-first
 Next: coder
+
+## IMPLEMENTING - TASK-061 - 2026-11-02T23:35:41Z
+Action: Titan implemented 61.1-61.4
+Result: 1155 tests, failures = baseline; default golden unchanged
+Decision: tester next
+Next: tester
