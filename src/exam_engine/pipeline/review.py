@@ -176,6 +176,16 @@ def qa_verdict(engine, qa):
     return "agrees" if engine == qa["answer"] else "differs"
 
 
+def _parse_qaline(ln):
+    """Kept QA line back to a qa row (verdict is recomputed from the current engine answer; flawed round-trips
+    as the verdict `flawed`), None for `QA: -` or a line not in our format."""
+    m = QA_RE.match(ln or "")
+    if not m:
+        return None
+    return {"answer": m.group(1), "conf": m.group(2), "flawed": m.group(3) == "flawed",
+            "why": ln.split(" | ", 2)[2] if ln.count(" | ") >= 2 else "-"}
+
+
 def build_sections(result, exam, refined, offset, qa=None, keep=None):
     """[(printed n, header dict, markdown lines)] in result order."""
     secs = []
@@ -195,12 +205,10 @@ def build_sections(result, exam, refined, offset, qa=None, keep=None):
         if h["answer"] == "?":
             h["eff"] = value_letter(q["answer"], stem) or "?"
         qline = "QA: -"
-        if qa and n in qa:
-            x = qa[n]
+        x = qa[n] if qa and n in qa else (keep or {}).get(n)
+        if x:
             qline = "QA: %s conf %s | %s | %s" % (x["answer"], x["conf"].replace(" ", "_"),
                                                   qa_verdict(h["eff"], x), x["why"])
-        elif keep and n in keep:
-            qline = keep[n]
         lines = ["## Q%d  p.%s  %s  answer %s  conf %s" % (n, h["page"], h["status"], h["answer"], h["conf"]),
                  "", _guard(stem), "", _engine_line(q), qline, "Flags: " + h["flags"], TEMPLATE, ""]
         secs.append((n, h, lines))
@@ -298,7 +306,7 @@ def pack(exam_id, subject, result_path, exam_path, refined_path=None, offset=0, 
             rows = parse_subject(fh.read())
         olds = {r["n"]: r for r in rows if r["n"] is not None}
         old = {n: r for n, r in olds.items() if _is_marked(r)}
-        keep = {n: r["qaline"] for n, r in olds.items() if r["qaline"] and r["qaline"] != "QA: -"}
+        keep = {n: x for n, x in ((n, _parse_qaline(r["qaline"])) for n, r in olds.items()) if x}
         # a mark in the previous format cannot be merged; keep the whole old file beside the new one
         legacy = [r for r in rows if r["review"] and not r["review"].startswith(PREFIX)
                   and "[x]" in r["review"].lower()]

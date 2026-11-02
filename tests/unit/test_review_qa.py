@@ -135,6 +135,12 @@ class QaTests(Base):
         self.pack_qa([])
         self.assertIn("QA: C conf low | differs |", self.read("s.md"))
 
+    def test_flawed_survives_rerun(self):
+        self.pack_qa([self.qa(QA1)])
+        self.pack_qa([])
+        self.pack_qa([])
+        self.assertIn("QA: B conf mid | flawed | broken stem", self.read("s.md"))
+
     def test_rerun_with_partial_qa_replaces_only_covered(self):
         self.pack_qa([self.qa(QA1)])
         self.pack_qa([self.qa("2 | A | high | no | new\n", "n.md")])
@@ -142,6 +148,38 @@ class QaTests(Base):
         self.assertIn("QA: A conf high | agrees | new", s)
         self.assertIn("QA: A conf high | agrees | same as engine", s)  # uncovered numbers keep their QA line (D1)
         self.assertNotIn("\nQA: -\n", s.split("## Q4")[0])
+
+
+    def test_third_run_changed_answer_keeps_mark_flag_and_qa(self):
+        self.pack_qa([self.qa(QA1)])
+        self.fill("s", 1, tick(ext="ok", note="n1"))
+        self.pack_qa([])
+        qs = self.qs()
+        qs[0] = q(1, "B")
+        r = self.result(qs, "s2.json")
+        e = self.w("s.md", "\n".join(["# E", ""] + ["## Question %d\n\nStem %d?\n" % (i, i) for i in range(1, 6)]))
+        _, msg = review.pack("X1", "s", r, e, None, 0, self.out, False, "", [])
+        t = self.read("s.md")
+        self.assertIn(tick(ext="ok", note="n1"), t)
+        self.assertIn("Answer changed: was A now B", t)
+        self.assertIn("1 marked answers changed", msg)
+        self.assertIn("QA: A conf high |", t)
+
+    def test_changed_answer_kept_qa_verdict_follows_engine(self):
+        # D4: kept QA line must not claim "agrees" when the engine answer is now B and QA says A
+        self.pack_qa([self.qa(QA1)])
+        qs = self.qs()
+        qs[0] = q(1, "B")
+        r = self.result(qs, "s2.json")
+        e = self.w("s.md", "\n".join(["# E", ""] + ["## Question %d\n\nStem %d?\n" % (i, i) for i in range(1, 6)]))
+        review.pack("X1", "s", r, e, None, 0, self.out, False, "", [])
+        self.assertNotIn("QA: A conf high | agrees |", self.read("s.md"))
+
+    def test_four_column_row_with_yes_no_word_not_flawed(self):
+        self.pack_qa([self.qa("1 | A | high | yes it matches\n2 | C | low | no | five col reason\n")])
+        s = self.read("s.md")
+        self.assertIn("QA: A conf high | agrees | yes it matches", s)
+        self.assertIn("QA: C conf low | differs | five col reason", s)
 
 
 if __name__ == "__main__":
