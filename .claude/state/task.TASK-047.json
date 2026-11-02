@@ -95,7 +95,10 @@
   "checkpoint": {
     "done": [],
     "notes": "",
-    "next": "resume: coder tests-first per phase-47 (tests 1-15), then real slice pages 7-8 and 14-15 (dry-run first, ask if > $0.3)"
+    "next": "resume: coder tests-first per phase-47 (tests 1-15), real slice pages 7-8 and 14-15 (dry-run first, ask if over 0.3 USD)"
   },
-  "next": "HELD after design: TASK-052 first (user priority), then coder tests-first per design list"
+  "next": "HELD after design: TASK-052 first (user priority), then coder tests-first per design list",
+  "status": "held",
+  "held_at": "2026-11-02T05:30:01Z",
+  "held_reason": "user priority: TASK-052 human review path first"
 }

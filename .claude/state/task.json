@@ -4,13 +4,6 @@
   "state": "DESIGN",
   "next": "HELD after design: TASK-052 first (user priority), then coder tests-first per design list",
   "title": "Python cut detector for page selection, bounded automatic recovery, page-extraction cache with trace page/hash (design 43.3-43.5, REQ-0045)",
-  "active": [
-    {
-      "task_id": "TASK-047",
-      "state": "DESIGN",
-      "next": "HELD after design: TASK-052 first (user priority), then coder tests-first per design list",
-      "updated_at": "2026-11-02T05:29:54Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
