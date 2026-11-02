@@ -78,6 +78,23 @@ def _answer_number(a):
     return m.group(0).replace(",", ".") if m else None
 
 
+_TAIL_NOTE = re.compile(r"\s*\([^)]*\)\s*\.?\s*$")
+
+
+def option_for_value(answer, options):
+    """Letter of the one option whose single number equals the answer's number, else None (60.1)."""
+    a = _TAIL_NOTE.sub("", str(answer).replace("\u2212", "-").strip()).rstrip(". ")
+    want = _answer_number(a)
+    if want is None or not options:
+        return None
+    hits = []
+    for k, v in options.items():
+        nums = _NUM.findall(str(v).replace("\u2212", "-"))
+        if len(nums) == 1 and nums[0].replace(",", ".") == want:
+            hits.append(k)
+    return hits[0] if len(hits) == 1 else None
+
+
 _SCI = re.compile(r"(\d+(?:[.,]\d+)?)\s*(?:[.·×x*]|\s)\s*10\s*\^\s*\{?(-?\d+)\}?")
 _EXACT = re.compile(r"^[-+0-9.()*/\s^]*(?:sqrt\([^)]*\)[-+0-9.()*/\s^]*)*")
 

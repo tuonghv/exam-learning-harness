@@ -46,6 +46,15 @@ def template():
         return fh.read()
 
 
+def _why(unreadable, low_similarity, gap):
+    """Reason codes behind needs_review (60.3); thresholds are the callers' own."""
+    return [c for c, on in (("unreadable", unreadable), ("similarity", low_similarity), ("gap", gap)) if on]
+
+
+def _add_why(q, code):
+    return list(q.get("needs_review_why") or []) + [code]
+
+
 def build_prompt(n, window=None, open_id=None):
     """Single page: "Page: n". Window: the pages in image order and the open (cut) question id."""
     if not window:
@@ -356,7 +365,7 @@ def _attach(qs, st, n, cont):
     else:
         kind = None
     if kind:
-        o.update(needs_review=True, orphan_page=n)
+        o.update(needs_review=True, orphan_page=n, needs_review_why=_add_why(o, "orphan_page"))
         return kind
     text = _dedupe(o["context"] if cont["passage"] and o["context"] else o["text"], cont["text"])
     if text:
@@ -367,7 +376,7 @@ def _attach(qs, st, n, cont):
     o["figures"] = list(o["figures"]) + cont["figures"]
     o["continued_pages"] = o.get("continued_pages", []) + [n]
     if cont["legacy"]:
-        o.update(needs_review=True, joined_page=n)
+        o.update(needs_review=True, joined_page=n, needs_review_why=_add_why(o, "joined_page"))
     return None
 
 
@@ -500,8 +509,12 @@ def refine(doc, spec, llm, source_path=None, max_cost=1.0, model="sonnet", allow
                      context=str(whole.get("context") or f["context"] or ""),
                      continued_pages=win[1:], window=win)
             f.pop("cut", None)
-            f["needs_review"] = (bool(whole.get("unreadable")) or sim < min_similarity
-                                 or (f["part"], f["id"]) in _gaps(qs[:pending["qi"] + 1]))
+            why = _why(bool(whole.get("unreadable")), sim < min_similarity,
+                       (f["part"], f["id"]) in _gaps(qs[:pending["qi"] + 1]))
+            f["needs_review"] = bool(why)
+            f.pop("needs_review_why", None)
+            if why:
+                f["needs_review_why"] = why
             if whole.get("unreadable") is True:
                 f["unreadable"] = True
             still = whole.get("cut") is True and not numbered
@@ -544,12 +557,14 @@ def refine(doc, spec, llm, source_path=None, max_cost=1.0, model="sonnet", allow
         for q in items:
             qid = norm_id(q["id"])
             sim = similarity(q, by_id.get(qid), text)
+            why = _why(bool(q.get("unreadable")), sim < min_similarity, (q["part"], qid) in gaps)
             qs.append({"id": qid, "part": q["part"], "text": q["text"],
                        "options": q.get("options", {}), "context": str(q.get("context") or ""),
                        "figures": q.get("figures", []), "origin": "ai", "page": n,
                        "similarity": sim,
-                       "needs_review": bool(q.get("unreadable")) or sim < min_similarity
-                       or (q["part"], qid) in gaps or bool(q.get("_review"))})
+                       "needs_review": bool(why) or bool(q.get("_review"))})
+            if why:
+                qs[-1]["needs_review_why"] = why
             if q.get("cut") is True:
                 qs[-1]["cut"] = True
             if q.get("unreadable") is True:

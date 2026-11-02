@@ -83,7 +83,8 @@ class TestAssembly(unittest.TestCase):
     def test_5_no_new_fields_is_unchanged(self):
         out = run_refine([rep([q(1, "t1", ABCD)], carry=""), rep([q(2, "t2", ABCD)])], "1-2")
         for x in out["refined"]["questions"]:
-            self.assertEqual(sorted(x), ["context", "figures", "id", "needs_review", "options",
+            # needs_review_why (60.3) is the one optional addition, present only on flagged questions
+            self.assertEqual(sorted(k for k in x if k != "needs_review_why"), ["context", "figures", "id", "needs_review", "options",
                                          "origin", "page", "part", "similarity", "text"])
         self.assertNotIn("orphans", out["refined"])
         self.assertEqual([w["code"] for w in out["warnings"]], ["refined_by_ai"])

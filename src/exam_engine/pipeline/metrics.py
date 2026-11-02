@@ -117,7 +117,7 @@ def _qa_block(rows, qa):
             "engine_nonletter": tally["engine-nonletter"], "unmatched": unmatched}, unmatched
 
 
-def compute(result, log_lines=None, exam=None, key=None, qa=None, needs_review=None):
+def compute(result, log_lines=None, exam=None, key=None, qa=None, needs_review=None, needs_review_why=None):
     """Metrics block of one run. exam = parsed exam (group kinds), key = {id: letter},
     qa = {id: {"answer", "flawed"}}; each optional source missing -> its fields are None."""
     qs = result.get("questions") or []
@@ -154,6 +154,16 @@ def compute(result, log_lines=None, exam=None, key=None, qa=None, needs_review=N
         counts["image_checked"] = sum(1 for q in qs if q.get("source") in ("image", "text+image"))
         counts["image_changed"] = sum(1 for q in qs if q.get("source") == "image"
                                       or _reason(q).startswith("needs_review: text/image"))
+    # 60.7: keys only when present, so a pre-60 result keeps byte-identical metrics
+    mapped = sum(1 for q in qs if "answer_mapped" in _codes(q))
+    if mapped:
+        counts["answer_mapped"] = mapped
+    if needs_review_why is not None:  # {id: [codes]} from the refine output
+        by_why = {}
+        for codes in needs_review_why.values():
+            for c in codes or ["unspecified"]:
+                by_why[c] = by_why.get(c, 0) + 1
+        counts["needs_review_by_why"] = by_why
     rates = {
         "retry_rate": _rate(sum(1 for r in rows if r["attempts"] > 1), n),
         "qa_disagree": _rate(sum(1 for q in qs if _reason(q) == "reviewer_disagrees"), len(ans)),
@@ -295,6 +305,10 @@ def block(m):
     usd = cost.get("cost_usd")
     img = " image %d checked %d changed" % (c["image_checked"], c["image_changed"]) \
         if c.get("image_checked") is not None else ""
+    if c.get("answer_mapped"):
+        img += " mapped %d" % c["answer_mapped"]
+    if c.get("needs_review_by_why"):
+        img += " review_why " + ",".join("%s=%d" % kv for kv in sorted(c["needs_review_by_why"].items()))
     return [
         "metrics: answered %d/%d declined %d malformed %d retry %s%s" % (
             c["answered"], m["n"], c["declined"], c["malformed"], _pct(r.get("retry_rate")), img),

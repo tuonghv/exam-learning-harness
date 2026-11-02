@@ -7,7 +7,7 @@ import re
 import unicodedata
 
 from exam_engine.core import refcheck
-from exam_engine.pipeline import extract_eval
+from exam_engine.pipeline import extract_eval, verifier
 from exam_engine.pipeline.reporter import _one_line
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
@@ -170,7 +170,13 @@ def value_letter(answer, stem):
     """Letter of the single option whose text equals the engine's value answer, else None."""
     v = _norm_value(answer)
     hits = [m.group(1) for m in OPT_RE.finditer(stem) if v and _norm_value(m.group(2)) == v]
-    return hits[0] if len(hits) == 1 else None
+    if len(hits) == 1:
+        return hits[0]
+    if hits:
+        return None
+    # value + trailing note, "12,7" vs "12.7%": same number rule as the solver (60.1, D4)
+    opts = {m.group(1): m.group(2) for m in OPT_RE.finditer(stem)}
+    return verifier.option_for_value(answer, opts)
 
 
 def qa_verdict(engine, qa):

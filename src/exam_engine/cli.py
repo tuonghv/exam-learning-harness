@@ -7,6 +7,7 @@ Without --mock, --dry-run or --real nothing runs (never defaults to a real call)
 import argparse
 import json
 import os
+import re
 import shutil
 import sys
 import tempfile
@@ -1193,6 +1194,47 @@ def _rs_compute(ref, a):
     return metrics.compute(result, log, exam=exam, key=keymap, qa=qa), sha, line, qa
 
 
+def _rs_recheck(a):
+    """Re-run the current code checks (option value -> letter, quote folding) on a saved run's
+    check_failed questions. Read-only, no LLM (60.2)."""
+    if len(a.refs) != 1 or not a.exam:
+        print("usage: exam.py run-stats recheck RESULT_DIR --exam FILE [--json]", file=sys.stderr)
+        return 2
+    result = _rs_resolve(a.refs[0], a.history, a.legacy)[0]
+    exam, code = _load_exam(a.exam)
+    if exam is None:
+        return code
+    qs = {str(q["id"]): q for q in exam["questions"]}
+    rows, cleared = [], 0
+    for sq in result.get("questions") or []:
+        reason = sq.get("status_reason") or ""
+        eq = qs.get(str(sq.get("id")))
+        if not reason.startswith("check_failed") or eq is None:
+            continue
+        ans = dict(sq)
+        mapped = "-"
+        if eq.get("options") and not re.match(r"^[A-D]$", str(ans.get("answer")).strip()):
+            mapped = verifier.option_for_value(ans.get("answer"), eq["options"]) or "-"
+            if mapped != "-":
+                ans["answer"] = mapped
+        # saved checks keep the quotes (first 80 chars) in their detail text
+        ans["evidence"] = [c["detail"].split(": ", 1)[1] for c in sq.get("checks") or []
+                           if c.get("kind") == "quote" and ": " in c.get("detail", "")
+                           and c["detail"].startswith("verbatim in passage/question")]
+        fails = [c["kind"] for c in verifier.det_checks(eq, ans, exam) if c["result"] == "fail"]
+        cleared += not fails
+        rows.append({"id": str(sq.get("id")), "old": reason, "now": "pass" if not fails else
+                     "fail:" + ",".join(fails), "mapped": mapped})
+    summary = {"cleared": cleared, "still_failed": len(rows) - cleared}
+    if a.json:
+        print(json.dumps({"rows": rows, **summary}, ensure_ascii=False, indent=2, sort_keys=True))
+    else:
+        for r in rows:
+            print("\t".join((r["id"], r["old"], r["now"], r["mapped"])))
+        print("cleared %d still_failed %d" % (cleared, summary["still_failed"]))
+    return 0
+
+
 def _rs_stats(a):
     m = _rs_compute(a.refs[0], a)[0]
     if a.json:
@@ -1297,7 +1339,7 @@ def _rs_backfill(a):
 def run_stats_main(argv):
     """run-stats stats|compare|trend|backfill: metrics of solve runs (TASK-056); exit 0 ok, 1 regression, 2 error."""
     ap = argparse.ArgumentParser(prog="exam run-stats")
-    ap.add_argument("sub", choices=("stats", "compare", "trend", "backfill"))
+    ap.add_argument("sub", choices=("stats", "compare", "trend", "backfill", "recheck"))
     ap.add_argument("refs", nargs="*", help="stats: RESULT_DIR; compare: A B; backfill: DIR...")
     ap.add_argument("--exam")
     ap.add_argument("--key", dest="ans_key")
@@ -1320,7 +1362,7 @@ def run_stats_main(argv):
             print("usage: exam.py run-stats stats RESULT_DIR", file=sys.stderr)
             return 2
         return {"stats": _rs_stats, "compare": _rs_compare, "trend": _rs_trend,
-                "backfill": _rs_backfill}[a.sub](a)
+                "backfill": _rs_backfill, "recheck": _rs_recheck}[a.sub](a)
     except (OSError, ValueError) as exc:
         print("ERROR: %s" % exc, file=sys.stderr)
         return 2

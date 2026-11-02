@@ -3,6 +3,7 @@
 Python 3.8 stdlib only. The key is never read here (fewshot skips the --key file).
 """
 import os
+import re
 
 from exam_engine import settings
 from exam_engine.adapters import claude
@@ -170,6 +171,13 @@ def solve_round(exam, rn, recs, ids, prompt, tag="solve"):
                                         "question %d not in the solver output" % i)])
             continue
         r.update(ans=a, review=None, findings=[])
+        mapped = None
+        if qs[i].get("options") and not re.match(r"^[A-D]$", str(a.get("answer")).strip()):
+            mapped = verifier.option_for_value(a.get("answer"), qs[i]["options"])
+        if mapped:  # option value given instead of its letter (60.1)
+            r["findings"].append(finding("deterministic", "answer_mapped",
+                                          '"%s" -> %s' % (str(a.get("answer"))[:40], mapped)))
+            a["answer"] = mapped
         r["code_checks"] = verifier.det_checks(qs[i], a, exam)
         r["checks"] = list(r["code_checks"])
         if declined(a):
