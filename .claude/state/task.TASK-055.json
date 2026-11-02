@@ -1,19 +1,19 @@
 {
   "task_id": "TASK-055",
   "title": "Group-aware solving: slice-after-share, group model, group-aware render/retry/QA, missing-context decline, source pages (REQ-0058)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0058",
   "acceptance_criteria": [
-    "AC1 group kind derived (independent/passage/dependent)",
+    "AC1 group kind derived",
     "AC2 independent: guide + own stem",
-    "AC3 passage once per group in prompt; missing passage declined",
-    "AC4 dependent: sibling answers passed on retry/QA; missing sibling declined",
-    "AC5 design states why best; tests-first 2-page slices; old files byte-identical"
+    "AC3 passage once per group; missing passage declined",
+    "AC4 sibling answers on retry/QA; missing sibling declined",
+    "AC5 tests-first 2-page slices; old files byte-identical"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-55-group-aware-solving.md",
+    "summary": "Option A: one whole-file call; slice after share; GROUP_RE forms; derived groups (independent/passage/dependent); group-aware render/retry/QA with passage once; missing-context decline; source pages. Visual attach separate.",
     "reuse": [],
     "risks": []
   },
@@ -40,11 +40,13 @@
   },
   "roles_required": true,
   "crosscheck_required": true,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-055/handoff/design.md"
+  },
   "user_notes": [],
   "picked_at": "2026-11-02T09:39:02Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-02T09:39:34Z",
+  "updated_by": "main",
   "scope": [
     "work/TASK-055/"
   ],
@@ -54,5 +56,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "Titan writes tests first (units 1-9), start 55.1 and 55.2"
 }
