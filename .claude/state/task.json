@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-061",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "Titan: tests first, 61.1-61.4",
   "title": "Image scope for cut/declined and doubtful questions, optional adjudication (REQ-0067; phase-60 items 60.4-60.6)",
   "active": [
     {
       "task_id": "TASK-061",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "Titan: tests first, 61.1-61.4",
+      "updated_at": "2026-11-02T23:27:47Z"
     }
   ],
   "max_active": 1

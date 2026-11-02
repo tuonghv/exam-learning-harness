@@ -1645,3 +1645,9 @@ Action: Report written
 Result: TASK-060 slice A verified, docs/report/phase-60-quality-solve-path.md
 Decision: DONE
 Next: follow-up task 60.4-60.6
+
+## DESIGN - TASK-061 - 2026-11-02T23:27:47Z
+Action: Design for image scope taken from phase-60 items 60.4-60.6
+Result: design COMPLETE
+Decision: coder tests-first
+Next: coder
