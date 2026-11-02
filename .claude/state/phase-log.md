@@ -1543,3 +1543,9 @@ Action: Nemesis QA
 Result: no blocking defects; D1 = extra info warnings page_cut_suspect on DGNL (accepted: informational)
 Decision: VERIFIED next
 Next: verifier
+
+## VERIFIED - TASK-047 - 2026-11-02T14:14:03Z
+Action: Argus verified (read-only); D1 fixed; evidence published
+Result: AC1-AC4 verified without paid run
+Decision: VERIFIED
+Next: report then DONE

@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-047",
   "title": "Python cut detector for page selection, bounded automatic recovery, page-extraction cache with trace page/hash (design 43.3-43.5, REQ-0045)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0051",
   "acceptance_criteria": [
     "REQ-0051 AC1 cut detector",
@@ -44,12 +44,27 @@
     "result": "1072 run, only the known failures (identical names to baseline); design tests 1-15 mapped; gold oracle 25 questions 0 orphans; mutations killed after 10 added tests; mock only, no paid run"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "no blocking finding (verify.md); cache dir paths hash-named, no traversal"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-047/evidence/suite-final.txt",
+      "work/TASK-047/evidence/head-failures.txt",
+      "work/TASK-047/evidence/baseline-failures.txt",
+      "work/TASK-047/evidence/test.md",
+      "work/TASK-047/evidence/verify.md"
+    ],
+    "command": "python3 -I -m unittest discover -s tests/unit; gold oracle (25 questions, 0 orphans); QA mutations",
+    "result": "REQ-0051 AC1-AC4 verified by unit + gold oracle with mock replies; cut detector, window extraction, bounded recovery, cost cap before every call, cache key and trace, flags verified; verifier D1 (cache hits unvalidated) fixed in fix round 1; D2 EST_CALL_USD kept at 0.08 (conservative, decision in design); failures identical to baseline 083d0e4; paid real DGNL subset check is REQ-0064, awaiting user go (question Q-1793622303)",
+    "published": [
+      "docs/report/evidence/TASK-047/suite-final.txt",
+      "docs/report/evidence/TASK-047/head-failures.txt",
+      "docs/report/evidence/TASK-047/baseline-failures.txt",
+      "docs/report/evidence/TASK-047/test.md",
+      "docs/report/evidence/TASK-047/verify.md"
+    ]
   },
   "report": {
     "status": "pending",
@@ -71,7 +86,8 @@
     ],
     "designer": "work/TASK-047/handoff/design.md",
     "coder": "work/TASK-047/handoff/code.md",
-    "tester": "work/TASK-047/handoff/test.md"
+    "tester": "work/TASK-047/handoff/test.md",
+    "verifier": "work/TASK-047/handoff/verify.md"
   },
   "user_notes": [
     {
@@ -81,7 +97,7 @@
     }
   ],
   "picked_at": "2026-11-02T05:25:02Z",
-  "updated_at": "2026-11-02T12:23:23Z",
+  "updated_at": "2026-11-02T14:14:03Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/refine.py",
@@ -103,5 +119,6 @@
     "notes": "",
     "next": "resume: coder tests-first per phase-47 (tests 1-15), real slice pages 7-8 and 14-15 (dry-run first, ask if over 0.3 USD)"
   },
-  "next": "verifier; real-slice pages 7-8 and 14 need user go"
+  "next": "report citing docs/report/evidence/TASK-047/, DONE",
+  "evidence_required": true
 }
