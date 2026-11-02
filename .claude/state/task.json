@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-053",
-  "state": "IMPLEMENTING",
-  "next": "UNIT_TESTED",
+  "state": "UNIT_TESTED",
+  "next": "VERIFIED",
   "title": "Solve QA by a senior solver merged into the review pack: --qa import, QA line, skill solve-qa, first DGNL QA data (REQ-0056)",
   "active": [
     {
       "task_id": "TASK-053",
-      "state": "IMPLEMENTING",
-      "next": "UNIT_TESTED",
-      "updated_at": "2026-11-02T06:08:59Z"
+      "state": "UNIT_TESTED",
+      "next": "VERIFIED",
+      "updated_at": "2026-11-02T06:09:00Z"
     }
   ],
   "max_active": 1

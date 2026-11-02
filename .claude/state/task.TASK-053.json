@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-053",
   "title": "Solve QA by a senior solver merged into the review pack: --qa import, QA line, skill solve-qa, first DGNL QA data (REQ-0056)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0056",
   "acceptance_criteria": [
     "REQ-0056 AC1 --qa merge",
@@ -32,9 +32,9 @@
     "summary": "review-pack --qa: QA line, verdicts (agrees/differs/flawed with engine-vs-QA/qa-only/unresolved/engine-nonletter), INDEX columns and counts, QA lines persist and are recomputed on re-run, value answers mapped to options, 4/5 column tables; skill solve-qa and DGNL QA tables by main"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "847 run, 32 review tests OK, 3 known failures identical at base; independent oracle on the real rebuilt pack 0 mismatches over 120 rows; mutations killed (stale verdict, wipe on re-run, first-of-two options, 4-cell flawed)"
   },
   "security": {
     "status": "pending",
@@ -67,6 +67,9 @@
     },
     "coder": {
       "waiver": "work/TASK-053/handoff/code.md"
+    },
+    "tester": {
+      "waiver": "work/TASK-053/handoff/test.md"
     }
   },
   "user_notes": [
@@ -77,7 +80,7 @@
     }
   ],
   "picked_at": "2026-11-02T05:46:42Z",
-  "updated_at": "2026-11-02T06:08:59Z",
+  "updated_at": "2026-11-02T06:09:00Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/review.py",
@@ -94,5 +97,5 @@
     "notes": "",
     "next": "RESUME after account switch (no agents were pending except Titan a5b72b2d D5): (1) git status/log; if Titan's D5 edit is uncommitted review it, run unit tests test_review*.py then full suite in backgr"
   },
-  "next": "UNIT_TESTED"
+  "next": "VERIFIED"
 }
