@@ -4,6 +4,7 @@ back (counts, Wilson agreement, improvements by kind). No model call; marks are 
 import json
 import os
 import re
+import unicodedata
 
 from exam_engine.core import refcheck
 from exam_engine.pipeline import extract_eval
@@ -25,9 +26,10 @@ HEAD_RE = re.compile(r"^## Q(\d+)  p\.(\S+)  (\S+)  answer (\S)  conf (\S+)\s*$"
 LOOSE_RE = re.compile(r"^##\s*Q?\s*(\d+)")
 QA_HEAD = ("QA: in-session independent reads of the source (same model family as the engine: not an official "
            "key, agreement is not proof). You review the extraction; the answer is QA's job. Verdicts: agrees, "
-           "differs, flawed, qa-only, unresolved.")
+           "differs, flawed, qa-only, unresolved, engine-nonletter.")
 QA_RE = re.compile(r"^QA: (\S+) conf (\S+) \| (\S+) \|")
-VERDICTS = ("agrees", "differs", "flawed", "qa-only", "unresolved")
+VERDICTS = ("agrees", "differs", "flawed", "qa-only", "unresolved", "engine-nonletter")
+OPT_RE = re.compile(r"(?m)^\s*\(?([A-D])[.)]\s*(.+?)\s*$")
 QA_HEADER_CELLS = ("n", "#", "no", "no.", "q", "number")
 SUBJECT_SKIP = ("INDEX.md", "improvements.md")
 
@@ -140,13 +142,26 @@ def parse_qa(paths):
                 bad.append("%s:%d" % (base, i))
                 continue
             rest = cells[3:]
-            fl = rest[0].lower() if rest else ""
+            fl = rest[0].lower() if len(rest) > 1 else ""  # 4 columns: the 4th is the note, no flawed column
             flawed = fl.startswith(("yes", "mild")) if fl.split(" ")[0] in ("yes", "no", "mild") else False
             if fl.split(" ")[0] in ("yes", "no", "mild"):
                 rest = rest[1:]
             rows[int(cells[0])] = {"answer": ans, "conf": (cells[2] if len(cells) > 2 and cells[2] else "-"),
                                    "flawed": flawed, "why": _one_line(" | ".join(rest))[:300] or "-"}
     return rows, bad
+
+
+def _norm_value(t):
+    t = unicodedata.normalize("NFC", str(t)).lower()
+    t = re.sub(r"(?<=\d),(?=\d)", ".", t)
+    return re.sub(r"[^\w.\-]|_", "", t).strip(".")
+
+
+def value_letter(answer, stem):
+    """Letter of the single option whose text equals the engine's value answer, else None."""
+    v = _norm_value(answer)
+    hits = [m.group(1) for m in OPT_RE.finditer(stem) if v and _norm_value(m.group(2)) == v]
+    return hits[0] if len(hits) == 1 else None
 
 
 def qa_verdict(engine, qa):
@@ -156,10 +171,12 @@ def qa_verdict(engine, qa):
         return "unresolved"
     if engine == "-":
         return "qa-only"
+    if engine not in ("A", "B", "C", "D"):
+        return "engine-nonletter"
     return "agrees" if engine == qa["answer"] else "differs"
 
 
-def build_sections(result, exam, refined, offset, qa=None):
+def build_sections(result, exam, refined, offset, qa=None, keep=None):
     """[(printed n, header dict, markdown lines)] in result order."""
     secs = []
     for q in result.get("questions") or []:
@@ -174,11 +191,16 @@ def build_sections(result, exam, refined, offset, qa=None):
              "status": str(q.get("verification_status") or "-"),
              "answer": q["answer"] if q.get("answer") in ("A", "B", "C", "D") else ("-" if q.get("answer") is None else "?"),
              "conf": _conf(q), "flags": _flags(q, stem, nr)}
+        h["eff"] = h["answer"]
+        if h["answer"] == "?":
+            h["eff"] = value_letter(q["answer"], stem) or "?"
         qline = "QA: -"
         if qa and n in qa:
             x = qa[n]
             qline = "QA: %s conf %s | %s | %s" % (x["answer"], x["conf"].replace(" ", "_"),
-                                                  qa_verdict(h["answer"], x), x["why"])
+                                                  qa_verdict(h["eff"], x), x["why"])
+        elif keep and n in keep:
+            qline = keep[n]
         lines = ["## Q%d  p.%s  %s  answer %s  conf %s" % (n, h["page"], h["status"], h["answer"], h["conf"]),
                  "", _guard(stem), "", _engine_line(q), qline, "Flags: " + h["flags"], TEMPLATE, ""]
         secs.append((n, h, lines))
@@ -194,12 +216,13 @@ def parse_subject(text):
             m, lm = HEAD_RE.match(ln), LOOSE_RE.match(ln)
             cur = {"n": int((m or lm).group(1)) if (m or lm) else None, "page": "-", "status": "-",
                    "answer": "-", "conf": "-", "flags": "none", "qa": "-", "verdict": "-", "review": None, "changed": None,
-                   "bad": not m}
+                   "bad": not m, "qaline": None}
             if m:
                 cur.update(page=m.group(2), status=m.group(3), answer=m.group(4), conf=m.group(5))
             rows.append(cur)
         elif cur is not None:
             if ln.startswith("QA: "):
+                cur["qaline"] = ln.rstrip()
                 qm = QA_RE.match(ln)
                 if qm:
                     cur["qa"], cur["verdict"] = qm.group(1), qm.group(3)
@@ -266,16 +289,16 @@ def pack(exam_id, subject, result_path, exam_path, refined_path=None, offset=0, 
     _check_name("subject", subject)
     d = review_dir(out, exam_id)
     qa, qa_bad = parse_qa(qa_files or [])
-    secs = build_sections(_load(result_path), exam_sections(exam_path),
-                          refined_info(refined_path) if refined_path else {}, offset, qa)
-    unmatched = sorted(set(qa) - {n for n, _, _ in secs})
+    result, exam = _load(result_path), exam_sections(exam_path)
+    refined = refined_info(refined_path) if refined_path else {}
     path = os.path.join(d, subject + ".md")
-    old, olds = {}, {}
+    old, olds, keep = {}, {}, {}
     if os.path.exists(path) and not force_reset:
         with open(path, encoding="utf-8") as fh:
             rows = parse_subject(fh.read())
         olds = {r["n"]: r for r in rows if r["n"] is not None}
         old = {n: r for n, r in olds.items() if _is_marked(r)}
+        keep = {n: r["qaline"] for n, r in olds.items() if r["qaline"] and r["qaline"] != "QA: -"}
         # a mark in the previous format cannot be merged; keep the whole old file beside the new one
         legacy = [r for r in rows if r["review"] and not r["review"].startswith(PREFIX)
                   and "[x]" in r["review"].lower()]
@@ -284,6 +307,8 @@ def pack(exam_id, subject, result_path, exam_path, refined_path=None, offset=0, 
             with open(path, encoding="utf-8") as src, open(os.path.join(d, subject + ".old.md"), "w",
                                                           encoding="utf-8") as dst:
                 dst.write(src.read())
+    secs = build_sections(result, exam, refined, offset, qa, keep)
+    unmatched = sorted(set(qa) - {n for n, _, _ in secs})
     new_ns = {n for n, _, _ in secs}
     lost = sorted(set(old) - new_ns)
     msg = "wrote %s (%d questions)" % (path, len(secs))
@@ -295,7 +320,7 @@ def pack(exam_id, subject, result_path, exam_path, refined_path=None, offset=0, 
     elif old:
         msg += "; merged %d existing marks by printed number" % len(old)
     body = ["# %s - %s" % (exam_id, subject), "", HOWTO % exam_id, ""]
-    if qa_files:
+    if qa_files or keep:
         body += [QA_HEAD, ""]
     if note:
         body += ["Note: " + _one_line(note), ""]
@@ -318,8 +343,8 @@ def pack(exam_id, subject, result_path, exam_path, refined_path=None, offset=0, 
         cnt = dict.fromkeys(VERDICTS, 0)
         for n, h, _ in secs:
             if n in qa:
-                cnt[qa_verdict(h["answer"], qa[n])] += 1
-        msg += "; QA " + ", ".join("%s %d" % (v, cnt[v]) for v in VERDICTS)
+                cnt[qa_verdict(h["eff"], qa[n])] += 1
+        msg += "; QA " + ", ".join("%s %d" % (v, cnt[v]) for v in VERDICTS if cnt[v] or v != "engine-nonletter")
         msg += "; qa_unmatched %d%s" % (len(unmatched), " (%s)" % ",".join(map(str, unmatched)) if unmatched else "")
         msg += "; qa_unparsed %d%s" % (len(qa_bad), " (%s)" % ", ".join(qa_bad) if qa_bad else "")
     if changed:
@@ -335,7 +360,8 @@ def _state(r):
 
 
 def _verdict_counts(rs):
-    return ", ".join("%s %d" % (v, sum(1 for r in rs if r["verdict"] == v)) for v in VERDICTS)
+    c = [(v, sum(1 for r in rs if r["verdict"] == v)) for v in VERDICTS]
+    return ", ".join("%s %d" % (v, k) for v, k in c if k or v != "engine-nonletter")
 
 
 def write_index(d, exam_id):
