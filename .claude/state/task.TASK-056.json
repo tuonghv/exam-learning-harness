@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-056",
   "title": "Solve-run metrics: metrics.py catalogue, run history, run-stats stats/compare/trend, metrics block in solve output and report (REQ-0060)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0060",
   "acceptance_criteria": [
     "AC1 catalogue with formulas",
@@ -18,8 +18,17 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/metrics.py",
+      "src/exam_engine/cli.py",
+      "src/exam_engine/engine.py",
+      "src/exam_engine/pipeline/reporter.py",
+      "src/exam_engine/pipeline/scorer.py",
+      "docs/guide/architecture.md",
+      "docs/guide/toolkit-reference.md"
+    ],
+    "summary": "metrics.py catalogue, history JSONL + backfill, run-stats stats/compare/trend/backfill, metrics block in solve and report"
   },
   "unit_test": {
     "status": "pending",
@@ -41,11 +50,12 @@
   "roles_required": true,
   "crosscheck_required": true,
   "roles": {
-    "designer": "work/TASK-056/handoff/design.md"
+    "designer": "work/TASK-056/handoff/design.md",
+    "coder": "work/TASK-056/handoff/code.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-02T10:07:38Z",
-  "updated_at": "2026-11-02T10:07:43Z",
+  "updated_at": "2026-11-02T10:28:25Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-056/"
@@ -56,5 +66,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Titan: tests first (fixtures) then metrics.py, history, run-stats, block"
+  "next": "unit-test gate"
 }

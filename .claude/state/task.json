@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-056",
-  "state": "DESIGN",
-  "next": "Titan: tests first (fixtures) then metrics.py, history, run-stats, block",
+  "state": "IMPLEMENTING",
+  "next": "unit-test gate",
   "title": "Solve-run metrics: metrics.py catalogue, run history, run-stats stats/compare/trend, metrics block in solve output and report (REQ-0060)",
   "active": [
     {
       "task_id": "TASK-056",
-      "state": "DESIGN",
-      "next": "Titan: tests first (fixtures) then metrics.py, history, run-stats, block",
-      "updated_at": "2026-11-02T10:07:43Z"
+      "state": "IMPLEMENTING",
+      "next": "unit-test gate",
+      "updated_at": "2026-11-02T10:28:25Z"
     }
   ],
   "max_active": 1

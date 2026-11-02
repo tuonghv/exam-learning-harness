@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0060",
-  "next": "Titan: tests first (fixtures) then metrics.py, history, run-stats, block",
-  "updated": "2026-11-02 17:07"
+  "next": "unit-test gate",
+  "updated": "2026-11-02 17:28"
 }
