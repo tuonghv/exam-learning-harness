@@ -997,7 +997,7 @@
     "task_id": "TASK-053",
     "title": "Solve QA by a senior solver merged into the review pack: --qa import, QA line, skill solve-qa, first DGNL QA data (REQ-0056)",
     "priority": 0,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-11-02T15:00:00Z",
     "requirement": "REQ-0056",
     "acceptance_criteria": [

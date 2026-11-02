@@ -1,0 +1,71 @@
+{
+  "task_id": "TASK-053",
+  "title": "Solve QA by a senior solver merged into the review pack: --qa import, QA line, skill solve-qa, first DGNL QA data (REQ-0056)",
+  "state": "TODO",
+  "requirement": "REQ-0056",
+  "acceptance_criteria": [
+    "REQ-0056 AC1-AC4"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {
+    "grants": {
+      "coder": [
+        ".claude/skills/solve-qa/SKILL.md"
+      ],
+      "tester": [
+        ".claude/skills/solve-qa/SKILL.md"
+      ]
+    },
+    "grants_auto": [
+      ".claude/skills/solve-qa/SKILL.md"
+    ]
+  },
+  "user_notes": [],
+  "picked_at": "2026-11-02T05:46:42Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [
+    "src/exam_engine/pipeline/review.py",
+    "src/exam_engine/cli.py",
+    "tests/unit/test_review*.py",
+    "tests/unit/fixtures/**",
+    ".claude/skills/solve-qa/SKILL.md",
+    "docs/guide/ingest-usage.md"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
