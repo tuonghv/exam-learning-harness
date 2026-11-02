@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-054",
-  "state": "UNIT_TESTED",
-  "next": "verifier: real verification (DGNL re-emit prompt, evidence saved)",
+  "state": "VERIFIED",
+  "next": "write report docs/report, backlog complete, DONE",
   "title": "Section headings once per section, group instruction per question (REQ-0057)",
   "active": [
     {
       "task_id": "TASK-054",
-      "state": "UNIT_TESTED",
-      "next": "verifier: real verification (DGNL re-emit prompt, evidence saved)",
-      "updated_at": "2026-11-02T09:32:55Z"
+      "state": "VERIFIED",
+      "next": "write report docs/report, backlog complete, DONE",
+      "updated_at": "2026-11-02T09:36:01Z"
     }
   ],
   "max_active": 1

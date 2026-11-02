@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-054",
   "title": "Section headings once per section, group instruction per question (REQ-0057)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0057",
   "acceptance_criteria": [
     "AC0 four labelled levels in FORMAT.md, parser, ingest, solve prompt",
@@ -37,12 +37,19 @@
     "result": "865 run; only the 4 pre-existing failures (lxml, examples/dgnl unknown subject dir x3); golden: 25 unlabelled inputs identical to baseline 2461f4f; DGNL re-emit 30 q/subject, options equal"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "no eval/shell/new AI call; one minor quadratic regex (D1, verify.md)"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-054/evidence/golden.txt",
+      "work/TASK-054/evidence/suite.txt",
+      "work/TASK-054/evidence/baseline-failures.txt",
+      "work/TASK-054/evidence/head-failures.txt"
+    ],
+    "command": "python3 -I -m unittest discover -s tests/unit; golden re-emit of DGNL e3-*.md",
+    "result": "AC0-AC5 verified by unit + golden; 4 suite failures identical at baseline 083d0e4 (baseline-failures.txt); paid English q1-5 re-solve not run (answers unchanged by prompt structure only)"
   },
   "report": {
     "status": "pending",
@@ -53,17 +60,23 @@
   "roles": {
     "designer": "work/TASK-054/handoff/design.md",
     "coder": "work/TASK-054/handoff/code.md",
-    "tester": "work/TASK-054/handoff/test.md"
+    "tester": "work/TASK-054/handoff/test.md",
+    "verifier": "work/TASK-054/handoff/verify.md"
   },
   "user_notes": [
     {
       "raw": "RAW-00167",
       "note": "solve strategy per question kind: independent (cloze) vs passage group; new REQ",
       "at": "2026-11-02T09:19:48Z"
+    },
+    {
+      "raw": "RAW-00168",
+      "note": "review tmp/solve-strategy-context.md for REQ-0058 (gaps, better engine design)",
+      "at": "2026-11-02T09:35:34Z"
     }
   ],
   "picked_at": "2026-11-02T06:09:12Z",
-  "updated_at": "2026-11-02T09:32:55Z",
+  "updated_at": "2026-11-02T09:36:01Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-054/"
@@ -75,5 +88,5 @@
     "notes": "",
     "next": "RESUME after account switch: write/brief the design for REQ-0057 (AC0 four-level clean exam format, AC4 section->subject by alias table, AC5 instruction block in the solve prompt; update examples/FORM"
   },
-  "next": "verifier: real verification (DGNL re-emit prompt, evidence saved)"
+  "next": "write report docs/report, backlog complete, DONE"
 }
