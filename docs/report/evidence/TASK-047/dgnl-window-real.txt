@@ -1,0 +1,9 @@
+# REQ-0064 real DGNL window check (user go RAW-00185, "decide yourself" RAW-00186)
+cmd: ingest-refine <DGNL pdf> --pages 7-8 | 14-15 | 5-16 --real --cache <dir> (dry-run first: est 0.16 / 0.16 / 0.80 at the conservative 0.08 per call)
+run 7-8: 1 call, 0.0764 USD (first try with cap 0.15 stopped by the cost cap before page 7, 0.04 spent; rerun with cap 0.25)
+run 14-15: 2 calls, 0.1081 USD, 18 questions, q67 needs_review
+run 5-16 (cache hits for 7 and 14): 3 calls, 0.1458 USD, 43 questions, ids 1-74 unique, q67 needs_review
+windows: [6,7] q6 whole; [7,8] q10 whole; [9,10] q20 whole; [14,15] q66 whole. Recovered pages 8, 10, 15 (outside the flagged set).
+q10 and q66: 4 options each, continued pages 8 and 15. Questions with fewer than 4 options: 0 (orphans 0). Without --all-pages.
+cost: runs total about 0.33 USD (measured window call about 0.07-0.11, single page 0.04-0.08); conservative estimate 0.08 per call stays.
+limits: one exam, one model; correctness of the text itself not scored here (no key); q67 left flagged for review.
