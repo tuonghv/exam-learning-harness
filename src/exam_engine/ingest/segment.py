@@ -30,6 +30,21 @@ def _next_n(lines, i):
     return None
 
 
+_SUBHEAD = re.compile(r"^\s*\d+\.\d+\.?\s+\S")
+
+
+def _is_subheading(lines, i):
+    """`3.2 TITLE` (<= 60 chars, mostly upper case) whose next non-empty line opens a group or a question."""
+    line = lines[i]
+    if not _SUBHEAD.match(line) or len(line.strip()) > 60:
+        return False
+    letters = [c for c in line if c.isalpha()]  # a heading is mostly upper case; "1.5 m/s" is a tail
+    if not letters or sum(c.isupper() for c in letters) < 0.6 * len(letters):
+        return False
+    nxt = next((ln for ln in lines[i + 1:] if ln.strip()), "")
+    return bool(_Q.match(nxt) or _INTRO.match(nxt) or _READ.match(nxt) or _PART_ANY.match(nxt))
+
+
 def _hint_start(line, qs, lines, i):
     """-> (n, text) for a question_start hint that keeps the numbering consecutive, else None."""
     prev = qs[-1]["n"]
@@ -135,7 +150,7 @@ def segment(lines, hints=None, report=None):
             qs[-1]["options"].append({"key": o.group(1), "text": o.group(2).strip()})
         elif line.strip():
             if qs[-1]["options"] and (closed or _INTRO.match(line) or _READ.match(line)
-                                      or _PART_ANY.match(line)):
+                                      or _PART_ANY.match(line) or _is_subheading(lines, i)):
                 pending.append(line.strip())
             elif qs[-1]["options"]:
                 qs[-1]["options"][-1]["text"] += " " + line.strip()

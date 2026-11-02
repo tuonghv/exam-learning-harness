@@ -106,7 +106,7 @@ def suspects(lines, page_of=None, known=None):
             keys.append(o.group(1))
             dtext = o.group(2)
             continue
-        if _strong(line):
+        if _strong(line) or segment._is_subheading(lines, i):
             ended = True  # the rules hold everything up to the next question as its context
             continue
         tok = _marker(line, last_n + 1)

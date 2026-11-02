@@ -98,6 +98,23 @@ class SubNumber(unittest.TestCase):
         self.assertEqual(claude.extract_json("[" * 5000 + "]" * 5000)[0], None)
 
 
+class SubHeading(unittest.TestCase):
+    def test_subheading_before_group_or_question_is_context_not_d(self):
+        for nxt in ("Questions 46-52: read the passage", "Câu 2. Tính"):
+            lines = q(1) + ["3.2 LOGIC VÀ SỐ LIỆU"] + ([nxt] if nxt.startswith("Q") else []) \
+                + (q(2) if nxt.startswith("C") else [])
+            qs = segment.segment(lines + ([] if nxt.startswith("C") else q(2)))[1]
+            self.assertEqual(qs[0]["options"][3]["text"], "bốn", nxt)
+            self.assertIn("3.2 LOGIC VÀ SỐ LIỆU", qs[1]["context"], nxt)
+
+    def test_wrapped_option_decimals_and_document_end_stay(self):
+        for tail in ("1.5 m/s mỗi giây", "3.5", "2.50"):
+            qs = segment.segment(q(1, tail=[tail]) + q(2))[1]
+            self.assertTrue(qs[0]["options"][3]["text"].endswith(tail), tail)
+        qs = segment.segment(q(1, tail=["1.2 TIÊU ĐỀ CUỐI"]))[1]
+        self.assertTrue(qs[0]["options"][3]["text"].endswith("TIÊU ĐỀ CUỐI"))
+
+
 class Plain(unittest.TestCase):
     def test_1_hints_none_is_plain_rules(self):
         lines = exam(4) + ["Bài 5: x"]
