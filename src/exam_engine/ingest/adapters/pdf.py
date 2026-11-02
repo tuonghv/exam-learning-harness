@@ -12,6 +12,7 @@ from exam_engine.ingest.schema import SCHEMA_VERSION, IngestError
 
 CROP_DPI = 150
 OCR_DPI = 200
+OCR_GAP = 0.15  # char gap / median char height that becomes a space (51.7 sweep: ocr-gap-sweep.tsv)
 MAX_CROPS = 6
 MIN_CHARS = 20
 MATH_FONTS = ("math", "cmsy", "cmmi", "cmex", "symbol")
@@ -72,6 +73,52 @@ def _page_blocks(page, textpage=None):
             spans = ln.get("spans", ())
             fonts.update(s.get("font", "") for s in spans)
             lines.append("".join(s.get("text", "") for s in spans))
+        text = _nfc("\n".join(lines)).strip()
+        if text:
+            out.append((tuple(round(v, 2) for v in b["bbox"]), text, fonts))
+    return out
+
+
+def _ocr_line_text(line, gap):
+    """Line text rebuilt from rawdict char boxes: a space where the gap exceeds gap * median height."""
+    chars = [c for sp in line.get("spans", ()) for c in sp.get("chars", ())]
+    plain = "".join(sp.get("text", "") for sp in line.get("spans", ()))
+    if not chars:
+        return plain
+    boxes = [c.get("bbox") for c in chars]
+    if any(not b or len(b) < 4 for b in boxes):
+        return plain
+    hs = sorted(b[3] - b[1] for b in boxes)
+    limit = gap * hs[len(hs) // 2]
+    out, prev = [], None
+    for c, b in zip(chars, boxes):
+        ch = c.get("c", "")
+        if ch.isspace():
+            if out and out[-1] != " ":
+                out.append(" ")
+            prev = None
+            continue
+        if prev is not None and out and out[-1] != " " and b[0] - prev > limit:
+            out.append(" ")
+        out.append(ch)
+        prev = b[2]
+    return "".join(out)
+
+
+def _ocr_blocks(page, tp, gap=OCR_GAP):
+    """`_page_blocks` shape for an OCR textpage, spacing rebuilt from char boxes (bridge glues words)."""
+    try:
+        d = page.get_text("rawdict", textpage=tp)
+    except Exception:  # noqa: BLE001 - no boxes: today's text
+        return _page_blocks(page, tp)
+    out = []
+    for b in d.get("blocks", ()):
+        if b.get("type") != 0:
+            continue
+        lines, fonts = [], set()
+        for ln in b.get("lines", ()):
+            fonts.update(s.get("font", "") for s in ln.get("spans", ()))
+            lines.append(_ocr_line_text(ln, gap))
         text = _nfc("\n".join(lines)).strip()
         if text:
             out.append((tuple(round(v, 2) for v in b["bbox"]), text, fonts))
@@ -336,7 +383,7 @@ def _extract(fitz, pdf, raw, path, config):
                 try:
                     tp = page.get_textpage_ocr(language=lang, dpi=OCR_DPI, full=True,
                                                tessdata=tess_dir)
-                    ocr_blocks = [b for b in _page_blocks(page, tp)
+                    ocr_blocks = [b for b in _ocr_blocks(page, tp)
                                   if not any(_inside(b[0], t) for t in tbbox)]
                     ocr_text = "\n".join(b[1] for b in ocr_blocks)
                     if len(ocr_text.strip()) >= MIN_CHARS and len(ocr_text) > len(native_text):

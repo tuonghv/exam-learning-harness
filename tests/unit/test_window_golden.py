@@ -3,6 +3,7 @@ Without a cut boundary the files are byte-identical; where the detector fires, t
 difference is added info warnings `page_cut_suspect` (REQ-0051 AC4)."""
 import json
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -41,6 +42,13 @@ class TestIngestGolden(unittest.TestCase):
             da, db = json.load(open(a, encoding="utf-8")), json.load(open(b, encoding="utf-8"))
             new = [w for w in db["warnings"] if w["code"] == "page_cut_suspect"]
             db["warnings"] = [w for w in db["warnings"] if w["code"] != "page_cut_suspect"]
+            if '"method": "ocr"' in open(a, encoding="utf-8").read():
+                # OCR source: 51.1 re-spaces glued words (intended); text is the same up to whitespace
+                # and the new run has at least as many word breaks (fewer glued tokens).
+                ta, tb = json.dumps(da, ensure_ascii=False), json.dumps(db, ensure_ascii=False)
+                self.assertEqual(re.sub(r"\s+|\\n|\"chars\": \d+", "", ta), re.sub(r"\s+|\\n|\"chars\": \d+", "", tb), pdf)
+                self.assertGreaterEqual(len(tb.split()), len(ta.split()), pdf)
+                continue
             self.assertEqual(da, db, pdf)
             if not new:  # no cut detected: the file is byte-identical
                 self.assertEqual(open(a, "rb").read(), open(b, "rb").read(), pdf)
