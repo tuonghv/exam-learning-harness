@@ -1,5 +1,5 @@
 {
-  "focus": "REQ-0062",
-  "next": "TASK-058 queued after TASK-057 DONE: pick, advance DESIGN (docs/design/phase-58-plan-report-split.md ready), coder 58.1+58.2 raw call capture first",
-  "updated": "2026-11-02 17:44"
+  "focus": "REQ-0061",
+  "next": "unit-test gate",
+  "updated": "2026-11-02 17:59"
 }
