@@ -1,15 +1,18 @@
 {
   "task_id": "TASK-048",
   "title": "Provenance sidecar assembly.json + prompt lines (never transcribe headers; decline incomplete/merged) (design 43.6-43.7, REQ-0045)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0052",
   "acceptance_criteria": [
-    "REQ-0052 AC1-AC4"
+    "AC1 sidecar assembly.json per exam",
+    "AC2 inspect table",
+    "AC3 prompt lines never transcribe headers; decline incomplete/merged with missing_text",
+    "AC4 old outputs unchanged"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-48-provenance-sidecar.md",
+    "summary": "assembly sidecar per question (printed number, source_pages, assembly/validation status, reasons) written beside the exam text, shown by ingest-inspect, copied into the plan run; prompt lines on dev channel; text-path questions have empty source_pages",
     "reuse": [],
     "risks": []
   },
@@ -37,11 +40,13 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-048/handoff/design.md"
+  },
   "user_notes": [],
   "picked_at": "2026-11-02T14:14:23Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-02T14:17:42Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -49,5 +54,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "Titan: tests first, 60.1-60.4 then prompts/plan copy"
 }

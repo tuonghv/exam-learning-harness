@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-048",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "Titan: tests first, 60.1-60.4 then prompts/plan copy",
   "title": "Provenance sidecar assembly.json + prompt lines (never transcribe headers; decline incomplete/merged) (design 43.6-43.7, REQ-0045)",
   "active": [
     {
       "task_id": "TASK-048",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "Titan: tests first, 60.1-60.4 then prompts/plan copy",
+      "updated_at": "2026-11-02T14:17:42Z"
     }
   ],
   "max_active": 1

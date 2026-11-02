@@ -1555,3 +1555,9 @@ Action: Report written
 Result: TASK-047 verified without paid run, docs/report/phase-47-whole-question-window.md
 Decision: DONE
 Next: REQ-0064 waits for user go; next TASK-048
+
+## DESIGN - TASK-048 - 2026-11-02T14:17:42Z
+Action: Nova updated phase-43 43.6-43.7 against current repo
+Result: design COMPLETE; G1 text-path pages empty; I1 dev channel only
+Decision: dev channel only
+Next: coder tests-first
