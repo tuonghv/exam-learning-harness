@@ -13,6 +13,9 @@ Proof: rebuild twice with the adapter and network forbidden gives byte-identical
   (test_scripts_exam.py:63, test_exam_report.py:604), `run-stats DIR`, test_default_out.py:63.
 ## Known incidents
 none found (not grepped beyond the files below).
+## Plan modes
+Solve gains plan-run capture; report/review/run-stats read plan runs. Ingest, refine and cross-solve unchanged. Old result dirs are read through plan-import; `--out` stays honoured.
+
 ## 1. Current flow and gaps
 - solve_main cli.py:30 -> engine.run engine.py:128 -> Runner.call engine.py:37 (the only solve-path LLM call;
   callers solver.py:141, verifier.py:224) -> result.json + run.log (engine.py:177-181) ->
