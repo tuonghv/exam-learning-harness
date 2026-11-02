@@ -54,8 +54,10 @@ def parse_pages(spec):
     return sorted(out)
 
 
-def select_pages(doc, spec):
-    """Copy of `doc` keeping only the pages in `spec` (original numbers kept)."""
+def select_pages(doc, spec, reviewer=None):
+    """Copy of `doc` keeping only the pages in `spec` (original numbers kept).
+
+    reviewer: boundary hints source (see boundary.segment_reviewed), so --pages keeps them."""
     want = parse_pages(spec)
     have = [p["n"] for p in doc["pages"]]
     bad = [n for n in want if n not in have]
@@ -68,16 +70,25 @@ def select_pages(doc, spec):
     new["assets"] = [a for a in new["assets"] if a["id"] in keep_ids]
     new["warnings"] = [w for w in new["warnings"] if w.get("page") in (None,) + tuple(want)
                        and w["code"] not in ("no_question_numbering", "segmentation_skipped",
-                                        "numbering_gap", "numbering_restarted")]
+                                        "numbering_gap", "numbering_restarted")
+                       and not w["code"].startswith("boundary_ai")]
     new.pop("questions", None)
     new.pop("intro", None)
     if new["source"].get("format") != "md":
-        lines = []
+        page_lines = []
         for p in new["pages"]:
+            lines = []
             for b in p["blocks"]:
                 if b["type"] == "paragraph":
                     lines.extend(b["text"].split("\n"))
-        intro, qs, ok = segment.segment(lines)
+            page_lines.append(lines)
+        if new["source"].get("format") == "pdf":  # same furniture filter as the full ingest
+            from exam_engine.ingest.adapters import pdf
+            page_lines, _removed = pdf._strip_furniture(page_lines)
+        lines = [ln for pl in page_lines for ln in pl]
+        from exam_engine.ingest import boundary  # imports this module (the _KEY pattern)
+        intro, qs, ok, bw = boundary.segment_reviewed({"boundary": reviewer}, lines)
+        new["warnings"].extend(bw)
         if ok or segment.numbering(qs)["usable"]:
             new["questions"], new["intro"] = qs, "\n".join(intro).strip()
             new["warnings"].extend({"level": "warning", "code": c, "message": m}

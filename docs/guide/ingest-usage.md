@@ -44,6 +44,29 @@ copy (`origin: normalized`, `derived_from`) is added beside the original; withou
 `missing_dependency`. `--exam-out` of an image-only document fails with `no_text`: the image goes
 to the solver as a visual (later REQ-0021).
 
+## Optional AI boundary hints (REQ-0053, default OFF)
+    python3 -I scripts/exam.py ingest exam.docx --boundary-ai haiku --dry-run
+    python3 -I scripts/exam.py ingest exam.docx --boundary-ai haiku --mock replies.json --out doc.json
+    python3 -I scripts/exam.py ingest exam.docx --boundary-ai haiku --real --max-cost-usd 0.05 --cache DIR
+
+- Text routes only (native PDF, OCR text, DOCX); not the vision refine, not Markdown. The rules in
+  `segment.py` stay primary; only lines they cannot place are sent: an unseen start word
+  (`Bài 3:`, `Item 3)`), an unmarked stem between two option lists, a heading or a passage after
+  option D, a bare `3.1.` that breaks the numbering. A normal exam sends 0 windows ($0).
+- Exactly one of `--mock FILE`, `--dry-run` (prints counts and the estimate, no call, no document),
+  `--real` (alias `haiku`, tools off, empty cwd); none given = exit 2, it never defaults to real.
+  `--max-cost-usd` (default 0.10) stops before a call that could exceed it (`boundary_ai_budget`).
+  `--cache DIR` (real only) reuses replies, so a rerun costs 0 calls; `--boundary-trace FILE` writes one
+  JSON row per window (with the reply text). Config key `boundary_ai` in `config/engine.json` sets the
+  default (absent = `off`).
+- A reply is strict JSON; a bad window is ignored whole (`boundary_ai_invalid`). A hint below confidence
+  0.7 is dropped, never overrides a strong rule match (`boundary_ai_overruled`), and a start that breaks
+  the numbering is rejected (`boundary_ai_rejected`). Applied hints are warnings `boundary_ai_applied`
+  with `origin: ai`; the completeness and numbering gates run after them. The Subject is never changed
+  (`boundary_ai_subject`); answer-key lines are never sent.
+- `boundary_ai_marker` = a start word the model keeps confirming: add it to `segment._Q` with a test.
+- `--pages` keeps the hints (the page selection re-segments with the same reviewer and the PDF furniture filter).
+
 ## Optional AI refine (REQ-0021)
     python3 -I scripts/exam.py ingest-refine exam.pdf --pages 1-4 --dry-run
     python3 -I scripts/exam.py ingest-refine exam.pdf --pages 1-4 --mock replies.json --out refined.json

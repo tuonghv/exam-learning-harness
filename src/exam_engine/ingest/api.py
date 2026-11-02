@@ -44,7 +44,7 @@ def _finish(doc, config, meta):
     if doc["source"].get("format") != "md":
         doc["parts"] = parts.find_parts(doc)
         if (config or {}).get("pages"):
-            doc = parts.select_pages(doc, config["pages"])
+            doc = parts.select_pages(doc, config["pages"], config.get("boundary"))
     fields = parser.header_fields(doc["source"]["text"]) if "text" in doc["source"] else {}
     fields.update(meta or {})
     doc["meta"] = fields

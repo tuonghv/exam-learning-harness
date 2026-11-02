@@ -240,12 +240,27 @@ def ingest_main(argv):
     ap.add_argument("--refined", metavar="DOC.json", help="exam text from the AI-refined questions of this document")
     ap.add_argument("--questions", metavar="SPEC", help="with --refined: keep only these question numbers, e.g. 61-90")
     ap.add_argument("--meta", action="append", default=[], metavar="K=V")
+    ap.add_argument("--boundary-ai", choices=["off", "haiku"],
+                    default=settings.load_config("engine").get("boundary_ai", "off"),
+                    help="AI hints for rule-uncertain boundary lines (needs --mock/--dry-run/--real)")
+    ap.add_argument("--mock", metavar="FILE")
+    ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--real", action="store_true")
+    ap.add_argument("--max-cost-usd", type=float, default=0.10)
+    ap.add_argument("--cache", metavar="DIR", help="boundary reply cache (real mode only)")
+    ap.add_argument("--boundary-trace", metavar="FILE")
     try:
         args = ap.parse_args(argv)
     except SystemExit:
         return 2
     if args.check:
         return _ingest_check()
+    modes = sum([bool(args.mock), args.dry_run, args.real])
+    if (args.boundary_ai == "haiku") != (modes == 1) or modes > 1 or args.max_cost_usd < 0:
+        print("usage: --boundary-ai haiku needs exactly one of --mock FILE, --dry-run, --real "
+              "(never defaults to real); those flags need --boundary-ai haiku; --max-cost-usd >= 0",
+              file=sys.stderr)
+        return 2
     if not args.file:
         print("ERROR: ingest: FILE required", file=sys.stderr)
         return 2
@@ -256,12 +271,26 @@ def ingest_main(argv):
             print("ERROR: --meta expects K=V, got %r" % item, file=sys.stderr)
             return 2
         meta[key.strip()] = val.strip()
+    reviewer, tmp = None, None
     try:
         cfg = {"ocr": args.ocr}
         if args.pages:
             cfg["pages"] = args.pages
         if args.assets:
             cfg["asset_dir"] = args.assets
+        if args.boundary_ai == "haiku":
+            from exam_engine.ingest import boundary, replycache
+            ask = None
+            if args.real:
+                tmp = tempfile.mkdtemp(prefix="exam_boundary_")
+                ask = boundary.make_real_ask("haiku", settings.load_config("engine")["timeout"], tmp)
+            elif args.mock:
+                ask = engine.mock_llm(args.mock)
+            reviewer = boundary.Reviewer(
+                ask, "haiku", args.max_cost_usd,
+                replycache.ReplyCache(args.cache if args.real else None), dry_run=args.dry_run,
+                keep_text=bool(args.boundary_trace), known=router.known_names())
+            cfg["boundary"] = reviewer
         doc = api.ingest_document(args.file, config=cfg, meta=meta)
         blob = json.dumps(doc, ensure_ascii=False, indent=2) + "\n"
         if args.out:
@@ -279,10 +308,24 @@ def ingest_main(argv):
     except IngestError as exc:
         print("ERROR: ingest: %s" % exc, file=sys.stderr)
         return 2
-    except OSError as exc:
+    except (OSError, ValueError) as exc:
         print("ERROR: ingest: %s" % exc, file=sys.stderr)
         return 2
-    if not args.out:
+    finally:
+        if tmp:
+            shutil.rmtree(tmp, ignore_errors=True)
+    if reviewer is not None:
+        if args.boundary_trace:
+            with open(args.boundary_trace, "w", encoding="utf-8") as fh:
+                fh.write(boundary.trace_lines(reviewer.trace))
+        st = reviewer.stats
+        print("boundary-ai: windows %d, suspects %d, skipped %d, cached %d, calls %d%s, hints %d, "
+              "invalid %d, low_confidence %d, cost $%.4f" % (
+                  st["windows"], st["suspects"], st["skipped"], st["cached"], st["calls"],
+                  " (dry run: est. %d, about $%.3f)" % (st["est_calls"], st["est_calls"] * boundary.EST_CALL_USD)
+                  if args.dry_run else "", st["hints"], st["invalid"], st["low_confidence"],
+                  reviewer.spent), file=sys.stderr if not args.dry_run else sys.stdout)
+    if not args.out and not args.dry_run:
         sys.stdout.write(blob)
     return 0
 

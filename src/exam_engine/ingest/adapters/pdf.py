@@ -6,7 +6,7 @@ import os
 import re
 import unicodedata
 
-from exam_engine.ingest import optional, segment
+from exam_engine.ingest import boundary, optional, segment
 from exam_engine.ingest.schema import SCHEMA_VERSION, IngestError
 
 CROP_DPI = 150
@@ -364,7 +364,9 @@ def _extract(fitz, pdf, raw, path, config):
         warnings.append(_warn("page_furniture_removed", "%d page number / repeated header or "
                               "footer line(s) left out of the question text" % removed,
                               level="info"))
-    intro, qs, ok = segment.segment([ln for lines in page_lines for ln in lines])
+    intro, qs, ok, bw = boundary.segment_reviewed(
+        config, [ln for lines in page_lines for ln in lines])
+    warnings.extend(bw)
     keep = ok
     if not qs:
         warnings.append(_warn("no_question_numbering", "no question numbering found"))

@@ -35,7 +35,7 @@ src/exam_engine/
   adapters/   claude.py          the ONLY module that runs the claude CLI
   pipeline/   parser router (subject policy, language) prompts solver verifier scorer
               reporter (answer sheet, learn view) examples_check cross benchmark genexam
-  ingest/     api.py segment.py parts.py refine.py inspect.py schema.py optional.py
+  ingest/     api.py segment.py boundary.py replycache.py parts.py refine.py inspect.py schema.py optional.py
     adapters/ pdf.py docx.py markdown.py image.py     source file -> document -> exam .md
   utils/      md2html.py text.py (detect_lang)
 config/       engine.json (defaults)  subjects.json (per subject: task, checks, score_basis, language, prompt)

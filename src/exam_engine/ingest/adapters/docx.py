@@ -11,7 +11,7 @@ import re
 import unicodedata
 import zipfile
 
-from exam_engine.ingest import optional, segment
+from exam_engine.ingest import boundary, optional, segment
 from exam_engine.ingest.schema import SCHEMA_VERSION, IngestError
 
 W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
@@ -210,7 +210,8 @@ def _extract(docx, doc, raw, name, config):
         pwarn.append(_warn("unsupported_content", "not read: %s"
                            % ", ".join(sorted(state["unsupported"])), 1))
     warnings = pwarn + warnings
-    intro, qs, ok = segment.segment(lines)
+    intro, qs, ok, bw = boundary.segment_reviewed(config, lines)
+    warnings.extend(bw)
     keep = ok
     if not qs:
         warnings.append(_warn("no_question_numbering", "no question numbering found"))

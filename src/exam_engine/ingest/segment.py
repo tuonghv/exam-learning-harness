@@ -13,18 +13,80 @@ _READ = re.compile(r"^\s*(?:Read|Study|Use)\s+the\s+(?:following\s+)?(?:passage|
 _PART = re.compile(r"^\s*PH[ẦA]N\s+(IV|V|I{1,3})\b", re.I)  # as refine.PART_RE (refine imports this module)
 
 
-def segment(lines):
+# a heading that must not be glued into option D: Roman or Arabic PHẦN / PART (the Roman-only _PART
+# stays equal to refine.PART_RE, which strips the heading from a context)
+_PART_ANY = re.compile(r"^\s*(?:PH[ẦA]N|PART)\s+(?:IV|V|I{1,3}|\d{1,2})\b", re.I)
+# an unseen question-start word: `Bài 3:`, `Item 3)`, `Q3.` (token, number, rest); boundary.py suspects
+MARK = re.compile(r"^\s*(\S{1,12}?)\s*(\d{1,3})\s*[.:)\]–-]\s*(\S.*)$")
+_KEYS = ["A", "B", "C", "D"]
+_ENDS = ("passage", "section_start", "subject_start", "question_end")
+
+
+def _next_n(lines, i):
+    for ln in lines[i:]:
+        m = _Q.match(ln)
+        if m:
+            return int(m.group(1) or m.group(2))
+    return None
+
+
+def _hint_start(line, qs, lines, i):
+    """-> (n, text) for a question_start hint that keeps the numbering consecutive, else None."""
+    prev = qs[-1]["n"]
+    m = MARK.match(line)
+    if m:
+        return (prev + 1, m.group(3).strip()) if int(m.group(2)) == prev + 1 else None
+    if [o["key"] for o in qs[-1]["options"]] != _KEYS:
+        return None
+    nxt = _next_n(lines, i + 1)
+    if nxt is None or nxt == prev + 2:  # an unmarked stem that closes the gap exactly
+        return prev + 1, line.strip()
+    return None
+
+
+def segment(lines, hints=None, report=None):
     """-> (intro_lines, questions, ok). questions: [{n, text, options}].
 
     ok only when numbering is consecutive from 1 and every question has text; the source
     text is never corrected.
+
+    hints {line index: (label, confidence)} (boundary.py, AI origin) are consulted only at those
+    lines and only where the rules are silent: a strong rule match always wins, a start that
+    breaks the numbering is rejected. Every decision is appended to `report` (dicts with code
+    boundary_ai_applied / _rejected / _overruled / _subject). hints=None is the plain rule result.
     """
+    hints = hints or {}
+    rep = report if report is not None else []
     intro, qs, pending = [], [], []
-    for line in lines:
+    closed = False  # a question_end hint: later free lines are context of the next question
+
+    def note(code, i, hint, **extra):
+        rep.append(dict(extra, code=code, line=i, label=hint[0], conf=hint[1]))
+
+    for i, line in enumerate(lines):
+        hint = hints.get(i) if qs else None
         m = _Q.match(line)
         if m:
-            qs.append({"n": int(m.group(1) or m.group(2)), "text": m.group(3).strip(),
-                       "options": []})
+            n = int(m.group(1) or m.group(2))
+            if hint and n == qs[-1]["n"] + 1:
+                if hint[0] != "question_start":
+                    note("boundary_ai_overruled", i, hint)
+            elif hint and n != 1 and hint[0] != "question_start" \
+                    and _next_n(lines, i + 1) == qs[-1]["n"] + 1:
+                # a weak `2)` / `3.1.` that is no question: the numbering resumes right after it
+                if hint[0] in ("passage", "section_start", "subject_start") and qs[-1]["options"]:
+                    note("boundary_ai_applied", i, hint)
+                    pending.append(line.strip())
+                    continue
+                if hint[0] in ("other", "option_continuation"):
+                    note("boundary_ai_applied", i, hint)
+                    if qs[-1]["options"]:
+                        qs[-1]["options"][-1]["text"] += " " + line.strip()
+                    else:
+                        qs[-1]["text"] = (qs[-1]["text"] + " " + line.strip()).strip()
+                    continue
+            qs.append({"n": n, "text": m.group(3).strip(), "options": []})
+            closed = False
             if pending:
                 qs[-1]["context"] = "\n".join(pending)
                 pending = []
@@ -32,6 +94,38 @@ def segment(lines):
         if not qs:
             intro.append(line)
             continue
+        strong = _OPT.match(line) or _INTRO.match(line) or _READ.match(line) or _PART_ANY.match(line)
+        if hint and strong:
+            natural = ("other", "option_continuation") if _OPT.match(line) \
+                else ("passage", "section_start", "subject_start")
+            if hint[0] not in natural:
+                note("boundary_ai_overruled", i, hint)
+        elif hint and line.strip():
+            if hint[0] == "question_start":
+                got = _hint_start(line, qs, lines, i)
+                if got is None:
+                    note("boundary_ai_rejected", i, hint, reason="numbering")
+                else:
+                    qs.append({"n": got[0], "text": got[1], "options": []})
+                    closed = False
+                    if pending:
+                        qs[-1]["context"] = "\n".join(pending)
+                        pending = []
+                    note("boundary_ai_applied", i, hint)
+                    continue
+            elif hint[0] in _ENDS:
+                if not qs[-1]["options"]:
+                    note("boundary_ai_rejected", i, hint, reason="no_options")
+                else:
+                    note("boundary_ai_applied", i, hint)
+                    if hint[0] == "subject_start":
+                        note("boundary_ai_subject", i, hint)
+                    if hint[0] == "question_end":
+                        qs[-1]["options"][-1]["text"] += " " + line.strip()
+                        closed = True
+                    else:
+                        pending.append(line.strip())
+                    continue
         if pending:
             if line.strip():
                 pending.append(line.strip())
@@ -40,7 +134,8 @@ def segment(lines):
         if o:
             qs[-1]["options"].append({"key": o.group(1), "text": o.group(2).strip()})
         elif line.strip():
-            if qs[-1]["options"] and (_INTRO.match(line) or _READ.match(line) or _PART.match(line)):
+            if qs[-1]["options"] and (closed or _INTRO.match(line) or _READ.match(line)
+                                      or _PART_ANY.match(line)):
                 pending.append(line.strip())
             elif qs[-1]["options"]:
                 qs[-1]["options"][-1]["text"] += " " + line.strip()
