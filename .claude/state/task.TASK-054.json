@@ -1,0 +1,55 @@
+{
+  "task_id": "TASK-054",
+  "title": "Section headings once per section, group instruction per question (REQ-0057)",
+  "state": "TODO",
+  "requirement": "REQ-0057",
+  "acceptance_criteria": [
+    "REQ-0057 AC1-AC3"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {},
+  "user_notes": [],
+  "picked_at": "2026-11-02T06:09:12Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [
+    "work/TASK-054/"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": "",
+    "next": "RESUME after account switch: write/brief the design for REQ-0057 (AC0 four-level clean exam format, AC4 section->subject by alias table, AC5 instruction block in the solve prompt; update examples/FORM"
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
