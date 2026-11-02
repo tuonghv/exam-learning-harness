@@ -39,7 +39,7 @@
   },
   "roles_required": true,
   "crosscheck_required": true,
-  "evidence_required": false,
+  "evidence_required": true,
   "roles": {
     "designer": "work/TASK-051/handoff/design.md"
   },
@@ -52,7 +52,8 @@
   "inputs": {},
   "checkpoint": {
     "done": [],
-    "notes": ""
+    "notes": "",
+    "next": "coder 51.7 sweep + 51.1 running (a4ca5fb7); then 51.2-51.6 brief, tester, verifier; vie.traineddata install is the user's (commands given); paid questions Q-1793619815 and Q-1793622303 wait for the user"
   },
   "next": "Titan: tests first 51.1-51.6; 51.7 calibration sweep on families A/B/C before OCR_GAP is fixed"
 }
