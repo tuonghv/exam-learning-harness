@@ -1285,3 +1285,9 @@ Action: report written
 Result: AC1-AC4 met; OCR quality gap opened as REQ-0054
 Decision: close TASK-046 and REQ-0050
 Next: TASK-047 whole-question window, TASK-048, TASK-051
+
+## DESIGN - TASK-047 - 2026-11-02T05:29:53Z
+Action: designer Nova drafted; coordinator installed with decisions
+Result: docs/design/phase-47-whole-question-window.md
+Decision: hold for TASK-052 (user priority)
+Next: resume IMPLEMENTING

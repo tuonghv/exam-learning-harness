@@ -1,17 +1,29 @@
 {
   "task_id": "TASK-047",
   "title": "Python cut detector for page selection, bounded automatic recovery, page-extraction cache with trace page/hash (design 43.3-43.5, REQ-0045)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0051",
   "acceptance_criteria": [
-    "REQ-0051 AC1-AC4"
+    "REQ-0051 AC1 cut detector",
+    "REQ-0051 AC2 whole-question window extraction",
+    "REQ-0051 AC3 cache with page/hash trace",
+    "REQ-0051 AC4 small real slice compared with bridge and independent reads"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
-    "reuse": [],
-    "risks": []
+    "status": "completed",
+    "path": "docs/design/phase-47-whole-question-window.md",
+    "summary": "cut last question dropped and extracted whole by a window call seeing pages N and N+1 (up to 3), deterministic cut test from native text, failed window keeps fragment + continues bridge, shared reply cache, extra image only on cut boundaries",
+    "reuse": [
+      "refine loop",
+      "run_claude_images",
+      "replycache",
+      "core/refcheck"
+    ],
+    "risks": [
+      "model repeats page N questions",
+      "image order",
+      "mock figures artefact"
+    ]
   },
   "implementation": {
     "status": "pending",
@@ -47,7 +59,10 @@
     },
     "grants_auto": [
       ".claude/skills/exam-extraction/SKILL.md"
-    ]
+    ],
+    "designer": {
+      "waiver": "work/TASK-047/handoff/design.md"
+    }
   },
   "user_notes": [
     {
@@ -57,8 +72,8 @@
     }
   ],
   "picked_at": "2026-11-02T05:25:02Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-02T05:29:54Z",
+  "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/refine.py",
     "src/exam_engine/ingest/api.py",
@@ -82,5 +97,5 @@
     "notes": "",
     "next": "resume: coder tests-first per phase-47 (tests 1-15), then real slice pages 7-8 and 14-15 (dry-run first, ask if > $0.3)"
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "HELD after design: TASK-052 first (user priority), then coder tests-first per design list"
 }
