@@ -944,7 +944,7 @@
     "acceptance_criteria": [
       "REQ-0052 AC1-AC4"
     ],
-    "completed_at": "2026-11-02T14:33:39Z",
+    "completed_at": "2026-11-02T14:33:40Z",
     "report": "docs/report/phase-48-provenance-sidecar.md"
   },
   {
