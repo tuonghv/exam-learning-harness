@@ -46,7 +46,7 @@ class Base(unittest.TestCase):
         return imgmod.ingest_sequence(self.files(n))
 
     def run_refine(self, n, spec, replies):
-        return refine.refine(self.doc(n), spec, Fake(replies), all_pages=True)
+        return refine.refine(self.doc(n), spec, Fake(replies), all_pages=True, window=False)
 
 
 class TestSequenceDoc(Base):
@@ -133,7 +133,7 @@ class TestAssembly(Base):
              "source": {"path": "t.pdf", "name": "t.pdf", "format": "pdf", "sha256": "0" * 64, "size": 1},
              "meta": {}, "assets": [], "warnings": [],
              "pages": [{"n": n, "blocks": []} for n in (1, 2)]}
-        out = refine.refine(d, "2", Fake([cont(options=OPTS)]), all_pages=True)
+        out = refine.refine(d, "2", Fake([cont(options=OPTS)]), all_pages=True, window=False)
         msg = [w["message"] for w in out["warnings"] if w["code"] == "orphan_continuation"][0]
         self.assertTrue(msg.endswith("add page(s) 1 to --pages"))
 

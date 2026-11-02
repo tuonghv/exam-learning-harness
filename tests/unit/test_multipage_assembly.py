@@ -33,7 +33,7 @@ def doc_of(n_pages):
 def run_refine(replies, spec, n_pages=3):
     it = iter(replies)
     llm = lambda prompt, png: C(True, json.dumps(next(it)), 0.0, "", "", 0.0)  # noqa: E731
-    return refine.refine(doc_of(n_pages), spec, llm, None, all_pages=True)
+    return refine.refine(doc_of(n_pages), spec, llm, None, all_pages=True, window=False)
 
 
 def q(i, text, opts=None, **kw):

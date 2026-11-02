@@ -176,7 +176,7 @@ class Families(unittest.TestCase):
         rp = os.path.join(self.dir, name + ".replies.json")
         with open(rp, "w", encoding="utf-8") as fh:
             json.dump(replies, fh, ensure_ascii=False)
-        out = refine.refine(doc, "1-%d" % len(replies), refine.mock_llm(rp), all_pages=True)
+        out = refine.refine(doc, "1-%d" % len(replies), refine.mock_llm(rp), all_pages=True, window=False)
         return out, replies
 
     def test_chain_vision_mock_replies_all_families(self):
@@ -200,7 +200,7 @@ class Families(unittest.TestCase):
         with open(rp, "w", encoding="utf-8") as fh:
             json.dump(broken, fh)
         doc = api.ingest_document(os.path.join(self.dir, "F3.scan.pdf"), config={"ocr": "off", "asset_dir": self.dir})
-        out = refine.refine(doc, "1-%d" % len(broken), refine.mock_llm(rp), all_pages=True)
+        out = refine.refine(doc, "1-%d" % len(broken), refine.mock_llm(rp), all_pages=True, window=False)
         cm = self.rates("F3", out, refined=True)
         self.assertEqual(cm["cross_page"]["k"], 0)
         self.assertEqual(cm["missing_detection"]["n"], 8)

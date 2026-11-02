@@ -52,7 +52,7 @@ def q(i, text, opts=None, **kw):
     return d
 
 
-GOOD1 = reply(q(1, "Two plus two?", {"A": "3", "B": "4"}))
+GOOD1 = reply(q(1, "Two plus two?", {"A": "3", "B": "4", "C": "5", "D": "6"}))  # 4 options: a 2-option last question counts as cut (window)
 GOOD2 = reply(q(2, "Colour of grass?", {"A": "green", "B": "red", "C": "x", "D": "y"}))
 
 
@@ -480,7 +480,7 @@ class AllPagesAndRefinedText(unittest.TestCase):
         import json
         C = namedtuple("C", "ok text cost_usd cls reason duration_s")
         llm = lambda prompt, png: C(True, json.dumps(next(replies)), 0.0, "", "", 0.0)
-        out = refine.refine(doc, "1-2", llm, None, all_pages=True)
+        out = refine.refine(doc, "1-2", llm, None, all_pages=True, window=False)
         self.assertIn("PASSAGE", out["refined"]["questions"][0]["context"])
         text = api.to_exam_text(out, {"use_refined": True})
         self.assertIn("[Figure/table: pie 30%]", text)

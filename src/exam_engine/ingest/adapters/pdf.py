@@ -6,6 +6,7 @@ import os
 import re
 import unicodedata
 
+from exam_engine.core.refcheck import _TRAIL
 from exam_engine.ingest import boundary, optional, segment
 from exam_engine.ingest.schema import SCHEMA_VERSION, IngestError
 
@@ -189,6 +190,51 @@ def _strip_furniture(pages):
     return out, removed
 
 
+def _cut_boundaries(pages, page_lines):
+    """page_cut_suspect warnings for boundaries n|n+1 where a question seems to run over (phase 47).
+
+    Both pages need native text; scanned pages are left to the reply-side test in refine.
+    S1 last numbered line of n has < 4 option lines after it and n+1 starts unnumbered;
+    S2 last line of n has no sentence end (or ends in an operator) and S3 n+1 starts unnumbered;
+    S4 an image of n+1 sits above its first numbered line while n ends inside a question.
+    """
+    def ok(p):
+        return p.get("status") != "ocr" and p.get("chars", 0) > 0
+
+    out = []
+    for i in range(len(pages) - 1):
+        a, b = pages[i], pages[i + 1]
+        la = [ln for ln in page_lines[i] if ln.strip()]
+        lb = [ln for ln in page_lines[i + 1] if ln.strip()]
+        if not (ok(a) and ok(b) and la and lb):
+            continue
+        last_q = max((k for k, ln in enumerate(la) if segment._Q.match(ln)), default=None)
+        n_opts = (sum(1 for ln in la[last_q + 1:] if segment._OPT.match(ln))
+                  if last_q is not None else None)
+        short = n_opts is not None and n_opts < 4
+        unnumbered = not segment._Q.match(lb[0])
+        tail = la[-1].rstrip()
+        s1 = short and unnumbered
+        s2 = tail[-1:] not in tuple(".?!:") or tail[-1:] in tuple(_TRAIL)
+        s4 = short and _image_before_question(b)
+        why = [name for name, hit in (("S1", s1), ("S2+S3", s2 and unnumbered), ("S4", s4)) if hit]
+        if why:
+            out.append(_warn("page_cut_suspect", "boundary %d|%d (%s)" % (a["n"], b["n"], ",".join(why)),
+                             page=a["n"], level="info"))
+    return out
+
+
+def _image_before_question(page):
+    """True when an image block comes before the first paragraph holding a numbered line."""
+    for blk in page.get("blocks", ()):
+        if blk.get("type") == "image":
+            return True
+        if blk.get("type") == "paragraph" and any(segment._Q.match(ln)
+                                                  for ln in blk.get("text", "").split("\n")):
+            return False
+    return False
+
+
 def _save_crop(page, rect, folder, rel_dir, name):
     os.makedirs(folder, exist_ok=True)
     full = os.path.join(folder, name)
@@ -364,6 +410,7 @@ def _extract(fitz, pdf, raw, path, config):
         warnings.append(_warn("page_furniture_removed", "%d page number / repeated header or "
                               "footer line(s) left out of the question text" % removed,
                               level="info"))
+    warnings.extend(_cut_boundaries(pages, page_lines))
     intro, qs, ok, bw = boundary.segment_reviewed(
         config, [ln for lines in page_lines for ln in lines])
     warnings.extend(bw)
