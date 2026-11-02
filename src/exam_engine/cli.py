@@ -19,7 +19,7 @@ from exam_engine.core.decision import decide
 from exam_engine.pipeline import (examples_check, metrics, parser, planrun, prompts, report_build, reporter,
                                   router, scorer, solver, verifier)
 
-COMMANDS = ("solve", "parse", "verify", "report", "check-examples", "score", "prompts",
+COMMANDS = ("solve", "parse", "verify", "report", "plan-import", "check-examples", "score", "prompts",
             "check-prompts", "ingest", "ingest-inspect", "ingest-refine", "cross-solve", "benchmark",
             "extract-eval", "gold-pdf", "gen-exams", "lessons", "review-pack", "review-apply", "run-stats")
 DEFAULT_HISTORY = os.path.join("plans", "run-history.jsonl")
@@ -253,6 +253,26 @@ def _report_plan(argv):
     for key in ("md", "answers", "html", "pdf"):
         if info["reports"].get(key):
             print("report %s -> %s" % (key, info["reports"][key]))
+    return 0
+
+
+def plan_import_main(argv):
+    """plan-import DIR [--exam EXAM.md] [--exam-id ID] [--ingest-cache DIR]: old run dir -> plan run."""
+    ap = argparse.ArgumentParser(prog="exam plan-import", description="Import an old run dir "
+                                 "(result.json, run.log, *.trace.json) into a plan run. No model call.")
+    ap.add_argument("dir")
+    ap.add_argument("--exam", help="exam file to store as input/exam.md (default: result exam.path if readable)")
+    ap.add_argument("--exam-id", help="default: basename of the result exam.path")
+    ap.add_argument("--ingest-cache", metavar="DIR",
+                    help="ingest reply-cache dir to copy (default: the only <DIR>/../work/ingest/<hash>)")
+    a = ap.parse_args(argv)
+    try:
+        plan, status = planrun.import_dir(a.dir, DEFAULT_OUT_ROOT, exam_path=a.exam, exam_id=a.exam_id,
+                                          ingest_cache=a.ingest_cache)
+    except (OSError, ValueError) as exc:
+        print("ERROR: %s" % exc, file=sys.stderr)
+        return 2
+    print("plan-import %s -> %s" % (status, plan))
     return 0
 
 
@@ -1005,7 +1025,7 @@ def main(argv=None):
     argv = list(sys.argv[1:] if argv is None else argv)
     cmd, rest = (argv[0], argv[1:]) if argv else (None, [])
     table = {"solve": solve_main, "parse": parse_main, "verify": verify_main,
-             "report": report_main, "check-examples": examples_check.main,
+             "report": report_main, "plan-import": plan_import_main, "check-examples": examples_check.main,
              "score": scorer.score_main, "prompts": prompts.prompts_main,
              "check-prompts": prompts.check_prompts_main,
              "ingest": ingest_main, "ingest-inspect": inspect_main,

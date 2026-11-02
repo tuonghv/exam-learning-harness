@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "exam": {
+    "path": "input-001.md",
+    "subject": "English",
+    "level": "Grade 12",
+    "exam_type": "High School Graduation",
+    "task": "Multiple Choice",
+    "mode": "Solve",
+    "language": "vi"
+  },
+  "run": {
+    "llm": "mock",
+    "model": "sonnet",
+    "max_attempts": 2,
+    "timeout_s": 300,
+    "max_cost_usd": 1.0,
+    "cost_usd": 0.0,
+    "calls": 2,
+    "stopped": null,
+    "prompt": {
+      "channel": "release",
+      "version": "v1.0.0"
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "evidence_kind": "Claude review only",
+      "answer": "A",
+      "solution": [
+        "The if-clause refers to tomorrow, so this is the first conditional.",
+        "Pattern: If + present simple, will + base verb.",
+        "have fits the pattern."
+      ],
+      "explanation": "First conditional uses the present simple in the if-clause. B had is past simple, C will have repeats will in the if-clause, D would have is second or third conditional.",
+      "uncertainty": {
+        "level": "low",
+        "reason": "standard first conditional"
+      },
+      "checks": [
+        {
+          "kind": "format",
+          "detail": "single letter A-D",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "quote",
+          "detail": "verbatim in passage/question: If I ______ enough time tomorrow",
+          "result": "pass",
+          "independent": false
+        },
+        {
+          "kind": "ai_review",
+          "detail": "reviewer: agree",
+          "result": "pass",
+          "independent": false
+        }
+      ],
+      "verification_status": "UNCERTAIN",
+      "status_reason": "no_independent_check",
+      "qa_findings": [],
+      "score": {
+        "points": null,
+        "max": null,
+        "basis": "none",
+        "detail": "no key"
+      },
+      "attempts": 1,
+      "unresolved": false,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 0,
+    "fail": 0,
+    "uncertain": 1,
+    "unresolved": 0,
+    "points": null,
+    "max_points": null
+  }
+}
