@@ -11,14 +11,18 @@ from exam_engine.pipeline.reporter import _one_line
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 FORBIDDEN_OUT = ("examples", "evals", "tests")
-KINDS = ("extraction", "solution", "flawed", "other")
 NAME_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]*$")
 ZWSP = "​"
-TEMPLATE = ("Your review: [ ] agree [ ] disagree [ ] unsure | correct: _ | kind: %s | note: " % "|".join(KINDS))
-HOWTO = ("How to review: on each question's `Your review:` line change one `[ ]` to `[x]` (agree / disagree / "
-         "unsure); if you disagree type the right letter after `correct:`, keep one kind word, and add a note; "
-         "then run `exam.py review-apply --exam-id %s`. Do not edit lines starting with `## Q`.")
+PREFIX = "Your review: extraction"
+TEMPLATE = ("Your review: extraction [ ] ok [ ] defect | solution (optional) [ ] agree [ ] disagree [ ] unsure"
+            " | correct: _ | note: ")
+HOWTO = ("How to review: you review the EXTRACTION (is the question text and every option as in the exam?). "
+         "On each `Your review:` line change one `[ ]` after `extraction` to `[x]` (ok / defect) and add a note for "
+         "a defect. The answer is the QA's job; reading the solution is optional (then tick agree / disagree / "
+         "unsure, and type the right letter after `correct:`). Then run `exam.py review-apply --exam-id %s`. "
+         "Do not edit lines starting with `## Q`.")
 HEAD_RE = re.compile(r"^## Q(\d+)  p\.(\S+)  (\S+)  answer (\S)  conf (\S+)\s*$")
+LOOSE_RE = re.compile(r"^##\s*Q?\s*(\d+)")
 SUBJECT_SKIP = ("INDEX.md", "improvements.md")
 
 
@@ -97,7 +101,9 @@ def _conf(q):
 def _engine_line(q):
     steps = [s for s in (q.get("solution") or []) if str(s).strip()][:3]
     txt = " / ".join(_one_line(s) for s in steps) or _one_line(q.get("explanation"))
-    return "Engine: " + (txt[:400] or "-")
+    a = q.get("answer")
+    pre = "answer %s; " % _one_line(a)[:80] if a is not None and a not in ("A", "B", "C", "D") else ""
+    return "Engine: " + pre + (txt[:400] or "-")
 
 
 def build_sections(result, exam, refined, offset):
@@ -113,64 +119,68 @@ def build_sections(result, exam, refined, offset):
         page, nr = refined.get(str(n), ("-", False))
         h = {"n": n, "page": "-" if page is None else str(page),
              "status": str(q.get("verification_status") or "-"),
-             "answer": q["answer"] if q.get("answer") in ("A", "B", "C", "D") else "-",
+             "answer": q["answer"] if q.get("answer") in ("A", "B", "C", "D") else ("-" if q.get("answer") is None else "?"),
              "conf": _conf(q), "flags": _flags(q, stem, nr)}
         lines = ["## Q%d  p.%s  %s  answer %s  conf %s" % (n, h["page"], h["status"], h["answer"], h["conf"]),
-                 "", _guard(stem), "", _engine_line(q), "Flags: " + h["flags"], TEMPLATE, ""]
+                 "", _guard(stem), "", _engine_line(q), "QA: -", "Flags: " + h["flags"], TEMPLATE, ""]
         secs.append((n, h, lines))
     return secs
 
 
 def parse_subject(text):
-    """[{n, page, status, answer, conf, flags, review}] where review is the raw `Your review:` line or None."""
+    """[{n, page, status, answer, conf, flags, review, changed, bad}]: review is the raw `Your review:` line or
+    None; bad = heading edited (n kept) or unnumbered `## ` section (n None)."""
     rows, cur = [], None
     for ln in text.split("\n"):
-        m = HEAD_RE.match(ln)
-        if m:
-            cur = {"n": int(m.group(1)), "page": m.group(2), "status": m.group(3), "answer": m.group(4),
-                   "conf": m.group(5), "flags": "none", "review": None}
+        if ln.startswith("## "):
+            m, lm = HEAD_RE.match(ln), LOOSE_RE.match(ln)
+            cur = {"n": int((m or lm).group(1)) if (m or lm) else None, "page": "-", "status": "-",
+                   "answer": "-", "conf": "-", "flags": "none", "review": None, "changed": None,
+                   "bad": not m}
+            if m:
+                cur.update(page=m.group(2), status=m.group(3), answer=m.group(4), conf=m.group(5))
             rows.append(cur)
         elif cur is not None:
             if ln.startswith("Flags: "):
                 cur["flags"] = ln[7:].strip() or "none"
+            elif ln.startswith("Answer changed:"):
+                cur["changed"] = ln.rstrip()
             elif ln.startswith("Your review:") and cur["review"] is None:
                 cur["review"] = ln.rstrip()
     return rows
 
 
-BOX_RE = re.compile(r"\[([^\]]*)\]\s*(agree|disagree|unsure)\b")
+BOX_RE = re.compile(r"\[([^\]]*)\]\s*([a-z]+)")
+
+
+def _group(seg, words):
+    """Ticked word of one box group, "" when none, None when malformed."""
+    boxes = BOX_RE.findall(seg)
+    if [w for _, w in boxes] != list(words) or any(b not in (" ", "", "x", "X") for b, _ in boxes):
+        return None
+    ticked = [w for b, w in boxes if b in ("x", "X")]
+    return ticked[0] if len(ticked) == 1 else ("" if not ticked else None)
 
 
 def parse_review(line):
-    """(state, correct, kind): state blank|agree|disagree|unsure|unparsed; never guesses."""
-    if line is None or line.strip() == TEMPLATE.strip():
-        return ("blank", None, None)
-    parts = [p.strip() for p in line[len("Your review:"):].split("|")]
-    boxes = BOX_RE.findall(parts[0]) if parts else []
-    if [w for _, w in boxes] != ["agree", "disagree", "unsure"] or any(b not in (" ", "", "x", "X") for b, _ in boxes):
-        return ("unparsed", None, None)
-    ticked = [w for b, w in boxes if b in ("x", "X")]
-    val = {}
-    for p in parts[1:]:
-        k, _, v = p.partition(":")
-        val.setdefault(k.strip().lower(), v.strip())
-    correct = val.get("correct", "_")
-    if correct in ("", "_"):
-        correct = None
-    elif correct not in ("A", "B", "C", "D", "-"):
-        return ("unparsed", None, None)
-    kv = val.get("kind", "")
-    found = [w for w in re.findall(r"[a-z]+", kv.lower()) if w in KINDS]
-    kind = None
-    if len(set(found)) == 1 and len(re.findall(r"[a-z]+", kv.lower())) == len(found):
-        kind = found[0]
-    elif kv and (not found or set(found) != set(KINDS)):
-        return ("unparsed", None, None)
-    if len(ticked) > 1:
-        return ("unparsed", None, None)
-    if not ticked:
-        return ("blank", None, None) if correct is None and kind is None else ("unparsed", None, None)
-    return (ticked[0], correct, kind)
+    """(extraction, solution, correct, note): extraction blank|ok|defect|unparsed, solution
+    blank|agree|disagree|unsure|unparsed; a line not in the current format is unparsed, never guessed."""
+    bad = ("unparsed", "unparsed", None, "")
+    if line is None or not line.startswith(PREFIX):
+        return bad
+    parts = line.split("|", 3)
+    if len(parts) < 4 or not parts[1].strip().startswith("solution (optional)"):
+        return bad
+    ext = _group(parts[0][len(PREFIX):], ("ok", "defect"))
+    sol = _group(parts[1], ("agree", "disagree", "unsure"))
+    c = parts[2].partition(":")
+    correct = c[2].strip().upper()
+    if c[0].strip() != "correct" or correct not in ("", "_", "A", "B", "C", "D", "-"):
+        return bad
+    n = parts[3].partition(":")
+    if n[0].strip() != "note" or ext is None or sol is None:
+        return bad
+    return (ext or "blank", sol or "blank", None if correct in ("", "_") else correct, n[2].strip())
 
 
 def _write(path, text):
@@ -184,19 +194,32 @@ def _subject_files(d):
                   and not f.endswith(".new.md"))
 
 
+def _is_marked(r):
+    return r["review"] is not None and r["review"].startswith(PREFIX) and r["review"].strip() != TEMPLATE.strip()
+
+
 def pack(exam_id, subject, result_path, exam_path, refined_path=None, offset=0, out="review",
-         force_reset=False):
+         force_reset=False, note=""):
     """Write <out>/<exam-id>/<subject>.md and regenerate INDEX.md; returns (path, message)."""
     _check_name("subject", subject)
     d = review_dir(out, exam_id)
     secs = build_sections(_load(result_path), exam_sections(exam_path),
                           refined_info(refined_path) if refined_path else {}, offset)
     path = os.path.join(d, subject + ".md")
-    old = {}
+    old, olds = {}, {}
     if os.path.exists(path) and not force_reset:
         with open(path, encoding="utf-8") as fh:
-            old = {r["n"]: r["review"] for r in parse_subject(fh.read())
-                   if r["review"] is not None and r["review"].strip() != TEMPLATE.strip()}
+            rows = parse_subject(fh.read())
+        olds = {r["n"]: r for r in rows if r["n"] is not None}
+        old = {n: r for n, r in olds.items() if _is_marked(r)}
+        # a mark in the previous format cannot be merged; keep the whole old file beside the new one
+        legacy = [r for r in rows if r["review"] and not r["review"].startswith(PREFIX)
+                  and "[x]" in r["review"].lower()]
+        if legacy:
+            os.makedirs(d, exist_ok=True)
+            with open(path, encoding="utf-8") as src, open(os.path.join(d, subject + ".old.md"), "w",
+                                                          encoding="utf-8") as dst:
+                dst.write(src.read())
     new_ns = {n for n, _, _ in secs}
     lost = sorted(set(old) - new_ns)
     msg = "wrote %s (%d questions)" % (path, len(secs))
@@ -208,11 +231,33 @@ def pack(exam_id, subject, result_path, exam_path, refined_path=None, offset=0, 
     elif old:
         msg += "; merged %d existing marks by printed number" % len(old)
     body = ["# %s - %s" % (exam_id, subject), "", HOWTO % exam_id, ""]
-    for n, _, lines in secs:
-        body += [(old[n] if (n in old and l == TEMPLATE) else l) for l in lines]
+    if note:
+        body += ["Note: " + _one_line(note), ""]
+    changed = 0
+    for n, h, lines in secs:
+        o = old.get(n)
+        out_lines = []
+        for l in lines:
+            if l == TEMPLATE and o:
+                if o["changed"] and o["answer"] == h["answer"]:
+                    out_lines.append(o["changed"])
+                elif o["answer"] != h["answer"]:
+                    out_lines.append("Answer changed: was %s now %s" % (o["answer"], h["answer"]))
+                    changed += 1
+                out_lines.append(o["review"])
+            else:
+                out_lines.append(l)
+        body += out_lines
+    if changed:
+        msg += "; %d marked answers changed (flagged)" % changed
     _write(path, "\n".join(body))
     write_index(d, exam_id)
     return path, msg
+
+
+def _state(r):
+    ext, sol, _, _ = parse_review(r["review"])
+    return ext, sol
 
 
 def write_index(d, exam_id):
@@ -220,23 +265,36 @@ def write_index(d, exam_id):
     for f in _subject_files(d):
         with open(os.path.join(d, f), encoding="utf-8") as fh:
             rows.append((f[:-3], parse_subject(fh.read())))
-    rows.sort(key=lambda s: (min([r["n"] for r in s[1]] or [0]), s[0]))
+    rows.sort(key=lambda s: (min([r["n"] for r in s[1] if r["n"] is not None] or [0]), s[0]))
     md = ["# Review index - %s" % exam_id, "", HOWTO % exam_id, "",
-          "| subject | n | page | status | answer | conf | flags | review |", "|---|---|---|---|---|---|---|---|"]
+          "| subject | n | page | status | answer | conf | flags | extraction | solution |",
+          "|---|---|---|---|---|---|---|---|---|"]
     tot = {}
     for sub, rs in rows:
+        c = tot.setdefault(sub, {})
         for r in rs:
-            st = parse_review(r["review"])[0]
-            tot[sub] = tot.setdefault(sub, {})
-            tot[sub][st] = tot[sub].get(st, 0) + 1
-            md.append("| %s | %d | %s | %s | %s | %s | %s | %s |" % (
-                sub, r["n"], r["page"], r["status"], r["answer"], r["conf"], r["flags"], st))
-    md += ["", "Totals (review state per subject):"]
+            ext, sol = _state(r)
+            c[ext] = c.get(ext, 0) + 1
+            fl = [r["flags"]] if r["flags"] != "none" else []
+            if r["changed"]:
+                fl.append("answer_changed")
+            if r["bad"]:
+                fl.append("heading_edited")
+            md.append("| %s | %s | %s | %s | %s | %s | %s | %s | %s |" % (
+                sub, "?" if r["n"] is None else r["n"], r["page"], r["status"], r["answer"], r["conf"],
+                ",".join(fl) or "none", ext, sol))
+    md += ["", "Totals (extraction review state per subject):"]
     for sub, rs in rows:
         c = tot.get(sub, {})
-        md.append("- %s: %d questions; %s" % (sub, len(rs), ", ".join(
-            "%s %d" % (s, c.get(s, 0)) for s in ("blank", "agree", "disagree", "unsure", "unparsed"))))
+        md.append("- %s: %d sections; %s" % (sub, len(rs), ", ".join(
+            "%s %d" % (s, c.get(s, 0)) for s in ("blank", "ok", "defect", "unparsed"))))
     _write(os.path.join(d, "INDEX.md"), "\n".join(md) + "\n")
+
+
+def _pct(k, n):
+    w = extract_eval.wilson(k, n)
+    return ("%d/%d = %.1f%% (Wilson 95%% %.1f-%.1f%%)" % (k, n, 100.0 * k / n, 100 * w[0], 100 * w[1])
+            if n else "n/a (0 reviewed)")
 
 
 def apply(exam_id, out="review"):
@@ -244,49 +302,59 @@ def apply(exam_id, out="review"):
     d = review_dir(out, exam_id)
     if not os.path.isdir(d):
         raise ValueError("no review folder %s (run review-pack first)" % d)
-    lines, imp, summary = [], {}, {}
-    unparsed_all, unsure_all = [], []
+    lines, summary = [], {}
+    defects, sdis, sunsure, unp, edited, secbad = [], [], [], [], [], []
     for f in _subject_files(d):
         sub = f[:-3]
         with open(os.path.join(d, f), encoding="utf-8") as fh:
             rs = parse_subject(fh.read())
-        c = {"blank": 0, "agree": 0, "disagree": 0, "unsure": 0, "unparsed": 0}
-        dis, doubt, unp = [], [], []
+        e = {"blank": 0, "ok": 0, "defect": 0, "unparsed": 0}
+        s = {"blank": 0, "agree": 0, "disagree": 0, "unsure": 0, "unparsed": 0}
+        dl, chg = [], []
         for r in rs:
-            st, corr, kind = parse_review(r["review"])
-            c[st] += 1
-            if st == "disagree":
-                dis.append((r["n"], kind or "unspecified", corr))
-                imp.setdefault(kind or "unspecified", []).append((sub, r["n"]))
-            elif st == "agree" and (r["conf"] == "low" or r["flags"] != "none"):
-                doubt.append(r["n"])
-            elif st == "unsure":
-                unsure_all.append((sub, r["n"]))
-            elif st == "unparsed":
-                unp.append(r["n"])
-                unparsed_all.append((sub, r["n"]))
-        rev = c["agree"] + c["disagree"] + c["unsure"]
-        w = extract_eval.wilson(c["agree"], rev)
-        agr = ("agreement %d/%d = %.1f%% (Wilson 95%% %.1f-%.1f%%)" % (
-            c["agree"], rev, 100.0 * c["agree"] / rev, 100 * w[0], 100 * w[1])) if rev else "agreement n/a (0 reviewed)"
-        lines.append("%s: %d questions; agree %d, disagree %d, unsure %d, blank %d, unparsed %d; %s" % (
-            sub, len(rs), c["agree"], c["disagree"], c["unsure"], c["blank"], c["unparsed"], agr))
-        if dis:
-            lines.append("  disagreements: " + ", ".join("Q%d (%s%s)" % (n, k, ", correct " + o if o else "")
-                                                         for n, k, o in dis))
-        if doubt:
-            lines.append("  agreed but engine doubtful: " + ", ".join("Q%d" % n for n in doubt))
-        if unp:
-            lines.append("  unparsed: " + ", ".join("Q%d" % n for n in unp))
-        summary[sub] = dict(c, n=len(rs))
-    md = ["# Improvements from review - %s" % exam_id, "", "Question numbers and kinds only (no question text).", ""]
-    for kind in list(KINDS) + ["unspecified"]:
-        if kind in imp:
-            md.append("- %s: %s" % (kind, ", ".join("%s Q%d" % x for x in imp[kind])))
-    if unsure_all:
-        md.append("- unsure: " + ", ".join("%s Q%d" % x for x in unsure_all))
-    if unparsed_all:
-        md.append("- unparsed (fix the line): " + ", ".join("%s Q%d" % x for x in unparsed_all))
+            ext, sol, corr, nt = parse_review(r["review"])
+            e[ext] += 1
+            s[sol] += 1
+            tag = "%s Q%s" % (sub, r["n"])
+            if r["n"] is None:
+                secbad.append(sub)
+            elif r["bad"]:
+                edited.append(tag)
+            if ext == "defect":
+                dl.append("Q%d%s" % (r["n"], " (%s)" % nt if nt else ""))
+                defects.append(tag)
+            if sol == "disagree":
+                sdis.append("%s%s" % (tag, " correct " + corr if corr else ""))
+            elif sol == "unsure":
+                sunsure.append(tag)
+            if "unparsed" in (ext, sol):
+                unp.append(tag)
+            if r["changed"]:
+                chg.append("  %s: %s" % (tag, r["changed"]))
+        lines.append("%s: %d sections; extraction ok %d, defect %d, blank %d, unparsed %d; extraction ok rate %s; "
+                     "solution (optional) agree %d, disagree %d, unsure %d" % (
+                         sub, len(rs), e["ok"], e["defect"], e["blank"], e["unparsed"],
+                         _pct(e["ok"], e["ok"] + e["defect"]), s["agree"], s["disagree"], s["unsure"]))
+        if dl:
+            lines.append("  extraction defects: " + ", ".join(dl))
+        lines += chg
+        summary[sub] = dict(e, n=len(rs), **{"sol_" + k: v for k, v in s.items()})
+    if edited:
+        lines.append("heading edited (marks kept by number): " + ", ".join(edited))
+    if secbad:
+        lines.append("unparsed section (unnumbered `## ` heading): in " + ", ".join(sorted(set(secbad))))
+    md = ["# Improvements from review - %s" % exam_id, "",
+          "Question numbers only (no question text, no notes).", ""]
+    if defects:
+        md.append("- extraction defects: " + ", ".join(defects))
+    if sdis:
+        md.append("- solution disagreements: " + ", ".join(sdis))
+    if sunsure:
+        md.append("- solution unsure: " + ", ".join(sunsure))
+    if unp:
+        md.append("- unparsed (fix the line): " + ", ".join(unp))
+    if secbad:
+        md.append("- unparsed section: " + ", ".join(sorted(set(secbad))))
     if len(md) == 4:
         md.append("- nothing to improve yet")
     _write(os.path.join(d, "improvements.md"), "\n".join(md) + "\n")

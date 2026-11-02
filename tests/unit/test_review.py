@@ -13,6 +13,8 @@ sys.path.insert(0, os.path.join(ROOT, "src"))
 from exam_engine import cli  # noqa: E402
 from exam_engine.pipeline import review  # noqa: E402
 
+TEMPLATE_LINE = review.TEMPLATE
+
 
 def q(i, ans="A", status="PASS", level="low", checks=None):
     return {"id": str(i), "answer": ans, "solution": ["step one", "step two"], "explanation": "why",
@@ -68,10 +70,11 @@ class Base(unittest.TestCase):
             fh.write("\n".join(txt))
 
 
-def tick(w, correct="_", kind="extraction|solution|flawed|other", note=""):
-    b = {k: "[x]" if k == w else "[ ]" for k in ("agree", "disagree", "unsure")}
-    return "Your review: %(agree)s agree %(disagree)s disagree %(unsure)s unsure | correct: %(c)s | kind: %(k)s | note: %(n)s" % dict(
-        b, c=correct, k=kind, n=note)
+def tick(ext="", sol="", correct="_", note=""):
+    e = {k: "[x]" if k == ext else "[ ]" for k in ("ok", "defect")}
+    o = {k: "[x]" if k == sol else "[ ]" for k in ("agree", "disagree", "unsure")}
+    return ("Your review: extraction %s ok %s defect | solution (optional) %s agree %s disagree %s unsure"
+            " | correct: %s | note: %s" % (e["ok"], e["defect"], o["agree"], o["disagree"], o["unsure"], correct, note))
 
 
 class PackTests(Base):
@@ -130,7 +133,7 @@ class PackTests(Base):
         first = self.read("A.md")
         self.pack("A", [q(1), q(2)], n=2)
         self.assertEqual(self.read("A.md"), first)
-        mark = tick("disagree", "B", "solution", "mine")
+        mark = tick("defect", "disagree", "B", "mine")
         self.fill("A", 2, mark)
         _, msg = self.pack("A", [q(1), q(2, "C")], n=2)
         self.assertIn("merged 1", msg)
@@ -146,37 +149,84 @@ class PackTests(Base):
 
 class ApplyTests(Base):
     def test_4_round_trip(self):
-        self.pack("A", [q(i) for i in (1, 2, 3, 4)], n=4, extra={4: "S\n[Incomplete: missing_text t]"})
-        self.fill("A", 1, tick("agree"))
-        self.fill("A", 2, tick("disagree", "B", "solution", "secret note"))
-        self.fill("A", 3, tick("unsure"))
-        self.fill("A", 4, tick("agree"))
+        self.pack("A", [q(i) for i in (1, 2, 3, 4)], n=4)
+        self.fill("A", 1, tick("ok"))
+        self.fill("A", 2, tick("defect", "disagree", "B", "secret note"))
+        self.fill("A", 3, tick("ok", "unsure"))
+        self.fill("A", 4, tick("ok", "agree"))
         rc, out, _ = self.run_cli("review-apply", "--exam-id", "X1", "--out", self.out)
         self.assertEqual(rc, 0)
-        self.assertIn("agree 2, disagree 1, unsure 1, blank 0, unparsed 0", out)
+        self.assertIn("extraction ok 3, defect 1, blank 0, unparsed 0", out)
         self.assertIn("Wilson", out)
-        self.assertIn("Q2 (solution, correct B)", out)
-        self.assertIn("agreed but engine doubtful: Q4", out)
+        self.assertIn("agree 1, disagree 1, unsure 1", out)
+        self.assertIn("extraction defects: Q2 (secret note)", out)
         imp = self.read("improvements.md")
-        self.assertIn("solution: A Q2", imp)
+        self.assertIn("extraction defects: A Q2", imp)
+        self.assertIn("solution disagreements: A Q2 correct B", imp)
         self.assertNotIn("secret", imp)
         self.assertNotIn("Synthetic", imp)
 
     def test_5_malformed_unparsed(self):
-        self.pack("A", [q(1), q(2), q(3), q(4)], n=4)
-        self.fill("A", 1, tick("agree").replace("[ ] disagree", "[x] disagree"))
-        self.fill("A", 2, tick("agree", correct="Z"))
-        self.fill("A", 3, tick("agree", kind="banana"))
+        self.pack("A", [q(1), q(2), q(3), q(4), q(5)], n=5)
+        self.fill("A", 1, tick("ok").replace("[ ] defect", "[x] defect"))
+        self.fill("A", 2, tick("ok", correct="Z"))
+        self.fill("A", 3, "Your review: extraction [x] ok [ ] defect | kind: a|b | note: ")
         self.fill("A", 4, "Your review: garbage")
+        self.fill("A", 5, "Your review: [x] agree [ ] disagree [ ] unsure | correct: _ | "
+                  "kind: extraction|solution|flawed|other | note: ")
         rc, out, _ = self.run_cli("review-apply", "--exam-id", "X1", "--out", self.out)
         self.assertEqual(rc, 0)
-        self.assertIn("unparsed 4", out)
-        self.assertIn("agree 0", out)
+        self.assertIn("unparsed 5", out)
+        self.assertIn("extraction ok 0", out)
+
+    def test_lowercase_correct_ok(self):
+        self.pack("A", [q(1)], n=1)
+        self.fill("A", 1, tick("defect", "disagree", "b", "n"))
+        _, out, _ = self.run_cli("review-apply", "--exam-id", "X1", "--out", self.out)
+        self.assertIn("defect 1", out)
+        self.assertIn("unparsed 0", out)
+
+    def test_d4_edited_heading_and_unnumbered(self):
+        self.pack("A", [q(1), q(2)], n=2)
+        t = self.read("A.md").replace("## Q2  p.-", "## Q2 (edited) p.-") + "\n## my own section\n"
+        with open(os.path.join(self.out, "X1", "A.md"), "w", encoding="utf-8") as fh:
+            fh.write(t)
+        self.fill("A", 2, tick("defect", note="x"))
+        _, out, _ = self.run_cli("review-apply", "--exam-id", "X1", "--out", self.out)
+        self.assertIn("defect 1", out)
+        self.assertIn("heading edited (marks kept by number): A Q2", out)
+        self.assertIn("unparsed section", out)
+        # re-run keeps the mark found by the number in the edited heading
+        _, msg = self.pack("A", [q(1), q(2)], n=2)
+        self.assertIn("merged 1", msg)
+
+    def test_d6_answer_change_flagged(self):
+        self.pack("A", [q(1, "A")], n=1)
+        self.fill("A", 1, tick("ok"))
+        self.pack("A", [q(1, "C")], n=1)
+        self.assertIn("Answer changed: was A now C", self.read("A.md"))
+        self.assertIn("answer_changed", self.read("INDEX.md"))
+        self.pack("A", [q(1, "C")], n=1)
+        self.assertIn("Answer changed: was A now C", self.read("A.md"))
+
+    def test_c_qa_line_and_old_format(self):
+        self.pack("A", [q(1)], n=1)
+        self.assertIn("Engine:", self.read("A.md"))
+        self.assertIn("\nQA: -\n", self.read("A.md"))
+        self.assertIn("EXTRACTION", self.read("A.md"))
+        old = ("Your review: [x] agree [ ] disagree [ ] unsure | correct: _ | "
+               "kind: extraction|solution|flawed|other | note: ")
+        self.fill("A", 1, old)
+        _, out, _ = self.run_cli("review-apply", "--exam-id", "X1", "--out", self.out)
+        self.assertIn("unparsed 1", out)
+        _, msg = self.pack("A", [q(1)], n=1)
+        self.assertTrue(os.path.exists(os.path.join(self.out, "X1", "A.old.md")))
+        self.assertIn(TEMPLATE_LINE, self.read("A.md"))
 
     def test_blank_pack_counts_zero(self):
         self.pack("A", [q(1), q(2)], n=2)
         rc, out, _ = self.run_cli("review-apply", "--exam-id", "X1", "--out", self.out)
-        self.assertIn("agree 0, disagree 0, unsure 0, blank 2, unparsed 0; agreement n/a", out)
+        self.assertIn("extraction ok 0, defect 0, blank 2, unparsed 0; extraction ok rate n/a", out)
 
     def test_cli_pack_and_errors(self):
         r = self.result([q(1)])

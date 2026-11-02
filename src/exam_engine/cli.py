@@ -839,12 +839,13 @@ def review_pack_main(argv):
     ap.add_argument("--offset", type=int, default=0)
     ap.add_argument("--out", default="review")
     ap.add_argument("--force-reset", action="store_true")
+    ap.add_argument("--note", default="", help="one line printed in the pack header")
     try:
         a = ap.parse_args(argv)
     except SystemExit:
         return 2
     try:
-        _, msg = review.pack(a.exam_id, a.subject, a.result, a.exam, a.refined, a.offset, a.out, a.force_reset)
+        _, msg = review.pack(a.exam_id, a.subject, a.result, a.exam, a.refined, a.offset, a.out, a.force_reset, a.note)
     except (ValueError, OSError) as exc:
         print("ERROR: review-pack: %s" % exc, file=sys.stderr)
         return 2
