@@ -25,6 +25,7 @@ FLAG_CODES = ("missing_text", "bad_encoding", "no_question_numbering", "math_pos
               "page_cut_suspect")  # boundary n|n+1 (page n is selected; n+1 comes by window)
 WINDOW_MAX = 3   # pages one window call may span (K)
 CHAIN_EXTRA = 2  # pages added outside the selection per cut chain
+EST_CALL_USD = 0.08  # rough cost of one vision call (estimate; measure on the slice)
 RUN_EXTRA = 4    # pages added outside the selection per run
 FORBIDDEN = ("answer", "answers", "solution", "solutions", "key", "explanation")
 PROMPT_REL = os.path.join("dev", "ingest", "refine.md")
@@ -66,6 +67,13 @@ def pick_pages(doc, spec, all_pages=False):
                   if w.get("page") and w.get("code") in FLAG_CODES)
     flagged |= set(p["n"] for p in doc["pages"] if p.get("status") == "ocr")
     return [n for n in want if n in flagged]
+
+
+def planned_windows(doc, pages):
+    """Pages n (selected) whose boundary n|n+1 the pdf detector flagged: one window call each (upper bound)."""
+    sel = set(pages)
+    return sorted(w["page"] for w in doc.get("warnings", ())
+                  if w.get("code") == "page_cut_suspect" and w.get("page") in sel)
 
 
 def check_key_pages(doc, spec, allow=False):
@@ -115,10 +123,29 @@ def make_real_llm(model, timeout_s, cwd, runner=None, trace=None):
 
 
 def mock_llm(path):
-    """llm(prompt, png) replaying a JSON list of reply strings (same file format as solve)."""
-    from exam_engine import engine
-    base = engine.mock_llm(path)
-    return lambda prompt, png: base(prompt)
+    """llm(prompt, png): a JSON list of reply strings is replayed in order (same file format as solve);
+    a JSON object maps the prompt's page label ("8" or "7-8" for a window) to a reply, call-order free."""
+    import json
+    with open(path, encoding="utf-8") as fh:
+        data = json.load(fh)
+    if not isinstance(data, dict):
+        from exam_engine import engine
+        base = engine.mock_llm(path)
+        return lambda prompt, png: base(prompt)
+
+    def llm(prompt, png):
+        m = re.search(r"^Pages: ([\d, ]+?) \(", prompt, re.M)
+        if m:
+            ps = [x.strip() for x in m.group(1).split(",")]
+            lab = "%s-%s" % (ps[0], ps[-1])
+        else:
+            m = re.search(r"^Page: (\d+)", prompt, re.M)
+            lab = m.group(1) if m else ""
+        r = data.get(lab)
+        if not isinstance(r, str):
+            return claude.Call(False, "", 0.0, "other", "no mock reply for %r" % lab, 0.0)
+        return claude.Call(True, r, 0.0, "", "", 0.0)
+    return llm
 
 
 def norm_id(v):
@@ -234,19 +261,39 @@ def _fail(code, msg, calls, cost):
     return e
 
 
-def _ask(llm, n, png, originals, window=None, open_id=None):
-    """(reply, calls, cost) for one page or window; at most MAX_ATTEMPTS calls (one retry on a bad reply)."""
+def _imgs(png):
+    return png if isinstance(png, tuple) else (png,)
+
+
+def _ask(llm, n, png, originals, window=None, open_id=None, cache=None, trace=None, model=""):
+    """(reply, calls, cost) for one page or window; at most MAX_ATTEMPTS calls (one retry on a bad reply).
+
+    `cache` (ReplyCache): key = model + prompt text + sha256 of every image; a hit costs 0 calls.
+    `trace`: one row per call (and per hit) with page, pages and the image hashes."""
     prompt, calls, cost, why = build_prompt(n, window, open_id), 0, 0.0, ""
+    shas = [hashlib.sha256(b).hexdigest() for b in _imgs(png)]
+    key = "%s\0%s\0%s" % (model, hashlib.sha256(prompt.encode("utf-8")).hexdigest(), ",".join(shas))
+    row = {"page": n, "pages": list(window or (n,)), "png_sha256": shas}
+    hit = cache.get("page", key) if cache is not None else None
+    if hit is not None:
+        if trace is not None:
+            trace.append(dict(row, ok=True, cls="", cost_usd=0.0, text="", reason="", cached=True))
+        return copy.deepcopy(hit), 0, 0.0
     for _ in range(MAX_ATTEMPTS):
         call = llm(prompt, png)
         calls += 1
         cost += call.cost_usd
+        if trace is not None:
+            trace.append(dict(row, ok=call.ok, cls=call.cls, cost_usd=call.cost_usd,
+                              text=call.text, reason=call.reason, cached=False))
         if not call.ok:
             raise _fail("call_failed", "page %d: %s %s" % (n, call.cls, call.reason), calls, cost)
         obj, why = claude.extract_json(call.text)
         if obj is not None:
             why = "; ".join(validate_refined(obj, originals))
         if not why:
+            if cache is not None:
+                cache.put("page", key, copy.deepcopy(obj))
             return obj, calls, cost
     raise _fail("invalid_reply", "page %d: %s (after %d attempts)" % (n, why, calls), calls, cost)
 
@@ -342,10 +389,11 @@ def _extra_ok(doc, n):
 
 def refine(doc, spec, llm, source_path=None, max_cost=1.0, model="sonnet", allow_key=False,
            min_similarity=MIN_SIMILARITY, render=render_page, all_pages=False, recover=True,
-           window=True, _memo=None, _recovered=()):
+           window=True, cache=None, trace=None, _memo=None, _recovered=()):
     """Copy of `doc` plus doc["refined"]; the source pages are untouched.
 
     `source_path` is the file to render pages from (None: no image is sent, mock runs).
+    `cache`: ReplyCache (47.6); `trace`: list of per-call rows.
     `window=False`: bridge only (the pre-phase-47 behaviour).
     A cut last question is re-read whole by one window call over the pages it spans (<= WINDOW_MAX);
     with `recover` the next page is added when it was not selected, and an orphan continuation
@@ -377,8 +425,7 @@ def refine(doc, spec, llm, source_path=None, max_cost=1.0, model="sonnet", allow
         if key in memo:  # this run already paid for it (backward re-run)
             return copy.deepcopy(memo[key])
         try:
-            obj, used, spent = (_ask(llm, n, png, by_id, window, open_id) if window
-                                else _ask(llm, n, png, by_id))
+            obj, used, spent = _ask(llm, n, png, by_id, window, open_id, cache, trace, model)
         except RefineError as e:
             calls += getattr(e, "calls", 0)
             cost += getattr(e, "cost", 0.0)
@@ -545,7 +592,7 @@ def refine(doc, spec, llm, source_path=None, max_cost=1.0, model="sonnet", allow
     if recover and window and back and cost < max_cost and _recovered == ():
         spec2 = ",".join(map(str, sorted(set(pages) | set(recovered) | set(back))))
         res = refine(doc, spec2, llm, source_path, max_cost - cost, model, allow_key,
-                     min_similarity, render, True, False, True, memo, sorted(set(recovered) | set(back)))
+                     min_similarity, render, True, False, True, cache, trace, memo, sorted(set(recovered) | set(back)))
         res["refined"]["calls"] += calls
         res["refined"]["cost_usd"] = round(res["refined"]["cost_usd"] + cost, 6)
         res["refined"]["pages"] = pages

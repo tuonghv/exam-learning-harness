@@ -616,7 +616,7 @@ def _refine_source(args, doc, images=False):
 
 def refine_main(argv):
     """ingest-refine FILE --pages SPEC (--dry-run|--mock FILE|--real): AI suggestion, exit 0/1/2/3."""
-    from exam_engine.ingest import api, refine
+    from exam_engine.ingest import api, refine, replycache
     from exam_engine.ingest.adapters import image as imgmod
     from exam_engine.ingest.schema import IngestError, validate_document
     d = settings.load_config("engine")
@@ -632,6 +632,11 @@ def refine_main(argv):
     ap.add_argument("--model", default="sonnet")
     ap.add_argument("--allow-key-pages", action="store_true")
     ap.add_argument("--all-pages", action="store_true", help="send every selected page, not only flagged ones")
+    ap.add_argument("--no-recover", action="store_true",
+                    help="do not read pages outside --pages to complete a cut question")
+    ap.add_argument("--no-window", action="store_true",
+                    help="no multi-page window call for a cut question (pre-phase-47 bridge only)")
+    ap.add_argument("--cache", metavar="DIR", help="page reply cache (real mode only)")
     try:
         a = ap.parse_args(argv)
     except SystemExit:
@@ -665,8 +670,11 @@ def refine_main(argv):
         refine.check_key_pages(doc, a.pages, a.allow_key_pages)
         pages = refine.pick_pages(doc, a.pages, a.all_pages)
         if a.dry_run:
-            print("pages %s, calls <= %d, cap $%.2f (dry run: no call made)" % (
-                pages or "none", len(pages) * refine.MAX_ATTEMPTS, a.max_cost_usd))
+            w = 0 if a.no_window else len(refine.planned_windows(doc, pages))
+            print("pages %s, windows planned %d (native), calls <= %d, cap $%.2f, est cost $%.2f "
+                  "(dry run: no call made)" % (
+                      pages or "none", w, (len(pages) + w) * refine.MAX_ATTEMPTS, a.max_cost_usd,
+                      (len(pages) + w) * refine.EST_CALL_USD))
             for n in pages:
                 print("=== REFINE prompt, page %d (page image attached) ===" % n)
                 print(refine.build_prompt(n))
@@ -675,14 +683,16 @@ def refine_main(argv):
         if a.real:
             src = _refine_source(a, doc, images=True)
             tmp = tempfile.mkdtemp(prefix="exam_refine_")
-            llm = refine.make_real_llm(a.model, a.timeout, tmp, trace=trace)
-            print("pages %s, calls <= %d, cap $%.2f" % (
+            llm = refine.make_real_llm(a.model, a.timeout, tmp)
+            print("pages %s, calls <= %d (+ windows), cap $%.2f" % (
                 pages, len(pages) * refine.MAX_ATTEMPTS, a.max_cost_usd), flush=True)
         else:
             llm = refine.mock_llm(a.mock)
         is_img = doc["source"].get("format") in IMAGE_FORMATS
         out = refine.refine(doc, a.pages, llm, src, a.max_cost_usd, a.model, a.allow_key_pages,
-                            all_pages=a.all_pages,
+                            all_pages=a.all_pages, recover=not a.no_recover,
+                            window=not a.no_window, trace=trace,
+                            cache=replycache.ReplyCache(a.cache if a.real else None),
                             **({"render": imgmod.render} if is_img else {}))
         if a.out:
             with open(a.out, "w", encoding="utf-8") as fh:

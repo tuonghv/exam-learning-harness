@@ -304,3 +304,87 @@ class TestDetector(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestCacheTrace(unittest.TestCase):
+    CUT = {"1": rep(qq(1, STEM1, {}, cut=True)), "1-2": rep(qq(1, WHOLE1))}
+
+    def test11_cache(self):
+        from exam_engine.ingest import replycache
+        cache = replycache.ReplyCache(None)
+        a = Keyed(self.CUT)
+        run(a, n=2, cache=cache)
+        self.assertEqual(a.calls, ["1", "1-2"])
+        b = Keyed({})
+        out = run(b, n=2, cache=cache)  # same cache: 0 calls
+        self.assertEqual(b.calls, [])
+        self.assertEqual(out["refined"]["calls"], 0)
+        self.assertEqual(out["refined"]["questions"][0]["text"], WHOLE1)
+        keys = [k[1] for k in cache.mem if k[0] == "page"]
+        self.assertEqual(len(keys), len(set(keys)))  # window key != single key
+        self.assertEqual(len(keys), 2)
+
+    def test11_template_change_misses(self):
+        from exam_engine.ingest import replycache
+        cache = replycache.ReplyCache(None)
+        run(Keyed(self.CUT), n=2, cache=cache)
+        orig = refine.template
+        try:
+            refine.template = lambda: orig() + "\nextra rule\n"
+            c = Keyed(self.CUT)
+            run(c, n=2, cache=cache)
+        finally:
+            refine.template = orig
+        self.assertEqual(c.calls, ["1", "1-2"])
+
+    def test11_mock_never_reads_disk(self):
+        import tempfile
+        from exam_engine.ingest import replycache
+        d = tempfile.mkdtemp()
+        run(Keyed(self.CUT), n=2, cache=replycache.ReplyCache(d))
+        self.assertTrue(os.listdir(d))
+        self.assertEqual(replycache.ReplyCache(None).get("page", "k"), None)
+        self.assertIsNone(replycache.ReplyCache(None).dir)
+
+    def test12_trace_rows(self):
+        tr = []
+        run(Keyed(self.CUT), n=2, trace=tr)
+        self.assertEqual([r["pages"] for r in tr], [[1], [1, 2]])
+        for r in tr:
+            self.assertEqual(sorted(r), ["cached", "cls", "cost_usd", "ok", "page", "pages",
+                                         "png_sha256", "reason", "text"])
+            self.assertFalse(r["cached"])
+        self.assertEqual(len(tr[1]["png_sha256"]), 2)
+        tr2 = []
+        from exam_engine.ingest import replycache
+        cache = replycache.ReplyCache(None)
+        run(Keyed(self.CUT), n=2, cache=cache)
+        run(Keyed({}), n=2, cache=cache, trace=tr2)
+        self.assertTrue(all(r["cached"] for r in tr2) and tr2)
+
+    def test14_old_refined_unchanged(self):
+        # no cut, no window: no new fields appear
+        out = run(Keyed({"1": rep(qq(1, "Plain question text"))}), n=1)
+        r = out["refined"]
+        for k in ("windows", "recovered_pages"):
+            self.assertNotIn(k, r)
+        self.assertNotIn("window", r["questions"][0])
+        self.assertEqual(sorted(r), ["calls", "cost_usd", "model", "pages", "prompt_sha256",
+                                     "questions"])
+
+    def test_keyed_mock_file(self):
+        import tempfile
+        p = os.path.join(tempfile.mkdtemp(), "m.json")
+        with open(p, "w") as fh:
+            json.dump(self.CUT, fh)
+        llm = refine.mock_llm(p)
+        out = run(llm, n=2)
+        self.assertEqual(out["refined"]["questions"][0]["text"], WHOLE1)
+        miss = llm(refine.build_prompt(9), b"")
+        self.assertFalse(miss.ok)
+
+    def test_dry_run_line(self):
+        w = [{"level": "info", "code": "page_cut_suspect", "page": 1, "message": "m"}]
+        d = doc(2, w)
+        self.assertEqual(refine.planned_windows(d, [1, 2]), [1])
+        self.assertEqual(refine.planned_windows(d, [2]), [])

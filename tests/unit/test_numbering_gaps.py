@@ -200,7 +200,7 @@ class TestPartsExamRefineInspect(unittest.TestCase):
             doc["questions"] = [{"n": n, "text": "T", "options": []} for n in ns]
             seen = []
 
-            def ask(llm, n, png, originals):
+            def ask(llm, n, png, originals, *rest):
                 seen.append(dict(originals))
                 raise refine.RefineError("stop", "stop")
             with mock.patch.object(refine, "_ask", ask):
