@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-051",
   "title": "OCR route quality: spaces, page furniture, doubt marker (REQ-0054)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0054",
   "acceptance_criteria": [
     "AC1 diagnosis and cheap fix for lost spaces",
@@ -17,8 +17,18 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/ingest/adapters/pdf.py",
+      "src/exam_engine/ingest/segment.py",
+      "src/exam_engine/ingest/boundary.py",
+      "src/exam_engine/ingest/api.py",
+      "src/exam_engine/core/refcheck.py",
+      "tests/unit/ocr_gap_sweep.py",
+      "tests/unit/ocr_before_after.py",
+      "docs/guide/toolkit-reference.md"
+    ],
+    "summary": "char-box respacing OCR_GAP 0.15 calibrated on 3 families, OCR-space-tolerant furniture filter, ocr_doubt reasons (glued/chars/furniture/lang_missing) -> Incomplete marker, sidecar uncertain, engine decline; missing-language error with install note; before/after measurement"
   },
   "unit_test": {
     "status": "pending",
@@ -41,7 +51,8 @@
   "crosscheck_required": true,
   "evidence_required": true,
   "roles": {
-    "designer": "work/TASK-051/handoff/design.md"
+    "designer": "work/TASK-051/handoff/design.md",
+    "coder": "work/TASK-051/handoff/code.md"
   },
   "user_notes": [
     {
@@ -51,7 +62,7 @@
     }
   ],
   "picked_at": "2026-11-02T14:33:48Z",
-  "updated_at": "2026-11-02T14:53:38Z",
+  "updated_at": "2026-11-02T16:03:52Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -61,5 +72,5 @@
     "notes": "",
     "next": "coder 51.7 sweep + 51.1 running (a4ca5fb7); then 51.2-51.6 brief, tester, verifier; vie.traineddata install is the user's (commands given); paid questions Q-1793619815 and Q-1793622303 wait for the user"
   },
-  "next": "Titan: tests first 51.1-51.6; 51.7 calibration sweep on families A/B/C before OCR_GAP is fixed"
+  "next": "unit-test gate"
 }

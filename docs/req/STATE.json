@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0054",
-  "next": "Titan: tests first 51.1-51.6; 51.7 calibration sweep on families A/B/C before OCR_GAP is fixed",
-  "updated": "2026-11-02 21:53"
+  "next": "tester QA for TASK-051",
+  "updated": "2026-11-02 23:03"
 }

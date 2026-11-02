@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-051",
-  "state": "DESIGN",
-  "next": "Titan: tests first 51.1-51.6; 51.7 calibration sweep on families A/B/C before OCR_GAP is fixed",
+  "state": "IMPLEMENTING",
+  "next": "unit-test gate",
   "title": "OCR route quality: spaces, page furniture, doubt marker (REQ-0054)",
   "active": [
     {
       "task_id": "TASK-051",
-      "state": "DESIGN",
-      "next": "Titan: tests first 51.1-51.6; 51.7 calibration sweep on families A/B/C before OCR_GAP is fixed",
-      "updated_at": "2026-11-02T14:53:38Z"
+      "state": "IMPLEMENTING",
+      "next": "unit-test gate",
+      "updated_at": "2026-11-02T16:03:52Z"
     }
   ],
   "max_active": 1
