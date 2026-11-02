@@ -8,7 +8,7 @@
 | Reports (verdict, limits) | `docs/report/phase-N-*.md` |
 | Evidence summaries (test output, recount TSV, metrics, verify/test handoffs) | `docs/report/evidence/TASK-NNN/` |
 | Requirements and their status | `docs/req/items/REQ-NNNN.md` |
-| Run history (git-ignored, answer letters) | `results/run-history.jsonl` via `exam.py run-stats trend` |
+| Run history (git-ignored, answer letters) | `reports/run-history.jsonl` via `exam.py run-stats trend` |
 
 | Task | Design | Report | Evidence |
 |---|---|---|---|

@@ -1,6 +1,6 @@
 # Report phase 56: solve-run metrics, history and compare (TASK-056; REQ-0060)
 
-Verdict: adopted. Every real solve now prints a 3-line metrics block (answered / declined / malformed / retry; accuracy; cost) and `report.md` gets a `## Metrics` section. Each real run (or any run with `--history`) appends one line to `results/run-history.jsonl` (git-ignored; holds answer letters): run id, time, exam sha256, git commit/dirty, prompt version, model, config, metrics. Mock runs are not appended. `exam.py run-stats` has `stats RESULT_DIR`, `compare A B`, `trend`, `backfill DIR...`.
+Verdict: adopted. Every real solve now prints a 3-line metrics block (answered / declined / malformed / retry; accuracy; cost) and `report.md` gets a `## Metrics` section. Each real run (or any run with `--history`) appends one line to `reports/run-history.jsonl` (git-ignored; holds answer letters): run id, time, exam sha256, git commit/dirty, prompt version, model, config, metrics. Mock runs are not appended. `exam.py run-stats` has `stats RESULT_DIR`, `compare A B`, `trend`, `backfill DIR...`.
 
 ## How to read the numbers
 - Accuracy only with an answer key (`key k/K`). Agreement with the QA line is printed as a proxy (same model family, not accuracy). Pass rate is NOT progress on DGNL: every question ends UNCERTAIN with `no_independent_check`.

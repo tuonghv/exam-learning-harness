@@ -412,7 +412,6 @@ class Cli(Base):
             for argv in ([INPUT_001, "--out", self.out],
                          [INPUT_001, "--out", self.out, "--dry-run", "--mock", MOCK],
                          [INPUT_001, "--out", self.out, "--real", "--mock", MOCK],
-                         [INPUT_001, "--mock", MOCK],  # no --out
                          [INPUT_001, "--mock", MOCK, "--out", self.out, "--max-attempts", "0"]):
                 code, out, err = self.main(*argv)
                 self.assertEqual(code, 2, argv)

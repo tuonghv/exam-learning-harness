@@ -21,7 +21,9 @@ from exam_engine.pipeline import examples_check, metrics, parser, prompts, repor
 COMMANDS = ("solve", "parse", "verify", "report", "check-examples", "score", "prompts",
             "check-prompts", "ingest", "ingest-inspect", "ingest-refine", "cross-solve", "benchmark",
             "extract-eval", "gold-pdf", "gen-exams", "lessons", "review-pack", "review-apply", "run-stats")
-DEFAULT_HISTORY = os.path.join("results", "run-history.jsonl")
+DEFAULT_HISTORY = os.path.join("reports", "run-history.jsonl")
+LEGACY_HISTORY = os.path.join("results", "run-history.jsonl")  # read-only fallback (pre RAW-00174)
+DEFAULT_OUT_ROOT = "reports"  # git-ignored; solve output must never be tracked
 USAGE = "usage: exam.py {%s} ..." % "|".join(COMMANDS)
 
 
@@ -66,8 +68,7 @@ def solve_main(argv=None):
         print("usage: --max-attempts >= 1, --max-cost-usd >= 0, --timeout > 0", file=sys.stderr)
         return 2
     if not a.dry_run and not a.out:
-        print("usage: --out DIR is required", file=sys.stderr)
-        return 2
+        a.out = _default_out(a.exam)
     cfg = {"max_attempts": a.max_attempts, "max_cost_usd": a.max_cost_usd, "timeout": a.timeout,
            "model": a.model, "key": a.key, "llm_name": "claude-p" if a.real else "mock",
            "pdf": not a.no_pdf, "lang": a.lang}
@@ -133,6 +134,17 @@ def solve_main(argv=None):
             if a.real or a.history:
                 _append_history(a, result, m)
     return code
+
+
+def _default_out(exam_path, root=DEFAULT_OUT_ROOT):
+    """reports/<exam-id>/<run-id>/ (UTC timestamp, -N suffix on a collision); not created here."""
+    base = os.path.join(root, os.path.splitext(os.path.basename(exam_path))[0])
+    stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
+    out, n = os.path.join(base, stamp), 1
+    while os.path.exists(out):
+        n += 1
+        out = os.path.join(base, "%s-%d" % (stamp, n))
+    return out
 
 
 def _append_history(a, result, m):
@@ -967,9 +979,18 @@ def main(argv=None):
     return table[cmd](rest)
 
 
-def _rs_resolve(ref, hist):
+def _rs_lines(a):
+    """(history lines, malformed count); the default history also reads the legacy results/ file."""
+    lines, bad = metrics.read_history(a.history)
+    if a.legacy:
+        lines2, bad2 = metrics.read_history(a.legacy)
+        lines, bad = lines2 + lines, bad + bad2
+    return lines, bad
+
+
+def _rs_resolve(ref, hist, legacy=None):
     """(result, log lines, history line or None) for a result dir or a history run_id; ValueError if unknown."""
-    lines = metrics.read_history(hist)[0]
+    lines = _rs_lines(argparse.Namespace(history=hist, legacy=legacy))[0]
     path = ref
     if not os.path.isfile(os.path.join(ref, "result.json")):
         hit = [ln for ln in lines if ln.get("run_id") == ref]
@@ -982,7 +1003,7 @@ def _rs_resolve(ref, hist):
 
 
 def _rs_compute(ref, a):
-    result, log, line = _rs_resolve(ref, a.history)
+    result, log, line = _rs_resolve(ref, a.history, a.legacy)
     exam = qa = None
     keymap = scorer.key_letters(a.ans_key) if a.ans_key else None
     if a.exam:
@@ -1054,7 +1075,7 @@ def _rs_group(ln):
 
 
 def _rs_trend(a):
-    lines, bad = metrics.read_history(a.history)
+    lines, bad = _rs_lines(a)
     if bad:
         print("WARN: %d history line(s) skipped" % bad, file=sys.stderr)
     rows = [ln for ln in lines if (not a.exam_id or ln.get("exam_id") == a.exam_id)
@@ -1103,7 +1124,8 @@ def run_stats_main(argv):
     ap.add_argument("--key", dest="ans_key")
     ap.add_argument("--review-pack", metavar="FILE", action="append")
     ap.add_argument("--offset", type=int, default=0)
-    ap.add_argument("--history", default=DEFAULT_HISTORY)
+    ap.add_argument("--history", default=None,
+                    help="default %s (+ legacy %s read-only)" % (DEFAULT_HISTORY, LEGACY_HISTORY))
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--exam-id")
     ap.add_argument("--subject")
@@ -1112,6 +1134,8 @@ def run_stats_main(argv):
         a = ap.parse_args(argv)
     except SystemExit as exc:
         return 2 if exc.code else 0
+    a.legacy = LEGACY_HISTORY if a.history is None else None
+    a.history = a.history or DEFAULT_HISTORY
     try:
         if a.sub == "stats" and len(a.refs) != 1:
             print("usage: exam.py run-stats stats RESULT_DIR", file=sys.stderr)

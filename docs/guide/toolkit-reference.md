@@ -9,4 +9,4 @@ per-session context small. Read the section you need before changing code.
 
 ## Commands
 
-- `exam.py run-stats stats DIR | compare A B | trend | backfill DIR...` (TASK-056): run metrics from result.json + run.log; history `results/run-history.jsonl` (`--history`), appended by `solve --real` or `solve --history`. `solve` prints a 3-line metrics block and report.md gets `## Metrics`. compare exit 2 on different exam, 1 on a regression signal.
+- `exam.py run-stats stats DIR | compare A B | trend | backfill DIR...` (TASK-056): run metrics from result.json + run.log; history `reports/run-history.jsonl` (`--history`; legacy `results/run-history.jsonl` still read), appended by `solve --real` or `solve --history`. `solve` prints a 3-line metrics block and report.md gets `## Metrics`. compare exit 2 on different exam, 1 on a regression signal.
