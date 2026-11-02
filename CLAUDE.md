@@ -17,6 +17,7 @@ queue in `backlog.json`, audit trail in `phase-log.md`; one task per commit (`Ta
 9. At phase completion record: Action → Result → Decision → Next.
 10. Every transition ends committed (`commit-check.sh` then `git commit`); DONE also needs the
     report and `backlog.sh complete`. The Stop hook blocks a turn that leaves `.claude/state` dirty.
+11. Crosscheck paths (user, RAW-00171/174): `work/` is the agents' scratch (git-ignored); solve output goes to git-ignored `plans/` and `reports/`, never tracked; design + report text live in `docs/design`, `docs/report`; evidence summaries in `docs/report/evidence/TASK-NNN/` only for big changes (`evidence_required`). Index `docs/report/INDEX.md`; rule `workflow-roles.md` §9.
 
 | Need | Skill |
 |---|---|

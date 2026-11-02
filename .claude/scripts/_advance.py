@@ -22,7 +22,7 @@ FLOW = _tasks.FLOW
 ORDER = list(FLOW)  # req.py ORDER is the same six names
 SIDE = ("SUPERSEDED", "REJECTED")
 REQ_DIR = os.path.join(ROOT, "docs", "req")
-SPEC_KEYS = ("set", "next", "log", "commit", "req", "quality")
+SPEC_KEYS = ("set", "next", "log", "commit", "req", "quality", "publish")
 SET_KEYS = ("design", "implementation", "unit_test", "security", "verification", "report", "roles",
             "acceptance_criteria")
 # state -> {section: required non-empty sub-keys}; lists are marked with a trailing []
@@ -41,6 +41,7 @@ FIX = {
     "set": "check the spec `set` keys (tasks.sh set --merge whitelist)",
     "req": "see the message; REQ more than one step behind: advance.sh req-catchup <REQ>",
     "backlog": "run backlog.sh complete by hand only after finding why it refused",
+    "evidence": "fix what _evidence.py names in the work/<TASK>/ summary (no exam text, keys, URLs), then re-run",
     "commit": "fix what commit-check names (paths, trailers, staged files), then re-run",
 }
 
@@ -325,6 +326,10 @@ def check_schema(st, spec):
         raise Fail("spec", "spec.req must be an object")
     if "quality" in spec and st != "DONE":
         raise Fail("spec", "spec.quality is for DONE only")
+    if "publish" in spec:
+        pb = spec["publish"]
+        if st != "VERIFIED" or not isinstance(pb, list) or not all(isinstance(p, str) for p in pb):
+            raise Fail("spec", "spec.publish is a list of work/<TASK>/ paths, VERIFIED only")
 
 
 # ---------------------------------------------------------------- helpers on the task
@@ -500,6 +505,37 @@ def _apply(t, st, spec, dry, cur, task, qblock, reqs, to_step, sp_req, snap, pla
         if rc != 0:
             raise Fail("backlog", short(first(out, "FAIL"), 200))
         plan.append("backlog.sh complete " + t)
+    if st == "DONE" and task.get("evidence_required") is True and not dry:
+        rc, out = run([sys.executable, "-I", os.path.join(SCRIPT_DIR, "_evidence.py"), "index"])
+        if rc != 0:
+            raise Fail("evidence", short(first(out, "FAIL"), 200))
+        plan.append("index docs/report/INDEX.md")
+    # 5b evidence (TASK-057): only a task with evidence_required publishes (RAW-00174)
+    published = []
+    if st == "VERIFIED" and task.get("evidence_required") is True:
+        srcs = spec.get("publish")
+        if srcs is None:
+            srcs = [e for e in (task.get("verification") or {}).get("evidence") or []
+                    if isinstance(e, str) and e.startswith("work/%s/" % t)]
+        if not srcs:
+            raise Fail("evidence", "evidence_required: no work/%s/ evidence to publish (spec.publish)" % t)
+        if dry:
+            plan.append("publish (dry) " + ", ".join("docs/report/evidence/%s/%s" % (t, os.path.basename(x))
+                                                     for x in srcs))
+        else:
+            rc, out = run([sys.executable, "-I", os.path.join(SCRIPT_DIR, "_evidence.py"), "publish", t] + list(srcs))
+            if rc != 0:
+                raise Fail("evidence", short(out.replace("\n", "; "), 300))
+            published = [l for l in out.splitlines() if l.startswith("docs/report/evidence/")]
+            wdir = os.path.join(ROOT, "work", t, "advance")
+            os.makedirs(wdir, exist_ok=True)
+            wp = os.path.join(wdir, "published.set.json")
+            with open(wp, "w", encoding="utf-8") as f:
+                json.dump({"verification": {"published": published}}, f)
+            rc, out = tasks_sh("set", t, "--merge", rel(wp))
+            if rc != 0:
+                raise Fail("set", short(first(out, "FAIL"), 200))
+            plan.append("publish " + ", ".join(published))
     # 6 workflow-check
     rc, out = run(["bash", os.path.join(SCRIPT_DIR, "workflow-check.sh"), "--task", t])
     wf = "PASS" if rc == 0 else short(first(out, r"^FAIL"), 200)
@@ -519,8 +555,11 @@ def _apply(t, st, spec, dry, cur, task, qblock, reqs, to_step, sp_req, snap, pla
     if st == "DONE":
         paths.append(task["report"]["path"])
     paths += [rel(p) for p in changed(snap) if p.startswith(REQ_DIR + os.sep)]
+    paths += published
     if st == "DONE":
         paths.append(rel(_tasks.BACKLOG))
+        if task.get("evidence_required") is True:
+            paths.append("docs/report/INDEX.md")
     seen, final = set(), []
     for p in paths:
         if p and p not in seen:

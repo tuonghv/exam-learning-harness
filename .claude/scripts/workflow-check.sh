@@ -94,6 +94,47 @@ if idx >= SEQUENCE.index("VERIFIED"):
     if not get("security", "result"):
         fail("security.result is empty (record what was checked, or why it does not apply)")
 
+# --- evidence gate (TASK-057, RAW-00174): only a task picked/set with evidence_required=true must publish
+#     scanned text evidence under docs/report/evidence/<T>/; others get a WARN. ---
+def _evidence_gate(done):
+    import subprocess
+    tid = d.get("task_id", "")
+    evdir = f"docs/report/evidence/{tid}/"
+    if d.get("evidence_required") is not True:
+        warn("no published evidence (evidence_required not set)")
+        return
+    pub = get("verification", "published")
+    if not isinstance(pub, list) or not pub:
+        fail("verification.published is empty (evidence_required: run advance VERIFIED with publish)")
+        pub = []
+    for p in pub:
+        if not isinstance(p, str) or not p.startswith(evdir) or ".." in p:
+            fail(f"published path '{p}' is not under {evdir}")
+        elif not os.path.isfile(os.path.join(root, p)):
+            fail(f"published file '{p}' does not exist")
+        elif subprocess.run(["git", "-C", root, "check-ignore", "-q", p]).returncode == 0:
+            fail(f"published file '{p}' is git-ignored")
+    if os.path.isdir(os.path.join(root, evdir)):
+        sc = subprocess.run([sys.executable, "-I", os.path.join(root, ".claude", "scripts", "_evidence.py"), "scan",
+                             os.path.join(root, evdir)], capture_output=True, text=True)
+        if sc.returncode != 0:
+            fail("evidence scan: " + "; ".join(sc.stdout.splitlines()[:5]))
+    if done:
+        rp = get("report", "path")
+        rtxt = open(os.path.join(root, rp), encoding="utf-8").read() if rp and os.path.isfile(os.path.join(root, rp)) else ""
+        cited = sorted(set(re.findall(re.escape(evdir) + r"[A-Za-z0-9_.-]+", rtxt)))
+        if not cited:
+            fail(f"report names no {evdir} file")
+        for c in cited:
+            if not os.path.isfile(os.path.join(root, c)):
+                fail(f"report cites missing evidence file '{c}'")
+        ip = os.path.join(root, "docs", "report", "INDEX.md")
+        if not (os.path.isfile(ip) and any(l.startswith(f"| {tid} ") for l in open(ip, encoding="utf-8"))):
+            fail(f"docs/report/INDEX.md has no row for {tid} (run _evidence.py index)")
+
+if idx >= SEQUENCE.index("VERIFIED"):
+    _evidence_gate(idx >= SEQUENCE.index("DONE"))
+
 # --- role gate (TASK-064): a task opted in via roles_required carries named
 #     role-subagent evidence per phase; tasks without the key (legacy, incl.
 #     TASK-064 itself) are exempt. Valid per-role value: a path under

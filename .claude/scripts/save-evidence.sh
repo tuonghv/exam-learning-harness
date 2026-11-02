@@ -5,6 +5,7 @@
 # combined stdout/stderr, prints a one-line summary and the last 10 output lines, and exits
 # with the command's rc. TASK defaults to .claude/state/task.json task_id. Pipes need
 # `bash -c '...'`. The verifier role has no Bash: it judges only what is saved here.
+# This is the RAW copy (work/, git-ignored); user-facing copy: main publishes at VERIFIED (workflow-roles.md section 9).
 set -Eeuo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=/dev/null  # resolved at run time; _lib.sh is checked on its own

@@ -157,4 +157,7 @@ printf 'Rules: Edit/Write only; no Bash writes into the repo. A refusal means st
 [ -z "$PEERS" ] || printf 'Peers: %s\n' "$PEERS"
 printf 'Turns: %s. Expect: %s min.\n' "$TURNS" "$EXPECT"
 printf 'Checks: %s\n' "$CHECKS"
+case "$ROLE" in
+  tester|verifier) printf 'Evidence: raw via save-evidence.sh in work/%s/evidence/; also write a <=200-line text summary there (no exam text/keys/URLs); main publishes it.\n' "$T" ;;
+esac
 printf 'Output: work/%s/handoff/%s.md. Reply ≤ 5 lines.\n' "$T" "$OUT"

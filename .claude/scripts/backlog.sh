@@ -125,6 +125,7 @@ new_task = {
     "report": {"status": "pending", "path": ""},
     "roles_required": True,
     "crosscheck_required": True,
+    "evidence_required": False,
     "roles": {},
     "user_notes": item.get("user_notes", []),
     "picked_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),

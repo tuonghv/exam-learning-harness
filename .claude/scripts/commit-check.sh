@@ -232,7 +232,8 @@ if msg_file:
             mine = int(re.sub(r"\D", "", tid) or 0)
             def _foreign_phase_doc(x):
                 m2 = re.fullmatch(r"docs/(?:design|report)/phase-([0-9]+)-.*", x)
-                return bool(m2) and int(m2.group(1)) != mine
+                m3 = re.fullmatch(r"docs/report/evidence/TASK-([0-9]+)/.*", x)
+                return (bool(m2) and int(m2.group(1)) != mine) or (bool(m3) and int(m3.group(1)) != mine)
             partial = [x for x in partial if x not in others and not _foreign_phase_doc(x)]
         if partial:
             fails.append("workflow files changed but not staged (git add them; the gate checked "

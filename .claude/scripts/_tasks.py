@@ -735,7 +735,7 @@ def cmd_pick(args):
         "security": {"status": "pending", "result": ""},
         "verification": {"status": "pending", "evidence": []},
         "report": {"status": "pending", "path": ""},
-        "roles_required": True, "crosscheck_required": True, "roles": {},
+        "roles_required": True, "crosscheck_required": True, "evidence_required": False, "roles": {},
         "user_notes": item.get("user_notes", []),
         "picked_at": now(), "updated_at": "", "updated_by": "",
         "scope": scope, "depends_on": item.get("depends_on", []), "inputs": {},
@@ -1109,7 +1109,7 @@ def _git(*a):
 def _path_ok(t, p):
     if not p or os.path.isabs(p) or ".." in p.replace("\\", "/").split("/") or p.startswith("-"):
         return False
-    if p.startswith("work/%s/" % t):
+    if p.startswith("work/%s/" % t) or p.startswith("docs/report/evidence/%s/" % t) or p == "docs/report/INDEX.md":
         return True
     d = load(t)
     for sec in ("design", "report"):
