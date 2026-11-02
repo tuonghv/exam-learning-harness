@@ -137,6 +137,38 @@ class HistoryTest(Base):
         self.assertEqual(self.rs("compare", "x")[0], 2)
 
 
+class ProxyLabelTest(Base):
+    """56.5: QA agreement is a proxy and must never read as accuracy."""
+    def pack(self):
+        pack = os.path.join(self.tmp, "qa.md")
+        with open(pack, "w", encoding="utf-8") as f:
+            f.write("| n | QA | conf | note |\n| --- | --- | --- | --- |\n| 1 | A | high | x |\n| 2 | C | high | x |\n")
+        return pack
+
+    def test_56_5_qa_only_block_says_proxy_and_no_key_accuracy(self):
+        d = self.run_dir("a", [q(1, "A"), q(2, "B")])
+        code, out, _ = self.rs("stats", d, "--review-pack", self.pack())
+        acc = [ln for ln in out.splitlines() if ln.startswith("accuracy:")][0]
+        self.assertEqual(acc, "accuracy: qa agree 1/2 (proxy)")
+        self.assertNotIn("key", acc)
+        code, js, _ = self.rs("stats", d, "--review-pack", self.pack(), "--json")
+        m = json.loads(js)
+        self.assertIsNone(m["accuracy"]["key"])
+        self.assertEqual(m["accuracy"]["qa"]["agrees"], 1)
+
+    def test_56_5_key_and_qa_shown_apart(self):
+        d = self.run_dir("a", [q(1, "A", ok=True), q(2, "B", ok=False)])
+        _c, out, _ = self.rs("stats", d, "--review-pack", self.pack())
+        acc = [ln for ln in out.splitlines() if ln.startswith("accuracy:")][0]
+        self.assertEqual(acc, "accuracy: key 1/2 | qa agree 1/2 (proxy)")
+
+    def test_56_5_qa_never_creates_key_accuracy(self):
+        d = self.run_dir("a", [q(1, "A"), q(2, "B")])
+        _c, js, _ = self.rs("stats", d, "--review-pack", self.pack(), "--json")
+        self.assertIsNone(json.loads(js)["accuracy"]["key"])
+        self.assertNotIn("key", metrics.block(json.loads(js))[1])
+
+
 class SolveTest(Base):
     def solve(self, *extra):
         out = io.StringIO()
