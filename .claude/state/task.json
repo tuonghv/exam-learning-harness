@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-047",
-  "state": "DESIGN",
-  "next": "HELD after design: TASK-052 first (user priority), then coder tests-first per design list",
-  "title": "Python cut detector for page selection, bounded automatic recovery, page-extraction cache with trace page/hash (design 43.3-43.5, REQ-0045)",
-  "active": [],
+  "task_id": "TASK-052",
+  "state": "TODO",
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "title": "Human review path: review packs per subject/question, feedback apply, skill review-loop (REQ-0055)",
+  "active": [
+    {
+      "task_id": "TASK-052",
+      "state": "TODO",
+      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+      "updated_at": ""
+    }
+  ],
   "max_active": 1
 }
