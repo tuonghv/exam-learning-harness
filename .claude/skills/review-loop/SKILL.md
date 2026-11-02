@@ -10,7 +10,7 @@ Many reruns by roles cost tokens and still cannot settle some questions (no answ
 ## Stop rule (user, RAW-00158)
 Hand the case to the human instead of another run when ANY holds:
 - the same defect survives 2 fix rounds, or a role needs a 3rd round;
-- correctness depends on a judgment no script can make (answer key unknown, two defensible options, figure read, extraction fidelity);
+- extraction fidelity needs a human eye (figure read, doubtful extraction): the user reviews EXTRACTION; answer correctness is NOT handed to the user, the senior-solver QA covers it (skill `solve-qa`, REQ-0056), unless QA itself is split: then report both options as `unresolved`;
 - roles disagree and the evidence is the same on both sides;
 - the next step would only re-run the same check with more tokens.
 Then: write the case to the review pack (below), say in one line what was tried, give the options with a recommendation, ask the user, and keep working on other tasks.

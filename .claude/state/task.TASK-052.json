@@ -54,7 +54,13 @@
       "waiver": "coordinator design inline: all inputs exist, one thin command pair"
     }
   },
-  "user_notes": [],
+  "user_notes": [
+    {
+      "raw": "RAW-00159",
+      "note": "REQ-0056/TASK-053: human reviews extraction, senior-solver QA covers answers",
+      "at": "2026-11-02T05:35:17Z"
+    }
+  ],
   "picked_at": "2026-11-02T05:30:02Z",
   "updated_at": "2026-11-02T05:30:50Z",
   "updated_by": "main",

@@ -3,7 +3,7 @@ id: EPIC-003
 title: Exam-solving pipeline engine: INPUT, VALIDATE, SOLVE, QA, SCORE, REPORT (claude -p + deterministic checks)
 source: [RAW-00025]
 created: 2026-10-29 10:02
-updated: 2026-11-02 12:26
+updated: 2026-11-02 12:35
 ---
 ## Original (verbatim, never edit)
 > **[RAW-00025]** 2026-10-29 10:01
@@ -26,5 +26,6 @@ A small stdlib engine (Python, Bash only where the harness already uses it) that
 - REQ-0036
 - REQ-0047
 - REQ-0055
+- REQ-0056
 
 ## Notes
