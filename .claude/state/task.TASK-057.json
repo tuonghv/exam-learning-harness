@@ -40,7 +40,12 @@
   "roles_required": true,
   "crosscheck_required": true,
   "roles": {
-    "designer": "work/TASK-057/handoff/design.md"
+    "designer": "work/TASK-057/handoff/design.md",
+    "grants": {
+      "coder": [
+        ".claude/scripts/*"
+      ]
+    }
   },
   "user_notes": [],
   "picked_at": "2026-11-02T10:30:45Z",
@@ -53,7 +58,8 @@
   "inputs": {},
   "checkpoint": {
     "done": [],
-    "notes": ""
+    "notes": "",
+    "next": "coder 57.8 (reports/ default out+history) then 57.2-57.7 in .claude/scripts; tester; advance IMPLEMENTING"
   },
   "next": "Titan (grant .claude/scripts/*): tests first, _evidence.py scan/publish/index, gates, _path_ok scope fix"
 }
