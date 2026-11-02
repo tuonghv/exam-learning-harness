@@ -16,7 +16,8 @@ from exam_engine import engine, settings
 from exam_engine.adapters import claude
 from exam_engine.core import schema as sch
 from exam_engine.core.decision import decide
-from exam_engine.pipeline import examples_check, metrics, parser, planrun, prompts, reporter, router, scorer, solver, verifier
+from exam_engine.pipeline import (examples_check, metrics, parser, planrun, prompts, report_build, reporter,
+                                  router, scorer, solver, verifier)
 
 COMMANDS = ("solve", "parse", "verify", "report", "check-examples", "score", "prompts",
             "check-prompts", "ingest", "ingest-inspect", "ingest-refine", "cross-solve", "benchmark",
@@ -24,6 +25,7 @@ COMMANDS = ("solve", "parse", "verify", "report", "check-examples", "score", "pr
 DEFAULT_HISTORY = os.path.join("plans", "run-history.jsonl")
 LEGACY_HISTORY = (os.path.join("reports", "run-history.jsonl"),  # read-only fallbacks (RAW-00174, phase 58)
                   os.path.join("results", "run-history.jsonl"))
+DEFAULT_REPORT_ROOT = "reports"
 DEFAULT_OUT_ROOT = "plans"  # git-ignored; solve output must never be tracked
 _REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 USAGE = "usage: exam.py {%s} ..." % "|".join(COMMANDS)
@@ -69,7 +71,8 @@ def solve_main(argv=None):
     if a.max_attempts < 1 or a.max_cost_usd < 0 or a.timeout <= 0:
         print("usage: --max-attempts >= 1, --max-cost-usd >= 0, --timeout > 0", file=sys.stderr)
         return 2
-    if not a.dry_run and not a.out:
+    plan_only = not a.dry_run and not a.out  # default layout: report goes to reports/ via report_build
+    if plan_only:
         a.out = planrun.claim_run_dir(DEFAULT_OUT_ROOT, planrun.exam_id_of(a.exam))
     cfg = {"max_attempts": a.max_attempts, "max_cost_usd": a.max_cost_usd, "timeout": a.timeout,
            "model": a.model, "key": a.key, "llm_name": "claude-p" if a.real else "mock",
@@ -113,10 +116,12 @@ def solve_main(argv=None):
         pw.start()
         result, code = None, None
         try:
-            result, code = engine.run(a.exam, a.out, cfg, llm, sink=pw.record)
+            result, code = engine.run(a.exam, a.out, cfg, llm, sink=pw.record, reports=not plan_only)
         finally:  # a crash still leaves plan.json (failed) and the captured calls
             pw.finish(result, code, time.time() - t0)
         wall = round(time.time() - t0, 1)
+        if plan_only and result is not None:
+            result["reports"] = _build_default_report(a, result)
     except (OSError, ValueError) as exc:
         print("ERROR: %s" % exc, file=sys.stderr)
         return 2
@@ -142,6 +147,15 @@ def solve_main(argv=None):
             if a.real or a.history:
                 _append_history(a, result, m)
     return code
+
+
+def _build_default_report(a, result):
+    """solve without --out: the report goes through report_build into reports/<exam>/<run>/sheet."""
+    out = os.path.join(DEFAULT_REPORT_ROOT, planrun.exam_id_of(a.exam),
+                       os.path.basename(os.path.abspath(a.out)), "sheet")
+    info = report_build.build(a.out, out, view="sheet", pdf=not a.no_pdf,
+                              engine_git=reporter.git_info(_REPO_ROOT))
+    return info["reports"]
 
 
 def _append_history(a, result, m):
@@ -215,7 +229,36 @@ def verify_main(argv):
     return 0
 
 
+def _report_plan(argv):
+    """report PLAN_RUN [--view sheet|learn] [--no-pdf] [--report-id ID] [--out DIR]"""
+    ap = argparse.ArgumentParser(prog="exam report", description="Rebuild a report from a plan run "
+                                 "(no model call). Default out reports/<exam-id>/<plan-run-id>/<report-id>.")
+    ap.add_argument("plan_run")
+    ap.add_argument("--view", choices=reporter.VIEWS, default="sheet")
+    ap.add_argument("--no-pdf", action="store_true")
+    ap.add_argument("--report-id", "--id", dest="rid", help="default: the view name; same id overwrites")
+    ap.add_argument("--out", help="override the output dir")
+    a = ap.parse_args(argv)
+    plan = os.path.abspath(a.plan_run.rstrip("/"))
+    meta = planrun.load(plan)["plan"] or {}
+    exam_id = meta.get("exam_id") or os.path.basename(os.path.dirname(plan))
+    run_id = meta.get("plan_run_id") or os.path.basename(plan)
+    out = a.out or os.path.join(DEFAULT_REPORT_ROOT, exam_id, run_id, a.rid or a.view)
+    try:
+        info = report_build.build(plan, out, view=a.view, pdf=not a.no_pdf,
+                                  engine_git=reporter.git_info(_REPO_ROOT))
+    except (OSError, ValueError) as exc:
+        print("ERROR: %s" % exc, file=sys.stderr)
+        return 2
+    for key in ("md", "answers", "html", "pdf"):
+        if info["reports"].get(key):
+            print("report %s -> %s" % (key, info["reports"][key]))
+    return 0
+
+
 def report_main(argv):
+    if argv and os.path.isdir(argv[0]):
+        return _report_plan(argv)
     """report RESULT.json --out DIR [--no-pdf] [--view sheet|learn]: write report files from a result."""
     usage = "usage: exam.py report RESULT.json --out DIR [--no-pdf] [--view sheet|learn]"
     args, view, i = [], "sheet", 0

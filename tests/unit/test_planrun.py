@@ -78,7 +78,8 @@ class PlanRunTest(unittest.TestCase):
     def test_git_status_clean_without_out(self):
         self.assertIn(self.solve(), (0, 1))
         self.assertTrue(os.path.isfile(os.path.join(self.plan_dir(), "result.json")))
-        self.assertTrue(os.path.isfile(os.path.join(self.plan_dir(), "report.md")))
+        rid = os.path.basename(self.plan_dir())
+        self.assertTrue(os.path.isfile(os.path.join("reports", "input-001", rid, "sheet", "report.md")))
         self.assertEqual(subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True).stdout, "")
 
     def test_out_honoured_and_plan_inside(self):

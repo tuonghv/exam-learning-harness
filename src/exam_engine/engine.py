@@ -127,7 +127,7 @@ def build_result(exam, exam_path, recs, cfg, rn, stopped):
                     "points": sum(pts) if pts else None, "max_points": sum(mx) if mx else None}}
 
 
-def run(exam_path, out_dir, cfg, llm, sink=None):
+def run(exam_path, out_dir, cfg, llm, sink=None, reports=True):
     """(result, exit_code); result is None on exit 2."""
     try:
         text = parser.read_text(exam_path)
@@ -186,8 +186,8 @@ def run(exam_path, out_dir, cfg, llm, sink=None):
         result["metrics"] = metrics.compute(result, metrics.load_log(os.path.join(out_dir, "run.log")), exam=exam)
     except Exception:  # noqa: BLE001 - metrics are extra; they must never fail a run
         result["metrics"] = None
-    result["reports"] = reporter.write_reports(result, out_dir, pdf=cfg.get("pdf", False),
-                                               metrics=result["metrics"])
+    result["reports"] = (reporter.write_reports(result, out_dir, pdf=cfg.get("pdf", False),
+                                                metrics=result["metrics"]) if reports else None)
     if stopped:
         return result, 3
     s = result["summary"]
