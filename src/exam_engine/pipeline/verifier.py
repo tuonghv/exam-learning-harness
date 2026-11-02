@@ -85,8 +85,6 @@ def option_for_value(answer, options):
     """Letter of the one option whose single number equals the answer's number, else None (60.1)."""
     raw = str(answer).replace("\u2212", "-").strip()
     a = _TAIL_NOTE.sub("", raw).rstrip(". ")
-    if re.search(r"\d", raw[len(a):]):  # a note holding a number may name another value
-        return None
     want = _answer_number(a)
     # one plain value only: "3; 5", "1/2", "sqrt(2)", "2.10^3" must not pick a letter (wrong letter < none)
     if (want is None or not options or len(_NUM.findall(a)) != 1

@@ -39,9 +39,14 @@ class TestOptionForValue(unittest.TestCase):
 
     def test_multi_number_fraction_sqrt_is_none(self):
         o = {"A": "3", "B": "5", "C": "1", "D": "2"}
-        for ans in ("3; 5", "3 and 5", "1/2", "sqrt(2)", "2.10^3", "3 (or 5)"):
+        for ans in ("3; 5", "3 and 5", "1/2", "sqrt(2)", "2.10^3", "1,1.10^13 Hz"):
             self.assertIsNone(verifier.option_for_value(ans, o), ans)
         self.assertEqual(verifier.option_for_value("3 (rounded)", o), "A")
+
+    def test_note_digits_ignored_decimal_comma_is_one_number(self):
+        o = {"A": "9 kg", "B": "3,25 kg", "C": "12,7%/n\u0103m"}
+        self.assertEqual(verifier.option_for_value("3,25 kg (l\u00e0m tr\u00f2n 2 ch\u1eef s\u1ed1 th\u1eadp ph\u00e2n)", o), "B")
+        self.assertEqual(verifier.option_for_value("12,7%/n\u0103m (l\u00e0m tr\u00f2n 1 ch\u1eef s\u1ed1)", o), "C")
 
     def test_no_number_or_no_match_is_none(self):
         self.assertIsNone(verifier.option_for_value("because", OPTS))
