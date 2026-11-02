@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-051",
-  "state": "DONE",
-  "next": "",
-  "title": "OCR route quality: spaces, page furniture, doubt marker (REQ-0054)",
-  "active": [],
+  "task_id": "TASK-060",
+  "state": "TODO",
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "title": "Quality deep-dive: design the slower higher-quality solve path from the cause table (REQ-0066)",
+  "active": [
+    {
+      "task_id": "TASK-060",
+      "state": "TODO",
+      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+      "updated_at": ""
+    }
+  ],
   "max_active": 1
 }
