@@ -1255,3 +1255,9 @@ Action: report written
 Result: AC1-AC4 met at tier 0; AC5 (real Haiku) pending the user's go
 Decision: close TASK-050; REQ-0053 AC5 split to a follow-up
 Next: TASK-046, TASK-047, TASK-048
+
+## DESIGN - TASK-046 - 2026-11-02T04:35:12Z
+Action: scoped design section 3 into phase-46
+Result: docs/design/phase-46-completeness-measurement.md
+Decision: implement now
+Next: IMPLEMENTING

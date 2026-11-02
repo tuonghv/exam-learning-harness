@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-046",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "coder: tests first, gold_pdf split layout, fixtures F1-F8, extract-eval metrics, chain run",
   "title": "Measurement: gold-pdf split layout, guide fixture families F1-F8, extract-eval boundary/cross-page/false-merge/incomplete-to-solver rates (design section 3, REQ-0045)",
   "active": [
     {
       "task_id": "TASK-046",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "coder: tests first, gold_pdf split layout, fixtures F1-F8, extract-eval metrics, chain run",
+      "updated_at": "2026-11-02T04:35:13Z"
     }
   ],
   "max_active": 1

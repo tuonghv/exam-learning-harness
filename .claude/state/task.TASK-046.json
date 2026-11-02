@@ -1,17 +1,28 @@
 {
   "task_id": "TASK-046",
   "title": "Measurement: gold-pdf split layout, guide fixture families F1-F8, extract-eval boundary/cross-page/false-merge/incomplete-to-solver rates (design section 3, REQ-0045)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0050",
   "acceptance_criteria": [
-    "REQ-0050 AC1-AC4"
+    "REQ-0050 AC1 split layout and pages",
+    "REQ-0050 AC2 fixture families F1-F8",
+    "REQ-0050 AC3 rates with Wilson intervals, expected counts independent",
+    "REQ-0050 AC4 honest 99.9% statement, no paid call"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
-    "reuse": [],
-    "risks": []
+    "status": "completed",
+    "path": "docs/design/phase-46-completeness-measurement.md",
+    "summary": "gold-pdf --layout split and pages, fixture families F1-F8, extract-eval boundary/cross_page/missing_detection/false_merge/incomplete_to_solver as k/n with Wilson; mock vision replies for the scanned variant",
+    "reuse": [
+      "gold_pdf.py",
+      "extract_eval.py",
+      "refine mock replies",
+      "ingest text route"
+    ],
+    "risks": [
+      "synthetic gold is an optimistic upper bound",
+      "new metrics must not change old outputs"
+    ]
   },
   "implementation": {
     "status": "pending",
@@ -36,11 +47,15 @@
   },
   "roles_required": true,
   "crosscheck_required": true,
-  "roles": {},
+  "roles": {
+    "designer": {
+      "waiver": "work/TASK-043/handoff/design.md section 3 (Nova) scoped in phase-46"
+    }
+  },
   "user_notes": [],
   "picked_at": "2026-11-02T04:35:12Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-02T04:35:13Z",
+  "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/gold_pdf.py",
     "src/exam_engine/pipeline/extract_eval.py",
@@ -59,5 +74,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder: tests first, gold_pdf split layout, fixtures F1-F8, extract-eval metrics, chain run"
 }
