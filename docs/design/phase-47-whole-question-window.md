@@ -102,3 +102,6 @@ Nova
 
 ## Plan modes
 Applies to the PDF/image vision refine route (`ingest-refine`); the text route and the solve plans are unchanged. A run with no cut boundary makes the same calls as today (no extra image); old refined.json load; mock and real runs behave the same.
+
+## Decision (coordinator, verifier D2)
+EST_CALL_USD stays 0.08 per call (conservative: measured single-page mean 0.036, max 0.045; window calls with up to 3 images are unmeasured, estimated 0.08-0.11). The dry-run therefore over-estimates; this supersedes the 0.04 figure above and the ~$0.88 for a 22-page --all-pages exam (about $1.76 at 0.08).
