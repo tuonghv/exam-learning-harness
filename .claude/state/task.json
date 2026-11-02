@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-056",
-  "state": "VERIFIED",
-  "next": "write report, DONE",
+  "state": "DONE",
+  "next": "",
   "title": "Solve-run metrics: metrics.py catalogue, run history, run-stats stats/compare/trend, metrics block in solve output and report (REQ-0060)",
-  "active": [
-    {
-      "task_id": "TASK-056",
-      "state": "VERIFIED",
-      "next": "write report, DONE",
-      "updated_at": "2026-11-02T10:30:07Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

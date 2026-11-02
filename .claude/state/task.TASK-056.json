@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-056",
   "title": "Solve-run metrics: metrics.py catalogue, run history, run-stats stats/compare/trend, metrics block in solve output and report (REQ-0060)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0060",
   "acceptance_criteria": [
     "AC1 catalogue with formulas",
@@ -50,11 +50,19 @@
       "docs/report/evidence/TASK-056/baseline-failures.txt"
     ],
     "command": "python3 -I -m unittest discover -s tests/unit; independent jq/awk recount of 3 real DGNL runs; compare/noise/exit-code checks; mutations",
-    "result": "AC1-AC5 verified on fixtures + real run3 result.json (no paid run); recount matches run-stats (English cost 0.3417 vs 0.3418 rounding); suite failures identical to baseline 083d0e4"
+    "result": "AC1-AC5 verified on fixtures + real run3 result.json (no paid run); recount matches run-stats (English cost 0.3417 vs 0.3418 rounding); suite failures identical to baseline 083d0e4",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "docs/report/evidence/TASK-056/recount-oracle.txt",
+        "docs/report/evidence/TASK-056/recount.tsv"
+      ],
+      "reason": "independent recount of real DGNL run metrics"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-56-run-metrics.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -62,7 +70,10 @@
     "designer": "work/TASK-056/handoff/design.md",
     "coder": "work/TASK-056/handoff/code.md",
     "tester": "work/TASK-056/handoff/test.md",
-    "verifier": "work/TASK-056/handoff/verify.md"
+    "verifier": "work/TASK-056/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "independent oracle done by tester: jq/awk recount of 3 real DGNL runs vs run-stats, TSV in docs/report/evidence/TASK-056/recount.tsv"
+    }
   },
   "user_notes": [
     {
@@ -72,7 +83,7 @@
     }
   ],
   "picked_at": "2026-11-02T10:07:38Z",
-  "updated_at": "2026-11-02T10:30:07Z",
+  "updated_at": "2026-11-02T10:30:26Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-056/"
@@ -83,5 +94,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "write report, DONE"
+  "next": ""
 }
