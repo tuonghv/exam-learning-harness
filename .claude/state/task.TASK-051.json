@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-051",
   "title": "OCR route quality: spaces, page furniture, doubt marker (REQ-0054)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0054",
   "acceptance_criteria": [
     "AC1 diagnosis and cheap fix for lost spaces",
@@ -36,12 +36,37 @@
     "result": "1121 run, only the known failures (identical names to baseline); tester recount of before/after matches (family C glued 171/168 vs 173/170: alignment method); 4 mutations killed; 25 md + 2 PDFs identical to 4865a2c (PDFs after whitespace normalisation)"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "low: unbounded difflib input at pdf.py:249; otherwise clean (verify.md)"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-051/evidence/ocr-gap-sweep.tsv",
+      "work/TASK-051/evidence/ocr-before-after.tsv",
+      "work/TASK-051/evidence/qa-recount.tsv",
+      "work/TASK-051/evidence/qa-recount-mismatch.tsv",
+      "work/TASK-051/evidence/suite-final.txt",
+      "work/TASK-051/evidence/head-failures.txt",
+      "work/TASK-051/evidence/baseline-failures.txt",
+      "work/TASK-051/evidence/test.md",
+      "work/TASK-051/evidence/verify.md",
+      "work/TASK-051/evidence/diagnosis.md"
+    ],
+    "command": "python3 -I -m unittest discover -s tests/unit; OCR gap sweep and before/after on synthetic scanned families; independent tester recount",
+    "result": "REQ-0054: AC2 (furniture) and AC3 (doubt marker feeds gate, AI fallback off) passed; AC1 (spaces) and AC4 (measurement) delivered with limits: real-error rate A 10/10->1/10, B 10/10->6/10, C stays 10/10; wrong questions reaching solver unmarked A 1/10, B 4/10, C 4/10; false alarms 0/9 (A), 0/4 (B); residual single-character misreads go to REQ-0065; vie+eng installed by the user; failures identical to baseline 083d0e4",
+    "published": [
+      "docs/report/evidence/TASK-051/ocr-gap-sweep.tsv",
+      "docs/report/evidence/TASK-051/ocr-before-after.tsv",
+      "docs/report/evidence/TASK-051/qa-recount.tsv",
+      "docs/report/evidence/TASK-051/qa-recount-mismatch.tsv",
+      "docs/report/evidence/TASK-051/suite-final.txt",
+      "docs/report/evidence/TASK-051/head-failures.txt",
+      "docs/report/evidence/TASK-051/baseline-failures.txt",
+      "docs/report/evidence/TASK-051/test.md",
+      "docs/report/evidence/TASK-051/verify.md",
+      "docs/report/evidence/TASK-051/diagnosis.md"
+    ]
   },
   "report": {
     "status": "pending",
@@ -53,7 +78,8 @@
   "roles": {
     "designer": "work/TASK-051/handoff/design.md",
     "coder": "work/TASK-051/handoff/code.md",
-    "tester": "work/TASK-051/handoff/test.md"
+    "tester": "work/TASK-051/handoff/test.md",
+    "verifier": "work/TASK-051/handoff/verify.md"
   },
   "user_notes": [
     {
@@ -63,7 +89,7 @@
     }
   ],
   "picked_at": "2026-11-02T14:33:48Z",
-  "updated_at": "2026-11-02T16:03:53Z",
+  "updated_at": "2026-11-02T16:04:03Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -73,5 +99,5 @@
     "notes": "",
     "next": "coder 51.7 sweep + 51.1 running (a4ca5fb7); then 51.2-51.6 brief, tester, verifier; vie.traineddata install is the user's (commands given); paid questions Q-1793619815 and Q-1793622303 wait for the user"
   },
-  "next": "verifier + publish evidence"
+  "next": "report, DONE"
 }

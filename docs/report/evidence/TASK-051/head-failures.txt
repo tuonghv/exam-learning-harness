@@ -1,0 +1,6 @@
+ERROR: examples/dgnl: pairing: unknown subject dir
+ERROR: test_d1_text_box_text_is_read_once_inline (test_multipage_adversarial.TestRealDocxTextBox)
+FAILED (failures=3, errors=1, skipped=34, expected failures=2)
+FAIL: test_12b_real_repo_passes (test_check_examples.Check)
+FAIL: test_check_examples_ok (test_scripts_exam.Exam)
+FAIL: test_cwd_independence_of_subcommands (test_req0012_acs.CwdAndReadme)

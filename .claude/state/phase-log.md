@@ -1603,3 +1603,9 @@ Action: Nemesis QA
 Result: no defects; gaps: 51.2 hint-started test missing, no native-only PDF tracked
 Decision: VERIFIED next
 Next: verifier
+
+## VERIFIED - TASK-051 - 2026-11-02T16:04:03Z
+Action: Argus verified; evidence published
+Result: AC2, AC3 passed; AC1, AC4 delivered with honest limits
+Decision: VERIFIED
+Next: report then DONE

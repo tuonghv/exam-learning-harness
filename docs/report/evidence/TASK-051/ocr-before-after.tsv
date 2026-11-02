@@ -1,0 +1,11 @@
+family	arm	n	real_error	wrong_unmarked	glued	cer	false_alarm(marked of correct)
+A	before	10	10/10=1.00 [0.72-1.00]	10/10=1.00 [0.72-1.00]	50	0.0	n/a (0 correct)
+A	after	10	1/10=0.10 [0.02-0.40]	1/10=0.10 [0.02-0.40]	0	0.0	0/9=0.00 [0.00-0.30]
+B	before	10	10/10=1.00 [0.72-1.00]	10/10=1.00 [0.72-1.00]	50	0.0067	n/a (0 correct)
+B	after	10	6/10=0.60 [0.31-0.83]	4/10=0.40 [0.17-0.69]	3	0.0067	0/4=0.00 [0.00-0.49]
+C	before	10	10/10=1.00 [0.72-1.00]	10/10=1.00 [0.72-1.00]	173	0.1294	n/a (0 correct)
+C	after	10	10/10=1.00 [0.72-1.00]	4/10=0.40 [0.17-0.69]	170	0.1294	n/a (0 correct)
+# limits: single-column synthetic, 10 questions/family (Wilson 95% intervals wide); "before" = bridge text + no marker;
+# family C: tesseract drops diacritics/chars (glued 170 unchanged, CER 0.13), after still 10/10 wrong but 6/10 marked;
+# B after: remaining 4 unmarked errors are single-char misreads (6->ó, hon, Gia) that form valid tokens, which no doubt signal sees;
+# false alarm = marked among correct: A 0/9, B 0/4 (n small; upper bounds 0.30 / 0.49).
