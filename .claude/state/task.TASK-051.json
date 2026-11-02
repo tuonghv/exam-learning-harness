@@ -1,15 +1,18 @@
 {
   "task_id": "TASK-051",
   "title": "OCR route quality: spaces, page furniture, doubt marker (REQ-0054)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0054",
   "acceptance_criteria": [
-    "REQ-0054 AC1-AC4"
+    "AC1 diagnosis and cheap fix for lost spaces",
+    "AC2 furniture removal on OCR lines incl leaked header slice",
+    "AC3 OCR doubt marker feeds completeness gate; AI fallback off",
+    "AC4 extract-eval before/after on scanned synthetic families, no paid call"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-51-ocr-route-quality.md",
+    "summary": "rebuild OCR spacing from rawdict char boxes (gap constant calibrated on >=2 families), furniture filter tolerant of OCR spacing, ocr_doubt reason (glued/chars/furniture/lang_missing) -> [Incomplete: missing_text ocr_doubt] + sidecar uncertain + engine decline, hard marker when vie is missing; CLI TSV confidence and AI fallback deferred",
     "reuse": [],
     "risks": []
   },
@@ -37,11 +40,13 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-051/handoff/design.md"
+  },
   "user_notes": [],
   "picked_at": "2026-11-02T14:33:48Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-02T14:53:38Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -49,5 +54,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "Titan: tests first 51.1-51.6; 51.7 calibration sweep on families A/B/C before OCR_GAP is fixed"
 }

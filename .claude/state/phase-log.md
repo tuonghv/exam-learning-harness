@@ -1585,3 +1585,9 @@ Action: Report written
 Result: TASK-048 verified, docs/report/phase-48-provenance-sidecar.md
 Decision: DONE
 Next: TASK-051 OCR route quality
+
+## DESIGN - TASK-051 - 2026-11-02T14:53:38Z
+Action: Inspector diagnosed, Nova designed OCR route quality
+Result: design COMPLETE; D-1..D-4
+Decision: bridge reassembly + doubt marker; vie.traineddata is a user input
+Next: coder tests-first
