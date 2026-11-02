@@ -55,6 +55,22 @@ def sections(text, level):
     return out
 
 
+_PAGES_RE = re.compile(r"\A\s*Source pages:[ \t]*([\d,\s-]+?)[ \t]*(?:\n|\Z)")
+
+
+def _source_pages(text):
+    """-> (pages, text without the leading `Source pages: 1-2` line); pages [] when absent."""
+    m = _PAGES_RE.match(text)
+    if not m:
+        return [], text
+    pages = []
+    for part in m.group(1).split(","):
+        a, _, b = part.strip().partition("-")
+        if a.strip().isdigit():
+            pages += range(int(a), int(b) + 1) if b.strip().isdigit() else [int(a)]
+    return sorted(set(pages)), text[m.end():].strip()
+
+
 def parse_exam(path):
     text = read_text(path)
     secs = sections(text, 2)
@@ -80,6 +96,7 @@ def parse_exam(path):
                 else:
                     lines.append(line)
             text = "\n".join(lines).strip()
+            pages, text = _source_pages(text)
             lab = dict(sections(text, 3)) if "###" in text else {}
             if not set(lab) & _LEVELS:
                 lab = {}  # unlabelled (today's form): the whole body is the stem
@@ -90,7 +107,7 @@ def parse_exam(path):
                 text = "\n\n".join(p for p in (ins, pas, stem) if p)
             res["questions"].append({"id": int(m.group(1)), "text": text, "options": opts,
                                      "section": cur_section, "instruction": ins,
-                                     "passage": pas, "stem": stem})
+                                     "passage": pas, "stem": stem, **({"pages": pages} if pages else {})})
         elif title == "Instructions":
             res["instructions"] = body
         elif title == "Passage":
@@ -207,3 +224,61 @@ def exam_warnings(exam):
         elif want and key != want:
             warns.append("section_subject_mismatch: %s -> %s vs Subject %s" % (sec, key, subj))
     return warns
+
+
+_REF_RE = re.compile(r"(?i)\b(?:câu|question)\s+(\d+)|\bý\s*\([a-d]\)|kết quả (?:câu|ý) trên"
+                     r"|previous (?:question|answer)")
+_OFFSET_RE = re.compile(r"printed exam number of question N is N \+ (\d+)")
+_TABLE_RE = re.compile(r"(?m)^(?:\s*\|.*\||\[Figure/table:.*)$")
+
+
+def _passage(q):
+    """Passage text of a question: the labelled level, else its table / figure lines."""
+    return q.get("passage") or "\n".join(m.group(0).strip() for m in _TABLE_RE.finditer(q["text"]))
+
+
+def deps(exam):
+    """{id: [ids]} each question's stem refers to (câu N / question N mapped printed->id by the
+    offset line; ý (a), `kết quả câu trên`, `previous question` -> the question before)."""
+    off = _OFFSET_RE.search(exam.get("instructions") or "")
+    off = int(off.group(1)) if off else 0
+    out, prev = {}, None
+    for q in exam["questions"]:
+        refs = []
+        for m in _REF_RE.finditer(q.get("stem") or q["text"]):
+            if m.group(1):
+                refs.append(int(m.group(1)) - off)
+            elif prev is not None:
+                refs.append(prev)
+        refs = sorted({r for r in refs if r != q["id"]})
+        if refs:
+            out[q["id"]] = refs
+        prev = q["id"]
+    return out
+
+
+def groups(exam):
+    """Pure, derived: [{"key","kind","ids","instruction","passage"}] in exam order.
+
+    Consecutive questions with equal (section, instruction, passage), at least one non-empty, form a
+    group; any other question is its own. kind: dependent (a stem refers to another question; the
+    referenced ids join the group) > passage (non-empty passage) > independent."""
+    dep = deps(exam)
+    known = {q["id"] for q in exam["questions"]}
+    runs, last = [], None
+    for q in exam["questions"]:
+        sig = (q.get("section") or "", q.get("instruction") or "", _passage(q))
+        if last == sig and (sig[1] or sig[2]):
+            runs[-1].append(q)
+        else:
+            runs.append([q])
+        last = sig
+    out = []
+    for run in runs:
+        ids = [q["id"] for q in run]
+        refs = sorted({r for i in ids for r in dep.get(i, ()) if r in known} - set(ids))
+        pas = _passage(run[0])
+        kind = "dependent" if any(i in dep for i in ids) else "passage" if pas else "independent"
+        out.append({"key": "g%d" % ids[0], "kind": kind, "ids": sorted(ids + refs),
+                    "instruction": run[0].get("instruction") or "", "passage": pas})
+    return out

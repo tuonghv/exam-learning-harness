@@ -325,6 +325,13 @@
           "unresolved": {
             "type": "boolean"
           },
+          "pages": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
           "error": {
             "type": [
               "object",

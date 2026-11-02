@@ -79,6 +79,7 @@ def without_questions(text, ids):
 def build_result(exam, exam_path, recs, cfg, rn, stopped):
     miss = dict(zip((q["id"] for q in exam["questions"]), refcheck.missing_by_question(
         [q["text"] + "\n" + exam["passage"] for q in exam["questions"]])))
+    pgs = {q["id"]: q["pages"] for q in exam["questions"] if q.get("pages")}
     qs = []
     for i in sorted(recs):
         r = recs[i]
@@ -97,7 +98,7 @@ def build_result(exam, exam_path, recs, cfg, rn, stopped):
             "checks": r["checks"], "verification_status": r["status"],
             "status_reason": r["reason"], "qa_findings": r["findings"], "score": sc,
             "attempts": max(1, r["attempts"]), "unresolved": r["status"] != "PASS" and r["reason"] != "no_independent_check",
-            "error": r["error"]})
+            "error": r["error"], **({"pages": pgs[i]} if pgs.get(i) else {})})
     pts = [q["score"]["points"] for q in qs if q["score"]["points"] is not None]
     mx = [q["score"]["max"] for q in qs if q["score"]["max"] is not None]
     f = exam["fields"]
