@@ -1477,3 +1477,9 @@ Action: Nova designed plan/report split
 Result: design COMPLETE; D-1..D-4
 Decision: capture first (fixes lost paid replies)
 Next: coder 58.1+58.2
+
+## IMPLEMENTING - TASK-058 - 2026-11-02T11:20:28Z
+Action: Titan implemented 58.1-58.8
+Result: unit failures = baseline
+Decision: UNIT_TESTED next
+Next: record tests

@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-058",
   "title": "Plan/report split: plans/<exam>/<run> with raw AI calls, reports rebuilt from plans with no AI, plan-import, history with plans (REQ-0062)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0062",
   "acceptance_criteria": [
     "AC1 layout documented",
@@ -18,8 +18,15 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/planrun.py",
+      "src/exam_engine/pipeline/report_build.py",
+      "src/exam_engine/engine.py",
+      "src/exam_engine/cli.py",
+      "docs/guide/toolkit-reference.md"
+    ],
+    "summary": "planrun.py raw call capture + plan run; report_build.py builder (no AI, deterministic); report PLAN_RUN; plan-import; run-stats on plan runs; default out plans/"
   },
   "unit_test": {
     "status": "pending",
@@ -42,11 +49,12 @@
   "crosscheck_required": true,
   "evidence_required": true,
   "roles": {
-    "designer": "work/TASK-058/handoff/design.md"
+    "designer": "work/TASK-058/handoff/design.md",
+    "coder": "work/TASK-058/handoff/code.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-02T11:02:48Z",
-  "updated_at": "2026-11-02T11:02:56Z",
+  "updated_at": "2026-11-02T11:20:28Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-058/"
@@ -58,5 +66,5 @@
     "notes": "",
     "next": "coder 58.7 running; then tester, advance, verifier, publish evidence, report, DONE"
   },
-  "next": "Titan: 58.1+58.2 raw call capture and plan run, tests first"
+  "next": "unit-test gate"
 }
