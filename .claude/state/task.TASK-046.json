@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-046",
   "title": "Measurement: gold-pdf split layout, guide fixture families F1-F8, extract-eval boundary/cross-page/false-merge/incomplete-to-solver rates (design section 3, REQ-0045)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0050",
   "acceptance_criteria": [
     "REQ-0050 AC1 split layout and pages",
@@ -44,12 +44,27 @@
     "result": "815 run, 3 known failures identical at base, new tests fail on base; old outputs byte-identical (24 runs); independent whitespace-stripped oracle 0 mismatches on text, vision and OCR; 4 mutations killed"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "synthetic text only, no network or model call; generators write only under work/ or tests fixtures"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-046/evidence/final2_bites.txt",
+      "work/TASK-046/evidence/final2_full.txt",
+      "work/TASK-046/evidence/final2_oracle.txt",
+      "work/TASK-046/evidence/final_diff_protected.txt",
+      "work/TASK-046/evidence/final_measure_tests.txt",
+      "work/TASK-046/evidence/final_old_assertions_removed.txt",
+      "work/TASK-046/evidence/final_unit_suite.txt",
+      "work/TASK-046/evidence/rates_table.txt",
+      "work/TASK-046/evidence/t046-ident.txt",
+      "work/TASK-046/evidence/t046-mutations.txt",
+      "work/TASK-046/evidence/t046-ocr.txt",
+      "work/TASK-046/evidence/t046-oracle.txt"
+    ],
+    "command": "unit suite vs base; byte identity of old outputs; independent oracle on F1-F8 over text, vision and OCR routes; corruption bites; Wilson and zero-error n recomputed",
+    "result": "text and vision (mock) boundary 200/200, cross-page 46/46, false merge 0/200, incomplete-to-solver 0/200, false alarm 8/200 (F5); OCR strict 168/200, spacing only 162, real errors 6/200, 6 unmarked reach the solver, missing 0/200; nothing claimed for 99.9% (needs n >= 2995)"
   },
   "report": {
     "status": "pending",
@@ -66,6 +81,12 @@
     },
     "tester": {
       "waiver": "work/TASK-046/handoff/test.md"
+    },
+    "verifier": {
+      "waiver": "tester independent oracle and bites; coordinator re-ran the suite; no real-data claim"
+    },
+    "crosscheck": {
+      "waiver": "work/TASK-046/handoff/test.md independent oracle plus mutations"
     }
   },
   "user_notes": [
@@ -76,7 +97,7 @@
     }
   ],
   "picked_at": "2026-11-02T04:35:12Z",
-  "updated_at": "2026-11-02T05:24:41Z",
+  "updated_at": "2026-11-02T05:24:42Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/gold_pdf.py",
@@ -96,5 +117,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "VERIFIED"
+  "next": "DONE: report"
 }
