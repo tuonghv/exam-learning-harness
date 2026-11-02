@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-061",
   "title": "Image scope for cut/declined and doubtful questions, optional adjudication (REQ-0067; phase-60 items 60.4-60.6)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0067",
   "acceptance_criteria": [
     "AC1 --image-scope declined",
@@ -29,9 +29,9 @@
     "summary": "--image-scope flagged|declined|doubt, image_agrees finding, optional --adjudicate, metrics rows; default unchanged"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "1159 run, only the known baseline failures; 10 of 10 scope mutants killed (2 survivors led to tests 12-15); default-scope golden identical on 134 cases (47 inputs); mock CLI --image-scope declined answers the cut question from the image"
   },
   "security": {
     "status": "pending",
@@ -50,11 +50,12 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-061/handoff/design.md",
-    "coder": "work/TASK-061/handoff/code.md"
+    "coder": "work/TASK-061/handoff/code.md",
+    "tester": "work/TASK-061/handoff/test.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-02T23:27:31Z",
-  "updated_at": "2026-11-02T23:35:41Z",
+  "updated_at": "2026-11-02T23:48:12Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -63,5 +64,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tester QA"
+  "next": "paid P1-P3 by coordinator, then verifier"
 }

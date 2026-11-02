@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-061",
-  "state": "IMPLEMENTING",
-  "next": "tester QA",
+  "state": "UNIT_TESTED",
+  "next": "paid P1-P3 by coordinator, then verifier",
   "title": "Image scope for cut/declined and doubtful questions, optional adjudication (REQ-0067; phase-60 items 60.4-60.6)",
   "active": [
     {
       "task_id": "TASK-061",
-      "state": "IMPLEMENTING",
-      "next": "tester QA",
-      "updated_at": "2026-11-02T23:35:41Z"
+      "state": "UNIT_TESTED",
+      "next": "paid P1-P3 by coordinator, then verifier",
+      "updated_at": "2026-11-02T23:48:12Z"
     }
   ],
   "max_active": 1
