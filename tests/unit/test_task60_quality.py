@@ -165,3 +165,81 @@ class TestNeedsReviewWhy(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestOptionForValueQA(unittest.TestCase):
+    """QA additions: guard against substring, sign and wrong-letter mutations."""
+
+    def test_no_substring_match(self):
+        self.assertEqual(verifier.option_for_value("5", {"A": "15", "B": "5", "C": "25"}), "B")
+        self.assertIsNone(verifier.option_for_value("5", {"A": "15", "B": "25"}))
+        self.assertIsNone(verifier.option_for_value("2.5", {"A": "12.5", "B": "2.55"}))
+
+    def test_each_letter_maps_to_its_own_option(self):
+        o = {"A": "10", "B": "20", "C": "30", "D": "40"}
+        self.assertEqual([verifier.option_for_value(v, o) for v in ("10", "20", "30", "40")],
+                         ["A", "B", "C", "D"])
+
+    def test_sign_is_kept(self):
+        self.assertEqual(verifier.option_for_value("-3", {"A": "3", "B": "-3"}), "B")
+        self.assertEqual(verifier.option_for_value("−3", {"A": "3", "B": "−3"}), "B")
+        self.assertIsNone(verifier.option_for_value("-3", {"A": "3", "B": "4"}))
+
+    def test_empty_options_or_answer(self):
+        self.assertIsNone(verifier.option_for_value("5", {}))
+        self.assertIsNone(verifier.option_for_value("5", None))
+        self.assertIsNone(verifier.option_for_value("", OPTS))
+
+
+class TestRecheckKeepsFailed(unittest.TestCase):
+    def test_unmatched_and_ambiguous_stay_failed(self):
+        self._run({"answer_status": "answered"})
+
+    def test_saved_result_without_answer_status_stays_failed(self):
+        """Saved result.json questions carry no answer_status; det_checks treats that as declined
+        (no checks), so recheck must set it or every failed question reads as cleared."""
+        self._run({})
+
+    def _run(self, extra):
+        tmp = tempfile.mkdtemp(prefix="t60q_")
+        self.addCleanup(shutil.rmtree, tmp, True)
+        ep = os.path.join(tmp, "exam.md")
+        with open(ep, "w", encoding="utf-8") as f:
+            f.write("# Exam Input\n\nSubject: Science\nLevel: Grade 12\nExam type: Test\n"
+                    "Task: Multiple Choice\nMode: Solve\n\n## Instructions\n\nChoose.\n\n"
+                    "## Question 1\n\nRate?\n\nA. 180\nB. 230\nC. 250\nD. 300\n\n"
+                    "## Question 2\n\nSize?\n\nA. 5 m\nB. 5 km\nC. 7\nD. 9\n")
+        ff = [{"kind": "format", "detail": "single letter A-D", "result": "fail", "independent": False}]
+        res = {"exam": {"subject": "Science"}, "run": {"calls": 1}, "questions": [
+            {"id": "1", "answer": "999", "status_reason": "check_failed: format",
+             "verification_status": "FAIL", "checks": ff, **extra},
+            {"id": "2", "answer": "5", "status_reason": "check_failed: format",
+             "verification_status": "FAIL", "checks": ff, **extra}]}
+        d = os.path.join(tmp, "run")
+        os.makedirs(d)
+        with open(os.path.join(d, "result.json"), "w", encoding="utf-8") as f:
+            json.dump(res, f)
+        out, err = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+            code = cli.main(["run-stats", "recheck", d, "--exam", ep, "--json",
+                             "--history", os.path.join(tmp, "h.jsonl")])
+        self.assertEqual(code, 0, err.getvalue())
+        got = json.loads(out.getvalue())
+        self.assertEqual((got["cleared"], got["still_failed"]), (0, 2))
+        self.assertTrue(all(r["mapped"] == "-" and r["now"].startswith("fail") for r in got["rows"]))
+
+
+class TestRefinedWhy(unittest.TestCase):
+    def test_load_refined_why_feeds_metrics(self):
+        with tempfile.TemporaryDirectory() as d:
+            p = os.path.join(d, "r.json")
+            with open(p, "w", encoding="utf-8") as f:
+                json.dump({"refined": {"questions": [
+                    {"id": "1", "needs_review": True, "needs_review_why": ["gap"]},
+                    {"id": "2", "needs_review": True},
+                    {"id": "3", "needs_review": False}]}}, f)
+            why = metrics.load_refined_why(p)
+        self.assertEqual(why, {"1": ["gap"], "2": []})
+        res = {"questions": [], "run": {}}
+        self.assertEqual(metrics.compute(res, needs_review_why=why)["counts"]["needs_review_by_why"],
+                         {"gap": 1, "unspecified": 1})

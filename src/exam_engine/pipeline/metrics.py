@@ -319,6 +319,14 @@ def block(m):
     ]
 
 
+def load_refined_why(path):
+    """{id: [codes]} of the needs_review questions in an ingest-refine output (60.3/60.7)."""
+    with open(path, encoding="utf-8") as f:
+        data = json.load(f)
+    qs = (data.get("refined") or data).get("questions") or []
+    return {str(q.get("id")): list(q.get("needs_review_why") or []) for q in qs if q.get("needs_review")}
+
+
 def load_qa(paths, offset=0):
     """{id: {"answer","flawed"}} from review QA tables; printed n -> id = n - offset."""
     rows, _bad = review.parse_qa(paths)

@@ -1059,6 +1059,7 @@ def review_pack_main(argv):
     ap.add_argument("--result", required=True)
     ap.add_argument("--exam", required=True)
     ap.add_argument("--refined")
+    ap.add_argument("--refined", metavar="FILE", help="ingest-refine output: fills needs_review_by_why")
     ap.add_argument("--offset", type=int, default=0)
     ap.add_argument("--out", default="review")
     ap.add_argument("--force-reset", action="store_true")
@@ -1191,7 +1192,8 @@ def _rs_compute(ref, a):
     if a.review_pack:
         qa = metrics.load_qa(a.review_pack, a.offset)
     sha = metrics.file_sha256(a.exam) if a.exam else (line or {}).get("exam_sha256")
-    return metrics.compute(result, log, exam=exam, key=keymap, qa=qa), sha, line, qa
+    why = metrics.load_refined_why(a.refined) if getattr(a, "refined", None) else None
+    return metrics.compute(result, log, exam=exam, key=keymap, qa=qa, needs_review_why=why), sha, line, qa
 
 
 def _rs_recheck(a):
@@ -1211,7 +1213,7 @@ def _rs_recheck(a):
         eq = qs.get(str(sq.get("id")))
         if not reason.startswith("check_failed") or eq is None:
             continue
-        ans = dict(sq)
+        ans = dict(sq, answer_status="answered")  # saved results do not keep it; declined() would skip all
         mapped = "-"
         if eq.get("options") and not re.match(r"^[A-D]$", str(ans.get("answer")).strip()):
             mapped = verifier.option_for_value(ans.get("answer"), eq["options"]) or "-"
