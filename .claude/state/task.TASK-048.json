@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-048",
   "title": "Provenance sidecar assembly.json + prompt lines (never transcribe headers; decline incomplete/merged) (design 43.6-43.7, REQ-0045)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0052",
   "acceptance_criteria": [
     "AC1 sidecar assembly.json per exam",
@@ -17,8 +17,18 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/ingest/api.py",
+      "src/exam_engine/ingest/inspect.py",
+      "src/exam_engine/cli.py",
+      "src/exam_engine/pipeline/planrun.py",
+      "prompts/dev/ingest/refine.md",
+      "prompts/dev/system.md",
+      "prompts/dev/lang/vi/system.md",
+      "docs/guide/toolkit-reference.md"
+    ],
+    "summary": "assembly sidecar <exam-out>.assembly.json (printed number, source_pages, assembly/validation status, reasons), ingest-inspect Assembly table, copy into plan run input/, dev-channel prompt lines (refine.md headers rule; system.md decline incomplete/merged with missing_text:)"
   },
   "unit_test": {
     "status": "pending",
@@ -41,11 +51,12 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-048/handoff/design.md"
+    "designer": "work/TASK-048/handoff/design.md",
+    "coder": "work/TASK-048/handoff/code.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-02T14:14:23Z",
-  "updated_at": "2026-11-02T14:17:42Z",
+  "updated_at": "2026-11-02T14:30:39Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -54,5 +65,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Titan: tests first, 60.1-60.4 then prompts/plan copy"
+  "next": "unit-test gate"
 }

@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-048",
-  "state": "DESIGN",
-  "next": "Titan: tests first, 60.1-60.4 then prompts/plan copy",
+  "state": "IMPLEMENTING",
+  "next": "unit-test gate",
   "title": "Provenance sidecar assembly.json + prompt lines (never transcribe headers; decline incomplete/merged) (design 43.6-43.7, REQ-0045)",
   "active": [
     {
       "task_id": "TASK-048",
-      "state": "DESIGN",
-      "next": "Titan: tests first, 60.1-60.4 then prompts/plan copy",
-      "updated_at": "2026-11-02T14:17:42Z"
+      "state": "IMPLEMENTING",
+      "next": "unit-test gate",
+      "updated_at": "2026-11-02T14:30:39Z"
     }
   ],
   "max_active": 1
