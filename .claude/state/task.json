@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-056",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "Titan: tests first (fixtures) then metrics.py, history, run-stats, block",
   "title": "Solve-run metrics: metrics.py catalogue, run history, run-stats stats/compare/trend, metrics block in solve output and report (REQ-0060)",
   "active": [
     {
       "task_id": "TASK-056",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "Titan: tests first (fixtures) then metrics.py, history, run-stats, block",
+      "updated_at": "2026-11-02T10:07:43Z"
     }
   ],
   "max_active": 1

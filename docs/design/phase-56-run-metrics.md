@@ -30,6 +30,9 @@ none found for metrics/history.
 - Real data: work/dgnl-real/{run,run2,run3}-{Math,Science,English,Vietnamese}, run1. run3-Math: 30/30 UNCERTAIN
   `no_independent_check`, 4 calls, $0.31147 = sum of run.log costs. So pass-rate is flat 0 on DGNL: status metrics
   are health only; progress must be read from answer agreement (key or QA line).
+## Plan modes
+Solve (real and mock) gains a metrics block; mock/test runs are not appended to history. Ingest, refine, cross-solve and review-pack are unchanged. Old result.json files are readable via backfill.
+
 ## Design
 ### 56.1 Metric catalogue (owner: new `src/exam_engine/pipeline/metrics.py`, `compute(result, log_lines=None, exam=None, key=None, qa=None)`)
 Denominator N = len(questions) unless stated. Kind: A accuracy, P proxy (not accuracy), H health, C cost.

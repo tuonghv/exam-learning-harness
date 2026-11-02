@@ -1411,3 +1411,9 @@ Action: Report written
 Result: TASK-055 verified, docs/report/phase-55-group-aware-solving.md
 Decision: DONE
 Next: REQ-0059 follow-up queued
+
+## DESIGN - TASK-056 - 2026-11-02T10:07:43Z
+Action: Nova designed run metrics
+Result: design COMPLETE; gaps: no token counts, retry flips unrecoverable, old runs lack commit/ts
+Decision: history git-ignored; proxy not accuracy
+Next: coder tests-first
