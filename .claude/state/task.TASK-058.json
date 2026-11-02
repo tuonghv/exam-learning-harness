@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-058",
   "title": "Plan/report split: plans/<exam>/<run> with raw AI calls, reports rebuilt from plans with no AI, plan-import, history with plans (REQ-0062)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0062",
   "acceptance_criteria": [
     "AC1 layout documented",
@@ -29,9 +29,9 @@
     "summary": "planrun.py raw call capture + plan run; report_build.py builder (no AI, deterministic); report PLAN_RUN; plan-import; run-stats on plan runs; default out plans/"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "985 run, only the known failures (identical to baseline 083d0e4); crash-safe capture, same-second ids, determinism, AI-forbidden, solve/report parity, masking, import recount pass; 4 mutations killed"
   },
   "security": {
     "status": "pending",
@@ -50,11 +50,12 @@
   "evidence_required": true,
   "roles": {
     "designer": "work/TASK-058/handoff/design.md",
-    "coder": "work/TASK-058/handoff/code.md"
+    "coder": "work/TASK-058/handoff/code.md",
+    "tester": "work/TASK-058/handoff/test.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-02T11:02:48Z",
-  "updated_at": "2026-11-02T11:20:28Z",
+  "updated_at": "2026-11-02T11:20:29Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-058/"
@@ -66,5 +67,5 @@
     "notes": "",
     "next": "coder 58.7 running; then tester, advance, verifier, publish evidence, report, DONE"
   },
-  "next": "unit-test gate"
+  "next": "verifier + publish evidence"
 }

@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-058",
-  "state": "IMPLEMENTING",
-  "next": "unit-test gate",
+  "state": "UNIT_TESTED",
+  "next": "verifier + publish evidence",
   "title": "Plan/report split: plans/<exam>/<run> with raw AI calls, reports rebuilt from plans with no AI, plan-import, history with plans (REQ-0062)",
   "active": [
     {
       "task_id": "TASK-058",
-      "state": "IMPLEMENTING",
-      "next": "unit-test gate",
-      "updated_at": "2026-11-02T11:20:28Z"
+      "state": "UNIT_TESTED",
+      "next": "verifier + publish evidence",
+      "updated_at": "2026-11-02T11:20:29Z"
     }
   ],
   "max_active": 1
