@@ -404,3 +404,112 @@ class TestCacheTrace(unittest.TestCase):
             self.assertIn("windows planned %d (native)" % wn, head)
             self.assertIn("calls <= %d" % ((2 + wn) * refine.MAX_ATTEMPTS), head)
             self.assertIn("est cost $%.2f" % ((2 + wn) * refine.EST_CALL_USD), head)
+
+
+class TestQaGaps(unittest.TestCase):
+    """TASK-047 QA: cap mid-recovery, bounded loops, cache key/corruption (design 2, 3, 11, 13, D2)."""
+
+    def test_cap_hit_mid_backward_recovery(self):
+        # page 2 alone -> orphan -> re-run with page 1; the cap is checked before the window call
+        llm = Keyed({"2": rep(qq(2, "next"), continues={"text": "tail of earlier question"}),
+                     "1": rep(qq(1, STEM1, {}, cut=True)), "1-2": rep(qq(1, WHOLE1), qq(2, "next"))},
+                    cost=0.3)
+        with self.assertRaises(refine.RefineError) as cm:
+            run(llm, n=3, spec="2", max_cost=0.5)
+        self.assertEqual(cm.exception.code, "cost_cap")
+        self.assertEqual(llm.calls, ["2", "1"])
+
+    def test_cap_checked_before_every_call_in_run(self):
+        # many cut pages, every call 0.3: never more than ceil(cap/cost) calls
+        rs = {}
+        for p in (1, 3, 5, 7):
+            rs[str(p)] = rep(qq(p, STEM1, {}, cut=True))
+            rs["%d-%d" % (p, p + 1)] = rep(qq(p, WHOLE1))
+        llm = Keyed(rs, cost=0.3)
+        with self.assertRaises(refine.RefineError) as cm:
+            run(llm, n=9, spec="1,3,5,7", max_cost=1.0)
+        self.assertEqual(cm.exception.code, "cost_cap")
+        self.assertEqual(len(llm.calls), 4)  # 0.3 * 4 = 1.2 >= 1.0 stops the fifth
+
+    def test_cut_cycle_terminates(self):
+        # every single page and every window still ends cut: bounded by K and the caps
+        rs = {}
+        for p in range(1, 9):
+            rs[str(p)] = rep(qq(p, STEM1, {}, cut=True))
+            for e in (p + 1, p + 2):
+                rs["%d-%d" % (p, e)] = rep(qq(p, STEM1, {}, cut=True))
+        llm = Keyed(rs)
+        out = run(llm, n=8, spec="1-8")
+        self.assertLessEqual(len(llm.calls), 8 + 7 * 2)
+        self.assertLessEqual(max(len(w["pages"]) for w in out["refined"]["windows"]), refine.WINDOW_MAX)
+
+    def test_chain_cap_two_extra_pages(self):
+        rs = {str(p): rep(qq(p, STEM1, {}, cut=True)) for p in range(1, 7)}
+        rs["1-2"] = rep(qq(1, STEM1, {}, cut=True))
+        rs["1-2-3"] = None
+        rs["1-3"] = rep(qq(1, STEM1, {}, cut=True))
+        llm = Keyed(rs)
+        out = run(llm, n=6, spec="1")
+        self.assertEqual(out["refined"]["recovered_pages"], [2, 3])
+        self.assertNotIn("4", llm.calls)
+        self.assertNotIn("1-4", llm.calls)
+
+    def test_cache_key_has_model_and_corrupt_is_miss(self):
+        import tempfile
+        from exam_engine.ingest import replycache
+        cache = replycache.ReplyCache(None)
+        run(Keyed({"1": rep(qq(1, "Plain question text"))}), n=1, cache=cache, model="m1")
+        b = Keyed({"1": rep(qq(1, "Plain question text"))})
+        run(b, n=1, cache=cache, model="m2")
+        self.assertEqual(b.calls, ["1"])  # other model = miss
+        c = Keyed({})
+        run(c, n=1, cache=cache, model="m1")
+        self.assertEqual(c.calls, [])
+        d = tempfile.mkdtemp()
+        run(Keyed({"1": rep(qq(1, "Plain question text"))}), n=1, cache=replycache.ReplyCache(d))
+        for f in os.listdir(d):
+            with open(os.path.join(d, f), "w") as fh:
+                fh.write("{not json")
+        e = Keyed({"1": rep(qq(1, "Plain question text"))})
+        run(e, n=1, cache=replycache.ReplyCache(d))
+        self.assertEqual(e.calls, ["1"])
+
+    def test_cache_hit_row_has_page_pages_sha(self):
+        from exam_engine.ingest import replycache
+        cache = replycache.ReplyCache(None)
+        run(Keyed(TestCacheTrace.CUT), n=2, cache=cache)
+        tr = []
+        run(Keyed({}), n=2, cache=cache, trace=tr)
+        for r in tr:
+            self.assertTrue(r["cached"] and r["png_sha256"] and r["page"] and r["pages"])
+
+    def test_cap_equal_to_spend_stops(self):
+        llm = Keyed({"1": rep(qq(1, STEM1, {}, cut=True)), "1-2": rep(qq(1, WHOLE1))}, cost=0.5)
+        with self.assertRaises(refine.RefineError) as cm:
+            run(llm, n=2, max_cost=0.5)
+        self.assertEqual(cm.exception.code, "cost_cap")
+        self.assertEqual(llm.calls, ["1"])
+
+    def test_chain_cap_alone_with_wider_window(self):
+        old = refine.WINDOW_MAX
+        refine.WINDOW_MAX = 6
+        try:
+            rs = {str(p): rep(qq(p, STEM1, {}, cut=True)) for p in range(1, 7)}
+            for e in range(2, 7):
+                rs["1-%d" % e] = rep(qq(1, STEM1, {}, cut=True))
+            llm = Keyed(rs)
+            out = run(llm, n=6, spec="1")
+        finally:
+            refine.WINDOW_MAX = old
+        self.assertEqual(out["refined"]["recovered_pages"], [2, 3])
+        self.assertNotIn("1-4", llm.calls)
+
+    def test_backward_run_cap(self):
+        # orphan continuations on pages 2,4,6,8,10 selected alone: at most RUN_EXTRA pages pulled in
+        rs = {}
+        for p in (2, 4, 6, 8, 10):
+            rs[str(p)] = rep(qq(p, "next"), continues={"text": "tail of earlier question"})
+            rs[str(p - 1)] = rep(qq(p - 1, STEM1, {}, cut=True))
+            rs["%d-%d" % (p - 1, p)] = rep(qq(p - 1, WHOLE1), qq(p, "next"))
+        out = run(Keyed(rs), n=11, spec="2,4,6,8,10")
+        self.assertLessEqual(len(out["refined"].get("recovered_pages", [])), refine.RUN_EXTRA)
