@@ -82,12 +82,9 @@
     "src/exam_engine/adapters/claude.py",
     "src/exam_engine/core/refcheck.py",
     "src/exam_engine/pipeline/gold_pdf.py",
-    "src/exam_engine/cli.py",
     "prompts/dev/ingest/refine.md",
     "tests/unit/test_window*.py",
     "tests/unit/test_ingest_*.py",
-    "tests/unit/fixtures/**",
-    "docs/guide/ingest-usage.md",
     ".claude/skills/exam-extraction/SKILL.md"
   ],
   "depends_on": [],
@@ -97,7 +94,7 @@
     "notes": "",
     "next": "resume: coder tests-first per phase-47 (tests 1-15), real slice pages 7-8 and 14-15 (dry-run first, ask if over 0.3 USD)"
   },
-  "next": "HELD after design: TASK-052 first (user priority), then coder tests-first per design list",
+  "next": "HELD after design: TASK-052 first (user priority), then coder tests-first per design list | on resume re-add scope: src/exam_engine/cli.py, docs/guide/ingest-usage.md, tests/unit/fixtures/** (removed while TASK-052 runs)",
   "status": "held",
   "held_at": "2026-11-02T05:30:01Z",
   "held_reason": "user priority: TASK-052 human review path first"
