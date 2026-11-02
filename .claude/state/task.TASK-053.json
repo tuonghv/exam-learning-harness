@@ -82,7 +82,8 @@
   "inputs": {},
   "checkpoint": {
     "done": [],
-    "notes": ""
+    "notes": "",
+    "next": "RESUME after account switch (no agents were pending except Titan a5b72b2d D5): (1) git status/log; if Titan's D5 edit is uncommitted review it, run unit tests test_review*.py then full suite in backgr"
   },
   "next": "coder: tests first, --qa import, INDEX columns; main: merge script, skill solve-qa, DGNL rebuild"
 }
