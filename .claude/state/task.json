@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-046",
-  "state": "IMPLEMENTING",
-  "next": "UNIT_TESTED",
+  "state": "UNIT_TESTED",
+  "next": "VERIFIED",
   "title": "Measurement: gold-pdf split layout, guide fixture families F1-F8, extract-eval boundary/cross-page/false-merge/incomplete-to-solver rates (design section 3, REQ-0045)",
   "active": [
     {
       "task_id": "TASK-046",
-      "state": "IMPLEMENTING",
-      "next": "UNIT_TESTED",
-      "updated_at": "2026-11-02T05:24:40Z"
+      "state": "UNIT_TESTED",
+      "next": "VERIFIED",
+      "updated_at": "2026-11-02T05:24:41Z"
     }
   ],
   "max_active": 1

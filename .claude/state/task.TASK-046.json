@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-046",
   "title": "Measurement: gold-pdf split layout, guide fixture families F1-F8, extract-eval boundary/cross-page/false-merge/incomplete-to-solver rates (design section 3, REQ-0045)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0050",
   "acceptance_criteria": [
     "REQ-0050 AC1 split layout and pages",
@@ -39,9 +39,9 @@
     "summary": "gold-pdf --layout split and per-question pages; families F1-F8 generator; extract-eval additive rates (boundary, cross_page, missing_detection, false_merge, incomplete_to_solver strict/content, content_errors, missing_to_solver, false_alarm) with Wilson; routes text, vision(mock), OCR"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "815 run, 3 known failures identical at base, new tests fail on base; old outputs byte-identical (24 runs); independent whitespace-stripped oracle 0 mismatches on text, vision and OCR; 4 mutations killed"
   },
   "security": {
     "status": "pending",
@@ -63,6 +63,9 @@
     },
     "coder": {
       "waiver": "work/TASK-046/handoff/code.md"
+    },
+    "tester": {
+      "waiver": "work/TASK-046/handoff/test.md"
     }
   },
   "user_notes": [
@@ -73,7 +76,7 @@
     }
   ],
   "picked_at": "2026-11-02T04:35:12Z",
-  "updated_at": "2026-11-02T05:24:40Z",
+  "updated_at": "2026-11-02T05:24:41Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/gold_pdf.py",
@@ -93,5 +96,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "UNIT_TESTED"
+  "next": "VERIFIED"
 }
