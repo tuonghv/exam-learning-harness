@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-058",
   "title": "Plan/report split: plans/<exam>/<run> with raw AI calls, reports rebuilt from plans with no AI, plan-import, history with plans (REQ-0062)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0062",
   "acceptance_criteria": [
     "AC1 layout documented",
@@ -34,12 +34,31 @@
     "result": "985 run, only the known failures (identical to baseline 083d0e4); crash-safe capture, same-second ids, determinism, AI-forbidden, solve/report parity, masking, import recount pass; 4 mutations killed"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "low defects D-V1 (id path traversal) and D-V2 (symlink/untrusted exam path in import) fixed in fix round 1 (verify.md)"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-058/evidence/suite-final.txt",
+      "work/TASK-058/evidence/head-failures.txt",
+      "work/TASK-058/evidence/baseline-failures.txt",
+      "work/TASK-058/evidence/plan-import-real.txt",
+      "work/TASK-058/evidence/qa7-import-stats.txt",
+      "work/TASK-058/evidence/test.md",
+      "work/TASK-058/evidence/verify.md"
+    ],
+    "command": "python3 -I -m unittest discover -s tests/unit; plan-import + report on real work/dgnl-real/run3-Math; QA mutations",
+    "result": "REQ-0062 AC1-AC5 verified (unit + real import/report, no paid run); crash-safe call capture, determinism, no-AI guard, masking, solve/report parity, import recount; verifier D-V1/D-V2/G3 fixed and sanitized derived ids; unit failures identical to baseline 083d0e4",
+    "published": [
+      "docs/report/evidence/TASK-058/suite-final.txt",
+      "docs/report/evidence/TASK-058/head-failures.txt",
+      "docs/report/evidence/TASK-058/baseline-failures.txt",
+      "docs/report/evidence/TASK-058/plan-import-real.txt",
+      "docs/report/evidence/TASK-058/qa7-import-stats.txt",
+      "docs/report/evidence/TASK-058/test.md",
+      "docs/report/evidence/TASK-058/verify.md"
+    ]
   },
   "report": {
     "status": "pending",
@@ -51,11 +70,12 @@
   "roles": {
     "designer": "work/TASK-058/handoff/design.md",
     "coder": "work/TASK-058/handoff/code.md",
-    "tester": "work/TASK-058/handoff/test.md"
+    "tester": "work/TASK-058/handoff/test.md",
+    "verifier": "work/TASK-058/handoff/verify.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-02T11:02:48Z",
-  "updated_at": "2026-11-02T11:20:29Z",
+  "updated_at": "2026-11-02T11:27:21Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-058/"
@@ -67,5 +87,5 @@
     "notes": "",
     "next": "coder 58.7 running; then tester, advance, verifier, publish evidence, report, DONE"
   },
-  "next": "verifier + publish evidence"
+  "next": "report citing docs/report/evidence/TASK-058/, DONE"
 }

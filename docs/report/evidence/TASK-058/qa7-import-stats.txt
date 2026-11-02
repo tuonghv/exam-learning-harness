@@ -1,0 +1,32 @@
+# evidence: qa7-import-stats
+# task: TASK-058
+# cmd: bash /tmp/qa7.sh
+# cwd: .
+# head: bb3378b+dirty
+# when: 2026-11-02T11:18:31Z
+# rc: 0
+---
+plan-import imported -> plans/ex/20261102T111830Z
+plan-import skipped -> plans/ex/20261102T111830Z
+== stats old
+metrics: answered 1/1 declined 0 malformed 0 retry 0%
+accuracy: none
+cost: calls 2 $0.0000 llm_s 0.0
+== stats plan
+metrics: answered 1/1 declined 0 malformed 0 retry 0%
+accuracy: none
+cost: calls 2 $0.0000 llm_s 0.0
+== compare old vs plan
+WARN: exam sha unknown for one run; same exam not checked
+changed: unknown (no history line for one run)
+A metrics: answered 1/1 declined 0 malformed 0 retry 0% | accuracy: none
+B metrics: answered 1/1 declined 0 malformed 0 retry 0% | accuracy: none
+unchanged: 1
+n=1 flips=0 fixed=0 regressed=0: within noise
+== recount
+2	1
+2	1
+result-identical
+2
+      2 false	not captured
+{"source":"import","calls_captured":false}
