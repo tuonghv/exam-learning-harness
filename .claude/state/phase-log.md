@@ -1549,3 +1549,9 @@ Action: Argus verified (read-only); D1 fixed; evidence published
 Result: AC1-AC4 verified without paid run
 Decision: VERIFIED
 Next: report then DONE
+
+## DONE - TASK-047 - 2026-11-02T14:14:14Z
+Action: Report written
+Result: TASK-047 verified without paid run, docs/report/phase-47-whole-question-window.md
+Decision: DONE
+Next: REQ-0064 waits for user go; next TASK-048

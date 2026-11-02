@@ -918,11 +918,20 @@
     "task_id": "TASK-047",
     "title": "Python cut detector for page selection, bounded automatic recovery, page-extraction cache with trace page/hash (design 43.3-43.5, REQ-0045)",
     "priority": 2,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-10-31T14:00:00Z",
     "requirement": "REQ-0051",
     "acceptance_criteria": [
       "REQ-0051 AC1-AC4"
+    ],
+    "completed_at": "2026-11-02T14:14:14Z",
+    "report": "docs/report/phase-47-whole-question-window.md",
+    "user_notes": [
+      {
+        "raw": "RAW-00156",
+        "note": "REQ-0055/TASK-052 queued: human review packs per subject and question",
+        "at": "2026-11-02T05:27:10Z"
+      }
     ]
   },
   {

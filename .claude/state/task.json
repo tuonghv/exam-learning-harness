@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-047",
-  "state": "VERIFIED",
-  "next": "report citing docs/report/evidence/TASK-047/, DONE",
+  "state": "DONE",
+  "next": "",
   "title": "Python cut detector for page selection, bounded automatic recovery, page-extraction cache with trace page/hash (design 43.3-43.5, REQ-0045)",
-  "active": [
-    {
-      "task_id": "TASK-047",
-      "state": "VERIFIED",
-      "next": "report citing docs/report/evidence/TASK-047/, DONE",
-      "updated_at": "2026-11-02T14:14:03Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

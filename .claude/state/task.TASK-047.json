@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-047",
   "title": "Python cut detector for page selection, bounded automatic recovery, page-extraction cache with trace page/hash (design 43.3-43.5, REQ-0045)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0051",
   "acceptance_criteria": [
     "REQ-0051 AC1 cut detector",
@@ -64,11 +64,19 @@
       "docs/report/evidence/TASK-047/baseline-failures.txt",
       "docs/report/evidence/TASK-047/test.md",
       "docs/report/evidence/TASK-047/verify.md"
-    ]
+    ],
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-047/evidence/test.md",
+        "work/TASK-047/evidence/suite-final.txt"
+      ],
+      "reason": "independent gold-PDF oracle (25 questions, 0 orphans) and byte-identity vs baseline; real-page check is the separate paid REQ-0064"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-47-whole-question-window.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -87,7 +95,10 @@
     "designer": "work/TASK-047/handoff/design.md",
     "coder": "work/TASK-047/handoff/code.md",
     "tester": "work/TASK-047/handoff/test.md",
-    "verifier": "work/TASK-047/handoff/verify.md"
+    "verifier": "work/TASK-047/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "engine change verified with mock replies; independent oracle = synthetic gold PDFs (25 questions, 0 orphans) and tester mutations (docs/report/evidence/TASK-047/test.md); real-page check is REQ-0064 (paid, awaits user go)"
+    }
   },
   "user_notes": [
     {
@@ -97,7 +108,7 @@
     }
   ],
   "picked_at": "2026-11-02T05:25:02Z",
-  "updated_at": "2026-11-02T14:14:03Z",
+  "updated_at": "2026-11-02T14:14:15Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/refine.py",
@@ -119,6 +130,6 @@
     "notes": "",
     "next": "resume: coder tests-first per phase-47 (tests 1-15), real slice pages 7-8 and 14-15 (dry-run first, ask if over 0.3 USD)"
   },
-  "next": "report citing docs/report/evidence/TASK-047/, DONE",
+  "next": "",
   "evidence_required": true
 }
