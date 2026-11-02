@@ -12,3 +12,5 @@ No paid re-solve of English q1-5: "answers unchanged" rests on prompt structure 
 
 Follow-up: REQ-0058 (group-aware solving: independent / passage / dependent) builds on these levels.
 User instructions honoured: RAW-00162.
+
+Evidence files for crosscheck: docs/report/evidence/TASK-054/ (index: docs/report/INDEX.md).

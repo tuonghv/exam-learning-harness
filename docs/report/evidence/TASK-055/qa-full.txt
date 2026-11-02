@@ -1,0 +1,126 @@
+# evidence: qa-full
+# task: TASK-055
+# cmd: python3 -I -m unittest discover -s tests/unit
+# cwd: /home/tuonghv/Documents/git/online-system/exam-learning-harness
+# head: f085d8b+dirty
+# when: 2026-11-02T09:55:00Z
+# rc: 1
+---
+./home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_benchmark.py:103: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmppeijyjqq/m.json' mode='w' encoding='UTF-8'>
+  json.dump([SOLVE, QA] * 2, open(mf, "w"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_benchmark.py:107: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmppeijyjqq/out/summary.json' mode='r' encoding='UTF-8'>
+  sm = json.load(open(os.path.join(o, "summary.json")))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+...../home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_benchmark.py:103: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpue6yg3sm/m.json' mode='w' encoding='UTF-8'>
+  json.dump([SOLVE, QA] * 2, open(mf, "w"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_benchmark.py:107: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpue6yg3sm/out/summary.json' mode='r' encoding='UTF-8'>
+  sm = json.load(open(os.path.join(o, "summary.json")))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+...................................sssssss..............xx..................F./home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_clean_golden.py:62: ResourceWarning: unclosed file <_io.TextIOWrapper name='/home/tuonghv/Documents/git/online-system/exam-learning-harness/work/dgnl-real/refined3.json' mode='r' encoding='utf-8'>
+  cls.doc = json.load(open(REFINED, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+../home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_clean_golden.py:32: ResourceWarning: unclosed file <_io.TextIOWrapper name='/home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/fixtures/golden_unlabelled.json' mode='r' encoding='utf-8'>
+  gold = json.load(open(GOLDEN, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+........................................................................................................................................................................................................................................................................../home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_genexam.py:160: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpwsemha_5/g/inputs/math/input-101.md' mode='r' encoding='utf-8'>
+  text = open(os.path.join(out, "inputs", "math", "input-101.md"), encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_genexam.py:164: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpwsemha_5/g/keys/math/expected-101.md' mode='r' encoding='utf-8'>
+  key = open(os.path.join(out, "keys", "math", "expected-101.md"), encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_genexam.py:166: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpwsemha_5/g/manifest.json' mode='r' encoding='utf-8'>
+  man = json.load(open(os.path.join(out, "manifest.json"), encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+...../home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_genexam.py:217: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpj_w0fk34/g/inputs/english/input-101.md' mode='r' encoding='utf-8'>
+  text = open(os.path.join(out, "inputs", "english", "input-101.md"), encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_genexam.py:220: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpj_w0fk34/g/keys/english/expected-101.md' mode='r' encoding='utf-8'>
+  key = open(os.path.join(out, "keys", "english", "expected-101.md"), encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_genexam.py:223: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpj_w0fk34/g/manifest.json' mode='r' encoding='utf-8'>
+  man = json.load(open(os.path.join(out, "manifest.json"), encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.../home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_genexam.py:328: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpmgkl6w9n/g/inputs/vietnamese/input-101.md' mode='r' encoding='utf-8'>
+  text = open(os.path.join(out, "inputs", "vietnamese", "input-101.md"), encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_genexam.py:332: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpmgkl6w9n/g/keys/vietnamese/expected-101.md' mode='r' encoding='utf-8'>
+  key = open(os.path.join(out, "keys", "vietnamese", "expected-101.md"), encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_genexam.py:334: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpmgkl6w9n/g/manifest.json' mode='r' encoding='utf-8'>
+  man = json.load(open(os.path.join(out, "manifest.json"), encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+....../home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_genexam.py:55: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpjt360uqa/g/keys/math/expected-101.md' mode='r' encoding='utf-8'>
+  key = open(os.path.join(out, "keys", "math", "expected-%d.md" % n), encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_genexam.py:55: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpjt360uqa/g/keys/math/expected-102.md' mode='r' encoding='utf-8'>
+  key = open(os.path.join(out, "keys", "math", "expected-%d.md" % n), encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_genexam.py:57: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpjt360uqa/g/manifest.json' mode='r' encoding='utf-8'>
+  man = json.load(open(os.path.join(out, "manifest.json"), encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+./home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_genexam.py:78: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmp43ct2mw2/g/inputs/math/input-101.md' mode='r' encoding='utf-8'>
+  text = open(os.path.join(out, "inputs", "math", "input-101.md"), encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.../home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_genexam.py:116: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmprqidpv33/g/manifest.json' mode='r' encoding='utf-8'>
+  man = json.load(open(os.path.join(out, "manifest.json"), encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+......../home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_genexam.py:293: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmprwa9pskh/summary.json' mode='w' encoding='UTF-8'>
+  json.dump(self.SUMMARY, open(p, "w"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_genexam.py:296: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmprwa9pskh/lessons.json' mode='r' encoding='UTF-8'>
+  self.assertEqual(len(json.load(open(os.path.join(tmp, "lessons.json")))), 2)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_genexam.py:297: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmprwa9pskh/lessons.md' mode='r' encoding='UTF-8'>
+  self.assertIn("2 open", open(os.path.join(tmp, "lessons.md")).read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+...........xWARN: group_link_uncertain: q 12
+./home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_group_e2e.py:82: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpmndq9uzk/out/result.json' mode='r' encoding='utf-8'>
+  res = json.load(open(os.path.join(out, "result.json"), encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+./home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_group_e2e.py:42: ResourceWarning: unclosed file <_io.TextIOWrapper name='/home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/fixtures/golden_retry_qa.json' mode='r' encoding='utf-8'>
+  gold = json.load(open(os.path.join(HERE, "fixtures", "golden_retry_qa.json"), encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+..................................../home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_image_sequence.py:79: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tmpd8kb8mon/p2.png'>
+  self.assertEqual(imgmod.render(paths, 2), open(paths[1], "rb").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+..................................ssssssssssssssssssssss................................................................................s....................................................s........................................E................ss.s..............................................................................................F..........................................................F...................s..................................
+======================================================================
+ERROR: test_d1_text_box_text_is_read_once_inline (test_multipage_adversarial.TestRealDocxTextBox)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_multipage_adversarial.py", line 154, in test_d1_text_box_text_is_read_once_inline
+    from lxml import etree
+ModuleNotFoundError: No module named 'lxml'
+
+======================================================================
+FAIL: test_12b_real_repo_passes (test_check_examples.Check)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_check_examples.py", line 222, in test_12b_real_repo_passes
+    self.assertEqual(rc, 0, out.getvalue())
+AssertionError: 1 != 0 : NOTE: legacy allowance: examples/english/expected-001.md
+ERROR: examples/dgnl: pairing: unknown subject dir
+
+
+======================================================================
+FAIL: test_cwd_independence_of_subcommands (test_req0012_acs.CwdAndReadme)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_req0012_acs.py", line 206, in test_cwd_independence_of_subcommands
+    self.assertEqual(run(EXAM, "check-examples", cwd=self.tmp)[0], 0)
+AssertionError: 1 != 0
+
+======================================================================
+FAIL: test_check_examples_ok (test_scripts_exam.Exam)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_scripts_exam.py", line 43, in test_check_examples_ok
+    self.assertEqual(code, 0)
+AssertionError: 1 != 0
+
+----------------------------------------------------------------------
+Ran 887 tests in 45.444s
+
+FAILED (failures=3, errors=1, skipped=35, expected failures=3)

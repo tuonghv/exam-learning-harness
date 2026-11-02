@@ -1,0 +1,14 @@
+# evidence: run-stats-backfill-stats
+# task: TASK-056
+# cmd: sh -c E=\'python3\ -I\ scripts/exam.py\ run-stats\'\;\ \$E\ backfill\ work/dgnl-real/run3-Math\ --history\ /tmp/claude-1627/-home-tuonghv-Documents-git-online-system-exam-learning-harness/056584bd-9d35-471a-8796-949e88af3926/scratchpad/h.jsonl\;\ \$E\ backfill\ work/dgnl-real/run3-Math\ --history\ /tmp/claude-1627/-home-tuonghv-Documents-git-online-system-exam-learning-harness/056584bd-9d35-471a-8796-949e88af3926/scratchpad/h.jsonl\;\ \$E\ stats\ work/dgnl-real/run3-Math\;\ \$E\ trend\ --history\ /tmp/claude-1627/-home-tuonghv-Documents-git-online-system-exam-learning-harness/056584bd-9d35-471a-8796-949e88af3926/scratchpad/h.jsonl
+# cwd: /home/tuonghv/Documents/git/online-system/exam-learning-harness
+# head: 84b0b37+dirty
+# when: 2026-11-02T10:21:57Z
+# rc: 0
+---
+backfill: added 1 skipped 0 -> /tmp/claude-1627/-home-tuonghv-Documents-git-online-system-exam-learning-harness/056584bd-9d35-471a-8796-949e88af3926/scratchpad/h.jsonl
+backfill: added 0 skipped 1 -> /tmp/claude-1627/-home-tuonghv-Documents-git-online-system-exam-learning-harness/056584bd-9d35-471a-8796-949e88af3926/scratchpad/h.jsonl
+metrics: answered 29/30 declined 1 malformed 0 retry 7%
+accuracy: none
+cost: calls 4 $0.3115 llm_s 125.3
+2026-10-30T14:18:27Z commit - prompt v1.0.0 model sonnet n 30 answered 29 key - qa - cost 0.31147

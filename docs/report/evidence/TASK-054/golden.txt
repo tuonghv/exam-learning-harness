@@ -1,0 +1,19 @@
+# evidence: golden
+# task: TASK-054
+# cmd: python3 -I -m unittest discover -s tests/unit -p test_clean_golden.py
+# cwd: /home/tuonghv/Documents/git/online-system/exam-learning-harness
+# head: 6b9b996+dirty
+# when: 2026-11-02T09:31:36Z
+# rc: 0
+---
+/home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_clean_golden.py:62: ResourceWarning: unclosed file <_io.TextIOWrapper name='/home/tuonghv/Documents/git/online-system/exam-learning-harness/work/dgnl-real/refined3.json' mode='r' encoding='utf-8'>
+  cls.doc = json.load(open(REFINED, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+../home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_clean_golden.py:32: ResourceWarning: unclosed file <_io.TextIOWrapper name='/home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/fixtures/golden_unlabelled.json' mode='r' encoding='utf-8'>
+  gold = json.load(open(GOLDEN, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.
+----------------------------------------------------------------------
+Ran 3 tests in 0.069s
+
+OK

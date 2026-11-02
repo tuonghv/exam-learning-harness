@@ -9,3 +9,5 @@ Verdict: adopted (option A, smallest change, same call count). The engine keeps 
 No paid real run on a DGNL English/VN reading slice. Prompt release not bumped (`prompts/dev/exam/solve.md` has one rule line; config pins v1.0.0). Visuals stay text-only in `solve`; pre-solve figure warning and page-image check for flagged questions are REQ-0059. The dependency-cycle case (design unit 6) has no dedicated test (UNVERIFIED by the verifier). Dependency regexes are Vietnamese/English only; sibling-retry test is thin (one per path).
 
 User instructions honoured: RAW-00167, RAW-00168, RAW-00169.
+
+Evidence files for crosscheck: docs/report/evidence/TASK-055/ (index: docs/report/INDEX.md).

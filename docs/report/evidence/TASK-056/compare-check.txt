@@ -1,0 +1,46 @@
+# evidence: compare-check
+# task: TASK-056
+# cmd: /tmp/claude-1627/-home-tuonghv-Documents-git-online-system-exam-learning-harness/056584bd-9d35-471a-8796-949e88af3926/scratchpad/cmp.sh /tmp/claude-1627/-home-tuonghv-Documents-git-online-system-exam-learning-harness/056584bd-9d35-471a-8796-949e88af3926/scratchpad
+# cwd: /home/tuonghv/Documents/git/online-system/exam-learning-harness
+# head: 8b5c3e0+dirty
+# when: 2026-11-02T10:24:10Z
+# rc: 0
+---
+## compare /tmp/claude-1627/-home-tuonghv-Documents-git-online-system-exam-learning-harness/056584bd-9d35-471a-8796-949e88af3926/scratchpad/cmp/base /tmp/claude-1627/-home-tuonghv-Documents-git-online-system-exam-learning-harness/056584bd-9d35-471a-8796-949e88af3926/scratchpad/cmp/f3 --history /tmp/claude-1627/-home-tuonghv-Documents-git-online-system-exam-learning-harness/056584bd-9d35-471a-8796-949e88af3926/scratchpad/cmp/h.jsonl
+changed: nothing
+A metrics: answered 12/12 declined 0 malformed 0 retry 0% | accuracy: key 12/12
+B metrics: answered 12/12 declined 0 malformed 0 retry 0% | accuracy: key 9/12
+regressed (vs key): 1, 2, 3
+unchanged: 9
+n=12 flips=3 fixed=0 regressed=3: within noise
+exit=0
+## compare /tmp/claude-1627/-home-tuonghv-Documents-git-online-system-exam-learning-harness/056584bd-9d35-471a-8796-949e88af3926/scratchpad/cmp/base /tmp/claude-1627/-home-tuonghv-Documents-git-online-system-exam-learning-harness/056584bd-9d35-471a-8796-949e88af3926/scratchpad/cmp/f1 --history /tmp/claude-1627/-home-tuonghv-Documents-git-online-system-exam-learning-harness/056584bd-9d35-471a-8796-949e88af3926/scratchpad/cmp/h.jsonl
+changed: nothing
+A metrics: answered 12/12 declined 0 malformed 0 retry 0% | accuracy: key 12/12
+B metrics: answered 12/12 declined 0 malformed 0 retry 0% | accuracy: key 11/12
+regressed (vs key): 1
+unchanged: 11
+n=12 flips=1 fixed=0 regressed=1: within noise
+exit=0
+## compare /tmp/claude-1627/-home-tuonghv-Documents-git-online-system-exam-learning-harness/056584bd-9d35-471a-8796-949e88af3926/scratchpad/cmp/base /tmp/claude-1627/-home-tuonghv-Documents-git-online-system-exam-learning-harness/056584bd-9d35-471a-8796-949e88af3926/scratchpad/cmp/f6 --history /tmp/claude-1627/-home-tuonghv-Documents-git-online-system-exam-learning-harness/056584bd-9d35-471a-8796-949e88af3926/scratchpad/cmp/h.jsonl
+changed: nothing
+A metrics: answered 12/12 declined 0 malformed 0 retry 0% | accuracy: key 12/12
+B metrics: answered 12/12 declined 0 malformed 0 retry 0% | accuracy: key 6/12
+regressed (vs key): 1, 2, 3, 4, 5, 6
+unchanged: 6
+n=12 flips=6 fixed=0 regressed=6: signal (regressed)
+exit=1
+## compare /tmp/claude-1627/-home-tuonghv-Documents-git-online-system-exam-learning-harness/056584bd-9d35-471a-8796-949e88af3926/scratchpad/cmp/f6 /tmp/claude-1627/-home-tuonghv-Documents-git-online-system-exam-learning-harness/056584bd-9d35-471a-8796-949e88af3926/scratchpad/cmp/base --history /tmp/claude-1627/-home-tuonghv-Documents-git-online-system-exam-learning-harness/056584bd-9d35-471a-8796-949e88af3926/scratchpad/cmp/h.jsonl
+changed: nothing
+A metrics: answered 12/12 declined 0 malformed 0 retry 0% | accuracy: key 6/12
+B metrics: answered 12/12 declined 0 malformed 0 retry 0% | accuracy: key 12/12
+fixed (vs key): 1, 2, 3, 4, 5, 6
+unchanged: 6
+n=12 flips=6 fixed=6 regressed=0: signal (improved)
+exit=0
+## compare /tmp/claude-1627/-home-tuonghv-Documents-git-online-system-exam-learning-harness/056584bd-9d35-471a-8796-949e88af3926/scratchpad/cmp/base /tmp/claude-1627/-home-tuonghv-Documents-git-online-system-exam-learning-harness/056584bd-9d35-471a-8796-949e88af3926/scratchpad/cmp/other --history /tmp/claude-1627/-home-tuonghv-Documents-git-online-system-exam-learning-harness/056584bd-9d35-471a-8796-949e88af3926/scratchpad/cmp/h.jsonl
+ERROR: different exam (sha c69f5cd8229d vs a4b60a6f7419)
+exit=2
+## compare /tmp/claude-1627/-home-tuonghv-Documents-git-online-system-exam-learning-harness/056584bd-9d35-471a-8796-949e88af3926/scratchpad/cmp/base /tmp/claude-1627/-home-tuonghv-Documents-git-online-system-exam-learning-harness/056584bd-9d35-471a-8796-949e88af3926/scratchpad/cmp/nonexist --history /tmp/claude-1627/-home-tuonghv-Documents-git-online-system-exam-learning-harness/056584bd-9d35-471a-8796-949e88af3926/scratchpad/cmp/h.jsonl
+ERROR: /tmp/claude-1627/-home-tuonghv-Documents-git-online-system-exam-learning-harness/056584bd-9d35-471a-8796-949e88af3926/scratchpad/cmp/nonexist: not a result dir and not a run_id in /tmp/claude-1627/-home-tuonghv-Documents-git-online-system-exam-learning-harness/056584bd-9d35-471a-8796-949e88af3926/scratchpad/cmp/h.jsonl
+exit=2

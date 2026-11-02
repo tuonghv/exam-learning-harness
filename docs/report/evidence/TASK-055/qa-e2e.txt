@@ -1,0 +1,20 @@
+# evidence: qa-e2e
+# task: TASK-055
+# cmd: python3 -I -m unittest discover -s tests/unit -p test_group_e2e.py
+# cwd: /home/tuonghv/Documents/git/online-system/exam-learning-harness
+# head: f085d8b+dirty
+# when: 2026-11-02T09:53:26Z
+# rc: 0
+---
+xWARN: group_link_uncertain: q 12
+./home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_group_e2e.py:82: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmp_n05x0bb/out/result.json' mode='r' encoding='utf-8'>
+  res = json.load(open(os.path.join(out, "result.json"), encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+./home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_group_e2e.py:42: ResourceWarning: unclosed file <_io.TextIOWrapper name='/home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/fixtures/golden_retry_qa.json' mode='r' encoding='utf-8'>
+  gold = json.load(open(os.path.join(HERE, "fixtures", "golden_retry_qa.json"), encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.
+----------------------------------------------------------------------
+Ran 4 tests in 0.106s
+
+OK (expected failures=1)

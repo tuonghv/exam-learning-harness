@@ -1,0 +1,33 @@
+test_55_4_dry_run_passage_once_per_group (test_group_e2e.TestCliEndToEnd) ... ok
+test_55_4_round1_prompt_passage_once (test_group_e2e.TestCliEndToEnd) ... WARN: group_link_uncertain: q 12
+test_55_5_mock_statuses (test_group_e2e.TestCliEndToEnd) ... /home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_group_e2e.py:81: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpptrc1o__/out/result.json' mode='r' encoding='utf-8'>
+test_55_golden_retry_qa_unchanged (test_group_e2e.TestGoldenRetryQa) ... /home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/test_group_e2e.py:42: ResourceWarning: unclosed file <_io.TextIOWrapper name='/home/tuonghv/Documents/git/online-system/exam-learning-harness/tests/unit/fixtures/golden_retry_qa.json' mode='r' encoding='utf-8'>
+Ran 4 tests in 0.109s
+OK
+test_kinds_and_deps (test_group_model.TestGroups) ... ok
+test_no_labels_no_groups (test_group_model.TestGroups) ... ok
+test_printed_offset (test_group_model.TestGroups) ... ok
+test_emitted_only_labelled (test_group_model.TestPages) ... ok
+test_parsed_not_in_text (test_group_model.TestPages) ... ok
+test_result_carries_pages (test_group_model.TestPages) ... ok
+Ran 6 tests in 0.007s
+OK
+test_missing_dependency_declined_no_call (test_group_render.TestDecline) ... ok
+test_passage_promised_but_empty (test_group_render.TestDecline) ... ok
+test_vague_ref_only_warns (test_group_render.TestDecline) ... ok
+test_dependent_retry_has_sibling_answer (test_group_render.TestRender) ... ok
+test_group_header_only_for_real_groups (test_group_render.TestRender) ... ok
+test_passage_promised_stem_has_text_warns_not_declines (test_group_render.TestRender) ... ok
+test_qa_prompt_context_and_siblings (test_group_render.TestRender) ... ok
+test_retry_only_open_with_context_once (test_group_render.TestRender) ... ok
+test_round1_passage_once_and_content_equal (test_group_render.TestRender) ... ok
+test_sibling_answers_each_rendered (test_group_render.TestRender) ... ok
+test_unlabelled_unchanged (test_group_render.TestRender) ... ok
+Ran 11 tests in 0.014s
+OK
+test_no_match (test_group_slice.TestGroupForms) ... ok
+test_table (test_group_slice.TestGroupForms) ... ok
+test_full_run_unchanged_shape (test_group_slice.TestSliceAfterShare) ... ok
+test_slice_keeps_passage (test_group_slice.TestSliceAfterShare) ... ok
+Ran 4 tests in 0.001s
+OK
