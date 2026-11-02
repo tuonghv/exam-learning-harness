@@ -994,5 +994,16 @@
     "acceptance_criteria": [
       "REQ-0056 AC1-AC4"
     ]
+  },
+  {
+    "task_id": "TASK-054",
+    "title": "Section headings once per section, group instruction per question (REQ-0057)",
+    "priority": 3,
+    "status": "queued",
+    "created_at": "2026-11-02T16:00:00Z",
+    "requirement": "REQ-0057",
+    "acceptance_criteria": [
+      "REQ-0057 AC1-AC3"
+    ]
   }
 ]
