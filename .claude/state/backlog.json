@@ -1042,7 +1042,7 @@
     "task_id": "TASK-055",
     "title": "Group-aware solving: slice-after-share, group model, group-aware render/retry/QA, missing-context decline, source pages (REQ-0058)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-02T09:40:00",
     "requirement": "REQ-0058",
     "acceptance_criteria": [
@@ -1051,6 +1051,15 @@
       "AC3 passage once per group in prompt; missing passage declined",
       "AC4 dependent: sibling answers passed on retry/QA; missing sibling declined",
       "AC5 design states why best; tests-first 2-page slices; old files byte-identical"
+    ],
+    "completed_at": "2026-11-02T10:03:43Z",
+    "report": "docs/report/phase-55-group-aware-solving.md",
+    "user_notes": [
+      {
+        "raw": "RAW-00169",
+        "note": "also review tmp/solve-workflow.md: compare PDF-path vs extract vs hybrid, unclear-context handling",
+        "at": "2026-11-02T09:48:52Z"
+      }
     ]
   }
 ]

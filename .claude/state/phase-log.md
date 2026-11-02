@@ -1405,3 +1405,9 @@ Action: Argus verified fixes + security; coordinator mapped REQ-0058 AC1-AC5 to 
 Result: all ACs covered, failures = baseline
 Decision: VERIFIED
 Next: report then DONE
+
+## DONE - TASK-055 - 2026-11-02T10:03:43Z
+Action: Report written
+Result: TASK-055 verified, docs/report/phase-55-group-aware-solving.md
+Decision: DONE
+Next: REQ-0059 follow-up queued
