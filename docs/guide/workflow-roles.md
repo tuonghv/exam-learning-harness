@@ -60,6 +60,7 @@ Removed: this harness runs one active task (`max_active` 1); main briefs the rol
 - Read the reply (≤ 5 lines); open a handoff only when a decision depends on it.
 - The verifier has no Bash: save each check to `work/TASK-0NN/evidence/` with
   `.claude/scripts/save-evidence.sh <name> -- <cmd>` before calling it (checklist: skill `verify`).
+  User-facing summaries of that evidence: section 9.
 - coder ↔ tester: at most 2 rounds, then main decides (fix brief, waiver, or `blocked`); the tester iterates with
   `tests/run_all.sh --changed`, `tests/run_all.sh --fast` plus the `--changed` heavy suites at UNIT_TESTED and VERIFIED (user approved, RAW-00889, TASK-137); the complete run (`--all`) once a week or before a release.
 
@@ -90,3 +91,25 @@ Every EPIC-002 role brief opens with the block in `docs/guide/exam-brief-overrid
 The main session (coordinator) uses the display name **Admiral Tuonghv** (leader: coordinator) when it signs or introduces itself.
 Role subagents keep the alias in their own agent file (Titan, Nemesis, Nova, Argus), not this one. Display name only:
 it changes no role, permission, skill or process; ids (`main`, `coder`, ...) stay the address in tool calls and files, and commit attribution stays as configured.
+
+## 9. User-facing crosscheck paths
+The user checks a task from committed paths only (RAW-00171, RAW-00174, REQ-0061). `work/` is raw scratch (git-ignored).
+| Kind | Path |
+|---|---|
+| Plans / designs | `docs/design/phase-N-*.md` |
+| Reports | `docs/report/phase-N-*.md` |
+| Evidence summaries (small text) | `docs/report/evidence/TASK-NNN/` |
+| Index of all of the above (generated) | `docs/report/INDEX.md` |
+- Opt-in: `evidence_required` (task key, default false; the coordinator sets it with `tasks.sh set` for BIG changes: engine
+  behaviour, prompts, formats, metrics). Unflagged tasks ship design + report text only; workflow-check gives a WARN.
+- Raw vs summary: roles save raw output with `save-evidence.sh` into `work/<T>/evidence/` and write a text summary
+  (<=200 lines, `.txt|.md|.tsv`, no exam text, answer keys, URLs or secrets) there or in their handoff.
+- Who publishes: roles cannot write `docs/report/*`; main does, at VERIFIED, via `advance.sh` (spec key
+  `publish: ["work/<T>/..."]`, default = `verification.evidence` entries under `work/<T>/`), which runs
+  `.claude/scripts/_evidence.py publish` (scan first, all-or-nothing, local paths redacted) and records `verification.published`.
+- Content guard: `_evidence.py scan <file|dir>` refuses binary, other extensions, oversize (200 lines, 32 KB per file;
+  20 files, 256 KB per task), exam headings, option blocks, answer lines/JSON/TSV, URLs, secrets.
+  It prints `FAIL: <file>:<line> <rule>`; the author rewords or trims, never the scanner.
+- Gates (flagged tasks): VERIFIED needs `verification.published` files that exist, are not git-ignored and scan clean;
+  DONE needs the report to cite >=1 existing `docs/report/evidence/<T>/<file>` and an INDEX row.
+- Index: `_evidence.py index [--check]` regenerates `docs/report/INDEX.md` (deterministic); advance.sh runs it at DONE.
