@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-058",
-  "state": "VERIFIED",
-  "next": "report citing docs/report/evidence/TASK-058/, DONE",
+  "state": "DONE",
+  "next": "",
   "title": "Plan/report split: plans/<exam>/<run> with raw AI calls, reports rebuilt from plans with no AI, plan-import, history with plans (REQ-0062)",
-  "active": [
-    {
-      "task_id": "TASK-058",
-      "state": "VERIFIED",
-      "next": "report citing docs/report/evidence/TASK-058/, DONE",
-      "updated_at": "2026-11-02T11:27:21Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

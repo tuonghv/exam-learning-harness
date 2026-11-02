@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-058",
   "title": "Plan/report split: plans/<exam>/<run> with raw AI calls, reports rebuilt from plans with no AI, plan-import, history with plans (REQ-0062)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0062",
   "acceptance_criteria": [
     "AC1 layout documented",
@@ -58,11 +58,19 @@
       "docs/report/evidence/TASK-058/qa7-import-stats.txt",
       "docs/report/evidence/TASK-058/test.md",
       "docs/report/evidence/TASK-058/verify.md"
-    ]
+    ],
+    "quality": {
+      "kind": "real-run",
+      "evidence": [
+        "work/TASK-058/evidence/plan-import-real.txt",
+        "work/TASK-058/evidence/qa7-import-stats.txt"
+      ],
+      "reason": "real work/dgnl-real/run3-Math imported into a plan run and reported with no AI call"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-58-plan-report-split.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -71,11 +79,14 @@
     "designer": "work/TASK-058/handoff/design.md",
     "coder": "work/TASK-058/handoff/code.md",
     "tester": "work/TASK-058/handoff/test.md",
-    "verifier": "work/TASK-058/handoff/verify.md"
+    "verifier": "work/TASK-058/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "tooling/layout change; independent oracle = tester recount of imported numbers with jq/awk (docs/report/evidence/TASK-058/qa7-import-stats.txt) and mutation checks"
+    }
   },
   "user_notes": [],
   "picked_at": "2026-11-02T11:02:48Z",
-  "updated_at": "2026-11-02T11:27:21Z",
+  "updated_at": "2026-11-02T11:27:32Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-058/"
@@ -87,5 +98,5 @@
     "notes": "",
     "next": "coder 58.7 running; then tester, advance, verifier, publish evidence, report, DONE"
   },
-  "next": "report citing docs/report/evidence/TASK-058/, DONE"
+  "next": ""
 }

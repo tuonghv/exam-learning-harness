@@ -1495,3 +1495,9 @@ Action: Argus verified; defects fixed; evidence published
 Result: AC1-AC5 verified
 Decision: VERIFIED
 Next: report then DONE
+
+## DONE - TASK-058 - 2026-11-02T11:27:31Z
+Action: Report written
+Result: TASK-058 verified, docs/report/phase-58-plan-report-split.md
+Decision: DONE
+Next: next TODO: REQ-0059 image check

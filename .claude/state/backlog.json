@@ -1113,7 +1113,7 @@
     "task_id": "TASK-058",
     "title": "Plan/report split: plans/<exam>/<run> with raw AI calls, reports rebuilt from plans with no AI, plan-import, history with plans (REQ-0062)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-02T13:30:00",
     "requirement": "REQ-0062",
     "acceptance_criteria": [
@@ -1122,6 +1122,8 @@
       "AC3 report PLAN_RUN with zero AI calls, deterministic",
       "AC4 history with plans, run-stats accepts plan runs",
       "AC5 plan-import for old dirs; docs; tests-first"
-    ]
+    ],
+    "completed_at": "2026-11-02T11:27:31Z",
+    "report": "docs/report/phase-58-plan-report-split.md"
   }
 ]
