@@ -144,6 +144,35 @@ class Runs(TI.Base):
         self.assertNotIn("image_scope", c)
         self.assertNotIn("image_agrees", c)
 
+    def test_12_declined_scope_excludes_doubt_ids(self):
+        recs = {1: rec(T.a(1, "7"), "UNCERTAIN", "reviewer_unsure"), 2: rec(None, "UNCERTAIN", "solver_declined: x")}
+        self.assertEqual(er.scope_ids(recs, {}, "declined"), ([2], []))
+        self.assertEqual(er.scope_ids(recs, {}, "doubt"), ([2], [1]))
+
+    def test_13_differ_on_fail_keeps_fail_and_answer(self):
+        text = TI.exam(PLAIN)
+        im, image = self.img(None, T.solve(T.a(1, "9")))
+        low = {"level": "medium", "reason": "r"}
+        llm = T.Script(T.solve(T.a(1, "7", uncertainty=low)), T.qa((1, "disagree")))
+        res, _ = self.run_img(text, llm, image, image_scope="doubt", max_attempts=1)
+        q = res["questions"][0]
+        self.assertEqual((q["answer"], q["verification_status"], q["status_reason"]), ("7", "FAIL", "reviewer_disagrees"))
+        self.assertIn("image_differs", [f["code"] for f in q["qa_findings"]])
+
+    def test_14_declined_from_image_not_pass(self):
+        im, image = self.img(None, T.solve(T.a(1, "B")))
+        res, _ = self.run_img(TI.exam(CUT, PLAIN), self.llm(T.a(2, "7")), image, image_scope="declined")
+        self.assertNotEqual(res["questions"][0]["verification_status"], "PASS")
+
+    def test_15_page_cap_in_run_keeps_text_result(self):
+        # CUT is on page 2, FIG on page 3: cap 1 page -> skip id first, the figure keeps its text answer
+        im, image = self.img(None, T.solve(T.a(1, "B")))
+        res, _ = self.run_img(TI.exam(CUT, FIG), self.llm(T.a(2, "5")), image, image_scope="declined", cap=1)
+        q1, q2 = res["questions"]
+        self.assertEqual((q1["answer"], q1["source"]), ("B", "image"))
+        self.assertEqual(q2["answer"], "5")
+        self.assertIn(("image_skipped", "page_cap"), [(f["code"], f["message"]) for f in q2["qa_findings"]])
+
 
 class Cli(T.Base):
     def test_11_flags_need_pdf_and_reach_cfg(self):
