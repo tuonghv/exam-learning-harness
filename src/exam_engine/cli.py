@@ -1197,7 +1197,8 @@ def _rs_compute(ref, a):
 
 def _rs_recheck(a):
     """Re-run the current code checks (option value -> letter, quote folding) on a saved run's
-    check_failed questions. Read-only, no LLM (60.2)."""
+    check_failed questions. Read-only, no LLM (60.2). "cleared" = no code check fails now; a mapped
+    letter is not proven correct."""
     if len(a.refs) != 1 or not a.exam:
         print("usage: exam.py run-stats recheck RESULT_DIR --exam FILE [--json]", file=sys.stderr)
         return 2
@@ -1224,7 +1225,7 @@ def _rs_recheck(a):
                            and c["detail"].startswith("verbatim in passage/question")]
         fails = [c["kind"] for c in verifier.det_checks(eq, ans, exam) if c["result"] == "fail"]
         cleared += not fails
-        rows.append({"id": str(sq.get("id")), "old": reason, "now": "pass" if not fails else
+        rows.append({"id": str(sq.get("id")), "old": reason, "now": "no_check_fails" if not fails else
                      "fail:" + ",".join(fails), "mapped": mapped})
     summary = {"cleared": cleared, "still_failed": len(rows) - cleared}
     if a.json:
