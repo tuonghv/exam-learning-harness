@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-055",
   "title": "Group-aware solving: slice-after-share, group model, group-aware render/retry/QA, missing-context decline, source pages (REQ-0058)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0058",
   "acceptance_criteria": [
     "AC1 group kind derived",
@@ -18,8 +18,20 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/ingest/api.py",
+      "src/exam_engine/ingest/segment.py",
+      "src/exam_engine/pipeline/parser.py",
+      "src/exam_engine/pipeline/solver.py",
+      "src/exam_engine/pipeline/verifier.py",
+      "src/exam_engine/core/refcheck.py",
+      "src/exam_engine/engine.py",
+      "src/exam_engine/cli.py",
+      "prompts/dev/exam/solve.md",
+      "schemas/result.schema.json"
+    ],
+    "summary": "Slice after share, wider group forms, groups()/deps(), group-aware render/retry/QA, missing-context decline, source pages, dry-run grouped prompt"
   },
   "unit_test": {
     "status": "pending",
@@ -41,7 +53,8 @@
   "roles_required": true,
   "crosscheck_required": true,
   "roles": {
-    "designer": "work/TASK-055/handoff/design.md"
+    "designer": "work/TASK-055/handoff/design.md",
+    "coder": "work/TASK-055/handoff/code.md"
   },
   "user_notes": [
     {
@@ -51,7 +64,7 @@
     }
   ],
   "picked_at": "2026-11-02T09:39:02Z",
-  "updated_at": "2026-11-02T09:39:34Z",
+  "updated_at": "2026-11-02T10:01:31Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-055/"
@@ -63,5 +76,5 @@
     "notes": "",
     "next": "coder 55.4-55.5 running; designer addendum (RAW-00169) running; on return commit wip, tester golden, advance IMPLEMENTING"
   },
-  "next": "Titan writes tests first (units 1-9), start 55.1 and 55.2"
+  "next": "unit-test gate with tester evidence"
 }

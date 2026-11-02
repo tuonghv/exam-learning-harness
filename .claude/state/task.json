@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-055",
-  "state": "DESIGN",
-  "next": "Titan writes tests first (units 1-9), start 55.1 and 55.2",
+  "state": "IMPLEMENTING",
+  "next": "unit-test gate with tester evidence",
   "title": "Group-aware solving: slice-after-share, group model, group-aware render/retry/QA, missing-context decline, source pages (REQ-0058)",
   "active": [
     {
       "task_id": "TASK-055",
-      "state": "DESIGN",
-      "next": "Titan writes tests first (units 1-9), start 55.1 and 55.2",
-      "updated_at": "2026-11-02T09:39:34Z"
+      "state": "IMPLEMENTING",
+      "next": "unit-test gate with tester evidence",
+      "updated_at": "2026-11-02T10:01:31Z"
     }
   ],
   "max_active": 1
