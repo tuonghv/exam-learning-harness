@@ -101,3 +101,6 @@ Nova
 1. Accepted as designed. D2 (unreadable stored as a reason) and D3 (same-id join keeps cut/continued_pages) move into TASK-045 (43.2) because TASK-040 is already tested and under verification; both are small and tier 0.
 2. Order: TASK-040 (verify, real run done) -> TASK-042/REQ-0046 (picture sources) -> TASK-044 (43.1 text-path boundaries) -> TASK-045 (43.2 + D2, D3) -> TASK-046 (measurement) -> TASK-047 (43.3 cut detector, 43.4 bounded recovery, 43.5 page cache) -> TASK-048 (43.6 sidecar + 43.7 prompt lines). Paid steps (real vision re-runs, about 3000 scanned questions about $16) only with the user go and a cost estimate; the cheap DGNL subset check in TASK-047 is within the earlier go only if under $0.3, otherwise ask.
 3. The 99.9% targets are measured with Wilson intervals, never claimed.
+
+## Coordinator decision (user, RAW-00154)
+43.4 changes: option C of 43.4 (2-image adjacent-page call, earlier rejected as a new call path) becomes the chosen recovery: a cut last question is dropped from page N's result and extracted whole by a call that sees page N and page N+1 together; the bridge (`continues`) stays as the fallback for questions longer than the window. TASK-047 designs and tests it on 2-page slices (generated families F2-F4 and a real 2-page slice).

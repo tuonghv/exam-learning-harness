@@ -52,7 +52,13 @@
       "waiver": "work/TASK-043/handoff/design.md section 3 (Nova) scoped in phase-46"
     }
   },
-  "user_notes": [],
+  "user_notes": [
+    {
+      "raw": "RAW-00154",
+      "note": "TASK-047: drop the cut last question and extract it whole from a 2-page window (user wants a smart engine)",
+      "at": "2026-11-02T05:11:46Z"
+    }
+  ],
   "picked_at": "2026-11-02T04:35:12Z",
   "updated_at": "2026-11-02T04:35:13Z",
   "updated_by": "main",
