@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-052",
   "title": "Human review path: review packs per subject/question, feedback apply, skill review-loop (REQ-0055)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0055",
   "acceptance_criteria": [
     "REQ-0055 AC1 packs",
@@ -57,11 +57,21 @@
       "work/TASK-052/evidence/t052-oracle-sample.txt"
     ],
     "command": "unit suite vs base; independent oracle on the 4 DGNL packs; review-line round trip on copies; marks preserved on re-run; mutations",
-    "result": "3 known failures identical at base; 0 old assertions removed; no schema/solver/prompt change; pack built from the final runs with the header note for 10, 21-25, 66; user review in progress (first real use)"
+    "result": "3 known failures identical at base; 0 old assertions removed; no schema/solver/prompt change; pack built from the final runs with the header note for 10, 21-25, 66; user review in progress (first real use)",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-052/evidence/final2_oracle.txt",
+        "work/TASK-052/evidence/final2_roundtrip.txt",
+        "work/TASK-052/evidence/final_unit_suite.txt",
+        "work/TASK-052/evidence/t052-oracle-sample.txt"
+      ],
+      "reason": "independent oracle on 120 real questions of the 4 packs, round trip, mutations; the user is reviewing the real pack"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-52-human-review-path.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -90,7 +100,7 @@
     }
   ],
   "picked_at": "2026-11-02T05:30:02Z",
-  "updated_at": "2026-11-02T05:46:36Z",
+  "updated_at": "2026-11-02T05:46:37Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/review.py",
@@ -107,5 +117,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "DONE: report; TASK-053 QA line next"
+  "next": ""
 }
