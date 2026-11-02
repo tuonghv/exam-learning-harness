@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-050",
   "title": "Cheap-model (Haiku) fallback for uncertain question/subject boundaries (REQ-0053)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0053",
   "acceptance_criteria": [
     "REQ-0053 AC1 uncertainty signal",
@@ -71,11 +71,21 @@
       "work/TASK-050/handoff/verify-phantoms.md"
     ],
     "command": "unit suite vs base; fake-claude cost safety; hint forgery cases; classifier of the DGNL native text; verifier read of the PDF against the renders for the 11 former N.M phantom lines (round 2)",
-    "result": "3 known failures identical at base; no old assertion removed; no schema/solver/config change; verifier round 2: 1.2 and 3.2 now in the context of 31-35 and 103-105 not option D, 3.1 stays with 91-93, nothing lost; open: DEF-6, DEF-7 (low, documented), DEF-C (low); no real Haiku call was made"
+    "result": "3 known failures identical at base; no old assertion removed; no schema/solver/config change; verifier round 2: 1.2 and 3.2 now in the context of 31-35 and 103-105 not option D, 3.1 stays with 91-93, nothing lost; open: DEF-6, DEF-7 (low, documented), DEF-C (low); no real Haiku call was made",
+    "quality": {
+      "kind": "real-run",
+      "evidence": [
+        "work/TASK-050/evidence/final3_classify.txt",
+        "work/TASK-050/evidence/final3_mutations.txt",
+        "work/TASK-050/evidence/final_unit_suite.txt",
+        "work/TASK-050/handoff/verify-phantoms.md"
+      ],
+      "reason": "real DGNL native text compared before/after by an independent classifier and by a verifier reading the PDF; cost safety with a fake claude; no real Haiku call yet (AC5 pending the user)"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-50-haiku-boundary-fallback.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -98,7 +108,7 @@
   },
   "user_notes": [],
   "picked_at": "2026-10-31T03:47:34Z",
-  "updated_at": "2026-11-02T04:34:47Z",
+  "updated_at": "2026-11-02T04:34:48Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/boundary.py",
@@ -122,5 +132,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "DONE: report; real Haiku run only with the user's go"
+  "next": ""
 }

@@ -944,11 +944,13 @@
     "task_id": "TASK-050",
     "title": "Cheap-model (Haiku) fallback for uncertain question/subject boundaries (REQ-0053)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-10-31T16:00:00Z",
     "requirement": "REQ-0053",
     "acceptance_criteria": [
       "REQ-0053 AC1-AC5"
-    ]
+    ],
+    "completed_at": "2026-11-02T04:34:48Z",
+    "report": "docs/report/phase-50-haiku-boundary-fallback.md"
   }
 ]

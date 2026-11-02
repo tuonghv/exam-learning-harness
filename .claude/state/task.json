@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-050",
-  "state": "VERIFIED",
-  "next": "DONE: report; real Haiku run only with the user's go",
+  "state": "DONE",
+  "next": "",
   "title": "Cheap-model (Haiku) fallback for uncertain question/subject boundaries (REQ-0053)",
-  "active": [
-    {
-      "task_id": "TASK-050",
-      "state": "VERIFIED",
-      "next": "DONE: report; real Haiku run only with the user's go",
-      "updated_at": "2026-11-02T04:34:47Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

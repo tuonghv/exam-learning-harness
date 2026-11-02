@@ -1249,3 +1249,9 @@ Action: verifier Argus read the PDF against before/after renders, found a regres
 Result: clean
 Decision: advance
 Next: DONE
+
+## DONE - TASK-050 - 2026-11-02T04:34:48Z
+Action: report written
+Result: AC1-AC4 met at tier 0; AC5 (real Haiku) pending the user's go
+Decision: close TASK-050; REQ-0053 AC5 split to a follow-up
+Next: TASK-046, TASK-047, TASK-048
