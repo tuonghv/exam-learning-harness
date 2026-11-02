@@ -143,3 +143,30 @@ Measures: text and option fidelity of the text-layer route on clean, single-colu
 embedded Unicode font (an optimistic upper bound). The `formula-image` variant rasterises the formula line, so
 text/options 20/20 show fidelity alone. Does not measure: scanned or photographed pages, OCR, two-column or grid
 tables, real exams. This is not real-exam accuracy. The text route never fills formula or figures, so overall is 8/20 (40%) by construction; 99.999% is not claimed (n=20).
+
+## Completeness measurement (REQ-0050, phase 46, tier 0, $0)
+Measures whether a question that crosses a page comes out whole, or is marked so the solver declines it.
+```
+python3 -I evals/extract/gen_families.py work/x/fx                       # F1-F8, 25 synthetic questions each
+python3 -I scripts/exam.py gold-pdf work/x/fx/F2.gold.json work/x/F2.pdf --layout split [--furniture] \
+    --gold-out work/x/F2.gold.json --replies work/x/F2.replies.json       # PDF, gold with `pages`, oracle vision replies
+python3 -I scripts/exam.py gold-pdf work/x/fx/F2.gold.json work/x/F2.scan.pdf --layout split --scan   # image-only PDF
+python3 -I scripts/exam.py ingest work/x/F2.pdf --ocr off --out work/x/F2.doc.json                      # text route
+python3 -I scripts/exam.py ingest work/x/F2.scan.pdf --ocr off --out work/x/F2.scan.json                # then:
+python3 -I scripts/exam.py ingest-refine work/x/F2.scan.json --pages 1-17 --all-pages --mock work/x/F2.replies.json --out work/x/F2.ref.json
+python3 -I scripts/exam.py extract-eval work/x/F2.gold.json work/x/F2.doc.json --completeness --out work/x/eval
+python3 -I scripts/exam.py extract-eval work/x/F2.gold.json work/x/F2.ref.json --refined --completeness
+```
+`--layout split` lets a question cross the page at a line (default `block` moves it whole; default output unchanged).
+`--gold-out` writes the gold with `pages: [p..]` per question (and the real figure page for split). `--furniture`
+puts a header, footer and page number on every page. `--completeness` adds five rates, each k/n with Wilson 95%,
+and never changes the existing report (extra files `completeness.json/md`): `boundary` (gold ids whose extracted
+text starts and ends like the gold with exact options, no other question's opening inside), `cross_page` (exact,
+over gold questions with more than one page), `missing_detection` (wrong extracted questions the structure check
+marks / all wrong), `false_merge` (extracted text holding another gold question's opening), `incomplete_to_solver`
+(wrong and unmarked: must be 0, exit 1 and `FAIL` otherwise), plus `false_alarm` (exact but marked). Families:
+F1 single page, F2 stem over 2 pages, F3 options on the next page, F4 passage over 3 pages + group of 3, F5 figure
+on the next page, F6 several per page, F7 formula cut, F8 header/footer/page number. The vision path replays
+mock replies built from gold per page, so it tests the continuation bridge and the gate, not vision accuracy.
+Synthetic gold is easier than a real exam (optimistic bound). Zero errors in n proves 99.9% at 95% only for
+n >= 2995 (`zero_error_n`); nothing is claimed from n=200 (Wilson lower bound about 98.1%).

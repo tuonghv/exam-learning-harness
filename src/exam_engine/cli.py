@@ -791,30 +791,45 @@ def lessons_main(argv):
 
 
 def extract_eval_main(argv):
-    """extract-eval GOLD EXTRACTED [--out DIR]: exact extraction accuracy report; exit 0 or 2 (no gate)."""
+    """extract-eval GOLD EXTRACTED [--out DIR] [--completeness] [--refined]: exact extraction accuracy report;
+    exit 0 or 2 (no gate); --completeness adds the boundary / cross-page / false-merge rates, 1 if one would
+    reach the solver unmarked; --refined scores the AI-refined questions of an ingest-refine document."""
     from exam_engine.pipeline import extract_eval
     ap = argparse.ArgumentParser(prog="exam.py extract-eval")
     ap.add_argument("gold")
     ap.add_argument("extracted")
     ap.add_argument("--out")
+    ap.add_argument("--completeness", action="store_true")
+    ap.add_argument("--refined", action="store_true")
     try:
         a = ap.parse_args(argv)
     except SystemExit:
         return 2
+    cm = None
     try:
-        sm = extract_eval.evaluate(extract_eval.load_questions(a.gold),
-                                   extract_eval.load_questions(a.extracted))
+        gold = extract_eval.load_questions(a.gold)
+        raws = {}
+        ext = (extract_eval.load_refined(a.extracted, raws) if a.refined
+               else extract_eval.load_questions(a.extracted, raws))
+        sm = extract_eval.evaluate(gold, ext)
+        if a.completeness:
+            cm = extract_eval.completeness(gold, ext, raws)
         if a.out:
             extract_eval.write(sm, a.out, a.gold, a.extracted)
+            if cm:
+                extract_eval.write_completeness(cm, a.out)
     except (ValueError, OSError) as exc:
         print("ERROR: extract-eval: %s" % exc, file=sys.stderr)
         return 2
     print("\n".join(extract_eval.report_lines(sm)))
-    return 0
+    if cm:
+        print("\n".join(extract_eval.completeness_lines(cm)))
+    return 1 if cm and cm["fail"] else 0
 
 
 def gold_pdf_main(argv):
-    """gold-pdf GOLD OUT.pdf [--variant text|formula-image] [--font TTF]: gold -> born-digital PDF; exit 0 or 2."""
+    """gold-pdf GOLD OUT.pdf [--variant text|formula-image] [--font TTF] [--layout block|split] [--furniture]
+    [--gold-out FILE] [--replies FILE] [--scan]: gold -> PDF (born-digital, or image-only with --scan); exit 0 or 2."""
     from exam_engine.ingest.schema import IngestError
     from exam_engine.pipeline import gold_pdf
     ap = argparse.ArgumentParser(prog="exam.py gold-pdf")
@@ -822,12 +837,29 @@ def gold_pdf_main(argv):
     ap.add_argument("out")
     ap.add_argument("--variant", choices=gold_pdf.VARIANTS, default="text")
     ap.add_argument("--font")
+    ap.add_argument("--layout", choices=gold_pdf.LAYOUTS, default="block",
+                    help="split: a question may cross the page at a line")
+    ap.add_argument("--furniture", action="store_true", help="header, footer and page number on every page")
+    ap.add_argument("--gold-out", metavar="FILE", help="copy of the gold with `pages` per question")
+    ap.add_argument("--replies", metavar="FILE", help="oracle mock vision replies per page (ingest-refine --mock)")
+    ap.add_argument("--scan", action="store_true", help="replace the PDF by an image-only copy (no text layer)")
     try:
         a = ap.parse_args(argv)
     except SystemExit:
         return 2
     try:
-        info = gold_pdf.render(a.gold, a.out, a.variant, a.font)
+        info = gold_pdf.render(a.gold, a.out, a.variant, a.font, a.layout, a.furniture, a.gold_out)
+        if a.scan:
+            tmp = a.out + ".born.pdf"
+            os.replace(a.out, tmp)
+            try:
+                gold_pdf.scan_pdf(tmp, a.out)
+            finally:
+                os.remove(tmp)
+        if a.replies:
+            with open(a.replies, "w", encoding="utf-8") as fh:
+                json.dump(gold_pdf.vision_replies(info), fh, ensure_ascii=False, indent=1)
+                fh.write("\n")
     except (ValueError, IngestError, OSError) as exc:
         print("ERROR: gold-pdf: %s" % exc, file=sys.stderr)
         return 2

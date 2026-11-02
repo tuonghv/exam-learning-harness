@@ -8,6 +8,7 @@ import math
 import os
 import unicodedata
 
+from exam_engine.core import refcheck
 from exam_engine.ingest.refine import FORBIDDEN, norm_id
 from exam_engine.ingest.schema import VERIFY_STATUSES
 
@@ -66,12 +67,15 @@ def _record(q):
     if status not in VERIFY_STATUSES:
         raise ValueError("question %s: bad verification status %r" % (qid, status))
     figs = sorted(p for p in (_page(f) for f in q.get("figures") or []) if p is not None)
+    pages = q.get("pages")
+    pages = sorted(p for p in pages if isinstance(p, int)) if isinstance(pages, list) else []
     return {"id": qid, "text": str(q.get("text") or ""), "formula": str(formula),
-            "options": {str(k): str(v) for k, v in opts.items()}, "figures": figs, "status": status}
+            "options": {str(k): str(v) for k, v in opts.items()}, "figures": figs, "status": status,
+            "pages": pages}
 
 
-def load_questions(path):
-    """{id: canonical record}; ValueError on unreadable/invalid input."""
+def load_questions(path, raws=None):
+    """{id: canonical record}; ValueError on unreadable/invalid input. `raws` (dict) receives {id: file record}."""
     try:
         with open(path, encoding="utf-8") as fh:
             data = json.load(fh)
@@ -90,6 +94,31 @@ def load_questions(path):
         if r["id"] in out:
             raise ValueError("duplicate question id %s in %s" % (r["id"], path))
         out[r["id"]] = r
+        if raws is not None:
+            raws[r["id"]] = q
+    return out
+
+
+def load_refined(path, raws=None):
+    """Like load_questions for the AI-refined questions of an `ingest-refine --out` document (a question
+    cut by a page break merged as the exam text does; a shared passage joined to the text)."""
+    from exam_engine.ingest import api
+    try:
+        with open(path, encoding="utf-8") as fh:
+            doc = json.load(fh)
+    except (OSError, ValueError) as exc:
+        raise ValueError("cannot read %s: %s" % (path, exc))
+    qs = api.refined_questions(doc) if isinstance(doc, dict) else []
+    if not qs:
+        raise ValueError("no refined questions in %s" % path)
+    out = {}
+    for q in qs:
+        r = _record(dict(q, text=(str(q.get("context") or "") + "\n" + str(q.get("text") or "")).strip()))
+        if r["id"] in out:
+            raise ValueError("duplicate question id %s in %s" % (r["id"], path))
+        out[r["id"]] = r
+        if raws is not None:
+            raws[r["id"]] = q
     return out
 
 
@@ -210,4 +239,91 @@ def write(sm, out_dir, gold_path="", extracted_path=""):
         fh.write("\n")
     with open(mp, "w", encoding="utf-8") as fh:
         fh.write(report_md(sm, gold_path, extracted_path))
+    return jp, mp
+
+
+# --- completeness rates (REQ-0050, phase 46): additive; evaluate() and its outputs are unchanged ---
+HEAD = 30  # characters of a question's text that must open / close the extracted text
+COMPLETENESS = ("boundary", "cross_page", "missing_detection", "false_merge", "incomplete_to_solver")
+
+
+def _body(g, e):
+    """Canonical extracted text without a trailing formula line the text route folds into the text."""
+    t, f = canon(e["text"]), canon(g["formula"])
+    return t[:-len(f)].rstrip() if f and not e["formula"] and t.endswith(f) else t
+
+
+def _opens(gold):
+    return dict((q, canon(g["text"])[:HEAD]) for q, g in gold.items())
+
+
+def _judge(gold, extracted, opens, raws=None):
+    """Per gold id: present, start/end/options ok, exact, foreign opening (false merge), reasons."""
+    ordered = sorted(extracted, key=int)
+    raws = [dict((raws or {}).get(q) or {"options": extracted[q]["options"]}, id=q,
+                 text=(raws or {}).get(q, {}).get("text") or extracted[q]["text"]) for q in ordered]
+    texts = [(str(r.get("context") or "") + "\n" + r["text"]).strip() for r in raws]
+    why = dict(zip(ordered, refcheck.incomplete_by_question(raws, texts)))
+    out = {}
+    for qid, g in gold.items():
+        e = extracted.get(qid)
+        row = {"id": qid, "present": e is not None, "pages": g["pages"], "reasons": why.get(qid, [])}
+        if e is None:
+            row.update(start=False, end=False, exact=False, merged=False)
+        else:
+            body, gt = _body(g, e), canon(g["text"])
+            eo = {k: canon(v) for k, v in e["options"].items()}
+            go = {k: canon(v) for k, v in g["options"].items()}
+            own = canon(e["text"] + " " + " ".join(e["options"].values()))
+            row["merged"] = any(o and o in own and o not in gt for q2, o in opens.items() if q2 != qid)
+            row["start"] = body.startswith(gt[:HEAD])
+            row["end"] = body.endswith(gt[-HEAD:]) and eo == go
+            row["exact"] = body == gt and eo == go and not row["merged"]
+        out[qid] = row
+    return out
+
+
+def completeness(gold, extracted, raws=None):
+    """Rates of the completeness measurement, each k/n with Wilson (see docs/design/phase-46).
+    `raws`: {id: extracted file record} (cut / continued_pages / page for the structure check)."""
+    rows = _judge(gold, extracted, _opens(gold), raws)
+    ids = sorted(gold, key=int)
+    got = [rows[q] for q in ids if rows[q]["present"]]
+    wrong = [r for r in got if not r["exact"]]
+    cross = [rows[q] for q in ids if len(gold[q]["pages"]) > 1]
+    flagged = lambda r: bool(r["reasons"])  # noqa: E731 - the solver declines a marked question
+    bad = sum(1 for r in wrong if not flagged(r))
+    ok_rows = [r for r in got if r["exact"]]
+    cm = {"boundary": _rate(sum(1 for q in ids if rows[q]["start"] and rows[q]["end"] and not rows[q]["merged"]),
+                            len(ids)),
+          "cross_page": _rate(sum(1 for r in cross if r["exact"]), len(cross)),
+          "missing_detection": _rate(sum(1 for r in wrong if flagged(r)), len(wrong)),
+          "false_merge": _rate(sum(1 for r in got if r["merged"]), len(got)),
+          "incomplete_to_solver": _rate(bad, len(got)),
+          "false_alarm": _rate(sum(1 for r in ok_rows if flagged(r)), len(ok_rows)),
+          "n": len(ids), "zero_error_n": zero_error_n(0.999), "fail": bad > 0,
+          "questions": [{"id": q, "pages": rows[q]["pages"], "present": rows[q]["present"],
+                         "start": rows[q]["start"], "end": rows[q]["end"], "exact": rows[q]["exact"],
+                         "merged": rows[q]["merged"], "reasons": rows[q]["reasons"]} for q in ids]}
+    return cm
+
+
+def completeness_lines(cm):
+    ls = ["%s %s" % (k, _fmt(cm[k], "n/a (0)")) for k in COMPLETENESS]
+    ls.append("false_alarm (exact but marked incomplete) %s" % _fmt(cm["false_alarm"], "n/a (0)"))
+    if cm["fail"]:
+        ls.append("FAIL: %d wrong question(s) would reach the solver unmarked" % cm["incomplete_to_solver"]["k"])
+    ls.append("99.9%% is NOT claimed: needs >= %d error-free questions (n=%d); intervals are Wilson 95%%." % (
+        cm["zero_error_n"], cm["n"]))
+    return ls
+
+
+def write_completeness(cm, out_dir):
+    os.makedirs(out_dir, exist_ok=True)
+    jp, mp = os.path.join(out_dir, "completeness.json"), os.path.join(out_dir, "completeness.md")
+    with open(jp, "w", encoding="utf-8") as fh:
+        json.dump(cm, fh, ensure_ascii=False, indent=1)
+        fh.write("\n")
+    with open(mp, "w", encoding="utf-8") as fh:
+        fh.write("# Completeness rates\n\n" + "\n".join("- " + ln for ln in completeness_lines(cm)) + "\n")
     return jp, mp

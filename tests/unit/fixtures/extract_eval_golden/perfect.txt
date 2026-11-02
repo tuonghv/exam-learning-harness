@@ -1,0 +1,10 @@
+overall 20/20 = 100.0% (Wilson 95% 83.9%-100.0%)
+text 20/20 = 100.0% (Wilson 95% 83.9%-100.0%)
+formula 20/20 = 100.0% (Wilson 95% 83.9%-100.0%)
+options 20/20 = 100.0% (Wilson 95% 83.9%-100.0%)
+figures 20/20 = 100.0% (Wilson 95% 83.9%-100.0%)
+formula (applicable only) 10/10 = 100.0% (Wilson 95% 72.2%-100.0%)
+figures (applicable only) 4/4 = 100.0% (Wilson 95% 51.0%-100.0%)
+verified precision 20/20 = 100.0% (Wilson 95% 83.9%-100.0%)
+needs_review 0/20 = 0.0% (Wilson 95% 0.0%-16.1%)
+99.999% is NOT claimed: needs >= 299572 error-free questions (n=20); 95% lower bound 83.89%.

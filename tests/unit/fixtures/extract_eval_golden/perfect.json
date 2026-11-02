@@ -1,0 +1,207 @@
+{
+ "n": 20,
+ "matched": 20,
+ "missing": [],
+ "extra": [],
+ "overall": {
+  "k": 20,
+  "n": 20,
+  "rate": 1.0,
+  "wilson": [
+   0.8388748419471806,
+   1.0
+  ]
+ },
+ "fields": {
+  "text": {
+   "k": 20,
+   "n": 20,
+   "rate": 1.0,
+   "wilson": [
+    0.8388748419471806,
+    1.0
+   ]
+  },
+  "formula": {
+   "k": 20,
+   "n": 20,
+   "rate": 1.0,
+   "wilson": [
+    0.8388748419471806,
+    1.0
+   ]
+  },
+  "options": {
+   "k": 20,
+   "n": 20,
+   "rate": 1.0,
+   "wilson": [
+    0.8388748419471806,
+    1.0
+   ]
+  },
+  "figures": {
+   "k": 20,
+   "n": 20,
+   "rate": 1.0,
+   "wilson": [
+    0.8388748419471806,
+    1.0
+   ]
+  }
+ },
+ "applicable": {
+  "formula": {
+   "k": 10,
+   "n": 10,
+   "rate": 1.0,
+   "wilson": [
+    0.7224672001371107,
+    0.9999999999999999
+   ]
+  },
+  "figures": {
+   "k": 4,
+   "n": 4,
+   "rate": 1.0,
+   "wilson": [
+    0.5101091635454027,
+    1.0
+   ]
+  }
+ },
+ "verified_precision": {
+  "k": 20,
+  "n": 20,
+  "rate": 1.0,
+  "wilson": [
+   0.8388748419471806,
+   1.0
+  ]
+ },
+ "needs_review": {
+  "k": 0,
+  "n": 20,
+  "rate": 0.0,
+  "wilson": [
+   0.0,
+   0.16112515805281938
+  ]
+ },
+ "status_counts": {
+  "unverified": 0,
+  "verified": 20,
+  "needs_review": 0,
+  "rejected": 0
+ },
+ "claims": {
+  "targets": {
+   "0.99": 299,
+   "0.999": 2995,
+   "0.99999": 299572
+  },
+  "supported_lower": 0.8388748419471806
+ },
+ "questions": [
+  {
+   "id": "1",
+   "status": "verified",
+   "wrong": []
+  },
+  {
+   "id": "2",
+   "status": "verified",
+   "wrong": []
+  },
+  {
+   "id": "3",
+   "status": "verified",
+   "wrong": []
+  },
+  {
+   "id": "4",
+   "status": "verified",
+   "wrong": []
+  },
+  {
+   "id": "5",
+   "status": "verified",
+   "wrong": []
+  },
+  {
+   "id": "6",
+   "status": "verified",
+   "wrong": []
+  },
+  {
+   "id": "7",
+   "status": "verified",
+   "wrong": []
+  },
+  {
+   "id": "8",
+   "status": "verified",
+   "wrong": []
+  },
+  {
+   "id": "9",
+   "status": "verified",
+   "wrong": []
+  },
+  {
+   "id": "10",
+   "status": "verified",
+   "wrong": []
+  },
+  {
+   "id": "11",
+   "status": "verified",
+   "wrong": []
+  },
+  {
+   "id": "12",
+   "status": "verified",
+   "wrong": []
+  },
+  {
+   "id": "13",
+   "status": "verified",
+   "wrong": []
+  },
+  {
+   "id": "14",
+   "status": "verified",
+   "wrong": []
+  },
+  {
+   "id": "15",
+   "status": "verified",
+   "wrong": []
+  },
+  {
+   "id": "16",
+   "status": "verified",
+   "wrong": []
+  },
+  {
+   "id": "17",
+   "status": "verified",
+   "wrong": []
+  },
+  {
+   "id": "18",
+   "status": "verified",
+   "wrong": []
+  },
+  {
+   "id": "19",
+   "status": "verified",
+   "wrong": []
+  },
+  {
+   "id": "20",
+   "status": "verified",
+   "wrong": []
+  }
+ ]
+}

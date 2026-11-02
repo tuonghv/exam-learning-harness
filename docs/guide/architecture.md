@@ -52,7 +52,9 @@ docs/req/ (WHAT)  docs/design/phase-N-*.md (HOW, phases 1-30)  docs/guide/  .cla
 ingest-inspect ingest-refine cross-solve benchmark extract-eval gold-pdf gen-exams lessons`. Common `solve` flags:
 `--out --key --mock|--dry-run|--real --max-attempts --max-cost-usd --timeout --model --lang vi|en|auto
 --channel release|dev --prompt-version --no-pdf`. A new subject is a `config/subjects.json` entry plus an
-optional `prompts/dev/subjects/<name>.md`; no engine code.
+optional `prompts/dev/subjects/<name>.md`; no engine code. Completeness measurement (phase 46): `gold-pdf --layout split
+--gold-out --replies --scan` and `extract-eval --completeness [--refined]` (`pipeline/gold_pdf.py`, `extract_eval.py`;
+fixtures `evals/extract/gen_families.py`); detail in `ingest-usage.md`.
 
 ## Flow
 
