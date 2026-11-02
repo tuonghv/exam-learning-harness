@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-046",
   "title": "Measurement: gold-pdf split layout, guide fixture families F1-F8, extract-eval boundary/cross-page/false-merge/incomplete-to-solver rates (design section 3, REQ-0045)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0050",
   "acceptance_criteria": [
     "REQ-0050 AC1 split layout and pages",
@@ -25,8 +25,18 @@
     ]
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/gold_pdf.py",
+      "src/exam_engine/pipeline/extract_eval.py",
+      "src/exam_engine/cli.py",
+      "evals/extract/gen_families.py",
+      "tests/unit/test_completeness_measure.py",
+      "tests/unit/test_completeness_measure_pdf.py",
+      "docs/guide/ingest-usage.md",
+      "docs/guide/architecture.md"
+    ],
+    "summary": "gold-pdf --layout split and per-question pages; families F1-F8 generator; extract-eval additive rates (boundary, cross_page, missing_detection, false_merge, incomplete_to_solver strict/content, content_errors, missing_to_solver, false_alarm) with Wilson; routes text, vision(mock), OCR"
   },
   "unit_test": {
     "status": "pending",
@@ -50,6 +60,9 @@
   "roles": {
     "designer": {
       "waiver": "work/TASK-043/handoff/design.md section 3 (Nova) scoped in phase-46"
+    },
+    "coder": {
+      "waiver": "work/TASK-046/handoff/code.md"
     }
   },
   "user_notes": [
@@ -60,7 +73,7 @@
     }
   ],
   "picked_at": "2026-11-02T04:35:12Z",
-  "updated_at": "2026-11-02T04:35:13Z",
+  "updated_at": "2026-11-02T05:24:40Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/gold_pdf.py",
@@ -80,5 +93,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "coder: tests first, gold_pdf split layout, fixtures F1-F8, extract-eval metrics, chain run"
+  "next": "UNIT_TESTED"
 }
