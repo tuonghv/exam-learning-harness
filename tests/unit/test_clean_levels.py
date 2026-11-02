@@ -166,8 +166,8 @@ class TestRender(unittest.TestCase):
                "passage": "", "stem": "S"},
               {"id": 2, "text": "Plain", "options": {"A": "a"}}]
         out = solver.render_questions({"questions": qs}, {1, 2})
-        self.assertEqual(out, "## Section: H\n\n## Question 1\n\n### Instruction for this group\n\nG\n\n"
-                              "### Question text\n\nS\n\nA. a\n\n## Question 2\n\nPlain\n\nA. a")
+        self.assertEqual(out, "## Section: H\n\n## Group 1-1\n\n### Instruction for this group\n\nG\n\n"
+                              "## Question 1\n\n### Question text\n\nS\n\nA. a\n\n## Question 2\n\nPlain\n\nA. a")
 
     def test_golden_inputs(self):
         paths = glob.glob(os.path.join(ROOT, "examples", "*", "input-*.md")) + \

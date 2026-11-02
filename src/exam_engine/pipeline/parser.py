@@ -223,7 +223,14 @@ def exam_warnings(exam):
             warns.append("section_subject_unknown: %s" % sec)
         elif want and key != want:
             warns.append("section_subject_mismatch: %s -> %s vs Subject %s" % (sec, key, subj))
+    if labelled(exam) and not exam.get("passage"):  # a ref word with no number and no text to link to
+        for q in exam["questions"]:
+            if not (q.get("instruction") or q.get("passage")) and _VAGUE_RE.search(q.get("stem") or ""):
+                warns.append("group_link_uncertain: q %d" % q["id"])
     return warns
+
+
+_VAGUE_RE = re.compile(r"(?i)\b(?:the|this) (?:text|passage)\b|(?:đoạn|văn bản|bài) (?:văn )?(?:trên|sau)\b")
 
 
 _REF_RE = re.compile(r"(?i)\b(?:câu|question)\s+(\d+)|\bý\s*\([a-d]\)|kết quả (?:câu|ý) trên"
@@ -255,6 +262,13 @@ def deps(exam):
             out[q["id"]] = refs
         prev = q["id"]
     return out
+
+
+def labelled(exam):
+    """True when the file carries group levels (instruction / passage); only then are prompts group-aware.
+    Accepts an exam dict or a list of questions."""
+    qs = exam if isinstance(exam, list) else exam.get("questions", [])
+    return any(q.get("instruction") or q.get("passage") for q in qs)
 
 
 def groups(exam):

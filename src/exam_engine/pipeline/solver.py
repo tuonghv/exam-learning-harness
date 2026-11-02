@@ -9,6 +9,7 @@ from exam_engine.adapters import claude
 from exam_engine.core import schema as sch
 from exam_engine.core.decision import declined, decide_rec, finding
 from exam_engine.pipeline import router, verifier
+from exam_engine.pipeline import parser
 from exam_engine.pipeline.parser import read_text
 from exam_engine.utils.text import norm
 
@@ -46,13 +47,69 @@ def fewshot(exam, exam_text, key_path):
     return ""
 
 
-def solve_prompt(exam, exam_text, key_path):
+labelled = parser.labelled
+
+
+def solve_prompt(exam, exam_text, key_path, ids=None):
+    """Round 1. A labelled file is rendered from the parse (each group's context once) over `ids`."""
     base = base_prompt(exam)
-    return "%s\n\nLanguage: %s\n\n%sExam file:\n%s\n" % (
-        base, router.language(exam), fewshot(exam, exam_text, key_path), exam_text)
+    shot = fewshot(exam, exam_text, key_path)
+    if ids is not None and labelled(exam):
+        exam_text = exam_context(exam) + render_questions(exam, set(ids))
+    return "%s\n\nLanguage: %s\n\n%sExam file:\n%s\n" % (base, router.language(exam), shot, exam_text)
 
 
-def render_questions(exam, ids):
+def exam_context(exam):
+    head = "\n".join("%s: %s" % kv for kv in exam["fields"].items())
+    ctx = head + "\n\n## Instructions\n\n%s\n" % exam["instructions"]
+    if exam["passage"]:
+        ctx += "\n## Passage\n\n%s\n" % exam["passage"]
+    return ctx
+
+
+def _one(q):
+    opts = "".join("\n%s. %s" % (k, v) for k, v in sorted(q["options"].items()))
+    body = "### Question text\n\n%s" % q["stem"] if parser.labelled([q]) else q["text"]
+    return "## Question %d\n\n%s\n%s" % (q["id"], body, opts)
+
+
+def render_questions(exam, ids, recs=None):
+    """Prompt text of the questions `ids`. Labelled file: per group the instruction and passage once,
+    then its questions; a dependent group also lists sibling stems + answers as context."""
+    if not labelled(exam):
+        return _render_plain(exam, ids)
+    qs = {q["id"]: q for q in exam["questions"]}
+    dep = parser.deps(exam)
+    parts, sec, done = [], "", set()
+    for g in parser.groups(exam):
+        own = [i for i in g["ids"] if i in ids and i not in done
+               and (qs[i].get("instruction") or "") == g["instruction"]
+               and parser._passage(qs[i]) == g["passage"]]
+        if not own:
+            continue
+        done.update(own)
+        if qs[own[0]].get("section") and qs[own[0]]["section"] != sec:
+            sec = qs[own[0]]["section"]
+            parts.append("## Section: %s" % sec)
+        if g["instruction"] or g["passage"]:
+            parts.append("## Group %d-%d" % (own[0], own[-1]))
+            parts.extend("### %s\n\n%s" % (lab, val) for lab, val in (
+                ("Instruction for this group", g["instruction"]), ("Passage", g["passage"])) if val)
+        if g["kind"] == "dependent":
+            sib = sorted({r for i in own for r in dep.get(i, ()) if r in qs and r not in ids})
+            if sib:
+                parts.append("### Sibling answers (context, do not re-answer)\n\n" + "\n\n".join(
+                    _sibling(qs[r], recs) for r in sib))
+        parts.extend(_one(qs[i]) for i in own)
+    return "\n\n".join(parts)
+
+
+def _sibling(q, recs):
+    a = ((recs or {}).get(q["id"]) or {}).get("ans") or {}
+    return "Question %d: %s\nAnswer: %s" % (q["id"], q["stem"], a.get("answer") or "(none yet)")
+
+
+def _render_plain(exam, ids):
     parts, sec = [], ""
     for q in exam["questions"]:
         if q["id"] in ids:
@@ -60,22 +117,13 @@ def render_questions(exam, ids):
             if q.get("section") and q["section"] != sec:
                 sec = q["section"]
                 parts.append("## Section: %s" % sec)
-            if q.get("instruction") or q.get("passage"):  # labelled: keep the four levels
-                body = "".join("### %s\n\n%s\n\n" % (lab, val) for lab, val in (
-                    ("Instruction for this group", q.get("instruction")), ("Passage", q.get("passage")))
-                    if val) + "### Question text\n\n%s" % q["stem"]
-            else:
-                body = q["text"]
-            parts.append("## Question %d\n\n%s\n%s" % (q["id"], body, opts))
+            parts.append("## Question %d\n\n%s\n%s" % (q["id"], q["text"], opts))
     return "\n\n".join(parts)
 
 
 def retry_prompt(exam, recs, ids):
     base = base_prompt(exam)
-    head = "\n".join("%s: %s" % kv for kv in exam["fields"].items())
-    ctx = head + "\n\n## Instructions\n\n%s\n" % exam["instructions"]
-    if exam["passage"]:
-        ctx += "\n## Passage\n\n%s\n" % exam["passage"]
+    ctx = exam_context(exam)
     notes = []
     for i in sorted(ids):
         msgs = [f["message"] for f in recs[i]["findings"]] or [recs[i]["reason"] or "no answer"]
@@ -83,7 +131,7 @@ def retry_prompt(exam, recs, ids):
     return ("%s\n\nLanguage: %s\n\nRetry: a first attempt was not accepted. Solve only the questions "
             "below, keep their ids, and return only those ids. Review notes (not a key, not "
             "authoritative):\n%s\n\nExam file (only the open questions):\n%s\n%s\n" % (
-                base, router.language(exam), "\n".join(notes), ctx, render_questions(exam, set(ids))))
+                base, router.language(exam), "\n".join(notes), ctx, render_questions(exam, set(ids), recs)))
 
 
 def solve_round(exam, rn, recs, ids, prompt):

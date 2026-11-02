@@ -57,12 +57,17 @@ def retry_ids(recs):
 
 
 def incomplete_ids(exam):
-    """{id: reasons} of questions carrying the `[Incomplete: missing_text ...]` marker line."""
+    """{id: reasons} of questions carrying the `[Incomplete: missing_text ...]` marker line, or whose
+    group context (a referenced question, a promised passage) is not in the file (labelled files)."""
     out = {}
     for q in exam["questions"]:
         why = refcheck.marker_reasons(q["text"])
         if why is not None:
             out[q["id"]] = why
+    if parser.labelled(exam):
+        for i, why in refcheck.missing_group_parts(
+                exam, parser.groups(exam), parser.deps(exam)).items():
+            out[i] = ", ".join(([out[i]] if i in out else []) + why)
     return out
 
 
@@ -146,7 +151,7 @@ def run(exam_path, out_dir, cfg, llm):
     try:
         ids = [i for i in sorted(recs) if i not in skip]
         prompt = solver.solve_prompt(exam, without_questions(text, skip) if skip else text,
-                                     cfg.get("key"))
+                                     cfg.get("key"), ids)
         for attempt in range(1, cfg["max_attempts"] + 1):
             if not ids:
                 break

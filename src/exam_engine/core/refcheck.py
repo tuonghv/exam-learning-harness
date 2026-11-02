@@ -151,3 +151,27 @@ def marker_reasons(text):
     """Reasons string of the marker line in `text`, or None."""
     m = _MARKER_LINE.search(text or "")
     return m.group(1) if m else None
+
+
+_NEEDS_TEXT = re.compile(
+    r"(?i)\bread\s+(?:the\s+)?(?:following\s+)?(?:passage|text)|đọc\s+(?:đoạn|bài|văn bản)"
+    r"|bảng số liệu sau|use the following data|dữ kiện sau")
+
+
+def missing_group_parts(exam, groups, deps):
+    """{id: [reasons]} of questions whose group context is cut: a dependency (`deps`: id -> ids) on a
+    question not in the file -> `question N`; a passage-asking instruction with no passage -> `passage`.
+    Uncertain links are not decided here (exam_warnings)."""
+    known = {q["id"] for q in exam["questions"]}
+    out = {}
+    for i, refs in deps.items():
+        for r in refs:
+            if r not in known:
+                out.setdefault(i, []).append("question %d" % r)
+    if not exam.get("passage"):
+        for g in groups:
+            if g["instruction"] and not g["passage"] and _NEEDS_TEXT.search(g["instruction"]):
+                for q in exam["questions"]:
+                    if q["id"] in g["ids"] and (q.get("instruction") or "") == g["instruction"]:
+                        out.setdefault(q["id"], []).append("passage")
+    return out

@@ -12,6 +12,7 @@ Rules
 4. `checks` = at least one way to confirm the answer differently (substitute back, unit analysis, limiting
    case, quote). For a calculation also give `expr`: the final numeric expression as plain Python
    arithmetic, so code can recompute it.
+5. A `## Group` block is shared context of its questions; `### Sibling answers` is context only, do not re-answer it.
 
 Output
 {"schema_version":"1.0","questions":[{"id":"1","type":"multiple_choice","answer":"A",

@@ -10,7 +10,7 @@ from exam_engine.adapters import claude
 from exam_engine.core import schema as sch
 from exam_engine.core.decision import declined, decide_rec, finding, is_open
 from exam_engine.core.safe_eval import safe_eval
-from exam_engine.pipeline import router
+from exam_engine.pipeline import parser, router
 from exam_engine.utils.text import fold, norm
 
 _NUM = re.compile(r"-?\d+(?:[.,]\d+)?")
@@ -184,17 +184,33 @@ def det_checks(q, ans, exam):
 def qa_prompt(exam, recs, ids):
     base = settings.read_prompt("verification/verify_answer.md", router.language(exam))
     qs = {q["id"]: q for q in exam["questions"]}
+    lab = parser.labelled(exam)
+    dep = parser.deps(exam) if lab else {}
     items = []
     for i in sorted(ids):
         r, a = recs[i], recs[i]["ans"]
-        items.append({"id": str(i), "question": qs[i]["text"], "options": qs[i]["options"],
+        items.append({"id": str(i), "question": qs[i]["stem"] if lab else qs[i]["text"],
+                      "options": qs[i]["options"],
                       "answer": a.get("answer"), "solution": a.get("solution"),
                       "explanation": a.get("explanation"),
                       "code_checks": [{"kind": c["kind"], "detail": c["detail"],
                                        "result": c["result"]} for c in r["checks"]]})
+        if dep.get(i):  # dependent: the stems and answers it builds on (context, not under review)
+            items[-1]["sibling_answers"] = [
+                {"id": str(j), "question": qs[j]["stem"],
+                 "answer": ((recs.get(j) or {}).get("ans") or {}).get("answer")}
+                for j in dep[i] if j in qs]
     ctx = "Instructions:\n%s\n" % exam["instructions"]
     if exam["passage"]:
         ctx += "\nPassage:\n%s\n" % exam["passage"]
+    if lab:  # each group's shared instruction + passage once, not repeated per item
+        for g in parser.groups(exam):
+            own = [i for i in sorted(ids) if i in g["ids"] and (g["instruction"] or g["passage"])
+                   and (qs[i].get("instruction") or "") == g["instruction"]
+                   and parser._passage(qs[i]) == g["passage"]]
+            if own:
+                ctx += "\nGroup of questions %s:\n%s\n%s\n" % (
+                    ", ".join(map(str, own)), g["instruction"], g["passage"])
     return "%s\n\nLanguage: %s\n\n%s\nAnswers to review (JSON):\n%s\n" % (
         base, router.language(exam), ctx, json.dumps(items, ensure_ascii=False, indent=1))
 
