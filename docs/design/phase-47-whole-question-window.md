@@ -99,3 +99,6 @@ Nova
 1. Accepted. The F5 false alarm on the vision path is a mock artefact (gold_pdf.vision_replies writes `figures: []`, D1): fix the mock in this task; the text-path rule tweak becomes its own small REQ.
 2. Paid slice (pages 7-8 and 14-15, about $0.2, user approved small real checks): dry-run first; anything above $0.3 asks the user.
 3. Order (user priority RAW-00156): TASK-052 (human review path) runs BEFORE the build of this task; TASK-047 is held after its design is installed and resumes after TASK-052.
+
+## Plan modes
+Applies to the PDF/image vision refine route (`ingest-refine`); the text route and the solve plans are unchanged. A run with no cut boundary makes the same calls as today (no extra image); old refined.json load; mock and real runs behave the same.

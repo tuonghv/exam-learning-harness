@@ -80,7 +80,7 @@
   "checkpoint": {
     "done": [],
     "notes": "",
-    "next": "designer drafting the whole-question window design; then advance.sh DESIGN, coder, tester, verifier"
+    "next": "resume: coder tests-first per phase-47 (tests 1-15), then real slice pages 7-8 and 14-15 (dry-run first, ask if > $0.3)"
   },
   "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
 }
