@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-051",
   "title": "OCR route quality: spaces, page furniture, doubt marker (REQ-0054)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0054",
   "acceptance_criteria": [
     "AC1 diagnosis and cheap fix for lost spaces",
@@ -31,9 +31,9 @@
     "summary": "char-box respacing OCR_GAP 0.15 calibrated on 3 families, OCR-space-tolerant furniture filter, ocr_doubt reasons (glued/chars/furniture/lang_missing) -> Incomplete marker, sidecar uncertain, engine decline; missing-language error with install note; before/after measurement"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit (about 5 min, OCR tests)",
+    "result": "1121 run, only the known failures (identical names to baseline); tester recount of before/after matches (family C glued 171/168 vs 173/170: alignment method); 4 mutations killed; 25 md + 2 PDFs identical to 4865a2c (PDFs after whitespace normalisation)"
   },
   "security": {
     "status": "pending",
@@ -52,7 +52,8 @@
   "evidence_required": true,
   "roles": {
     "designer": "work/TASK-051/handoff/design.md",
-    "coder": "work/TASK-051/handoff/code.md"
+    "coder": "work/TASK-051/handoff/code.md",
+    "tester": "work/TASK-051/handoff/test.md"
   },
   "user_notes": [
     {
@@ -62,7 +63,7 @@
     }
   ],
   "picked_at": "2026-11-02T14:33:48Z",
-  "updated_at": "2026-11-02T16:03:52Z",
+  "updated_at": "2026-11-02T16:03:53Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -72,5 +73,5 @@
     "notes": "",
     "next": "coder 51.7 sweep + 51.1 running (a4ca5fb7); then 51.2-51.6 brief, tester, verifier; vie.traineddata install is the user's (commands given); paid questions Q-1793619815 and Q-1793622303 wait for the user"
   },
-  "next": "unit-test gate"
+  "next": "verifier + publish evidence"
 }

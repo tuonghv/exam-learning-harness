@@ -1597,3 +1597,9 @@ Action: Titan implemented 51.1-51.7
 Result: 1121 tests, failures = baseline
 Decision: UNIT_TESTED next
 Next: record tests
+
+## UNIT_TESTED - TASK-051 - 2026-11-02T16:03:53Z
+Action: Nemesis QA
+Result: no defects; gaps: 51.2 hint-started test missing, no native-only PDF tracked
+Decision: VERIFIED next
+Next: verifier
