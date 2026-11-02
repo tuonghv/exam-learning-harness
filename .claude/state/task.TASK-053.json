@@ -60,7 +60,13 @@
       "waiver": "coordinator design inline: one option and a table format that already exists"
     }
   },
-  "user_notes": [],
+  "user_notes": [
+    {
+      "raw": "RAW-00161",
+      "note": "REQ-0057 widened: section->subject, instruction as a labelled block",
+      "at": "2026-11-02T05:49:13Z"
+    }
+  ],
   "picked_at": "2026-11-02T05:46:42Z",
   "updated_at": "2026-11-02T05:47:03Z",
   "updated_by": "main",
