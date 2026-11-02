@@ -1,0 +1,58 @@
+{
+  "task_id": "TASK-059",
+  "title": "Pre-solve figure/table/passage flag and page-image check for flagged questions (REQ-0059; hybrid: extract to locate, keep original PDF to verify)",
+  "state": "TODO",
+  "requirement": "REQ-0059",
+  "acceptance_criteria": [
+    "AC1 only flagged questions get source-page images",
+    "AC2 unreadable/absent image -> decline missing_text",
+    "AC3 real small-slice evidence (TASK-020 Q10, Q18), cost reported",
+    "AC4 pre-solve WARN for missing figure refs"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {},
+  "user_notes": [],
+  "picked_at": "2026-11-02T11:27:53Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [
+    "work/TASK-059/"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
