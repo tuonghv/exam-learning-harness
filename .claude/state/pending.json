@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "id": "Q-1793619815",
+    "task_id": "TASK-059",
+    "question": "Run the one paid real check of the page-image path on the TASK-020 trial slice (Q1, Q7, Q10, Q18 with source-page lines; about $0.20-0.30, cap $0.50)?",
+    "recommendation": "Yes: it is the only evidence that Q10 and Q18 are solved from images in the new path; cost is capped at $0.50",
+    "kind": "paid",
+    "asked_at": "2026-11-02T11:43:35Z"
+  }
+]
