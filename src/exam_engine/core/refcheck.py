@@ -158,6 +158,15 @@ _NEEDS_TEXT = re.compile(
     r"|bảng số liệu sau|use the following data|dữ kiện sau")
 
 
+_SENT = re.compile(r"[.!?。]+(?:\s|$)")
+
+
+def has_own_text(q):
+    """The stem itself carries the passage (options excluded): >= 200 chars or >= 3 sentences."""
+    stem = (q.get("stem") or "").strip()
+    return len(stem) >= 200 or len(_SENT.findall(stem)) >= 3
+
+
 def missing_group_parts(exam, groups, deps):
     """{id: [reasons]} of questions whose group context is cut: a dependency (`deps`: id -> ids) on a
     question not in the file -> `question N`; a passage-asking instruction with no passage -> `passage`.
@@ -172,6 +181,7 @@ def missing_group_parts(exam, groups, deps):
         for g in groups:
             if g["instruction"] and not g["passage"] and _NEEDS_TEXT.search(g["instruction"]):
                 for q in exam["questions"]:
-                    if q["id"] in g["ids"] and (q.get("instruction") or "") == g["instruction"]:
+                    if (q["id"] in g["ids"] and (q.get("instruction") or "") == g["instruction"]
+                            and not has_own_text(q)):
                         out.setdefault(q["id"], []).append("passage")
     return out

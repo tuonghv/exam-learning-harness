@@ -227,6 +227,11 @@ def exam_warnings(exam):
         for q in exam["questions"]:
             if not (q.get("instruction") or q.get("passage")) and _VAGUE_RE.search(q.get("stem") or ""):
                 warns.append("group_link_uncertain: q %d" % q["id"])
+        for g in groups(exam):  # passage promised, none given, but the stem carries text: solve, warn
+            if g["instruction"] and not g["passage"] and refcheck._NEEDS_TEXT.search(g["instruction"]):
+                warns.extend("group_link_uncertain: q %d" % q["id"] for q in exam["questions"]
+                             if q["id"] in g["ids"] and (q.get("instruction") or "") == g["instruction"]
+                             and refcheck.has_own_text(q))
     return warns
 
 

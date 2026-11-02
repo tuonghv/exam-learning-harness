@@ -78,6 +78,39 @@ class TestRender(unittest.TestCase):
         p2 = solver.retry_prompt(ex2, _recs(ex2, {1: "C"}), [2])
         self.assertIn("Answer: C", p2)
 
+    def test_sibling_answers_each_rendered(self):
+        t = _file(_lab(1, "Read.", PAS, "Base one?") + _lab(2, "Read.", PAS, "Base two?")
+                  + _lab(3, "Read.", PAS, "Using question 1 and question 2, add."))
+        ex = _parse(t)
+        recs = _recs(ex, {1: "B", 2: "D"})
+        out = solver.render_questions(ex, [3], recs)
+        self.assertRegex(out, r"Question 1: Base one\?\nAnswer: B")
+        self.assertRegex(out, r"Question 2: Base two\?\nAnswer: D")
+        self.assertIn("Answer: (none yet)", solver.render_questions(ex, [3], _recs(ex, {1: "B"})))
+        self.assertEqual(out.count(PAS), 1)
+
+    def test_group_header_only_for_real_groups(self):
+        lone = _parse(_file(_lab(1, "Choose the best answer.", "", "Stem?")))
+        out = solver.render_questions(lone, [1])
+        self.assertNotIn("## Group", out)
+        self.assertIn("### Instruction for this group", out)
+        two = _parse(_file(_lab(1, "Choose.", "", "S1?") + _lab(2, "Choose.", "", "S2?")))
+        self.assertEqual(solver.render_questions(two, [1, 2]).count("## Group 1-2"), 1)
+        pas = _parse(_file(_lab(1, "Read.", PAS, "S1?")))
+        self.assertIn("## Group 1-1", solver.render_questions(pas, [1]))
+
+    def test_passage_promised_stem_has_text_warns_not_declines(self):
+        long_stem = "The tea trade grew along the old roads. " * 6 + "Why?"
+        ex = _parse(_file(_lab(1, "Read the following passage and answer.", "", long_stem)))
+        self.assertEqual(refcheck.missing_group_parts(ex, parser.groups(ex), parser.deps(ex)), {})
+        self.assertEqual(parser.exam_warnings(ex), ["group_link_uncertain: q 1"])
+        three = _parse(_file(_lab(1, "Read the following text.", "", "One. Two. Three. Why?")))
+        self.assertEqual(refcheck.missing_group_parts(three, parser.groups(three), parser.deps(three)), {})
+        short = _parse(_file(_lab(1, "Read the following text.", "", "One. Why?")))
+        self.assertEqual(refcheck.missing_group_parts(short, parser.groups(short), parser.deps(short)),
+                         {1: ["passage"]})
+        self.assertEqual(parser.exam_warnings(short), [])
+
     def test_unlabelled_unchanged(self):
         t = _file("## Question 1\n\nA?\n" + OPT + "## Question 2\n\nB?\n" + OPT)
         ex = _parse(t)

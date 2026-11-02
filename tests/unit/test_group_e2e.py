@@ -51,7 +51,6 @@ class TestCliEndToEnd(unittest.TestCase):
         with open(self.p, "w", encoding="utf-8") as f:
             f.write(exam_text())
 
-    @unittest.expectedFailure  # DEFECT D1: cli dry-run calls solve_prompt without ids -> raw file, passage x7
     def test_55_4_dry_run_passage_once_per_group(self):
         r = cli(self.p, "--dry-run")
         self.assertEqual(r.returncode, 0, r.stderr)

@@ -92,7 +92,8 @@ def render_questions(exam, ids, recs=None):
             sec = qs[own[0]]["section"]
             parts.append("## Section: %s" % sec)
         if g["instruction"] or g["passage"]:
-            parts.append("## Group %d-%d" % (own[0], own[-1]))
+            if len(own) > 1 or g["passage"]:  # a lone guide-only question needs no group frame
+                parts.append("## Group %d-%d" % (own[0], own[-1]))
             parts.extend("### %s\n\n%s" % (lab, val) for lab, val in (
                 ("Instruction for this group", g["instruction"]), ("Passage", g["passage"])) if val)
         if g["kind"] == "dependent":

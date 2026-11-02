@@ -83,7 +83,10 @@ def solve_main(argv=None):
         print("calls <= %d, cap $%.2f (dry run: no call made)" % (
             engine.call_cap(cfg), a.max_cost_usd))
         print("=== SOLVE prompt ===")
-        print(solver.solve_prompt(exam, text, a.key))
+        skip = engine.incomplete_ids(exam)
+        ids = [q["id"] for q in sorted(exam["questions"], key=lambda q: q["id"]) if q["id"] not in skip]
+        print(solver.solve_prompt(exam, engine.without_questions(text, skip) if skip else text,
+                                  cfg["key"], ids))
         print("=== QA prompt template (answers are filled in from the SOLVE reply) ===")
         print(settings.read_prompt("verification/verify_answer.md"))
         print("=== retry prompt: solve prompt + only the open questions + non-key QA findings ===")
