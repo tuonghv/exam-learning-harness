@@ -43,7 +43,13 @@
   "roles": {
     "designer": "work/TASK-051/handoff/design.md"
   },
-  "user_notes": [],
+  "user_notes": [
+    {
+      "raw": "RAW-00181",
+      "note": "user installed vie.traineddata in /usr/share/tesseract-ocr/4.00/tessdata/; rerun vie-dependent checks",
+      "at": "2026-11-02T15:02:56Z"
+    }
+  ],
   "picked_at": "2026-11-02T14:33:48Z",
   "updated_at": "2026-11-02T14:53:38Z",
   "updated_by": "main",
