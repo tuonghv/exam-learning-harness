@@ -116,7 +116,7 @@ def _share_context(qs):
         q = dict(q, context=ctx, section=sec) if heads or sec else q
         m = GROUP_RE.search(ctx)
         if m:
-            cur = (int(m.group(1)), int(m.group(2)), ctx)
+            cur = segment.group_span(m) + (ctx,)
         elif cur and q["id"].isdigit() and cur[0] < int(q["id"]) <= cur[1]:
             q = dict(q, context=cur[2])
         out.append(q)
@@ -168,13 +168,13 @@ def _from_refined(doc, spec=None):
         raise IngestError("missing_header", "missing exam header(s): %s (use --meta K=V)"
                           % ", ".join(missing))
     qs = refined_questions(doc)
+    qs = _share_context(qs)  # before the slice: a group's carrier may lie outside `spec`
     if spec:
         want = set(parts.parse_pages(spec))
         qs = [q for q in qs if q["id"].isdigit() and int(q["id"]) in want]
     if not qs:
         raise IngestError("no_questions", "no refined questions selected in %s" % doc["source"]["name"])
     out = ["# Exam Input", ""] + ["%s: %s" % (k, v) for k, v in meta.items()]
-    qs = _share_context(qs)
     first = int(qs[0]["id"])
     out += ["", "## Instructions", "", "Choose the best answer and explain why."]
     if first != 1:

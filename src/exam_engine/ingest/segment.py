@@ -4,7 +4,16 @@ import re
 _Q = re.compile(r"^\s*(?:(?:Câu|Cau|Question)\s*(\d+)\s*[.:)]?|(\d+)(?!\.\d)\s*[.)])\s*(.*)$", re.I)  # `3.1.` is a sub-number, not question 3
 _OPT = re.compile(r"^\s*([A-D])\s*[.)]\s*(.*)$")
 # a group passage intro ("Questions 46-52 ...") or a part heading is not part of option D
-GROUP_RE = re.compile(r"(?:Questions?|[Cc]âu(?:\s*hỏi)?)\s*(?:từ\s*)?(\d+)\s*(?:-|–|đến|to)\s*(\d+)")
+# forms: `N-M`, `N đến (câu )M`, `N to M`, `N and M`, `N, M(, K)`; read the span with group_span()
+GROUP_RE = re.compile(r"(?:Questions?|[Cc]âu(?:\s*hỏi)?)\s*(?:từ\s*)?(\d+)"
+                      r"(?:\s*(?:-|–|đến|to)\s*(?:[Cc]âu\s*)?(\d+)|\s+and\s+(\d+)|((?:\s*,\s*\d+)+))")
+
+
+def group_span(m):
+    """(first, last) question numbers of a GROUP_RE match; a list form spans min..max."""
+    nums = [int(m.group(1))] + [int(n) for n in re.findall(r"\d+", m.group(4) or "")]
+    nums += [int(g) for g in m.group(2, 3) if g]
+    return min(nums), max(nums)
 # opens a context only at the line start (short prefix allowed), so a wrapped option that
 # mentions "câu 3-5" stays in option D
 _INTRO = re.compile(r"^\s*(?:(?:Dựa vào|Đọc|Hãy đọc|Based on|Read|Use|Study)\b[^\n]{0,120}?)?"
