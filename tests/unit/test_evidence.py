@@ -218,8 +218,8 @@ class WorkflowCheck(Fixture):
     def test_flagged_verified_needs_published(self):
         r = self.run_wc({"state": "VERIFIED", "evidence_required": True,
                          "verification": {"status": "passed", "evidence": ["work/TASK-9/e.txt"]}})
-        self.assertIn("published", r.stdout)
-        self.assertIn("FAIL", r.stdout)
+        fails = [l for l in r.stdout.splitlines() if l.startswith("FAIL") and "verification.published" in l]
+        self.assertTrue(fails, r.stdout)  # the WARN text also says "published"; only the FAIL line proves the gate
 
     def test_unflagged_warn_only(self):
         r = self.run_wc({"state": "VERIFIED",

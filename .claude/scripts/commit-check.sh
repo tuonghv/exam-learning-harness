@@ -208,7 +208,7 @@ if msg_file:
         # workflow-check.sh read the WORKING TREE; its verdict only holds for
         # this commit if the workflow files are fully staged. Otherwise HEAD
         # can record DONE with backlog.json still 'active' or no report file.
-        porcelain = git("status", "--porcelain", "--",
+        porcelain = git("status", "--porcelain", "-uall", "--",
                         ".claude/state", "docs/design", "docs/report").stdout
         partial = [l[3:] for l in porcelain.splitlines()
                    if l.startswith("??") or (len(l) > 1 and l[1] != " ")]
