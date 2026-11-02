@@ -1076,7 +1076,7 @@
       "AC4 metrics block in stdout and report, no paid call",
       "AC5 tests-first on fixtures; crosscheck recount on a real DGNL run"
     ],
-    "completed_at": "2026-11-02T10:30:26Z",
+    "completed_at": "2026-11-02T10:30:33Z",
     "report": "docs/report/phase-56-run-metrics.md",
     "user_notes": [
       {
