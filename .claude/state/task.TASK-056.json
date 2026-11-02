@@ -1,0 +1,58 @@
+{
+  "task_id": "TASK-056",
+  "title": "Solve-run metrics: metrics.py catalogue, run history, run-stats stats/compare/trend, metrics block in solve output and report (REQ-0060)",
+  "state": "TODO",
+  "requirement": "REQ-0060",
+  "acceptance_criteria": [
+    "AC1 metrics catalogue with formulas, accuracy vs proxy vs health",
+    "AC2 history JSONL per run + backfill",
+    "AC3 compare/trend with noise rule",
+    "AC4 metrics block in stdout and report, no paid call",
+    "AC5 tests-first on fixtures; crosscheck recount on a real DGNL run"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {},
+  "user_notes": [],
+  "picked_at": "2026-11-02T10:07:38Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [
+    "work/TASK-056/"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
