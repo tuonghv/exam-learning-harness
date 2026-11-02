@@ -1501,3 +1501,9 @@ Action: Report written
 Result: TASK-058 verified, docs/report/phase-58-plan-report-split.md
 Decision: DONE
 Next: next TODO: REQ-0059 image check
+
+## DESIGN - TASK-059 - 2026-11-02T11:32:18Z
+Action: Nova designed page-image check
+Result: design COMPLETE; real slice run $0.20-0.30 needs user go
+Decision: keep text answer on unreadable image; flag --pdf
+Next: coder tests-first
