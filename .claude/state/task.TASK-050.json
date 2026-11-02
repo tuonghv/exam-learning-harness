@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-050",
   "title": "Cheap-model (Haiku) fallback for uncertain question/subject boundaries (REQ-0053)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0053",
   "acceptance_criteria": [
     "REQ-0053 AC1 uncertainty signal",
@@ -52,12 +52,26 @@
     "result": "779 run, 52 boundary tests OK (2 documented expected failures DEF-6/DEF-7), 3 known failures identical at base; cost safety: 0 invocations with flag off, no mode, two modes, mock, dry-run; real mode uses model haiku in an isolated cwd, cap and cache honoured; 8 mutations killed; DGNL native text with flag off: exactly 4 blocks differ vs the pre-rule render, 143 identical"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "default off; real call only with --real (exactly one mode, else exit 2); model reply strictly validated (labels, indices, confidence, size, nesting) and used only as a hint behind numbering/completeness gates; answer-key lines never in a window; prompt-injection text cannot change anything beyond validated labels; claude invoked with model alias haiku in an isolated cwd and a cost cap"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-050/evidence/final2_classify.txt",
+      "work/TASK-050/evidence/final3_classify.txt",
+      "work/TASK-050/evidence/final3_full.txt",
+      "work/TASK-050/evidence/final3_mutations.txt",
+      "work/TASK-050/evidence/final_boundary_tests.txt",
+      "work/TASK-050/evidence/final_diff_protected.txt",
+      "work/TASK-050/evidence/final_old_assertions_removed.txt",
+      "work/TASK-050/evidence/final_unit_suite.txt",
+      "work/TASK-050/evidence/phantom_map.txt",
+      "work/TASK-050/evidence/render_diff_after_vs_after2.txt",
+      "work/TASK-050/handoff/verify-phantoms.md"
+    ],
+    "command": "unit suite vs base; fake-claude cost safety; hint forgery cases; classifier of the DGNL native text; verifier read of the PDF against the renders for the 11 former N.M phantom lines (round 2)",
+    "result": "3 known failures identical at base; no old assertion removed; no schema/solver/config change; verifier round 2: 1.2 and 3.2 now in the context of 31-35 and 103-105 not option D, 3.1 stays with 91-93, nothing lost; open: DEF-6, DEF-7 (low, documented), DEF-C (low); no real Haiku call was made"
   },
   "report": {
     "status": "pending",
@@ -74,6 +88,12 @@
     },
     "tester": {
       "waiver": "work/TASK-050/handoff/test.md"
+    },
+    "verifier": {
+      "waiver": "work/TASK-050/handoff/verify-phantoms.md (Argus, PDF read against the renders)"
+    },
+    "crosscheck": {
+      "waiver": "work/TASK-050/handoff/test.md independent classifier, fake-claude traces and mutations"
     }
   },
   "user_notes": [],
@@ -102,5 +122,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "VERIFIED"
+  "next": "DONE: report; real Haiku run only with the user's go"
 }

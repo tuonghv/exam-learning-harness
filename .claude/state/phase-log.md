@@ -1243,3 +1243,9 @@ Action: tester Nemesis three rounds: cost safety with a fake claude, hint forger
 Result: no open medium defect
 Decision: advance
 Next: VERIFIED
+
+## VERIFIED - TASK-050 - 2026-11-02T04:34:47Z
+Action: verifier Argus read the PDF against before/after renders, found a regression, rechecked after the fix
+Result: clean
+Decision: advance
+Next: DONE
