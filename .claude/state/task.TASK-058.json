@@ -40,7 +40,7 @@
   },
   "roles_required": true,
   "crosscheck_required": true,
-  "evidence_required": false,
+  "evidence_required": true,
   "roles": {
     "designer": "work/TASK-058/handoff/design.md"
   },
@@ -55,7 +55,8 @@
   "inputs": {},
   "checkpoint": {
     "done": [],
-    "notes": ""
+    "notes": "",
+    "next": "coder 58.7 running; then tester, advance, verifier, publish evidence, report, DONE"
   },
   "next": "Titan: 58.1+58.2 raw call capture and plan run, tests first"
 }

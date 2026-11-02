@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0062",
-  "next": "Titan: 58.1+58.2 raw call capture and plan run, tests first",
-  "updated": "2026-11-02 18:02"
+  "next": "TASK-058: coder 58.7 plan-import running (ac033a98); then commit wip, tester QA (determinism, no-AI guard, importer), advance IMPLEMENTING/UNIT_TESTED, verifier, publish evidence (flag evidence_required), report, DONE; then pick next TODO REQ (REQ-0059 image check, TASK-048, TASK-051)",
+  "updated": "2026-11-02 18:15"
 }
