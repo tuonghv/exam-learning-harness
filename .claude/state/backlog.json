@@ -623,7 +623,7 @@
     "created_at": "2026-10-30T15:30:00Z",
     "requirement": "REQ-0034",
     "acceptance_criteria": [
-      "REQ-0034 AC1-AC4: sheet 'Subject \u2013 N Questions', 5 per row, 2-digit ids as stored, circled A-D, \u2014 for null/Open/non A-D, block at top of report.md/html/pdf plus answers.md, solver/schema unchanged",
+      "REQ-0034 AC1-AC4: sheet 'Subject – N Questions', 5 per row, 2-digit ids as stored, circled A-D, — for null/Open/non A-D, block at top of report.md/html/pdf plus answers.md, solver/schema unchanged",
       "REQ-0035 AC1-AC4 phase 1: --view sheet|learn (default sheet), learn view reuses explanation+solution, optional key_concept/common_mistake only if present, no extra LLM cost",
       "Tests in tests/unit/test_exam_report.py with null-answer results (work/dgnl-real Vietnamese/Science), existing report tests stay green, PDF font check for circled letters"
     ],
@@ -1036,6 +1036,21 @@
         "note": "review tmp/solve-strategy-context.md for REQ-0058 (gaps, better engine design)",
         "at": "2026-11-02T09:35:34Z"
       }
+    ]
+  },
+  {
+    "task_id": "TASK-055",
+    "title": "Group-aware solving: slice-after-share, group model, group-aware render/retry/QA, missing-context decline, source pages (REQ-0058)",
+    "priority": 1,
+    "status": "queued",
+    "created_at": "2026-11-02T09:40:00",
+    "requirement": "REQ-0058",
+    "acceptance_criteria": [
+      "AC1 group kind derived (independent/passage/dependent)",
+      "AC2 independent: guide + own stem",
+      "AC3 passage once per group in prompt; missing passage declined",
+      "AC4 dependent: sibling answers passed on retry/QA; missing sibling declined",
+      "AC5 design states why best; tests-first 2-page slices; old files byte-identical"
     ]
   }
 ]
