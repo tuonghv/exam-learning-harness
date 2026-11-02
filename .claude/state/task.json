@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-050",
-  "state": "DESIGN",
-  "next": "coder: tests first (design list 15), boundary.py, replycache.py, segment hints, ingest flags, D1 rule fix first",
+  "state": "IMPLEMENTING",
+  "next": "UNIT_TESTED",
   "title": "Cheap-model (Haiku) fallback for uncertain question/subject boundaries (REQ-0053)",
   "active": [
     {
       "task_id": "TASK-050",
-      "state": "DESIGN",
-      "next": "coder: tests first (design list 15), boundary.py, replycache.py, segment hints, ingest flags, D1 rule fix first",
-      "updated_at": "2026-10-31T03:47:35Z"
+      "state": "IMPLEMENTING",
+      "next": "UNIT_TESTED",
+      "updated_at": "2026-11-02T04:34:46Z"
     }
   ],
   "max_active": 1
