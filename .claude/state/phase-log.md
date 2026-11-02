@@ -1279,3 +1279,9 @@ Action: coordinator re-ran the suite and checked the evidence set
 Result: consistent
 Decision: advance
 Next: DONE
+
+## DONE - TASK-046 - 2026-11-02T05:24:42Z
+Action: report written
+Result: AC1-AC4 met; OCR quality gap opened as REQ-0054
+Decision: close TASK-046 and REQ-0050
+Next: TASK-047 whole-question window, TASK-048, TASK-051
