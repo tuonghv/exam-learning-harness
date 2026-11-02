@@ -346,5 +346,48 @@ class WindowLogic(unittest.TestCase):
         self.assertEqual(self.kinds(lines), (["NB"], 1))
 
 
+class SubHeadingRule(unittest.TestCase):
+    H = "3.2 LOGIC VÀ SỐ LIỆU"
+
+    def run_(self, lines):
+        return segment.segment(lines)[1]
+
+    def test_50qa_heading_before_question_group_or_passage_goes_to_context(self):
+        for nxt in (q(2), ["Questions 46-52: read the passage"] + q(2), ["Read the following passage."] + q(2),
+                    ["", ""] + q(2), ["Câu 2-3. Dựa vào đoạn sau"] + q(2)[:1] + q(2)[1:]):
+            qs = self.run_(q(1) + [self.H] + nxt)
+            self.assertEqual(qs[0]["options"][3]["text"], "bốn", nxt[:1])
+            self.assertTrue(qs[1].get("context", "").startswith(self.H), nxt[:1])
+
+    def test_50qa_heading_stays_in_d_without_a_following_question_or_group(self):
+        # no next non-empty line, a plain line, an answer-key line, an option: the rule stays silent
+        for tail in ([], ["ghi chú thêm"], ["Đáp án"], ["A. x"]):
+            qs = self.run_(q(1) + ["2.3 KẾT QUẢ"] + tail + (q(2) if tail else []))
+            self.assertIn("KẾT QUẢ", qs[0]["options"][3]["text"], tail)
+            self.assertNotIn("context", qs[-1] if len(qs) > 1 else {}, tail)
+
+    def test_50qa_lowercase_and_overlong_heading_stay_in_d_sixty_chars_move(self):
+        for ln, moved in (("3.1 something here", False), ("3.2 " + "A" * 57, False), ("3.2 " + "A" * 56, True),
+                          ("1.5 m/s", False), ("3.5", False), ("2.50", False), ("3.1 Phần tiếp theo", False)):
+            qs = self.run_(q(1, tail=[ln]) + q(2))
+            self.assertEqual(ln in qs[0]["options"][3]["text"], not moved, ln)
+            self.assertEqual("context" in qs[1], moved, ln)
+
+    def test_50qa_heading_after_exam_intro_is_intro_not_context(self):
+        _i, qs, _ok = segment.segment(["Hướng dẫn làm bài", "1.1 PHẦN MỘT"] + q(1) + q(2))
+        self.assertEqual([x["n"] for x in qs], [1, 2])
+        self.assertNotIn("context", qs[0])
+
+    @unittest.expectedFailure  # DEF-6 low: first of two headings in a row is glued into D
+    def test_50qa_two_headings_in_a_row_both_context(self):
+        qs = self.run_(q(1) + [self.H, "3.3 PHẦN KHÁC NỮA"] + q(2))
+        self.assertEqual(qs[0]["options"][3]["text"], "bốn")
+
+    @unittest.expectedFailure  # DEF-7 low: an upper-case wrapped tail `2.5 KM` before a question moves to its context
+    def test_50qa_uppercase_wrapped_tail_with_number_stays_in_d(self):
+        qs = self.run_(q(1, tail=["2.5 KM"]) + q(2))
+        self.assertTrue(qs[0]["options"][3]["text"].endswith("2.5 KM"))
+
+
 if __name__ == "__main__":
     unittest.main()
