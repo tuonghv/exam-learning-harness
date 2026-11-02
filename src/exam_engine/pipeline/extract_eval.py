@@ -247,6 +247,11 @@ HEAD = 30  # characters of a question's text that must open / close the extracte
 COMPLETENESS = ("boundary", "cross_page", "missing_detection", "false_merge", "incomplete_to_solver")
 
 
+def squash(s):
+    """NFC with every whitespace removed: equal means the same characters, only spacing/gluing differs."""
+    return "".join(unicodedata.normalize("NFC", s).split())
+
+
 def _body(g, e):
     """Canonical extracted text without a trailing formula line the text route folds into the text."""
     t, f = canon(e["text"]), canon(g["formula"])
@@ -269,7 +274,7 @@ def _judge(gold, extracted, opens, raws=None):
         e = extracted.get(qid)
         row = {"id": qid, "present": e is not None, "pages": g["pages"], "reasons": why.get(qid, [])}
         if e is None:
-            row.update(start=False, end=False, exact=False, merged=False)
+            row.update(start=False, end=False, exact=False, content=False, merged=False)
         else:
             body, gt = _body(g, e), canon(g["text"])
             eo = {k: canon(v) for k, v in e["options"].items()}
@@ -279,6 +284,8 @@ def _judge(gold, extracted, opens, raws=None):
             row["start"] = body.startswith(gt[:HEAD])
             row["end"] = body.endswith(gt[-HEAD:]) and eo == go
             row["exact"] = body == gt and eo == go and not row["merged"]
+            row["content"] = (squash(body) == squash(gt) and not row["merged"]
+                              and {k: squash(v) for k, v in eo.items()} == {k: squash(v) for k, v in go.items()})
         out[qid] = row
     return out
 
@@ -293,6 +300,7 @@ def completeness(gold, extracted, raws=None):
     cross = [rows[q] for q in ids if len(gold[q]["pages"]) > 1]
     flagged = lambda r: bool(r["reasons"])  # noqa: E731 - the solver declines a marked question
     bad = sum(1 for r in wrong if not flagged(r))
+    real = [r for r in got if not r["content"]]  # content differs beyond spacing
     ok_rows = [r for r in got if r["exact"]]
     cm = {"boundary": _rate(sum(1 for q in ids if rows[q]["start"] and rows[q]["end"] and not rows[q]["merged"]),
                             len(ids)),
@@ -300,17 +308,26 @@ def completeness(gold, extracted, raws=None):
           "missing_detection": _rate(sum(1 for r in wrong if flagged(r)), len(wrong)),
           "false_merge": _rate(sum(1 for r in got if r["merged"]), len(got)),
           "incomplete_to_solver": _rate(bad, len(got)),
+          "incomplete_to_solver_strict": _rate(bad, len(got)),  # same as incomplete_to_solver: exact text
+          "incomplete_to_solver_content": _rate(sum(1 for r in real if not flagged(r)), len(got)),
+          "content_errors": _rate(len(real), len(got)),
+          "missing_to_solver": _rate(len(ids) - len(got), len(ids)),
           "false_alarm": _rate(sum(1 for r in ok_rows if flagged(r)), len(ok_rows)),
           "n": len(ids), "zero_error_n": zero_error_n(0.999), "fail": bad > 0,
           "questions": [{"id": q, "pages": rows[q]["pages"], "present": rows[q]["present"],
                          "start": rows[q]["start"], "end": rows[q]["end"], "exact": rows[q]["exact"],
-                         "merged": rows[q]["merged"], "reasons": rows[q]["reasons"]} for q in ids]}
+                         "merged": rows[q]["merged"], "content": rows[q]["content"], "reasons": rows[q]["reasons"]} for q in ids]}
     return cm
 
 
 def completeness_lines(cm):
     ls = ["%s %s" % (k, _fmt(cm[k], "n/a (0)")) for k in COMPLETENESS]
     ls.append("false_alarm (exact but marked incomplete) %s" % _fmt(cm["false_alarm"], "n/a (0)"))
+    ls.append("incomplete_to_solver_strict (exact text, unmarked) %s" % _fmt(cm["incomplete_to_solver_strict"], "n/a (0)"))
+    ls.append("incomplete_to_solver_content (same characters ignoring whitespace, unmarked) %s" % _fmt(
+        cm["incomplete_to_solver_content"], "n/a (0)"))
+    ls.append("content_errors (characters differ, marked or not) %s" % _fmt(cm["content_errors"], "n/a (0)"))
+    ls.append("missing_to_solver (gold question absent, silent drop) %s" % _fmt(cm["missing_to_solver"], "n/a (0)"))
     if cm["fail"]:
         ls.append("FAIL: %d wrong question(s) would reach the solver unmarked" % cm["incomplete_to_solver"]["k"])
     ls.append("99.9%% is NOT claimed: needs >= %d error-free questions (n=%d); intervals are Wilson 95%%." % (

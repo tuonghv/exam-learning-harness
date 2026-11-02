@@ -164,7 +164,11 @@ and never changes the existing report (extra files `completeness.json/md`): `bou
 text starts and ends like the gold with exact options, no other question's opening inside), `cross_page` (exact,
 over gold questions with more than one page), `missing_detection` (wrong extracted questions the structure check
 marks / all wrong), `false_merge` (extracted text holding another gold question's opening), `incomplete_to_solver`
-(wrong and unmarked: must be 0, exit 1 and `FAIL` otherwise), plus `false_alarm` (exact but marked). Families:
+(wrong and unmarked: must be 0, exit 1 and `FAIL` otherwise), plus `false_alarm` (exact but marked). Companions
+(same output, extra keys): `incomplete_to_solver_strict` (= the exact-text rate), `incomplete_to_solver_content`
+(characters differ after NFC and removing all whitespace, unmarked), `content_errors` (characters differ, marked or
+not), `missing_to_solver` (gold question absent from the extraction: a silent drop). On the OCR route tesseract
+(vie+eng present) glues words and can leak page furniture, so strict is high while content errors are few; read both. Families:
 F1 single page, F2 stem over 2 pages, F3 options on the next page, F4 passage over 3 pages + group of 3, F5 figure
 on the next page, F6 several per page, F7 formula cut, F8 header/footer/page number. The vision path replays
 mock replies built from gold per page, so it tests the continuation bridge and the gate, not vision accuracy.

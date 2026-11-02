@@ -132,6 +132,60 @@ class Rates(Base):
         self.assertIn("Wilson 95%", text)
 
 
+class StrictVsContent(Base):
+    def setUp(self):
+        super().setUp()
+        self.gold = mk_gold()
+        self.ext = [dict((k, v) for k, v in q.items() if k != "pages") for q in copy.deepcopy(self.gold)]
+
+    def test_glued_words_are_strict_wrong_but_content_equal(self):
+        self.ext[0]["text"] = stem(1).replace(" ", "")
+        self.ext[1]["options"]["A"] = self.ext[1]["options"]["A"].replace(" ", "")
+        cm = self.rates(self.gold, self.ext)
+        self.assertEqual(self.kn(cm, "incomplete_to_solver"), (2, 6))
+        self.assertEqual(self.kn(cm, "incomplete_to_solver_strict"), (2, 6))
+        self.assertEqual(self.kn(cm, "incomplete_to_solver_content"), (0, 6))
+        self.assertEqual(self.kn(cm, "content_errors"), (0, 6))
+
+    def test_real_content_error_counts_in_both(self):
+        self.ext[2]["text"] = stem(3).replace("riêng", "riềng")
+        self.ext[0]["text"] = stem(1).replace(" ", "")
+        cm = self.rates(self.gold, self.ext)
+        self.assertEqual(self.kn(cm, "incomplete_to_solver_strict"), (2, 6))
+        self.assertEqual(self.kn(cm, "incomplete_to_solver_content"), (1, 6))
+        self.assertEqual(self.kn(cm, "content_errors"), (1, 6))
+
+    def test_content_ignores_nfc_form(self):
+        import unicodedata
+        self.ext[0]["text"] = unicodedata.normalize("NFD", stem(1))
+        cm = self.rates(self.gold, self.ext)
+        self.assertEqual(self.kn(cm, "incomplete_to_solver_content"), (0, 6))
+
+    def test_marked_content_error_is_not_unmarked(self):
+        self.ext[1]["text"] = stem(2)[:30]
+        self.ext[1]["options"] = {"A": "x", "B": "y"}
+        cm = self.rates(self.gold, self.ext)
+        self.assertEqual(self.kn(cm, "content_errors"), (1, 6))
+        self.assertEqual(self.kn(cm, "incomplete_to_solver_content"), (0, 6))
+
+    def test_drop_moves_missing_to_solver_only(self):
+        cm = self.rates(self.gold, self.ext)
+        self.assertEqual(self.kn(cm, "missing_to_solver"), (0, 6))
+        del self.ext[0], self.ext[2]
+        cm = self.rates(self.gold, self.ext)
+        self.assertEqual(self.kn(cm, "missing_to_solver"), (2, 6))
+        self.assertEqual(self.kn(cm, "incomplete_to_solver"), (0, 4))
+        self.assertFalse(cm["fail"])
+        text = "\n".join(ee.completeness_lines(cm))
+        self.assertIn("silent drop) 2/6", text)
+        self.assertIn("incomplete_to_solver_content", text)
+
+    def test_existing_lines_keep_their_order_and_text(self):
+        lines = ee.completeness_lines(self.rates(self.gold, self.ext))
+        self.assertTrue(lines[0].startswith("boundary 6/6"))
+        self.assertTrue(lines[4].startswith("incomplete_to_solver 0/6"))
+
+
 class LoadingAndIdentity(Base):
     def test_gold_without_pages_loads_unchanged(self):
         g = ee.load_questions(GOLD)
