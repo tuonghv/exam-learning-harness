@@ -154,6 +154,10 @@ def compute(result, log_lines=None, exam=None, key=None, qa=None, needs_review=N
         counts["image_checked"] = sum(1 for q in qs if q.get("source") in ("image", "text+image"))
         counts["image_changed"] = sum(1 for q in qs if q.get("source") == "image"
                                       or _reason(q).startswith("needs_review: text/image"))
+    scope = (result.get("run") or {}).get("image_scope")
+    agrees, differs = (sum(1 for q in qs if code in _codes(q)) for code in ("image_agrees", "image_differs"))
+    if scope or agrees or differs:  # 61.4: keys only for wider-scope runs
+        counts.update(image_scope=scope, image_agrees=agrees, image_differs=differs)
     # 60.7: keys only when present, so a pre-60 result keeps byte-identical metrics
     mapped = sum(1 for q in qs if "answer_mapped" in _codes(q))
     if mapped:
@@ -305,6 +309,8 @@ def block(m):
     usd = cost.get("cost_usd")
     img = " image %d checked %d changed" % (c["image_checked"], c["image_changed"]) \
         if c.get("image_checked") is not None else ""
+    if c.get("image_scope"):
+        img += " scope %s agrees %d differs %d" % (c["image_scope"], c["image_agrees"], c["image_differs"])
     if c.get("answer_mapped"):
         img += " mapped %d" % c["answer_mapped"]
     if c.get("needs_review_by_why"):

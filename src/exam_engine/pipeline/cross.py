@@ -60,13 +60,34 @@ def flagged_items(exam, ids):
     return out
 
 
-def flagged_prompt(exam, items):
-    """Image prompt for flagged questions: asked by id + stem prefix, never by reading-order counting."""
+CONTINUES = "A question may continue on the next attached page.\n"
+ADJUDICATE_RULES = (
+    "Two readings of the same question disagree: one from the exam text, one from the page image. "
+    "For each question below choose ONE final answer and explain why in the explanation. "
+    "Use exactly these ids.\n%s")
+
+
+def adjudicate_prompt(exam, items):
+    """Text-only prompt; items = [(id, text answer dict, image answer dict)]."""
+    from exam_engine.pipeline import router
+    qs = {q["id"]: q for q in exam["questions"]}
+    blocks = []
+    for i, ta, ia in items:
+        blocks.append("id %s: %s\n  text answer: %s | %s\n  image answer: %s | %s" % (
+            i, qs[i]["text"].strip(), ta.get("answer"), ta.get("explanation") or "",
+            ia.get("answer"), ia.get("explanation") or ""))
+    return "%s\n\nLanguage: %s\n\n%s\n" % (solver.base_prompt(exam), router.language(exam),
+                                               ADJUDICATE_RULES % "\n\n".join(blocks))
+
+
+def flagged_prompt(exam, items, continues=False):
+    """Image prompt for flagged questions: asked by id + stem prefix, never by reading-order counting.
+    `continues` (wider --image-scope only) adds the cut-question rule; the default text is unchanged."""
     from exam_engine.pipeline import router
     lines = "\n".join('id %s%s: "%s..."' % (i, " (printed %s)" % p if p is not None else "", pre)
                       for i, p, pre in items)
     return "%s\n\nLanguage: %s\n\n%s\n" % (solver.base_prompt(exam), router.language(exam),
-                                           FLAGGED_RULES % lines)
+                                           FLAGGED_RULES % lines + (CONTINUES if continues else ""))
 
 
 def canon(answer):

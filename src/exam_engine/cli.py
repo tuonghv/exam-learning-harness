@@ -59,7 +59,14 @@ def solve_main(argv=None):
                     help="source PDF or ingest doc.json: re-read questions that need a figure/table from page images")
     ap.add_argument("--max-image-pages", type=int, metavar="N",
                     help="cap on distinct pages in the image call (default 4; needs --pdf)")
+    ap.add_argument("--image-scope", choices=("flagged", "declined", "doubt"), default="flagged",
+                    help="which questions reach the image call: flagged (default), + declined/cut, + doubtful (needs --pdf)")
+    ap.add_argument("--adjudicate", action="store_true",
+                    help="one extra text call for ids whose text and image answers differ (needs --pdf)")
     a = ap.parse_args(argv)
+    if (a.image_scope != "flagged" or a.adjudicate) and not a.pdf:
+        print("usage: --image-scope declined|doubt and --adjudicate need --pdf", file=sys.stderr)
+        return 2
     if a.max_image_pages is not None and (not a.pdf or a.max_image_pages < 0):
         print("usage: --max-image-pages N (N >= 0) needs --pdf", file=sys.stderr)
         return 2
@@ -91,6 +98,10 @@ def solve_main(argv=None):
            "pdf": not a.no_pdf, "lang": a.lang}
     if a.pdf:  # cfg keys only with --pdf: config_sha256 of a text-only run is unchanged
         cfg.update(image_pdf=a.pdf, max_image_pages=4 if a.max_image_pages is None else a.max_image_pages)
+        if a.image_scope != "flagged":  # only non-default values enter cfg: default runs stay byte-identical
+            cfg["image_scope"] = a.image_scope
+        if a.adjudicate:
+            cfg["adjudicate"] = True
     if a.dry_run:
         try:
             text = parser.read_text(a.exam)
@@ -127,7 +138,7 @@ def solve_main(argv=None):
             tg = _image_plan(cfg, exam, image)[0]
             if tg:
                 print("=== IMAGE prompt (flagged questions; page images attached) ===")
-                print(cross.flagged_prompt(exam, cross.flagged_items(exam, tg)))
+                print(cross.flagged_prompt(exam, cross.flagged_items(exam, tg), cfg.get("image_scope", "flagged") != "flagged"))
         return 0
     tmp = None
     try:
@@ -241,14 +252,17 @@ def _solve_image(a, real, tmp, base):
 
 def _image_plan(cfg, exam, image):
     skip = engine.incomplete_ids(exam)
+    scope = cfg.get("image_scope", "flagged")
+    # dry run: no answers yet, so only the skip ids are known as declined; doubt ids appear after the text rounds
     return engine.image_targets(exam, engine.visual_flags(exam), skip, cfg["max_image_pages"],
-                                image["key_pages"], image["have_pages"])
+                                image["key_pages"], image["have_pages"], scope)
 
 
 def _print_image_header(cfg, exam, image):
     tg, pages, _sk = _image_plan(cfg, exam, image)
     print("image check: %d questions, pages %s, est. $%.2f" % (
-        len(tg), pages, 0.03 + 0.035 * len(pages) if tg else 0.0), flush=True)
+        len(tg), pages, 0.03 + 0.035 * len(pages) if tg else 0.0)
+        + (", scope %s, ids %s" % (cfg["image_scope"], tg) if cfg.get("image_scope") else ""), flush=True)
 
 
 def _build_default_report(a, result):

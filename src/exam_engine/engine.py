@@ -20,7 +20,7 @@ BLOCKING = ("auth", "rate_limit", "service")
 
 
 def call_cap(cfg):
-    return 1 + 2 * cfg["max_attempts"] + (1 if cfg.get("image_pdf") else 0)
+    return 1 + 2 * cfg["max_attempts"] + (1 if cfg.get("image_pdf") else 0) + (1 if cfg.get("adjudicate") else 0)
 
 
 PNG_SIG = b"\x89PNG\r\n\x1a\n"
@@ -117,14 +117,33 @@ def warn_flags(exam, flags, skip, image_on):
             i, ", ".join(flags[i]), _span(pg), state), file=sys.stderr)
 
 
-def image_targets(exam, flags, skip, max_pages, key_pages, have_pages):
-    """(targets [id], pages [int], skipped {id: reason}); flagged ids not in `skip`, ascending.
+DOUBT_REASONS = ("solver_uncertainty_not_low", "reviewer_unsure", "reviewer_disagrees", "no_review")
+
+
+def scope_ids(recs, skip, scope):
+    """(declined ids, doubt ids) a wider --image-scope adds to the flagged ones; ([], []) for `flagged`."""
+    if scope == "flagged":
+        return [], []
+    dec = [i for i in sorted(recs) if i not in skip and (recs[i]["reason"] or "").startswith("solver_declined")]
+    if scope != "doubt":
+        return dec, []
+    return dec, [i for i in sorted(recs) if i not in skip and i not in dec and recs[i]["ans"] is not None
+                 and not declined(recs[i]["ans"]) and recs[i]["reason"] in DOUBT_REASONS]
+
+
+def image_targets(exam, flags, skip, max_pages, key_pages, have_pages, scope="flagged", dec=(), doubt=()):
+    """(targets [id], pages [int], skipped {id: reason}). `flagged`: flagged ids not in `skip`, ascending.
+    declined/doubt: priority order skip ids, `dec`, flagged, then `doubt` (lowest under the page cap).
     have_pages None = page count unknown (nothing is `page_absent`)."""
     qs = {q["id"]: q for q in exam["questions"]}
     targets, union, skipped = [], set(), {}
-    for i in sorted(flags):
-        if not flags[i] or i in skip:
-            continue
+    if scope == "flagged":
+        order = [i for i in sorted(flags) if flags[i] and i not in skip]
+    else:
+        order = sorted(skip)
+        for grp in (dec, [i for i in sorted(flags) if flags[i] and i not in skip], doubt):
+            order += [i for i in grp if i not in order]
+    for i in order:
         pg = set(qs[i].get("pages") or [])
         if max_pages <= 0:
             skipped[i] = "disabled"
@@ -142,7 +161,7 @@ def image_targets(exam, flags, skip, max_pages, key_pages, have_pages):
     return targets, sorted(union), skipped
 
 
-def apply_image(exam, recs, got, targets, flags, fail=None):
+def apply_image(exam, recs, got, targets, flags, fail=None, scope="flagged"):
     """Reconcile the image reply `got` ({id str: answer}) with the text records of `targets`.
     `fail` = (code, message) when the image call gave nothing: findings only, text records kept.
     Returns the reply ids that were not asked (ignored)."""
@@ -157,9 +176,13 @@ def apply_image(exam, recs, got, targets, flags, fail=None):
         if g is not None and not declined(g):
             if text_ok and cross.same_answer(r["ans"]["answer"], g["answer"]):
                 r["source"] = "text+image"
+                if scope != "flagged":  # agreement is a proxy: status stays as it was
+                    r["findings"].append(finding("image", "image_agrees", "image answer: %s" % g["answer"]))
             elif text_ok:
                 r["source"] = "text+image"
-                r["status"], r["reason"] = "UNCERTAIN", "needs_review: text/image differ"
+                r["image_ans"] = g
+                if not (scope != "flagged" and r["status"] == "FAIL"):  # a wider scope never softens a FAIL
+                    r["status"], r["reason"] = "UNCERTAIN", "needs_review: text/image differ"
                 r["findings"].append(finding("image", "image_differs", "image answer: %s" % g["answer"]))
             else:
                 r["attempts"] += 1
@@ -177,16 +200,38 @@ def apply_image(exam, recs, got, targets, flags, fail=None):
         r["findings"].append(finding("image", "image_unreadable" if g is not None else "image_missing",
                                      "image: %s" % why))
         if text_ok:  # G1: keep the text answer, never overwrite it
-            r["status"], r["reason"] = "UNCERTAIN", "needs_review: image unreadable (%s)" % why
-        elif r["ans"] is None or declined(r["ans"]):
-            r["reason"] = "solver_declined: missing_text (%s; image: %s)" % (", ".join(flags.get(i) or []), why)
+            if scope == "flagged" or r["status"] == "PASS":  # wider scope: a doubtful result keeps its reason
+                r["status"], r["reason"] = "UNCERTAIN", "needs_review: image unreadable (%s)" % why
+        elif r["ans"] is None or declined(r["ans"]):  # stays declined
+            r["reason"] = ("solver_declined: missing_text (%s; image: %s)" % (", ".join(flags[i]), why)
+                           if flags.get(i) else "solver_declined: missing_text (image: %s)" % why)
     return sorted(k for k in got if not any(str(t) == k for t in targets))
+
+
+def adjudicate(exam, recs, rn, ids):
+    """60.6: one text call for the ids whose text and image answers differ; answer replaced with a recorded reason."""
+    items = [(i, recs[i]["ans"], recs[i]["image_ans"]) for i in ids]
+    c = rn.call(cross.adjudicate_prompt(exam, items), "adjudicate")
+    got, err = cross.parse_reply(c.text) if c.ok else (None, c.reason or c.cls or "failed")
+    for i in ids:
+        r = recs[i]
+        g = (got or {}).get(str(i))
+        if g is None or declined(g):
+            r["findings"].append(finding("image", "adjudication_failed", err or "not in reply"))
+            continue
+        r["findings"].append(finding("image", "adjudicated", "adjudicated: %s (text %s, image %s)" % (
+            g["answer"], r["ans"]["answer"], r["image_ans"]["answer"])))
+        r["ans"] = g
+        r["status"], r["reason"] = "UNCERTAIN", "needs_review: adjudicated"
 
 
 def image_check(exam, recs, rn, flags, skip, cfg, image):
     """The one image call for the flagged questions (after the text rounds)."""
+    scope = cfg.get("image_scope", "flagged")
+    dec, doubt = scope_ids(recs, skip, scope)
     targets, pages, skipped = image_targets(
-        exam, flags, skip, cfg.get("max_image_pages", 4), image.get("key_pages"), image.get("have_pages"))
+        exam, flags, skip, cfg.get("max_image_pages", 4), image.get("key_pages"), image.get("have_pages"),
+        scope, dec, doubt)
     for i, why in skipped.items():
         recs[i]["findings"].append(finding("image", "image_skipped", why))
     if not targets:
@@ -197,19 +242,23 @@ def image_check(exam, recs, rn, flags, skip, cfg, image):
             if not isinstance(b, bytes) or not b.startswith(PNG_SIG) or len(b) > MAX_PNG_BYTES:
                 raise ValueError("render did not return a PNG within %d bytes" % MAX_PNG_BYTES)
     except Exception as exc:  # noqa: BLE001 - render is injected; any failure means no call
-        apply_image(exam, recs, {}, targets, flags, ("image_unavailable", str(exc)[:200]))
+        apply_image(exam, recs, {}, targets, flags, ("image_unavailable", str(exc)[:200]), scope)
         return
-    c = rn.call(cross.flagged_prompt(exam, cross.flagged_items(exam, targets)), "image", images=pngs, pages=pages)
+    items = cross.flagged_items(exam, targets)
+    c = rn.call(cross.flagged_prompt(exam, items, scope != "flagged"), "image", images=pngs, pages=pages)
     if not c.ok:
-        apply_image(exam, recs, {}, targets, flags, ("image_call_failed", c.reason or c.cls or "failed"))
+        apply_image(exam, recs, {}, targets, flags, ("image_call_failed", c.reason or c.cls or "failed"), scope)
         return
     got, err = cross.parse_reply(c.text)
     if got is None:
-        apply_image(exam, recs, {}, targets, flags, ("image_malformed", err))
+        apply_image(exam, recs, {}, targets, flags, ("image_malformed", err), scope)
         return
-    extra = apply_image(exam, recs, got, targets, flags)
+    extra = apply_image(exam, recs, got, targets, flags, None, scope)
     if extra:
         print("WARN: image reply ids not asked, ignored: %s" % ", ".join(extra), file=sys.stderr)
+    diff = [i for i in targets if recs[i].get("image_ans") is not None and recs[i]["reason"] == "needs_review: text/image differ"]
+    if cfg.get("adjudicate") and diff:
+        adjudicate(exam, recs, rn, diff)
 
 
 def build_result(exam, exam_path, recs, cfg, rn, stopped):
@@ -247,7 +296,8 @@ def build_result(exam, exam_path, recs, cfg, rn, stopped):
                 "timeout_s": cfg["timeout"], "max_cost_usd": cfg["max_cost_usd"],
                 "cost_usd": round(rn.cost, 6), "calls": rn.calls,
                 "stopped": stopped[0] if stopped else None,
-                "prompt": prompts.prompt_info()},
+                "prompt": prompts.prompt_info(),
+                **({"image_scope": cfg["image_scope"]} if cfg.get("image_scope", "flagged") != "flagged" else {})},
         "questions": qs,
         "summary": {"pass": sum(q["verification_status"] == "PASS" for q in qs),
                     "fail": sum(q["verification_status"] == "FAIL" for q in qs),
