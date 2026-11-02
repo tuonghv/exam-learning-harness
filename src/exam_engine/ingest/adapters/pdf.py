@@ -454,9 +454,14 @@ def _extract(fitz, pdf, raw, path, config):
             elif not lang:
                 pwarn.append(_warn("ocr_unavailable", "no tesseract language data found", n))
             else:
-                if len(have) < 2 and not lang_warned:
-                    warnings.append(_warn("ocr_language_missing",
-                                          "OCR language data missing, using %s" % lang))
+                if "vie" not in have and not lang_warned:
+                    warnings.append(_warn(
+                        "ocr_language_missing",
+                        "vie.traineddata not found in %s; every OCR question is marked ocr_doubt "
+                        "(lang_missing), using %s. Put vie.traineddata in /usr/share/tesseract-ocr/<ver>/"
+                        "tessdata/ or $TESSDATA_PREFIX (or config tessdata); the engine never fetches it"
+                        % (", ".join(tessdata_candidates(config)) or "no tessdata folder", lang),
+                        level="error"))
                     lang_warned = True
                 try:
                     tp = page.get_textpage_ocr(language=lang, dpi=OCR_DPI, full=True,
