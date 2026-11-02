@@ -109,9 +109,11 @@ GROUP_RE = segment.GROUP_RE
 
 def _share_context(qs):
     """Repeat a passage with every question of its group ("Questions 46-52", "câu từ 103 đến 105")."""
-    out, cur = [], None
+    out, cur, sec = [], None, ""
     for q in qs:
-        ctx = q.get("context") or ""
+        heads, ctx = segment.split_heading(q.get("context") or "")
+        sec = " > ".join(heads) or sec  # a section stays until the next heading
+        q = dict(q, context=ctx, section=sec) if heads or sec else q
         m = GROUP_RE.search(ctx)
         if m:
             cur = (int(m.group(1)), int(m.group(2)), ctx)
@@ -140,10 +142,22 @@ def refined_questions(doc):
 def question_lines(q):
     """Question block lines of the exam text, without options: context, text, figure lines."""
     out = []
-    if q.get("context"):
+    guide, passage = segment.split_guide(q.get("context") or "")
+    if guide:  # four-level form: instruction / passage / question text (FORMAT.md)
+        out += ["### Instruction for this group", "", guide, ""]
+        if passage:
+            out += ["### Passage", "", passage, ""]
+        out += ["### Question text", ""]
+    elif q.get("context"):
         out += [q["context"], ""]
     out += [q.get("text") or "", ""]
     return out + ["[Figure/table: %s]" % f for f in q.get("figures") or ()]
+
+
+def _section_lines(q, prev):
+    """`## Section:` line when the section changes; -> (lines, section)."""
+    sec = q.get("section") or ""
+    return (["## Section: %s" % sec, ""] if sec and sec != prev else []), (sec or prev)
 
 
 def _from_refined(doc, spec=None):
@@ -169,8 +183,10 @@ def _from_refined(doc, spec=None):
     out.append("")
     lines = [question_lines(q) for q in qs]
     why = refcheck.incomplete_by_question(qs, ["\n".join(ln) for ln in lines])
+    prev = ""
     for k, (q, ln, w) in enumerate(zip(qs, lines, why), 1):
-        out += ["## Question %d" % k, ""] + ln
+        sl, prev = _section_lines(q, prev)
+        out += sl + ["## Question %d" % k, ""] + ln
         if w:
             out += [refcheck.marker(w), ""]
         out += ["%s. %s" % (k, q["options"][k]) for k in sorted(q["options"])]
@@ -205,9 +221,10 @@ def _from_questions(doc, out):
             out += ["Questions are numbered from 1 here; printed numbers: %s." % _printed(qs), ""]
     ctx = _share_context([dict(q, id=str(q["n"])) for q in qs])
     why = refcheck.incomplete_by_question(qs, [q["text"] for q in qs])
+    prev = ""
     for k, (q, w) in enumerate(zip(ctx, why), 1):
-        out += ["## Question %d" % k, ""] + ([q["context"], ""] if q.get("context") else [])
-        out += [q["text"], ""]
+        sl, prev = _section_lines(q, prev)
+        out += sl + ["## Question %d" % k, ""] + question_lines(dict(q, figures=()))  # text path: no figure lines
         if w:
             out += [refcheck.marker(w), ""]
         out += ["%s. %s" % (o["key"], o["text"]) for o in q["options"]]

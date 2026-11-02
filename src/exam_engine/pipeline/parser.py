@@ -13,6 +13,7 @@ LEGACY_HEADINGS = ("Solution", "Explanation", "Verification", "Grading")
 _QHEAD = re.compile(r"^##\s+Question\s+(\d+)\s*$")
 _LEGACY_QHEAD = re.compile(r"^Question\s+(\d+)\s*$")
 _HEAD = re.compile(r"^(#+)\s+(.*?)\s*$")
+_LEVELS = {"Instruction for this group", "Passage", "Question text"}
 
 
 def read_text(path):
@@ -58,8 +59,16 @@ def parse_exam(path):
     text = read_text(path)
     secs = sections(text, 2)
     res = {"fields": header_fields(text), "instructions": "", "passage": "",
-           "learner_answer": None, "questions": []}
+           "learner_answer": None, "questions": [], "sections": [], "section_subjects": {}}
+    cur_section = ""
     for title, body in secs:
+        sm = re.match(r"^Section:\s*(.+)$", title)
+        if sm:
+            cur_section = sm.group(1).strip()
+            res["sections"].append(cur_section)
+            fn = getattr(router, "heading_subject", None)
+            res["section_subjects"][cur_section] = fn(cur_section) if fn else None
+            continue
         m = re.match(r"^Question\s+(\d+)$", title)
         if m:
             opts = {}
@@ -70,9 +79,18 @@ def parse_exam(path):
                     opts[om.group(1)] = line[2:].strip()
                 else:
                     lines.append(line)
-            res["questions"].append({"id": int(m.group(1)),
-                                     "text": "\n".join(lines).strip(),
-                                     "options": opts})
+            text = "\n".join(lines).strip()
+            lab = dict(sections(text, 3)) if "###" in text else {}
+            if not set(lab) & _LEVELS:
+                lab = {}  # unlabelled (today's form): the whole body is the stem
+            ins = lab.get("Instruction for this group", "").strip()
+            pas = lab.get("Passage", "").strip()
+            stem = lab.get("Question text", "").strip() if lab else text
+            if lab:  # labelled: text = instruction + passage + stem (labels dropped)
+                text = "\n\n".join(p for p in (ins, pas, stem) if p)
+            res["questions"].append({"id": int(m.group(1)), "text": text, "options": opts,
+                                     "section": cur_section, "instruction": ins,
+                                     "passage": pas, "stem": stem})
         elif title == "Instructions":
             res["instructions"] = body
         elif title == "Passage":

@@ -33,13 +33,56 @@ def _next_n(lines, i):
 _SUBHEAD = re.compile(r"^\s*\d+\.\d+\.?\s+\S")
 
 
+def _mostly_upper(line):
+    letters = [c for c in line if c.isalpha()]
+    return bool(letters) and sum(c.isupper() for c in letters) >= 0.6 * len(letters)
+
+
+def _is_heading_line(line):
+    """A section heading: `PHẦN 1: ...`, or `1.2. TIẾNG ANH` (short, mostly upper), or a bare
+    upper-case line naming a subject (router.heading_subject)."""
+    s = line.strip()
+    if _PART_ANY.match(s):
+        return True
+    if _SUBHEAD.match(s):
+        return len(s) <= 60 and _mostly_upper(s)
+    if s and len(s) <= 40 and s == s.upper() and any(c.isalpha() for c in s):
+        from exam_engine.pipeline import router  # lazy: ingest does not depend on pipeline at import
+        fn = getattr(router, "heading_subject", None)
+        return bool(fn and fn(s))
+    return False
+
+
+def split_heading(context):
+    """-> (headings, rest): leading heading lines peeled off a question context; stops at the
+    first non-heading line (guide or passage, so an upper-case passage title stays)."""
+    lines = (context or "").split("\n")
+    heads, i = [], 0
+    while i < len(lines):
+        if not lines[i].strip():
+            i += 1
+        elif _is_heading_line(lines[i]):
+            heads.append(lines[i].strip())
+            i += 1
+        else:
+            break
+    return heads, "\n".join(lines[i:]).strip("\n") if heads else (context or "")
+
+
+def split_guide(rest):
+    """-> (guide, passage): a leading `Questions 31-35: ...` / `Read the following passage` line is the guide."""
+    first, _, tail = (rest or "").partition("\n")
+    if first.strip() and (_INTRO.match(first) or _READ.match(first)):
+        return first.strip(), tail.strip("\n")
+    return "", rest or ""
+
+
 def _is_subheading(lines, i):
     """`3.2 TITLE` (<= 60 chars, mostly upper case) whose next non-empty line opens a group or a question."""
     line = lines[i]
     if not _SUBHEAD.match(line) or len(line.strip()) > 60:
         return False
-    letters = [c for c in line if c.isalpha()]  # a heading is mostly upper case; "1.5 m/s" is a tail
-    if not letters or sum(c.isupper() for c in letters) < 0.6 * len(letters):
+    if not _mostly_upper(line):  # a heading is mostly upper case; "1.5 m/s" is a tail
         return False
     nxt = next((ln for ln in lines[i + 1:] if ln.strip()), "")
     return bool(_Q.match(nxt) or _INTRO.match(nxt) or _READ.match(nxt) or _PART_ANY.match(nxt))

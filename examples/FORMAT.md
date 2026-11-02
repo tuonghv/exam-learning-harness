@@ -44,6 +44,21 @@ B. had
 C. will have
 D. would have
 
+Optional four-level labels (written by ingest; a file without them is the form above, all stem):
+
+```
+## Section: PHẦN 1: NGÔN NGỮ > 1.2. TIẾNG ANH   # level 1, once before the first question of the section
+## Question 31                                  # level 3
+### Instruction for this group                  # level 2, repeated in each question of the group
+Questions 31-35: Choose a suitable word or phrase (A, B, C, or D) to fill in each blank.
+### Passage                                     # optional shared text of the group
+### Question text                               # level 4
+Jane was careful. ... _____ ...
+A. read ...
+```
+
+Nested sections are joined by ` > ` on one line. The `[Incomplete: ...]` marker stays after the stem.
+
 (A line `[Incomplete: missing_text <reasons>]` after a question text, written by ingest, makes the engine decline that question without a solver call.)
 
 ## Learner answer                    # only with Mode: Grade
