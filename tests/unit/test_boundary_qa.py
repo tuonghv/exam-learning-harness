@@ -330,12 +330,20 @@ class WindowLogic(unittest.TestCase):
         self.assertEqual([x["n"] for x in qs], list(range(1, 9)))
         self.assertIn("boundary_ai_marker", codes)
 
-    def test_50qa_numbered_subheading_glued_into_d_is_a_rule_weakness(self):
-        # real DGNL shows `3.1. ...` after option D: today an NB window (AI) although a rule can decide
-        lines = q(1) + q(2) + q(3, tail=["3.1. Phần tiếp theo của bài"]) + q(4)
-        self.assertEqual(self.kinds(lines), ([], 0))  # DEF-2 fixed: the rule decides, no window
-        qs = segment.segment(lines)[1]
-        self.assertEqual([x["n"] for x in qs], [1, 2, 3, 4])
+    def test_50qa_numbered_subheading_is_not_a_question_and_no_window(self):
+        # DEF-2 fixed by rule: `3.1.` / `3.5 m/s` / `1.000` never open a question and never need the AI
+        for tail in (["3.1. Phần tiếp theo của bài"], ["3.5 m/s là vận tốc"], ["1.000 đồng một ngày"]):
+            lines = q(1) + q(2) + q(3, tail=tail) + q(4)
+            self.assertEqual(self.kinds(lines), ([], 0), tail)
+            qs = segment.segment(lines)[1]
+            self.assertEqual([x["n"] for x in qs], [1, 2, 3, 4], tail)
+            self.assertTrue(qs[2]["options"][3]["text"].startswith("bốn"), tail)
+            self.assertEqual(len(qs[2]["options"]), 4, tail)
+
+    def test_50qa_weak_plain_number_after_d_is_still_nb(self):
+        # the premise "weak start -> NB window" must survive for plain `N)`: guards against an over-wide DEF-2 rule
+        lines = q(1) + q(2) + q(3, tail=["2) một mục trong danh sách"]) + q(4)
+        self.assertEqual(self.kinds(lines), (["NB"], 1))
 
 
 if __name__ == "__main__":
