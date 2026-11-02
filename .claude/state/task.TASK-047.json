@@ -36,7 +36,19 @@
   },
   "roles_required": true,
   "crosscheck_required": true,
-  "roles": {},
+  "roles": {
+    "grants": {
+      "coder": [
+        ".claude/skills/exam-extraction/SKILL.md"
+      ],
+      "tester": [
+        ".claude/skills/exam-extraction/SKILL.md"
+      ]
+    },
+    "grants_auto": [
+      ".claude/skills/exam-extraction/SKILL.md"
+    ]
+  },
   "user_notes": [
     {
       "raw": "RAW-00156",
@@ -47,7 +59,22 @@
   "picked_at": "2026-11-02T05:25:02Z",
   "updated_at": "",
   "updated_by": "",
-  "scope": [],
+  "scope": [
+    "src/exam_engine/ingest/refine.py",
+    "src/exam_engine/ingest/api.py",
+    "src/exam_engine/ingest/adapters/pdf.py",
+    "src/exam_engine/ingest/replycache.py",
+    "src/exam_engine/adapters/claude.py",
+    "src/exam_engine/core/refcheck.py",
+    "src/exam_engine/pipeline/gold_pdf.py",
+    "src/exam_engine/cli.py",
+    "prompts/dev/ingest/refine.md",
+    "tests/unit/test_window*.py",
+    "tests/unit/test_ingest_*.py",
+    "tests/unit/fixtures/**",
+    "docs/guide/ingest-usage.md",
+    ".claude/skills/exam-extraction/SKILL.md"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
