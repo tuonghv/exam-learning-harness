@@ -1,0 +1,102 @@
+{
+ "evals/inputs/english/input-003.md": {
+  "qa": "ac6ad4c361f1551d3868a926db0cf245829bb4fb25dba82c4d44edacdf57358a",
+  "retry": "30802b51a1c730ab22723969fefed9b4411a86580e2a8fd5d87fefd50223670a"
+ },
+ "evals/inputs/english/input-004.md": {
+  "qa": "985dc1ad58c53770c7e0b8d9810930ef76826c462f11624bb78c0e79ba0f57bd",
+  "retry": "525444cd0039fb12be7ab612cc2fbbe1c76c9fe9d84dd9ff2ec226c6d72fd416"
+ },
+ "evals/inputs/english/input-005.md": {
+  "qa": "bbc7ff6ecb3feed91d95e2657cbf1c98b4e5e44c3be7db65b74eaeb916db093e",
+  "retry": "e6b3796572d7df862a6718c6123a4a9047199bc3454506cba4dd198dc17b5319"
+ },
+ "evals/inputs/informatics/input-003.md": {
+  "qa": "62211e16063a7d4e38ebe7afb5f649e6bf1b11de3cab59d8969a99c93bcb7e67",
+  "retry": "NOPROMPT"
+ },
+ "evals/inputs/informatics/input-004.md": {
+  "qa": "091630d78a7b076c886037a391dbfe46ecf782cc5d961d4430fffe286b999212",
+  "retry": "NOPROMPT"
+ },
+ "evals/inputs/informatics/input-005.md": {
+  "qa": "091cd5d78b45f868638f43b9df8af03a67244fd1b68443e1c6affa3068b5f2aa",
+  "retry": "NOPROMPT"
+ },
+ "evals/inputs/literature/input-003.md": {
+  "qa": "ff15bd989af0f522beebb57f96ad992e53d395b592dc71460e8524981e2d6e46",
+  "retry": "58c82f91fc6e6b17b3e369419ce343b1de0e810738237215ffa77fdabba7eeff"
+ },
+ "evals/inputs/literature/input-004.md": {
+  "qa": "15899c710a3c6e5ebe1bb72ef8a8d25b8620f0b78ea60faf77bbe7361acd59c5",
+  "retry": "00473f06bb57ec58cf2954eb8d62dc9d745060c35fab2a2d1341753ee33e62aa"
+ },
+ "evals/inputs/literature/input-005.md": {
+  "qa": "9c5cc55eec04f365a67d17a002fab3ff1de787a97db297aa074048bb24c69d24",
+  "retry": "8dc76910f68f818591a16fe4856f46a827f1d4330e526cff2a2e3232591221bc"
+ },
+ "evals/inputs/math/input-003.md": {
+  "qa": "72774bffe3b0e1845fc6ae2f862ec61f7ab3c9656125608fcd1b10d3b2957b8f",
+  "retry": "ab95464a58396bbf54fe801561de4feb5b1e5c9a633b81bcf6a45e7b2783fc55"
+ },
+ "evals/inputs/math/input-004.md": {
+  "qa": "431ab32b60fd5081944aefc2a5d5b4ef1da2fd257007c106e2a3ef0160130b24",
+  "retry": "b43952d12a353f7372984b788951c897a36cf797e5aff34e0902004bb77904a9"
+ },
+ "evals/inputs/math/input-005.md": {
+  "qa": "b1845613192a38d81ec9500830de50b81a1045bd6462556b193b4ac57dfb8c46",
+  "retry": "eca2f494102aa9fb33db73a553a7494c091a4af00f9f6d0a3b4c57d2a4da0b38"
+ },
+ "evals/inputs/physics/input-003.md": {
+  "qa": "aaa510ab775776a7331e396e28a2eeb0441e51ed2e588b2d2dfd671191c4f13b",
+  "retry": "2d7835a772f610235770340dd3a06c38897efcca53d1014387c2dffe8e0754ca"
+ },
+ "evals/inputs/physics/input-004.md": {
+  "qa": "7e9f4218b2cd63269d68730853b3897b5cf8286d05ab9099357fcb672be44902",
+  "retry": "abeb345455a32d262f31ef56bcd4cf0801d807d0e065365aa4274907c4da26af"
+ },
+ "evals/inputs/physics/input-005.md": {
+  "qa": "3313140eefa4e3332d2c7d5e6c0c41469a2dd8363ce1f4146b1e595834a939dd",
+  "retry": "be6e31e725159d3eb2a415db6002cc85208c2928ca25b4ad5833a2629bfd25bd"
+ },
+ "examples/english/input-001.md": {
+  "qa": "ab165f3c90d0311f323fe657c43ae892bb06543d74eee2d6d340d189cb48ecde",
+  "retry": "852b0d7228ec86986cc5cc820976f05f5a94d6b85bbc1c44c579db0576c3491e"
+ },
+ "examples/english/input-002.md": {
+  "qa": "30699d2825c1c5494c189cc9fb449aababbeff48da5296f7e4852af12f48bc9c",
+  "retry": "dd3e7da89be65c589fc4a0ea8dbd4749367dc3def45ffa2f2ebea07ba0793ac9"
+ },
+ "examples/informatics/input-001.md": {
+  "qa": "8881c9d285d263773ecb85c4c60c7b4f0356fece77cfcf77efb5c68cde588778",
+  "retry": "NOPROMPT"
+ },
+ "examples/informatics/input-002.md": {
+  "qa": "02f51c4bcf611f90c48273bdf5323a34b83a3e7f2948eb56df43acc04e0e0b41",
+  "retry": "NOPROMPT"
+ },
+ "examples/literature/input-001.md": {
+  "qa": "95264374e7b4f1c4c9397ccae7b13ee7e6522790a6a534524b2b8dffeb366238",
+  "retry": "87616e22c78751a7e48237b12ad505066d7f9c8988b5740aacd8a23b3a1b7edb"
+ },
+ "examples/literature/input-002.md": {
+  "qa": "f925f78323ce0b28a8772ffbf63c78dbd4bd80e1240e021abe688b27d750c8a1",
+  "retry": "ba23926763f2e17a518dce1628617cf1dc4bb56854c5ffe10a824706ccb54c5c"
+ },
+ "examples/math/input-001.md": {
+  "qa": "6eee511050005c514ca482fbbc1d257f0115ec9ae5016013386cdb0a9b43ea30",
+  "retry": "f8f3fcee2ca0cca02301b7e5e0f581b8feeb2fe1ed546be7fc93df2ea025fd11"
+ },
+ "examples/math/input-002.md": {
+  "qa": "3f08ed3d6a67f7f12fac4a3770b670f5ad00afc8ff0b0e26118dae2578e8fcf3",
+  "retry": "409bbec61e7b19fa239e802b31fce17e950512e931aed967598d7b3d3da715f9"
+ },
+ "examples/physics/input-001.md": {
+  "qa": "d3d700739c48beeb2952721d6093c217f8139288746643e30196734a61f0d67d",
+  "retry": "69d253a8fe3f586ffb77bd3a67eec55979225274d4e21aab70091b50de2d6f16"
+ },
+ "examples/physics/input-002.md": {
+  "qa": "206ea9925e6d75df2593c73551f43264ada42987dcc9d73760c1ec342b13a47f",
+  "retry": "0518bc889cef5758c9c2fe5947619c8883a64924419d9553b1310c2793052685"
+ }
+}
