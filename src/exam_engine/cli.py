@@ -54,7 +54,14 @@ def solve_main(argv=None):
     ap.add_argument("--channel", choices=("release", "dev"),
                     help="prompt channel (default: prompt_channel in config/engine.json)")
     ap.add_argument("--prompt-version", help="release version, e.g. v1.0.0 (default: prompt_release)")
+    ap.add_argument("--pdf", metavar="FILE",
+                    help="source PDF or ingest doc.json: re-read questions that need a figure/table from page images")
+    ap.add_argument("--max-image-pages", type=int, metavar="N",
+                    help="cap on distinct pages in the image call (default 4; needs --pdf)")
     a = ap.parse_args(argv)
+    if a.max_image_pages is not None and (not a.pdf or a.max_image_pages < 0):
+        print("usage: --max-image-pages N (N >= 0) needs --pdf", file=sys.stderr)
+        return 2
     try:
         settings.use_prompts(a.channel, a.prompt_version)
     except ValueError as exc:
@@ -81,6 +88,8 @@ def solve_main(argv=None):
     cfg = {"max_attempts": a.max_attempts, "max_cost_usd": a.max_cost_usd, "timeout": a.timeout,
            "model": a.model, "key": a.key, "llm_name": "claude-p" if a.real else "mock",
            "pdf": not a.no_pdf, "lang": a.lang}
+    if a.pdf:  # cfg keys only with --pdf: config_sha256 of a text-only run is unchanged
+        cfg.update(image_pdf=a.pdf, max_image_pages=4 if a.max_image_pages is None else a.max_image_pages)
     if a.dry_run:
         try:
             text = parser.read_text(a.exam)
@@ -96,6 +105,14 @@ def solve_main(argv=None):
             return 2
         print("calls <= %d, cap $%.2f (dry run: no call made)" % (
             engine.call_cap(cfg), a.max_cost_usd))
+        image = None
+        if a.pdf:
+            try:
+                image = _solve_image(a, False, None, None)
+            except (OSError, ValueError, _ingest_error()) as exc:
+                print("ERROR: --pdf: %s" % exc, file=sys.stderr)
+                return 2
+            _print_image_header(cfg, exam, image)
         print("=== SOLVE prompt ===")
         skip = engine.incomplete_ids(exam)
         ids = [q["id"] for q in sorted(exam["questions"], key=lambda q: q["id"]) if q["id"] not in skip]
@@ -104,29 +121,41 @@ def solve_main(argv=None):
         print("=== QA prompt template (answers are filled in from the SOLVE reply) ===")
         print(settings.read_prompt("verification/verify_answer.md"))
         print("=== retry prompt: solve prompt + only the open questions + non-key QA findings ===")
+        if image:
+            from exam_engine.pipeline import cross
+            tg = _image_plan(cfg, exam, image)[0]
+            if tg:
+                print("=== IMAGE prompt (flagged questions; page images attached) ===")
+                print(cross.flagged_prompt(exam, cross.flagged_items(exam, tg)))
         return 0
     tmp = None
     try:
+        image = None
         if a.real:
             print("calls <= %d, cap $%.2f" % (engine.call_cap(cfg), a.max_cost_usd), flush=True)
             tmp = tempfile.mkdtemp(prefix="exam_run_")
+            image = _solve_image(a, True, tmp, None) if a.pdf else None
 
             def llm(prompt):
                 return claude.run_claude(prompt, model=a.model, timeout_s=a.timeout, cwd=tmp)
         else:
             llm = engine.mock_llm(a.mock)
+            image = _solve_image(a, False, None, llm) if a.pdf else None
+        if image:
+            _print_image_header(cfg, parser.parse_exam(a.exam), image)
         t0 = time.time()
         pw = planrun.PlanWriter(a.out, a.exam, cfg, repo_root=_REPO_ROOT)
         pw.start()
         result, code = None, None
         try:
-            result, code = engine.run(a.exam, a.out, cfg, llm, sink=pw.record, reports=not plan_only)
+            result, code = engine.run(a.exam, a.out, cfg, llm, sink=pw.record, reports=not plan_only,
+                                    **({"image": image} if image else {}))
         finally:  # a crash still leaves plan.json (failed) and the captured calls
             pw.finish(result, code, time.time() - t0)
         wall = round(time.time() - t0, 1)
         if plan_only and result is not None:
             result["reports"] = _build_default_report(a, result)
-    except (OSError, ValueError) as exc:
+    except (OSError, ValueError, _ingest_error()) as exc:
         print("ERROR: %s" % exc, file=sys.stderr)
         return 2
     finally:
@@ -151,6 +180,61 @@ def solve_main(argv=None):
             if a.real or a.history:
                 _append_history(a, result, m)
     return code
+
+
+def _ingest_error():
+    from exam_engine.ingest.schema import IngestError
+    return IngestError
+
+
+def _load_source_doc(path):
+    """Ingest document of a PDF, or the doc.json of an earlier ingest (validated)."""
+    from exam_engine.ingest import api
+    from exam_engine.ingest.schema import validate_document
+    if path.lower().endswith(".json"):
+        with open(path, encoding="utf-8") as fh:
+            doc = json.load(fh)
+        errs = validate_document(doc)
+        if errs:
+            raise ValueError("invalid document: %s" % "; ".join(errs[:5]))
+        return doc
+    return api.ingest_document(path, config={"ocr": "auto"})
+
+
+def _solve_image(a, real, tmp, base):
+    """Inputs of engine.run(image=...) for solve --pdf: llm(prompt, pngs), render(page), key and present pages.
+    Real: pages rendered from the source PDF; mock: base llm answers, stub PNG bytes."""
+    from exam_engine.ingest import refine
+    doc = _load_source_doc(a.pdf)
+    a.file = a.pdf
+    key_pages = set()
+    for p in doc.get("parts") or refine.partsmod.find_parts(doc):
+        if p["kind"] == "answer_key":
+            key_pages.update(range(p["pages"][0], p["pages"][1] + 1))
+    have = {p["n"] for p in doc["pages"]}
+    if real:
+        src = _refine_source(a, doc)
+
+        def llm(prompt, imgs):
+            return claude.run_claude_images(prompt, [("image/png", p) for p in imgs],
+                                            model=a.model, timeout_s=a.timeout, cwd=tmp)
+        render = lambda n: refine.render_page(src, n)  # noqa: E731
+    else:
+        llm = (lambda prompt, imgs: base(prompt)) if base else None  # noqa: E731
+        render = lambda n: b"\x89PNG"  # noqa: E731
+    return {"llm": llm, "render": render, "key_pages": key_pages, "have_pages": have}
+
+
+def _image_plan(cfg, exam, image):
+    skip = engine.incomplete_ids(exam)
+    return engine.image_targets(exam, engine.visual_flags(exam), skip, cfg["max_image_pages"],
+                                image["key_pages"], image["have_pages"])
+
+
+def _print_image_header(cfg, exam, image):
+    tg, pages, _sk = _image_plan(cfg, exam, image)
+    print("image check: %d questions, pages %s, est. $%.2f" % (
+        len(tg), pages, 0.03 + 0.035 * len(pages) if tg else 0.0), flush=True)
 
 
 def _build_default_report(a, result):
@@ -649,16 +733,8 @@ def cross_main(argv):
     tmp = None
     try:
         text = parser.read_text(a.exam)
-        if a.pdf.lower().endswith(".json"):
-            with open(a.pdf, encoding="utf-8") as fh:
-                doc = json.load(fh)
-            errs = validate_document(doc)
-            if errs:
-                raise ValueError("invalid document: %s" % "; ".join(errs[:5]))
-            a.file = a.pdf
-        else:
-            doc = api.ingest_document(a.pdf, config={"ocr": "auto"})
-            a.file = a.pdf
+        doc = _load_source_doc(a.pdf)
+        a.file = a.pdf
         refine.check_key_pages(doc, a.pages, a.allow_key_pages)
         pages = refine.partsmod.parse_pages(a.pages)
         absent = [n for n in pages if n not in [p["n"] for p in doc["pages"]]]

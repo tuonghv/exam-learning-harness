@@ -110,7 +110,7 @@ class PlanWriter(object):
         except OSError as exc:
             self._warn(exc)
 
-    def record(self, n, tag, prompt, call):
+    def record(self, n, tag, prompt, call, pages=None):
         """Sink for Runner.call: one prompt file, one reply file, one flushed index line."""
         if not self.ok:
             return
@@ -126,6 +126,8 @@ class PlanWriter(object):
                     "cost_usd": call.cost_usd or 0.0, "prompt_bytes": len(prompt.encode("utf-8")),
                     "reply_bytes": len(text.encode("utf-8")), "prompt_sha256": _sha(prompt),
                     "reply_sha256": _sha(text)}
+            if pages is not None:  # image call: page numbers only, PNGs are not stored
+                line["pages"] = list(pages)
             with open(os.path.join(cdir, "index.jsonl"), "a", encoding="utf-8") as fh:
                 fh.write(json.dumps(line, ensure_ascii=False, sort_keys=True) + "\n")
                 fh.flush()

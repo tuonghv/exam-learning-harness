@@ -150,6 +150,10 @@ def compute(result, log_lines=None, exam=None, key=None, qa=None, needs_review=N
         "qa_unavailable": sum(1 for q in qs if _codes(q) & {"review_failed", "review_missing"}),
         "needs_review": needs_review,
     }
+    if any(q.get("source") for q in qs):  # keys only for image-check runs: old metrics.json stay identical
+        counts["image_checked"] = sum(1 for q in qs if q.get("source") in ("image", "text+image"))
+        counts["image_changed"] = sum(1 for q in qs if q.get("source") == "image"
+                                      or _reason(q).startswith("needs_review: text/image"))
     rates = {
         "retry_rate": _rate(sum(1 for r in rows if r["attempts"] > 1), n),
         "qa_disagree": _rate(sum(1 for q in qs if _reason(q) == "reviewer_disagrees"), len(ans)),
@@ -289,9 +293,11 @@ def block(m):
     if q:
         parts.append("qa agree %d/%d (proxy)" % (q["agrees"], q["agrees"] + q["differs"]))
     usd = cost.get("cost_usd")
+    img = " image %d checked %d changed" % (c["image_checked"], c["image_changed"]) \
+        if c.get("image_checked") is not None else ""
     return [
-        "metrics: answered %d/%d declined %d malformed %d retry %s" % (
-            c["answered"], m["n"], c["declined"], c["malformed"], _pct(r.get("retry_rate"))),
+        "metrics: answered %d/%d declined %d malformed %d retry %s%s" % (
+            c["answered"], m["n"], c["declined"], c["malformed"], _pct(r.get("retry_rate")), img),
         "accuracy: " + (" | ".join(parts) if parts else "none"),
         "cost: calls %s $%s llm_s %s" % (
             "-" if cost.get("calls") is None else cost["calls"], "-" if usd is None else "%.4f" % usd,

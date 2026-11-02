@@ -322,6 +322,14 @@
             "type": "integer",
             "minimum": 1
           },
+          "source": {
+            "type": "string",
+            "enum": [
+              "text",
+              "image",
+              "text+image"
+            ]
+          },
           "unresolved": {
             "type": "boolean"
           },
