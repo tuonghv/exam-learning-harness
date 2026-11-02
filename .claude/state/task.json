@@ -1,14 +1,14 @@
 {
   "schema": 2,
   "task_id": "TASK-052",
-  "state": "IMPLEMENTING",
-  "next": "UNIT_TESTED",
+  "state": "UNIT_TESTED",
+  "next": "VERIFIED",
   "title": "Human review path: review packs per subject/question, feedback apply, skill review-loop (REQ-0055)",
   "active": [
     {
       "task_id": "TASK-052",
-      "state": "IMPLEMENTING",
-      "next": "UNIT_TESTED",
+      "state": "UNIT_TESTED",
+      "next": "VERIFIED",
       "updated_at": "2026-11-02T05:46:10Z"
     }
   ],

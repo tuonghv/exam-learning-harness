@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-052",
   "title": "Human review path: review packs per subject/question, feedback apply, skill review-loop (REQ-0055)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0055",
   "acceptance_criteria": [
     "REQ-0055 AC1 packs",
@@ -37,9 +37,9 @@
     "summary": "exam.py review-pack/review-apply: review/<exam-id>/INDEX.md + one file per subject, extraction-first review line, QA slot, marks merged by printed number and never lost, changed answers flagged, strict parsing; first DGNL pack from the final runs"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "829 run, 14 review tests (fail on base), 3 known failures identical at base; independent oracle 0 mismatches over 120 questions; round trip with the new grammar, Wilson matches; 6 mutations killed"
   },
   "security": {
     "status": "pending",
@@ -61,6 +61,9 @@
     },
     "coder": {
       "waiver": "work/TASK-052/handoff/code.md"
+    },
+    "tester": {
+      "waiver": "work/TASK-052/handoff/test.md"
     }
   },
   "user_notes": [
@@ -88,5 +91,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "UNIT_TESTED"
+  "next": "VERIFIED"
 }
