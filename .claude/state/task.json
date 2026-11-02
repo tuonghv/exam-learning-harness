@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-054",
-  "state": "DONE",
-  "next": "",
-  "title": "Section headings once per section, group instruction per question (REQ-0057)",
-  "active": [],
+  "task_id": "TASK-055",
+  "state": "TODO",
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "title": "Group-aware solving: slice-after-share, group model, group-aware render/retry/QA, missing-context decline, source pages (REQ-0058)",
+  "active": [
+    {
+      "task_id": "TASK-055",
+      "state": "TODO",
+      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+      "updated_at": ""
+    }
+  ],
   "max_active": 1
 }

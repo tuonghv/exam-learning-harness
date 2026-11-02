@@ -1,0 +1,58 @@
+{
+  "task_id": "TASK-055",
+  "title": "Group-aware solving: slice-after-share, group model, group-aware render/retry/QA, missing-context decline, source pages (REQ-0058)",
+  "state": "TODO",
+  "requirement": "REQ-0058",
+  "acceptance_criteria": [
+    "AC1 group kind derived (independent/passage/dependent)",
+    "AC2 independent: guide + own stem",
+    "AC3 passage once per group in prompt; missing passage declined",
+    "AC4 dependent: sibling answers passed on retry/QA; missing sibling declined",
+    "AC5 design states why best; tests-first 2-page slices; old files byte-identical"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "roles": {},
+  "user_notes": [],
+  "picked_at": "2026-11-02T09:39:02Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [
+    "work/TASK-055/"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
