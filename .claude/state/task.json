@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-047",
-  "state": "DESIGN",
-  "next": "HELD after design: TASK-052 first (user priority), then coder tests-first per design list | on resume re-add scope: src/exam_engine/cli.py, docs/guide/ingest-usage.md, tests/unit/fixtures/** (removed while TASK-052 runs)",
+  "state": "IMPLEMENTING",
+  "next": "unit-test gate",
   "title": "Python cut detector for page selection, bounded automatic recovery, page-extraction cache with trace page/hash (design 43.3-43.5, REQ-0045)",
   "active": [
     {
       "task_id": "TASK-047",
-      "state": "DESIGN",
-      "next": "HELD after design: TASK-052 first (user priority), then coder tests-first per design list | on resume re-add scope: src/exam_engine/cli.py, docs/guide/ingest-usage.md, tests/unit/fixtures/** (removed while TASK-052 runs)",
-      "updated_at": "2026-11-02T05:29:54Z"
+      "state": "IMPLEMENTING",
+      "next": "unit-test gate",
+      "updated_at": "2026-11-02T12:23:23Z"
     }
   ],
   "max_active": 1

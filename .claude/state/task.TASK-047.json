@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-047",
   "title": "Python cut detector for page selection, bounded automatic recovery, page-extraction cache with trace page/hash (design 43.3-43.5, REQ-0045)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0051",
   "acceptance_criteria": [
     "REQ-0051 AC1 cut detector",
@@ -26,8 +26,17 @@
     ]
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/ingest/adapters/pdf.py",
+      "src/exam_engine/ingest/refine.py",
+      "src/exam_engine/ingest/replycache.py",
+      "src/exam_engine/cli.py",
+      "src/exam_engine/pipeline/gold_pdf.py",
+      "prompts/dev/ingest/refine.md",
+      "docs/guide/toolkit-reference.md"
+    ],
+    "summary": "cut detector (pdf adapter), cut test on reply, window extraction, bounded recovery, rule 11, page cache + trace, --no-recover/--no-window/--cache, dry-run line, keyed mock, gold oracle with windows"
   },
   "unit_test": {
     "status": "pending",
@@ -60,9 +69,8 @@
     "grants_auto": [
       ".claude/skills/exam-extraction/SKILL.md"
     ],
-    "designer": {
-      "waiver": "work/TASK-047/handoff/design.md"
-    }
+    "designer": "work/TASK-047/handoff/design.md",
+    "coder": "work/TASK-047/handoff/code.md"
   },
   "user_notes": [
     {
@@ -72,7 +80,7 @@
     }
   ],
   "picked_at": "2026-11-02T05:25:02Z",
-  "updated_at": "2026-11-02T05:29:54Z",
+  "updated_at": "2026-11-02T12:23:23Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/refine.py",
@@ -94,5 +102,5 @@
     "notes": "",
     "next": "resume: coder tests-first per phase-47 (tests 1-15), real slice pages 7-8 and 14-15 (dry-run first, ask if over 0.3 USD)"
   },
-  "next": "HELD after design: TASK-052 first (user priority), then coder tests-first per design list | on resume re-add scope: src/exam_engine/cli.py, docs/guide/ingest-usage.md, tests/unit/fixtures/** (removed while TASK-052 runs)"
+  "next": "unit-test gate"
 }
