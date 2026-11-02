@@ -1579,3 +1579,9 @@ Action: Argus verified (read-only); evidence published
 Result: AC1-AC4 verified, no paid run needed
 Decision: VERIFIED
 Next: report then DONE
+
+## DONE - TASK-048 - 2026-11-02T14:33:39Z
+Action: Report written
+Result: TASK-048 verified, docs/report/phase-48-provenance-sidecar.md
+Decision: DONE
+Next: TASK-051 OCR route quality

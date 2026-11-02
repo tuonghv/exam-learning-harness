@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-048",
-  "state": "VERIFIED",
-  "next": "report, DONE",
+  "state": "DONE",
+  "next": "",
   "title": "Provenance sidecar assembly.json + prompt lines (never transcribe headers; decline incomplete/merged) (design 43.6-43.7, REQ-0045)",
-  "active": [
-    {
-      "task_id": "TASK-048",
-      "state": "VERIFIED",
-      "next": "report, DONE",
-      "updated_at": "2026-11-02T14:33:29Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

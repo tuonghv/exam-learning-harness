@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-048",
   "title": "Provenance sidecar assembly.json + prompt lines (never transcribe headers; decline incomplete/merged) (design 43.6-43.7, REQ-0045)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0052",
   "acceptance_criteria": [
     "AC1 sidecar assembly.json per exam",
@@ -56,11 +56,19 @@
       "docs/report/evidence/TASK-048/baseline-failures.txt",
       "docs/report/evidence/TASK-048/test.md",
       "docs/report/evidence/TASK-048/verify.md"
-    ]
+    ],
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-048/evidence/test.md",
+        "work/TASK-048/evidence/suite-final.txt"
+      ],
+      "reason": "independent byte-identity comparison vs baseline commit 63a5299 and 5 mutation checks; mock only"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-48-provenance-sidecar.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -69,11 +77,14 @@
     "designer": "work/TASK-048/handoff/design.md",
     "coder": "work/TASK-048/handoff/code.md",
     "tester": "work/TASK-048/handoff/test.md",
-    "verifier": "work/TASK-048/handoff/verify.md"
+    "verifier": "work/TASK-048/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "ingest sidecar and prompt lines; independent oracle = tester golden byte-identity vs 63a5299 and mutations (docs/report/evidence/TASK-048/test.md)"
+    }
   },
   "user_notes": [],
   "picked_at": "2026-11-02T14:14:23Z",
-  "updated_at": "2026-11-02T14:33:29Z",
+  "updated_at": "2026-11-02T14:33:40Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -82,5 +93,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report, DONE"
+  "next": ""
 }
