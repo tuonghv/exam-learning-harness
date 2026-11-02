@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-054",
   "title": "Section headings once per section, group instruction per question (REQ-0057)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0057",
   "acceptance_criteria": [
     "AC0 four labelled levels in FORMAT.md, parser, ingest, solve prompt",
@@ -49,11 +49,19 @@
       "work/TASK-054/evidence/head-failures.txt"
     ],
     "command": "python3 -I -m unittest discover -s tests/unit; golden re-emit of DGNL e3-*.md",
-    "result": "AC0-AC5 verified by unit + golden; 4 suite failures identical at baseline 083d0e4 (baseline-failures.txt); paid English q1-5 re-solve not run (answers unchanged by prompt structure only)"
+    "result": "AC0-AC5 verified by unit + golden; 4 suite failures identical at baseline 083d0e4 (baseline-failures.txt); paid English q1-5 re-solve not run (answers unchanged by prompt structure only)",
+    "quality": {
+      "kind": "real-run",
+      "evidence": [
+        "work/TASK-054/evidence/golden.txt",
+        "work/TASK-054/evidence/baseline-failures.txt"
+      ],
+      "reason": "DGNL re-emit golden on real refined data, no AI"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-54-clean-exam-levels.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -61,7 +69,10 @@
     "designer": "work/TASK-054/handoff/design.md",
     "coder": "work/TASK-054/handoff/code.md",
     "tester": "work/TASK-054/handoff/test.md",
-    "verifier": "work/TASK-054/handoff/verify.md"
+    "verifier": "work/TASK-054/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "format/engine change, no extracted-content counts; independent oracle = tester golden comparing parse/prompt to baseline commit and DGNL option dicts to old files"
+    }
   },
   "user_notes": [
     {
@@ -76,7 +87,7 @@
     }
   ],
   "picked_at": "2026-11-02T06:09:12Z",
-  "updated_at": "2026-11-02T09:36:01Z",
+  "updated_at": "2026-11-02T09:36:23Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-054/"
@@ -88,5 +99,5 @@
     "notes": "",
     "next": "RESUME after account switch: write/brief the design for REQ-0057 (AC0 four-level clean exam format, AC4 section->subject by alias table, AC5 instruction block in the solve prompt; update examples/FORM"
   },
-  "next": "write report docs/report, backlog complete, DONE"
+  "next": ""
 }
