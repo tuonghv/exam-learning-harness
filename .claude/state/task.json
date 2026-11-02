@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-059",
-  "state": "UNIT_TESTED",
-  "next": "verifier + publish evidence; paid slice run awaits user go",
+  "state": "VERIFIED",
+  "next": "report citing docs/report/evidence/TASK-059/, DONE",
   "title": "Pre-solve figure/table/passage flag and page-image check for flagged questions (REQ-0059; hybrid: extract to locate, keep original PDF to verify)",
   "active": [
     {
       "task_id": "TASK-059",
-      "state": "UNIT_TESTED",
-      "next": "verifier + publish evidence; paid slice run awaits user go",
-      "updated_at": "2026-11-02T11:48:12Z"
+      "state": "VERIFIED",
+      "next": "report citing docs/report/evidence/TASK-059/, DONE",
+      "updated_at": "2026-11-02T11:53:34Z"
     }
   ],
   "max_active": 1

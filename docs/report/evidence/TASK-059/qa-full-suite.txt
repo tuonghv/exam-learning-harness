@@ -1,0 +1,163 @@
+# evidence: qa-full-suite
+# task: TASK-059
+# cmd: python3 -I -m unittest discover -s tests/unit
+# cwd: .
+# head: 214283b+dirty
+# when: 2026-11-02T11:43:01Z
+# rc: 1
+---
+../tests/unit/test_benchmark.py:103: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmp26ybp6ds/m.json' mode='w' encoding='UTF-8'>
+  json.dump([SOLVE, QA] * 2, open(mf, "w"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+./tests/unit/test_benchmark.py:107: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmp26ybp6ds/out/summary.json' mode='r' encoding='UTF-8'>
+  sm = json.load(open(os.path.join(o, "summary.json")))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+....../tests/unit/test_benchmark.py:103: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmp78c46xoy/m.json' mode='w' encoding='UTF-8'>
+  json.dump([SOLVE, QA] * 2, open(mf, "w"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+./tests/unit/test_benchmark.py:107: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmp78c46xoy/out/summary.json' mode='r' encoding='UTF-8'>
+  sm = json.load(open(os.path.join(o, "summary.json")))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+...................................sssssss..............xx..................F../tests/unit/test_clean_golden.py:62: ResourceWarning: unclosed file <_io.TextIOWrapper name='./work/dgnl-real/refined3.json' mode='r' encoding='utf-8'>
+  cls.doc = json.load(open(REFINED, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.../tests/unit/test_clean_golden.py:32: ResourceWarning: unclosed file <_io.TextIOWrapper name='./tests/unit/fixtures/golden_unlabelled.json' mode='r' encoding='utf-8'>
+  gold = json.load(open(GOLDEN, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+....................................................................................................................................................................................................................................................................................................../tests/unit/test_genexam.py:160: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmp2am9aujj/g/inputs/math/input-101.md' mode='r' encoding='utf-8'>
+  text = open(os.path.join(out, "inputs", "math", "input-101.md"), encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+./tests/unit/test_genexam.py:164: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmp2am9aujj/g/keys/math/expected-101.md' mode='r' encoding='utf-8'>
+  key = open(os.path.join(out, "keys", "math", "expected-101.md"), encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+./tests/unit/test_genexam.py:166: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmp2am9aujj/g/manifest.json' mode='r' encoding='utf-8'>
+  man = json.load(open(os.path.join(out, "manifest.json"), encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+....../tests/unit/test_genexam.py:217: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpk1w49bj8/g/inputs/english/input-101.md' mode='r' encoding='utf-8'>
+  text = open(os.path.join(out, "inputs", "english", "input-101.md"), encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+./tests/unit/test_genexam.py:220: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpk1w49bj8/g/keys/english/expected-101.md' mode='r' encoding='utf-8'>
+  key = open(os.path.join(out, "keys", "english", "expected-101.md"), encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+./tests/unit/test_genexam.py:223: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpk1w49bj8/g/manifest.json' mode='r' encoding='utf-8'>
+  man = json.load(open(os.path.join(out, "manifest.json"), encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+..../tests/unit/test_genexam.py:328: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpkuz8wlvl/g/inputs/vietnamese/input-101.md' mode='r' encoding='utf-8'>
+  text = open(os.path.join(out, "inputs", "vietnamese", "input-101.md"), encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+./tests/unit/test_genexam.py:332: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpkuz8wlvl/g/keys/vietnamese/expected-101.md' mode='r' encoding='utf-8'>
+  key = open(os.path.join(out, "keys", "vietnamese", "expected-101.md"), encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+./tests/unit/test_genexam.py:334: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpkuz8wlvl/g/manifest.json' mode='r' encoding='utf-8'>
+  man = json.load(open(os.path.join(out, "manifest.json"), encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+......./tests/unit/test_genexam.py:55: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpqp6wtss_/g/keys/math/expected-101.md' mode='r' encoding='utf-8'>
+  key = open(os.path.join(out, "keys", "math", "expected-%d.md" % n), encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+./tests/unit/test_genexam.py:55: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpqp6wtss_/g/keys/math/expected-102.md' mode='r' encoding='utf-8'>
+  key = open(os.path.join(out, "keys", "math", "expected-%d.md" % n), encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+./tests/unit/test_genexam.py:57: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpqp6wtss_/g/manifest.json' mode='r' encoding='utf-8'>
+  man = json.load(open(os.path.join(out, "manifest.json"), encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+../tests/unit/test_genexam.py:78: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpxjvr4xif/g/inputs/math/input-101.md' mode='r' encoding='utf-8'>
+  text = open(os.path.join(out, "inputs", "math", "input-101.md"), encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+..../tests/unit/test_genexam.py:116: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpuojeb2qj/g/manifest.json' mode='r' encoding='utf-8'>
+  man = json.load(open(os.path.join(out, "manifest.json"), encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+........./tests/unit/test_genexam.py:293: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpwukan4j9/summary.json' mode='w' encoding='UTF-8'>
+  json.dump(self.SUMMARY, open(p, "w"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+./tests/unit/test_genexam.py:296: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpwukan4j9/lessons.json' mode='r' encoding='UTF-8'>
+  self.assertEqual(len(json.load(open(os.path.join(tmp, "lessons.json")))), 2)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+./tests/unit/test_genexam.py:297: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpwukan4j9/lessons.md' mode='r' encoding='UTF-8'>
+  self.assertIn("2 open", open(os.path.join(tmp, "lessons.md")).read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+............WARN: group_link_uncertain: q 12
+../tests/unit/test_group_e2e.py:81: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpgpwyuvy5/out/result.json' mode='r' encoding='utf-8'>
+  res = json.load(open(os.path.join(out, "result.json"), encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+../tests/unit/test_group_e2e.py:42: ResourceWarning: unclosed file <_io.TextIOWrapper name='./tests/unit/fixtures/golden_retry_qa.json' mode='r' encoding='utf-8'>
+  gold = json.load(open(os.path.join(HERE, "fixtures", "golden_retry_qa.json"), encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+........................................................................../tests/unit/test_image_sequence.py:79: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tmpz6e95vwh/p2.png'>
+  self.assertEqual(imgmod.render(paths, 2), open(paths[1], "rb").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+..................................ssssssssssssssssssssss................................................................................s....................................................s............................................................E................ss.s........................../tests/unit/test_plan_import.py:126: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpfnsea9xp/old/work/ingest/aa/f.json' mode='w' encoding='UTF-8'>
+  open(os.path.join(self.tmp, "old", "work", "ingest", h, "f.json"), "w").write("{}")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+./tests/unit/test_plan_import.py:126: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpfnsea9xp/old/work/ingest/bb/f.json' mode='w' encoding='UTF-8'>
+  open(os.path.join(self.tmp, "old", "work", "ingest", h, "f.json"), "w").write("{}")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+......./tests/unit/test_plan_import.py:53: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmp1rlb8hdj/plans/ex/20261102T114259Z/plan.json' mode='r' encoding='UTF-8'>
+  meta = json.load(open(os.path.join(p, "plan.json")))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+./tests/unit/test_plan_import.py:60: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmp1rlb8hdj/plans/ex/20261102T114259Z/calls/index.jsonl' mode='r' encoding='UTF-8'>
+  rows = [json.loads(x) for x in open(os.path.join(p, "calls", "index.jsonl"))]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+....../tests/unit/test_plan_import.py:169: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpioh4h38h/secret.trace.json' mode='w' encoding='UTF-8'>
+  open(secret, "w").write("{}")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+./tests/unit/test_plan_import.py:171: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpioh4h38h/old/run3-Math/result.json' mode='r' encoding='UTF-8'>
+  res = json.load(open(os.path.join(self.src, "result.json")))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+./tests/unit/test_plan_import.py:173: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpioh4h38h/old/run3-Math/result.json' mode='w' encoding='UTF-8'>
+  json.dump(res, open(os.path.join(self.src, "result.json"), "w"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+../tests/unit/test_plan_import.py:120: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpzzi9x4a6/plans/ex/20261102T114259Z/plan.json' mode='r' encoding='UTF-8'>
+  meta = json.load(open(os.path.join(self.plan(), "plan.json")))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+../tests/unit/test_plan_import.py:183: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmp2m9m3ggv/v3.trace.json' mode='w' encoding='UTF-8'>
+  open(t, "w").write('{"a": 1}')
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+./tests/unit/test_plan_import.py:189: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmp2m9m3ggv/plans/ex/20261102T114259Z/ingest/v3.trace.json' mode='r' encoding='UTF-8'>
+  self.assertEqual(open(os.path.join(ing, "v3.trace.json")).read(), '{"a": 1}')
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.../tests/unit/test_plan_import.py:160: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmp82n7sbwm/plans/ex/20261102T114259Z/plan.json' mode='r' encoding='UTF-8'>
+  meta = json.load(open(os.path.join(p, "plan.json")))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+./tests/unit/test_plan_import.py:162: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmp82n7sbwm/plans/ex/20261102T114259Z/plan.json' mode='w' encoding='UTF-8'>
+  json.dump(meta, open(os.path.join(p, "plan.json"), "w"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+........WARN: capture off: [Errno 2] No such file or directory: '/tmp/tmp2un8mu17/nodir/calls/001-prompt.txt'
+.....................................................................................F........................................................................F...................s..................................
+======================================================================
+ERROR: test_d1_text_box_text_is_read_once_inline (test_multipage_adversarial.TestRealDocxTextBox)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "./tests/unit/test_multipage_adversarial.py", line 154, in test_d1_text_box_text_is_read_once_inline
+    from lxml import etree
+ModuleNotFoundError: No module named 'lxml'
+
+======================================================================
+FAIL: test_12b_real_repo_passes (test_check_examples.Check)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "./tests/unit/test_check_examples.py", line 222, in test_12b_real_repo_passes
+    self.assertEqual(rc, 0, out.getvalue())
+AssertionError: 1 != 0 : NOTE: legacy allowance: examples/english/expected-001.md
+ERROR: examples/dgnl: pairing: unknown subject dir
+
+
+======================================================================
+FAIL: test_cwd_independence_of_subcommands (test_req0012_acs.CwdAndReadme)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "./tests/unit/test_req0012_acs.py", line 206, in test_cwd_independence_of_subcommands
+    self.assertEqual(run(EXAM, "check-examples", cwd=self.tmp)[0], 0)
+AssertionError: 1 != 0
+
+======================================================================
+FAIL: test_check_examples_ok (test_scripts_exam.Exam)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "./tests/unit/test_scripts_exam.py", line 43, in test_check_examples_ok
+    self.assertEqual(code, 0)
+AssertionError: 1 != 0
+
+----------------------------------------------------------------------
+Ran 1024 tests in 46.838s
+
+FAILED (failures=3, errors=1, skipped=35, expected failures=2)

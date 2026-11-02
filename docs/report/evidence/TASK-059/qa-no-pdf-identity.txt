@@ -1,0 +1,5 @@
+25 inputs (examples/*/input-*.md 10 + evals/inputs 15), solve --mock '[]', HEAD 214283b vs git archive 760fbac, outputs in scratchpad oa/ob.
+files compared: result.json config.json answers.md report.md report.html run.log calls/ input/ (diff -rq): identical for all 20 runs that write them.
+plan.json: differs only in started_utc, finished_utc, git (commit/dirty) in 25/25.
+stdout/stderr: identical after path normalisation, except informatics x5 stderr (repo path in prompt-missing error, same exit 2 both).
+exit codes equal 25/25 (1 x20, 2 x5 informatics). stderr WARN lines at HEAD: 0 (no input has a flagged stem), so WARN is unit-tested only.

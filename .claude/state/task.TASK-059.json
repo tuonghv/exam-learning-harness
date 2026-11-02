@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-059",
   "title": "Pre-solve figure/table/passage flag and page-image check for flagged questions (REQ-0059; hybrid: extract to locate, keep original PDF to verify)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0059",
   "acceptance_criteria": [
     "AC1 only flagged questions get source-page images",
@@ -36,12 +36,31 @@
     "result": "1027 run, only the known failures (identical names to baseline); no --pdf output byte-identical for 25 inputs vs 760fbac; 9 mutations killed; mock LLM only"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "no finding (verify.md); PNG signature + 8 MB cap, page hashes only, ids only in image prompt"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-059/evidence/suite-final.txt",
+      "work/TASK-059/evidence/head-failures.txt",
+      "work/TASK-059/evidence/baseline-failures.txt",
+      "work/TASK-059/evidence/qa-no-pdf-identity.txt",
+      "work/TASK-059/evidence/qa-full-suite.txt",
+      "work/TASK-059/evidence/test.md",
+      "work/TASK-059/evidence/verify.md"
+    ],
+    "command": "python3 -I -m unittest discover -s tests/unit; mock CLI end-to-end solve --pdf --mock; QA mutations",
+    "result": "REQ-0059 AC1,AC2,AC3(mock),AC4 verified by unit + mock CLI tests, no paid run (real slice is REQ-0063 awaiting user go); no --pdf output byte-identical for 25 inputs vs 760fbac; 9 mutations killed; verifier D1 (mock PNG stub) and the schema source enum found by the CLI test fixed in fix round 2; failures identical to baseline",
+    "published": [
+      "docs/report/evidence/TASK-059/suite-final.txt",
+      "docs/report/evidence/TASK-059/head-failures.txt",
+      "docs/report/evidence/TASK-059/baseline-failures.txt",
+      "docs/report/evidence/TASK-059/qa-no-pdf-identity.txt",
+      "docs/report/evidence/TASK-059/qa-full-suite.txt",
+      "docs/report/evidence/TASK-059/test.md",
+      "docs/report/evidence/TASK-059/verify.md"
+    ]
   },
   "report": {
     "status": "pending",
@@ -53,11 +72,12 @@
   "roles": {
     "designer": "work/TASK-059/handoff/design.md",
     "coder": "work/TASK-059/handoff/code.md",
-    "tester": "work/TASK-059/handoff/test.md"
+    "tester": "work/TASK-059/handoff/test.md",
+    "verifier": "work/TASK-059/handoff/verify.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-02T11:27:53Z",
-  "updated_at": "2026-11-02T11:48:12Z",
+  "updated_at": "2026-11-02T11:53:34Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-059/"
@@ -69,5 +89,5 @@
     "notes": "",
     "next": "coder fix round 1 (PNG check, page_sha256) running; then advance IMPLEMENTING, UNIT_TESTED, verifier, publish evidence; paid real slice run waits for user go (Q-1793619815): report states it as limit if not approved"
   },
-  "next": "verifier + publish evidence; paid slice run awaits user go"
+  "next": "report citing docs/report/evidence/TASK-059/, DONE"
 }
