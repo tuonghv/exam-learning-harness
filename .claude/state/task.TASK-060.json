@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-060",
   "title": "Quality deep-dive: design the slower higher-quality solve path from the cause table (REQ-0066)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0066",
   "acceptance_criteria": [
     "AC1 cause table from saved runs",
@@ -30,9 +30,9 @@
     "summary": "60.1 option value to letter, 60.2 run-stats recheck, 60.3 needs_review_why, 60.7 metrics rows (slice A; 60.4-60.6 image scope follow-up)"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "1142 run, only the known baseline failures (head-failures identical to baseline); mutations on option_for_value and recheck killed; prompts identical on 15 inputs; recheck on saved runs 7 cleared 2 still failed; mock only"
   },
   "security": {
     "status": "pending",
@@ -51,11 +51,12 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-060/handoff/design.md",
-    "coder": "work/TASK-060/handoff/code.md"
+    "coder": "work/TASK-060/handoff/code.md",
+    "tester": "work/TASK-060/handoff/test.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-02T22:22:04Z",
-  "updated_at": "2026-11-02T22:39:44Z",
+  "updated_at": "2026-11-02T23:03:14Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -64,5 +65,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tester QA"
+  "next": "verifier + publish evidence"
 }
