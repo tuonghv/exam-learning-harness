@@ -33,7 +33,7 @@ src/exam_engine/
   cli.py engine.py settings.py   subcommands; solve loop -> result.json + reports; config loading
   core/       schema.py (validator) safe_eval.py decision.py (decide, evidence_kind) refcheck.py (referenced-part check)
   adapters/   claude.py          the ONLY module that runs the claude CLI
-  pipeline/   parser router (subject policy, language) prompts solver verifier scorer
+  pipeline/   parser router (subject policy, language) prompts solver verifier scorer review (human review pack: review-pack/review-apply, TASK-052)
               reporter (answer sheet, learn view) examples_check cross benchmark genexam
   ingest/     api.py segment.py boundary.py replycache.py parts.py refine.py inspect.py schema.py optional.py
     adapters/ pdf.py docx.py markdown.py image.py     source file -> document -> exam .md
@@ -49,7 +49,7 @@ docs/req/ (WHAT)  docs/design/phase-N-*.md (HOW, phases 1-30)  docs/guide/  .cla
 ```
 
 `exam.py` subcommands: `solve parse verify report check-examples score prompts check-prompts ingest
-ingest-inspect ingest-refine cross-solve benchmark extract-eval gold-pdf gen-exams lessons`. Common `solve` flags:
+ingest-inspect ingest-refine cross-solve benchmark extract-eval gold-pdf gen-exams lessons review-pack review-apply`. Common `solve` flags:
 `--out --key --mock|--dry-run|--real --max-attempts --max-cost-usd --timeout --model --lang vi|en|auto
 --channel release|dev --prompt-version --no-pdf`. A new subject is a `config/subjects.json` entry plus an
 optional `prompts/dev/subjects/<name>.md`; no engine code. Completeness measurement (phase 46): `gold-pdf --layout split

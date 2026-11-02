@@ -19,7 +19,7 @@ from exam_engine.pipeline import examples_check, parser, prompts, reporter, rout
 
 COMMANDS = ("solve", "parse", "verify", "report", "check-examples", "score", "prompts",
             "check-prompts", "ingest", "ingest-inspect", "ingest-refine", "cross-solve", "benchmark",
-            "extract-eval", "gold-pdf", "gen-exams", "lessons")
+            "extract-eval", "gold-pdf", "gen-exams", "lessons", "review-pack", "review-apply")
 USAGE = "usage: exam.py {%s} ..." % "|".join(COMMANDS)
 
 
@@ -827,6 +827,50 @@ def extract_eval_main(argv):
     return 1 if cm and cm["fail"] else 0
 
 
+def review_pack_main(argv):
+    """review-pack: one readable review file per subject under review/<exam-id>/ plus INDEX.md."""
+    from exam_engine.pipeline import review
+    ap = argparse.ArgumentParser(prog="exam.py review-pack")
+    ap.add_argument("--exam-id", required=True)
+    ap.add_argument("--subject", required=True)
+    ap.add_argument("--result", required=True)
+    ap.add_argument("--exam", required=True)
+    ap.add_argument("--refined")
+    ap.add_argument("--offset", type=int, default=0)
+    ap.add_argument("--out", default="review")
+    ap.add_argument("--force-reset", action="store_true")
+    try:
+        a = ap.parse_args(argv)
+    except SystemExit:
+        return 2
+    try:
+        _, msg = review.pack(a.exam_id, a.subject, a.result, a.exam, a.refined, a.offset, a.out, a.force_reset)
+    except (ValueError, OSError) as exc:
+        print("ERROR: review-pack: %s" % exc, file=sys.stderr)
+        return 2
+    print(msg)
+    return 0
+
+
+def review_apply_main(argv):
+    """review-apply: read the `Your review:` lines, print agreement per subject, write improvements.md."""
+    from exam_engine.pipeline import review
+    ap = argparse.ArgumentParser(prog="exam.py review-apply")
+    ap.add_argument("--exam-id", required=True)
+    ap.add_argument("--out", default="review")
+    try:
+        a = ap.parse_args(argv)
+    except SystemExit:
+        return 2
+    try:
+        lines, _ = review.apply(a.exam_id, a.out)
+    except (ValueError, OSError) as exc:
+        print("ERROR: review-apply: %s" % exc, file=sys.stderr)
+        return 2
+    print("\n".join(lines))
+    return 0
+
+
 def gold_pdf_main(argv):
     """gold-pdf GOLD OUT.pdf [--variant text|formula-image] [--font TTF] [--layout block|split] [--furniture]
     [--gold-out FILE] [--replies FILE] [--scan]: gold -> PDF (born-digital, or image-only with --scan); exit 0 or 2."""
@@ -877,7 +921,8 @@ def main(argv=None):
              "ingest": ingest_main, "ingest-inspect": inspect_main,
              "ingest-refine": refine_main, "cross-solve": cross_main, "benchmark": benchmark_main,
              "extract-eval": extract_eval_main, "gold-pdf": gold_pdf_main,
-             "gen-exams": genexam_main, "lessons": lessons_main}
+             "gen-exams": genexam_main, "lessons": lessons_main,
+             "review-pack": review_pack_main, "review-apply": review_apply_main}
     if cmd not in table:
         print(USAGE, file=sys.stderr)
         return 2

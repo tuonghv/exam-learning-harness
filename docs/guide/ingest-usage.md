@@ -174,3 +174,11 @@ on the next page, F6 several per page, F7 formula cut, F8 header/footer/page num
 mock replies built from gold per page, so it tests the continuation bridge and the gate, not vision accuracy.
 Synthetic gold is easier than a real exam (optimistic bound). Zero errors in n proves 99.9% at 95% only for
 n >= 2995 (`zero_error_n`); nothing is claimed from n=200 (Wilson lower bound about 98.1%).
+
+## Human review pack (TASK-052, REQ-0055)
+One readable file per subject under `review/<exam-id>/` (gitignored, copyright), the user ticks one line per question:
+```
+python3 -I scripts/exam.py review-pack --exam-id ID --subject Math --result work/run/result.json --exam work/e3-Math.md [--refined doc.json] [--offset 60] [--out review] [--force-reset]
+python3 -I scripts/exam.py review-apply --exam-id ID [--out review]
+```
+`review-pack` writes `<subject>.md` (a section `## Q<printed n>  p.<page>  <status>  answer <A-D|->  conf <..>`, stem, `Engine:`, `Flags:`, `Your review:` line) and regenerates `INDEX.md`. Offset maps exam position to the printed number. A re-run keeps your marks (merged by printed number; `<subject>.new.md` if a marked number vanished; `--force-reset` discards). `review-apply` prints agree/disagree/unsure/blank/unparsed counts, agreement with Wilson 95%, disagreements by number and kind, and writes `improvements.md` (numbers and kinds only). Malformed lines are `unparsed`, never guessed. Refuses `--out` inside examples/, evals/, tests/.
