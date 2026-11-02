@@ -75,12 +75,27 @@ class TestPages(unittest.TestCase):
         self.assertNotIn("Source pages", q["text"])
         self.assertNotIn("Source pages", q["stem"])
 
-    def test_emitted_only_labelled(self):
+    def test_emitted_for_every_question_with_page(self):
         lab = {"id": "1", "context": "Questions 1-2: Read.\nPassage text.", "text": "S?",
                "page": 1, "continued_pages": [2]}
         self.assertEqual(api.question_lines(lab)[0], "Source pages: 1-2")
         plain = {"id": "1", "text": "S?", "page": 1}
-        self.assertNotIn("Source pages", "\n".join(api.question_lines(plain)))
+        self.assertEqual(api.question_lines(plain)[:2], ["Source pages: 1", ""])
+        self.assertNotIn("Source pages", "\n".join(api.question_lines({"id": "1", "text": "S?"})))
+
+    def test_unlabelled_pages_parsed_and_not_in_prompt(self):
+        from exam_engine import engine
+        from exam_engine.pipeline import solver
+        plain = (HEAD % "") + "## Question 1\n\nStem?\n" + OPT
+        withp = (HEAD % "") + "## Question 1\n\nSource pages: 3\n\nStem?\n" + OPT
+        self.assertEqual(parser.strip_unlabelled_pages(withp), plain)
+        self.assertEqual(parser.strip_unlabelled_pages(plain), plain)
+        self.assertEqual(_parse(withp)["questions"][0]["pages"], [3])
+        lab = (HEAD % "") + _lab(1, "Guide.", "", "Stem?", "1-2")
+        self.assertEqual(parser.strip_unlabelled_pages(lab), lab)  # four-level keeps its line
+        ex = _parse(plain)
+        self.assertEqual(solver.solve_prompt(ex, parser.strip_unlabelled_pages(withp), None),
+                         solver.solve_prompt(ex, plain, None))
 
     def test_result_carries_pages(self):
         from exam_engine import engine

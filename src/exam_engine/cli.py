@@ -104,7 +104,7 @@ def solve_main(argv=None):
             cfg["adjudicate"] = True
     if a.dry_run:
         try:
-            text = parser.read_text(a.exam)
+            text = parser.strip_unlabelled_pages(parser.read_text(a.exam))
         except (OSError, UnicodeDecodeError) as exc:
             print("ERROR: input: cannot read %s: %s" % (a.exam, exc), file=sys.stderr)
             return 2

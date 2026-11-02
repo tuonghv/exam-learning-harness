@@ -143,11 +143,11 @@ def question_lines(q):
     """Question block lines of the exam text, without options: context, text, figure lines."""
     out = []
     guide, passage = segment.split_guide(q.get("context") or "")
+    pg = sorted({q["page"]} | set(q.get("continued_pages") or ())) if q.get("page") else []
+    if pg:  # the image check needs the pages of every question; the parser strips the line from the prompt text
+        out += ["Source pages: %s" % ("%d-%d" % (pg[0], pg[-1]) if pg[-1] - pg[0] + 1 == len(pg)
+                                      and len(pg) > 1 else ",".join(map(str, pg))), ""]
     if guide:  # four-level form: instruction / passage / question text (FORMAT.md)
-        pg = sorted({q["page"]} | set(q.get("continued_pages") or ())) if q.get("page") else []
-        if pg:  # lets the solver tell which page a question and its passage came from
-            out += ["Source pages: %s" % ("%d-%d" % (pg[0], pg[-1]) if pg[-1] - pg[0] + 1 == len(pg)
-                                          and len(pg) > 1 else ",".join(map(str, pg))), ""]
         out += ["### Instruction for this group", "", guide, ""]
         if passage:
             out += ["### Passage", "", passage, ""]

@@ -358,5 +358,7 @@ class ExtractionSuspects(unittest.TestCase):
         qs = api.refined_questions(self.doc())
         self.assertEqual([q["id"] for q in qs], ["1", "2", "3", "4", "5", "6"])
         self.assertEqual(qs[5]["text"], "Look at the chart below\ncontinued")
+        pg = ["Source pages: %s" % ",".join(map(str, sorted({qs[5]["page"]} | set(qs[5].get("continued_pages") or ())))), ""] \
+            if qs[5].get("page") else []
         self.assertEqual(api.question_lines(qs[5]),
-                         ["Look at the chart below\ncontinued", "", "[Figure/table: a chart]"])
+                         pg + ["Look at the chart below\ncontinued", "", "[Figure/table: a chart]"])

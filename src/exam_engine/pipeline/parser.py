@@ -71,6 +71,18 @@ def _source_pages(text):
     return sorted(set(pages)), text[m.end():].strip()
 
 
+def strip_unlabelled_pages(text):
+    """Exam text without the `Source pages:` line of unlabelled questions (only the parser needs it there;
+    the prompt stays as it was before ingest emitted the line). Labelled (four-level) questions keep it."""
+    out = []
+    for chunk in re.split(r"(?m)^(?=## )", text):
+        m = re.match(r"## Question\s+\d+[ \t]*\n(\s*)Source pages:[^\n]*\n\n?", chunk)
+        if m and not re.search(r"(?m)^### (?:%s)\s*$" % "|".join(map(re.escape, _LEVELS)), chunk):
+            chunk = chunk[:m.end(1)] + chunk[m.end():]
+        out.append(chunk)
+    return "".join(out)
+
+
 def parse_exam(path):
     text = read_text(path)
     secs = sections(text, 2)

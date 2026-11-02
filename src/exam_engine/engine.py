@@ -310,7 +310,7 @@ def run(exam_path, out_dir, cfg, llm, sink=None, reports=True, image=None):
     """(result, exit_code); result is None on exit 2. `image` = {"llm": f(prompt, pngs), "render": f(page),
     "key_pages": set, "have_pages": set|None} enables the page-image check (cfg["image_pdf"])."""
     try:
-        text = parser.read_text(exam_path)
+        text = parser.strip_unlabelled_pages(parser.read_text(exam_path))
     except (OSError, UnicodeDecodeError) as exc:
         print("ERROR: input: cannot read %s: %s" % (exam_path, exc), file=sys.stderr)
         return None, 2
