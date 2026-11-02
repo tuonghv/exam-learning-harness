@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-047",
   "title": "Python cut detector for page selection, bounded automatic recovery, page-extraction cache with trace page/hash (design 43.3-43.5, REQ-0045)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0051",
   "acceptance_criteria": [
     "REQ-0051 AC1 cut detector",
@@ -39,9 +39,9 @@
     "summary": "cut detector (pdf adapter), cut test on reply, window extraction, bounded recovery, rule 11, page cache + trace, --no-recover/--no-window/--cache, dry-run line, keyed mock, gold oracle with windows"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "1072 run, only the known failures (identical names to baseline); design tests 1-15 mapped; gold oracle 25 questions 0 orphans; mutations killed after 10 added tests; mock only, no paid run"
   },
   "security": {
     "status": "pending",
@@ -70,7 +70,8 @@
       ".claude/skills/exam-extraction/SKILL.md"
     ],
     "designer": "work/TASK-047/handoff/design.md",
-    "coder": "work/TASK-047/handoff/code.md"
+    "coder": "work/TASK-047/handoff/code.md",
+    "tester": "work/TASK-047/handoff/test.md"
   },
   "user_notes": [
     {
@@ -102,5 +103,5 @@
     "notes": "",
     "next": "resume: coder tests-first per phase-47 (tests 1-15), real slice pages 7-8 and 14-15 (dry-run first, ask if over 0.3 USD)"
   },
-  "next": "unit-test gate"
+  "next": "verifier; real-slice pages 7-8 and 14 need user go"
 }
