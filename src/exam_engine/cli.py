@@ -1059,7 +1059,6 @@ def review_pack_main(argv):
     ap.add_argument("--result", required=True)
     ap.add_argument("--exam", required=True)
     ap.add_argument("--refined")
-    ap.add_argument("--refined", metavar="FILE", help="ingest-refine output: fills needs_review_by_why")
     ap.add_argument("--offset", type=int, default=0)
     ap.add_argument("--out", default="review")
     ap.add_argument("--force-reset", action="store_true")
@@ -1346,6 +1345,7 @@ def run_stats_main(argv):
     ap.add_argument("--exam")
     ap.add_argument("--key", dest="ans_key")
     ap.add_argument("--review-pack", metavar="FILE", action="append")
+    ap.add_argument("--refined", metavar="FILE", help="ingest-refine output: fills needs_review_by_why")
     ap.add_argument("--offset", type=int, default=0)
     ap.add_argument("--history", default=None,
                     help="default %s (+ legacy %s read-only)" % (DEFAULT_HISTORY, LEGACY_HISTORY))
