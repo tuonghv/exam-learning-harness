@@ -194,3 +194,16 @@ def validate_exam(exam):
                 and refcheck.marker_reasons(q["text"]) is None):  # a marked one is declined, not solved
             errs.append("question %d: options must be exactly A-D" % q["id"])
     return errs
+
+
+def exam_warnings(exam):
+    """Non-fatal findings of a parse_exam result (section headings vs subject); never raises."""
+    warns = []
+    subj = (exam.get("fields") or {}).get("Subject")
+    want = router.subject_key(subj) if subj else None
+    for sec, key in (exam.get("section_subjects") or {}).items():
+        if key is None:
+            warns.append("section_subject_unknown: %s" % sec)
+        elif want and key != want:
+            warns.append("section_subject_mismatch: %s -> %s vs Subject %s" % (sec, key, subj))
+    return warns

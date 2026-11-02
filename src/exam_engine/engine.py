@@ -133,6 +133,8 @@ def run(exam_path, out_dir, cfg, llm):
         for e in errs:
             print("ERROR: input: %s" % e, file=sys.stderr)
         return None, 2
+    for w in parser.exam_warnings(exam):
+        print("WARN: %s" % w, file=sys.stderr)
     log = []
     rn = Runner(cfg, llm, log)
     recs = {q["id"]: new_rec() for q in exam["questions"]}

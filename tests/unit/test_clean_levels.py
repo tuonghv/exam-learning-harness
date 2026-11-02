@@ -1,4 +1,5 @@
 """TASK-054 (54.1-54.4): four-level labelled exam text at emission and parse."""
+import glob
 import os
 import re
 import sys
@@ -8,11 +9,11 @@ import unittest
 ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 sys.path.insert(0, os.path.join(ROOT, "src"))
 from exam_engine.ingest import api, segment  # noqa: E402
-from exam_engine.pipeline import parser, router  # noqa: E402
+from exam_engine.pipeline import parser, router, solver  # noqa: E402
 
 GUIDE = "Questions 31-35: Choose a suitable word or phrase (A, B, C, or D) to fill in each blank."
 OPTS = {"A": "one", "B": "two", "C": "three", "D": "four"}
-META = {"Subject": "English", "Level": "Grade 12", "Exam type": "Test", "Task": "Multiple Choice",
+META = {"Subject": "english", "Level": "Grade 12", "Exam type": "Test", "Task": "Multiple Choice",
         "Mode": "Solve"}
 
 
@@ -27,7 +28,6 @@ class TestSplitHeading(unittest.TestCase):
     def test_part_roman(self):
         self.assertEqual(segment.split_heading("PHẦN II\nText here."), (["PHẦN II"], "Text here."))
 
-    @unittest.skipUnless(hasattr(router, "heading_subject"), "router.heading_subject (54.5)")
     def test_bare_subject(self):
         self.assertEqual(segment.split_heading("TOÁN\nCho hàm số")[0], ["TOÁN"])
 
@@ -144,6 +144,42 @@ class TestParser(unittest.TestCase):
         self.assertEqual((q["text"], q["stem"], q["section"], q["instruction"], q["passage"]),
                          ("Fill ___.", "Fill ___.", "", "", ""))
         self.assertEqual(r["sections"], [])
+
+
+class TestHeadingSubject(unittest.TestCase):
+    def test_headings(self):
+        for h, k in (("1.2. TIẾNG ANH", "english"), ("tieng anh", "english"), ("TOÁN", "math"),
+                     ("PHẦN 1: NGÔN NGỮ > 1.2. TIẾNG ANH", "english"), ("PHẦN II", None),
+                     ("TƯ DUY ĐỊNH LƯỢNG", None), ("", None)):
+            self.assertEqual(router.heading_subject(h), k, h)
+
+    def test_warnings(self):
+        ex = {"fields": {"Subject": "Math"}, "section_subjects": {"1.2. TIẾNG ANH": "english", "X": None, "TOÁN": "math"}}
+        self.assertEqual(parser.exam_warnings(ex), [
+            "section_subject_mismatch: 1.2. TIẾNG ANH -> english vs Subject Math", "section_subject_unknown: X"])
+        self.assertEqual(parser.exam_warnings({"fields": {}}), [])
+
+
+class TestRender(unittest.TestCase):
+    def test_labelled_and_old(self):
+        qs = [{"id": 1, "text": "G\n\nS", "options": {"A": "a"}, "section": "H", "instruction": "G",
+               "passage": "", "stem": "S"},
+              {"id": 2, "text": "Plain", "options": {"A": "a"}}]
+        out = solver.render_questions({"questions": qs}, {1, 2})
+        self.assertEqual(out, "## Section: H\n\n## Question 1\n\n### Instruction for this group\n\nG\n\n"
+                              "### Question text\n\nS\n\nA. a\n\n## Question 2\n\nPlain\n\nA. a")
+
+    def test_golden_inputs(self):
+        paths = glob.glob(os.path.join(ROOT, "examples", "*", "input-*.md")) + \
+            glob.glob(os.path.join(ROOT, "evals", "inputs", "**", "*.md"), recursive=True)
+        self.assertTrue(paths)
+        for p in paths:
+            ex = parser.parse_exam(p)
+            if ex["sections"] or any(q["instruction"] or q["passage"] for q in ex["questions"]):
+                continue  # labelled files are new-form
+            old = "\n\n".join("## Question %d\n\n%s\n%s" % (q["id"], q["text"], "".join(
+                "\n%s. %s" % kv for kv in sorted(q["options"].items()))) for q in ex["questions"])
+            self.assertEqual(solver.render_questions(ex, {q["id"] for q in ex["questions"]}), old, p)
 
 
 if __name__ == "__main__":

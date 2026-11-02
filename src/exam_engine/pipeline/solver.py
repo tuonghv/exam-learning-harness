@@ -53,11 +53,20 @@ def solve_prompt(exam, exam_text, key_path):
 
 
 def render_questions(exam, ids):
-    parts = []
+    parts, sec = [], ""
     for q in exam["questions"]:
         if q["id"] in ids:
             opts = "".join("\n%s. %s" % (k, v) for k, v in sorted(q["options"].items()))
-            parts.append("## Question %d\n\n%s\n%s" % (q["id"], q["text"], opts))
+            if q.get("section") and q["section"] != sec:
+                sec = q["section"]
+                parts.append("## Section: %s" % sec)
+            if q.get("instruction") or q.get("passage"):  # labelled: keep the four levels
+                body = "".join("### %s\n\n%s\n\n" % (lab, val) for lab, val in (
+                    ("Instruction for this group", q.get("instruction")), ("Passage", q.get("passage")))
+                    if val) + "### Question text\n\n%s" % q["stem"]
+            else:
+                body = q["text"]
+            parts.append("## Question %d\n\n%s\n%s" % (q["id"], body, opts))
     return "\n\n".join(parts)
 
 

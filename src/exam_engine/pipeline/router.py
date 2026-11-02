@@ -1,4 +1,6 @@
 """Subject policy lookup from config/subjects.json (a new subject needs no code change)."""
+import re
+
 from exam_engine import settings
 from exam_engine.utils import text
 from exam_engine.utils.text import fold
@@ -16,6 +18,20 @@ def subject_key(name, config_dir=None):
     low = fold(name)
     for key, pol in subjects(config_dir).items():
         if low == fold(key) or low in [fold(a) for a in pol.get("aliases", [])]:
+            return key
+    return None
+
+
+_PART_PREFIX = re.compile(r"^(?:PH[ẦA]N|PART)\s+\S+\s*[:.\-–]?\s*", re.I)
+_NUM_PREFIX = re.compile(r"^\d+(?:\.\d+)*\.?\s*")
+
+
+def heading_subject(heading, config_dir=None):
+    """Subject key named by a section heading (last ` > ` segment that maps), else None."""
+    for seg in reversed((heading or "").split(" > ")):
+        seg = _NUM_PREFIX.sub("", _PART_PREFIX.sub("", seg.strip()), count=1).strip()
+        key = seg and subject_key(seg, config_dir)
+        if key:
             return key
     return None
 
