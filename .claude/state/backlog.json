@@ -1130,7 +1130,7 @@
     "task_id": "TASK-059",
     "title": "Pre-solve figure/table/passage flag and page-image check for flagged questions (REQ-0059; hybrid: extract to locate, keep original PDF to verify)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-02T14:30:00",
     "requirement": "REQ-0059",
     "acceptance_criteria": [
@@ -1138,6 +1138,8 @@
       "AC2 unreadable/absent image -> decline missing_text",
       "AC3 real small-slice evidence (TASK-020 Q10, Q18), cost reported",
       "AC4 pre-solve WARN for missing figure refs"
-    ]
+    ],
+    "completed_at": "2026-11-02T11:53:54Z",
+    "report": "docs/report/phase-59-page-image-check.md"
   }
 ]

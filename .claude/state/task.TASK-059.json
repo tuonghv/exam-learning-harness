@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-059",
   "title": "Pre-solve figure/table/passage flag and page-image check for flagged questions (REQ-0059; hybrid: extract to locate, keep original PDF to verify)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0059",
   "acceptance_criteria": [
     "AC1 only flagged questions get source-page images",
@@ -60,11 +60,18 @@
       "docs/report/evidence/TASK-059/qa-full-suite.txt",
       "docs/report/evidence/TASK-059/test.md",
       "docs/report/evidence/TASK-059/verify.md"
-    ]
+    ],
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-059/evidence/qa-no-pdf-identity.txt"
+      ],
+      "reason": "independent byte-identity comparison vs baseline commit 760fbac for 25 inputs; engine/CLI change tested with a mock runner; the real-run check is the separate paid REQ-0063 awaiting the user go"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-59-page-image-check.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -73,11 +80,14 @@
     "designer": "work/TASK-059/handoff/design.md",
     "coder": "work/TASK-059/handoff/code.md",
     "tester": "work/TASK-059/handoff/test.md",
-    "verifier": "work/TASK-059/handoff/verify.md"
+    "verifier": "work/TASK-059/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "engine change verified with mock runner only; independent oracle = tester byte-identity check vs baseline 760fbac for 25 inputs and 9 mutations (docs/report/evidence/TASK-059/qa-no-pdf-identity.txt); real-content check is REQ-0063 (paid, awaits user go)"
+    }
   },
   "user_notes": [],
   "picked_at": "2026-11-02T11:27:53Z",
-  "updated_at": "2026-11-02T11:53:34Z",
+  "updated_at": "2026-11-02T11:53:54Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-059/"
@@ -89,5 +99,5 @@
     "notes": "",
     "next": "coder fix round 1 (PNG check, page_sha256) running; then advance IMPLEMENTING, UNIT_TESTED, verifier, publish evidence; paid real slice run waits for user go (Q-1793619815): report states it as limit if not approved"
   },
-  "next": "report citing docs/report/evidence/TASK-059/, DONE"
+  "next": ""
 }
