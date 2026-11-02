@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-057",
   "title": "Standard user-facing crosscheck paths: docs/report/evidence/TASK-NNN, INDEX generator, gate in advance/workflow-check (REQ-0061)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0061",
   "acceptance_criteria": [
     "AC1 convention documented and enforced at VERIFIED/DONE",
@@ -64,11 +64,19 @@
       "docs/report/evidence/TASK-057/scope57.txt",
       "docs/report/evidence/TASK-057/test.md",
       "docs/report/evidence/TASK-057/verify.md"
-    ]
+    ],
+    "quality": {
+      "kind": "real-run",
+      "evidence": [
+        "work/TASK-057/evidence/e2e57.txt",
+        "work/TASK-057/evidence/scope57.txt"
+      ],
+      "reason": "script checks run real advance/workflow-check/commit-check in temp repos"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-57-crosscheck-paths.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -81,7 +89,10 @@
     },
     "coder": "work/TASK-057/handoff/code.md",
     "tester": "work/TASK-057/handoff/test.md",
-    "verifier": "work/TASK-057/handoff/verify.md"
+    "verifier": "work/TASK-057/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "workflow tooling, no extracted content or counts; independent oracle = tester e2e script checks and mutation checks (docs/report/evidence/TASK-057/e2e57.txt)"
+    }
   },
   "user_notes": [
     {
@@ -91,7 +102,7 @@
     }
   ],
   "picked_at": "2026-11-02T10:30:45Z",
-  "updated_at": "2026-11-02T11:02:25Z",
+  "updated_at": "2026-11-02T11:02:39Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-057/"
@@ -103,6 +114,6 @@
     "notes": "",
     "next": "coder 57.8 (reports/ default out+history) then 57.2-57.7 in .claude/scripts; tester; advance IMPLEMENTING"
   },
-  "next": "write report citing docs/report/evidence/TASK-057/, DONE",
+  "next": "",
   "evidence_required": true
 }
