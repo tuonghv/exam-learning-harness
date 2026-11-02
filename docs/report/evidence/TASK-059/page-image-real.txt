@@ -1,0 +1,7 @@
+# REQ-0063 real page-image check (user go: RAW-00182), trial exam slice of 4 questions (printed Q1, Q7, Q10, Q18)
+cmd: exam.py solve <slice> --real --pdf <trial pdf> --max-cost-usd 0.50
+calls 4, cost $0.1406 (cap 0.50), llm 58.5 s
+metrics: answered 4/4, declined 0, malformed 0, retry 50%, image checked 3, image changed 2
+sources: Q1 text; Q7 text+image (agree); Q10 image; Q18 image
+vs key (scoring only, from the TASK-020 record): 4/4 match. Q10 and Q18 were declined by the text route before and are now answered from images.
+limits: n=4 on one exam; status stays uncertain/needs_review for all four (retry 50%); no accuracy claim. Raw output stays in plans/ (not tracked).
