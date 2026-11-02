@@ -54,7 +54,13 @@
     "coder": "work/TASK-056/handoff/code.md",
     "tester": "work/TASK-056/handoff/test.md"
   },
-  "user_notes": [],
+  "user_notes": [
+    {
+      "raw": "RAW-00171",
+      "note": "evidence for user crosscheck must be in committed docs/ paths, not only work/; new REQ-0061",
+      "at": "2026-11-02T10:28:39Z"
+    }
+  ],
   "picked_at": "2026-11-02T10:07:38Z",
   "updated_at": "2026-11-02T10:28:25Z",
   "updated_by": "main",
