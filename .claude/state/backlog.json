@@ -1166,13 +1166,15 @@
     "task_id": "TASK-060",
     "title": "Quality deep-dive: design the slower higher-quality solve path from the cause table (REQ-0066)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-03T05:30:00",
     "requirement": "REQ-0066",
     "acceptance_criteria": [
       "AC1 cause table from saved runs",
       "AC2 design with >=3 options, cost, gain, recommendation",
       "AC3 first option implemented after design accepted"
-    ]
+    ],
+    "completed_at": "2026-11-02T23:27:07Z",
+    "report": "docs/report/phase-60-quality-solve-path.md"
   }
 ]

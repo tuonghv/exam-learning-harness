@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-060",
-  "state": "VERIFIED",
-  "next": "report, DONE; follow-up task for 60.4-60.6",
+  "state": "DONE",
+  "next": "",
   "title": "Quality deep-dive: design the slower higher-quality solve path from the cause table (REQ-0066)",
-  "active": [
-    {
-      "task_id": "TASK-060",
-      "state": "VERIFIED",
-      "next": "report, DONE; follow-up task for 60.4-60.6",
-      "updated_at": "2026-11-02T23:26:54Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
