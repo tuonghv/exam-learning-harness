@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-052",
-  "state": "DESIGN",
-  "next": "coder: tests first (design list 1-8), review-pack, review-apply, DGNL pack",
+  "state": "IMPLEMENTING",
+  "next": "UNIT_TESTED",
   "title": "Human review path: review packs per subject/question, feedback apply, skill review-loop (REQ-0055)",
   "active": [
     {
       "task_id": "TASK-052",
-      "state": "DESIGN",
-      "next": "coder: tests first (design list 1-8), review-pack, review-apply, DGNL pack",
-      "updated_at": "2026-11-02T05:30:50Z"
+      "state": "IMPLEMENTING",
+      "next": "UNIT_TESTED",
+      "updated_at": "2026-11-02T05:46:10Z"
     }
   ],
   "max_active": 1

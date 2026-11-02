@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-052",
   "title": "Human review path: review packs per subject/question, feedback apply, skill review-loop (REQ-0055)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0055",
   "acceptance_criteria": [
     "REQ-0055 AC1 packs",
@@ -27,8 +27,14 @@
     ]
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/review.py",
+      "src/exam_engine/cli.py",
+      "tests/unit/test_review.py",
+      "docs/guide/ingest-usage.md"
+    ],
+    "summary": "exam.py review-pack/review-apply: review/<exam-id>/INDEX.md + one file per subject, extraction-first review line, QA slot, marks merged by printed number and never lost, changed answers flagged, strict parsing; first DGNL pack from the final runs"
   },
   "unit_test": {
     "status": "pending",
@@ -52,6 +58,9 @@
   "roles": {
     "designer": {
       "waiver": "coordinator design inline: all inputs exist, one thin command pair"
+    },
+    "coder": {
+      "waiver": "work/TASK-052/handoff/code.md"
     }
   },
   "user_notes": [
@@ -62,7 +71,7 @@
     }
   ],
   "picked_at": "2026-11-02T05:30:02Z",
-  "updated_at": "2026-11-02T05:30:50Z",
+  "updated_at": "2026-11-02T05:46:10Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/review.py",
@@ -79,5 +88,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "coder: tests first (design list 1-8), review-pack, review-apply, DGNL pack"
+  "next": "UNIT_TESTED"
 }
