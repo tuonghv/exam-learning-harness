@@ -94,6 +94,7 @@ class PlanWriter(object):
             cfg = self._config()
             _dump(os.path.join(self.dir, "config.json"), cfg)
             shutil.copyfile(self.exam_path, os.path.join(self.dir, "input", "exam.md"))
+            _copy_assembly(self.exam_path, os.path.join(self.dir, "input"))
             canon = json.dumps(cfg, sort_keys=True, ensure_ascii=False)
             self.meta = {
                 "schema_version": SCHEMA_VERSION, "exam_id": exam_id_of(self.exam_path),
@@ -232,6 +233,13 @@ def _plain_file(path, max_bytes=None):
     return True
 
 
+def _copy_assembly(exam_path, input_dir):
+    """Provenance sidecar `<exam>.assembly.json` (ingest --exam-out) -> input/assembly.json when present."""
+    side = exam_path + ".assembly.json"
+    if os.path.lexists(side) and _plain_file(side):
+        shutil.copyfile(side, os.path.join(input_dir, "assembly.json"))
+
+
 def import_dir(src, root, exam_path=None, exam_id=None, ingest_cache=None, traces_extra=()):
     """Old run dir (result.json [+ run.log, *.trace.json]) -> <root>/<exam-id>/<run>/; (plan_dir, status).
     status "skipped" when the same dir with the same result.json was imported before.
@@ -277,6 +285,7 @@ def import_dir(src, root, exam_path=None, exam_id=None, ingest_cache=None, trace
     if exam_path and _plain_file(exam_path):
         os.makedirs(os.path.join(out, "input"))
         shutil.copyfile(exam_path, os.path.join(out, "input", "exam.md"))
+        _copy_assembly(exam_path, os.path.join(out, "input"))
         exam = {"path": exam_path, "sha256": metrics.file_sha256(exam_path)}
     ingest = 0
     traces, caches = _ingest_sources(src, ingest_cache)

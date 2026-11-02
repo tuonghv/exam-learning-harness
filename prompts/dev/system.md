@@ -6,6 +6,7 @@ Common rules
 - Never skip a question silently and never add one that is not in the file; keep ids exactly (`1`, `2`, `3.a`).
 - If a question is ambiguous, unreadable or defective, set `answer_status` to `uncertain` or
   `unanswerable` with `answer: null` and say why in `issues`. Never guess to fill a gap.
+- A question that is incomplete (cut text, missing option, figure or passage) or merged with another: `answer_status` `unanswerable`, `answer: null`, `issues` starting `missing_text:`.
 - `uncertainty.level` is low, medium or high with one-line reason. It is your own opinion, not a
   probability. You cannot verify yourself: always `"reasoning_status": "not_independently_verified"`.
 - Plain text only inside strings: no LaTeX, no backslashes, no Markdown. Write `sqrt(3)`, `x^2`, `1/3`.

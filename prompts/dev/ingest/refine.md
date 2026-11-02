@@ -12,6 +12,7 @@ Rules
 9. A question whose text visibly runs past the page bottom: transcribe what is visible and set `"cut": true`. A passage, table or shared instruction printed on this page whose questions all start on the next page (never a question itself): put it, in full, in the top-level `carry` (empty when none). A figure or table printed before the first number goes in `continues` only if it continues the previous question; a figure shared by the following questions goes into the first question that uses it.
 10. Never output an answer, a solution, a key or a hint.
 11. When several images are attached (order given under Pages), the question named Open starts on image 1 and is cut: return it FIRST and WHOLE (text, options, figures joined over the images; `cut` true only if it runs past the last image). Then return only the questions whose number starts on the LAST image. Never repeat other questions of earlier images. `continues` and `carry` refer to the last image.
+12. Never transcribe running headers, footers or page numbers (school or exam name, exam code, "Page 2/4").
 
 Output (JSON only)
 {"questions":[{"id":"1","text":"question text","options":{"A":"..","B":".."},"context":"","figures":[],"unreadable":false,"cut":false}],"carry":"","continues":{"text":"","options":{},"figures":[],"passage":false}}

@@ -520,6 +520,11 @@ def ingest_main(argv):
             text = api.to_exam_text(doc, cfg2)
             with open(args.exam_out, "w", encoding="utf-8") as fh:
                 fh.write(text)
+            rows = api.assembly(doc, cfg2) if text != (doc["source"].get("text") or None) else []
+            if rows:  # an exam-format Markdown source has no assembly to record
+                side = {"schema": "assembly/1", "exam": os.path.basename(args.exam_out), "questions": rows}
+                with open(args.exam_out + ".assembly.json", "w", encoding="utf-8") as fh:
+                    fh.write(json.dumps(side, ensure_ascii=False, indent=2) + "\n")
     except IngestError as exc:
         print("ERROR: ingest: %s" % exc, file=sys.stderr)
         return 2

@@ -136,5 +136,19 @@ def report(doc):
             L += ["", "### %s" % name]
             for s in sorted(groups[name], key=_by_printed):
                 L.append("- printed %s (p%s): %s" % (s["id"], s["page"], "; ".join(s["reasons"])))
+    rows = _assembly_rows(doc)
+    if rows:
+        L += ["", "## Assembly", "", "| id | printed | pages | assembly | validation | reasons |",
+              "|---|---|---|---|---|---|"]
+        L += ["| %s | %s | %s | %s | %s | %s |" % (
+            r["id"], r["printed"], ",".join(map(str, r["source_pages"])) or "-", r["assembly_status"],
+            r["validation_status"], "; ".join(r["reasons"]) or "-") for r in rows]
     L += ["", "_%s_" % DISCLAIMER, ""]
     return "\n".join(L)
+
+
+def _assembly_rows(doc):
+    try:
+        return api.assembly(doc, {"use_refined": bool(doc.get("refined"))})
+    except (KeyError, TypeError, ValueError):  # a hand-edited document: the report stays readable
+        return []

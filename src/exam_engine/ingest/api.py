@@ -164,6 +164,16 @@ def _section_lines(q, prev):
     return (["## Section: %s" % sec, ""] if sec and sec != prev else []), (sec or prev)
 
 
+def _selected_refined(doc, spec=None):
+    """(questions, their question_lines, incomplete reasons) as written to the exam text."""
+    qs = _share_context(refined_questions(doc))  # before the slice: a group's carrier may lie outside `spec`
+    if spec:
+        want = set(parts.parse_pages(spec))
+        qs = [q for q in qs if q["id"].isdigit() and int(q["id"]) in want]
+    lines = [question_lines(q) for q in qs]
+    return qs, lines, refcheck.incomplete_by_question(qs, ["\n".join(ln) for ln in lines])
+
+
 def _from_refined(doc, spec=None):
     """Exam text from doc["refined"] questions (origin ai); `spec` keeps question numbers like 61-90."""
     meta = doc.get("meta") or {}
@@ -171,11 +181,7 @@ def _from_refined(doc, spec=None):
     if missing:
         raise IngestError("missing_header", "missing exam header(s): %s (use --meta K=V)"
                           % ", ".join(missing))
-    qs = refined_questions(doc)
-    qs = _share_context(qs)  # before the slice: a group's carrier may lie outside `spec`
-    if spec:
-        want = set(parts.parse_pages(spec))
-        qs = [q for q in qs if q["id"].isdigit() and int(q["id"]) in want]
+    qs, lines, why = _selected_refined(doc, spec)
     if not qs:
         raise IngestError("no_questions", "no refined questions selected in %s" % doc["source"]["name"])
     out = ["# Exam Input", ""] + ["%s: %s" % (k, v) for k, v in meta.items()]
@@ -185,8 +191,6 @@ def _from_refined(doc, spec=None):
         out += ["", "Questions are numbered from 1 here; the printed exam number of question N is N + %d "
                 "(passages may refer to printed numbers)." % (first - 1)]
     out.append("")
-    lines = [question_lines(q) for q in qs]
-    why = refcheck.incomplete_by_question(qs, ["\n".join(ln) for ln in lines])
     prev = ""
     for k, (q, ln, w) in enumerate(zip(qs, lines, why), 1):
         sl, prev = _section_lines(q, prev)
@@ -210,6 +214,45 @@ def _printed(qs):
     return ", ".join(parts_)
 
 
+def _selected_questions(doc):
+    """(context-shared segmented questions, incomplete reasons) as written to the exam text."""
+    qs = doc.get("questions") or []
+    ctx = _share_context([dict(q, id=str(q["n"])) for q in qs])
+    return ctx, refcheck.incomplete_by_question(qs, [q["text"] for q in qs])
+
+
+UNCERTAIN = ("cut_unresolved", "orphan_on_page", "merge_suspect", "unreadable")
+
+
+def assembly(doc, config=None):
+    """Provenance rows, one per exam-file question (same selection as `to_exam_text`).
+
+    Row: id (exam position), printed, source_pages ([] on the text path: no per-question page),
+    assembly_status complete|uncertain, validation_status passed|failed, reasons. Never raises."""
+    cfg = config or {}
+    rows = []
+    if cfg.get("use_refined"):
+        qs, _, why = _selected_refined(doc, cfg.get("questions"))
+        pages = [sorted(({q["page"]} if q.get("page") else set()) | set(q.get("continued_pages") or ()))
+                 for q in qs]
+        printed = [q["id"] for q in qs]
+    else:
+        raw = doc.get("questions") or []
+        _, why = _selected_questions(doc)
+        pages = [[] for _ in raw]
+        sec, multi, printed = 0, len(segment.runs(raw)) > 1, []
+        for k, q in enumerate(raw, 1):
+            if q["n"] == 1 and k > 1:
+                sec += 1
+            printed.append("s%d.%d" % (sec + 1, q["n"]) if multi else str(q["n"]))
+    for k, (pr, pg, w) in enumerate(zip(printed, pages, why), 1):
+        unc = any(r.split(" ")[0] in UNCERTAIN for r in w)
+        rows.append({"id": str(k), "printed": pr, "source_pages": pg,
+                     "assembly_status": "uncertain" if unc else "complete",
+                     "validation_status": "failed" if w else "passed", "reasons": list(w)})
+    return rows
+
+
 def _from_questions(doc, out):
     """Exam text from the segmented `questions` (non-Markdown sources); never edits the text."""
     qs = doc.get("questions") or []
@@ -223,8 +266,7 @@ def _from_questions(doc, out):
             out += [doc["intro"], ""]
         if renum:
             out += ["Questions are numbered from 1 here; printed numbers: %s." % _printed(qs), ""]
-    ctx = _share_context([dict(q, id=str(q["n"])) for q in qs])
-    why = refcheck.incomplete_by_question(qs, [q["text"] for q in qs])
+    ctx, why = _selected_questions(doc)
     prev = ""
     for k, (q, w) in enumerate(zip(ctx, why), 1):
         sl, prev = _section_lines(q, prev)
