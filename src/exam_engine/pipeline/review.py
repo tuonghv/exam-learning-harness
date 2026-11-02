@@ -23,6 +23,12 @@ HOWTO = ("How to review: you review the EXTRACTION (is the question text and eve
          "Do not edit lines starting with `## Q`.")
 HEAD_RE = re.compile(r"^## Q(\d+)  p\.(\S+)  (\S+)  answer (\S)  conf (\S+)\s*$")
 LOOSE_RE = re.compile(r"^##\s*Q?\s*(\d+)")
+QA_HEAD = ("QA: in-session independent reads of the source (same model family as the engine: not an official "
+           "key, agreement is not proof). You review the extraction; the answer is QA's job. Verdicts: agrees, "
+           "differs, flawed, qa-only, unresolved.")
+QA_RE = re.compile(r"^QA: (\S+) conf (\S+) \| (\S+) \|")
+VERDICTS = ("agrees", "differs", "flawed", "qa-only", "unresolved")
+QA_HEADER_CELLS = ("n", "#", "no", "no.", "q", "number")
 SUBJECT_SKIP = ("INDEX.md", "improvements.md")
 
 
@@ -106,7 +112,54 @@ def _engine_line(q):
     return "Engine: " + pre + (txt[:400] or "-")
 
 
-def build_sections(result, exam, refined, offset):
+def parse_qa(paths):
+    """({printed n: {answer, conf, flawed, why}}, [unparsed row descriptions]): pipe tables, later files win,
+    header/separator rows and prose skipped, a malformed row is listed, never guessed."""
+    rows, bad = {}, []
+    for path in paths:
+        try:
+            with open(path, encoding="utf-8") as fh:
+                lines = fh.read().split("\n")
+        except OSError as exc:
+            raise ValueError("cannot read %s: %s" % (path, exc))
+        base = os.path.basename(path)
+        for i, ln in enumerate(lines, 1):
+            if "|" not in ln:
+                continue
+            cells = [c.strip() for c in ln.strip().split("|")]
+            if cells and cells[0] == "":
+                cells = cells[1:]
+            if cells and cells[-1] == "":
+                cells = cells[:-1]
+            if not cells or set("".join(cells)) <= set("-: "):
+                continue
+            if cells[0].lower() in QA_HEADER_CELLS:
+                continue
+            ans = cells[1].upper() if len(cells) > 1 else ""
+            if not cells[0].isdigit() or ans not in ("A", "B", "C", "D", "-"):
+                bad.append("%s:%d" % (base, i))
+                continue
+            rest = cells[3:]
+            fl = rest[0].lower() if rest else ""
+            flawed = fl.startswith(("yes", "mild")) if fl.split(" ")[0] in ("yes", "no", "mild") else False
+            if fl.split(" ")[0] in ("yes", "no", "mild"):
+                rest = rest[1:]
+            rows[int(cells[0])] = {"answer": ans, "conf": (cells[2] if len(cells) > 2 and cells[2] else "-"),
+                                   "flawed": flawed, "why": _one_line(" | ".join(rest))[:300] or "-"}
+    return rows, bad
+
+
+def qa_verdict(engine, qa):
+    if qa["flawed"]:
+        return "flawed"
+    if qa["answer"] == "-":
+        return "unresolved"
+    if engine == "-":
+        return "qa-only"
+    return "agrees" if engine == qa["answer"] else "differs"
+
+
+def build_sections(result, exam, refined, offset, qa=None):
     """[(printed n, header dict, markdown lines)] in result order."""
     secs = []
     for q in result.get("questions") or []:
@@ -121,8 +174,13 @@ def build_sections(result, exam, refined, offset):
              "status": str(q.get("verification_status") or "-"),
              "answer": q["answer"] if q.get("answer") in ("A", "B", "C", "D") else ("-" if q.get("answer") is None else "?"),
              "conf": _conf(q), "flags": _flags(q, stem, nr)}
+        qline = "QA: -"
+        if qa and n in qa:
+            x = qa[n]
+            qline = "QA: %s conf %s | %s | %s" % (x["answer"], x["conf"].replace(" ", "_"),
+                                                  qa_verdict(h["answer"], x), x["why"])
         lines = ["## Q%d  p.%s  %s  answer %s  conf %s" % (n, h["page"], h["status"], h["answer"], h["conf"]),
-                 "", _guard(stem), "", _engine_line(q), "QA: -", "Flags: " + h["flags"], TEMPLATE, ""]
+                 "", _guard(stem), "", _engine_line(q), qline, "Flags: " + h["flags"], TEMPLATE, ""]
         secs.append((n, h, lines))
     return secs
 
@@ -135,13 +193,17 @@ def parse_subject(text):
         if ln.startswith("## "):
             m, lm = HEAD_RE.match(ln), LOOSE_RE.match(ln)
             cur = {"n": int((m or lm).group(1)) if (m or lm) else None, "page": "-", "status": "-",
-                   "answer": "-", "conf": "-", "flags": "none", "review": None, "changed": None,
+                   "answer": "-", "conf": "-", "flags": "none", "qa": "-", "verdict": "-", "review": None, "changed": None,
                    "bad": not m}
             if m:
                 cur.update(page=m.group(2), status=m.group(3), answer=m.group(4), conf=m.group(5))
             rows.append(cur)
         elif cur is not None:
-            if ln.startswith("Flags: "):
+            if ln.startswith("QA: "):
+                qm = QA_RE.match(ln)
+                if qm:
+                    cur["qa"], cur["verdict"] = qm.group(1), qm.group(3)
+            elif ln.startswith("Flags: "):
                 cur["flags"] = ln[7:].strip() or "none"
             elif ln.startswith("Answer changed:"):
                 cur["changed"] = ln.rstrip()
@@ -199,12 +261,14 @@ def _is_marked(r):
 
 
 def pack(exam_id, subject, result_path, exam_path, refined_path=None, offset=0, out="review",
-         force_reset=False, note=""):
+         force_reset=False, note="", qa_files=None):
     """Write <out>/<exam-id>/<subject>.md and regenerate INDEX.md; returns (path, message)."""
     _check_name("subject", subject)
     d = review_dir(out, exam_id)
+    qa, qa_bad = parse_qa(qa_files or [])
     secs = build_sections(_load(result_path), exam_sections(exam_path),
-                          refined_info(refined_path) if refined_path else {}, offset)
+                          refined_info(refined_path) if refined_path else {}, offset, qa)
+    unmatched = sorted(set(qa) - {n for n, _, _ in secs})
     path = os.path.join(d, subject + ".md")
     old, olds = {}, {}
     if os.path.exists(path) and not force_reset:
@@ -231,6 +295,8 @@ def pack(exam_id, subject, result_path, exam_path, refined_path=None, offset=0, 
     elif old:
         msg += "; merged %d existing marks by printed number" % len(old)
     body = ["# %s - %s" % (exam_id, subject), "", HOWTO % exam_id, ""]
+    if qa_files:
+        body += [QA_HEAD, ""]
     if note:
         body += ["Note: " + _one_line(note), ""]
     changed = 0
@@ -248,6 +314,14 @@ def pack(exam_id, subject, result_path, exam_path, refined_path=None, offset=0, 
             else:
                 out_lines.append(l)
         body += out_lines
+    if qa_files:
+        cnt = dict.fromkeys(VERDICTS, 0)
+        for n, h, _ in secs:
+            if n in qa:
+                cnt[qa_verdict(h["answer"], qa[n])] += 1
+        msg += "; QA " + ", ".join("%s %d" % (v, cnt[v]) for v in VERDICTS)
+        msg += "; qa_unmatched %d%s" % (len(unmatched), " (%s)" % ",".join(map(str, unmatched)) if unmatched else "")
+        msg += "; qa_unparsed %d%s" % (len(qa_bad), " (%s)" % ", ".join(qa_bad) if qa_bad else "")
     if changed:
         msg += "; %d marked answers changed (flagged)" % changed
     _write(path, "\n".join(body))
@@ -260,15 +334,21 @@ def _state(r):
     return ext, sol
 
 
+def _verdict_counts(rs):
+    return ", ".join("%s %d" % (v, sum(1 for r in rs if r["verdict"] == v)) for v in VERDICTS)
+
+
 def write_index(d, exam_id):
     rows = []
     for f in _subject_files(d):
         with open(os.path.join(d, f), encoding="utf-8") as fh:
             rows.append((f[:-3], parse_subject(fh.read())))
     rows.sort(key=lambda s: (min([r["n"] for r in s[1] if r["n"] is not None] or [0]), s[0]))
+    has_qa = any(r["qa"] != "-" for _, rs in rows for r in rs)
     md = ["# Review index - %s" % exam_id, "", HOWTO % exam_id, "",
-          "| subject | n | page | status | answer | conf | flags | extraction | solution |",
-          "|---|---|---|---|---|---|---|---|---|"]
+          "| subject | n | page | status | answer | conf | flags | extraction | solution |"
+          + (" qa | verdict |" if has_qa else ""),
+          "|---|---|---|---|---|---|---|---|---|" + ("---|---|" if has_qa else "")]
     tot = {}
     for sub, rs in rows:
         c = tot.setdefault(sub, {})
@@ -282,12 +362,16 @@ def write_index(d, exam_id):
                 fl.append("heading_edited")
             md.append("| %s | %s | %s | %s | %s | %s | %s | %s | %s |" % (
                 sub, "?" if r["n"] is None else r["n"], r["page"], r["status"], r["answer"], r["conf"],
-                ",".join(fl) or "none", ext, sol))
+                ",".join(fl) or "none", ext, sol) + (" %s | %s |" % (r["qa"], r["verdict"]) if has_qa else ""))
     md += ["", "Totals (extraction review state per subject):"]
     for sub, rs in rows:
         c = tot.get(sub, {})
         md.append("- %s: %d sections; %s" % (sub, len(rs), ", ".join(
             "%s %d" % (s, c.get(s, 0)) for s in ("blank", "ok", "defect", "unparsed"))))
+    if has_qa:
+        md += ["", "QA verdicts per subject (same-family independent reads, not an official key):"]
+        for sub, rs in rows:
+            md.append("- %s: %s" % (sub, _verdict_counts(rs)))
     _write(os.path.join(d, "INDEX.md"), "\n".join(md) + "\n")
 
 
@@ -338,6 +422,8 @@ def apply(exam_id, out="review"):
         if dl:
             lines.append("  extraction defects: " + ", ".join(dl))
         lines += chg
+        if any(r["qa"] != "-" for r in rs):
+            lines.append("  QA verdicts: " + _verdict_counts(rs))
         summary[sub] = dict(e, n=len(rs), **{"sol_" + k: v for k, v in s.items()})
     if edited:
         lines.append("heading edited (marks kept by number): " + ", ".join(edited))
