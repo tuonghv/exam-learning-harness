@@ -90,11 +90,44 @@ class Cli(T.Base):
             self.assertEqual((seen["cfg"]["image_pdf"], seen["cfg"]["max_image_pages"]), ("d.json", 2))
             img = seen["kw"]["image"]
             self.assertEqual((img["key_pages"], img["have_pages"], img["render"](3)),
-                             ({9, 10}, {3}, b"\x89PNG"))
+                             ({9, 10}, {3}, cli._STUB_PNG))
             seen.clear()
             self.main(path, "--mock", mockf, "--out", self.out)
             self.assertNotIn("image_pdf", seen["cfg"])
             self.assertNotIn("image", seen["kw"])
+
+    def cli_run(self, render=None):
+        path = self.write("exam.md", TEXT)
+        mockf = self.write("m.json", json.dumps([
+            T.solve(T.a(1, "5"), T.a(2, "7")), T.qa((1, "agree"), (2, "agree")), T.solve(T.a(1, "6"))]))
+        doc = {"pages": [{"n": 3}], "parts": []}
+        real_img = cli._solve_image
+        def img(*a, **k):  # noqa: E306
+            im = real_img(*a, **k)
+            if render:
+                im["render"] = render
+            return im
+        with mock.patch.object(cli, "_load_source_doc", return_value=doc), \
+                mock.patch.object(cli, "_solve_image", img):
+            code, _o, _e = self.main(path, "--mock", mockf, "--out", self.out, "--pdf", "d.pdf")
+        self.assertIn(code, (0, 1), _o + _e)
+        with open(os.path.join(self.out, "calls", "index.jsonl")) as fh:
+            lines = [json.loads(x) for x in fh]
+        with open(os.path.join(self.out, "result.json")) as fh:
+            return code, lines, json.load(fh)
+
+    def test_cli_mock_pdf_makes_one_image_call(self):
+        _code, lines, res = self.cli_run()
+        img = [x for x in lines if x["tag"] == "image"]
+        self.assertEqual(len(img), 1)
+        self.assertEqual(img[0]["page_sha256"], [hashlib.sha256(cli._STUB_PNG).hexdigest()])
+        self.assertEqual(res["questions"][0]["source"], "text+image")
+        self.assertEqual(metrics.compute(res)["counts"]["image_checked"], 1)
+
+    def test_cli_non_png_render_is_image_unavailable(self):
+        _code, lines, res = self.cli_run(render=lambda n: b"\x89PNG")
+        self.assertFalse([x for x in lines if x["tag"] == "image"])
+        self.assertIn("image_unavailable", [f["code"] for f in res["questions"][0]["qa_findings"]])
 
     def test_dry_run_prints_image_prompt_no_render(self):
         path = self.write("exam.md", TEXT)

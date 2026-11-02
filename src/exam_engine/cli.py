@@ -201,6 +201,19 @@ def _load_source_doc(path):
     return api.ingest_document(path, config={"ocr": "auto"})
 
 
+def _tiny_png():
+    import struct
+    import zlib
+
+    def chunk(t, d):
+        return struct.pack(">I", len(d)) + t + d + struct.pack(">I", zlib.crc32(t + d) & 0xffffffff)
+    return (b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", 1, 1, 8, 0, 0, 0, 0))
+            + chunk(b"IDAT", zlib.compress(b"\x00\x00")) + chunk(b"IEND", b""))
+
+
+_STUB_PNG = _tiny_png()
+
+
 def _solve_image(a, real, tmp, base):
     """Inputs of engine.run(image=...) for solve --pdf: llm(prompt, pngs), render(page), key and present pages.
     Real: pages rendered from the source PDF; mock: base llm answers, stub PNG bytes."""
@@ -221,7 +234,7 @@ def _solve_image(a, real, tmp, base):
         render = lambda n: refine.render_page(src, n)  # noqa: E731
     else:
         llm = (lambda prompt, imgs: base(prompt)) if base else None  # noqa: E731
-        render = lambda n: b"\x89PNG"  # noqa: E731
+        render = lambda n: _STUB_PNG  # noqa: E731
     return {"llm": llm, "render": render, "key_pages": key_pages, "have_pages": have}
 
 

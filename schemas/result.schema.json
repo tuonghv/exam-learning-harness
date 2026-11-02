@@ -273,7 +273,8 @@
                   "enum": [
                     "deterministic",
                     "ai_review",
-                    "score"
+                    "score",
+                    "image"
                   ]
                 },
                 "code": {
