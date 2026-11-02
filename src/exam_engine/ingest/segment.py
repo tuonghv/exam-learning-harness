@@ -1,7 +1,7 @@
 """Question segmentation shared by adapters: numbering and options from plain text lines."""
 import re
 
-_Q = re.compile(r"^\s*(?:(?:Câu|Cau|Question)\s*(\d+)\s*[.:)]?|(\d+)\s*[.)])\s*(.*)$", re.I)
+_Q = re.compile(r"^\s*(?:(?:Câu|Cau|Question)\s*(\d+)\s*[.:)]?|(\d+)(?!\.\d)\s*[.)])\s*(.*)$", re.I)  # `3.1.` is a sub-number, not question 3
 _OPT = re.compile(r"^\s*([A-D])\s*[.)]\s*(.*)$")
 # a group passage intro ("Questions 46-52 ...") or a part heading is not part of option D
 GROUP_RE = re.compile(r"(?:Questions?|[Cc]âu(?:\s*hỏi)?)\s*(?:từ\s*)?(\d+)\s*(?:-|–|đến|to)\s*(\d+)")

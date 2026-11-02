@@ -86,6 +86,18 @@ class RuleFixes(unittest.TestCase):
         self.assertEqual(len(out["questions"]), 3)
 
 
+class SubNumber(unittest.TestCase):
+    def test_def2_sub_number_is_not_a_question(self):
+        for ln, want in (("3.1. text", False), ("3.5 m/s", False), ("33.1. t", False), ("3. text", True),
+                         ("3) text", True), ("Câu 3.", True), ("Câu 3.1 x", True), ("3 . text", True)):
+            self.assertEqual(bool(segment._Q.match(ln)), want, ln)
+        qs = segment.segment(q(1, tail=["3.1. Phần tiếp"]) + q(2))[1]
+        self.assertEqual([x["n"] for x in qs], [1, 2])
+
+    def test_def1_deep_nesting_is_a_bad_reply(self):
+        self.assertEqual(claude.extract_json("[" * 5000 + "]" * 5000)[0], None)
+
+
 class Plain(unittest.TestCase):
     def test_1_hints_none_is_plain_rules(self):
         lines = exam(4) + ["Bài 5: x"]
@@ -176,13 +188,13 @@ class Others(unittest.TestCase):
         self.assertTrue(qs[0]["options"][3]["text"].endswith("ven biển."))
 
     def test_7b_weak_number_heading_after_d_not_glued(self):
-        lines = q(1) + ["3.1. SUY LUẬN"] + q(2) + q(3) + q(4)
+        lines = q(1) + ["3) SUY LUẬN"] + q(2) + q(3) + q(4)
         sus = boundary.suspects(lines)
         self.assertEqual([s["kind"] for s in sus], ["NB"])
         qs = hinted(lines, Ask(reply(("w1", [(sus[0]["line"], "section_start", 0.9)]))))[0]
         self.assertEqual([x["n"] for x in qs], [1, 2, 3, 4])
         self.assertEqual(qs[0]["options"][3]["text"], "bốn")
-        self.assertEqual(qs[1]["context"], "3.1. SUY LUẬN")
+        self.assertEqual(qs[1]["context"], "3) SUY LUẬN")
 
     def test_7c_range_or_decimal_is_not_a_marker(self):
         lines = q(1) + q(2) + ["Dành 03-05 phút để kiểm tra"] + q(3)

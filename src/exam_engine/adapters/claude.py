@@ -125,7 +125,7 @@ def _run(prompt, extra, model, timeout_s, runner, cwd, stream=False):
 def _load(s):
     try:
         obj = json.loads(s)
-    except ValueError:
+    except (ValueError, RecursionError, MemoryError):  # hostile nesting is a bad reply, not a crash
         return None
     return obj if isinstance(obj, dict) else None
 
