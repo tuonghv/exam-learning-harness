@@ -1,0 +1,193 @@
+{
+ "schema_version": 1,
+ "exam": {
+  "path": "x.md",
+  "subject": "Math"
+ },
+ "run": {
+  "llm": "claude-p",
+  "model": "sonnet",
+  "max_attempts": 2,
+  "timeout_s": 300,
+  "max_cost_usd": 1.5,
+  "stopped": null,
+  "prompt": {
+   "channel": "release",
+   "version": "v1.0.0"
+  },
+  "cost_usd": 0.5,
+  "calls": 5
+ },
+ "questions": [
+  {
+   "id": "1",
+   "evidence_kind": "code oracle",
+   "answer": "A",
+   "uncertainty": {
+    "level": "low",
+    "reason": ""
+   },
+   "verification_status": "PASS",
+   "status_reason": null,
+   "qa_findings": [],
+   "score": {
+    "points": null,
+    "max": null,
+    "basis": "none",
+    "detail": "no key"
+   },
+   "attempts": 1
+  },
+  {
+   "id": "2",
+   "evidence_kind": "Claude review only",
+   "answer": "B",
+   "uncertainty": {
+    "level": "low",
+    "reason": ""
+   },
+   "verification_status": "UNCERTAIN",
+   "status_reason": "no_independent_check",
+   "qa_findings": [],
+   "score": {
+    "points": null,
+    "max": null,
+    "basis": "none",
+    "detail": "no key"
+   },
+   "attempts": 2
+  },
+  {
+   "id": "3",
+   "evidence_kind": "Claude review only",
+   "answer": "C",
+   "uncertainty": {
+    "level": "medium",
+    "reason": ""
+   },
+   "verification_status": "UNCERTAIN",
+   "status_reason": "reviewer_disagrees",
+   "qa_findings": [],
+   "score": {
+    "points": null,
+    "max": null,
+    "basis": "none",
+    "detail": "no key"
+   },
+   "attempts": 2
+  },
+  {
+   "id": "4",
+   "evidence_kind": "Claude review only",
+   "answer": null,
+   "uncertainty": {
+    "level": "low",
+    "reason": ""
+   },
+   "verification_status": "UNCERTAIN",
+   "status_reason": "solver_declined: missing_text (figure)",
+   "qa_findings": [],
+   "score": {
+    "points": null,
+    "max": null,
+    "basis": "none",
+    "detail": "no key"
+   },
+   "attempts": 1
+  },
+  {
+   "id": "5",
+   "evidence_kind": "Claude review only",
+   "answer": null,
+   "uncertainty": {
+    "level": "low",
+    "reason": ""
+   },
+   "verification_status": "UNCERTAIN",
+   "status_reason": "solver_declined",
+   "qa_findings": [],
+   "score": {
+    "points": null,
+    "max": null,
+    "basis": "none",
+    "detail": "no key"
+   },
+   "attempts": 1
+  },
+  {
+   "id": "6",
+   "evidence_kind": "Claude review only",
+   "answer": null,
+   "uncertainty": {
+    "level": "low",
+    "reason": ""
+   },
+   "verification_status": "UNCERTAIN",
+   "status_reason": "malformed_output",
+   "qa_findings": [
+    {
+     "source": "solver",
+     "code": "malformed_output"
+    }
+   ],
+   "score": {
+    "points": null,
+    "max": null,
+    "basis": "none",
+    "detail": "no key"
+   },
+   "attempts": 1
+  },
+  {
+   "id": "7",
+   "evidence_kind": "Claude review only",
+   "answer": "D",
+   "uncertainty": {
+    "level": "high",
+    "reason": ""
+   },
+   "verification_status": "UNCERTAIN",
+   "status_reason": "check_failed: format",
+   "qa_findings": [
+    {
+     "source": "verifier",
+     "code": "review_failed"
+    }
+   ],
+   "score": {
+    "points": null,
+    "max": null,
+    "basis": "none",
+    "detail": "no key"
+   },
+   "attempts": 1
+  },
+  {
+   "id": "8",
+   "evidence_kind": "Claude review only",
+   "answer": null,
+   "uncertainty": {
+    "level": "low",
+    "reason": ""
+   },
+   "verification_status": "UNCERTAIN",
+   "status_reason": "not_solved",
+   "qa_findings": [],
+   "score": {
+    "points": null,
+    "max": null,
+    "basis": "none",
+    "detail": "no key"
+   },
+   "attempts": 1
+  }
+ ],
+ "summary": {
+  "pass": 1,
+  "fail": 0,
+  "uncertain": 7,
+  "unresolved": 0,
+  "points": null,
+  "max_points": null
+ }
+}

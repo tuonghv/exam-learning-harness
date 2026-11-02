@@ -1,0 +1,112 @@
+{
+ "schema_version": 1,
+ "exam": {
+  "path": "x.md",
+  "subject": "Science"
+ },
+ "run": {
+  "llm": "claude-p",
+  "model": "sonnet",
+  "max_attempts": 2,
+  "timeout_s": 300,
+  "max_cost_usd": 1.5,
+  "stopped": null,
+  "prompt": {
+   "channel": "release",
+   "version": "v1.0.0"
+  },
+  "cost_usd": 0.2,
+  "calls": 2
+ },
+ "questions": [
+  {
+   "id": "1",
+   "evidence_kind": "key match",
+   "answer": "A",
+   "uncertainty": {
+    "level": "low",
+    "reason": ""
+   },
+   "verification_status": "PASS",
+   "status_reason": null,
+   "qa_findings": [],
+   "score": {
+    "points": 1,
+    "max": 1,
+    "basis": "official_key",
+    "detail": ""
+   },
+   "attempts": 1
+  },
+  {
+   "id": "2",
+   "evidence_kind": "key match",
+   "answer": "B",
+   "uncertainty": {
+    "level": "low",
+    "reason": ""
+   },
+   "verification_status": "FAIL",
+   "status_reason": "differs_from_key",
+   "qa_findings": [
+    {
+     "source": "score",
+     "code": "differs_from_key"
+    }
+   ],
+   "score": {
+    "points": 0,
+    "max": 1,
+    "basis": "official_key",
+    "detail": ""
+   },
+   "attempts": 1
+  },
+  {
+   "id": "3",
+   "evidence_kind": "key match",
+   "answer": "C",
+   "uncertainty": {
+    "level": "low",
+    "reason": ""
+   },
+   "verification_status": "PASS",
+   "status_reason": null,
+   "qa_findings": [],
+   "score": {
+    "points": 1,
+    "max": 1,
+    "basis": "official_key",
+    "detail": ""
+   },
+   "attempts": 2
+  },
+  {
+   "id": "4",
+   "evidence_kind": "Claude review only",
+   "answer": "D",
+   "uncertainty": {
+    "level": "low",
+    "reason": ""
+   },
+   "verification_status": "UNCERTAIN",
+   "status_reason": "no_independent_check",
+   "qa_findings": [],
+   "score": {
+    "points": null,
+    "max": null,
+    "basis": "none",
+    "detail": "no key"
+   },
+   "attempts": 1
+  }
+ ],
+ "summary": {
+  "pass": 2,
+  "fail": 1,
+  "uncertain": 1,
+  "unresolved": 0,
+  "points": 2,
+  "max_points": 3
+ }
+}

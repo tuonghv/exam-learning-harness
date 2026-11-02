@@ -1,0 +1,39 @@
+{
+ "schema_version": 1,
+ "exam": {
+  "path": "x.md",
+  "subject": "English"
+ },
+ "run": {
+  "llm": "claude-p",
+  "model": "sonnet",
+  "cost_usd": 0.1,
+  "calls": 1,
+  "stopped": "max_cost_usd"
+ },
+ "questions": [
+  {
+   "id": "1",
+   "answer": "A",
+   "verification_status": "UNCERTAIN",
+   "status_reason": "no_independent_check"
+  },
+  {
+   "id": "2",
+   "answer": null,
+   "verification_status": "UNCERTAIN",
+   "status_reason": "not_solved"
+  },
+  {
+   "id": "3",
+   "answer": null,
+   "verification_status": "UNCERTAIN",
+   "status_reason": "not_solved"
+  }
+ ],
+ "summary": {
+  "pass": 0,
+  "fail": 0,
+  "uncertain": 3
+ }
+}
