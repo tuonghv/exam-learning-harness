@@ -73,7 +73,11 @@ def solve_main(argv=None):
         return 2
     plan_only = not a.dry_run and not a.out  # default layout: report goes to reports/ via report_build
     if plan_only:
-        a.out = planrun.claim_run_dir(DEFAULT_OUT_ROOT, planrun.exam_id_of(a.exam))
+        try:
+            a.out = planrun.claim_run_dir(DEFAULT_OUT_ROOT, planrun.exam_id_of(a.exam))
+        except ValueError as exc:
+            print("ERROR: %s" % exc, file=sys.stderr)
+            return 2
     cfg = {"max_attempts": a.max_attempts, "max_cost_usd": a.max_cost_usd, "timeout": a.timeout,
            "model": a.model, "key": a.key, "llm_name": "claude-p" if a.real else "mock",
            "pdf": not a.no_pdf, "lang": a.lang}
@@ -151,7 +155,7 @@ def solve_main(argv=None):
 
 def _build_default_report(a, result):
     """solve without --out: the report goes through report_build into reports/<exam>/<run>/sheet."""
-    out = os.path.join(DEFAULT_REPORT_ROOT, planrun.exam_id_of(a.exam),
+    out = os.path.join(DEFAULT_REPORT_ROOT, planrun.safe_id(planrun.exam_id_of(a.exam), "exam id"),
                        os.path.basename(os.path.abspath(a.out)), "sheet")
     info = report_build.build(a.out, out, view="sheet", pdf=not a.no_pdf,
                               engine_git=reporter.git_info(_REPO_ROOT))
@@ -240,10 +244,15 @@ def _report_plan(argv):
     ap.add_argument("--out", help="override the output dir")
     a = ap.parse_args(argv)
     plan = os.path.abspath(a.plan_run.rstrip("/"))
-    meta = planrun.load(plan)["plan"] or {}
-    exam_id = meta.get("exam_id") or os.path.basename(os.path.dirname(plan))
-    run_id = meta.get("plan_run_id") or os.path.basename(plan)
-    out = a.out or os.path.join(DEFAULT_REPORT_ROOT, exam_id, run_id, a.rid or a.view)
+    try:
+        meta = planrun.load(plan)["plan"] or {}
+        exam_id = planrun.safe_id(meta.get("exam_id") or os.path.basename(os.path.dirname(plan)), "exam id")
+        run_id = planrun.safe_id(meta.get("plan_run_id") or os.path.basename(plan), "plan run id")
+        rid = planrun.safe_id(a.rid, "report id") if a.rid else a.view
+        out = a.out or os.path.join(DEFAULT_REPORT_ROOT, exam_id, run_id, rid)
+    except ValueError as exc:
+        print("ERROR: %s" % exc, file=sys.stderr)
+        return 2
     try:
         info = report_build.build(plan, out, view=a.view, pdf=not a.no_pdf,
                                   engine_git=reporter.git_info(_REPO_ROOT))
@@ -257,18 +266,21 @@ def _report_plan(argv):
 
 
 def plan_import_main(argv):
-    """plan-import DIR [--exam EXAM.md] [--exam-id ID] [--ingest-cache DIR]: old run dir -> plan run."""
+    """plan-import DIR [--exam EXAM.md] [--exam-id ID] [--trace FILE...] [--ingest-cache DIR]: old run dir -> plan run."""
     ap = argparse.ArgumentParser(prog="exam plan-import", description="Import an old run dir "
                                  "(result.json, run.log, *.trace.json) into a plan run. No model call.")
     ap.add_argument("dir")
     ap.add_argument("--exam", help="exam file to store as input/exam.md (default: result exam.path if readable)")
     ap.add_argument("--exam-id", help="default: basename of the result exam.path")
+    ap.add_argument("--trace", metavar="FILE", action="append", default=[],
+                    help="refine *.trace.json to copy into ingest/ (repeatable; <= 20 MB, no symlinks)")
     ap.add_argument("--ingest-cache", metavar="DIR",
                     help="ingest reply-cache dir to copy (default: the only <DIR>/../work/ingest/<hash>)")
     a = ap.parse_args(argv)
     try:
         plan, status = planrun.import_dir(a.dir, DEFAULT_OUT_ROOT, exam_path=a.exam, exam_id=a.exam_id,
-                                          ingest_cache=a.ingest_cache)
+                                          ingest_cache=a.ingest_cache,
+                                          traces_extra=[os.path.abspath(t) for t in a.trace])
     except (OSError, ValueError) as exc:
         print("ERROR: %s" % exc, file=sys.stderr)
         return 2

@@ -140,6 +140,70 @@ class PlanImportTest(unittest.TestCase):
         self.assertEqual(status, "imported")
         self.assertEqual(planrun.import_dir(self.src, "plans", exam_path=EXAM, exam_id="ex"), (p, "skipped"))
 
+    def test_traversal_ids_rejected_nothing_written(self):
+        for bad in ("..", "../x", "a/b", ".hid", "", "a\0b"):
+            code, _, err = run(cli.plan_import_main, [self.src, "--exam", EXAM, "--exam-id", bad])
+            self.assertEqual(code, 2, bad)
+            self.assertIn("invalid", err)
+        self.assertFalse(os.path.exists(os.path.join(self.tmp, "plans")))
+        self.assertEqual(os.listdir(self.tmp), ["old"])
+        self.imp()
+        for bad in ("..", "../../esc", ".x"):
+            code, _, _ = run(cli.report_main, [self.plan(), "--no-pdf", "--report-id", bad])
+            self.assertEqual(code, 2, bad)
+        self.assertFalse(os.path.exists(os.path.join(self.tmp, "reports")))
+        self.assertRaises(ValueError, planrun.safe_id, "a\x00b")
+
+    def test_traversal_meta_ids_rejected(self):
+        self.imp()
+        p = self.plan()
+        meta = json.load(open(os.path.join(p, "plan.json")))
+        meta["exam_id"] = "../../out"
+        json.dump(meta, open(os.path.join(p, "plan.json"), "w"))
+        code, _, _ = run(cli.report_main, [p, "--no-pdf"])
+        self.assertEqual(code, 2)
+        self.assertFalse(os.path.exists(os.path.join(self.tmp, "reports")))
+
+    def test_symlinks_skipped_and_foreign_exam_not_read(self):
+        secret = os.path.join(self.tmp, "secret.trace.json")
+        open(secret, "w").write("{}")
+        os.symlink(secret, os.path.join(self.src, "evil.trace.json"))
+        res = json.load(open(os.path.join(self.src, "result.json")))
+        res.setdefault("exam", {})["path"] = secret
+        json.dump(res, open(os.path.join(self.src, "result.json"), "w"))
+        code, _, err = run(cli.plan_import_main, [self.src, "--exam-id", "ex"])
+        self.assertEqual(code, 0, err)
+        self.assertIn("exam not imported", err)
+        p = self.plan()
+        self.assertFalse(os.path.exists(os.path.join(p, "input", "exam.md")))
+        self.assertFalse(os.path.exists(os.path.join(p, "ingest", "evil.trace.json")))
+
+    def test_trace_flag_copies_and_caps(self):
+        t = os.path.join(self.tmp, "v3.trace.json")
+        open(t, "w").write('{"a": 1}')
+        link = os.path.join(self.tmp, "l.trace.json")
+        os.symlink(t, link)
+        code, _, err = self.imp("--trace", t, "--trace", link)
+        self.assertEqual(code, 0, err)
+        ing = os.path.join(self.plan(), "ingest")
+        self.assertEqual(open(os.path.join(ing, "v3.trace.json")).read(), '{"a": 1}')
+        self.assertFalse(os.path.exists(os.path.join(ing, "l.trace.json")))
+        with mock.patch.object(planrun, "TRACE_MAX_BYTES", 3):
+            shutil.rmtree(os.path.join(self.tmp, "plans"))
+            self.imp("--trace", t)
+            self.assertFalse(os.path.exists(os.path.join(self.plan(), "ingest", "v3.trace.json")))
+
+    def test_derived_exam_id_sanitized_not_rejected(self):
+        self.assertEqual(planrun.exam_id_of("/x/Đề thi  Toán (1).md"), "De-thi-Toan-1-")
+        self.assertEqual(planrun.exam_id_of("/x/ --.md"), "exam")
+        self.assertEqual(planrun.exam_id_of("/x/a..b.md"), "a.b")
+        root = os.path.join(self.tmp, "p")
+        d1 = planrun.claim_run_dir(root, planrun.exam_id_of("Đề 1.md"))
+        d2 = planrun.claim_run_dir(root, planrun.exam_id_of("De 1.md"))
+        self.assertEqual(os.path.dirname(d1), os.path.join(root, "De-1"))
+        self.assertNotEqual(d1, d2)
+        self.assertEqual(os.path.dirname(d1), os.path.dirname(d2))
+
 
 if __name__ == "__main__":
     unittest.main()
