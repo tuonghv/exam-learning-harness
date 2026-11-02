@@ -277,6 +277,8 @@ def _ask(llm, n, png, originals, window=None, open_id=None, cache=None, trace=No
     key = "%s\0%s\0%s" % (model, hashlib.sha256(prompt.encode("utf-8")).hexdigest(), ",".join(shas))
     row = {"page": n, "pages": list(window or (n,)), "png_sha256": shas}
     hit = cache.get("page", key) if cache is not None else None
+    if hit is not None and (not isinstance(hit, dict) or validate_refined(hit, originals)):
+        hit = None  # wrong-shape or stale cache entry: a miss
     if hit is not None:
         if trace is not None:
             trace.append(dict(row, ok=True, cls="", cost_usd=0.0, text="", reason="", cached=True))

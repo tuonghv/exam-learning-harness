@@ -346,6 +346,22 @@ class TestCacheTrace(unittest.TestCase):
         self.assertEqual(replycache.ReplyCache(None).get("page", "k"), None)
         self.assertIsNone(replycache.ReplyCache(None).dir)
 
+    def test11_wrong_shape_entry_is_a_miss(self):
+        from exam_engine.ingest import replycache
+        for bad in ([1, 2], {"nope": 1}, "x", {"questions": "x"}):
+            cache = replycache.ReplyCache(None)
+            run(Keyed({"1": rep(qq(1, "Plain question text"))}), n=1, cache=cache)
+            (k,) = [k for k in cache.mem if k[0] == "page"]
+            cache.mem[k] = bad
+            llm, tr = Keyed({"1": rep(qq(1, "Plain question text"))}), []
+            out = run(llm, n=1, cache=cache, trace=tr)
+            self.assertEqual(llm.calls, ["1"], bad)
+            self.assertFalse(tr[0]["cached"])
+            self.assertEqual(out["refined"]["calls"], 1)
+        c2 = Keyed({})
+        run(c2, n=1, cache=cache)  # entry rewritten by the fresh call: valid hit, 0 calls
+        self.assertEqual(c2.calls, [])
+
     def test12_trace_rows(self):
         tr = []
         run(Keyed(self.CUT), n=2, trace=tr)
