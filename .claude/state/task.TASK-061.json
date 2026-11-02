@@ -53,7 +53,13 @@
     "coder": "work/TASK-061/handoff/code.md",
     "tester": "work/TASK-061/handoff/test.md"
   },
-  "user_notes": [],
+  "user_notes": [
+    {
+      "raw": "RAW-00187",
+      "note": "design general, no DGNL-specific rules; D5 Source pages for every refined question follows this",
+      "at": "2026-11-02T23:58:37Z"
+    }
+  ],
   "picked_at": "2026-11-02T23:27:31Z",
   "updated_at": "2026-11-02T23:48:12Z",
   "updated_by": "main",
