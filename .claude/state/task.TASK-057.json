@@ -1,18 +1,18 @@
 {
   "task_id": "TASK-057",
   "title": "Standard user-facing crosscheck paths: docs/report/evidence/TASK-NNN, INDEX generator, gate in advance/workflow-check (REQ-0061)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0061",
   "acceptance_criteria": [
     "AC1 convention documented and enforced at VERIFIED/DONE",
-    "AC2 evidence text-only, no exam content/keys, size cap",
-    "AC3 generated docs/report/INDEX.md",
-    "AC4 backfill 054-056 (done by hand) + role brief line"
+    "AC2 text-only evidence, no exam content/keys, size cap",
+    "AC3 generated INDEX.md",
+    "AC4 backfill 054-056 + role brief line"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-57-crosscheck-paths.md",
+    "summary": "Roles save to work/; advance VERIFIED publishes scanned text evidence to docs/report/evidence/<T>/; opt-in evidence_required gates; _path_ok scope fix; INDEX generator in _evidence.py",
     "reuse": [],
     "risks": []
   },
@@ -39,11 +39,13 @@
   },
   "roles_required": true,
   "crosscheck_required": true,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-057/handoff/design.md"
+  },
   "user_notes": [],
   "picked_at": "2026-11-02T10:30:45Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-02T10:35:03Z",
+  "updated_by": "main",
   "scope": [
     "work/TASK-057/"
   ],
@@ -53,5 +55,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "Titan (grant .claude/scripts/*): tests first, _evidence.py scan/publish/index, gates, _path_ok scope fix"
 }

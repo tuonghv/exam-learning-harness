@@ -1441,3 +1441,9 @@ Action: Report written
 Result: TASK-056 verified; docs/report/phase-56-run-metrics.md
 Decision: DONE
 Next: REQ-0061 evidence convention, REQ-0059 image check
+
+## DESIGN - TASK-057 - 2026-11-02T10:35:03Z
+Action: Nova designed crosscheck paths
+Result: design COMPLETE; D1 qa-dryrun trimmed by main; no item needs user go
+Decision: redact /home/<user> in published evidence
+Next: coder tests-first
