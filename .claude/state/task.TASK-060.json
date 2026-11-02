@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-060",
   "title": "Quality deep-dive: design the slower higher-quality solve path from the cause table (REQ-0066)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0066",
   "acceptance_criteria": [
     "AC1 cause table from saved runs",
@@ -16,8 +16,18 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/verifier.py",
+      "src/exam_engine/pipeline/solver.py",
+      "src/exam_engine/pipeline/review.py",
+      "src/exam_engine/pipeline/metrics.py",
+      "src/exam_engine/cli.py",
+      "src/exam_engine/ingest/refine.py",
+      "tests/unit/test_task60_quality.py",
+      "tests/unit/test_multipage_assembly.py"
+    ],
+    "summary": "60.1 option value to letter, 60.2 run-stats recheck, 60.3 needs_review_why, 60.7 metrics rows (slice A; 60.4-60.6 image scope follow-up)"
   },
   "unit_test": {
     "status": "pending",
@@ -40,11 +50,12 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-060/handoff/design.md"
+    "designer": "work/TASK-060/handoff/design.md",
+    "coder": "work/TASK-060/handoff/code.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-02T22:22:04Z",
-  "updated_at": "2026-11-02T22:26:14Z",
+  "updated_at": "2026-11-02T22:39:44Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -53,5 +64,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Titan: tests first, 60.1-60.3 and 60.7"
+  "next": "tester QA"
 }

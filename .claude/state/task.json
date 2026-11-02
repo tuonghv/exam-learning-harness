@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-060",
-  "state": "DESIGN",
-  "next": "Titan: tests first, 60.1-60.3 and 60.7",
+  "state": "IMPLEMENTING",
+  "next": "tester QA",
   "title": "Quality deep-dive: design the slower higher-quality solve path from the cause table (REQ-0066)",
   "active": [
     {
       "task_id": "TASK-060",
-      "state": "DESIGN",
-      "next": "Titan: tests first, 60.1-60.3 and 60.7",
-      "updated_at": "2026-11-02T22:26:14Z"
+      "state": "IMPLEMENTING",
+      "next": "tester QA",
+      "updated_at": "2026-11-02T22:39:44Z"
     }
   ],
   "max_active": 1
