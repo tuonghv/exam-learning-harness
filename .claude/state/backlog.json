@@ -938,7 +938,7 @@
     "task_id": "TASK-048",
     "title": "Provenance sidecar assembly.json + prompt lines (never transcribe headers; decline incomplete/merged) (design 43.6-43.7, REQ-0045)",
     "priority": 2,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-10-31T14:00:00Z",
     "requirement": "REQ-0052",
     "acceptance_criteria": [
