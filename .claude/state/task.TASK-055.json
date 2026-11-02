@@ -43,7 +43,13 @@
   "roles": {
     "designer": "work/TASK-055/handoff/design.md"
   },
-  "user_notes": [],
+  "user_notes": [
+    {
+      "raw": "RAW-00169",
+      "note": "also review tmp/solve-workflow.md: compare PDF-path vs extract vs hybrid, unclear-context handling",
+      "at": "2026-11-02T09:48:52Z"
+    }
+  ],
   "picked_at": "2026-11-02T09:39:02Z",
   "updated_at": "2026-11-02T09:39:34Z",
   "updated_by": "main",
@@ -54,7 +60,8 @@
   "inputs": {},
   "checkpoint": {
     "done": [],
-    "notes": ""
+    "notes": "",
+    "next": "coder 55.4-55.5 running; designer addendum (RAW-00169) running; on return commit wip, tester golden, advance IMPLEMENTING"
   },
   "next": "Titan writes tests first (units 1-9), start 55.1 and 55.2"
 }
