@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-058",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "Titan: 58.1+58.2 raw call capture and plan run, tests first",
   "title": "Plan/report split: plans/<exam>/<run> with raw AI calls, reports rebuilt from plans with no AI, plan-import, history with plans (REQ-0062)",
   "active": [
     {
       "task_id": "TASK-058",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "Titan: 58.1+58.2 raw call capture and plan run, tests first",
+      "updated_at": "2026-11-02T11:02:56Z"
     }
   ],
   "max_active": 1

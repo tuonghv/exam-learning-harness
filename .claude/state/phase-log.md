@@ -1471,3 +1471,9 @@ Action: Report written
 Result: TASK-057 verified, docs/report/phase-57-crosscheck-paths.md
 Decision: DONE
 Next: TASK-058 plan/report split
+
+## DESIGN - TASK-058 - 2026-11-02T11:02:56Z
+Action: Nova designed plan/report split
+Result: design COMPLETE; D-1..D-4
+Decision: capture first (fixes lost paid replies)
+Next: coder 58.1+58.2

@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-058",
   "title": "Plan/report split: plans/<exam>/<run> with raw AI calls, reports rebuilt from plans with no AI, plan-import, history with plans (REQ-0062)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0062",
   "acceptance_criteria": [
     "AC1 layout documented",
@@ -11,9 +11,9 @@
     "AC5 plan-import for old dirs; docs; tests-first"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-58-plan-report-split.md",
+    "summary": "plans/<exam>/<run> holds config, input, raw AI calls (captured via Runner sink), result.json; report engine builds reports/<exam>/<run>/<report-id> from a plan run with no AI; plan-import wraps old dirs incl. ingest traces; history with plans",
     "reuse": [],
     "risks": []
   },
@@ -41,11 +41,13 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-058/handoff/design.md"
+  },
   "user_notes": [],
   "picked_at": "2026-11-02T11:02:48Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-02T11:02:56Z",
+  "updated_by": "main",
   "scope": [
     "work/TASK-058/"
   ],
@@ -55,5 +57,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "Titan: 58.1+58.2 raw call capture and plan run, tests first"
 }
