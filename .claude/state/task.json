@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-059",
-  "state": "DONE",
-  "next": "",
-  "title": "Pre-solve figure/table/passage flag and page-image check for flagged questions (REQ-0059; hybrid: extract to locate, keep original PDF to verify)",
-  "active": [],
+  "task_id": "TASK-047",
+  "state": "DESIGN",
+  "next": "HELD after design: TASK-052 first (user priority), then coder tests-first per design list | on resume re-add scope: src/exam_engine/cli.py, docs/guide/ingest-usage.md, tests/unit/fixtures/** (removed while TASK-052 runs)",
+  "title": "Python cut detector for page selection, bounded automatic recovery, page-extraction cache with trace page/hash (design 43.3-43.5, REQ-0045)",
+  "active": [
+    {
+      "task_id": "TASK-047",
+      "state": "DESIGN",
+      "next": "HELD after design: TASK-052 first (user priority), then coder tests-first per design list | on resume re-add scope: src/exam_engine/cli.py, docs/guide/ingest-usage.md, tests/unit/fixtures/** (removed while TASK-052 runs)",
+      "updated_at": "2026-11-02T05:29:54Z"
+    }
+  ],
   "max_active": 1
 }
