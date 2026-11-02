@@ -53,6 +53,7 @@ Turn and time budget: every brief sets `Turns:` and `Expect:`. The hard stop is 
 Skills: each role preloads its skills from the `skills:` frontmatter of `.claude/agents/<role>.md`, and every role has the `Skill` tool for the language or domain skill its step needs. State-moving skills (workflow, commit, req-*, coordinator) are the coordinator's only. The brief's `Load:` line names extra ones. Accept a handoff only when its second line is `SKILLS: ...`; otherwise send it back once, then escalate. After editing an agent file, restart the session so new agents pick it up.
 When a role needs a path the guard reserves, grant it per task (`roles.grants.<role> = ["<glob>"]`, only `protect.grantable` globs), or use the patch route: the role writes `work/<T>/patches/*.patch`, you `git apply` it. Never do the edit for the role.
 
+**Short replies (user, RAW-00151, repeats RAW-00142):** my own replies to the user are short: lead with the result, then only what the user must know or decide; no step-by-step narration, no restating tool output, no paragraphs of background. Code comments: only where the why is not obvious.
 Short roles (user, RAW-00142): the user reads only the main session, so every brief ends `Reply ≤ 5 lines`, handoffs are short bullets with evidence paths (no prose, no pasted code/logs), and I open a handoff only when a decision needs it. In my own replies: lead with the result, no role-traffic narration.
 
 ## 2b. Cover what the roles cannot do
