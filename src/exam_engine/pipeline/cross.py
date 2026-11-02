@@ -22,6 +22,12 @@ IMAGE_RULES = (
     "included. Read figures, tables and formulas from the images. If something is unreadable, set "
     "answer_status to a non-answered value instead of guessing.")
 
+FLAGGED_RULES = (
+    "Only these questions are asked, in the attached pages:\n%s\n"
+    "Identify each by its first words (printed numbers may restart per part); answer with exactly "
+    "these ids. Read figures/tables from the images. If the question or its figure is not readable "
+    "or not on the pages, set answer_status to a non-answered value with the reason; never guess.")
+
 
 class CrossError(Exception):
     """Structured failure (exit 3): call_failed, invalid_reply, cost_cap."""
@@ -40,6 +46,27 @@ def route_b_prompt(exam):
     n = len(exam["questions"])
     return "%s\n\nLanguage: %s\n\n%s\n" % (solver.base_prompt(exam), router.language(exam),
                                            IMAGE_RULES % (n, n))
+
+
+def flagged_items(exam, ids):
+    """[(id, printed number or None, first 80 chars of the stem's first line)] for the flagged `ids`."""
+    from exam_engine.pipeline import parser
+    off = parser._OFFSET_RE.search(exam.get("instructions") or "")
+    qs = {q["id"]: q for q in exam["questions"]}
+    out = []
+    for i in ids:
+        body = (qs[i].get("stem") or qs[i]["text"]).strip()
+        out.append((i, i + int(off.group(1)) if off else None, (body.split("\n", 1)[0])[:80]))
+    return out
+
+
+def flagged_prompt(exam, items):
+    """Image prompt for flagged questions: asked by id + stem prefix, never by reading-order counting."""
+    from exam_engine.pipeline import router
+    lines = "\n".join('id %s%s: "%s..."' % (i, " (printed %s)" % p if p is not None else "", pre)
+                      for i, p, pre in items)
+    return "%s\n\nLanguage: %s\n\n%s\n" % (solver.base_prompt(exam), router.language(exam),
+                                           FLAGGED_RULES % lines)
 
 
 def canon(answer):
