@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-052",
-  "state": "UNIT_TESTED",
-  "next": "VERIFIED",
+  "state": "VERIFIED",
+  "next": "DONE: report; TASK-053 QA line next",
   "title": "Human review path: review packs per subject/question, feedback apply, skill review-loop (REQ-0055)",
   "active": [
     {
       "task_id": "TASK-052",
-      "state": "UNIT_TESTED",
-      "next": "VERIFIED",
-      "updated_at": "2026-11-02T05:46:10Z"
+      "state": "VERIFIED",
+      "next": "DONE: report; TASK-053 QA line next",
+      "updated_at": "2026-11-02T05:46:36Z"
     }
   ],
   "max_active": 1
