@@ -1,17 +1,30 @@
 {
   "task_id": "TASK-052",
   "title": "Human review path: review packs per subject/question, feedback apply, skill review-loop (REQ-0055)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0055",
   "acceptance_criteria": [
-    "REQ-0055 AC1-AC4"
+    "REQ-0055 AC1 packs",
+    "REQ-0055 AC2 feedback apply",
+    "REQ-0055 AC3 skill review-loop",
+    "REQ-0055 AC4 tests and first DGNL pack"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
-    "reuse": [],
-    "risks": []
+    "status": "completed",
+    "path": "docs/design/phase-52-human-review-path.md",
+    "summary": "exam.py review-pack and review-apply, review/<exam-id>/INDEX.md + one file per subject, Your review lines parsed with Wilson agreement, improvements.md, marks never lost on re-run, gitignored",
+    "reuse": [
+      "result.json",
+      "exam .md",
+      "refined json page/needs_review",
+      "report labels",
+      "extract_eval Wilson",
+      "refcheck"
+    ],
+    "risks": [
+      "review marks lost on re-run (guarded)",
+      "question text only in gitignored review/"
+    ]
   },
   "implementation": {
     "status": "pending",
@@ -36,11 +49,15 @@
   },
   "roles_required": true,
   "crosscheck_required": true,
-  "roles": {},
+  "roles": {
+    "designer": {
+      "waiver": "coordinator design inline: all inputs exist, one thin command pair"
+    }
+  },
   "user_notes": [],
   "picked_at": "2026-11-02T05:30:02Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-02T05:30:50Z",
+  "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/review.py",
     "src/exam_engine/cli.py",
@@ -56,5 +73,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder: tests first (design list 1-8), review-pack, review-apply, DGNL pack"
 }

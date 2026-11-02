@@ -1291,3 +1291,9 @@ Action: designer Nova drafted; coordinator installed with decisions
 Result: docs/design/phase-47-whole-question-window.md
 Decision: hold for TASK-052 (user priority)
 Next: resume IMPLEMENTING
+
+## DESIGN - TASK-052 - 2026-11-02T05:30:50Z
+Action: coordinator wrote the design inline
+Result: docs/design/phase-52-human-review-path.md
+Decision: implement now
+Next: IMPLEMENTING

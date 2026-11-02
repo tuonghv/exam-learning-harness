@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-052",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "coder: tests first (design list 1-8), review-pack, review-apply, DGNL pack",
   "title": "Human review path: review packs per subject/question, feedback apply, skill review-loop (REQ-0055)",
   "active": [
     {
       "task_id": "TASK-052",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "coder: tests first (design list 1-8), review-pack, review-apply, DGNL pack",
+      "updated_at": "2026-11-02T05:30:50Z"
     }
   ],
   "max_active": 1
