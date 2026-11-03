@@ -1352,10 +1352,103 @@ def _rs_backfill(a):
     return 0
 
 
+def _rs_board_load(line, qa):
+    """Metrics (with quality) of the run a history line points to; None when its result.json is gone."""
+    rp = line.get("result_path")
+    try:
+        result = settings.load_json(rp)
+    except (OSError, ValueError, TypeError):
+        return None, None
+    return metrics.compute(result, metrics.load_log(os.path.join(os.path.dirname(rp), "run.log")),
+                           qa=qa, quality=True), metrics.kind(result)
+
+
+def _rs_board_baseline(a, lines):
+    """History line (or synthetic one) of --baseline RUN_ID|DIR; ValueError when it cannot be resolved."""
+    ref = a.baseline
+    hit = [ln for ln in lines if ln.get("run_id") == ref]
+    if not hit and os.path.isfile(os.path.join(ref, "result.json")):
+        rp = os.path.abspath(os.path.join(ref, "result.json"))
+        hit = [ln for ln in lines if ln.get("result_path") == rp] or [
+            {"run_id": ref, "result_path": rp, "exam_sha256": metrics.file_sha256(a.exam) if a.exam else None}]
+    if not hit:
+        raise ValueError("%s: not a result dir and not a run_id in %s" % (ref, a.history))
+    return hit[-1]
+
+
+def _rs_board_packs(specs, n_exams):
+    """{scope or None: [files]} from --review-pack [SHA_PREFIX|EXAM_ID=]FILE. Ids repeat across exams, so an
+    unscoped pack is only valid when the board shows one exam (D6)."""
+    out = {}
+    for sp in specs:
+        m = re.match(r"^([A-Za-z0-9_.-]+)=(.+)$", sp)
+        out.setdefault(m.group(1) if m else None, []).append(m.group(2) if m else sp)
+    if None in out and n_exams > 1:
+        raise ValueError("--review-pack needs SHA_PREFIX=FILE when several exams are shown")
+    return out
+
+
+def _rs_board_qa(packs, line, offset):
+    files = list(packs.get(None, []))
+    for scope, fs in packs.items():
+        if scope and ((line.get("exam_sha256") or "").startswith(scope) or line.get("exam_id") == scope):
+            files += fs
+    return metrics.load_qa(files, offset) if files else None
+
+
+def _rs_board(a):
+    """Free scoreboard (63.5): per exam kind coverage, quality, cost, delta and verdict; reads history + result.json."""
+    lines, bad = _rs_lines(a)
+    if bad:
+        print("WARN: %d history line(s) skipped" % bad, file=sys.stderr)
+    lines = [ln for ln in lines if not a.source or (ln.get("source") or "solve") == a.source]
+    sha = metrics.file_sha256(a.exam) if a.exam else None
+    if a.exam and sha is None:
+        raise ValueError("%s: cannot read exam" % a.exam)
+    base = _rs_board_baseline(a, lines) if a.baseline else None
+    if base is not None:
+        sha = sha or base.get("exam_sha256")
+        if not base.get("exam_sha256") or base["exam_sha256"] != sha:
+            print("ERROR: different exam (sha %s vs %s)" % ((base.get("exam_sha256") or "?")[:12], (sha or "?")[:12]),
+                  file=sys.stderr)
+            return 2
+    if sha:
+        lines = [ln for ln in lines if ln.get("exam_sha256") == sha]
+    pairs, no_sha = metrics.pair(lines, base)
+    packs = _rs_board_packs(a.review_pack or [], len(pairs))
+    kinds, skipped = {}, []
+    for cur, prev in pairs:
+        qa = _rs_board_qa(packs, cur, a.offset)
+        mc, kc = _rs_board_load(cur, qa)
+        if mc is None:
+            print("result missing: %s" % cur.get("run_id"))
+            skipped.append(cur.get("run_id"))
+            continue
+        mp = None
+        if prev is not None:
+            mp = _rs_board_load(prev, qa)[0]
+            if mp is None:
+                print("result missing: %s" % prev.get("run_id"))
+                skipped.append(prev.get("run_id"))
+        if a.kind and kc != a.kind:
+            continue
+        kinds.setdefault(kc, []).append({"cur": mc, "base": mp, "qa": qa, "line": cur})
+    if no_sha:
+        print("no_sha %d" % no_sha)
+    out = {k: metrics.board_kind(v) for k, v in sorted(kinds.items())}
+    if a.json:
+        print(json.dumps({"kinds": out, "no_sha": no_sha, "skipped": skipped}, ensure_ascii=False, indent=2,
+                         sort_keys=True))
+    else:
+        for k, blk in out.items():
+            print("\n".join(metrics.board_text(k, blk)))
+    return 1 if any(b["verdict"] == "regression" for b in out.values()) else 0
+
+
 def run_stats_main(argv):
-    """run-stats stats|compare|trend|backfill: metrics of solve runs (TASK-056); exit 0 ok, 1 regression, 2 error."""
+    """run-stats stats|compare|trend|backfill|board: metrics of solve runs (TASK-056); exit 0 ok, 1 regression, 2 error."""
     ap = argparse.ArgumentParser(prog="exam run-stats")
-    ap.add_argument("sub", choices=("stats", "compare", "trend", "backfill", "recheck"))
+    ap.add_argument("sub", choices=("stats", "compare", "trend", "backfill", "recheck", "board"))
     ap.add_argument("refs", nargs="*", help="stats: RESULT_DIR; compare: A B; backfill: DIR...")
     ap.add_argument("--exam")
     ap.add_argument("--key", dest="ans_key")
@@ -1368,6 +1461,9 @@ def run_stats_main(argv):
     ap.add_argument("--exam-id")
     ap.add_argument("--subject")
     ap.add_argument("--last", type=int, default=0)
+    ap.add_argument("--baseline", metavar="RUN_ID|DIR", help="board: baseline run (same exam), else the previous run")
+    ap.add_argument("--kind", help="board: only this subject/language/level")
+    ap.add_argument("--source", choices=("solve", "backfill", "regset"), help="board: only this history source")
     try:
         a = ap.parse_args(argv)
     except SystemExit as exc:
@@ -1379,7 +1475,7 @@ def run_stats_main(argv):
             print("usage: exam.py run-stats stats RESULT_DIR", file=sys.stderr)
             return 2
         return {"stats": _rs_stats, "compare": _rs_compare, "trend": _rs_trend,
-                "backfill": _rs_backfill, "recheck": _rs_recheck}[a.sub](a)
+                "backfill": _rs_backfill, "recheck": _rs_recheck, "board": _rs_board}[a.sub](a)
     except (OSError, ValueError) as exc:
         print("ERROR: %s" % exc, file=sys.stderr)
         return 2

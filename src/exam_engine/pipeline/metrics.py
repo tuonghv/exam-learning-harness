@@ -117,7 +117,8 @@ def _qa_block(rows, qa):
             "engine_nonletter": tally["engine-nonletter"], "unmatched": unmatched}, unmatched
 
 
-def compute(result, log_lines=None, exam=None, key=None, qa=None, needs_review=None, needs_review_why=None):
+def compute(result, log_lines=None, exam=None, key=None, qa=None, needs_review=None, needs_review_why=None,
+            quality=False):
     """Metrics block of one run. exam = parsed exam (group kinds), key = {id: letter},
     qa = {id: {"answer", "flawed"}}; each optional source missing -> its fields are None."""
     qs = result.get("questions") or []
@@ -187,7 +188,7 @@ def compute(result, log_lines=None, exam=None, key=None, qa=None, needs_review=N
                 tokens=None, wall_s=None)
     cost["cost_per_answered"] = (cost["cost_usd"] / len(ans)) if ans and cost["cost_usd"] is not None else None
     subject = (result.get("exam") or {}).get("subject")
-    return {
+    m = {
         "n": n, "counts": counts, "rates": rates, "accuracy": {"key": key_blk, "qa": qa_blk},
         "cost": cost, "stopped": run.get("stopped"), "qa_unmatched": unmatched,
         "by_subject": {subject: _slice(rows)} if subject and rows else {},
@@ -195,6 +196,50 @@ def compute(result, log_lines=None, exam=None, key=None, qa=None, needs_review=N
         "questions": [{k: r[k] for k in ("id", "answer", "status", "reason", "attempts", "group_kind",
                                          "key_ok", "qa")} for r in rows],
     }
+    if quality:  # only the board asks: stats/metrics.json stay byte-identical (63.1)
+        m["quality"] = _quality(rows, qs, counts, qa_blk, key_blk)
+    return m
+
+
+FLAG_REASONS = ("reviewer_disagrees", "check_failed", "needs_review")  # engine reason codes, not exam data
+
+
+def _flagged(q):
+    return _reason(q).startswith(FLAG_REASONS) or "image_differs" in _codes(q)
+
+
+def _quality(rows, qs, counts, qa_blk, key_blk):
+    """63.1: key quality (from key_ok: given key or scorer score) and QA proxy of one run."""
+    flag = {str(q.get("id")): _flagged(q) for q in qs}
+    basis = "key" if key_blk else ("qa" if qa_blk else None)
+    out = {"basis": basis, "unmeasured": basis is None, "correct": None, "keyed": None, "keyed_scored": None,
+           "attempt_rate": None, "adj": None, "precision": None, "wrong_answered": None, "silent_wrong": None, "flagged": None, "flagged_correct": None,
+           "false_alarm": None}
+    if key_blk:
+        ak = [r for r in rows if r["answered"] and r["key_ok"] is not None]
+        good = [r for r in ak if r["key_ok"]]
+        wrong = [r for r in ak if not r["key_ok"]]
+        fl = [r for r in ak if flag[r["id"]]]
+        fl_ok = [r for r in fl if r["key_ok"]]
+        # the scorer leaves a declined/unanswered question out of `keyed`, so refusing would raise the rate:
+        # attempt-adjusted denominator = scored + unanswered (additive, scorer output unchanged)
+        unans = [r for r in rows if not r["answered"]]
+        adj = {r["id"]: (r["key_ok"] if r["key_ok"] is not None else (False if not r["answered"] else None))
+               for r in rows}
+        keyed_adj = key_blk["keyed"] + sum(1 for r in unans if r["key_ok"] is None)
+        out.update(correct=len(good), keyed=keyed_adj, keyed_scored=key_blk["keyed"], adj=adj,
+                   attempt_rate=_rate(len(good), keyed_adj), precision=_rate(len(good), len(ak)),
+                   wrong_answered=len(wrong), silent_wrong=sum(1 for r in wrong if not flag[r["id"]]),
+                   flagged=len(fl), flagged_correct=len(fl_ok), false_alarm=_rate(len(fl_ok), len(fl)))
+    qv = [r for r in rows if r["answered"] and r["qa"] in ("agrees", "differs")]
+    qfl = [r for r in qv if flag[r["id"]]]
+    qfl_ok = [r for r in qfl if r["qa"] == "agrees"]
+    out["proxy"] = {"agree_rate": qa_blk["agree_rate"] if qa_blk else None,
+                    "flagged": len(qfl), "flagged_agrees": len(qfl_ok),
+                    "proxy_false_alarm": _rate(len(qfl_ok), len(qfl)),
+                    "needs_review_by_why": counts.get("needs_review_by_why"),
+                    "image_agrees": counts.get("image_agrees"), "image_differs": counts.get("image_differs")}
+    return out
 
 
 # ---- history (56.2) ----
@@ -211,6 +256,12 @@ def file_sha256(path):
         return None
 
 
+def kind(result):
+    """Exam kind label subject/language/level from result.exam (63.2); '-' for a missing field."""
+    ex = (result or {}).get("exam") or {}
+    return "/".join(str(ex.get(k) or "-") for k in ("subject", "language", "level"))
+
+
 def history_line(result, m, meta):
     """One history record. meta: run_id, ts, exam_id, exam_sha256, git, result_path, source, lang."""
     meta = meta or {}
@@ -221,7 +272,7 @@ def history_line(result, m, meta):
     extra = {"plan_dir": meta["plan_dir"]} if meta.get("plan_dir") else {}
     return dict(extra, v=1, run_id=meta.get("run_id"), ts=meta.get("ts") or _now(),
                 exam_id=meta.get("exam_id"), exam_sha256=meta.get("exam_sha256"),
-                subject=ex.get("subject"), git=meta.get("git"), prompt=run.get("prompt"),
+                subject=ex.get("subject"), kind=kind(result), git=meta.get("git"), prompt=run.get("prompt"),
                 model=run.get("model"), llm=run.get("llm"),
                 config={"max_attempts": run.get("max_attempts"), "timeout_s": run.get("timeout_s"),
                         "max_cost_usd": run.get("max_cost_usd"), "lang": meta.get("lang") or ex.get("language")},
@@ -344,23 +395,50 @@ def noise(f, r):
     return not (f + r >= 4 and abs(f - r) >= 2 * math.sqrt(f + r))
 
 
+def _one_label(x):
+    """A single answer label (any option letter or digit), not a substring test (D1)."""
+    return isinstance(x, str) and len(x) == 1 and x.isalnum()
+
+
+def _row_answered(r):
+    return _answered({"answer": r["answer"], "status_reason": r["reason"]})
+
+
+def _kok(m, q):
+    """key_ok of a question; the board's attempt-adjusted map (quality.adj) counts unanswered as not correct."""
+    adj = (m.get("quality") or {}).get("adj")
+    return adj[q["id"]] if adj and q["id"] in adj else q["key_ok"]
+
+
 def classify(ma, mb, qa=None):
-    """Per-question change from run A to run B. Reference = key (key_ok) else QA letter."""
+    """Per-question change from run A to run B. Reference = key (key_ok) else QA letter.
+    63.3 adds cov_up/cov_down (not answered <-> answered) and wrong_new/wrong_gone (answered and wrong
+    vs the reference, D5: a declined question later answered wrong counts); the old lists are unchanged."""
     qb = {q["id"]: q for q in mb["questions"]}
     out = {"fixed": [], "regressed": [], "changed": [], "status_up": [], "status_down": [], "unchanged": 0,
-           "basis": None}
+           "basis": None, "cov_up": [], "cov_down": [], "wrong_new": [], "wrong_gone": []}
     rank = {"PASS": 2, "UNCERTAIN": 1, "FAIL": 0}
     for a in ma["questions"]:
         b = qb.get(a["id"])
         if b is None:
             continue
         ra = rb = None
-        if a["key_ok"] is not None and b["key_ok"] is not None:
-            ra, rb, out["basis"] = a["key_ok"], b["key_ok"], "key"
-        elif qa and a["id"] in qa and qa[a["id"]]["answer"] in "ABCD" and not qa[a["id"]]["flawed"]:
+        aa, ab = _row_answered(a), _row_answered(b)
+        if aa != ab:
+            out["cov_up" if ab else "cov_down"].append(a["id"])
+        ka, kb = _kok(ma, a), _kok(mb, b)
+        if ka is not None and kb is not None:
+            ra, rb, out["basis"] = ka, kb, "key"
+        elif qa and a["id"] in qa and _one_label(qa[a["id"]]["answer"]) and not qa[a["id"]]["flawed"]:
             want = qa[a["id"]]["answer"]
             ra, rb = a["answer"] == want, b["answer"] == want
             out["basis"] = out["basis"] or "QA"
+        if ra is not None:
+            wa, wb = aa and not ra, ab and not rb
+            if wb and not wa:
+                out["wrong_new"].append(a["id"])
+            elif wa and not wb:
+                out["wrong_gone"].append(a["id"])
         if ra is not None and ra != rb:
             out["fixed" if rb else "regressed"].append(a["id"])
         elif ra is None and a["answer"] != b["answer"]:
@@ -369,4 +447,151 @@ def classify(ma, mb, qa=None):
             out["status_up" if rank.get(b["status"], 1) > rank.get(a["status"], 1) else "status_down"].append(a["id"])
         else:
             out["unchanged"] += 1
+    return out
+
+
+# ---- engine scoreboard (TASK-063): pairing, delta, verdict, text ----
+
+_POOL = ("fixed", "regressed", "wrong_new", "wrong_gone", "cov_up", "cov_down")
+
+
+def pair(lines, baseline=None):
+    """([(current line, baseline line or None)] one per exam_sha256, no_sha count) (63.2).
+    Current = latest line of a sha; baseline = the given line of that sha, else the previous line."""
+    by, no_sha = {}, 0
+    for ln in sorted(lines, key=lambda x: x.get("ts") or ""):
+        if not ln.get("exam_sha256"):
+            no_sha += 1
+            continue
+        by.setdefault(ln["exam_sha256"], []).append(ln)
+    out = []
+    for sha, grp in by.items():
+        cur = grp[-1]
+        if baseline is not None and baseline.get("exam_sha256") == sha and baseline.get("run_id") != cur.get("run_id"):
+            base = baseline
+        else:
+            base = grp[-2] if len(grp) > 1 else None
+        out.append((cur, base))
+    return out, no_sha
+
+
+def board_delta(ma, mb, qa=None):
+    """Pair delta A->B (63.3): classify counts plus coverage, quality and cost values of both sides."""
+    d = classify(ma, mb, qa)
+    res = {k: len(d[k]) for k in _POOL}
+    res.update(basis=d["basis"], n=mb["n"], flips=res["fixed"] + res["regressed"])
+    return res
+
+
+def pool(deltas):
+    """Sum the pair counts of one kind; basis key beats QA beats None."""
+    out = {k: sum(d[k] for d in deltas) for k in _POOL}
+    bases = {d["basis"] for d in deltas}
+    out["basis"] = "key" if "key" in bases else ("QA" if "QA" in bases else None)
+    out["n"] = sum(d["n"] for d in deltas)
+    return out
+
+
+def verdict(d):
+    """(verdict text, flag or None) of a pooled delta (63.4). Coverage alone is never `better`."""
+    f, r, wn, wg = d["fixed"], d["regressed"], d["wrong_new"], d["wrong_gone"]
+    if d["basis"] is None:
+        return "unmeasured", None
+    cov_up = d["cov_up"] > d["cov_down"]
+    if (not noise(f, r) and r > f) or (not noise(wg, wn) and wn > wg):
+        return "regression", "COVERAGE_UP_QUALITY_DOWN" if cov_up else None
+    if not noise(f, r) and f > r:
+        return ("better (proxy)" if d["basis"] == "QA" else "better"), None
+    flag = "watch: coverage up, quality down within noise" if cov_up and (r > f or wn > wg) else None
+    return "same (within noise n=%d flips=%d)" % (d["n"], f + r), flag
+
+
+def _sum(xs):
+    xs = [x for x in xs if x is not None]
+    return sum(xs) if xs else None
+
+
+def _side(ms):
+    """Aggregate of runs (metrics with quality) of one kind on one side."""
+    qs = [m["quality"] for m in ms]
+    ans, n = sum(m["counts"]["answered"] for m in ms), sum(m["n"] for m in ms)
+    agg = {k: _sum(q[k] for q in qs) for k in ("correct", "keyed", "wrong_answered", "silent_wrong",
+                                               "flagged", "flagged_correct")}
+    agg.update(answered=ans, n=n, basis="key" if any(q["basis"] == "key" for q in qs)
+               else ("qa" if any(q["basis"] == "qa" for q in qs) else None),
+               cost_usd=_sum(m["cost"].get("cost_usd") for m in ms), calls=_sum(m["cost"].get("calls") for m in ms))
+    c, w = agg["correct"], agg["wrong_answered"]
+    agg["precision"] = _rate(c, c + w) if c is not None else None
+    agg["false_alarm"] = _rate(agg["flagged_correct"], agg["flagged"]) if agg["flagged"] else None
+    agg["cost_per_answered"] = agg["cost_usd"] / ans if ans and agg["cost_usd"] is not None else None
+    pr = [q["proxy"] for q in qs]
+    rates = [p["agree_rate"] for p in pr if p["agree_rate"] is not None]
+    agg["agree_rate"] = sum(rates) / len(rates) if rates else None
+    pf = _sum(p["flagged"] for p in pr)
+    agg["proxy_false_alarm"] = _rate(_sum(p["flagged_agrees"] for p in pr), pf) if pf else None
+    why = {}
+    for p in pr:
+        for k, v in (p["needs_review_by_why"] or {}).items():
+            why[k] = why.get(k, 0) + v
+    agg.update(review_why=why, image_agrees=_sum(p["image_agrees"] for p in pr),
+               image_differs=_sum(p["image_differs"] for p in pr))
+    return agg
+
+
+def board_kind(entries):
+    """One kind block (63.5 data). entries = [{"cur": m, "base": m|None, "qa": qa|None, "line": history line}]."""
+    cur = _side([e["cur"] for e in entries])
+    paired = [e for e in entries if e["base"] is not None]
+    base = _side([e["base"] for e in paired]) if paired else None
+    out = {"exams": len(entries), "runs": len(entries) + len(paired), "cur": cur, "base": base,
+           "generated": any(str((e["line"] or {}).get("key_basis") or "").startswith("generated") for e in entries)}
+    if paired:
+        out["delta"] = pool([board_delta(e["base"], e["cur"], e["qa"]) for e in paired])
+        out["verdict"], out["flag"] = verdict(out["delta"])
+    else:
+        out["delta"], out["verdict"], out["flag"] = None, "-", None
+    return out
+
+
+def _f(x, fmt="%d"):
+    return "-" if x is None else fmt % x
+
+
+def _arrow(a, b, show):
+    return "%s -> %s" % (show(a), show(b)) if a is not None or b is not None else "-"
+
+
+def board_text(name, k):
+    """Text lines of one kind block (63.5)."""
+    cur, base = k["cur"], k["base"]
+    basis = {"key": "key (generated)" if k["generated"] else "key", "qa": "qa(proxy)"}.get(cur["basis"], "none")
+    out = ["kind %s  basis %s  exams %d  runs %d" % (name, basis, k["exams"], k["runs"])]
+    if base is None:
+        out.append("  baseline: none")
+        out.append("  coverage %d/%d" % (cur["answered"], cur["n"]))
+    else:
+        out.append("  coverage %d/%d -> %d/%d (%+d)" % (base["answered"], base["n"], cur["answered"], cur["n"],
+                                                       cur["answered"] - base["answered"]))
+    ref = base or {}
+    if cur["basis"] == "key":
+        out.append("  quality key %s/%s (%s of all keyed)  precision %s" % (
+            _f(cur["correct"]), _f(cur["keyed"]), _pct(_rate(cur["correct"], cur["keyed"])),
+            _arrow(ref.get("precision"), cur["precision"], _pct) if base else _pct(cur["precision"])))
+        out.append("  false_alarm %s  silent_wrong %s" % (
+            _arrow(ref.get("false_alarm"), cur["false_alarm"], _pct) if base else _pct(cur["false_alarm"]),
+            _arrow(ref.get("silent_wrong"), cur["silent_wrong"], _f) if base else _f(cur["silent_wrong"])))
+    elif cur["basis"] == "qa":
+        why = ",".join("%s=%d" % kv for kv in sorted(cur["review_why"].items())) or "-"
+        out.append("  quality qa agree %s (proxy)" % (
+            _arrow(ref.get("agree_rate"), cur["agree_rate"], _pct) if base else _pct(cur["agree_rate"])))
+        out.append("  proxy: false_alarm~ %s review_why %s image %s/%s" % (
+            _pct(cur["proxy_false_alarm"]), why, _f(cur["image_agrees"]), _f(cur["image_differs"])))
+    else:
+        out.append("  quality unmeasured (no key, no QA)")
+    usd = lambda x: "-" if x is None else "$%.4f" % x  # noqa: E731
+    out.append("  cost %s (per answered %s) calls %s" % (
+        _arrow(ref.get("cost_usd"), cur["cost_usd"], usd) if base else usd(cur["cost_usd"]),
+        _arrow(ref.get("cost_per_answered"), cur["cost_per_answered"], usd) if base else usd(cur["cost_per_answered"]),
+        _arrow(ref.get("calls"), cur["calls"], _f) if base else _f(cur["calls"])))
+    out.append("  verdict %s%s" % (k["verdict"], "  " + k["flag"] if k["flag"] else ""))
     return out
