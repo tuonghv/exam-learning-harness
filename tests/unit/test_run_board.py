@@ -164,6 +164,13 @@ class AttemptAdjustedTest(Base):
         out = self.board()[1]
         self.assertIn("quality key 16/30 (53% of all keyed)  precision 80%", out)
 
+    def test_100q_mixed_hand_count(self):
+        # 100q: 55 right, 25 wrong, 20 declined -> 55/100 of all keyed, precision 55/80
+        qu = metrics.compute(result(states(55, 25, 20)), quality=True)["quality"]
+        self.assertEqual((qu["correct"], qu["keyed"], qu["keyed_scored"]), (55, 100, 80))
+        self.assertAlmostEqual(qu["attempt_rate"], 0.55)
+        self.assertAlmostEqual(qu["precision"], 55 / 80)
+
     def test_2q_one_of_one(self):
         qu = metrics.compute(result([q(1, "ok"), q(2, "dec")]), quality=True)["quality"]
         self.assertEqual((qu["correct"], qu["keyed"], qu["attempt_rate"]), (1, 2, 0.5))
