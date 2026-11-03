@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-069",
   "title": "Parsing accuracy metrics apart from solving accuracy: structure_scores, gold fixtures, board --structure-gold, parse-suspect split (REQ-0074)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0074",
   "acceptance_criteria": [
     "AC1 structure_scores and gold fixtures, board prints parsing accuracy beside solving accuracy",
@@ -15,8 +15,16 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/metrics.py",
+      "src/exam_engine/cli.py",
+      "tests/unit/test_structure_scores.py",
+      "tests/unit/fixtures/structure_gold.json",
+      "docs/guide/toolkit-reference.md",
+      "docs/design/phase-65-exam-structure-scope.md"
+    ],
+    "summary": "metrics.structure_scores, compute(structure=), board parsing line and --structure-gold, parse-suspect vs solver split, tokens per question (bytes/4), 11 synthetic gold cases covering the six metrics with known_miss labels"
   },
   "unit_test": {
     "status": "pending",
@@ -39,11 +47,12 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-069/handoff/design.md"
+    "designer": "work/TASK-069/handoff/design.md",
+    "coder": "work/TASK-069/handoff/code.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-03T09:40:44Z",
-  "updated_at": "2026-11-03T09:40:52Z",
+  "updated_at": "2026-11-03T09:51:05Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -52,5 +61,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Titan: tests first, 69.1-69.6"
+  "next": "tester QA"
 }

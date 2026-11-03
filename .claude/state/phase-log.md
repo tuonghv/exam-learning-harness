@@ -1891,3 +1891,9 @@ Action: Nova designed parsing metrics
 Result: design COMPLETE
 Decision: board --structure-gold; gold beside synthetic fixtures
 Next: coder tests-first
+
+## IMPLEMENTING - TASK-069 - 2026-11-03T09:51:04Z
+Action: Titan implemented 69.1-69.6
+Result: structure and eval tests pass; full suite before the fixture change baseline only
+Decision: tester next (full suite)
+Next: tester
