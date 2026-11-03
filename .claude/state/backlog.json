@@ -1256,7 +1256,7 @@
     "task_id": "TASK-065",
     "title": "Exam structure and context review and design: hierarchy, instruction inheritance, shared references, cross-page, validation, parsing metrics (REQ-0073)",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-11-03T15:00:00",
     "requirement": "REQ-0073",
     "acceptance_criteria": [

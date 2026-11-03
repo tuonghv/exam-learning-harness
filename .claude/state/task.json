@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-064",
-  "state": "DONE",
-  "next": "",
-  "title": "Evaluation statistics robustness: refusals never rewarded, pooled attempt-adjusted score with interval, exact sign test, insufficient verdict, official vs exploratory tier, version-aware baseline (REQ-0071)",
-  "active": [],
+  "task_id": "TASK-065",
+  "state": "TODO",
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "title": "Exam structure and context review and design: hierarchy, instruction inheritance, shared references, cross-page, validation, parsing metrics (REQ-0073)",
+  "active": [
+    {
+      "task_id": "TASK-065",
+      "state": "TODO",
+      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+      "updated_at": ""
+    }
+  ],
   "max_active": 1
 }
