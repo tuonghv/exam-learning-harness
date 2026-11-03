@@ -9,6 +9,7 @@ import re
 from exam_engine.adapters import claude
 from exam_engine.core import schema as sch
 from exam_engine.core.decision import declined
+from exam_engine.ingest import segment
 from exam_engine.pipeline import solver, verifier
 from exam_engine.utils import langtable
 from exam_engine.utils.text import fold
@@ -28,10 +29,10 @@ _TF = tf_map(langtable.load())
 
 IMAGE_RULES = (
     "The exam is in the attached page images, not in text. There are exactly %d questions in total. "
-    "The printed numbering restarts in each part (Part I 1-12, Part II 1-4, ...); do NOT use the "
+    "%s; do NOT use the "
     "printed numbers: count continuously in reading order, so the first question of a later part "
-    "gets the previous count + 1, and use 1..%d as ids. Answer every question, Part II and III "
-    "included. Read figures, tables and formulas from the images. If something is unreadable, set "
+    "gets the previous count + 1, and use 1..%d as ids. Answer every question in every part. "
+    "Read figures, tables and formulas from the images. If something is unreadable, set "
     "answer_status to a non-answered value instead of guessing.")
 
 FLAGGED_RULES = (
@@ -53,11 +54,34 @@ def route_a_prompt(exam, text):
     return solver.solve_prompt(exam, text, None)
 
 
-def route_b_prompt(exam):
+_HEAD = re.compile(r"^\s*([^\W\d_]{3,12})\s+(IV|V|I{1,3}|\d{1,2})\s*[.:)]?(?:\s|$)")
+_HINT_FALLBACK = "Printed numbering may restart per part or section"
+
+
+def structure_hint(text):
+    """Clause naming the parts and their printed question spans, read from the exam text's own
+    headings (`PART I`, `SECTION 2`, `PHẦN III`); the generic clause when fewer than 2 parts are found."""
+    parts = []
+    for line in (text or "").splitlines():
+        s = line.strip()
+        m = _HEAD.match(s) if len(s) <= 80 else None
+        if m and m.group(1).isupper() and not segment._Q.match(s):
+            parts.append([m.group(1).capitalize() + " " + m.group(2), []])
+            continue
+        q = segment._Q.match(s)
+        if q and parts:
+            parts[-1][1].append(int(q.group(1) or q.group(2)))
+    spans = ["%s %d-%d" % (name, min(ns), max(ns)) for name, ns in parts if ns]
+    if len(spans) < 2:
+        return _HINT_FALLBACK
+    return "The printed numbering restarts in each part (%s)" % ", ".join(spans)
+
+
+def route_b_prompt(exam, text=None):
     from exam_engine.pipeline import router
     n = len(exam["questions"])
     return "%s\n\nLanguage: %s\n\n%s\n" % (solver.base_prompt(exam), router.language(exam),
-                                           IMAGE_RULES % (n, n))
+                                           IMAGE_RULES % (n, structure_hint(text), n))
 
 
 def flagged_items(exam, ids):
@@ -187,7 +211,7 @@ def cross_solve(exam, exam_text, llm_text, llm_images, pngs, max_cost=1.0, model
     """Result dict; `llm_text(prompt)` and `llm_images(prompt, pngs)` return a claude.Call."""
     state = {"calls": 0, "cost": 0.0, "trace": []}
     got_a = _ask(llm_text, route_a_prompt(exam, exam_text), "A", state, max_cost)
-    got_b = _ask(lambda p: llm_images(p, pngs), route_b_prompt(exam), "B", state, max_cost)
+    got_b = _ask(lambda p: llm_images(p, pngs), route_b_prompt(exam, exam_text), "B", state, max_cost)
     qs = compare(exam, got_a, got_b)
     bad = [q for q in qs if q["status"] != "agree"]
     return {"routes": {"A": "exam text", "B": "page images"}, "model": model, "questions": qs,

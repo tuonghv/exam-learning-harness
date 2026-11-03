@@ -794,7 +794,7 @@ def cross_main(argv):
             print("=== ROUTE A prompt (exam text) ===")
             print(cross.route_a_prompt(exam, text))
             print("=== ROUTE B prompt (page images attached) ===")
-            print(cross.route_b_prompt(exam))
+            print(cross.route_b_prompt(exam, text))
             return 0
         if a.real:
             src = _refine_source(a, doc)

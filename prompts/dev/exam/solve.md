@@ -8,7 +8,7 @@ Rules
 2. Explain in the `Language:` value. English items stay in English. Do not translate the question.
 3. `answer` by type: multiple choice = one letter A-D; sentence ordering = letters joined with `-`
    (`c-a-d-b-e`); calculation = value, unit and the rounding used (`2.5 m/s^2`); short answer = the exact
-   value or phrase; Literature or other open task = `Open`.
+   value or phrase; an open (essay/rubric) task = `Open`.
 4. `checks` = at least one way to confirm the answer differently (substitute back, unit analysis, limiting
    case, quote). For a calculation also give `expr`: the final numeric expression as plain Python
    arithmetic, so code can recompute it.

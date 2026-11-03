@@ -8,7 +8,7 @@ Quy tắc
 2. Giải thích bằng ngôn ngữ ghi trong giá trị `Language:`. Các mục tiếng Anh giữ nguyên tiếng Anh. Không dịch câu hỏi.
 3. `answer` theo loại: trắc nghiệm = một chữ cái A-D; sắp xếp câu = các chữ cái nối bằng `-`
    (`c-a-d-b-e`); tính toán = giá trị, đơn vị và cách làm tròn đã dùng (`2.5 m/s^2`); trả lời ngắn = giá trị
-   hoặc cụm từ chính xác; Ngữ văn hoặc bài tự luận khác = `Open`.
+   hoặc cụm từ chính xác; bài tự luận (có thang điểm) khác = `Open`.
 4. `checks` = ít nhất một cách khác để xác nhận đáp án (thay ngược lại, phân tích đơn vị, trường hợp giới
    hạn, trích dẫn). Với bài tính toán, cũng ghi `expr`: biểu thức số cuối cùng dưới dạng phép tính Python
    thuần, để mã có thể tính lại.
