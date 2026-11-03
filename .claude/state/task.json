@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-066",
-  "state": "DESIGN",
-  "next": "Titan: tests first, 66.1-66.4",
+  "state": "IMPLEMENTING",
+  "next": "tester QA",
   "title": "Keyed regression set: benchmark --set, regset history lines (official tier), board labels (REQ-0072)",
   "active": [
     {
       "task_id": "TASK-066",
-      "state": "DESIGN",
-      "next": "Titan: tests first, 66.1-66.4",
-      "updated_at": "2026-11-03T03:09:47Z"
+      "state": "IMPLEMENTING",
+      "next": "tester QA",
+      "updated_at": "2026-11-03T03:17:24Z"
     }
   ],
   "max_active": 1

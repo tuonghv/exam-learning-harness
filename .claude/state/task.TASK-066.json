@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-066",
   "title": "Keyed regression set: benchmark --set, regset history lines (official tier), board labels (REQ-0072)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0072",
   "acceptance_criteria": [
     "AC1 benchmark --set and evals/regset.json, mock tests",
@@ -15,8 +15,16 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/benchmark.py",
+      "src/exam_engine/pipeline/metrics.py",
+      "src/exam_engine/cli.py",
+      "evals/regset.example.json",
+      "tests/unit/test_regset.py",
+      "docs/guide/toolkit-reference.md"
+    ],
+    "summary": "benchmark --set with regset history lines (source, set_id, key_basis, git, prompt_info), kinds from exam header, official vs generated key labels, skipped items not regressions, evals/regset.example.json"
   },
   "unit_test": {
     "status": "pending",
@@ -39,11 +47,12 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-066/handoff/design.md"
+    "designer": "work/TASK-066/handoff/design.md",
+    "coder": "work/TASK-066/handoff/code.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-03T03:09:47Z",
-  "updated_at": "2026-11-03T03:09:47Z",
+  "updated_at": "2026-11-03T03:17:24Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -52,5 +61,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Titan: tests first, 66.1-66.4"
+  "next": "tester QA"
 }
