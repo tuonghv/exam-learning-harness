@@ -1,15 +1,16 @@
 {
   "task_id": "TASK-034",
   "title": "Measure compaction count and hook bytes in a later session vs REQ-0006 baseline (REQ-0038); runs when a later session transcript exists",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0038",
   "acceptance_criteria": [
-    "REQ-0038 AC1-AC2"
+    "AC1 measurement from a real later session transcript saved under evidence",
+    "AC2 compared with the REQ-0006 baseline, reduced / not reduced"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-34-compaction-measure.md",
+    "summary": "measurement of a later session transcript vs the REQ-0006 baseline: compaction count and hook output bytes per event",
     "reuse": [],
     "risks": []
   },
@@ -37,11 +38,15 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": {
+      "waiver": "measurement task without code, method stated in the design doc"
+    }
+  },
   "user_notes": [],
   "picked_at": "2026-11-03T11:42:34Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-03T11:43:52Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -49,5 +54,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "inspector measurement done; record evidence"
 }

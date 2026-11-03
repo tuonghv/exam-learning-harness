@@ -1975,3 +1975,9 @@ Action: Report written
 Result: TASK-071 verified, docs/report/phase-71-ocr-misread-signals.md
 Decision: DONE
 Next: REQ-0045 umbrella check; REQ-0040 waits for the user pages
+
+## DESIGN - TASK-034 - 2026-11-03T11:43:52Z
+Action: Coordinator defined the measurement method
+Result: design COMPLETE
+Decision: inspector measures this session transcript
+Next: record evidence
