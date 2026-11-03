@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-061",
   "title": "Image scope for cut/declined and doubtful questions, optional adjudication (REQ-0067; phase-60 items 60.4-60.6)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0067",
   "acceptance_criteria": [
     "AC1 --image-scope declined",
@@ -45,11 +45,18 @@
       "work/TASK-061/evidence/qa061-mut2.txt"
     ],
     "command": "python3 -I -m unittest discover -s tests/unit; mock CLI --image-scope; paid P1/P2 on 4 DGNL window questions",
-    "result": "REQ-0067 AC1-AC3 verified by unit + mock CLI tests (1160 tests, baseline failures only; 10/10 scope mutants and 5/5 strip mutants killed; default-scope golden identical on 134 cases); AC4 P1 0.149 and P2 0.183 USD (0.33 total, caps unused), P3 not needed (no differ); limits: 4 questions, no key, declined scope not exercised on a real declined question, adjudication never ran live"
+    "result": "REQ-0067 AC1-AC3 verified by unit + mock CLI tests (1160 tests, baseline failures only; 10/10 scope mutants and 5/5 strip mutants killed; default-scope golden identical on 134 cases); AC4 P1 0.149 and P2 0.183 USD (0.33 total, caps unused), P3 not needed (no differ); limits: 4 questions, no key, declined scope not exercised on a real declined question, adjudication never ran live",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-061/evidence/qa061-full2.txt"
+      ],
+      "reason": "golden identity vs pre-task commit on 134 cases, 15 mutants, mock CLI; paid real runs documented in the report"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-61-image-scope.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -58,7 +65,10 @@
     "designer": "work/TASK-061/handoff/design.md",
     "coder": "work/TASK-061/handoff/code.md",
     "tester": "work/TASK-061/handoff/test.md",
-    "verifier": "work/TASK-061/handoff/verify.md"
+    "verifier": "work/TASK-061/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "mock + golden identity on 134 cases + mutations by tester; real check P1/P2 on 4 questions without a key (docs/report/phase-61-image-scope.md)"
+    }
   },
   "user_notes": [
     {
@@ -68,7 +78,7 @@
     }
   ],
   "picked_at": "2026-11-02T23:27:31Z",
-  "updated_at": "2026-11-03T00:05:47Z",
+  "updated_at": "2026-11-03T00:06:00Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -77,5 +87,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report, DONE; then REQ-0068 generality fixes"
+  "next": ""
 }

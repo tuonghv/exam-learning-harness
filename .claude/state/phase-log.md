@@ -1669,3 +1669,9 @@ Action: Argus verified image scope
 Result: verified; paid P1/P2 0.33 USD
 Decision: VERIFIED
 Next: report then DONE
+
+## DONE - TASK-061 - 2026-11-03T00:05:59Z
+Action: Report written
+Result: TASK-061 verified, docs/report/phase-61-image-scope.md
+Decision: DONE
+Next: REQ-0068 generality task

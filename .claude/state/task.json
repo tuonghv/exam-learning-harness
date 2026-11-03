@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-061",
-  "state": "VERIFIED",
-  "next": "report, DONE; then REQ-0068 generality fixes",
+  "state": "DONE",
+  "next": "",
   "title": "Image scope for cut/declined and doubtful questions, optional adjudication (REQ-0067; phase-60 items 60.4-60.6)",
-  "active": [
-    {
-      "task_id": "TASK-061",
-      "state": "VERIFIED",
-      "next": "report, DONE; then REQ-0068 generality fixes",
-      "updated_at": "2026-11-03T00:05:47Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
