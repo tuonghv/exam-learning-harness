@@ -9,6 +9,7 @@ import re
 import sys
 
 from exam_engine import settings
+from exam_engine.core.safe_eval import safe_eval
 from exam_engine.core.decision import declined, decide_rec, finding, is_open
 from exam_engine.pipeline import parser
 from exam_engine.utils.text import norm
@@ -43,7 +44,37 @@ def match(answer, key):
         (kv, d, ke, unit_k), (av, _, ae, unit_a) = mk, ma
         return (_unit_ok(unit_k, unit_a)
                 and abs(av * 10 ** ae - kv * 10 ** ke) <= (0.5 * 10 ** (-d) + 1e-12) * 10 ** ke)
-    return na == nk
+    return na == nk or _note_match(a, k)
+
+
+_NOTE = re.compile(r"^(.*\S)\s+\(([^()]*)\)\s*\.?\s*$", re.S)
+_NOTE_NUM = re.compile(r"-?\d+(?:[.,]\d+)?")
+
+
+def _exact_value(s):
+    t = s.replace("\u221a", "sqrt").replace("^", "**").replace(",", ".").replace("\u2212", "-")
+    try:
+        return float(safe_eval(t))
+    except (ValueError, ArithmeticError):
+        return None
+
+
+def _note_match(answer, key):
+    """67.1: value part equals the key and one trailing (note) agrees with it (never strips the key)."""
+    m = _NOTE.match(answer)
+    if not m or norm(m.group(1)) != norm(key):
+        return False
+    nums = _NOTE_NUM.findall(m.group(2).replace("\u2212", "-"))
+    if not nums:
+        return True
+    if len(nums) > 1:
+        return False
+    v = _exact_value(m.group(1))
+    if v is None:
+        return False
+    x = nums[0].replace(",", ".")
+    d = len(x.split(".")[1]) if "." in x else 0
+    return abs(v - float(x)) <= 0.5 * 10 ** (-d) + 1e-12
 
 
 _SCI = re.compile(r"(\d+(?:[.,]\d+)?)\s*(?:[.·×x*]|\s)\s*10\s*\^\s*\{?(-?\d+)\}?")

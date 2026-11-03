@@ -87,7 +87,7 @@ def _answer_number(a):
     return m.group(0).replace(",", ".") if m else None
 
 
-_TAIL_NOTE = re.compile(r"\s*\([^)]*\)\s*\.?\s*$")
+_TAIL_NOTE = re.compile(r"\s+\([^)]*\)\s*\.?\s*$")
 
 
 def option_for_value(answer, options):
