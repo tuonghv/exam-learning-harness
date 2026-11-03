@@ -1321,7 +1321,7 @@
     "task_id": "TASK-069",
     "title": "Parsing accuracy metrics apart from solving accuracy: structure_scores, gold fixtures, board --structure-gold, parse-suspect split (REQ-0074)",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-11-03T22:00:00",
     "requirement": "REQ-0074",
     "acceptance_criteria": [
