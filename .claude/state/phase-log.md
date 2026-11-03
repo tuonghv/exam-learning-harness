@@ -1825,3 +1825,9 @@ Action: Report written
 Result: TASK-066 verified, docs/report/phase-66-keyed-regression-set.md
 Decision: DONE
 Next: REQ-0075 answer-note matching, REQ-0070 slice B, REQ-0074 parsing metrics
+
+## DESIGN - TASK-067 - 2026-11-03T03:48:49Z
+Action: Nova located the failing comparison at scorer.py:46
+Result: design COMPLETE
+Decision: additive value-part match; no prompt change
+Next: coder tests-first

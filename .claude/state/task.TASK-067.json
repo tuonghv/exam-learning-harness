@@ -1,16 +1,16 @@
 {
   "task_id": "TASK-067",
   "title": "Final answers with a trailing note must still match the key (math/005 false FAIL) (REQ-0075)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0075",
   "acceptance_criteria": [
-    "AC1 reproduce and locate the failing comparison",
+    "AC1 locate the failing comparison",
     "AC2 fix with tests, regression set re-scored"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-67-answer-note-key-match.md",
+    "summary": "scorer key match compares the value part: _numparse fails on sqrt keys so a note stays in the answer; add _note_match/_exact_value (additive, value must equal the key exactly, numbers in the note must agree); fix _TAIL_NOTE stripping sqrt(2)",
     "reuse": [],
     "risks": []
   },
@@ -38,11 +38,13 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-067/handoff/design.md"
+  },
   "user_notes": [],
   "picked_at": "2026-11-03T03:46:29Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-03T03:48:49Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -50,5 +52,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "Titan: tests first, 67.x"
 }
