@@ -42,7 +42,13 @@
   "roles": {
     "designer": "work/TASK-063/handoff/design.md"
   },
-  "user_notes": [],
+  "user_notes": [
+    {
+      "raw": "RAW-00189",
+      "note": "stats robustness review brief (tmp/AI-Engine-Evaluation.md) -> REQ-0071/TASK-064 builds on 63",
+      "at": "2026-11-03T00:53:59Z"
+    }
+  ],
   "picked_at": "2026-11-03T00:46:30Z",
   "updated_at": "2026-11-03T00:50:03Z",
   "updated_by": "main",

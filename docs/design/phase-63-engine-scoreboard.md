@@ -1,5 +1,5 @@
-# Phase 63 - Engine scoreboard (draft for docs/design/phase-63-engine-scoreboard.md)
-Task: TASK-063 · REQ-0069 (RAW-00188) · Status: draft · Extends: phase-56-run-metrics.md 56.1/56.4 (no rewrite)
+# Phase 63 - Engine scoreboard (TASK-063)
+Task: TASK-063 · REQ-0069 (RAW-00188) · Status: designed · Extends: phase-56-run-metrics.md 56.1/56.4 (no rewrite)
 
 ## Goal
 `exam.py run-stats board` shows, per exam kind, coverage next to quality and cost, with delta vs baseline/previous and a
