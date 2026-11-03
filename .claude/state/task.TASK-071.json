@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-071",
   "title": "OCR single-character misreads: cheap extra doubt signal (tesseract per-word confidence, number/symbol token checks, option parity) (REQ-0065)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0065",
   "acceptance_criteria": [
     "see REQ-0065"
@@ -31,12 +31,18 @@
     "result": "1397 tests, only the 4 known baseline failures; sweep re-run byte-identical to the coder numbers; golden ingest outputs identical when no signal fires; 8/8 mutations killed; no injection path in the tesseract call (lang vie/eng only, list argv, timeout, graceful skip); guard allowlist narrow (adapters/pdf.py only)"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "tesseract subprocess: list argv, no shell, lang only vie/eng, timeout, pixels on stdin, graceful skip; guard allowlist narrow"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-071/evidence/t71-final-suite.txt",
+      "work/TASK-071/evidence/conf-sweep.tsv",
+      "work/TASK-071/evidence/t071-sweep.txt"
+    ],
+    "command": "python3 -I -m unittest discover -s tests/unit; offline calibration sweep on the phase-51 families plus clean family Cm",
+    "result": "REQ-0065 AC1 verified on synthetic data: 1397 tests, failures = the 4 known baseline names; floor 60 margin 0 chosen by a 0-false-alarm sweep: 0 false alarms on A, B, D and on clean unaccented Cm (0/18); unmarked wrong answers on family C 15 -> 3 (strong token shapes alone 10); A and B unchanged; option_parity flags 3 wrong questions and no correct ones; ocr_conf default auto; limits: false alarms on correctly read ACCENTED text unmeasured (every accented word is misread in family C's font), floor 60 sits just below the 70 cliff (4 false alarms on A), real scans unmeasured: REQ-0040 first number to measure, fallback floor 50 or ocr_conf off; refined route deferred; no AI or paid call"
   },
   "report": {
     "status": "pending",
@@ -48,7 +54,8 @@
   "roles": {
     "designer": "work/TASK-071/handoff/design.md",
     "coder": "work/TASK-071/handoff/code.md",
-    "tester": "work/TASK-071/handoff/test.md"
+    "tester": "work/TASK-071/handoff/test.md",
+    "verifier": "work/TASK-071/handoff/verify.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-03T10:36:44Z",
@@ -61,5 +68,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verified"
+  "next": "report, DONE"
 }
