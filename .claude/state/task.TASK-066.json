@@ -1,16 +1,16 @@
 {
   "task_id": "TASK-066",
   "title": "Keyed regression set: benchmark --set, regset history lines (official tier), board labels (REQ-0072)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0072",
   "acceptance_criteria": [
     "AC1 benchmark --set and evals/regset.json, mock tests",
     "AC2 one paid scoring run inside the 1.00 USD cap, board recorded"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-66-keyed-regression-set.md",
+    "summary": "benchmark --set with regset history lines (official tier), generated vs official key labels, skipped items not regressions; paid scoring inside the cap",
     "reuse": [],
     "risks": []
   },
@@ -38,11 +38,13 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-066/handoff/design.md"
+  },
   "user_notes": [],
   "picked_at": "2026-11-03T03:09:47Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-03T03:09:47Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -50,5 +52,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "Titan: tests first, 66.1-66.4"
 }
