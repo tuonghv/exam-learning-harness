@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-034",
   "title": "Measure compaction count and hook bytes in a later session vs REQ-0006 baseline (REQ-0038); runs when a later session transcript exists",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0038",
   "acceptance_criteria": [
     "AC1 measurement from a real later session transcript saved under evidence",
@@ -27,12 +27,16 @@
     "result": "compact_boundary 1 and isCompactSummary 1 agree; UserPromptSubmit 242 events 119,155 B matches the inspector (241 / 119,009 B); no code changed, so no unit tests"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "read-only on the transcript, only numbers recorded"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-034/evidence/measure.txt"
+    ],
+    "command": "transcript measurement (inspector, read-only) and independent recount",
+    "result": "REQ-0038 AC1, AC2 verified: later session (12.8 MB, 28.6 h, 1 compaction vs 18 per 34 MB in the baseline): SessionStart startup ~1,600x smaller per event, compact ~120x, UserPromptSubmit 0.44x per event, PreToolUse:Bash 0.31x; REQ-0006 fix effective; limits: one compaction and two SessionStart events, baseline counting method not re-verified; UserPromptSubmit is the watch item"
   },
   "report": {
     "status": "pending",
@@ -49,12 +53,15 @@
       "waiver": "no code to write: read-only measurement"
     },
     "tester": {
-      "waiver": "no code; the counts were cross-checked by an independent recount (work/TASK-034/evidence/measure.txt)"
+      "waiver": "no code; counts cross-checked by an independent recount"
+    },
+    "verifier": {
+      "waiver": "evidence is a measurement counted twice (inspector and coordinator) with matching numbers; no code to verify"
     }
   },
   "user_notes": [],
   "picked_at": "2026-11-03T11:42:34Z",
-  "updated_at": "2026-11-03T11:44:09Z",
+  "updated_at": "2026-11-03T11:44:23Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -63,5 +70,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verified"
+  "next": "report, DONE"
 }
