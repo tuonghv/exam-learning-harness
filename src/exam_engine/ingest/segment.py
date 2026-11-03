@@ -57,6 +57,8 @@ def _next_n(lines, i):
 
 
 _SUBHEAD = re.compile(r"^\s*\d+\.\d+\.?\s+\S")
+_ENUM = re.compile(r"^(?:([IVXLC]{1,4})|([A-Z])|(\d{1,2}))[.)]\s+\S")  # `I. X`, `B. Y`, `3. Z`
+GROUP_ANY = re.compile(GROUP_RE.pattern, GROUP_RE.flags | re.I)  # group word in any case ("answer questions 5-7")
 
 
 def _mostly_upper(line):
@@ -70,13 +72,38 @@ def _is_heading_line(line):
     s = line.strip()
     if _PART_ANY.match(s):
         return True
-    if _SUBHEAD.match(s):
+    if _SUBHEAD.match(s) or _ENUM.match(s):
         return len(s) <= 60 and _mostly_upper(s)
     if s and len(s) <= 40 and s == s.upper() and any(c.isalpha() for c in s):
         from exam_engine.pipeline import router  # lazy: ingest does not depend on pipeline at import
         fn = getattr(router, "heading_subject", None)
         return bool(fn and fn(s))
     return False
+
+
+def heading_kind(line):
+    """Level family of a heading line: part, sub (`1.2.`), roman, letter, arabic, else subject."""
+    s = line.strip()
+    if _PART_ANY.match(s):
+        return "part"
+    if _SUBHEAD.match(s):
+        return "sub"
+    m = _ENUM.match(s)
+    if m:
+        if m.group(1) and (len(m.group(1)) > 1 or m.group(1) in "IVX"):
+            return "roman"
+        return "letter" if m.group(1) or m.group(2) else "arabic"
+    return "subject"
+
+
+def push_heading(stack, line):
+    """Section stack after `line`: pops down to and including the last entry of its kind, then pushes."""
+    kind = heading_kind(line)
+    for i in range(len(stack) - 1, -1, -1):
+        if stack[i][0] == kind:
+            del stack[i:]
+            break
+    stack.append((kind, line.strip()))
 
 
 def split_heading(context):

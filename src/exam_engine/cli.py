@@ -537,6 +537,9 @@ def ingest_main(argv):
                 fh.write(text)
             rows = api.assembly(doc, cfg2) if text != (doc["source"].get("text") or None) else []
             if rows:  # an exam-format Markdown source has no assembly to record
+                for r in rows:
+                    if r.get("structure"):
+                        print("WARN: structure: q%s %s" % (r["id"], ", ".join(r["structure"])), file=sys.stderr)
                 side = {"schema": "assembly/1", "exam": os.path.basename(args.exam_out), "questions": rows}
                 with open(args.exam_out + ".assembly.json", "w", encoding="utf-8") as fh:
                     fh.write(json.dumps(side, ensure_ascii=False, indent=2) + "\n")

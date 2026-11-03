@@ -107,19 +107,60 @@ def to_exam_text(doc, config=None):
 GROUP_RE = segment.GROUP_RE
 
 
+def _flag(q, code):
+    """q with structure flag `code` (key only when non-empty; flags never decline a question)."""
+    cur = q.get("structure") or []
+    return q if code in cur else dict(q, structure=cur + [code])
+
+
+def _flag(q, code):
+    """q with structure flag `code` (key only when non-empty; flags never decline a question)."""
+    cur = q.get("structure") or []
+    return q if code in cur else dict(q, structure=cur + [code])
+
+
 def _share_context(qs):
-    """Repeat a passage with every question of its group ("Questions 46-52", "câu từ 103 đến 105")."""
-    out, cur, sec = [], None, ""
+    """Repeat a passage with every question of its group ("Questions 46-52", "câu từ 103 đến 105").
+
+    A range stays inside its section (numbering may restart in the next one); a question's own
+    context inside a range is kept as the first line(s) of its text. Doubts go to q["structure"]."""
+    out, cur, sec, ghost, stack = [], None, "", None, []  # ghost: the (lo, hi) of a range cut by a section change
+
+    def close():  # a range that ended before its last number: the carrier shows it
+        if cur and cur["last"] < cur["hi"]:
+            out[cur["at"]] = _flag(out[cur["at"]], "range_overrun")
+
     for q in qs:
         heads, ctx = segment.split_heading(q.get("context") or "")
-        sec = " > ".join(heads) or sec  # a section stays until the next heading
+        for h in heads:
+            segment.push_heading(stack, h)
+        new_sec = " > ".join(t for _, t in stack) or sec  # a section stays until the next heading
+        m = segment.GROUP_ANY.search(ctx)
+        num = int(q["id"]) if q["id"].isdigit() else None
+        if new_sec != sec:
+            ghost = (cur["lo"], cur["hi"]) if cur else None
+            close()
+            cur = None
+        sec = new_sec
         q = dict(q, context=ctx, section=sec) if heads or sec else q
-        m = GROUP_RE.search(ctx)
         if m:
-            cur = segment.group_span(m) + (ctx,)
-        elif cur and q["id"].isdigit() and cur[0] < int(q["id"]) <= cur[1]:
-            q = dict(q, context=cur[2])
+            lo, hi = segment.group_span(m)
+            if cur and cur["ctx"] == ctx and (cur["lo"], cur["hi"]) == (lo, hi):
+                cur["last"] = max(cur["last"], num or 0)  # the group line repeated on a member
+                q = dict(q, context=ctx)
+            else:
+                close()
+                cur = {"lo": lo, "hi": hi, "ctx": ctx, "at": len(out), "last": num or 0}
+            ghost = None
+        elif cur and num is not None and cur["lo"] < num <= cur["hi"]:
+            cur["last"] = max(cur["last"], num)
+            if ctx.strip() and ctx != cur["ctx"]:  # nearer text wins: own line leads the question text
+                q = _flag(dict(q, text=(ctx + "\n" + (q.get("text") or "")).strip()), "instruction_override")
+            q = dict(q, context=cur["ctx"])
+        elif ghost and num is not None and ghost[0] <= num <= ghost[1]:
+            q = _flag(q, "range_cut_by_section")
         out.append(q)
+    close()
     return out
 
 
@@ -228,28 +269,32 @@ def assembly(doc, config=None):
     """Provenance rows, one per exam-file question (same selection as `to_exam_text`).
 
     Row: id (exam position), printed, source_pages ([] on the text path: no per-question page),
-    assembly_status complete|uncertain, validation_status passed|failed, reasons. Never raises."""
+    assembly_status complete|uncertain, validation_status passed|failed, reasons, and `structure`
+    (scope doubts, _flag codes; key only when non-empty). Never raises."""
     cfg = config or {}
     rows = []
     if cfg.get("use_refined"):
         qs, _, why = _selected_refined(doc, cfg.get("questions"))
+        flags = [q.get("structure") or [] for q in qs]
         pages = [sorted(({q["page"]} if q.get("page") else set()) | set(q.get("continued_pages") or ()))
                  for q in qs]
         printed = [q["id"] for q in qs]
     else:
         raw = doc.get("questions") or []
-        _, why = _selected_questions(doc)
+        ctx, why = _selected_questions(doc)
+        flags = [q.get("structure") or [] for q in ctx]
         pages = [[] for _ in raw]
         sec, multi, printed = 0, len(segment.runs(raw)) > 1, []
         for k, q in enumerate(raw, 1):
             if q["n"] == 1 and k > 1:
                 sec += 1
             printed.append("s%d.%d" % (sec + 1, q["n"]) if multi else str(q["n"]))
-    for k, (pr, pg, w) in enumerate(zip(printed, pages, why), 1):
+    for k, (pr, pg, w, fl) in enumerate(zip(printed, pages, why, flags), 1):
         unc = any(r.split(" ")[0] in UNCERTAIN for r in w)
-        rows.append({"id": str(k), "printed": pr, "source_pages": pg,
-                     "assembly_status": "uncertain" if unc else "complete",
-                     "validation_status": "failed" if w else "passed", "reasons": list(w)})
+        rows.append(dict({"id": str(k), "printed": pr, "source_pages": pg,
+                          "assembly_status": "uncertain" if unc else "complete",
+                          "validation_status": "failed" if w else "passed", "reasons": list(w)},
+                         **({"structure": list(fl)} if fl else {})))
     return rows
 
 

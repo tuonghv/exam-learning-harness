@@ -57,6 +57,10 @@ Jane was careful. ... _____ ...
 A. read ...
 ```
 
+Scope rules (ingest): a group range ("Questions 31-35") never crosses a `## Section:` change; a question's own
+instruction inside a range is the first lines of its `### Question text`. In a labelled question, option lines
+(`A.`-`D.`) are read only after `### Question text`; `A. ...` lines in the instruction or passage stay text.
+
 Nested sections are joined by ` > ` on one line. The `[Incomplete: ...]` marker stays after the stem.
 
 (A line `[Incomplete: missing_text <reasons>]` after a question text, written by ingest, makes the engine decline that question without a solver call.)

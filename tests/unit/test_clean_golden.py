@@ -92,7 +92,8 @@ class TestDgnlReemit(unittest.TestCase):
         pr = solver.solve_prompt(ex, text, None)
         self.assertEqual(pr.count("Instruction for this group"), 5)
         self.assertEqual(pr.count("1.2. TIẾNG ANH"), 1)
-        self.assertEqual(pr.count("## Section: 1.2. TIẾNG ANH"), 1)
+        # TASK-065 65.5 named golden update: the section line keeps its parent (FORMAT.md:50)
+        self.assertEqual(pr.count("## Section: PHẦN 1: SỬ DỤNG NGÔN NGỮ > 1.2. TIẾNG ANH"), 1)
 
 
 if __name__ == "__main__":

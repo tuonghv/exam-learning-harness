@@ -101,8 +101,11 @@ def parse_exam(path):
         if m:
             opts = {}
             lines = []
-            for line in body.splitlines():
-                om = re.match(r"^([A-D])\.\s+\S", line)
+            blines = body.splitlines()
+            # labelled file: options only after `### Question text`; instruction/passage lines stay verbatim
+            qt = next((i for i, ln in enumerate(blines) if re.match(r"^### Question text\s*$", ln)), None)
+            for i, line in enumerate(blines):
+                om = re.match(r"^([A-D])\.\s+\S", line) if qt is None or i > qt else None
                 if om:
                     opts[om.group(1)] = line[2:].strip()
                 else:
