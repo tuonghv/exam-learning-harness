@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-062",
   "title": "Generality: remove exam-specific hard-codes (profiles, Vietnamese-only regexes, part structure, prompt subject lists) into generic signals and per-exam config (REQ-0068)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0068",
   "acceptance_criteria": [
     "AC1 audit (done)",
@@ -36,9 +36,9 @@
     "summary": "slice A: golden freeze, lang word tables (vi+en union + config/lang.json), verdict/ref tables, subject config, garble scripts, genexam profiles as data, D1 manifest hash, D2 PART heading, Generality line (62.9)"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "1196 tests, only the known baseline failures; before/after vs a8e8d51 over 102 inputs + 4 gen-exams profiles: 0 diffs; 9/9 mutations killed; bad lang.json fails naming the file; data-only French/chemistry probe passes"
   },
   "security": {
     "status": "pending",
@@ -57,11 +57,12 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-062/handoff/design.md",
-    "coder": "work/TASK-062/handoff/code.md"
+    "coder": "work/TASK-062/handoff/code.md",
+    "tester": "work/TASK-062/handoff/test.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-03T00:06:12Z",
-  "updated_at": "2026-11-03T00:26:48Z",
+  "updated_at": "2026-11-03T00:32:55Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -70,5 +71,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tester QA"
+  "next": "verifier"
 }
