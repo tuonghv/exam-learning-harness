@@ -1,0 +1,55 @@
+{
+  "task_id": "TASK-062",
+  "title": "Generality: remove exam-specific hard-codes (profiles, Vietnamese-only regexes, part structure, prompt subject lists) into generic signals and per-exam config (REQ-0068)",
+  "state": "TODO",
+  "requirement": "REQ-0068",
+  "acceptance_criteria": [
+    "AC1 audit (done)",
+    "AC2 each generalise item fixed or config, test with a non-DGNL synthetic exam",
+    "AC3 design template gains a Generality line"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {},
+  "user_notes": [],
+  "picked_at": "2026-11-03T00:06:12Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
