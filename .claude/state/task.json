@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-067",
-  "state": "VERIFIED",
-  "next": "report, DONE; TASK REQ-0076 next",
+  "state": "DONE",
+  "next": "",
   "title": "Final answers with a trailing note must still match the key (math/005 false FAIL) (REQ-0075)",
-  "active": [
-    {
-      "task_id": "TASK-067",
-      "state": "VERIFIED",
-      "next": "report, DONE; TASK REQ-0076 next",
-      "updated_at": "2026-11-03T04:21:12Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

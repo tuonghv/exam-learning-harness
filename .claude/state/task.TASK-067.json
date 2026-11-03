@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-067",
   "title": "Final answers with a trailing note must still match the key (math/005 false FAIL) (REQ-0075)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0075",
   "acceptance_criteria": [
     "AC1 locate the failing comparison",
@@ -38,11 +38,18 @@
       "work/TASK-067/evidence/paid-regset-run3.txt"
     ],
     "command": "python3 -I -m unittest discover -s tests/unit; free replay of 36 saved items; paid regression re-score run3",
-    "result": "REQ-0075 AC1, AC2 verified: 1304 tests, baseline failures only; replay shows only math/005 FAIL->PASS; adversarial false-pass pairs stay FAIL; sign kept; paid re-score 18 items 14 pass 0 fail 4 uncertain, 0.618 USD: math/005 FAIL->PASS as intended, math/gen-102 PASS->UNCERTAIN is a malformed model reply (scorer not involved); limits: pre-existing note-less sign blindness is REQ-0076, f(2) low item accepted, one malformed flake in 18"
+    "result": "REQ-0075 AC1, AC2 verified: 1304 tests, baseline failures only; replay shows only math/005 FAIL->PASS; adversarial false-pass pairs stay FAIL; sign kept; paid re-score 18 items 14 pass 0 fail 4 uncertain, 0.618 USD: math/005 FAIL->PASS as intended, math/gen-102 PASS->UNCERTAIN is a malformed model reply (scorer not involved); limits: pre-existing note-less sign blindness is REQ-0076, f(2) low item accepted, one malformed flake in 18",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-067/evidence/paid-regset-run3.txt"
+      ],
+      "reason": "replay of saved items against the old scorer, adversarial pairs and mutations, plus a real re-score of the keyed set"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-67-answer-note-key-match.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -51,11 +58,14 @@
     "designer": "work/TASK-067/handoff/design.md",
     "coder": "work/TASK-067/handoff/code.md",
     "tester": "work/TASK-067/handoff/test.md",
-    "verifier": "work/TASK-067/handoff/verify.md"
+    "verifier": "work/TASK-067/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "independent oracle = tester replay of 36 saved items against the old scorer, adversarial false-pass pairs, mutations; plus the real paid re-score of the keyed set (math/005 FAIL->PASS)"
+    }
   },
   "user_notes": [],
   "picked_at": "2026-11-03T03:46:29Z",
-  "updated_at": "2026-11-03T04:21:12Z",
+  "updated_at": "2026-11-03T04:21:24Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -64,5 +74,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report, DONE; TASK REQ-0076 next"
+  "next": ""
 }

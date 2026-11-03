@@ -1293,12 +1293,14 @@
     "task_id": "TASK-067",
     "title": "Final answers with a trailing note must still match the key (math/005 false FAIL) (REQ-0075)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-03T19:00:00",
     "requirement": "REQ-0075",
     "acceptance_criteria": [
       "AC1 reproduce and locate the failing comparison",
       "AC2 fix with tests, regression set re-scored"
-    ]
+    ],
+    "completed_at": "2026-11-03T04:21:24Z",
+    "report": "docs/report/phase-67-answer-note-key-match.md"
   }
 ]
