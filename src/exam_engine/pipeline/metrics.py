@@ -208,12 +208,41 @@ def _flagged(q):
     return _reason(q).startswith(FLAG_REASONS) or "image_differs" in _codes(q)
 
 
+def wilson(k, n, z=1.96):
+    """Wilson score interval (lo, hi) of k/n at z (1.96 = 95%); None when n is 0 (64.2)."""
+    if not n:
+        return None
+    p, z2 = k / n, z * z
+    mid = p + z2 / (2 * n)
+    half = z * math.sqrt(p * (1 - p) / n + z2 / (4 * n * n))
+    return ((mid - half) / (1 + z2 / n), (mid + half) / (1 + z2 / n))
+
+
+OUTCOMES = ("correct", "wrong", "unkeyed_answered", "declined", "unanswered", "invalid")
+
+
+def _outcome(q, key_ok):
+    """One disjoint outcome per question (64.2); an answered question with review_malformed stays answered."""
+    r = _reason(q)
+    if _is_declined(q):
+        return "declined"
+    if r == "malformed_output":
+        return "invalid"
+    if r == "not_solved" or q.get("answer") is None:
+        return "unanswered"
+    return "unkeyed_answered" if key_ok is None else ("correct" if key_ok else "wrong")
+
+
 def _quality(rows, qs, counts, qa_blk, key_blk):
     """63.1: key quality (from key_ok: given key or scorer score) and QA proxy of one run."""
     flag = {str(q.get("id")): _flagged(q) for q in qs}
+    outcomes = dict.fromkeys(OUTCOMES, 0)
+    for q, r in zip(qs, rows):
+        outcomes[_outcome(q, r["key_ok"])] += 1
     basis = "key" if key_blk else ("qa" if qa_blk else None)
     out = {"basis": basis, "unmeasured": basis is None, "correct": None, "keyed": None, "keyed_scored": None,
-           "attempt_rate": None, "adj": None, "precision": None, "wrong_answered": None, "silent_wrong": None, "flagged": None, "flagged_correct": None,
+           "attempt_rate": None, "adj": None, "score": None, "score_ci": None,
+           "outcomes": outcomes, "coverage": _rate(counts["answered"], len(rows)), "precision": None, "wrong_answered": None, "silent_wrong": None, "flagged": None, "flagged_correct": None,
            "false_alarm": None}
     if key_blk:
         ak = [r for r in rows if r["answered"] and r["key_ok"] is not None]
@@ -228,13 +257,15 @@ def _quality(rows, qs, counts, qa_blk, key_blk):
                for r in rows}
         keyed_adj = key_blk["keyed"] + sum(1 for r in unans if r["key_ok"] is None)
         out.update(correct=len(good), keyed=keyed_adj, keyed_scored=key_blk["keyed"], adj=adj,
-                   attempt_rate=_rate(len(good), keyed_adj), precision=_rate(len(good), len(ak)),
+                   attempt_rate=_rate(len(good), keyed_adj), score=_rate(len(good), keyed_adj),
+                   score_ci=wilson(len(good), keyed_adj), precision=_rate(len(good), len(ak)),
                    wrong_answered=len(wrong), silent_wrong=sum(1 for r in wrong if not flag[r["id"]]),
                    flagged=len(fl), flagged_correct=len(fl_ok), false_alarm=_rate(len(fl_ok), len(fl)))
     qv = [r for r in rows if r["answered"] and r["qa"] in ("agrees", "differs")]
     qfl = [r for r in qv if flag[r["id"]]]
     qfl_ok = [r for r in qfl if r["qa"] == "agrees"]
     out["proxy"] = {"agree_rate": qa_blk["agree_rate"] if qa_blk else None,
+                    "agrees": qa_blk["agrees"] if qa_blk else None, "differs": qa_blk["differs"] if qa_blk else None,
                     "flagged": len(qfl), "flagged_agrees": len(qfl_ok),
                     "proxy_false_alarm": _rate(len(qfl_ok), len(qfl)),
                     "needs_review_by_why": counts.get("needs_review_by_why"),
@@ -390,9 +421,29 @@ def load_qa(paths, offset=0):
     return {str(n - offset): {"answer": r["answer"], "flawed": r["flawed"]} for n, r in rows.items()}
 
 
+ALPHA_INV = 20  # alpha = 0.05, the convention of the earlier "~95%" rule
+
+
 def noise(f, r):
-    """True when the fixed/regressed split is within noise (sign test ~95%, F+R >= 4)."""
-    return not (f + r >= 4 and abs(f - r) >= 2 * math.sqrt(f + r))
+    """True when the fixed/regressed split is within noise: exact two-sided sign test p > 1/ALPHA_INV (64.4)."""
+    n = f + r
+    tail = sum(math.comb(n, i) for i in range(min(f, r) + 1))
+    return not 2 * tail * ALPHA_INV <= 2 ** n
+
+
+def _min_flips():
+    n = 1
+    while 2 * ALPHA_INV > 2 ** n:  # a unanimous n flips has p = 2 / 2**n
+        n += 1
+    return n
+
+
+MIN_FLIPS = _min_flips()  # 6: fewer flips can never reach p <= .05
+
+
+def decisive(f, r):
+    """True when f+r flips are enough for the sign test to be able to reach p <= .05."""
+    return f + r >= MIN_FLIPS
 
 
 def _one_label(x):
@@ -455,9 +506,16 @@ def classify(ma, mb, qa=None):
 _POOL = ("fixed", "regressed", "wrong_new", "wrong_gone", "cov_up", "cov_down")
 
 
+def version_key(line):
+    """What a run is a version of: engine commit, prompt and model (64.7; a repeat shares it)."""
+    return ((line.get("git") or {}).get("commit"), json.dumps(line.get("prompt"), sort_keys=True),
+            line.get("model"))
+
+
 def pair(lines, baseline=None):
     """([(current line, baseline line or None)] one per exam_sha256, no_sha count) (63.2).
-    Current = latest line of a sha; baseline = the given line of that sha, else the previous line."""
+    Current = latest line of a sha; baseline = the given line of that sha, else the latest earlier line of
+    another version (64.7), else the previous line (a repeat)."""
     by, no_sha = {}, 0
     for ln in sorted(lines, key=lambda x: x.get("ts") or ""):
         if not ln.get("exam_sha256"):
@@ -470,7 +528,8 @@ def pair(lines, baseline=None):
         if baseline is not None and baseline.get("exam_sha256") == sha and baseline.get("run_id") != cur.get("run_id"):
             base = baseline
         else:
-            base = grp[-2] if len(grp) > 1 else None
+            other = [x for x in grp[:-1] if version_key(x) != version_key(cur)]
+            base = other[-1] if other else (grp[-2] if len(grp) > 1 else None)
         out.append((cur, base))
     return out, no_sha
 
@@ -498,6 +557,9 @@ def verdict(d):
     if d["basis"] is None:
         return "unmeasured", None
     cov_up = d["cov_up"] > d["cov_down"]
+    if not decisive(f, r) and not decisive(wg, wn):
+        flag = "watch: coverage up, quality down within noise" if cov_up and (r > f or wn > wg) else None
+        return "insufficient (flips %d<%d)" % (f + r, MIN_FLIPS), flag
     if (not noise(f, r) and r > f) or (not noise(wg, wn) and wn > wg):
         return "regression", "COVERAGE_UP_QUALITY_DOWN" if cov_up else None
     if not noise(f, r) and f > r:
@@ -517,6 +579,9 @@ def _side(ms):
     ans, n = sum(m["counts"]["answered"] for m in ms), sum(m["n"] for m in ms)
     agg = {k: _sum(q[k] for q in qs) for k in ("correct", "keyed", "wrong_answered", "silent_wrong",
                                                "flagged", "flagged_correct")}
+    agg["score"] = _rate(agg["correct"], agg["keyed"]) if agg["correct"] is not None else None
+    agg["score_ci"] = wilson(agg["correct"], agg["keyed"]) if agg["score"] is not None else None
+    agg["outcomes"] = {k: sum(q["outcomes"][k] for q in qs) for k in OUTCOMES}
     agg.update(answered=ans, n=n, basis="key" if any(q["basis"] == "key" for q in qs)
                else ("qa" if any(q["basis"] == "qa" for q in qs) else None),
                cost_usd=_sum(m["cost"].get("cost_usd") for m in ms), calls=_sum(m["cost"].get("calls") for m in ms))
@@ -525,8 +590,8 @@ def _side(ms):
     agg["false_alarm"] = _rate(agg["flagged_correct"], agg["flagged"]) if agg["flagged"] else None
     agg["cost_per_answered"] = agg["cost_usd"] / ans if ans and agg["cost_usd"] is not None else None
     pr = [q["proxy"] for q in qs]
-    rates = [p["agree_rate"] for p in pr if p["agree_rate"] is not None]
-    agg["agree_rate"] = sum(rates) / len(rates) if rates else None
+    ag, df = _sum(p["agrees"] for p in pr), _sum(p["differs"] for p in pr)
+    agg["agree_rate"] = _rate(ag, ag + df) if ag is not None else None  # pooled by question, not per exam (64.3)
     pf = _sum(p["flagged"] for p in pr)
     agg["proxy_false_alarm"] = _rate(_sum(p["flagged_agrees"] for p in pr), pf) if pf else None
     why = {}
@@ -544,6 +609,7 @@ def board_kind(entries):
     paired = [e for e in entries if e["base"] is not None]
     base = _side([e["base"] for e in paired]) if paired else None
     out = {"exams": len(entries), "runs": len(entries) + len(paired), "cur": cur, "base": base,
+           "tier": entries[0].get("tier"), "repeat": any(e.get("repeat") for e in paired),
            "generated": any(str((e["line"] or {}).get("key_basis") or "").startswith("generated") for e in entries)}
     if paired:
         out["delta"] = pool([board_delta(e["base"], e["cur"], e["qa"]) for e in paired])
@@ -565,7 +631,9 @@ def board_text(name, k):
     """Text lines of one kind block (63.5)."""
     cur, base = k["cur"], k["base"]
     basis = {"key": "key (generated)" if k["generated"] else "key", "qa": "qa(proxy)"}.get(cur["basis"], "none")
-    out = ["kind %s  basis %s  exams %d  runs %d" % (name, basis, k["exams"], k["runs"])]
+    out = ["kind %s  basis %s  exams %d  runs %d%s%s" % (
+        name, basis, k["exams"], k["runs"], "  tier " + k["tier"] if k.get("tier") else "",
+        "  repeat" if k.get("repeat") else "")]
     if base is None:
         out.append("  baseline: none")
         out.append("  coverage %d/%d" % (cur["answered"], cur["n"]))
@@ -577,6 +645,10 @@ def board_text(name, k):
         out.append("  quality key %s/%s (%s of all keyed)  precision %s" % (
             _f(cur["correct"]), _f(cur["keyed"]), _pct(_rate(cur["correct"], cur["keyed"])),
             _arrow(ref.get("precision"), cur["precision"], _pct) if base else _pct(cur["precision"])))
+        if cur["score"] is not None:
+            lo, hi = cur["score_ci"]
+            out.append("  score %s of all keyed (95%% CI %s-%s)  answered-only %s" % (
+                _pct(cur["score"]), _pct(lo), _pct(hi), _pct(cur["precision"])))
         out.append("  false_alarm %s  silent_wrong %s" % (
             _arrow(ref.get("false_alarm"), cur["false_alarm"], _pct) if base else _pct(cur["false_alarm"]),
             _arrow(ref.get("silent_wrong"), cur["silent_wrong"], _f) if base else _f(cur["silent_wrong"])))

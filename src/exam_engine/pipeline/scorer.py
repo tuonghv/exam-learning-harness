@@ -105,6 +105,12 @@ def apply_key(recs, key_path):
     keyq = {q["id"]: q for q in parser.parse_expected(key_path, legacy=True)["questions"]}
     for i, r in recs.items():
         a = r["ans"]
+        final = (keyq.get(i) or {}).get("final")
+        if (a is None or declined(a)) and not is_open(a) and final is not None \
+                and norm(_strip(final)) != "open (rubric)":
+            # 64.1: a refusal is not a correct answer; the status/reason stay as they are
+            r["score"] = {"points": 0, "max": 1, "basis": "official_key", "detail": "not_answered"}
+            continue
         if a is None or declined(a) or is_open(a):
             r["score"] = {"points": None, "max": None, "basis": "none",
                           "detail": "no key comparison (no answer or open task)"}

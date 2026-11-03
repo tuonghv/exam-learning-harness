@@ -1297,8 +1297,15 @@ def _rs_compare(a):
         if d[name]:
             print("%s (%s): %s" % (shown, note, ", ".join(d[name])))
     print("unchanged: %d" % d["unchanged"])
-    sig = not metrics.noise(f, r)
-    verdict = ("signal (%s)" % ("improved" if f > r else "regressed")) if sig else "within noise"
+    sig = metrics.decisive(f, r) and not metrics.noise(f, r)
+    if d["basis"] is None:
+        verdict = "unmeasured (no key, no QA)"
+    elif sig:
+        verdict = "signal (%s)" % ("improved" if f > r else "regressed")
+    elif not metrics.decisive(f, r):
+        verdict = "insufficient (flips %d<%d)" % (f + r, metrics.MIN_FLIPS)
+    else:
+        verdict = "within noise"
     print("n=%d flips=%d fixed=%d regressed=%d: %s" % (ma["n"], f + r, f, r, verdict))
     return 1 if sig and r > f else 0
 
@@ -1308,7 +1315,7 @@ def _pct_rate(x):
 
 
 def _rs_group(ln):
-    return (_rs_commit(ln), json.dumps(ln.get("prompt"), sort_keys=True), ln.get("model"))
+    return metrics.version_key(ln)
 
 
 def _rs_trend(a):
@@ -1316,7 +1323,8 @@ def _rs_trend(a):
     if bad:
         print("WARN: %d history line(s) skipped" % bad, file=sys.stderr)
     rows = [ln for ln in lines if (not a.exam_id or ln.get("exam_id") == a.exam_id)
-            and (not a.subject or ln.get("subject") == a.subject)]
+            and (not a.subject or ln.get("subject") == a.subject)
+            and (not a.source or (ln.get("source") or "solve") == a.source)]
     rows.sort(key=lambda ln: ln.get("ts") or "")
     if a.last:
         rows = rows[-a.last:]
@@ -1432,16 +1440,19 @@ def _rs_board(a):
                 skipped.append(prev.get("run_id"))
         if a.kind and kc != a.kind:
             continue
-        kinds.setdefault(kc, []).append({"cur": mc, "base": mp, "qa": qa, "line": cur})
+        tier = "official" if cur.get("source") == "regset" else "exploratory"  # 64.6: tiers are never pooled
+        kinds.setdefault((tier, kc), []).append({
+            "cur": mc, "base": mp, "qa": qa, "line": cur, "tier": tier,
+            "repeat": prev is not None and metrics.version_key(prev) == metrics.version_key(cur)})
     if no_sha:
         print("no_sha %d" % no_sha)
-    out = {k: metrics.board_kind(v) for k, v in sorted(kinds.items())}
+    out = {"%s|%s" % k: metrics.board_kind(v) for k, v in sorted(kinds.items())}
     if a.json:
         print(json.dumps({"kinds": out, "no_sha": no_sha, "skipped": skipped}, ensure_ascii=False, indent=2,
                          sort_keys=True))
     else:
         for k, blk in out.items():
-            print("\n".join(metrics.board_text(k, blk)))
+            print("\n".join(metrics.board_text(k.split("|", 1)[1], blk)))
     return 1 if any(b["verdict"] == "regression" for b in out.values()) else 0
 
 
@@ -1463,7 +1474,7 @@ def run_stats_main(argv):
     ap.add_argument("--last", type=int, default=0)
     ap.add_argument("--baseline", metavar="RUN_ID|DIR", help="board: baseline run (same exam), else the previous run")
     ap.add_argument("--kind", help="board: only this subject/language/level")
-    ap.add_argument("--source", choices=("solve", "backfill", "regset"), help="board: only this history source")
+    ap.add_argument("--source", choices=("solve", "backfill", "regset"), help="board, trend: only this history source")
     try:
         a = ap.parse_args(argv)
     except SystemExit as exc:

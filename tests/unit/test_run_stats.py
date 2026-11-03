@@ -58,7 +58,7 @@ class CompareTest(Base):
         self.assertIn("fixed (vs key): 1", out)
         self.assertIn("regressed (vs key): 2", out)
         self.assertIn("unchanged: 1", out)
-        self.assertIn("within noise", out)
+        self.assertIn("insufficient (flips 2<6)", out)  # 64.5
         self.assertIn("n=3 flips=2", out)
         self.assertEqual(code, 0)
 
@@ -95,7 +95,7 @@ class CompareTest(Base):
         self.assertTrue(metrics.noise(0, 0))
         self.assertFalse(metrics.noise(6, 0))
         self.assertTrue(metrics.noise(3, 0))  # F+R < 4
-        self.assertFalse(metrics.noise(0, 4))
+        self.assertTrue(metrics.noise(0, 4))  # 64.4: exact p = .125
 
 
 class HistoryTest(Base):

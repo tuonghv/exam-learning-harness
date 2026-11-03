@@ -91,7 +91,7 @@ class VerdictTest(Base):
         self.run_dir(result(b))
         code, out, _ = self.board()
         self.assertEqual(code, 0)
-        self.assertIn("same (within noise n=24 flips=4)", out)
+        self.assertIn("insufficient (flips 4<6)", out)  # 64.5
         self.assertFalse(metrics.noise(6, 0))
         self.assertTrue(metrics.noise(3, 1))
 
@@ -131,7 +131,7 @@ class VerdictTest(Base):
         self.run_dir(result(states(18, 3, 3)))
         out = self.board()[1]
         self.assertIn("watch: coverage up, quality down within noise", out)
-        self.assertIn("same (within noise", out)
+        self.assertIn("insufficient (flips 0<6)", out)
 
 
 class QualityTest(Base):
