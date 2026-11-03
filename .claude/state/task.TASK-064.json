@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-064",
   "title": "Evaluation statistics robustness: refusals never rewarded, pooled attempt-adjusted score with interval, exact sign test, insufficient verdict, official vs exploratory tier, version-aware baseline (REQ-0071)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0071",
   "acceptance_criteria": [
     "AC1 review report and design",
@@ -16,8 +16,17 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/scorer.py",
+      "src/exam_engine/pipeline/metrics.py",
+      "src/exam_engine/cli.py",
+      "tests/unit/test_eval_stats.py",
+      "tests/unit/test_run_board.py",
+      "tests/unit/test_run_stats.py",
+      "docs/guide/toolkit-reference.md"
+    ],
+    "summary": "64.1-64.7: non-answered keyed items score 0, outcome partition, pooled kind aggregate, exact sign test, insufficient/unmeasured verdicts, official vs exploratory tier, version-aware baseline"
   },
   "unit_test": {
     "status": "pending",
@@ -40,11 +49,12 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-064/handoff/design.md"
+    "designer": "work/TASK-064/handoff/design.md",
+    "coder": "work/TASK-064/handoff/code.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-03T01:10:10Z",
-  "updated_at": "2026-11-03T01:22:14Z",
+  "updated_at": "2026-11-03T01:31:04Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -53,5 +63,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Titan: tests first, 64.1-64.7"
+  "next": "tester QA"
 }
