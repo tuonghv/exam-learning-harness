@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-067",
-  "state": "DESIGN",
-  "next": "Titan: tests first, 67.x",
+  "state": "IMPLEMENTING",
+  "next": "tester QA",
   "title": "Final answers with a trailing note must still match the key (math/005 false FAIL) (REQ-0075)",
   "active": [
     {
       "task_id": "TASK-067",
-      "state": "DESIGN",
-      "next": "Titan: tests first, 67.x",
-      "updated_at": "2026-11-03T03:48:49Z"
+      "state": "IMPLEMENTING",
+      "next": "tester QA",
+      "updated_at": "2026-11-03T03:57:11Z"
     }
   ],
   "max_active": 1

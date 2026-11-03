@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-067",
   "title": "Final answers with a trailing note must still match the key (math/005 false FAIL) (REQ-0075)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0075",
   "acceptance_criteria": [
     "AC1 locate the failing comparison",
@@ -15,8 +15,13 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/scorer.py",
+      "src/exam_engine/pipeline/verifier.py",
+      "tests/unit/test_answer_note_match.py"
+    ],
+    "summary": "scorer value-part match with trailing note (additive), _TAIL_NOTE needs whitespace before the parenthesis"
   },
   "unit_test": {
     "status": "pending",
@@ -39,11 +44,12 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-067/handoff/design.md"
+    "designer": "work/TASK-067/handoff/design.md",
+    "coder": "work/TASK-067/handoff/code.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-03T03:46:29Z",
-  "updated_at": "2026-11-03T03:48:49Z",
+  "updated_at": "2026-11-03T03:57:11Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -52,5 +58,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Titan: tests first, 67.x"
+  "next": "tester QA"
 }
