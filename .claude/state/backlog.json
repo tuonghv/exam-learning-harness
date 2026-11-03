@@ -1349,11 +1349,13 @@
     "task_id": "TASK-071",
     "title": "OCR single-character misreads: cheap extra doubt signal (tesseract per-word confidence, number/symbol token checks, option parity) (REQ-0065)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-04T00:30:00",
     "requirement": "REQ-0065",
     "acceptance_criteria": [
       "see REQ-0065"
-    ]
+    ],
+    "completed_at": "2026-11-03T11:40:00Z",
+    "report": "docs/report/phase-71-ocr-misread-signals.md"
   }
 ]

@@ -1969,3 +1969,9 @@ Action: Argus verified OCR misread signals
 Result: verified on synthetic data; real scans unmeasured
 Decision: VERIFIED
 Next: report then DONE
+
+## DONE - TASK-071 - 2026-11-03T11:40:00Z
+Action: Report written
+Result: TASK-071 verified, docs/report/phase-71-ocr-misread-signals.md
+Decision: DONE
+Next: REQ-0045 umbrella check; REQ-0040 waits for the user pages
