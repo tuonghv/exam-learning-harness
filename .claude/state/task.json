@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-066",
-  "state": "VERIFIED",
-  "next": "report, DONE",
+  "state": "DONE",
+  "next": "",
   "title": "Keyed regression set: benchmark --set, regset history lines (official tier), board labels (REQ-0072)",
-  "active": [
-    {
-      "task_id": "TASK-066",
-      "state": "VERIFIED",
-      "next": "report, DONE",
-      "updated_at": "2026-11-03T03:46:08Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

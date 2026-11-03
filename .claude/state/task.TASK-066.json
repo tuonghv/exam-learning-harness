@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-066",
   "title": "Keyed regression set: benchmark --set, regset history lines (official tier), board labels (REQ-0072)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0072",
   "acceptance_criteria": [
     "AC1 benchmark --set and evals/regset.json, mock tests",
@@ -44,11 +44,18 @@
       "work/TASK-066/evidence/board-final.txt"
     ],
     "command": "python3 -I -m unittest discover -s tests/unit; benchmark --set mock end to end; two paid real runs of the 18-item set",
-    "result": "REQ-0072 AC1, AC2 verified: 1294 tests, baseline failures only; no --set output byte-identical; tier by key basis; leak check none; 7/7 mutations killed; real runs: 18 items pass 14 fail 1 uncertain 3, 0.607 and 0.596 USD, identical verdicts on all 18 items in both runs (noise band), official rows English 3/3, Physics 3/3, Math 2/3, Literature unmeasured; informatics items removed (no subject prompt); finding math/005 false FAIL -> REQ-0075"
+    "result": "REQ-0072 AC1, AC2 verified: 1294 tests, baseline failures only; no --set output byte-identical; tier by key basis; leak check none; 7/7 mutations killed; real runs: 18 items pass 14 fail 1 uncertain 3, 0.607 and 0.596 USD, identical verdicts on all 18 items in both runs (noise band), official rows English 3/3, Physics 3/3, Math 2/3, Literature unmeasured; informatics items removed (no subject prompt); finding math/005 false FAIL -> REQ-0075",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-066/evidence/paid-regset-runs.txt"
+      ],
+      "reason": "two real keyed scoring runs at one commit with identical verdicts on all 18 items, byte-identical golden without --set, leak check, mutations"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-66-keyed-regression-set.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -57,11 +64,14 @@
     "designer": "work/TASK-066/handoff/design.md",
     "coder": "work/TASK-066/handoff/code.md",
     "tester": "work/TASK-066/handoff/test.md",
-    "verifier": "work/TASK-066/handoff/verify.md"
+    "verifier": "work/TASK-066/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "independent oracle = tester byte-identical golden without --set, key-leak check and 7 mutations; the real keyed runs are the check (two paid runs, identical verdicts)"
+    }
   },
   "user_notes": [],
   "picked_at": "2026-11-03T03:09:47Z",
-  "updated_at": "2026-11-03T03:46:08Z",
+  "updated_at": "2026-11-03T03:46:19Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -70,5 +80,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report, DONE"
+  "next": ""
 }

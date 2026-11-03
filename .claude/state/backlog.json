@@ -1279,12 +1279,14 @@
     "task_id": "TASK-066",
     "title": "Keyed regression set: benchmark --set, regset history lines (official tier), board labels (REQ-0072)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-03T17:00:00",
     "requirement": "REQ-0072",
     "acceptance_criteria": [
       "AC1 benchmark --set and evals/regset.json, mock tests",
       "AC2 one paid scoring run inside the 1.00 USD cap, board recorded"
-    ]
+    ],
+    "completed_at": "2026-11-03T03:46:18Z",
+    "report": "docs/report/phase-66-keyed-regression-set.md"
   }
 ]

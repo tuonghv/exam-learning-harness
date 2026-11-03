@@ -1819,3 +1819,9 @@ Action: Argus verified; coordinator ran two paid scoring runs
 Result: verified; noise band zero on verdicts; math/005 finding to REQ-0075
 Decision: VERIFIED
 Next: report then DONE
+
+## DONE - TASK-066 - 2026-11-03T03:46:18Z
+Action: Report written
+Result: TASK-066 verified, docs/report/phase-66-keyed-regression-set.md
+Decision: DONE
+Next: REQ-0075 answer-note matching, REQ-0070 slice B, REQ-0074 parsing metrics
