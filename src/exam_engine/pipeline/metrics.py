@@ -241,7 +241,7 @@ def _quality(rows, qs, counts, qa_blk, key_blk):
         outcomes[_outcome(q, r["key_ok"])] += 1
     basis = "key" if key_blk else ("qa" if qa_blk else None)
     out = {"basis": basis, "unmeasured": basis is None, "correct": None, "keyed": None, "keyed_scored": None,
-           "attempt_rate": None, "adj": None, "score": None, "score_ci": None,
+           "attempt_rate": None, "score": None, "score_ci": None,
            "outcomes": outcomes, "coverage": _rate(counts["answered"], len(rows)), "precision": None, "wrong_answered": None, "silent_wrong": None, "flagged": None, "flagged_correct": None,
            "false_alarm": None}
     if key_blk:
@@ -250,13 +250,9 @@ def _quality(rows, qs, counts, qa_blk, key_blk):
         wrong = [r for r in ak if not r["key_ok"]]
         fl = [r for r in ak if flag[r["id"]]]
         fl_ok = [r for r in fl if r["key_ok"]]
-        # the scorer leaves a declined/unanswered question out of `keyed`, so refusing would raise the rate:
-        # attempt-adjusted denominator = scored + unanswered (additive, scorer output unchanged)
-        unans = [r for r in rows if not r["answered"]]
-        adj = {r["id"]: (r["key_ok"] if r["key_ok"] is not None else (False if not r["answered"] else None))
-               for r in rows}
-        keyed_adj = key_blk["keyed"] + sum(1 for r in unans if r["key_ok"] is None)
-        out.update(correct=len(good), keyed=keyed_adj, keyed_scored=key_blk["keyed"], adj=adj,
+        # 64.1: the scorer scores a keyed refusal 0, so keyed already counts it; open/no-key items stay out
+        keyed_adj = key_blk["keyed"]
+        out.update(correct=len(good), keyed=keyed_adj, keyed_scored=key_blk["keyed"],
                    attempt_rate=_rate(len(good), keyed_adj), score=_rate(len(good), keyed_adj),
                    score_ci=wilson(len(good), keyed_adj), precision=_rate(len(good), len(ak)),
                    wrong_answered=len(wrong), silent_wrong=sum(1 for r in wrong if not flag[r["id"]]),
@@ -455,12 +451,6 @@ def _row_answered(r):
     return _answered({"answer": r["answer"], "status_reason": r["reason"]})
 
 
-def _kok(m, q):
-    """key_ok of a question; the board's attempt-adjusted map (quality.adj) counts unanswered as not correct."""
-    adj = (m.get("quality") or {}).get("adj")
-    return adj[q["id"]] if adj and q["id"] in adj else q["key_ok"]
-
-
 def classify(ma, mb, qa=None):
     """Per-question change from run A to run B. Reference = key (key_ok) else QA letter.
     63.3 adds cov_up/cov_down (not answered <-> answered) and wrong_new/wrong_gone (answered and wrong
@@ -477,7 +467,7 @@ def classify(ma, mb, qa=None):
         aa, ab = _row_answered(a), _row_answered(b)
         if aa != ab:
             out["cov_up" if ab else "cov_down"].append(a["id"])
-        ka, kb = _kok(ma, a), _kok(mb, b)
+        ka, kb = a["key_ok"], b["key_ok"]
         if ka is not None and kb is not None:
             ra, rb, out["basis"] = ka, kb, "key"
         elif qa and a["id"] in qa and _one_label(qa[a["id"]]["answer"]) and not qa[a["id"]]["flawed"]:

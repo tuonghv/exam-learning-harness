@@ -144,6 +144,14 @@ class Outcome642Test(Base):
         self.assertAlmostEqual(qu["precision"], 70 / 82)
         self.assertAlmostEqual(qu["coverage"], 0.82)
 
+    def test_unkeyed_declined_stays_out_of_denominator(self):
+        none = {"score": {"points": None, "max": None}}  # declined open-rubric / no-key item (scorer leaves it unscored)
+        qs = [rq(1, "ok"), rq(2, "dec"), rq(3, "dec", none), rq(4, "dec", none)]
+        qu = self.q(qs)
+        self.assertEqual((qu["correct"], qu["keyed"]), (1, 2))  # keyed refusal counts, the 2 unkeyed do not
+        self.assertAlmostEqual(qu["score"], 0.5)
+        self.assertEqual(qu["outcomes"]["declined"], 3)
+
     def test_keyed_zero_is_none(self):
         qu = self.q([rq(1, "ok", {"score": None})])
         self.assertIsNone(qu["score"])

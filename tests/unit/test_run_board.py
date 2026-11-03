@@ -22,8 +22,8 @@ def q(i, state, flag=None, keyed=True):
     r = {"id": str(i), "answer": None if state == "dec" else "A", "verification_status": "UNCERTAIN",
          "status_reason": DECL if state == "dec" else flag, "qa_findings": [], "attempts": 1,
          "uncertainty": {"level": "low", "reason": ""}}
-    if keyed:  # the scorer leaves a declined question unscored (scorer.apply_key)
-        r["score"] = {"points": None, "max": None} if state == "dec" else {"points": int(state == "ok"), "max": 1}
+    if keyed:  
+        r["score"] = {"points": int(state == "ok"), "max": 1}  # 64.1: a keyed refusal scores 0
     return r
 
 
@@ -141,7 +141,7 @@ class QualityTest(Base):
         qs[0]["status_reason"] = "check_failed: y"
         m = metrics.compute(result(qs), quality=True)["quality"]
         self.assertEqual((m["basis"], m["correct"], m["keyed"], m["wrong_answered"]), ("key", 6, 12, 4))
-        self.assertEqual(m["keyed_scored"], 10)
+        self.assertEqual(m["keyed_scored"], 12)  # 64.1: refusals are scored
         self.assertEqual((m["flagged"], m["flagged_correct"], m["silent_wrong"]), (3, 1, 2))
         self.assertAlmostEqual(m["precision"], 6 / 10)
         self.assertAlmostEqual(m["false_alarm"], 1 / 3)
@@ -156,7 +156,7 @@ class QualityTest(Base):
 class AttemptAdjustedTest(Base):
     def test_30q_refusal_does_not_raise_headline(self):
         m = metrics.compute(result(states(16, 4, 10)), quality=True)
-        self.assertEqual((m["accuracy"]["key"]["correct"], m["accuracy"]["key"]["keyed"]), (16, 20))  # scorer: 80%
+        self.assertEqual((m["accuracy"]["key"]["correct"], m["accuracy"]["key"]["keyed"]), (16, 30))  # 64.1: refusals scored 0
         qu = m["quality"]
         self.assertEqual((qu["correct"], qu["keyed"]), (16, 30))
         self.assertAlmostEqual(qu["precision"], 0.8)
@@ -167,7 +167,7 @@ class AttemptAdjustedTest(Base):
     def test_100q_mixed_hand_count(self):
         # 100q: 55 right, 25 wrong, 20 declined -> 55/100 of all keyed, precision 55/80
         qu = metrics.compute(result(states(55, 25, 20)), quality=True)["quality"]
-        self.assertEqual((qu["correct"], qu["keyed"], qu["keyed_scored"]), (55, 100, 80))
+        self.assertEqual((qu["correct"], qu["keyed"], qu["keyed_scored"]), (55, 100, 100))
         self.assertAlmostEqual(qu["attempt_rate"], 0.55)
         self.assertAlmostEqual(qu["precision"], 55 / 80)
 
