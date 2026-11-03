@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-070",
   "title": "Route-B structure derived from headings and generic dev prompt wording, with paid before/after check (REQ-0070)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0070",
   "acceptance_criteria": [
     "AC1 70.1 structure_hint",
@@ -29,9 +29,9 @@
     "summary": "cross.structure_hint from route-A headings with a generic fallback, route-B IMAGE_RULES generic; generic dev prompt wording in five dev files; release channel untouched"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "1364 tests, only the 4 known baseline failures; release channel byte-identical across 114 inputs; dev and route-B prompts differ only in the intended sentences; 8 added tests, 7 mutations killed; structure_hint strict consistency rules; verifier D1 (vi verify_answer) fixed with a test"
   },
   "security": {
     "status": "pending",
@@ -50,11 +50,12 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-070/handoff/design.md",
-    "coder": "work/TASK-070/handoff/code.md"
+    "coder": "work/TASK-070/handoff/code.md",
+    "tester": "work/TASK-070/handoff/test.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-03T09:58:13Z",
-  "updated_at": "2026-11-03T10:07:30Z",
+  "updated_at": "2026-11-03T10:36:22Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -63,5 +64,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tester QA; paid cross-solve check by coordinator"
+  "next": "report; paid checks done"
 }
