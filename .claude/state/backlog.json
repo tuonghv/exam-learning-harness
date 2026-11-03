@@ -1355,7 +1355,7 @@
     "acceptance_criteria": [
       "see REQ-0065"
     ],
-    "completed_at": "2026-11-03T11:40:00Z",
+    "completed_at": "2026-11-03T11:40:01Z",
     "report": "docs/report/phase-71-ocr-misread-signals.md"
   }
 ]
