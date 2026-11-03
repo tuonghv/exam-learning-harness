@@ -1,0 +1,132 @@
+{
+ "v": 1,
+ "set_id": "regset-1",
+ "items": [
+  {
+   "id": "english/003",
+   "input": "evals/inputs/english/input-003.md",
+   "key": "evals/keys/english/expected-003.md",
+   "key_basis": "official"
+  },
+  {
+   "id": "english/004",
+   "input": "evals/inputs/english/input-004.md",
+   "key": "evals/keys/english/expected-004.md",
+   "key_basis": "official"
+  },
+  {
+   "id": "english/005",
+   "input": "evals/inputs/english/input-005.md",
+   "key": "evals/keys/english/expected-005.md",
+   "key_basis": "official"
+  },
+  {
+   "id": "informatics/003",
+   "input": "evals/inputs/informatics/input-003.md",
+   "key": "evals/keys/informatics/expected-003.md",
+   "key_basis": "official"
+  },
+  {
+   "id": "informatics/004",
+   "input": "evals/inputs/informatics/input-004.md",
+   "key": "evals/keys/informatics/expected-004.md",
+   "key_basis": "official"
+  },
+  {
+   "id": "informatics/005",
+   "input": "evals/inputs/informatics/input-005.md",
+   "key": "evals/keys/informatics/expected-005.md",
+   "key_basis": "official"
+  },
+  {
+   "id": "literature/003",
+   "input": "evals/inputs/literature/input-003.md",
+   "key": "evals/keys/literature/expected-003.md",
+   "key_basis": "official"
+  },
+  {
+   "id": "literature/004",
+   "input": "evals/inputs/literature/input-004.md",
+   "key": "evals/keys/literature/expected-004.md",
+   "key_basis": "official"
+  },
+  {
+   "id": "literature/005",
+   "input": "evals/inputs/literature/input-005.md",
+   "key": "evals/keys/literature/expected-005.md",
+   "key_basis": "official"
+  },
+  {
+   "id": "math/003",
+   "input": "evals/inputs/math/input-003.md",
+   "key": "evals/keys/math/expected-003.md",
+   "key_basis": "official"
+  },
+  {
+   "id": "math/004",
+   "input": "evals/inputs/math/input-004.md",
+   "key": "evals/keys/math/expected-004.md",
+   "key_basis": "official"
+  },
+  {
+   "id": "math/005",
+   "input": "evals/inputs/math/input-005.md",
+   "key": "evals/keys/math/expected-005.md",
+   "key_basis": "official"
+  },
+  {
+   "id": "physics/003",
+   "input": "evals/inputs/physics/input-003.md",
+   "key": "evals/keys/physics/expected-003.md",
+   "key_basis": "official"
+  },
+  {
+   "id": "physics/004",
+   "input": "evals/inputs/physics/input-004.md",
+   "key": "evals/keys/physics/expected-004.md",
+   "key_basis": "official"
+  },
+  {
+   "id": "physics/005",
+   "input": "evals/inputs/physics/input-005.md",
+   "key": "evals/keys/physics/expected-005.md",
+   "key_basis": "official"
+  },
+  {
+   "id": "math/gen-101",
+   "input": "evals/generated/inputs/math/input-101.md",
+   "key": "evals/generated/keys/math/expected-101.md",
+   "key_basis": "generated: model knowledge, not an official exam (manifest reviewed=false)"
+  },
+  {
+   "id": "math/gen-102",
+   "input": "evals/generated/inputs/math/input-102.md",
+   "key": "evals/generated/keys/math/expected-102.md",
+   "key_basis": "generated: model knowledge, not an official exam (manifest reviewed=false)"
+  },
+  {
+   "id": "english/dgnl-101",
+   "input": "evals/generated-dgnl/inputs/english/input-101.md",
+   "key": "evals/generated-dgnl/keys/english/expected-101.md",
+   "key_basis": "generated: model knowledge, not an official exam (manifest reviewed=false)"
+  },
+  {
+   "id": "english/dgnl-102",
+   "input": "evals/generated-dgnl/inputs/english/input-102.md",
+   "key": "evals/generated-dgnl/keys/english/expected-102.md",
+   "key_basis": "generated: model knowledge, not an official exam (manifest reviewed=false)"
+  },
+  {
+   "id": "vietnamese/dgnl-101",
+   "input": "evals/generated-dgnl/inputs/vietnamese/input-101.md",
+   "key": "evals/generated-dgnl/keys/vietnamese/expected-101.md",
+   "key_basis": "generated: model knowledge, not an official exam (manifest reviewed=false)"
+  },
+  {
+   "id": "vietnamese/dgnl-102",
+   "input": "evals/generated-dgnl/inputs/vietnamese/input-102.md",
+   "key": "evals/generated-dgnl/keys/vietnamese/expected-102.md",
+   "key_basis": "generated: model knowledge, not an official exam (manifest reviewed=false)"
+  }
+ ]
+}

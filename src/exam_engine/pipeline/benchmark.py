@@ -30,6 +30,38 @@ def discover(inputs, keys, subject=None):
     return out
 
 
+def load_set(path, root="."):
+    """(set_id, [(subject, name, input path, key path)], {(subject, name): key_basis}) from a regset file.
+
+    The file lists ids and paths only (never key text); relative paths resolve against root.
+    Any defect raises ValueError naming the file."""
+    def bad(why):
+        return ValueError("regression set %s: %s" % (path, why))
+    try:
+        with open(path, encoding="utf-8") as fh:
+            data = json.load(fh)
+    except (OSError, ValueError) as exc:
+        raise bad(exc)
+    if not isinstance(data, dict) or data.get("v") != 1 or not isinstance(data.get("items"), list) \
+            or not data["items"]:
+        raise bad('need {"v": 1, "items": [...]} with at least one item')
+    items, bases, seen = [], {}, set()
+    for i, it in enumerate(data["items"]):
+        if not isinstance(it, dict) or not all(isinstance(it.get(k), str) and it.get(k).strip()
+                                               for k in ("id", "input", "key", "key_basis")):
+            raise bad("item %d needs non-empty string id, input, key, key_basis" % i)
+        if it["id"] in seen:
+            raise bad("duplicate id %s" % it["id"])
+        seen.add(it["id"])
+        sub, _, n = it["id"].rpartition("/")
+        key = (sub or "set", n)
+        items.append(key + tuple(p if os.path.isabs(p) else os.path.join(root, p)
+                                 for p in (it["input"], it["key"])))
+        bases[key] = it["key_basis"]
+    sid = data.get("set_id")
+    return (sid if isinstance(sid, str) and sid else os.path.splitext(os.path.basename(path))[0]), items, bases
+
+
 def basis(q):
     """How the answer was checked: a code oracle, a key match, or a Claude review only."""
     kinds = [c.get("kind") for c in (q.get("checks") or []) if c.get("independent")]
@@ -53,12 +85,16 @@ def item_row(sub, n, result):
             "questions": qs}
 
 
-def run_all(items, out_dir, cfg, llm, budget):
-    """Rows for every item; stops before an item once the shared budget is spent."""
+def run_all(items, out_dir, cfg, llm, budget, record=None):
+    """Rows for every item; stops before an item once the shared budget is spent.
+    record(sub, n, result, out path) is called for each item that ran."""
     rows, spent = [], 0.0
     for sub, n, path, key in items:
         if spent >= budget:
             rows.append({"subject": sub, "item": n, "skipped": "budget_reached"})
+            continue
+        if not (os.path.isfile(path) and os.path.isfile(key)):
+            rows.append({"subject": sub, "item": n, "skipped": "missing"})
             continue
         c = dict(cfg, key=key, max_cost_usd=min(cfg["max_cost_usd"], budget - spent))
         try:
@@ -70,6 +106,8 @@ def run_all(items, out_dir, cfg, llm, budget):
             rows.append({"subject": sub, "item": n, "skipped": "invalid_input"})
             continue
         spent += result["run"]["cost_usd"]
+        if record:
+            record(sub, n, result, os.path.join(out_dir, sub, n))
         rows.append(item_row(sub, n, result))
     return rows
 
@@ -121,8 +159,18 @@ def report_md(sm):
     return "\n".join(L) + "\n"
 
 
+def _ran(sm):
+    """{(subject, item): pass count} for items that ran (a skipped item has no summary)."""
+    return dict(((r["subject"], r["item"]), (r["summary"] or {}).get("pass") or 0)
+                for r in sm.get("items", ()) if "summary" in r)
+
+
 def regression(prev, cur):
-    """Subjects whose pass count fell versus the previous summary (both measured)."""
+    """Subjects whose pass count fell versus the previous summary (both measured).
+    With item rows on both sides only items that ran in both count: a skipped item is no regression."""
+    if "items" in prev and "items" in cur:
+        a, b = _ran(prev), _ran(cur)
+        return sorted(set(k[0] for k in b if k in a and b[k] < a[k]))
     return sorted(k for k, s in cur["per_subject"].items()
                   if k in prev.get("per_subject", {}) and s["pass"] < prev["per_subject"][k]["pass"])
 

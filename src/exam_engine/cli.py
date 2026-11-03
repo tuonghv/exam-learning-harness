@@ -847,6 +847,9 @@ def benchmark_main(argv):
     ap.add_argument("--inputs", default="evals/inputs")
     ap.add_argument("--keys", default="evals/keys")
     ap.add_argument("--subject")
+    ap.add_argument("--set", metavar="FILE", help="fixed keyed regression set (evals/regset.json); "
+                    "appends source=regset history lines")
+    ap.add_argument("--history", metavar="FILE", help="history file for --set (default: the solve history)")
     ap.add_argument("--out")
     ap.add_argument("--previous", metavar="summary.json")
     ap.add_argument("--mock")
@@ -875,7 +878,17 @@ def benchmark_main(argv):
     if a.max_attempts < 1 or a.budget_usd < 0 or a.max_cost_usd < 0 or a.timeout <= 0:
         print("usage: --max-attempts >= 1, costs >= 0, --timeout > 0", file=sys.stderr)
         return 2
-    items = benchmark.discover(a.inputs, a.keys, a.subject)
+    set_id, bases = None, {}
+    if a.set:
+        try:
+            set_id, items, bases = benchmark.load_set(a.set, _REPO_ROOT)
+        except ValueError as exc:
+            print("ERROR: %s" % exc, file=sys.stderr)
+            return 2
+        if a.subject:
+            items = [x for x in items if x[0] == a.subject]
+    else:
+        items = benchmark.discover(a.inputs, a.keys, a.subject)
     if not items:
         print("ERROR: no input/key pairs under %s and %s" % (a.inputs, a.keys), file=sys.stderr)
         return 2
@@ -905,7 +918,22 @@ def benchmark_main(argv):
                 return claude.run_claude(prompt, model=a.model, timeout_s=a.timeout, cwd=tmp)
         else:
             llm = engine.mock_llm(a.mock)
-        rows = benchmark.run_all(items, a.out, cfg, llm, a.budget_usd)
+        rec = None
+        if set_id:
+            git, hist = reporter.git_info(_REPO_ROOT), a.history or DEFAULT_HISTORY
+            stamp = time.strftime("%Y%m%dT%H%M%S")
+            paths = dict(((x[0], x[1]), x[2]) for x in items)
+
+            def rec(sub, n, result, outp):
+                meta = {"run_id": "%s/%s/%s@%s" % (set_id, sub, n, stamp), "exam_id": "%s/%s" % (sub, n),
+                        "exam_sha256": metrics.file_sha256(paths[(sub, n)]), "git": git,
+                        "result_path": os.path.abspath(os.path.join(outp, "result.json")),
+                        "source": "regset", "set_id": set_id, "key_basis": bases.get((sub, n))}
+                try:
+                    metrics.append(hist, metrics.history_line(result, metrics.compute(result), meta))
+                except (OSError, ValueError) as exc:
+                    print("WARN: history not written: %s" % exc, file=sys.stderr)
+        rows = benchmark.run_all(items, a.out, cfg, llm, a.budget_usd, rec)
     except (OSError, ValueError) as exc:
         print("ERROR: %s" % exc, file=sys.stderr)
         return 2
