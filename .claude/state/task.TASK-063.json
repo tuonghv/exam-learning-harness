@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-063",
   "title": "Engine scoreboard: coverage next to quality per exam kind with trend and quality-regression flag (REQ-0069)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0069",
   "acceptance_criteria": [
     "AC1 run-stats board prints coverage and quality side by side with delta and verdict",
@@ -41,11 +41,18 @@
       "work/TASK-063/evidence/keyed-mock-run.txt"
     ],
     "command": "python3 -I -m unittest discover -s tests/unit; run-stats board on saved runs; keyed mock run",
-    "result": "REQ-0069 AC1, AC2 verified (1225 tests, baseline failures only; golden stats/compare/trend byte-identical; 5/5 mutations killed; 30q gives 16/30; coverage alone never better; unmeasured honest on saved DGNL/trial runs; packs scoped per exam); AC3 split to REQ-0072; limits: key and precision path on a real keyed history line not yet exercised (unit tests only), denominator assumes the key covers unanswered questions, noise rule loose at small n (TASK-064)"
+    "result": "REQ-0069 AC1, AC2 verified (1225 tests, baseline failures only; golden stats/compare/trend byte-identical; 5/5 mutations killed; 30q gives 16/30; coverage alone never better; unmeasured honest on saved DGNL/trial runs; packs scoped per exam); AC3 split to REQ-0072; limits: key and precision path on a real keyed history line not yet exercised (unit tests only), denominator assumes the key covers unanswered questions, noise rule loose at small n (TASK-064)",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-063/evidence/task063-suite.txt"
+      ],
+      "reason": "golden byte identity of existing run-stats output, hand-counted numbers, mutations"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-63-engine-scoreboard.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -54,7 +61,10 @@
     "designer": "work/TASK-063/handoff/design.md",
     "coder": "work/TASK-063/handoff/code.md",
     "tester": "work/TASK-063/handoff/test.md",
-    "verifier": "work/TASK-063/handoff/verify.md"
+    "verifier": "work/TASK-063/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "saved-run golden byte identity vs pre-task commit, hand-counted scenarios and 5 mutations by the tester; keyed real-data path is REQ-0072"
+    }
   },
   "user_notes": [
     {
@@ -64,7 +74,7 @@
     }
   ],
   "picked_at": "2026-11-03T00:46:30Z",
-  "updated_at": "2026-11-03T01:09:59Z",
+  "updated_at": "2026-11-03T01:10:09Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -73,5 +83,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report, DONE; TASK-064 next"
+  "next": ""
 }

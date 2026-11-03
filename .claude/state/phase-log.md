@@ -1729,3 +1729,9 @@ Action: Argus verified the scoreboard
 Result: verified; regression set split to REQ-0072
 Decision: VERIFIED
 Next: report then DONE
+
+## DONE - TASK-063 - 2026-11-03T01:10:09Z
+Action: Report written
+Result: TASK-063 verified, docs/report/phase-63-engine-scoreboard.md
+Decision: DONE
+Next: TASK-064 statistics robustness

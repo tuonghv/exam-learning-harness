@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-063",
-  "state": "VERIFIED",
-  "next": "report, DONE; TASK-064 next",
+  "state": "DONE",
+  "next": "",
   "title": "Engine scoreboard: coverage next to quality per exam kind with trend and quality-regression flag (REQ-0069)",
-  "active": [
-    {
-      "task_id": "TASK-063",
-      "state": "VERIFIED",
-      "next": "report, DONE; TASK-064 next",
-      "updated_at": "2026-11-03T01:09:59Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
