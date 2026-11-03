@@ -125,13 +125,14 @@ class StructureHint(unittest.TestCase):
 
 class DevPromptsGeneric(unittest.TestCase):
     FILES = ["system.md", "lang/vi/system.md", "verification/verify_answer.md",
+             "lang/vi/verification/verify_answer.md",
              "exam/solve.md", "lang/vi/exam/solve.md"]
 
     def test_no_fixed_subject_list(self):
         for f in self.FILES:
             with open(os.path.join(ROOT, "prompts", "dev", f), encoding="utf-8") as fh:
                 s = fh.read()
-            for w in ("Grade 12", "Literature", "Ngữ văn", "lớp 12 ", "Vật lí"):
+            for w in ("Grade 12", "Literature", "Ngữ văn", "lớp 12", "Vật lí"):
                 self.assertNotIn(w, s, "%s: %s" % (f, w))
 
 
