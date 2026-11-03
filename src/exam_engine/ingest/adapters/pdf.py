@@ -18,7 +18,9 @@ CROP_DPI = 150
 OCR_DPI = 200
 OCR_GAP = 0.15  # char gap / median char height that becomes a space (51.7 sweep: ocr-gap-sweep.tsv)
 OCR_CONF_DEFAULT = "auto"  # 71.5 gate passed: family C unmarked 10 -> 3 at 0 false alarms; "off" skips the CLI run
-OCR_LOW_CONF = 60  # 71.2 floor: largest with 0 false alarms on families A-D (work/TASK-071/qa/conf-sweep.tsv, 71.5)
+# 71.2 floor 60, margin 0 (work/TASK-071/qa/conf-sweep.tsv): 0 false alarms on families A, B, D and on the
+# unaccented family Cm (0/18); accented correct text is unmeasured; 60 sits just below the 70 cliff (A: 4 false alarms)
+OCR_LOW_CONF = 60
 TOKEN_MARGIN = 0  # 71.3 weak shapes flag below floor + margin
 TSV_TIMEOUT = 60
 MAX_CROPS = 6
