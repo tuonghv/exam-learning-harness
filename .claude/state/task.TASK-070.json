@@ -1,0 +1,54 @@
+{
+  "task_id": "TASK-070",
+  "title": "Route-B structure derived from headings and generic dev prompt wording, with paid before/after check (REQ-0070)",
+  "state": "TODO",
+  "requirement": "REQ-0070",
+  "acceptance_criteria": [
+    "AC1 70.1 structure_hint",
+    "AC2 70.2 generic dev prompts, paid before/after check"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {},
+  "user_notes": [],
+  "picked_at": "2026-11-03T09:58:13Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
