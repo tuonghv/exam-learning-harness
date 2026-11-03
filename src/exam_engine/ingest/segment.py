@@ -106,20 +106,43 @@ def push_heading(stack, line):
     stack.append((kind, line.strip()))
 
 
+_BANK = re.compile(r"^[A-E][.)]\s+\S")  # an answer-option label line, any case
+
+
+def _next_line(lines, i):
+    return next((ln for ln in lines[i + 1:] if ln.strip()), "")
+
+
+def _enum_bank(lines, i):
+    """True when lines[i] is an `A.`-`E.` label that starts or continues a run of option labels:
+    in doubt it is an option, never a heading (the choices must not be deleted)."""
+    s = lines[i].strip()
+    return bool(_BANK.match(s)) and bool(_BANK.match(_next_line(lines, i).strip()))
+
+
 def split_heading(context):
     """-> (headings, rest): leading heading lines peeled off a question context; stops at the
-    first non-heading line (guide or passage, so an upper-case passage title stays)."""
+    first non-heading line (guide or passage, so an upper-case passage title stays) or at an
+    option bank (`A. x` / `B. y` lines)."""
     lines = (context or "").split("\n")
     heads, i = [], 0
     while i < len(lines):
         if not lines[i].strip():
             i += 1
-        elif _is_heading_line(lines[i]):
+        elif _is_heading_line(lines[i]) and not _enum_bank(lines, i):
             heads.append(lines[i].strip())
             i += 1
         else:
             break
     return heads, "\n".join(lines[i:]).strip("\n") if heads else (context or "")
+
+
+def ambiguous_heading(context):
+    """True when the first line looks like an enumerated heading but is kept because it opens an option bank."""
+    lines = (context or "").split("\n")
+    i = next((k for k, ln in enumerate(lines) if ln.strip()), None)
+    return i is not None and bool(_ENUM.match(lines[i].strip())) and _is_heading_line(lines[i]) \
+        and _enum_bank(lines, i)
 
 
 def split_guide(rest):

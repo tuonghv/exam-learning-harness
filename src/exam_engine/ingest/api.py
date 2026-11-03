@@ -113,12 +113,6 @@ def _flag(q, code):
     return q if code in cur else dict(q, structure=cur + [code])
 
 
-def _flag(q, code):
-    """q with structure flag `code` (key only when non-empty; flags never decline a question)."""
-    cur = q.get("structure") or []
-    return q if code in cur else dict(q, structure=cur + [code])
-
-
 def _share_context(qs):
     """Repeat a passage with every question of its group ("Questions 46-52", "câu từ 103 đến 105").
 
@@ -143,6 +137,8 @@ def _share_context(qs):
             cur = None
         sec = new_sec
         q = dict(q, context=ctx, section=sec) if heads or sec else q
+        if not heads and segment.ambiguous_heading(ctx):  # kept as text (maybe an option bank)
+            q = _flag(q, "ambiguous_heading")
         if m:
             lo, hi = segment.group_span(m)
             if cur and cur["ctx"] == ctx and (cur["lo"], cur["hi"]) == (lo, hi):

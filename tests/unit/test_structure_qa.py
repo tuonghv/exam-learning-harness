@@ -91,7 +91,6 @@ class TestFalsePositives(unittest.TestCase):
         _, ex, _ = emit(qs)
         self.assertEqual([g["ids"] for g in parser.groups(ex)], [[1, 2, 3]])
 
-    @unittest.expectedFailure  # DEFECT D1 (QA): upper-case shared answer bank at the start of a context is peeled as headings
     def test_65_5_shared_option_bank_not_swallowed(self):
         text, ex, _ = emit([q(1, ctx="A. HISTORY\nB. GEOGRAPHY\nC. CIVICS\nD. ECONOMICS\n"
                                      "Questions 1-2: Match each text with a subject above.", opts=None),
@@ -99,11 +98,9 @@ class TestFalsePositives(unittest.TestCase):
         for w in ("HISTORY", "GEOGRAPHY", "CIVICS", "ECONOMICS"):
             self.assertIn(w, text.split("## Question 1")[1])
 
-    @unittest.expectedFailure  # DEFECT D2 (QA): numeric bank "A. 25" is peeled (label letter counts as upper case)
     def test_65_5_numeric_bank_not_heading(self):
         self.assertEqual(segment.split_heading("A. 25\nB. 36\nC. 49\nD. 64\nQuestions 1-2: pick.")[0], [])
 
-    @unittest.expectedFailure  # DEFECT D3 (QA): a bank after the range line is read as passage, options lost
     def test_65_6_bank_after_range_line_still_options(self):
         _, ex, _ = emit([q(1, ctx="Questions 1-2: Match.\nA. HISTORY\nB. GEOGRAPHY\nC. CIVICS\nD. ECONOMICS", opts=None),
                          q(2, opts=None)])

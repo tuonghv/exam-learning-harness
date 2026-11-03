@@ -8,7 +8,7 @@ import unittest
 ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 sys.path.insert(0, os.path.join(ROOT, "src"))
 from exam_engine.core import refcheck  # noqa: E402
-from exam_engine.ingest import api  # noqa: E402
+from exam_engine.ingest import api, segment  # noqa: E402
 from exam_engine.pipeline import parser  # noqa: E402
 
 META = {"Subject": "English", "Level": "Grade 12", "Exam type": "Synthetic", "Task": "Multiple Choice",
@@ -148,6 +148,24 @@ class TestEnumeratedHeadings(unittest.TestCase):  # 65.5: P10, real P10b, stack,
         sh = api._share_context([q(5, ctx="Read the text below.\n" + PAS + "\nanswer questions 5-7."),
                                  q(6), q(7)])
         self.assertEqual({x["context"] for x in sh}, {sh[0]["context"]})
+
+
+class TestHeadingVersusBank(unittest.TestCase):  # fix round 1: never delete choices
+    def test_heading_then_bank(self):
+        heads, rest = segment.split_heading("A. GRAMMAR\nA. ONE\nB. TWO\nQuestions 1-2: pick.")
+        self.assertEqual(heads, [])  # doubt: stays text (flagged ambiguous_heading), nothing deleted
+        heads, rest = segment.split_heading("I. READING\nA. ONE\nB. TWO\nQuestions 1-2: pick.")
+        self.assertEqual(heads, ["I. READING"])
+        self.assertTrue(rest.startswith("A. ONE\nB. TWO"))
+
+    def test_bank_alone_and_single_heading(self):
+        self.assertEqual(segment.split_heading("A. NaCl\nB. KCl\nQuestions 1-2: x")[0], [])
+        self.assertEqual(segment.split_heading("B. VOCABULARY\nQuestions 1-2: x")[0], ["B. VOCABULARY"])
+
+    def test_ambiguous_flag(self):
+        sh = api._share_context([q(1, ctx="A. HISTORY\nB. CIVICS\nQuestions 1-1: x", opts=None)])
+        self.assertEqual(sh[0]["structure"], ["ambiguous_heading"])
+        self.assertNotIn("structure", api._share_context([q(1, ctx="A. GRAMMAR\nQuestions 1-1: x")])[0])
 
 
 if __name__ == "__main__":
