@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-070",
   "title": "Route-B structure derived from headings and generic dev prompt wording, with paid before/after check (REQ-0070)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0070",
   "acceptance_criteria": [
     "AC1 70.1 structure_hint",
@@ -15,8 +15,18 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/cross.py",
+      "src/exam_engine/cli.py",
+      "prompts/dev/system.md",
+      "prompts/dev/lang/vi/system.md",
+      "prompts/dev/verification/verify_answer.md",
+      "prompts/dev/exam/solve.md",
+      "prompts/dev/lang/vi/exam/solve.md",
+      "tests/unit/test_route_b_structure.py"
+    ],
+    "summary": "cross.structure_hint from route-A headings with a generic fallback, route-B IMAGE_RULES generic; generic dev prompt wording in five dev files; release channel untouched"
   },
   "unit_test": {
     "status": "pending",
@@ -39,11 +49,12 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-070/handoff/design.md"
+    "designer": "work/TASK-070/handoff/design.md",
+    "coder": "work/TASK-070/handoff/code.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-03T09:58:13Z",
-  "updated_at": "2026-11-03T09:58:28Z",
+  "updated_at": "2026-11-03T10:07:30Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -52,5 +63,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Titan: tests first, 70.1 and 70.2"
+  "next": "tester QA; paid cross-solve check by coordinator"
 }

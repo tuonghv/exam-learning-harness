@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-070",
-  "state": "DESIGN",
-  "next": "Titan: tests first, 70.1 and 70.2",
+  "state": "IMPLEMENTING",
+  "next": "tester QA; paid cross-solve check by coordinator",
   "title": "Route-B structure derived from headings and generic dev prompt wording, with paid before/after check (REQ-0070)",
   "active": [
     {
       "task_id": "TASK-070",
-      "state": "DESIGN",
-      "next": "Titan: tests first, 70.1 and 70.2",
-      "updated_at": "2026-11-03T09:58:28Z"
+      "state": "IMPLEMENTING",
+      "next": "tester QA; paid cross-solve check by coordinator",
+      "updated_at": "2026-11-03T10:07:30Z"
     }
   ],
   "max_active": 1
