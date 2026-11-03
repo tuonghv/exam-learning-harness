@@ -1,15 +1,15 @@
 {
   "task_id": "TASK-071",
   "title": "OCR single-character misreads: cheap extra doubt signal (tesseract per-word confidence, number/symbol token checks, option parity) (REQ-0065)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0065",
   "acceptance_criteria": [
     "see REQ-0065"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-71-ocr-misread-signals.md",
+    "summary": "OCR single-character misread signals: tesseract TSV per-word low_conf (calibrated by a 0-false-alarm sweep, off by default unless it helps), token glyph plausibility, option_parity structure flag; refined route deferred; no AI or paid call",
     "reuse": [],
     "risks": []
   },
@@ -37,11 +37,13 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-071/handoff/design.md"
+  },
   "user_notes": [],
   "picked_at": "2026-11-03T10:36:44Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-03T10:41:32Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -49,5 +51,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "Titan: tests first, 71.1-71.5"
 }

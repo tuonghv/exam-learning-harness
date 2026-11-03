@@ -1945,3 +1945,9 @@ Action: Report written
 Result: TASK-070 verified, docs/report/phase-70-route-b-structure-prompts.md
 Decision: DONE
 Next: backlog: REQ-0040 waits for user pages; free work remains REQ-0045 umbrella and REQ-0065
+
+## DESIGN - TASK-071 - 2026-11-03T10:41:32Z
+Action: Nova designed OCR misread signals
+Result: design COMPLETE
+Decision: refined route deferred; 71.5 sweep gates low_conf
+Next: coder tests-first
