@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-065",
   "title": "Exam structure and context review and design: hierarchy, instruction inheritance, shared references, cross-page, validation, parsing metrics (REQ-0073)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0073",
   "acceptance_criteria": [
     "AC1 deliverables A-G in one design",
@@ -31,9 +31,9 @@
     "summary": "stage 1+: 65.1 section-scoped ranges, 65.2 own override, 65.3 range word case, 65.5 enumerated headings + section stack, 65.6 labelled option scan, 65.8 structure flags (assembly rows + ingest WARN); Section lines in labelled output keep their parent heading (named golden update)"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "1280 tests, only baseline failures; 35 structure tests; probe P1..P11 fixed; golden byte-identical on 114 md inputs + 3 plans/dgnl-window files, DGNL refined3 differs only in 4 Section lines per prompt; 79-case bank sweep loses no choice text and keeps ABCD for blank-line banks; 6/6 mutations killed; D1-D6 fixed over 2 rounds, D7 known limit"
   },
   "security": {
     "status": "pending",
@@ -52,7 +52,8 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-065/handoff/design.md",
-    "coder": "work/TASK-065/handoff/code.md"
+    "coder": "work/TASK-065/handoff/code.md",
+    "tester": "work/TASK-065/handoff/test.md"
   },
   "user_notes": [
     {
@@ -62,7 +63,7 @@
     }
   ],
   "picked_at": "2026-11-03T02:12:56Z",
-  "updated_at": "2026-11-03T02:34:43Z",
+  "updated_at": "2026-11-03T03:07:57Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -71,5 +72,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tester QA"
+  "next": "verifier"
 }

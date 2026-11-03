@@ -1777,3 +1777,9 @@ Action: Titan implemented stage 1 of 65 plus 65.3 and 65.5
 Result: 1261 tests, baseline failures only
 Decision: tester next
 Next: tester
+
+## UNIT_TESTED - TASK-065 - 2026-11-03T03:07:56Z
+Action: Nemesis QA found a critical option-bank deletion, fixed in 2 rounds
+Result: no open defect
+Decision: VERIFIED next
+Next: verifier
