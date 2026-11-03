@@ -58,11 +58,18 @@ class Shapes(unittest.TestCase):  # 62.4
         self.assertTrue(reporter._is_open({"answer": "A"}, {"subject": "history", "task": "Essay"}))
         self.assertFalse(reporter._is_open({"answer": "A"}, {"subject": "chemistry", "task": "Quiz"}))
 
+    def test_reporter_open_by_task_name(self):  # V3
+        self.assertTrue(reporter._is_open({"answer": "A"}, {"task": "history"}))
+        self.assertFalse(reporter._is_open({"answer": "A"}, {"task": "chemistry"}))
+
     def test_examples_check_open_by_policy(self):
         self.assertEqual(examples_check.router.policy("history")["task"], "Open")
 
 
 class ShapesDefault(unittest.TestCase):
+    def test_reporter_literature_task(self):
+        self.assertTrue(reporter._is_open({"answer": "A"}, {"task": "literature"}))
+
     def test_math_physics_literature_unchanged(self):
         exam = lambda s: {"fields": {"Subject": s}}
         for s in ("math", "physics"):
@@ -118,6 +125,28 @@ class Profiles(unittest.TestCase):  # 62.6 + D1
             with self.assertRaises(genexam.GenError) as cm:
                 genexam.load_profiles(d)
             self.assertEqual(cm.exception.code, "bad_profile")
+
+    def test_prompt_path_rejected(self):  # V1
+        for key in ("prompt", "qa_prompt"):
+            for bad in ("../../etc/passwd", "dev/../../x", "/etc/passwd", "", 5, None, ["a"]):
+                d = tmp_cfg("genexam_profiles.json", {"x": dict(BIO["bio-mc"], **{key: bad})})
+                self.addCleanup(shutil.rmtree, d, True)
+                with self.assertRaises(genexam.GenError) as cm:
+                    genexam.load_profiles(d)
+                self.assertEqual(cm.exception.code, "bad_profile", (key, bad))
+
+    def test_no_hs_profile(self):  # V2: defaults follow the first profile, not a literal
+        d = tmp_cfg("genexam_profiles.json", BIO)
+        self.addCleanup(shutil.rmtree, d, True)
+        genexam.apply_profiles(genexam.load_profiles(d))
+        self.assertIn("cells", genexam.build_prompt("biology", 1, 1))
+        self.assertIn("Question:", genexam.qa_prompt({"question": "q", "solution": "s", "final_answer": "A"}))
+        out = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, out, True)
+        genexam.write("biology", [({"qa": "pass", "qa_note": ""}, "in", "key")], out, {})
+        with open(os.path.join(out, "manifest.json"), encoding="utf-8") as fh:
+            self.assertEqual(json.load(fh)["runs"][0]["prompt_sha256"],
+                             hashlib.sha256(genexam.template(genexam.PROMPT_OF["bio-mc"]).encode()).hexdigest())
 
     def test_default_profiles(self):
         self.assertEqual(genexam.PROFILES, ("hs", "dgnl", "dgnl-en", "dgnl-vi"))

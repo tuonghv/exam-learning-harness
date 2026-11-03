@@ -47,6 +47,12 @@ def load_profiles(config_dir=None):
         miss = [k for k in _KEYS if k not in pr]
         if miss:
             raise GenError("bad_profile", "%s: profile %r lacks %s" % (path, name, ", ".join(miss)))
+        for k in ("prompt", "qa_prompt"):
+            v = pr[k]
+            parts = v.replace("\\", "/").split("/") if isinstance(v, str) else []
+            if not parts or not all(parts) or ".." in parts or os.path.isabs(v):
+                raise GenError("bad_profile", "%s: profile %r %s must be a relative path inside prompts/ (got %r)"
+                               % (path, name, k, v))
         if pr["check"] not in CHECK_NAMES:
             raise GenError("bad_profile", "%s: profile %r has unknown check %r (have: %s)"
                            % (path, name, pr["check"], ", ".join(CHECK_NAMES)))
@@ -99,28 +105,32 @@ def template(rel=PROMPT_REL):
         return fh.read()
 
 
-def topic(seed, idx, profile="hs"):
+def topic(seed, idx, profile=None):
     """Topic for exam idx of a round: consecutive topics from a seed-dependent start, so no two repeat."""
+    profile = profile or PROFILES[0]
     ts = TOPICS[profile]
     return ts[(int(hashlib.sha256(str(seed).encode("utf-8")).hexdigest(), 16) + idx) % len(ts)]
 
 
-def build_prompt(subject, seed, idx, level="hard", profile="hs"):
+def build_prompt(subject, seed, idx, level="hard", profile=None):
+    profile = profile or PROFILES[0]
     return "%s\nSeed: %s-%d\nSubject key: %s\nLevel: %s\nTopic (use exactly this): %s\n" % (
         template(PROMPT_OF[profile]).rstrip("\n"), seed, idx, subject, level,
         topic(seed, idx, profile))
 
 
-def qa_prompt(obj, profile="hs"):
+def qa_prompt(obj, profile=None):
     """Review prompt: the question and the worked solution; the model's own final answer is asked for."""
+    profile = profile or PROFILES[0]
     opts = "".join("%s. %s\n" % (k, v) for k, v in sorted((obj.get("options") or {}).items()))
     return "%s\nQuestion:\n%s\n%s\nSolution to review:\n%s\nClaimed final answer: %s\n" % (
         template(QA_OF[profile]).rstrip("\n"), obj["question"].strip(), opts, obj["solution"].strip(),
         obj["final_answer"].strip())
 
 
-def qa(llm, obj, profile="hs"):
+def qa(llm, obj, profile=None):
     """(status 'pass'|'fail'|'unknown', note, cost): independent review; its own answer must match the key."""
+    profile = profile or PROFILES[0]
     call = llm(qa_prompt(obj, profile))
     if not call.ok:
         return "unknown", "%s %s" % (call.cls, call.reason), call.cost_usd
@@ -328,8 +338,9 @@ class _Checks(dict):
 CHECKS = _Checks()
 
 
-def _ask(llm, prompt, profile="hs"):
+def _ask(llm, prompt, profile=None):
     """(obj, cost) with one retry on a bad reply; a reply with a wrong key is a bad reply."""
+    profile = profile or PROFILES[0]
     cost, why = 0.0, ""
     for _ in range(MAX_ATTEMPTS):
         call = llm(prompt)
@@ -344,11 +355,12 @@ def _ask(llm, prompt, profile="hs"):
     raise GenError("invalid_reply", "%s (after %d attempts)" % (why, MAX_ATTEMPTS))
 
 
-def generate(subject, n, seed, llm, max_cost=0.5, level="hard", review=True, profile="hs"):
+def generate(subject, n, seed, llm, max_cost=0.5, level="hard", review=True, profile=None):
     """[(obj, input text, key text)] for n exams; each obj gets obj["qa"] / obj["qa_note"].
 
     Stops with cost_cap when the cap is reached.
     """
+    profile = profile or PROFILES[0]
     if subject not in SUBJECTS:
         raise GenError("invalid_reply", "subject %r not supported (have: %s)"
                        % (subject, ", ".join(sorted(SUBJECTS))))
@@ -406,7 +418,7 @@ def write(subject, items, out, meta):
                             qa_counts={k: sum(1 for o, _, _ in items if o.get("qa") == k)
                                        for k in ("pass", "fail", "unknown", "skipped")},
                             prompt_sha256=hashlib.sha256(
-                                template(PROMPT_OF[meta.get("profile", "hs")]).encode("utf-8")).hexdigest()))
+                                template(PROMPT_OF[meta.get("profile") or PROFILES[0]]).encode("utf-8")).hexdigest()))
     with open(mp, "w", encoding="utf-8") as fh:
         json.dump(man, fh, ensure_ascii=False, indent=2)
         fh.write("\n")

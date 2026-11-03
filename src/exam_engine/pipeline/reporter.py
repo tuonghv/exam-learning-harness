@@ -42,7 +42,7 @@ def _cell(text):
 
 
 def _is_open(q, exam):
-    return (q.get("answer") == "Open" or str(exam.get("task") or "").strip().lower() == "literature"
+    return (q.get("answer") == "Open" or router.policy(exam.get("task"))["task"] == "Open"
             or router.policy(exam.get("subject"))["task"] == "Open")
 
 
