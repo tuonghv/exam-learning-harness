@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-062",
   "title": "Generality: remove exam-specific hard-codes (profiles, Vietnamese-only regexes, part structure, prompt subject lists) into generic signals and per-exam config (REQ-0068)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0068",
   "acceptance_criteria": [
     "AC1 audit (done)",
@@ -16,8 +16,24 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "config/lang.json",
+      "config/subjects.json",
+      "config/genexam_profiles.json",
+      "src/exam_engine/utils/langtable.py",
+      "src/exam_engine/ingest/segment.py",
+      "src/exam_engine/ingest/refine.py",
+      "src/exam_engine/ingest/adapters/pdf.py",
+      "src/exam_engine/pipeline/verifier.py",
+      "src/exam_engine/pipeline/cross.py",
+      "src/exam_engine/pipeline/genexam.py",
+      "src/exam_engine/core/refcheck.py",
+      "tests/unit/test_generality_golden.py",
+      "tests/unit/test_langtable.py",
+      "tests/unit/test_generality_shapes.py"
+    ],
+    "summary": "slice A: golden freeze, lang word tables (vi+en union + config/lang.json), verdict/ref tables, subject config, garble scripts, genexam profiles as data, D1 manifest hash, D2 PART heading, Generality line (62.9)"
   },
   "unit_test": {
     "status": "pending",
@@ -40,11 +56,12 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-062/handoff/design.md"
+    "designer": "work/TASK-062/handoff/design.md",
+    "coder": "work/TASK-062/handoff/code.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-03T00:06:12Z",
-  "updated_at": "2026-11-03T00:10:16Z",
+  "updated_at": "2026-11-03T00:26:48Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -53,5 +70,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Titan: 62.G golden first, then 62.1-62.6"
+  "next": "tester QA"
 }

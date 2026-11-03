@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-062",
-  "state": "DESIGN",
-  "next": "Titan: 62.G golden first, then 62.1-62.6",
+  "state": "IMPLEMENTING",
+  "next": "tester QA",
   "title": "Generality: remove exam-specific hard-codes (profiles, Vietnamese-only regexes, part structure, prompt subject lists) into generic signals and per-exam config (REQ-0068)",
   "active": [
     {
       "task_id": "TASK-062",
-      "state": "DESIGN",
-      "next": "Titan: 62.G golden first, then 62.1-62.6",
-      "updated_at": "2026-11-03T00:10:16Z"
+      "state": "IMPLEMENTING",
+      "next": "tester QA",
+      "updated_at": "2026-11-03T00:26:48Z"
     }
   ],
   "max_active": 1
