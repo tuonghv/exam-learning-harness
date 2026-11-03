@@ -22,13 +22,18 @@ def _strip(s):
     return re.sub(r"^\s*[-*]\s*", "", s or "").strip()
 
 
+def _signed(raw):
+    t = _strip(raw)
+    return "-" + t.lstrip("\u2212") if _neg(raw) else t
+
+
 def match(answer, key):
     """True/False, or None when the key is an open (rubric) item."""
     if answer is None:
         return False
-    a, k = _strip(answer), _strip(key)
-    if norm(k) == "open (rubric)":
+    if norm(_strip(key)) == "open (rubric)":
         return None
+    a, k = _signed(answer), _signed(key)  # 68.1: keep a leading sign (_strip drops it)
     na, nk = norm(a), norm(k)
     if re.match(r"^[a-d]$", nk):
         m = re.match(r"^([a-d])(?:\.|\s|$)", na)
@@ -44,7 +49,7 @@ def match(answer, key):
         (kv, d, ke, unit_k), (av, _, ae, unit_a) = mk, ma
         return (_unit_ok(unit_k, unit_a)
                 and abs(av * 10 ** ae - kv * 10 ** ke) <= (0.5 * 10 ** (-d) + 1e-12) * 10 ** ke)
-    return na == nk or _note_match(a, k, answer, key)
+    return na == nk or _note_match(_strip(answer), _strip(key), answer, key)
 
 
 _NOTE = re.compile(r"^(.*\S)\s+\(([^()]*)\)\s*\.?\s*$", re.S)
