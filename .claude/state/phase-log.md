@@ -1837,3 +1837,9 @@ Action: Titan implemented the value-part match
 Result: suite baseline failures only
 Decision: tester next
 Next: tester
+
+## UNIT_TESTED - TASK-067 - 2026-11-03T04:16:07Z
+Action: Nemesis QA
+Result: no open defect in the note path; pre-existing sign blindness of note-less answers split to REQ-0076
+Decision: VERIFIED next
+Next: verifier + paid re-score

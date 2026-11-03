@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-067",
-  "state": "IMPLEMENTING",
-  "next": "tester QA",
+  "state": "UNIT_TESTED",
+  "next": "verifier and paid re-score by coordinator",
   "title": "Final answers with a trailing note must still match the key (math/005 false FAIL) (REQ-0075)",
   "active": [
     {
       "task_id": "TASK-067",
-      "state": "IMPLEMENTING",
-      "next": "tester QA",
-      "updated_at": "2026-11-03T03:57:11Z"
+      "state": "UNIT_TESTED",
+      "next": "verifier and paid re-score by coordinator",
+      "updated_at": "2026-11-03T04:16:07Z"
     }
   ],
   "max_active": 1

@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-067",
   "title": "Final answers with a trailing note must still match the key (math/005 false FAIL) (REQ-0075)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0075",
   "acceptance_criteria": [
     "AC1 locate the failing comparison",
@@ -24,9 +24,9 @@
     "summary": "scorer value-part match with trailing note (additive), _TAIL_NOTE needs whitespace before the parenthesis"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "1304 tests, only baseline failures; replay of 36 saved items: exactly 2 diffs (math/005 FAIL->PASS in run1 and run2); adversarial false-pass pairs stay FAIL; sign kept in the note path; mutations killed; tester D1 sign flip fixed"
   },
   "security": {
     "status": "pending",
@@ -45,11 +45,12 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-067/handoff/design.md",
-    "coder": "work/TASK-067/handoff/code.md"
+    "coder": "work/TASK-067/handoff/code.md",
+    "tester": "work/TASK-067/handoff/test.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-03T03:46:29Z",
-  "updated_at": "2026-11-03T03:57:11Z",
+  "updated_at": "2026-11-03T04:16:07Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -58,5 +59,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tester QA"
+  "next": "verifier and paid re-score by coordinator"
 }
