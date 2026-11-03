@@ -1909,3 +1909,9 @@ Action: Argus verified parsing metrics
 Result: verified
 Decision: VERIFIED
 Next: report then DONE
+
+## DONE - TASK-069 - 2026-11-03T09:58:12Z
+Action: Report written
+Result: TASK-069 verified, docs/report/phase-69-parsing-metrics.md
+Decision: DONE
+Next: TASK-070

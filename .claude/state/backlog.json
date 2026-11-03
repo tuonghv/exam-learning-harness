@@ -1321,13 +1321,15 @@
     "task_id": "TASK-069",
     "title": "Parsing accuracy metrics apart from solving accuracy: structure_scores, gold fixtures, board --structure-gold, parse-suspect split (REQ-0074)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-03T22:00:00",
     "requirement": "REQ-0074",
     "acceptance_criteria": [
       "AC1 structure_scores and gold fixtures, board prints parsing accuracy beside solving accuracy",
       "AC2 tokens per question; 65.4/65.7 only if metrics justify"
-    ]
+    ],
+    "completed_at": "2026-11-03T09:58:13Z",
+    "report": "docs/report/phase-69-parsing-metrics.md"
   },
   {
     "task_id": "TASK-070",
