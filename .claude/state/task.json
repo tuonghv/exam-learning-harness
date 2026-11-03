@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-063",
-  "state": "DESIGN",
-  "next": "Titan: tests first, 63.1-63.5, then 63.6",
+  "state": "IMPLEMENTING",
+  "next": "tester QA",
   "title": "Engine scoreboard: coverage next to quality per exam kind with trend and quality-regression flag (REQ-0069)",
   "active": [
     {
       "task_id": "TASK-063",
-      "state": "DESIGN",
-      "next": "Titan: tests first, 63.1-63.5, then 63.6",
-      "updated_at": "2026-11-03T00:50:03Z"
+      "state": "IMPLEMENTING",
+      "next": "tester QA",
+      "updated_at": "2026-11-03T01:02:27Z"
     }
   ],
   "max_active": 1

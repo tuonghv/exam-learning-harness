@@ -1711,3 +1711,9 @@ Action: Nova designed the engine scoreboard
 Result: design COMPLETE; regression set = committed evals inputs/keys
 Decision: unmeasured when no key; coverage alone never better
 Next: coder tests-first
+
+## IMPLEMENTING - TASK-063 - 2026-11-03T01:02:27Z
+Action: Titan implemented 63.1-63.5 with D2 D6 from the stats review
+Result: test_run_board 24 OK; full suite before addendum baseline only
+Decision: tester next
+Next: tester

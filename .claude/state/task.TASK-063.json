@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-063",
   "title": "Engine scoreboard: coverage next to quality per exam kind with trend and quality-regression flag (REQ-0069)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0069",
   "acceptance_criteria": [
     "AC1 run-stats board prints coverage and quality side by side with delta and verdict",
@@ -16,8 +16,14 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/metrics.py",
+      "src/exam_engine/cli.py",
+      "tests/unit/test_run_board.py",
+      "docs/guide/toolkit-reference.md"
+    ],
+    "summary": "run-stats board: quality block (attempt-adjusted headline over all keyed), exam kind + pairing by exam hash, per-pair delta, verdict with coverage-up/quality-down flag and unmeasured, review packs scoped per exam; 63.6 regression set split to a follow-up"
   },
   "unit_test": {
     "status": "pending",
@@ -40,7 +46,8 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-063/handoff/design.md"
+    "designer": "work/TASK-063/handoff/design.md",
+    "coder": "work/TASK-063/handoff/code.md"
   },
   "user_notes": [
     {
@@ -50,7 +57,7 @@
     }
   ],
   "picked_at": "2026-11-03T00:46:30Z",
-  "updated_at": "2026-11-03T00:50:03Z",
+  "updated_at": "2026-11-03T01:02:27Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -59,5 +66,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Titan: tests first, 63.1-63.5, then 63.6"
+  "next": "tester QA"
 }
