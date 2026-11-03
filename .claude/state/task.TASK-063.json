@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-063",
   "title": "Engine scoreboard: coverage next to quality per exam kind with trend and quality-regression flag (REQ-0069)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0069",
   "acceptance_criteria": [
     "AC1 run-stats board prints coverage and quality side by side with delta and verdict",
@@ -26,9 +26,9 @@
     "summary": "run-stats board: quality block (attempt-adjusted headline over all keyed), exam kind + pairing by exam hash, per-pair delta, verdict with coverage-up/quality-down flag and unmeasured, review packs scoped per exam; 63.6 regression set split to a follow-up"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "1225 tests, only baseline failures; golden stats/compare/trend byte-identical vs pre-task commit; 5/5 mutations killed; hand-checked 30q (16/30), 2q, 100q, shared-id packs; unmeasured never better"
   },
   "security": {
     "status": "pending",
@@ -47,7 +47,8 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-063/handoff/design.md",
-    "coder": "work/TASK-063/handoff/code.md"
+    "coder": "work/TASK-063/handoff/code.md",
+    "tester": "work/TASK-063/handoff/test.md"
   },
   "user_notes": [
     {
@@ -57,7 +58,7 @@
     }
   ],
   "picked_at": "2026-11-03T00:46:30Z",
-  "updated_at": "2026-11-03T01:02:27Z",
+  "updated_at": "2026-11-03T01:09:03Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -66,5 +67,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tester QA"
+  "next": "verifier"
 }
