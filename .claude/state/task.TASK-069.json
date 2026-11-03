@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-069",
   "title": "Parsing accuracy metrics apart from solving accuracy: structure_scores, gold fixtures, board --structure-gold, parse-suspect split (REQ-0074)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0074",
   "acceptance_criteria": [
     "AC1 structure_scores and gold fixtures, board prints parsing accuracy beside solving accuracy",
@@ -27,9 +27,9 @@
     "summary": "metrics.structure_scores, compute(structure=), board parsing line and --structure-gold, parse-suspect vs solver split, tokens per question (bytes/4), 11 synthetic gold cases covering the six metrics with known_miss labels"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "1336 tests, only the 4 known baseline failures; independent recomputation of the six accuracies matches; output byte-identical vs pre-task commit without the new flags; 8/8 mutations killed; tester D1 (T5 fails on a stale known_miss, strict by design: update the label) and D2 (no reference gold case) recorded as low"
   },
   "security": {
     "status": "pending",
@@ -48,11 +48,12 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-069/handoff/design.md",
-    "coder": "work/TASK-069/handoff/code.md"
+    "coder": "work/TASK-069/handoff/code.md",
+    "tester": "work/TASK-069/handoff/test.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-03T09:40:44Z",
-  "updated_at": "2026-11-03T09:51:05Z",
+  "updated_at": "2026-11-03T09:57:03Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -61,5 +62,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tester QA"
+  "next": "verifier"
 }

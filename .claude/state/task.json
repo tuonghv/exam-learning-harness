@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-069",
-  "state": "IMPLEMENTING",
-  "next": "tester QA",
+  "state": "UNIT_TESTED",
+  "next": "verifier",
   "title": "Parsing accuracy metrics apart from solving accuracy: structure_scores, gold fixtures, board --structure-gold, parse-suspect split (REQ-0074)",
   "active": [
     {
       "task_id": "TASK-069",
-      "state": "IMPLEMENTING",
-      "next": "tester QA",
-      "updated_at": "2026-11-03T09:51:05Z"
+      "state": "UNIT_TESTED",
+      "next": "verifier",
+      "updated_at": "2026-11-03T09:57:03Z"
     }
   ],
   "max_active": 1
