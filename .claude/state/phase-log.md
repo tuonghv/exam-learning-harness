@@ -1705,3 +1705,9 @@ Action: Report written
 Result: TASK-062 slice A verified, docs/report/phase-62-exam-kind-generality.md
 Decision: DONE
 Next: TASK-063 scoreboard (REQ-0069), REQ-0070 slice B
+
+## DESIGN - TASK-063 - 2026-11-03T00:50:03Z
+Action: Nova designed the engine scoreboard
+Result: design COMPLETE; regression set = committed evals inputs/keys
+Decision: unmeasured when no key; coverage alone never better
+Next: coder tests-first

@@ -1,17 +1,17 @@
 {
   "task_id": "TASK-063",
   "title": "Engine scoreboard: coverage next to quality per exam kind with trend and quality-regression flag (REQ-0069)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0069",
   "acceptance_criteria": [
-    "AC1 run-stats board",
-    "AC2 coverage-up/quality-down flagged",
-    "AC3 keyed regression set re-scored after each change"
+    "AC1 run-stats board prints coverage and quality side by side with delta and verdict",
+    "AC2 coverage-up/quality-down flagged with synthetic test",
+    "AC3 keyed regression set re-scored and appended to history"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-63-engine-scoreboard.md",
+    "summary": "run-stats board: quality block, kind and pairing by exam hash, per-pair delta, verdict with coverage-up/quality-down flag and unmeasured case, keyed regression set from evals; D5 classify fix",
     "reuse": [],
     "risks": []
   },
@@ -39,11 +39,13 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-063/handoff/design.md"
+  },
   "user_notes": [],
   "picked_at": "2026-11-03T00:46:30Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-03T00:50:03Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -51,5 +53,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "Titan: tests first, 63.1-63.5, then 63.6"
 }

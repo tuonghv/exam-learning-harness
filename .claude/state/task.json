@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-063",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "Titan: tests first, 63.1-63.5, then 63.6",
   "title": "Engine scoreboard: coverage next to quality per exam kind with trend and quality-regression flag (REQ-0069)",
   "active": [
     {
       "task_id": "TASK-063",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "Titan: tests first, 63.1-63.5, then 63.6",
+      "updated_at": "2026-11-03T00:50:03Z"
     }
   ],
   "max_active": 1
