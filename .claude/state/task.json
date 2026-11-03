@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-070",
-  "state": "DONE",
-  "next": "",
-  "title": "Route-B structure derived from headings and generic dev prompt wording, with paid before/after check (REQ-0070)",
-  "active": [],
+  "task_id": "TASK-071",
+  "state": "TODO",
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "title": "OCR single-character misreads: cheap extra doubt signal (tesseract per-word confidence, number/symbol token checks, option parity) (REQ-0065)",
+  "active": [
+    {
+      "task_id": "TASK-071",
+      "state": "TODO",
+      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+      "updated_at": ""
+    }
+  ],
   "max_active": 1
 }
