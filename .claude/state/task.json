@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-066",
-  "state": "IMPLEMENTING",
-  "next": "tester QA",
+  "state": "UNIT_TESTED",
+  "next": "paid scoring run by coordinator, then verifier",
   "title": "Keyed regression set: benchmark --set, regset history lines (official tier), board labels (REQ-0072)",
   "active": [
     {
       "task_id": "TASK-066",
-      "state": "IMPLEMENTING",
-      "next": "tester QA",
-      "updated_at": "2026-11-03T03:17:24Z"
+      "state": "UNIT_TESTED",
+      "next": "paid scoring run by coordinator, then verifier",
+      "updated_at": "2026-11-03T03:37:20Z"
     }
   ],
   "max_active": 1

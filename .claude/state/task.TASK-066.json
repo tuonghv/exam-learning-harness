@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-066",
   "title": "Keyed regression set: benchmark --set, regset history lines (official tier), board labels (REQ-0072)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0072",
   "acceptance_criteria": [
     "AC1 benchmark --set and evals/regset.json, mock tests",
@@ -27,9 +27,9 @@
     "summary": "benchmark --set with regset history lines (source, set_id, key_basis, git, prompt_info), kinds from exam header, official vs generated key labels, skipped items not regressions, evals/regset.example.json"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "1294 tests, only baseline failures; no --set benchmark and run-stats output byte-identical vs pre-task commit; mixed kind prints two rows (official key, generated key (generated)); key-leak check none; 7/7 mutations killed; tester D1 D2 fixed"
   },
   "security": {
     "status": "pending",
@@ -48,11 +48,12 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-066/handoff/design.md",
-    "coder": "work/TASK-066/handoff/code.md"
+    "coder": "work/TASK-066/handoff/code.md",
+    "tester": "work/TASK-066/handoff/test.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-03T03:09:47Z",
-  "updated_at": "2026-11-03T03:17:24Z",
+  "updated_at": "2026-11-03T03:37:20Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -61,5 +62,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tester QA"
+  "next": "paid scoring run by coordinator, then verifier"
 }
