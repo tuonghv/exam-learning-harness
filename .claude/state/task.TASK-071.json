@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-071",
   "title": "OCR single-character misreads: cheap extra doubt signal (tesseract per-word confidence, number/symbol token checks, option parity) (REQ-0065)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0065",
   "acceptance_criteria": [
     "see REQ-0065"
@@ -26,9 +26,9 @@
     "summary": "71.1/71.2 tesseract TSV per-word low_conf (floor 60 from a 0-false-alarm sweep, ocr_conf default auto), 71.3 token glyph shapes, 71.4 option_parity structure flag, 71.5 calibration harness; guard test allowlists adapters/pdf.py for the tesseract subprocess (list argv, no shell, pixels on stdin, timeout)"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "1397 tests, only the 4 known baseline failures; sweep re-run byte-identical to the coder numbers; golden ingest outputs identical when no signal fires; 8/8 mutations killed; no injection path in the tesseract call (lang vie/eng only, list argv, timeout, graceful skip); guard allowlist narrow (adapters/pdf.py only)"
   },
   "security": {
     "status": "pending",
@@ -47,11 +47,12 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-071/handoff/design.md",
-    "coder": "work/TASK-071/handoff/code.md"
+    "coder": "work/TASK-071/handoff/code.md",
+    "tester": "work/TASK-071/handoff/test.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-03T10:36:44Z",
-  "updated_at": "2026-11-03T11:10:05Z",
+  "updated_at": "2026-11-03T11:39:59Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -60,5 +61,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tester QA"
+  "next": "verified"
 }
