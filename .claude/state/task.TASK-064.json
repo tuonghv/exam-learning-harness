@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-064",
   "title": "Evaluation statistics robustness: refusals never rewarded, pooled attempt-adjusted score with interval, exact sign test, insufficient verdict, official vs exploratory tier, version-aware baseline (REQ-0071)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0071",
   "acceptance_criteria": [
     "AC1 review report and design",
@@ -44,11 +44,18 @@
       "work/TASK-064/evidence/t64-full.txt"
     ],
     "command": "python3 -I -m unittest discover -s tests/unit; independent p-value and Wilson recomputation; golden old/new outputs",
-    "result": "64.1-64.7 verified: 1245 tests, failures = the 4 known baseline names (docx textbox, check_examples 12b + dgnl pairing, req0012 cwd, scripts_exam); independent p-values and Wilson intervals match; 6/6 mutations killed; golden diffs only the intended wording and board-key changes; verifier D1 (denominator included declined open/no-key items) fixed; limits: official tier empty until REQ-0072, runs written before TASK-064 must be re-scored (L1), benchmark.py regression rule G9 out of scope, no real keyed run"
+    "result": "64.1-64.7 verified: 1245 tests, failures = the 4 known baseline names (docx textbox, check_examples 12b + dgnl pairing, req0012 cwd, scripts_exam); independent p-values and Wilson intervals match; 6/6 mutations killed; golden diffs only the intended wording and board-key changes; verifier D1 (denominator included declined open/no-key items) fixed; limits: official tier empty until REQ-0072, runs written before TASK-064 must be re-scored (L1), benchmark.py regression rule G9 out of scope, no real keyed run",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-064/evidence/t64-final-suite.txt"
+      ],
+      "reason": "independent recomputation of p-values and Wilson intervals, golden old/new output diff, mutations"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-64-eval-stats-robustness.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -57,11 +64,14 @@
     "designer": "work/TASK-064/handoff/design.md",
     "coder": "work/TASK-064/handoff/code.md",
     "tester": "work/TASK-064/handoff/test.md",
-    "verifier": "work/TASK-064/handoff/verify.md"
+    "verifier": "work/TASK-064/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "independent oracle = tester recomputation of exact sign-test p-values and Wilson intervals by hand, golden old/new outputs and 6 mutations; real keyed scoring is REQ-0072"
+    }
   },
   "user_notes": [],
   "picked_at": "2026-11-03T01:10:10Z",
-  "updated_at": "2026-11-03T02:12:45Z",
+  "updated_at": "2026-11-03T02:12:55Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -70,5 +80,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report, DONE; TASK-065"
+  "next": ""
 }

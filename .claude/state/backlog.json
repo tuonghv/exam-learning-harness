@@ -1241,14 +1241,16 @@
     "task_id": "TASK-064",
     "title": "Evaluation statistics robustness: refusals never rewarded, pooled attempt-adjusted score with interval, exact sign test, insufficient verdict, official vs exploratory tier, version-aware baseline (REQ-0071)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-03T13:00:00",
     "requirement": "REQ-0071",
     "acceptance_criteria": [
       "AC1 review report and design (done)",
       "AC2 validation scenarios on synthetic runs",
       "AC3 implementation, golden-compatible"
-    ]
+    ],
+    "completed_at": "2026-11-03T02:12:55Z",
+    "report": "docs/report/phase-64-eval-stats-robustness.md"
   },
   {
     "task_id": "TASK-065",

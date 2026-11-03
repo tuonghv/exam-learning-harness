@@ -1759,3 +1759,9 @@ Action: Argus verified statistics robustness
 Result: verified
 Decision: VERIFIED
 Next: report then DONE
+
+## DONE - TASK-064 - 2026-11-03T02:12:55Z
+Action: Report written
+Result: TASK-064 verified, docs/report/phase-64-eval-stats-robustness.md
+Decision: DONE
+Next: TASK-065 exam structure
