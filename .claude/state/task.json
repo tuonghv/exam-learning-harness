@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-062",
-  "state": "UNIT_TESTED",
-  "next": "verifier",
+  "state": "VERIFIED",
+  "next": "report, DONE; REQ-0070 slice B; REQ-0069 scoreboard",
   "title": "Generality: remove exam-specific hard-codes (profiles, Vietnamese-only regexes, part structure, prompt subject lists) into generic signals and per-exam config (REQ-0068)",
   "active": [
     {
       "task_id": "TASK-062",
-      "state": "UNIT_TESTED",
-      "next": "verifier",
-      "updated_at": "2026-11-03T00:32:55Z"
+      "state": "VERIFIED",
+      "next": "report, DONE; REQ-0070 slice B; REQ-0069 scoreboard",
+      "updated_at": "2026-11-03T00:46:10Z"
     }
   ],
   "max_active": 1
