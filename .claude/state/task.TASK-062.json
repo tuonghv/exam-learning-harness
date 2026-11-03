@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-062",
   "title": "Generality: remove exam-specific hard-codes (profiles, Vietnamese-only regexes, part structure, prompt subject lists) into generic signals and per-exam config (REQ-0068)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0068",
   "acceptance_criteria": [
     "AC1 audit (done)",
@@ -9,9 +9,9 @@
     "AC3 design template gains a Generality line"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-62-exam-kind-generality.md",
+    "summary": "Exam-kind generality: golden freeze, language word tables merged with vi+en, verdict/ref/answer-shape tables, subject config, genexam profiles as data, route-B structure derived, generic dev prompt wording, Generality line in the design template; D1 D2 fixed; slice A free, slice B paid check",
     "reuse": [],
     "risks": []
   },
@@ -39,11 +39,13 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-062/handoff/design.md"
+  },
   "user_notes": [],
   "picked_at": "2026-11-03T00:06:12Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-03T00:10:16Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -51,5 +53,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "Titan: 62.G golden first, then 62.1-62.6"
 }

@@ -1675,3 +1675,9 @@ Action: Report written
 Result: TASK-061 verified, docs/report/phase-61-image-scope.md
 Decision: DONE
 Next: REQ-0068 generality task
+
+## DESIGN - TASK-062 - 2026-11-03T00:10:16Z
+Action: Nova designed exam-kind generality
+Result: design COMPLETE; slice A free first
+Decision: union of languages from config word lists; vi+en stay code literals; byte-identical default
+Next: coder golden harness
