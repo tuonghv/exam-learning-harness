@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-034",
   "title": "Measure compaction count and hook bytes in a later session vs REQ-0006 baseline (REQ-0038); runs when a later session transcript exists",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0038",
   "acceptance_criteria": [
     "AC1 measurement from a real later session transcript saved under evidence",
@@ -15,8 +15,11 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "docs/design/phase-34-compaction-measure.md"
+    ],
+    "summary": "no code: measurement of the later session transcript saved as work/TASK-034/evidence/measure.txt"
   },
   "unit_test": {
     "status": "pending",
@@ -41,11 +44,14 @@
   "roles": {
     "designer": {
       "waiver": "measurement task without code, method stated in the design doc"
+    },
+    "coder": {
+      "waiver": "no code to write: read-only measurement by the inspector"
     }
   },
   "user_notes": [],
   "picked_at": "2026-11-03T11:42:34Z",
-  "updated_at": "2026-11-03T11:43:52Z",
+  "updated_at": "2026-11-03T11:44:08Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -54,5 +60,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "inspector measurement done; record evidence"
+  "next": "unit-test gate (cross-check of the counts)"
 }
