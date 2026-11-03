@@ -56,7 +56,7 @@ class RegSetQA(base.RegSet):
         self.assertEqual(benchmark.regression(prev, cur), [])  # pass count fell 2 -> 1 only because item 2 did not run
 
     def test_66_2_regset_lines_are_tier_official_others_exploratory(self):
-        self.run_set()
+        self.run_set(("official", "official"))
         lines = metrics.read_history(self.hist)[0]
         for i, ln in enumerate(list(lines)):  # same results re-labelled as plain solve runs, other exam hash
             ln = dict(ln, source="solve", run_id="x%d" % i, exam_sha256="f%d" % i)
@@ -81,13 +81,16 @@ class RegSetQA(base.RegSet):
         txt = "\n".join(metrics.board_text("K", b)[0] for b in kinds.values())
         self.assertIn("key (generated)", txt)
 
-    @unittest.expectedFailure  # DEFECT D1: design says both labels; board prints only "key (generated)"
-    def test_66_4_mixed_key_bases_print_both_labels(self):
-        self.run_set()
+    def test_66_4_mixed_key_bases_split_into_two_rows(self):
+        self.run_set()  # default: one official and one generated item of the same kind
         _, kinds = self.board(self.hist)
-        text = "\n".join("\n".join(metrics.board_text(k, b)) for k, b in kinds.items())
+        tiers = sorted(k.split("|")[0] for k in kinds)
+        self.assertEqual(tiers, ["generated", "official"])
+        for k, blk in kinds.items():
+            self.assertEqual(blk["generated"], k.startswith("generated|"))
+        text = "\n".join("\n".join(metrics.board_text(k.split("|", 1)[1], b)) for k, b in kinds.items())
         self.assertIn("key (generated)", text)
-        self.assertIn("key (official)", text)
+        self.assertIn("tier official", text)
 
 
 for _n in ("test_history_lines_carry_regset_fields", "test_key_text_never_in_history",

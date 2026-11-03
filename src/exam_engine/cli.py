@@ -1471,7 +1471,10 @@ def _rs_board(a):
                 skipped.append(prev.get("run_id"))
         if a.kind and kc != a.kind:
             continue
-        tier = "official" if cur.get("source") == "regset" else "exploratory"  # 64.6: tiers are never pooled
+        # 64.6: tiers are never pooled; 66.2: a regset line with a generated key is its own tier
+        tier = "exploratory"
+        if cur.get("source") == "regset":
+            tier = "generated" if str(cur.get("key_basis") or "").startswith("generated") else "official"
         kinds.setdefault((tier, kc), []).append({
             "cur": mc, "base": mp, "qa": qa, "line": cur, "tier": tier,
             "repeat": prev is not None and metrics.version_key(prev) == metrics.version_key(cur)})
