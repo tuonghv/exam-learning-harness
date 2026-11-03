@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-070",
   "title": "Route-B structure derived from headings and generic dev prompt wording, with paid before/after check (REQ-0070)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0070",
   "acceptance_criteria": [
     "AC1 70.1 structure_hint",
@@ -45,11 +45,18 @@
       "work/TASK-070/evidence/t70-final-suite.txt"
     ],
     "command": "python3 -I -m unittest discover -s tests/unit; cross-solve real on the trial exam; regression set real solve on the dev channel; repeated physics/003",
-    "result": "REQ-0070 AC1, AC2 verified: 1364 tests, failures = the 4 known baseline names; release channel byte-identical; structure_hint strict (never states a wrong span: fallback otherwise); generic dev prompts; cross-solve agree 20 / needs_review 2 (before 19/3) with identical answer values; dev regset run 14 pass 1 fail 3 uncertain, the one new FAIL (physics/003 quote check) is a flake (3/3 PASS dev, 3/3 PASS release on repeat); limits: heading-derived hint tested on synthetic text only, one exam, no accuracy claim, genexam.md / genexam_qa.md / subjects/literature.md still fix a subject (out of scope)"
+    "result": "REQ-0070 AC1, AC2 verified: 1364 tests, failures = the 4 known baseline names; release channel byte-identical; structure_hint strict (never states a wrong span: fallback otherwise); generic dev prompts; cross-solve agree 20 / needs_review 2 (before 19/3) with identical answer values; dev regset run 14 pass 1 fail 3 uncertain, the one new FAIL (physics/003 quote check) is a flake (3/3 PASS dev, 3/3 PASS release on repeat); limits: heading-derived hint tested on synthetic text only, one exam, no accuracy claim, genexam.md / genexam_qa.md / subjects/literature.md still fix a subject (out of scope)",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-070/evidence/paid-dev-solve.txt"
+      ],
+      "reason": "prompt diffs against the pre-task commit, adversarial structure cases, mutations, real cross-solve and dev regression runs with a repeated flake check"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-70-route-b-structure-prompts.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -58,11 +65,14 @@
     "designer": "work/TASK-070/handoff/design.md",
     "coder": "work/TASK-070/handoff/code.md",
     "tester": "work/TASK-070/handoff/test.md",
-    "verifier": "work/TASK-070/handoff/verify.md"
+    "verifier": "work/TASK-070/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "independent oracle = tester prompt diffs vs the pre-task commit (release byte-identical, only intended sentences differ), structure_hint adversarial cases and mutations; plus real cross-solve and dev-channel regression solves"
+    }
   },
   "user_notes": [],
   "picked_at": "2026-11-03T09:58:13Z",
-  "updated_at": "2026-11-03T10:36:23Z",
+  "updated_at": "2026-11-03T10:36:37Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -71,5 +81,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report, DONE"
+  "next": ""
 }

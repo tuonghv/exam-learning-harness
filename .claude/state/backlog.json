@@ -1335,12 +1335,14 @@
     "task_id": "TASK-070",
     "title": "Route-B structure derived from headings and generic dev prompt wording, with paid before/after check (REQ-0070)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-03T22:30:00",
     "requirement": "REQ-0070",
     "acceptance_criteria": [
       "AC1 70.1 structure_hint",
       "AC2 70.2 generic dev prompts, paid before/after check"
-    ]
+    ],
+    "completed_at": "2026-11-03T10:36:36Z",
+    "report": "docs/report/phase-70-route-b-structure-prompts.md"
   }
 ]

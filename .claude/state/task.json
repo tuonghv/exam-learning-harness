@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-070",
-  "state": "VERIFIED",
-  "next": "report, DONE",
+  "state": "DONE",
+  "next": "",
   "title": "Route-B structure derived from headings and generic dev prompt wording, with paid before/after check (REQ-0070)",
-  "active": [
-    {
-      "task_id": "TASK-070",
-      "state": "VERIFIED",
-      "next": "report, DONE",
-      "updated_at": "2026-11-03T10:36:23Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

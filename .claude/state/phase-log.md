@@ -1939,3 +1939,9 @@ Action: Argus verified; coordinator ran paid cross-solve and dev regset checks
 Result: no regression; one flake explained
 Decision: VERIFIED
 Next: report then DONE
+
+## DONE - TASK-070 - 2026-11-03T10:36:36Z
+Action: Report written
+Result: TASK-070 verified, docs/report/phase-70-route-b-structure-prompts.md
+Decision: DONE
+Next: backlog: REQ-0040 waits for user pages; free work remains REQ-0045 umbrella and REQ-0065
