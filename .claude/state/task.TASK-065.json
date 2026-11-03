@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-065",
   "title": "Exam structure and context review and design: hierarchy, instruction inheritance, shared references, cross-page, validation, parsing metrics (REQ-0073)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0073",
   "acceptance_criteria": [
     "AC1 deliverables A-G in one design",
@@ -36,12 +36,19 @@
     "result": "1280 tests, only baseline failures; 35 structure tests; probe P1..P11 fixed; golden byte-identical on 114 md inputs + 3 plans/dgnl-window files, DGNL refined3 differs only in 4 Section lines per prompt; 79-case bank sweep loses no choice text and keeps ABCD for blank-line banks; 6/6 mutations killed; D1-D6 fixed over 2 rounds, D7 known limit"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "no finding; parsing only, no network, no new input path"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-065/evidence/suite-final.txt",
+      "work/TASK-065/evidence/golden-final.txt",
+      "work/TASK-065/evidence/probe-final.txt",
+      "work/TASK-065/evidence/bank-sweep-final.txt"
+    ],
+    "command": "python3 -I -m unittest discover -s tests/unit; probe P1..P11 before/after; golden diff; 79-case bank sweep",
+    "result": "65.1, 65.2, 65.3, 65.5, 65.6, 65.8 verified: 1280 tests, baseline failures only; probe cases fixed; golden byte-identical on 114 inputs + 3 DGNL window files, DGNL refined3 differs only in Section lines; bank sweep 79 ok / 0 lost; no scope leak, own override kept; 6/6 mutations killed; limits: D7 lone `A. TRUE` peeled (known), verifier lows V1 wrapped option A peeled and V2 unflagged passage-list fallback, 65.4/65.7/65.9 not done (REQ-0074), no paid or real-exam run, no DGNL gain expected"
   },
   "report": {
     "status": "pending",
@@ -53,7 +60,8 @@
   "roles": {
     "designer": "work/TASK-065/handoff/design.md",
     "coder": "work/TASK-065/handoff/code.md",
-    "tester": "work/TASK-065/handoff/test.md"
+    "tester": "work/TASK-065/handoff/test.md",
+    "verifier": "work/TASK-065/handoff/verify.md"
   },
   "user_notes": [
     {
@@ -63,7 +71,7 @@
     }
   ],
   "picked_at": "2026-11-03T02:12:56Z",
-  "updated_at": "2026-11-03T03:07:57Z",
+  "updated_at": "2026-11-03T03:09:05Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -72,5 +80,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verifier"
+  "next": "report, DONE"
 }
