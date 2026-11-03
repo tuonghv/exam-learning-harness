@@ -1735,3 +1735,9 @@ Action: Report written
 Result: TASK-063 verified, docs/report/phase-63-engine-scoreboard.md
 Decision: DONE
 Next: TASK-064 statistics robustness
+
+## DESIGN - TASK-064 - 2026-11-03T01:22:14Z
+Action: Nova reviewed the evaluation statistics and designed 64.1-64.7
+Result: design COMPLETE
+Decision: attempt-adjusted headline, exact sign test, tiers; old figures kept additive
+Next: coder tests-first
