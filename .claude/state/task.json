@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-068",
-  "state": "UNIT_TESTED",
-  "next": "verifier",
+  "state": "VERIFIED",
+  "next": "report, DONE; TASK-069",
   "title": "Scorer sign blindness: keep the leading minus when comparing with the key (REQ-0076)",
   "active": [
     {
       "task_id": "TASK-068",
-      "state": "UNIT_TESTED",
-      "next": "verifier",
-      "updated_at": "2026-11-03T09:34:27Z"
+      "state": "VERIFIED",
+      "next": "report, DONE; TASK-069",
+      "updated_at": "2026-11-03T09:40:43Z"
     }
   ],
   "max_active": 1

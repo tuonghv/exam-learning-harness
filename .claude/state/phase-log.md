@@ -1873,3 +1873,9 @@ Action: Nemesis QA
 Result: no defects
 Decision: VERIFIED next
 Next: verifier
+
+## VERIFIED - TASK-068 - 2026-11-03T09:40:43Z
+Action: Argus verified the scorer sign fix
+Result: verified; 0 flips on 323 pairs
+Decision: VERIFIED
+Next: report then DONE

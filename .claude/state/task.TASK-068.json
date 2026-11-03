@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-068",
   "title": "Scorer sign blindness: keep the leading minus when comparing with the key (REQ-0076)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0076",
   "acceptance_criteria": [
     "AC1 free replay of saved results for verdict flips",
@@ -28,12 +28,17 @@
     "result": "1312 tests, baseline failures only; independent replay of 323 saved answer/key pairs: 0 flips; run-stats and score outputs byte-identical vs pre-task commit; 9 new tests fail on the old scorer; 5 of 6 mutations killed, survivor is the redundant U+2212 fallback in _neg (equivalent)"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "no finding; scorer comparison only"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-068/evidence/t68-final-suite.txt",
+      "work/TASK-068/evidence/replay.txt"
+    ],
+    "command": "python3 -I -m unittest discover -s tests/unit; replay of 323 saved answer/key pairs",
+    "result": "REQ-0076 AC1, AC2 verified: 1321 tests, failures = the 4 known baseline names (docx textbox, check_examples 12b + dgnl pairing, req0012 cwd, scripts_exam); independent replay of 323 saved pairs: 0 verdict flips (the fix is preventive, no saved score was inflated); run-stats and score outputs byte-identical; 9 new tests fail on the old scorer; 5/6 mutations killed (survivor equivalent); side effect: `x = -3` vs `-3` and `\u2212x` vs `-x` now match (correct); limits: replay covers saved pairs only"
   },
   "report": {
     "status": "pending",
@@ -47,11 +52,12 @@
       "waiver": "small fix reusing phase-67 helpers; design written by the coordinator in docs/design/phase-68-scorer-sign.md"
     },
     "coder": "work/TASK-068/handoff/code.md",
-    "tester": "work/TASK-068/handoff/test.md"
+    "tester": "work/TASK-068/handoff/test.md",
+    "verifier": "work/TASK-068/handoff/verify.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-03T04:21:24Z",
-  "updated_at": "2026-11-03T09:34:27Z",
+  "updated_at": "2026-11-03T09:40:43Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -60,5 +66,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verifier"
+  "next": "report, DONE; TASK-069"
 }
