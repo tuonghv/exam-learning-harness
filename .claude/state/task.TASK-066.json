@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-066",
   "title": "Keyed regression set: benchmark --set, regset history lines (official tier), board labels (REQ-0072)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0072",
   "acceptance_criteria": [
     "AC1 benchmark --set and evals/regset.json, mock tests",
@@ -32,12 +32,19 @@
     "result": "1294 tests, only baseline failures; no --set benchmark and run-stats output byte-identical vs pre-task commit; mixed kind prints two rows (official key, generated key (generated)); key-leak check none; 7/7 mutations killed; tester D1 D2 fixed"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "no finding; keys reach only the scorer, set file lists paths not key text"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-066/evidence/paid-regset-runs.txt",
+      "work/TASK-066/evidence/suite-final.txt",
+      "work/TASK-066/evidence/golden-final.txt",
+      "work/TASK-066/evidence/board-final.txt"
+    ],
+    "command": "python3 -I -m unittest discover -s tests/unit; benchmark --set mock end to end; two paid real runs of the 18-item set",
+    "result": "REQ-0072 AC1, AC2 verified: 1294 tests, baseline failures only; no --set output byte-identical; tier by key basis; leak check none; 7/7 mutations killed; real runs: 18 items pass 14 fail 1 uncertain 3, 0.607 and 0.596 USD, identical verdicts on all 18 items in both runs (noise band), official rows English 3/3, Physics 3/3, Math 2/3, Literature unmeasured; informatics items removed (no subject prompt); finding math/005 false FAIL -> REQ-0075"
   },
   "report": {
     "status": "pending",
@@ -49,11 +56,12 @@
   "roles": {
     "designer": "work/TASK-066/handoff/design.md",
     "coder": "work/TASK-066/handoff/code.md",
-    "tester": "work/TASK-066/handoff/test.md"
+    "tester": "work/TASK-066/handoff/test.md",
+    "verifier": "work/TASK-066/handoff/verify.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-03T03:09:47Z",
-  "updated_at": "2026-11-03T03:37:20Z",
+  "updated_at": "2026-11-03T03:46:08Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -62,5 +70,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "paid scoring run by coordinator, then verifier"
+  "next": "report, DONE"
 }
