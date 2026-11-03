@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-071",
   "title": "OCR single-character misreads: cheap extra doubt signal (tesseract per-word confidence, number/symbol token checks, option parity) (REQ-0065)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0065",
   "acceptance_criteria": [
     "see REQ-0065"
@@ -14,8 +14,16 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/ingest/adapters/pdf.py",
+      "tests/unit/ocr_before_after.py",
+      "tests/unit/test_ocr_conf.py",
+      "tests/unit/test_ocr_qa.py",
+      "tests/unit/test_guards.py",
+      "docs/guide/toolkit-reference.md"
+    ],
+    "summary": "71.1/71.2 tesseract TSV per-word low_conf (floor 60 from a 0-false-alarm sweep, ocr_conf default auto), 71.3 token glyph shapes, 71.4 option_parity structure flag, 71.5 calibration harness; guard test allowlists adapters/pdf.py for the tesseract subprocess (list argv, no shell, pixels on stdin, timeout)"
   },
   "unit_test": {
     "status": "pending",
@@ -38,11 +46,12 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-071/handoff/design.md"
+    "designer": "work/TASK-071/handoff/design.md",
+    "coder": "work/TASK-071/handoff/code.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-03T10:36:44Z",
-  "updated_at": "2026-11-03T10:41:32Z",
+  "updated_at": "2026-11-03T11:10:05Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -51,5 +60,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Titan: tests first, 71.1-71.5"
+  "next": "tester QA"
 }

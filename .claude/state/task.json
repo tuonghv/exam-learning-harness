@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-071",
-  "state": "DESIGN",
-  "next": "Titan: tests first, 71.1-71.5",
+  "state": "IMPLEMENTING",
+  "next": "tester QA",
   "title": "OCR single-character misreads: cheap extra doubt signal (tesseract per-word confidence, number/symbol token checks, option parity) (REQ-0065)",
   "active": [
     {
       "task_id": "TASK-071",
-      "state": "DESIGN",
-      "next": "Titan: tests first, 71.1-71.5",
-      "updated_at": "2026-11-03T10:41:32Z"
+      "state": "IMPLEMENTING",
+      "next": "tester QA",
+      "updated_at": "2026-11-03T11:10:05Z"
     }
   ],
   "max_active": 1
