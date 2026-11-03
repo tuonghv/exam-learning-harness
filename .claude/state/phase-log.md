@@ -1723,3 +1723,9 @@ Action: Nemesis QA
 Result: no defects
 Decision: VERIFIED next
 Next: verifier
+
+## VERIFIED - TASK-063 - 2026-11-03T01:09:59Z
+Action: Argus verified the scoreboard
+Result: verified; regression set split to REQ-0072
+Decision: VERIFIED
+Next: report then DONE
