@@ -727,12 +727,14 @@
     "task_id": "TASK-034",
     "title": "Measure compaction count and hook bytes in a later session vs REQ-0006 baseline (REQ-0038); runs when a later session transcript exists",
     "priority": 3,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-10-31T06:00:00Z",
     "requirement": "REQ-0038",
     "acceptance_criteria": [
       "REQ-0038 AC1-AC2"
-    ]
+    ],
+    "completed_at": "2026-11-03T11:44:23Z",
+    "report": "docs/report/phase-34-compaction-measure.md"
   },
   {
     "task_id": "TASK-035",

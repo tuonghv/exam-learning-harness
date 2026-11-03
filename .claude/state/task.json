@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-034",
-  "state": "VERIFIED",
-  "next": "report, DONE",
+  "state": "DONE",
+  "next": "",
   "title": "Measure compaction count and hook bytes in a later session vs REQ-0006 baseline (REQ-0038); runs when a later session transcript exists",
-  "active": [
-    {
-      "task_id": "TASK-034",
-      "state": "VERIFIED",
-      "next": "report, DONE",
-      "updated_at": "2026-11-03T11:44:23Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

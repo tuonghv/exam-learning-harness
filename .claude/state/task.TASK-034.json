@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-034",
   "title": "Measure compaction count and hook bytes in a later session vs REQ-0006 baseline (REQ-0038); runs when a later session transcript exists",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0038",
   "acceptance_criteria": [
     "AC1 measurement from a real later session transcript saved under evidence",
@@ -36,11 +36,18 @@
       "work/TASK-034/evidence/measure.txt"
     ],
     "command": "transcript measurement (inspector, read-only) and independent recount",
-    "result": "REQ-0038 AC1, AC2 verified: later session (12.8 MB, 28.6 h, 1 compaction vs 18 per 34 MB in the baseline): SessionStart startup ~1,600x smaller per event, compact ~120x, UserPromptSubmit 0.44x per event, PreToolUse:Bash 0.31x; REQ-0006 fix effective; limits: one compaction and two SessionStart events, baseline counting method not re-verified; UserPromptSubmit is the watch item"
+    "result": "REQ-0038 AC1, AC2 verified: later session (12.8 MB, 28.6 h, 1 compaction vs 18 per 34 MB in the baseline): SessionStart startup ~1,600x smaller per event, compact ~120x, UserPromptSubmit 0.44x per event, PreToolUse:Bash 0.31x; REQ-0006 fix effective; limits: one compaction and two SessionStart events, baseline counting method not re-verified; UserPromptSubmit is the watch item",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-034/evidence/measure.txt"
+      ],
+      "reason": "independent recount of compaction markers and hook bytes in the same transcript"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-34-compaction-measure.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -57,6 +64,9 @@
     },
     "verifier": {
       "waiver": "evidence is a measurement counted twice (inspector and coordinator) with matching numbers; no code to verify"
+    },
+    "crosscheck": {
+      "waiver": "the measurement was counted twice with matching numbers (inspector and coordinator); no generator under test"
     }
   },
   "user_notes": [],
@@ -70,5 +80,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report, DONE"
+  "next": ""
 }
