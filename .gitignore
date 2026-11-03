@@ -44,3 +44,6 @@ workspace/
 
 # exam review packs (copyright, user-visible)
 /review/
+
+# keyed regression set (local copy of evals/regset.example.json)
+evals/regset.json
