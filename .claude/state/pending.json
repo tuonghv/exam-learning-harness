@@ -18,5 +18,13 @@
     "asked_at": "2026-11-02T12:25:03Z",
     "answered_at": "2026-11-02T22:15:06Z",
     "answer": "Yes (user, RAW-00185): run DGNL window check, dry-run first, total under 0.30 USD"
+  },
+  {
+    "id": "Q-1793706417",
+    "task_id": "TASK-037",
+    "question": "Send 3-5 labelled real exam pages with their correct answers (path under input/) so I can measure real accuracy and the OCR false-alarm share (REQ-0040).",
+    "recommendation": "Yes: put the pages and an answer list under input/ and tell me the path; it is the only way to measure real scans",
+    "kind": "block",
+    "asked_at": "2026-11-03T11:46:57Z"
   }
 ]
