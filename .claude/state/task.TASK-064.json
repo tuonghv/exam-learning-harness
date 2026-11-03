@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-064",
   "title": "Evaluation statistics robustness: refusals never rewarded, pooled attempt-adjusted score with interval, exact sign test, insufficient verdict, official vs exploratory tier, version-aware baseline (REQ-0071)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0071",
   "acceptance_criteria": [
     "AC1 review report and design",
@@ -29,9 +29,9 @@
     "summary": "64.1-64.7: non-answered keyed items score 0, outcome partition, pooled kind aggregate, exact sign test, insufficient/unmeasured verdicts, official vs exploratory tier, version-aware baseline"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "1244 tests, only baseline failures; independent p-values and Wilson intervals match code and design; golden diffs only the intended wording and board-key changes; 6/6 mutations killed; real run2->run3 compare unmeasured, board tier exploratory, never better"
   },
   "security": {
     "status": "pending",
@@ -50,11 +50,12 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-064/handoff/design.md",
-    "coder": "work/TASK-064/handoff/code.md"
+    "coder": "work/TASK-064/handoff/code.md",
+    "tester": "work/TASK-064/handoff/test.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-03T01:10:10Z",
-  "updated_at": "2026-11-03T01:31:04Z",
+  "updated_at": "2026-11-03T01:41:52Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -63,5 +64,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tester QA"
+  "next": "verifier"
 }
