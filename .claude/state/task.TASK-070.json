@@ -1,16 +1,16 @@
 {
   "task_id": "TASK-070",
   "title": "Route-B structure derived from headings and generic dev prompt wording, with paid before/after check (REQ-0070)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0070",
   "acceptance_criteria": [
     "AC1 70.1 structure_hint",
     "AC2 70.2 generic dev prompts, paid before/after check"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-70-route-b-structure-prompts.md",
+    "summary": "route-B structure_hint derived from route-A headings with a generic fallback; generic dev prompt wording (subject, level, language from the exam header); dev channel only; paid before/after check by the coordinator",
     "reuse": [],
     "risks": []
   },
@@ -38,11 +38,13 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-070/handoff/design.md"
+  },
   "user_notes": [],
   "picked_at": "2026-11-03T09:58:13Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-03T09:58:28Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -50,5 +52,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "Titan: tests first, 70.1 and 70.2"
 }

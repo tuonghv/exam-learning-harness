@@ -1915,3 +1915,9 @@ Action: Report written
 Result: TASK-069 verified, docs/report/phase-69-parsing-metrics.md
 Decision: DONE
 Next: TASK-070
+
+## DESIGN - TASK-070 - 2026-11-03T09:58:28Z
+Action: Design for route-B structure and generic prompts from phase-62 62.7/62.8 and the inspector prep
+Result: design COMPLETE
+Decision: coder tests-first; paid check by coordinator
+Next: coder

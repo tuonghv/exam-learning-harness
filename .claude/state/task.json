@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-070",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "Titan: tests first, 70.1 and 70.2",
   "title": "Route-B structure derived from headings and generic dev prompt wording, with paid before/after check (REQ-0070)",
   "active": [
     {
       "task_id": "TASK-070",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "Titan: tests first, 70.1 and 70.2",
+      "updated_at": "2026-11-03T09:58:28Z"
     }
   ],
   "max_active": 1
