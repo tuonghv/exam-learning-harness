@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-068",
-  "state": "DESIGN",
-  "next": "Titan: tests first, 68.1 and 68.2",
+  "state": "IMPLEMENTING",
+  "next": "tester QA",
   "title": "Scorer sign blindness: keep the leading minus when comparing with the key (REQ-0076)",
   "active": [
     {
       "task_id": "TASK-068",
-      "state": "DESIGN",
-      "next": "Titan: tests first, 68.1 and 68.2",
-      "updated_at": "2026-11-03T09:14:31Z"
+      "state": "IMPLEMENTING",
+      "next": "tester QA",
+      "updated_at": "2026-11-03T09:27:48Z"
     }
   ],
   "max_active": 1

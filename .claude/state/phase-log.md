@@ -1861,3 +1861,9 @@ Action: Coordinator designed the scorer sign fix (designer waived: small change)
 Result: design COMPLETE
 Decision: fix in match, replay saved results free
 Next: coder tests-first
+
+## IMPLEMENTING - TASK-068 - 2026-11-03T09:27:48Z
+Action: Titan implemented the sign fix
+Result: 1312 tests baseline failures only; replay of 323 pairs no flips
+Decision: tester next
+Next: tester
