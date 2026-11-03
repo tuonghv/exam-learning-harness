@@ -29,9 +29,11 @@ class Guards(unittest.TestCase):
         self.assertEqual(bad, [])
 
     def test_only_reporter_and_adapter_start_processes(self):
+        # TASK-071: adapters/pdf.py runs the tesseract CLI (list argv, no shell, PDF reaches it as pixels only)
         pat = re.compile(r"subprocess\.(run|Popen|call|check_output|check_call)|os\.system")
         users = sorted(os.path.relpath(p, SRC) for p in py_files(SRC) if pat.search(text(p)))
         self.assertEqual(users, [os.path.join("adapters", "claude.py"),
+                                 os.path.join("ingest", "adapters", "pdf.py"),
                                  os.path.join("pipeline", "reporter.py")])
 
     def test_only_scorer_reads_keys(self):

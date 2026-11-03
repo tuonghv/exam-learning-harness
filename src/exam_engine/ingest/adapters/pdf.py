@@ -5,6 +5,8 @@ import glob
 import hashlib
 import os
 import re
+import shutil
+import subprocess
 import unicodedata
 
 from exam_engine.core.refcheck import _TRAIL
@@ -15,6 +17,10 @@ from exam_engine.utils import langtable
 CROP_DPI = 150
 OCR_DPI = 200
 OCR_GAP = 0.15  # char gap / median char height that becomes a space (51.7 sweep: ocr-gap-sweep.tsv)
+OCR_CONF_DEFAULT = "auto"  # 71.5 gate passed: family C unmarked 10 -> 3 at 0 false alarms; "off" skips the CLI run
+OCR_LOW_CONF = 60  # 71.2 floor: largest with 0 false alarms on families A-D (work/TASK-071/qa/conf-sweep.tsv, 71.5)
+TOKEN_MARGIN = 0  # 71.3 weak shapes flag below floor + margin
+TSV_TIMEOUT = 60
 MAX_CROPS = 6
 MIN_CHARS = 20
 MATH_FONTS = ("math", "cmsy", "cmmi", "cmex", "symbol")
@@ -298,18 +304,106 @@ def _odd_chars(tok, scripts=None):
     return False
 
 
-def _ocr_doubt(qs, starts, lines, page_len, ocr_pages, leaks, lang_ok, suspect_pages=()):
-    """Set q["ocr_doubt"] = sorted kinds (glued / chars / furniture / lang_missing) on every question
-    with lines on an OCR page. starts: first flat line of each question; page_len: lines per page;
-    leaks: {(page, line)} from _strip_furniture; lang_ok: vie.traineddata was available."""
+def _tok_key(tok):
+    """NFC token without edge punctuation (the key shared by the TSV map and the OCR lines)."""
+    t = unicodedata.normalize("NFC", tok)
+    i, j = 0, len(t)
+    while i < j and unicodedata.category(t[i]).startswith("P"):
+        i += 1
+    while j > i and unicodedata.category(t[j - 1]).startswith("P"):
+        j -= 1
+    return t[i:j]
+
+
+def _parse_tsv(text):
+    """{word: conf} from tesseract TSV: word rows (level 5) with conf >= 0; duplicates keep the lower median
+    (min flagged every "hơn" of a page for one bad read: 71.5 sweep, family D)."""
+    seen = {}
+    for ln in (text or "").splitlines()[1:]:
+        f = ln.split("\t", 11)
+        if len(f) < 12 or f[0] != "5":
+            continue
+        try:
+            c = float(f[10])
+        except ValueError:
+            continue
+        w = _tok_key(f[11].strip())
+        if c >= 0 and w:
+            seen.setdefault(w, []).append(c)
+    return dict((w, sorted(v)[(len(v) - 1) // 2]) for w, v in seen.items())
+
+
+def _tsv_conf(page, lang, tess_dir, config, why=None):
+    """{word: conf 0-100} of one page from the tesseract CLI (same pixels as the bridge), else None;
+    the reason goes to `why` (list). Untrusted PDF reaches the binary only as PNG pixels on stdin."""
+    if (config or {}).get("ocr_conf", OCR_CONF_DEFAULT) == "off":
+        return None
+    why = why if why is not None else []
+    exe = shutil.which("tesseract")
+    if not exe:
+        why.append("tesseract binary not found")
+        return None
+    argv = [exe, "stdin", "stdout", "-l", lang, "--psm", "3"]
+    if tess_dir:
+        argv += ["--tessdata-dir", tess_dir]
+    argv.append("tsv")
+    try:
+        png = page.get_pixmap(dpi=OCR_DPI).tobytes("png")
+        r = subprocess.run(argv, input=png, capture_output=True, timeout=TSV_TIMEOUT)
+        if r.returncode != 0:
+            why.append("tesseract exit %d" % r.returncode)
+            return None
+        return _parse_tsv(r.stdout.decode("utf-8", "replace"))
+    except Exception as exc:  # noqa: BLE001 - confidence is optional data
+        why.append("%s" % (exc.__class__.__name__,))
+        return None
+
+
+def _floor(lang, config=None):
+    """Low-confidence floor for the first OCR language: config/lang.json "ocr_low_conf" {code: n}, else the default."""
+    try:
+        v = (langtable.load() or {}).get("ocr_low_conf", {}).get((lang or "").split("+")[0])
+    except (ValueError, AttributeError):
+        v = None
+    return v if isinstance(v, (int, float)) and not isinstance(v, bool) else OCR_LOW_CONF
+
+
+_WEAK = re.compile(r"^(?:\$\d+|[A-Z]\d+)$")
+
+
+def _odd_token(tok, conf=None, floor=None):
+    """71.3 glyph plausibility. Strong (no confidence needed): a digit between two lower-case letters
+    ("h0n"), an ASCII dollar sign touching a lower-case letter ("$o"). Weak: "$6", "S6" only when the word's
+    TSV conf is below floor + TOKEN_MARGIN (no conf: never, protects money and math)."""
+    t = _tok_key(tok)
+    for a, b, c in zip(t, t[1:], t[2:]):
+        if unicodedata.category(a) == "Ll" and b.isdecimal() and unicodedata.category(c) == "Ll":
+            return True
+    for a, b in zip(t, t[1:]):
+        if (a == "$" and unicodedata.category(b) == "Ll") or (unicodedata.category(a) == "Ll" and b == "$"):
+            return True
+    if conf is not None and _WEAK.match(t):
+        return conf < (OCR_LOW_CONF if floor is None else floor) + TOKEN_MARGIN
+    return False
+
+
+def _ocr_doubt(qs, starts, lines, page_len, ocr_pages, leaks, lang_ok, suspect_pages=(), conf=None,
+               floor=None):
+    """Set q["ocr_doubt"] = sorted kinds (glued / chars / furniture / lang_missing / low_conf / token) on
+    every question with lines on an OCR page; returns their indexes. starts: first flat line of each
+    question; page_len: lines per page; leaks: {(page, line)} from _strip_furniture; lang_ok: vie
+    available; conf: {page: {word: conf}} from _tsv_conf (None = 71.2 off, strong token shapes still run)."""
+    ocr_q = []
     if len(starts) != len(qs):
-        return
+        return ocr_q
     flat = [(pi, j) for pi, ln in enumerate(page_len) for j in range(ln)]
+    fl = OCR_LOW_CONF if floor is None else floor
     for k, q in enumerate(qs):
         end = starts[k + 1] if k + 1 < len(starts) else len(flat)
         idx = [i for i in range(starts[k], end) if flat[i][0] in ocr_pages]
         if not idx:
             continue
+        ocr_q.append(k)
         kinds = set()
         if not lang_ok:
             kinds.add("lang_missing")
@@ -318,13 +412,47 @@ def _ocr_doubt(qs, starts, lines, page_len, ocr_pages, leaks, lang_ok, suspect_p
         if any(flat[i][0] in suspect_pages for i in idx):
             kinds.add("chars")
         for i in idx:
+            cp = (conf or {}).get(flat[i][0])
             for tok in lines[i].split():
                 if _odd_chars(tok):
                     kinds.add("chars")
                 if any(_glued(w) for w in _TOKEN.findall(tok)):
                     kinds.add("glued")
+                c = cp.get(_tok_key(tok)) if cp else None
+                if c is not None and c < fl:
+                    kinds.add("low_conf")
+                if _odd_token(tok, c, fl):
+                    kinds.add("token")
         if kinds:
             q["ocr_doubt"] = sorted(kinds)
+    return ocr_q
+
+
+def _opt_class(text):
+    for ch in text.strip():
+        cat = unicodedata.category(ch)
+        return "L" if cat.startswith("L") else "D" if cat.startswith("N") else "S"
+    return "S"
+
+
+def _option_parity(qs, ocr_q):
+    """71.4 soft structure flag "option_parity" on OCR questions: exactly one option starts with another
+    glyph class (letter/digit/symbol) than >= 3 others, or the option count differs from the mode of the
+    OCR questions while that mode covers >= 80% of them. Text is never changed."""
+    opts = dict((k, [o.get("text", "") for o in qs[k].get("options") or () if isinstance(o, dict)])
+                for k in ocr_q)
+    counts = [len(v) for v in opts.values() if v]
+    mode = max(set(counts), key=counts.count) if counts else 0
+    mode_ok = bool(counts) and counts.count(mode) * 5 >= len(counts) * 4
+    for k, v in opts.items():
+        if not v:
+            continue
+        cls = [_opt_class(t) for t in v]
+        odd = len(set(cls)) == 2 and min(cls.count(c) for c in set(cls)) == 1 and len(v) >= 4
+        if odd or (mode_ok and len(v) != mode):
+            qs[k].setdefault("structure", [])
+            if "option_parity" not in qs[k]["structure"]:
+                qs[k]["structure"] = qs[k]["structure"] + ["option_parity"]
 
 
 def _cut_boundaries(pages, page_lines):
@@ -422,6 +550,7 @@ def _extract(fitz, pdf, raw, path, config):
     if ocr_mode != "off":
         tess_dir, lang, have = pick_ocr_language(config)
     lang_warned = False
+    conf_pages, conf_why = {}, []
     any_content = False
 
     for pno in range(pdf.page_count):
@@ -485,6 +614,9 @@ def _extract(fitz, pdf, raw, path, config):
                         text_blocks, method = ocr_blocks, "ocr"
                         native_text = ocr_text
                         status = "needs_review" if _suspect(ocr_text) else "ocr"
+                        c = _tsv_conf(page, lang, tess_dir, config, conf_why)
+                        if c is not None:
+                            conf_pages[pno] = c
                 except Exception as exc:  # noqa: BLE001 - OCR failure is data
                     pwarn.append(_warn("ocr_unavailable", "OCR failed: %s" % exc, n))
         extra = {"method": "ocr"} if method == "ocr" else {}
@@ -590,8 +722,12 @@ def _extract(fitz, pdf, raw, path, config):
         if ocr_pages:
             sus = set(i for i, p in enumerate(pages) if p["method"] == "ocr"
                       and any(w.get("code") == "bad_encoding" for w in p["warnings"]))
-            _ocr_doubt(qs, starts, flat, [len(x) for x in page_lines], ocr_pages, leaks,
-                       "vie" in have, sus)
+            ocr_q = _ocr_doubt(qs, starts, flat, [len(x) for x in page_lines], ocr_pages, leaks,
+                               "vie" in have, sus, conf=conf_pages or None, floor=_floor(lang))
+            _option_parity(qs, ocr_q)
+            if conf_why and ocr_mode != "off" and config.get("ocr_conf", OCR_CONF_DEFAULT) != "off":
+                warnings.append(_warn("ocr_conf_unavailable", "per-word OCR confidence skipped (%s)"
+                                      % conf_why[0], level="info"))
         doc["questions"] = qs
         doc["intro"] = "\n".join(intro).strip()
     return doc

@@ -42,7 +42,8 @@ class TestLangMissingEndToEnd(unittest.TestCase):
         lm._scanned(cls.pdf)
         fake = (lm._dir, "eng", ["eng"])
         with mock.patch.object(pdfmod, "pick_ocr_language", return_value=fake):
-            cls.doc = pdfmod.ingest(cls.pdf, {"asset_dir": os.path.join(cls.tmp.name, "a")})
+            cls.doc = pdfmod.ingest(cls.pdf, {"asset_dir": os.path.join(cls.tmp.name, "a"),
+                                                  "ocr_conf": "off"})  # 71: low_conf would add a kind
 
     @classmethod
     def tearDownClass(cls):
