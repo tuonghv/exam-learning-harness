@@ -88,7 +88,7 @@ Codes: `range_cut_by_section` (65.1), `instruction_override` (65.2), `section_in
 Existing checks kept (no duplicate): empty/duplicate/numbering (validate_exam), missing passage/question (missing_group_parts), cut/orphan/merge (UNCERTAIN, api.py:224), section subject (exam_warnings). Flags never decline.
 ### 65.9 Parsing accuracy apart from solving (owner: metrics.py new pure `structure_scores(exam, gold)`; metrics.compute optional `structure=` arg)
 - gold JSON per fixture: `[{"id","section","instruction","group","pages","deps"}]`; scores = question count/boundary (stem prefix), section, instruction inheritance, shared-ref (group ids), cross-page (pages), deps; each a rate.
-- compute(structure={id: [codes]}): rows get `parse_flag`; `by_parse_flag` slice and `counts["structure_flags"]`, keys only when given (old metrics byte-identical). A wrong answer on a flagged question is reported as parse-suspect, not solver. Avg input tokens/question = existing `_log_cost` bytes / n.
+- compute(structure={id: [codes]}): rows get `parse_flag`; `by_parse_flag` slice and `counts["structure_flags"]`, keys only when given (old metrics byte-identical). A wrong answer on a flagged question is reported as parse-suspect, not solver. Avg input KB/question = existing `_log_cost` KB / n (tokens: phase 69.6, bytes/4).
 
 ## E. Implementation plan
 1. Minimum (confirmed, high): 65.1, 65.2, 65.6, 65.8 codes for them. api.py, parser.py. Risk: DGNL golden (no restart/override there -> 0 diff expected).

@@ -1399,7 +1399,40 @@ def _rs_board_load(line, qa):
     except (OSError, ValueError, TypeError):
         return None, None
     return metrics.compute(result, metrics.load_log(os.path.join(os.path.dirname(rp), "run.log")),
-                           qa=qa, quality=True), metrics.kind(result)
+                           qa=qa, quality=True, structure=_rs_board_structure(rp)), metrics.kind(result)
+
+
+def _rs_board_structure(result_path):
+    """{id: [structure flag codes]} from <run dir>/input/assembly.json (69.4); None when absent or unreadable."""
+    try:
+        side = settings.load_json(os.path.join(os.path.dirname(result_path), "input", "assembly.json"))
+        return {str(r["id"]): list(r.get("structure") or []) for r in side["questions"]}
+    except (OSError, ValueError, TypeError, KeyError):
+        return None
+
+
+def _rs_board_gold(a):
+    """69.5: structure_scores of the shown exam against --structure-gold FILE (None without the flag)."""
+    if not a.structure_gold:
+        return None
+    if not a.exam:
+        raise ValueError("--structure-gold needs --exam")
+    try:
+        gold = settings.load_json(a.structure_gold)
+        gold = gold.get("gold") if isinstance(gold, dict) else gold
+        if not isinstance(gold, list) or not all(isinstance(g, dict) and isinstance(g.get("id"), int)
+                                                 for g in gold):
+            raise ValueError("not a list of rows with an int id")
+    except (OSError, ValueError, TypeError) as exc:
+        raise ValueError("--structure-gold %s: %s" % (a.structure_gold, exc))
+    return metrics.structure_scores(parser.parse_exam(a.exam), gold)
+
+
+def _rs_gold_text(g):
+    cells = " ".join("%s %s" % (k, "-" if v["rate"] is None else "%.1f%%" % (100 * v["rate"]))
+                     for k, v in g["scores"].items())
+    return "  parsing gold n=%d %s tok/q~%s" % (g["n_gold"], cells, "-" if g["tokens_per_question_est"] is None
+                                                  else g["tokens_per_question_est"])
 
 
 def _rs_board_baseline(a, lines):
@@ -1437,6 +1470,7 @@ def _rs_board_qa(packs, line, offset):
 
 def _rs_board(a):
     """Free scoreboard (63.5): per exam kind coverage, quality, cost, delta and verdict; reads history + result.json."""
+    gold = _rs_board_gold(a)
     lines, bad = _rs_lines(a)
     if bad:
         print("WARN: %d history line(s) skipped" % bad, file=sys.stderr)
@@ -1482,11 +1516,15 @@ def _rs_board(a):
         print("no_sha %d" % no_sha)
     out = {"%s|%s" % k: metrics.board_kind(v) for k, v in sorted(kinds.items())}
     if a.json:
-        print(json.dumps({"kinds": out, "no_sha": no_sha, "skipped": skipped}, ensure_ascii=False, indent=2,
-                         sort_keys=True))
+        doc = {"kinds": out, "no_sha": no_sha, "skipped": skipped}
+        if gold is not None:
+            doc["structure_gold"] = gold
+        print(json.dumps(doc, ensure_ascii=False, indent=2, sort_keys=True))
     else:
         for k, blk in out.items():
             print("\n".join(metrics.board_text(k.split("|", 1)[1], blk)))
+            if gold is not None:
+                print(_rs_gold_text(gold))
     return 1 if any(b["verdict"] == "regression" for b in out.values()) else 0
 
 
@@ -1507,6 +1545,7 @@ def run_stats_main(argv):
     ap.add_argument("--subject")
     ap.add_argument("--last", type=int, default=0)
     ap.add_argument("--baseline", metavar="RUN_ID|DIR", help="board: baseline run (same exam), else the previous run")
+    ap.add_argument("--structure-gold", metavar="FILE", help="board: parsing scores of --exam against a gold list")
     ap.add_argument("--kind", help="board: only this subject/language/level")
     ap.add_argument("--source", choices=("solve", "backfill", "regset"), help="board, trend: only this history source")
     try:

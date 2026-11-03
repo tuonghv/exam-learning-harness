@@ -1,0 +1,763 @@
+{
+ "schema": "structure-gold/1",
+ "cases": [
+  {
+   "case": "TestSectionScopedRange.test_no_carry_over",
+   "refined": [
+    {
+     "id": "1",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "PART I\nQuestions 1-3: Choose the synonym.",
+     "page": 1
+    },
+    {
+     "id": "2",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "",
+     "page": 1
+    },
+    {
+     "id": "3",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "",
+     "page": 1
+    },
+    {
+     "id": "1",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "PART II\nAnswer each question.",
+     "page": 1
+    },
+    {
+     "id": "2",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "",
+     "page": 1
+    },
+    {
+     "id": "3",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "",
+     "page": 1
+    }
+   ],
+   "gold": [
+    {
+     "id": 1,
+     "stem": "Pick one.",
+     "section": "PART I",
+     "instruction": "Questions 1-3: Choose the synonym."
+    },
+    {
+     "id": 2,
+     "stem": "Pick one.",
+     "section": "PART I",
+     "instruction": "Questions 1-3: Choose the synonym."
+    },
+    {
+     "id": 3,
+     "stem": "Pick one.",
+     "section": "PART I",
+     "instruction": "Questions 1-3: Choose the synonym."
+    },
+    {
+     "id": 4,
+     "stem": "Pick one.",
+     "section": "PART II",
+     "instruction": "Answer each question."
+    },
+    {
+     "id": 5,
+     "stem": "Pick one.",
+     "section": "PART II",
+     "instruction": "Answer each question."
+    },
+    {
+     "id": 6,
+     "stem": "Pick one.",
+     "section": "PART II",
+     "instruction": "Answer each question."
+    }
+   ],
+   "known_miss": {
+    "instruction": [
+     4,
+     5,
+     6
+    ],
+    "boundary": [
+     4
+    ]
+   }
+  },
+  {
+   "case": "TestOverrideInPassageGroup.test_65_2_override_keeps_passage_and_group",
+   "refined": [
+    {
+     "id": "1",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "Questions 1-3: Read the passage.\nLine one of a synthetic passage. Line two follows. Line three ends it.",
+     "page": 1
+    },
+    {
+     "id": "2",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "Answer using line two only.",
+     "page": 1
+    },
+    {
+     "id": "3",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "",
+     "page": 1
+    }
+   ],
+   "gold": [
+    {
+     "id": 1,
+     "stem": "Pick one.",
+     "section": "",
+     "instruction": "Questions 1-3: Read the passage.",
+     "shared": "g1"
+    },
+    {
+     "id": 2,
+     "stem": "Answer using line two only.\nPick one.",
+     "section": "",
+     "instruction": "Questions 1-3: Read the passage.",
+     "shared": "g1"
+    },
+    {
+     "id": 3,
+     "stem": "Pick one.",
+     "section": "",
+     "instruction": "Questions 1-3: Read the passage.",
+     "shared": "g1"
+    }
+   ],
+   "known_miss": {}
+  },
+  {
+   "case": "TestSectionsAcrossRestart.test_65_1_two_passages_one_per_part",
+   "refined": [
+    {
+     "id": "1",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "PART I\nQuestions 1-2: Read.\nLine one of a synthetic passage. Line two follows. Line three ends it.",
+     "page": 1
+    },
+    {
+     "id": "2",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "",
+     "page": 1
+    },
+    {
+     "id": "1",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "PART II\nQuestions 1-2: Read.\nOther passage text here, quite different.",
+     "page": 1
+    },
+    {
+     "id": "2",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "",
+     "page": 1
+    }
+   ],
+   "gold": [
+    {
+     "id": 1,
+     "stem": "Pick one.",
+     "section": "PART I",
+     "instruction": "Questions 1-2: Read.",
+     "shared": "g1"
+    },
+    {
+     "id": 2,
+     "stem": "Pick one.",
+     "section": "PART I",
+     "instruction": "Questions 1-2: Read.",
+     "shared": "g1"
+    },
+    {
+     "id": 3,
+     "stem": "Pick one.",
+     "section": "PART II",
+     "instruction": "Questions 1-2: Read.",
+     "shared": "g2"
+    },
+    {
+     "id": 4,
+     "stem": "Pick one.",
+     "section": "PART II",
+     "instruction": "Questions 1-2: Read.",
+     "shared": "g2"
+    }
+   ],
+   "known_miss": {}
+  },
+  {
+   "case": "TestSectionsAcrossRestart.test_65_5_mixed_subject_parts",
+   "refined": [
+    {
+     "id": "1",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "PHẦN 1. TOÁN HỌC\nQuestions 1-2: Solve.",
+     "page": 1
+    },
+    {
+     "id": "2",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "",
+     "page": 1
+    },
+    {
+     "id": "3",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "PHẦN 2. TIẾNG ANH\nQuestions 3-4: Choose.",
+     "page": 1
+    },
+    {
+     "id": "4",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "",
+     "page": 1
+    }
+   ],
+   "gold": [
+    {
+     "id": 1,
+     "stem": "Pick one.",
+     "section": "PHẦN 1. TOÁN HỌC",
+     "instruction": "Questions 1-2: Solve."
+    },
+    {
+     "id": 2,
+     "stem": "Pick one.",
+     "section": "PHẦN 1. TOÁN HỌC",
+     "instruction": "Questions 1-2: Solve."
+    },
+    {
+     "id": 3,
+     "stem": "Pick one.",
+     "section": "PHẦN 2. TIẾNG ANH",
+     "instruction": "Questions 3-4: Choose."
+    },
+    {
+     "id": 4,
+     "stem": "Pick one.",
+     "section": "PHẦN 2. TIẾNG ANH",
+     "instruction": "Questions 3-4: Choose."
+    }
+   ],
+   "known_miss": {}
+  },
+  {
+   "case": "TestEnumeratedHeadings.test_p10_section_path",
+   "refined": [
+    {
+     "id": "1",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "I. READING\nB. VOCABULARY\nQuestions 1-2: Choose the synonym.",
+     "page": 1
+    },
+    {
+     "id": "2",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "",
+     "page": 1
+    }
+   ],
+   "gold": [
+    {
+     "id": 1,
+     "stem": "Pick one.",
+     "section": "I. READING > B. VOCABULARY",
+     "instruction": "Questions 1-2: Choose the synonym."
+    },
+    {
+     "id": 2,
+     "stem": "Pick one.",
+     "section": "I. READING > B. VOCABULARY",
+     "instruction": "Questions 1-2: Choose the synonym."
+    }
+   ],
+   "known_miss": {}
+  },
+  {
+   "case": "TestEnumeratedHeadings.test_p10b_real_heading_not_an_option",
+   "refined": [
+    {
+     "id": "1",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "A. GRAMMAR\nQuestions 1-2: Write the word.",
+     "page": 1
+    },
+    {
+     "id": "2",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "",
+     "page": 1
+    }
+   ],
+   "gold": [
+    {
+     "id": 1,
+     "stem": "Pick one.",
+     "section": "A. GRAMMAR",
+     "instruction": "Questions 1-2: Write the word."
+    },
+    {
+     "id": 2,
+     "stem": "Pick one.",
+     "section": "A. GRAMMAR",
+     "instruction": "Questions 1-2: Write the word."
+    }
+   ],
+   "known_miss": {}
+  },
+  {
+   "case": "TestFalsePositives.test_65_5_cross_page_context_keeps_range",
+   "refined": [
+    {
+     "id": "7",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "Questions 7-9: Read.\nLine one of a synthetic passage. Line two follows. Line three ends it.",
+     "page": 1
+    },
+    {
+     "id": "8",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "",
+     "page": 1
+    },
+    {
+     "id": "9",
+     "text": "Stem begins",
+     "options": {},
+     "context": "",
+     "page": 1
+    },
+    {
+     "id": "9",
+     "text": "and ends.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "",
+     "page": 2,
+     "continued_pages": [
+      2
+     ]
+    }
+   ],
+   "gold": [
+    {
+     "id": 1,
+     "stem": "Pick one.",
+     "shared": "g1"
+    },
+    {
+     "id": 2,
+     "stem": "Pick one.",
+     "shared": "g1"
+    },
+    {
+     "id": 3,
+     "stem": "Stem begins\nand ends.",
+     "shared": "g1",
+     "pages": [
+      1,
+      2
+     ]
+    }
+   ],
+   "known_miss": {}
+  },
+  {
+   "case": "gold_extraction_miss_dropped_question",
+   "refined": [
+    {
+     "id": "1",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "",
+     "page": 1
+    },
+    {
+     "id": "2",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "",
+     "page": 1
+    }
+   ],
+   "gold": [
+    {
+     "id": 1,
+     "stem": "Pick one."
+    },
+    {
+     "id": 2,
+     "stem": "Pick one."
+    },
+    {
+     "id": 3,
+     "stem": "Pick one."
+    }
+   ],
+   "known_miss": {
+    "extraction": [
+     3
+    ]
+   }
+  },
+  {
+   "case": "TestFalsePositives.test_65_5_lowercase_option_lines_not_headings (heading not peeled)",
+   "refined": [
+    {
+     "id": "1",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "A. Paris\nB. Rome\nQuestions 1-2: x",
+     "page": 1
+    },
+    {
+     "id": "2",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "",
+     "page": 1
+    }
+   ],
+   "gold": [
+    {
+     "id": 1,
+     "section": "A. Paris"
+    },
+    {
+     "id": 2,
+     "section": "A. Paris"
+    }
+   ],
+   "known_miss": {
+    "hierarchy": [
+     1,
+     2
+    ]
+   }
+  },
+  {
+   "case": "TestSectionsAcrossRestart.test_65_1 (one passage reused across parts, G6)",
+   "refined": [
+    {
+     "id": "1",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "PART I\nQuestions 1-2: Read.\nLine one of a synthetic passage. Line two follows. Line three ends it.",
+     "page": 1
+    },
+    {
+     "id": "2",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "",
+     "page": 1
+    },
+    {
+     "id": "1",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "PART II\nQuestions 1-2: Read.\nLine one of a synthetic passage. Line two follows. Line three ends it.",
+     "page": 1
+    },
+    {
+     "id": "2",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "",
+     "page": 1
+    }
+   ],
+   "gold": [
+    {
+     "id": 1,
+     "shared": "g1"
+    },
+    {
+     "id": 2,
+     "shared": "g1"
+    },
+    {
+     "id": 3,
+     "shared": "g1"
+    },
+    {
+     "id": 4,
+     "shared": "g1"
+    }
+   ],
+   "known_miss": {
+    "shared_ref": [
+     1,
+     2,
+     3,
+     4
+    ]
+   }
+  },
+  {
+   "case": "TestFalsePositives.test_65_5_cross_page_context_keeps_range (continuation without continued_pages)",
+   "refined": [
+    {
+     "id": "7",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "Questions 7-9: Read.\nLine one of a synthetic passage. Line two follows. Line three ends it.",
+     "page": 1
+    },
+    {
+     "id": "8",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "",
+     "page": 1
+    },
+    {
+     "id": "9",
+     "text": "Stem begins",
+     "options": {},
+     "context": "",
+     "page": 1
+    },
+    {
+     "id": "9",
+     "text": "and ends.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "",
+     "page": 2
+    }
+   ],
+   "gold": [
+    {
+     "id": 1,
+     "stem": "Pick one."
+    },
+    {
+     "id": 2,
+     "stem": "Pick one."
+    },
+    {
+     "id": 3,
+     "stem": "Stem begins\nand ends.",
+     "pages": [
+      1,
+      2
+     ]
+    }
+   ],
+   "known_miss": {
+    "cross_page": [
+     3
+    ]
+   }
+  }
+ ]
+}

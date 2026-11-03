@@ -118,9 +118,10 @@ def _qa_block(rows, qa):
 
 
 def compute(result, log_lines=None, exam=None, key=None, qa=None, needs_review=None, needs_review_why=None,
-            quality=False):
+            quality=False, structure=None):
     """Metrics block of one run. exam = parsed exam (group kinds), key = {id: letter},
-    qa = {id: {"answer", "flawed"}}; each optional source missing -> its fields are None."""
+    qa = {id: {"answer", "flawed"}}; each optional source missing -> its fields are None.
+    structure = {id: [structure flag codes]} (assembly rows, 69.3): adds parse_flag keys, only when given."""
     qs = result.get("questions") or []
     run = result.get("run") or {}
     kinds = _group_kinds(exam)
@@ -196,8 +197,17 @@ def compute(result, log_lines=None, exam=None, key=None, qa=None, needs_review=N
         "questions": [{k: r[k] for k in ("id", "answer", "status", "reason", "attempts", "group_kind",
                                          "key_ok", "qa")} for r in rows],
     }
+    if structure is not None:  # 69.3: keys only when given, so old metrics.json stay byte-identical
+        flags = {}
+        for r in rows:
+            r["parse_flag"] = bool(structure.get(r["id"]))
+            for c in structure.get(r["id"]) or []:
+                flags[c] = flags.get(c, 0) + 1
+        counts["structure_flags"] = flags
+        m["by_parse_flag"] = {"flagged": _slice([r for r in rows if r["parse_flag"]]),
+                              "clean": _slice([r for r in rows if not r["parse_flag"]])}
     if quality:  # only the board asks: stats/metrics.json stay byte-identical (63.1)
-        m["quality"] = _quality(rows, qs, counts, qa_blk, key_blk)
+        m["quality"] = _quality(rows, qs, counts, qa_blk, key_blk, structure is not None)
     return m
 
 
@@ -233,7 +243,7 @@ def _outcome(q, key_ok):
     return "unkeyed_answered" if key_ok is None else ("correct" if key_ok else "wrong")
 
 
-def _quality(rows, qs, counts, qa_blk, key_blk):
+def _quality(rows, qs, counts, qa_blk, key_blk, structured=False):
     """63.1: key quality (from key_ok: given key or scorer score) and QA proxy of one run."""
     flag = {str(q.get("id")): _flagged(q) for q in qs}
     outcomes = dict.fromkeys(OUTCOMES, 0)
@@ -266,7 +276,92 @@ def _quality(rows, qs, counts, qa_blk, key_blk):
                     "proxy_false_alarm": _rate(len(qfl_ok), len(qfl)),
                     "needs_review_by_why": counts.get("needs_review_by_why"),
                     "image_agrees": counts.get("image_agrees"), "image_differs": counts.get("image_differs")}
+    if structured:  # 69.3: parse-suspect vs solver split; named apart from the engine-review `flagged`
+        out["parse_flagged"] = sum(1 for r in rows if r["parse_flag"])
+        if key_blk:
+            out["parse_wrong"] = sum(1 for r in wrong if r["parse_flag"])
+            out["solve_wrong"] = out["wrong_answered"] - out["parse_wrong"]
+        if qa_blk:
+            out["parse_differs"] = sum(1 for r in qv if r["qa"] == "differs" and r["parse_flag"])
     return out
+
+
+# ---- parsing accuracy apart from solving (69.1) ----
+
+BYTES_PER_TOKEN = 4  # rough for Latin text, low for non-Latin scripts: a relative measure between parses, not a bill
+STRUCTURE_METRICS = ("extraction", "boundary", "hierarchy", "instruction", "shared_ref", "reference", "cross_page")
+
+
+def _opt_texts(q):
+    o = q.get("options") or {}
+    return list(o.values()) if isinstance(o, dict) else [str(x) for x in o]
+
+
+def tokens_per_question_est(exam):
+    """Estimated prompt tokens per question of a parse: group instruction + passage once, every stem and option."""
+    qs = {q["id"]: q for q in exam["questions"]}
+    if not qs:
+        return None
+    total = 0
+    for g in parser.groups(exam):
+        total += len((g["instruction"] + g["passage"]).encode("utf-8"))
+    for q in qs.values():
+        total += sum(len(t.encode("utf-8")) for t in [q.get("stem", q["text"])] + _opt_texts(q))
+    return round(total / BYTES_PER_TOKEN / len(qs), 1)
+
+
+def structure_scores(exam, gold):
+    """Parsing rates against a gold list (rows {"id", optional stem/section/instruction/shared/deps/pages}),
+    matched by exam position id. Field metrics count only gold rows that carry the field and were extracted."""
+    from exam_engine.pipeline.extract_eval import squash
+    qs = {q["id"]: q for q in exam["questions"]}
+    gid = {g["id"] for g in gold}
+    notes = exam.get("section_notes") or {}
+    dep = parser.deps(exam)
+    sc = {k: {"k": 0, "n": 0, "rate": None, "miss": []} for k in STRUCTURE_METRICS}
+
+    def put(name, ok, i, why):
+        s = sc[name]
+        s["n"] += 1
+        if ok:
+            s["k"] += 1
+        else:
+            s["miss"].append({"id": i, "why": why})
+
+    extra = sorted(i for i in qs if i not in gid)
+    for g in gold:
+        i = g["id"]
+        put("extraction", i in qs, i, "missing")
+    for i in extra:
+        put("extraction", False, i, "extra")
+    for g in gold:
+        i, q = g["id"], qs.get(g["id"])
+        if q is None:
+            continue
+        stem_ok = "stem" not in g or squash(q.get("stem", q["text"])) == squash(g["stem"])
+        if "stem" in g:
+            put("boundary", stem_ok, i, "cut")
+        if "section" in g:
+            put("hierarchy", (q.get("section") or "").strip() == g["section"].strip(), i, "section")
+        if "instruction" in g:
+            eff = "\n".join(x for x in (notes.get(q.get("section") or ""), q.get("instruction")) if x)
+            put("instruction", squash(eff) == squash(g["instruction"]), i,
+                "missing" if g["instruction"] and not eff else "leak")
+        if "shared" in g:
+            want = {x["id"] for x in gold if x.get("shared") == g["shared"]}
+            qp = squash(parser._passage(q))
+            got = {x["id"] for x in gold if x["id"] in qs and qs[x["id"]].get("section") == q.get("section")
+                   and qp and squash(parser._passage(qs[x["id"]])) == qp} | {i}
+            put("shared_ref", got == want, i, "unlinked" if want - got else "overlinked")
+        if "deps" in g:
+            put("reference", sorted(dep.get(i, [])) == sorted(g["deps"]), i, "wrong_target")
+        if len(g.get("pages") or []) > 1:
+            ok = q.get("pages") == g["pages"]
+            put("cross_page", ok and stem_ok, i, "pages" if not ok else "cut")
+    for s in sc.values():
+        s["rate"] = _rate(s["k"], s["n"])
+    return {"n_gold": len(gold), "n_exam": len(qs), "extra": extra, "scores": sc,
+            "tokens_per_question_est": tokens_per_question_est(exam)}
 
 
 # ---- history (56.2) ----
@@ -592,6 +687,12 @@ def _side(ms):
             why[k] = why.get(k, 0) + v
     agg.update(review_why=why, image_agrees=_sum(p["image_agrees"] for p in pr),
                image_differs=_sum(p["image_differs"] for p in pr))
+    if any("parse_flagged" in q for q in qs):  # 69.4: keys only for runs with an assembly.json
+        agg.update({k: _sum(q.get(k) for q in qs) for k in ("parse_flagged", "parse_wrong", "solve_wrong",
+                                                           "parse_differs")})
+    kbs = [m["cost"].get("prompt_kb") for m in ms]
+    if n and None not in kbs:  # 69.6: only when every run has a run.log
+        agg["in_tok_per_q"] = sum(kbs) * 1024 / BYTES_PER_TOKEN / n
     return agg
 
 
@@ -652,10 +753,19 @@ def board_text(name, k):
             _pct(cur["proxy_false_alarm"]), why, _f(cur["image_agrees"]), _f(cur["image_differs"])))
     else:
         out.append("  quality unmeasured (no key, no QA)")
+    if cur.get("parse_flagged") is not None:  # 69.4: flags, not accuracy; the quality lines keep their denominator
+        tail = ""
+        if cur["basis"] == "key":
+            tail = "  wrong: parse-suspect %s solver %s" % (_f(cur.get("parse_wrong")), _f(cur.get("solve_wrong")))
+        elif cur["basis"] == "qa":
+            tail = "  differs on flagged %s" % _f(cur.get("parse_differs"))
+        out.append("  parsing flagged %d/%d (structure flags, not accuracy)%s" % (cur["parse_flagged"], cur["n"], tail))
     usd = lambda x: "-" if x is None else "$%.4f" % x  # noqa: E731
     out.append("  cost %s (per answered %s) calls %s" % (
         _arrow(ref.get("cost_usd"), cur["cost_usd"], usd) if base else usd(cur["cost_usd"]),
         _arrow(ref.get("cost_per_answered"), cur["cost_per_answered"], usd) if base else usd(cur["cost_per_answered"]),
         _arrow(ref.get("calls"), cur["calls"], _f) if base else _f(cur["calls"])))
+    if cur.get("in_tok_per_q") is not None:
+        out.append("  input ~tok/q %.1f (prompt bytes/%d, all calls)" % (cur["in_tok_per_q"], BYTES_PER_TOKEN))
     out.append("  verdict %s%s" % (k["verdict"], "  " + k["flag"] if k["flag"] else ""))
     return out
