@@ -1855,3 +1855,9 @@ Action: Report written
 Result: TASK-067 verified, docs/report/phase-67-answer-note-key-match.md
 Decision: DONE
 Next: REQ-0076 scorer sign blindness
+
+## DESIGN - TASK-068 - 2026-11-03T09:14:31Z
+Action: Coordinator designed the scorer sign fix (designer waived: small change)
+Result: design COMPLETE
+Decision: fix in match, replay saved results free
+Next: coder tests-first
