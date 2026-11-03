@@ -206,5 +206,15 @@ class TestGolden(unittest.TestCase):
         self.assertEqual(json.dumps(new, sort_keys=True), json.dumps(old, sort_keys=True))
 
 
+class TestCalibrationPool(unittest.TestCase):
+    def test_family_c_has_clean_pool_family(self):
+        import ocr_before_after as ba
+        self.assertIn("Cm", ba.FAMILIES71)
+        self.assertEqual(ba.FAMILIES71["Cm"][:2], ba.FAMILIES71["C"][:2])
+        g = ba.gold_questions("mild", 12)
+        self.assertEqual(len(g), 12)
+        self.assertTrue(all(ord(ch) < 128 or ch == "â" for q in g for ch in q["text"] + "".join(q["options"].values())))
+
+
 if __name__ == "__main__":
     unittest.main()

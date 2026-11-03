@@ -26,15 +26,18 @@ import ocr_gap_sweep as sw  # noqa: E402
 NQ, PER_PAGE = 10, 5
 STEM = "Tìm giá trị của biểu thức khi x bằng %d và y bằng %d trong bài toán sau đây."
 SHORT = "Đề thi thử có %d câu, mỗi câu ở mức %d điểm; tử số và kỳ này ủy ban đổi mã đề 101."
+MILD = "Cho biet x bang %d va y bang %d, tinh tong cua hai so do trong bai toan nay."
+OPTS_MILD = ["Bang %d.", "La %d.", "Lon hon %d.", "Khong doi %d."]
 OPTS = ["Giá trị bằng %d.", "Kết quả là %d.", "Số lớn hơn %d.", "Đáp số không đổi %d."]
 
 
 def gold_questions(kind, nq=NQ):
     out = []
     for n in range(1, nq + 1):
-        stem = (STEM if kind == "prose" else SHORT) % (n + 1, n + 2)
+        stem = (STEM if kind == "prose" else MILD if kind == "mild" else SHORT) % (n + 1, n + 2)
+        opts = OPTS_MILD if kind == "mild" else OPTS
         out.append({"n": n, "text": stem, "options": dict(
-            (k, o % (n + i)) for i, (k, o) in enumerate(zip("ABCD", OPTS)))})
+            (k, o % (n + i)) for i, (k, o) in enumerate(zip("ABCD", opts)))})
     return out
 
 
@@ -109,7 +112,8 @@ def score(gold, doc):
 
 
 # ---- 71.5: calibration of the 71.1-71.4 signals (one ingest per family, then offline replay) ----
-FAMILIES71 = dict(sw.FAMILIES, D=(sw.DEJAVU, 11, "prose"))  # D = clean DejaVuSans 11 (14 overflows the page width), false-alarm pool
+# Cm = family C font/size with unaccented text (accented text is never read right there): the correct-question pool for C (C itself has none)
+FAMILIES71 = dict(sw.FAMILIES, Cm=(sw.CALADEA, 14, "mild"), D=(sw.DEJAVU, 11, "prose"))  # D = clean DejaVuSans 11 (14 overflows the page width), false-alarm pool
 NQ71, PER_PAGE71 = 30, 5
 FLOORS = (50, 60, 70, 75, 80, 85, 90)
 MARGINS = (0, 5, 10)
