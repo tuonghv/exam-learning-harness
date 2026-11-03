@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-065",
-  "state": "VERIFIED",
-  "next": "report, DONE",
+  "state": "DONE",
+  "next": "",
   "title": "Exam structure and context review and design: hierarchy, instruction inheritance, shared references, cross-page, validation, parsing metrics (REQ-0073)",
-  "active": [
-    {
-      "task_id": "TASK-065",
-      "state": "VERIFIED",
-      "next": "report, DONE",
-      "updated_at": "2026-11-03T03:09:05Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

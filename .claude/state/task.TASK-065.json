@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-065",
   "title": "Exam structure and context review and design: hierarchy, instruction inheritance, shared references, cross-page, validation, parsing metrics (REQ-0073)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0073",
   "acceptance_criteria": [
     "AC1 deliverables A-G in one design",
@@ -48,11 +48,18 @@
       "work/TASK-065/evidence/bank-sweep-final.txt"
     ],
     "command": "python3 -I -m unittest discover -s tests/unit; probe P1..P11 before/after; golden diff; 79-case bank sweep",
-    "result": "65.1, 65.2, 65.3, 65.5, 65.6, 65.8 verified: 1280 tests, baseline failures only; probe cases fixed; golden byte-identical on 114 inputs + 3 DGNL window files, DGNL refined3 differs only in Section lines; bank sweep 79 ok / 0 lost; no scope leak, own override kept; 6/6 mutations killed; limits: D7 lone `A. TRUE` peeled (known), verifier lows V1 wrapped option A peeled and V2 unflagged passage-list fallback, 65.4/65.7/65.9 not done (REQ-0074), no paid or real-exam run, no DGNL gain expected"
+    "result": "65.1, 65.2, 65.3, 65.5, 65.6, 65.8 verified: 1280 tests, baseline failures only; probe cases fixed; golden byte-identical on 114 inputs + 3 DGNL window files, DGNL refined3 differs only in Section lines; bank sweep 79 ok / 0 lost; no scope leak, own override kept; 6/6 mutations killed; limits: D7 lone `A. TRUE` peeled (known), verifier lows V1 wrapped option A peeled and V2 unflagged passage-list fallback, 65.4/65.7/65.9 not done (REQ-0074), no paid or real-exam run, no DGNL gain expected",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-065/evidence/bank-sweep-final.txt"
+      ],
+      "reason": "79-case bank sweep with zero lost choices, probe before/after, byte-identical golden diff, mutations"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-65-exam-structure-scope.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -61,7 +68,10 @@
     "designer": "work/TASK-065/handoff/design.md",
     "coder": "work/TASK-065/handoff/code.md",
     "tester": "work/TASK-065/handoff/test.md",
-    "verifier": "work/TASK-065/handoff/verify.md"
+    "verifier": "work/TASK-065/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "independent oracle = tester probe before/after, 79-case option-bank sweep (0 lost), byte-identical golden diff on 114 inputs and 6 mutations; real-exam check not applicable (no DGNL gain expected)"
+    }
   },
   "user_notes": [
     {
@@ -71,7 +81,7 @@
     }
   ],
   "picked_at": "2026-11-03T02:12:56Z",
-  "updated_at": "2026-11-03T03:09:05Z",
+  "updated_at": "2026-11-03T03:09:17Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -80,5 +90,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report, DONE"
+  "next": ""
 }

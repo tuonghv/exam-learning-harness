@@ -1789,3 +1789,9 @@ Action: Argus verified exam structure and scoped context
 Result: verified; metrics split to REQ-0074
 Decision: VERIFIED
 Next: report then DONE
+
+## DONE - TASK-065 - 2026-11-03T03:09:17Z
+Action: Report written
+Result: TASK-065 verified, docs/report/phase-65-exam-structure-scope.md
+Decision: DONE
+Next: REQ-0070 slice B, REQ-0072 keyed regression set, REQ-0074 parsing metrics
