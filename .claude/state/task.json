@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-034",
-  "state": "DONE",
-  "next": "",
-  "title": "Measure compaction count and hook bytes in a later session vs REQ-0006 baseline (REQ-0038); runs when a later session transcript exists",
-  "active": [],
+  "task_id": "TASK-037",
+  "state": "TODO",
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "title": "Score the user's labelled real pages with extract-eval (REQ-0040); waits for the user's labelled pages",
+  "active": [
+    {
+      "task_id": "TASK-037",
+      "state": "TODO",
+      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+      "updated_at": ""
+    }
+  ],
   "max_active": 1
 }

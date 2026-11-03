@@ -766,7 +766,7 @@
     "task_id": "TASK-037",
     "title": "Score the user's labelled real pages with extract-eval (REQ-0040); waits for the user's labelled pages",
     "priority": 4,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-10-31T08:00:00Z",
     "requirement": "REQ-0040",
     "acceptance_criteria": [
