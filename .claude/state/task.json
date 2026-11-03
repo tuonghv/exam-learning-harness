@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-065",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "Titan: tests first, stage 1 = 65.1, 65.2, 65.6, 65.8",
   "title": "Exam structure and context review and design: hierarchy, instruction inheritance, shared references, cross-page, validation, parsing metrics (REQ-0073)",
   "active": [
     {
       "task_id": "TASK-065",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "Titan: tests first, stage 1 = 65.1, 65.2, 65.6, 65.8",
+      "updated_at": "2026-11-03T02:13:07Z"
     }
   ],
   "max_active": 1

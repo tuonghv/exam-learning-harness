@@ -1765,3 +1765,9 @@ Action: Report written
 Result: TASK-064 verified, docs/report/phase-64-eval-stats-robustness.md
 Decision: DONE
 Next: TASK-065 exam structure
+
+## DESIGN - TASK-065 - 2026-11-03T02:13:06Z
+Action: Nova reviewed exam structure and context, probe-confirmed 3 major defects
+Result: design COMPLETE; stage 1 first
+Decision: ONE recommendation B: fix scope rules where text is written and in the parser; no new parser
+Next: coder tests-first
