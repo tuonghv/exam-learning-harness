@@ -167,7 +167,7 @@ def norm_id(v):
     return str(int(m.group(0))) if m else None
 
 
-PART_RE = re.compile(r"^\s*PH[ẦA]N\s+(IV|V|I{1,3})\b[^\n]*(?:\n|$)", re.I)
+PART_RE = re.compile(r"^\s*" + segment.PART_WORD + r"\s+(IV|V|I{1,3})\b[^\n]*(?:\n|$)", re.I)
 
 
 def split_part(text):

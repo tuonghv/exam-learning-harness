@@ -10,6 +10,7 @@ import unicodedata
 from exam_engine.core.refcheck import _TRAIL
 from exam_engine.ingest import boundary, optional, segment
 from exam_engine.ingest.schema import SCHEMA_VERSION, IngestError
+from exam_engine.utils import langtable
 
 CROP_DPI = 150
 OCR_DPI = 200
@@ -202,7 +203,13 @@ def _suspect(text):
     return flags
 
 
-_PAGE_NO = re.compile(r"^\s*(?:(?:Trang|Page)\s*\d+(?:\s*(?:/|of)\s*\d+)?|-\s*\d+\s*-)\s*$", re.I)
+def page_re(table):
+    """Page-number furniture line: Trang|Page|extra word N[/N]; `- N -` needs no word."""
+    return re.compile(r"^\s*(?:" + langtable.alt("(?:Trang|Page)", "page", table)
+                      + r"\s*\d+(?:\s*(?:/|of)\s*\d+)?|-\s*\d+\s*-)\s*$", re.I)
+
+
+_PAGE_NO = page_re(langtable.load())
 FURNITURE_EDGE = 2   # first / last non-empty lines of a page that can be furniture
 LEAK_RATIO = 0.8      # edge line this close to a dropped header is an OCR-garbled leak
 LEAK_MIN_KEY = 8      # shorter keys are too easy to match by chance

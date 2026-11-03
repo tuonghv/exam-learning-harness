@@ -1,4 +1,5 @@
-Draft for docs/design/phase-62-<slug>.md (suggested slug: exam-kind-generality). Task: TASK-062, REQ-0068, RAW-00187.
+# Phase 62 - Exam-kind generality (TASK-062)
+Task: TASK-062, REQ-0068, RAW-00187 · Status: designed.
 
 ## Goal
 - The engine parses, checks and generates a non-DGNL exam (other subjects, numbering, layout, language) by editing data only

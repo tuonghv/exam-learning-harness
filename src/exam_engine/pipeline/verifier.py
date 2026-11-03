@@ -11,6 +11,7 @@ from exam_engine.core import schema as sch
 from exam_engine.core.decision import declined, decide_rec, finding, is_open
 from exam_engine.core.safe_eval import safe_eval
 from exam_engine.pipeline import parser, router
+from exam_engine.utils import langtable
 from exam_engine.utils.text import fold, norm
 
 _NUM = re.compile(r"-?\d+(?:[.,]\d+)?")
@@ -32,7 +33,13 @@ def _letters(text):
     return re.findall(r"(?m)^\s*\(?([a-e])[.)]\s", text)
 
 
-_VERDICT = re.compile(r"(?<!\w)(đúng|sai|true|false|đ|s|t|f)(?!\w)", re.I)
+def verdict_re(table):
+    """True/false word regex; extra-language words (utils/langtable) come after today's alternatives."""
+    ws = ["đúng|sai|true|false|đ|s|t|f"] + langtable.words("true", table) + langtable.words("false", table)
+    return re.compile(r"(?<!\w)(" + "|".join(ws) + r")(?!\w)", re.I)
+
+
+_VERDICT = verdict_re(langtable.load())
 
 
 def _part_format(q, a, exam):

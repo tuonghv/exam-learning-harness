@@ -6,21 +6,22 @@ import re
 import unicodedata
 
 from ..ingest.segment import _Q
+from ..utils import langtable
 
 _PAR_VI = re.compile(r"\bđoạn(?:\s+(?:văn|thơ|trích))?\s*(?:(\()(\d{1,2})\)|(?<=\s)(\d{1,2})\b)", re.I)
 _PAR_EN = re.compile(r"\bparagraph\s*(?:(\()(\d{1,2})\)?|(\d{1,2})\b)", re.I)
 _MARKER = re.compile(r"(?m)^[ \t\"“”'‘’*_\-\[]*\((\d{1,2})\)\s")
-_FIG = re.compile(
+_FIG_BASE = (
     r"\b(?:hình|bảng|biểu đồ|đồ thị|sơ đồ)(?:\s+vẽ)?\s+(?:bên|dưới|trên|sau|\d+)\b"
     r"|\bbảng số liệu\b"
     r"|\b(?:figure|table|chart|graph|diagram)\s+(?:above|below|\d+)\b"
-    r"|\b(?:following|above|below)\s+(?:figure|table|chart|graph|diagram)\b", re.I)
+    r"|\b(?:following|above|below)\s+(?:figure|table|chart|graph|diagram)\b")
 _FIG_PRESENT = re.compile(r"(?m)^\[Figure/table:|^\s*\|.*\|")
 
 
 def _refs(text):
     out = []
-    for rx in (_PAR_VI, _PAR_EN):
+    for rx in (_PAR_VI, _PAR_EN) + _PAR_X:
         for m in rx.finditer(text):
             n = m.group(2) or m.group(3)
             out.append((int(n), bool(m.group(1))))
@@ -154,9 +155,23 @@ def marker_reasons(text):
     return m.group(1) if m else None
 
 
-_NEEDS_TEXT = re.compile(
+_NEEDS_BASE = (
     r"(?i)\bread\s+(?:the\s+)?(?:following\s+)?(?:passage|text)|đọc\s+(?:đoạn|bài|văn bản)"
     r"|bảng số liệu sau|use the following data|dữ kiện sau")
+
+
+def build(table):
+    """-> (extra paragraph regexes, _FIG, _NEEDS_TEXT): the vi+en literals plus the extra words."""
+    par = langtable.words("paragraph", table)
+    pars = (re.compile(r"\b(?:" + "|".join(par) + r")\s*(?:(\()(\d{1,2})\)?|(\d{1,2})\b)", re.I),) if par else ()
+
+    def more(slot):
+        ws = langtable.words(slot, table)
+        return r"|\b(?:" + "|".join(ws) + r")\b" if ws else ""
+    return pars, re.compile(_FIG_BASE + more("figure"), re.I), re.compile(_NEEDS_BASE + more("needs_text"))
+
+
+_PAR_X, _FIG, _NEEDS_TEXT = build(langtable.load())
 
 
 _SENT = re.compile(r"[.!?。]+(?:\s|$)")

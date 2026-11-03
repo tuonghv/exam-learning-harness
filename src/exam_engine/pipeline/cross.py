@@ -10,10 +10,22 @@ from exam_engine.adapters import claude
 from exam_engine.core import schema as sch
 from exam_engine.core.decision import declined
 from exam_engine.pipeline import solver, verifier
+from exam_engine.utils import langtable
 from exam_engine.utils.text import fold
 
 MAX_ATTEMPTS = 2
-_TF = {"đúng": "T", "true": "T", "t": "T", "đ": "T", "sai": "F", "false": "F", "f": "F", "s": "F"}
+
+
+def tf_map(table):
+    """Verdict word -> T/F: today's vi+en words plus the extra-language words (casefolded)."""
+    m = {"đúng": "T", "true": "T", "t": "T", "đ": "T", "sai": "F", "false": "F", "f": "F", "s": "F"}
+    for slot, v in (("true", "T"), ("false", "F")):
+        m.update({w.casefold(): v for w in langtable.raw(slot, table)})
+    return m
+
+
+_TF = tf_map(langtable.load())
+
 IMAGE_RULES = (
     "The exam is in the attached page images, not in text. There are exactly %d questions in total. "
     "The printed numbering restarts in each part (Part I 1-12, Part II 1-4, ...); do NOT use the "
@@ -95,7 +107,7 @@ def canon(answer):
     s = re.sub(r"(?<=\d)\s*\(.*$", "", str(answer).strip(), flags=re.S)
     if re.fullmatch(r"[A-Da-d]", s):
         return "L:" + s.upper()
-    verdicts = [_TF[w.lower()] for w in verifier._VERDICT.findall(s)]
+    verdicts = [_TF[w.casefold()] for w in verifier._VERDICT.findall(s)]
     if len(verdicts) == 4:
         return "V:" + "".join(verdicts)
     num = verifier._answer_number(s)

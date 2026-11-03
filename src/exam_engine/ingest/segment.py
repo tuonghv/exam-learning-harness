@@ -1,12 +1,39 @@
 """Question segmentation shared by adapters: numbering and options from plain text lines."""
 import re
+import types
 
-_Q = re.compile(r"^\s*(?:(?:Câu|Cau|Question)\s*(\d+)\s*[.:)]?|(\d+)(?!\.\d)\s*[.)])\s*(.*)$", re.I)  # `3.1.` is a sub-number, not question 3
+from exam_engine.utils import langtable
+
 _OPT = re.compile(r"^\s*([A-D])\s*[.)]\s*(.*)$")
-# a group passage intro ("Questions 46-52 ...") or a part heading is not part of option D
-# forms: `N-M`, `N đến (câu )M`, `N to M`, `N and M`, `N, M(, K)`; read the span with group_span()
-GROUP_RE = re.compile(r"(?:Questions?|[Cc]âu(?:\s*hỏi)?)\s*(?:từ\s*)?(\d+)"
-                      r"(?:\s*(?:-|–|đến|to)\s*(?:[Cc]âu\s*)?(\d+)|\s+and\s+(\d+)|((?:\s*,\s*\d+)+))")
+
+
+def build(table):
+    """Compiled start/group/part regexes: the vi+en literals plus the words of an extra-language table
+    (utils/langtable). An empty table gives today's patterns byte for byte."""
+    q = langtable.alt("(?:Câu|Cau|Question)", "question", table)
+    grp = langtable.alt(r"(?:Questions?|[Cc]âu(?:\s*hỏi)?)", "group", table)
+    rng = langtable.alt("(?:-|–|đến|to)", "range", table)
+    lead = langtable.alt("(?:Dựa vào|Đọc|Hãy đọc|Based on|Read|Use|Study)", "intro", table)
+    part = langtable.alt("(?:PH[ẦA]N|PART)", "part", table)
+    return types.SimpleNamespace(
+        _Q=re.compile(r"^\s*(?:" + q + r"\s*(\d+)\s*[.:)]?|(\d+)(?!\.\d)\s*[.)])\s*(.*)$", re.I),  # `3.1.` is a sub-number, not question 3
+        # a group passage intro ("Questions 46-52 ...") or a part heading is not part of option D
+        # forms: `N-M`, `N đến (câu )M`, `N to M`, `N and M`, `N, M(, K)`; read the span with group_span()
+        GROUP_RE=re.compile(grp + r"\s*(?:từ\s*)?(\d+)"
+                            r"(?:\s*" + rng + r"\s*(?:[Cc]âu\s*)?(\d+)|\s+and\s+(\d+)|((?:\s*,\s*\d+)+))"),
+        # opens a context only at the line start (short prefix allowed), so a wrapped option that
+        # mentions "câu 3-5" stays in option D
+        _INTRO=re.compile(r"^\s*(?:" + lead + r"\b[^\n]{0,120}?)?"
+                          + grp + r"\s*(?:từ\s*)?\d+\s*" + rng + r"\s*\d+"),
+        _PART=re.compile(r"^\s*" + part + r"\s+(IV|V|I{1,3})\b", re.I),  # as refine.PART_RE (refine imports this module)
+        # a heading that must not be glued into option D: Roman or Arabic part heading
+        _PART_ANY=re.compile(r"^\s*" + part + r"\s+(?:IV|V|I{1,3}|\d{1,2})\b", re.I),
+        part_word=part)
+
+
+_NS = build(langtable.load())
+_Q, GROUP_RE, _INTRO, _PART, _PART_ANY = _NS._Q, _NS.GROUP_RE, _NS._INTRO, _NS._PART, _NS._PART_ANY
+PART_WORD = _NS.part_word
 
 
 def group_span(m):
@@ -14,17 +41,7 @@ def group_span(m):
     nums = [int(m.group(1))] + [int(n) for n in re.findall(r"\d+", m.group(4) or "")]
     nums += [int(g) for g in m.group(2, 3) if g]
     return min(nums), max(nums)
-# opens a context only at the line start (short prefix allowed), so a wrapped option that
-# mentions "câu 3-5" stays in option D
-_INTRO = re.compile(r"^\s*(?:(?:Dựa vào|Đọc|Hãy đọc|Based on|Read|Use|Study)\b[^\n]{0,120}?)?"
-                    r"(?:Questions?|[Cc]âu(?:\s*hỏi)?)\s*(?:từ\s*)?\d+\s*(?:-|–|đến|to)\s*\d+")
 _READ = re.compile(r"^\s*(?:Read|Study|Use)\s+the\s+(?:following\s+)?(?:passage|text|article)\b", re.I)
-_PART = re.compile(r"^\s*PH[ẦA]N\s+(IV|V|I{1,3})\b", re.I)  # as refine.PART_RE (refine imports this module)
-
-
-# a heading that must not be glued into option D: Roman or Arabic PHẦN / PART (the Roman-only _PART
-# stays equal to refine.PART_RE, which strips the heading from a context)
-_PART_ANY = re.compile(r"^\s*(?:PH[ẦA]N|PART)\s+(?:IV|V|I{1,3}|\d{1,2})\b", re.I)
 # an unseen question-start word: `Bài 3:`, `Item 3)`, `Q3.` (token, number, rest); boundary.py suspects
 MARK = re.compile(r"^\s*(\S{1,12}?)\s*(\d{1,3})\s*[.:)\]–-]\s*(\S.*)$")
 _KEYS = ["A", "B", "C", "D"]
