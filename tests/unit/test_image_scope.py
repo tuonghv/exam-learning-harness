@@ -173,6 +173,15 @@ class Runs(TI.Base):
         self.assertEqual(q2["answer"], "5")
         self.assertIn(("image_skipped", "page_cap"), [(f["code"], f["message"]) for f in q2["qa_findings"]])
 
+    def test_16_unlabelled_source_pages_line_not_in_any_prompt(self):
+        text = TI.exam(PLAIN, FIG)
+        im, image = self.img(None, T.solve(T.a(2, "5")))
+        llm = self.llm(T.a(1, "7"), T.a(2, "5"))
+        self.run_img(text, llm, image)
+        self.assertTrue(llm.prompts)
+        for p in llm.prompts:
+            self.assertNotIn("Source pages", p)
+
 
 class Cli(T.Base):
     def test_11_flags_need_pdf_and_reach_cfg(self):
