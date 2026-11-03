@@ -138,6 +138,26 @@ class BadConfig(unittest.TestCase):  # failure modes: never a silent fallback to
         self.assertIn("genexam_profiles", r.stderr)
 
 
+class V1Paths(unittest.TestCase):  # profile prompt path must stay inside prompts/ (config is untrusted)
+    def test_traversal_and_absolute_prompt_fail_bad_profile(self):
+        with open(os.path.join(CONFIG, "genexam_profiles.json"), encoding="utf-8") as fh:
+            prof = json.load(fh)
+        name = next(iter(prof))
+        for field in ("prompt", "qa_prompt"):
+            for bad in ("../../etc/passwd", "/etc/passwd", "a/../../b", "", 5):
+                p = json.loads(json.dumps(prof))
+                p[name][field] = bad
+                d = tempfile.mkdtemp()
+                self.addCleanup(shutil.rmtree, d, True)
+                for f in os.listdir(CONFIG):
+                    shutil.copy(os.path.join(CONFIG, f), d)
+                with open(os.path.join(d, "genexam_profiles.json"), "w", encoding="utf-8") as fh:
+                    json.dump(p, fh)
+                r = run_py("import exam_engine.pipeline.genexam", d)
+                self.assertNotEqual(r.returncode, 0, (field, bad))
+                self.assertIn("bad_profile", r.stderr + r.stdout, (field, bad, r.stderr[-200:]))
+
+
 class Probe(unittest.TestCase):
     """Synthetic non-DGNL exam: French words + German verdicts + a chemistry subject, data-only (no code edit)."""
 
