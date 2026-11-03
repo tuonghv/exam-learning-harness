@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-069",
   "title": "Parsing accuracy metrics apart from solving accuracy: structure_scores, gold fixtures, board --structure-gold, parse-suspect split (REQ-0074)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0074",
   "acceptance_criteria": [
     "AC1 structure_scores and gold fixtures, board prints parsing accuracy beside solving accuracy",
@@ -32,12 +32,16 @@
     "result": "1336 tests, only the 4 known baseline failures; independent recomputation of the six accuracies matches; output byte-identical vs pre-task commit without the new flags; 8/8 mutations killed; tester D1 (T5 fails on a stale known_miss, strict by design: update the label) and D2 (no reference gold case) recorded as low"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "no finding; metrics over saved results and synthetic fixtures"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-069/evidence/t69-full.txt"
+    ],
+    "command": "python3 -I -m unittest discover -s tests/unit; independent recompute of the six accuracies; golden compare without the new flags",
+    "result": "REQ-0074 AC1, AC2 verified: 1336 tests, failures = the 4 known baseline names; six accuracies recomputed independently match; output byte-identical without the new flags; 8/8 mutations killed; limits: gold is synthetic only (11 cases), real runs have no gold so only flags show, board label `solver` means unflagged wrong answer, stale known_miss makes T5 fail by design, no reference gold case, 65.4/65.7 not built"
   },
   "report": {
     "status": "pending",
@@ -49,11 +53,12 @@
   "roles": {
     "designer": "work/TASK-069/handoff/design.md",
     "coder": "work/TASK-069/handoff/code.md",
-    "tester": "work/TASK-069/handoff/test.md"
+    "tester": "work/TASK-069/handoff/test.md",
+    "verifier": "work/TASK-069/handoff/verify.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-03T09:40:44Z",
-  "updated_at": "2026-11-03T09:57:03Z",
+  "updated_at": "2026-11-03T09:58:12Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -62,5 +67,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verifier"
+  "next": "report, DONE; TASK-070"
 }
