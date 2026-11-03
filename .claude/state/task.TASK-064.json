@@ -1,0 +1,55 @@
+{
+  "task_id": "TASK-064",
+  "title": "Evaluation statistics robustness: refusals never rewarded, pooled attempt-adjusted score with interval, exact sign test, insufficient verdict, official vs exploratory tier, version-aware baseline (REQ-0071)",
+  "state": "TODO",
+  "requirement": "REQ-0071",
+  "acceptance_criteria": [
+    "AC1 review report and design (done)",
+    "AC2 validation scenarios on synthetic runs",
+    "AC3 implementation, golden-compatible"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {},
+  "user_notes": [],
+  "picked_at": "2026-11-03T01:10:10Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
