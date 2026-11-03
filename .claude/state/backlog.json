@@ -1204,13 +1204,15 @@
     "task_id": "TASK-062",
     "title": "Generality: remove exam-specific hard-codes (profiles, Vietnamese-only regexes, part structure, prompt subject lists) into generic signals and per-exam config (REQ-0068)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-03T10:00:00",
     "requirement": "REQ-0068",
     "acceptance_criteria": [
       "AC1 audit (done)",
       "AC2 each generalise item fixed or config, test with a non-DGNL synthetic exam",
       "AC3 design template gains a Generality line"
-    ]
+    ],
+    "completed_at": "2026-11-03T00:46:20Z",
+    "report": "docs/report/phase-62-exam-kind-generality.md"
   }
 ]

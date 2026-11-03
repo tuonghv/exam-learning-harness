@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-062",
   "title": "Generality: remove exam-specific hard-codes (profiles, Vietnamese-only regexes, part structure, prompt subject lists) into generic signals and per-exam config (REQ-0068)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0068",
   "acceptance_criteria": [
     "AC1 audit (done)",
@@ -53,11 +53,18 @@
       "work/TASK-062/evidence/qa-beforeafter-final.txt"
     ],
     "command": "python3 -I -m unittest discover -s tests/unit; before/after over 102 inputs + 4 gen-exams profiles; V1 probe",
-    "result": "slice A (62.G, 62.1-62.6, D1, D2, 62.9) verified: 1200 tests, only baseline failures; default config byte-identical on 102 inputs (0 diffs); real gen-exams differs only in manifest prompt_sha256 for 3 non-hs profiles (D1); PART fixture differs only in split_part (D2); 9/9 mutations killed; verifier V1 path traversal, V2, V3 fixed; slice B 62.7/62.8 open (REQ-0070), no paid check"
+    "result": "slice A (62.G, 62.1-62.6, D1, D2, 62.9) verified: 1200 tests, only baseline failures; default config byte-identical on 102 inputs (0 diffs); real gen-exams differs only in manifest prompt_sha256 for 3 non-hs profiles (D1); PART fixture differs only in split_part (D2); 9/9 mutations killed; verifier V1 path traversal, V2, V3 fixed; slice B 62.7/62.8 open (REQ-0070), no paid check",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-062/evidence/qa-beforeafter-final.txt"
+      ],
+      "reason": "before/after byte comparison against the pre-task commit, mutations, synthetic non-DGNL exam"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-62-exam-kind-generality.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -66,11 +73,14 @@
     "designer": "work/TASK-062/handoff/design.md",
     "coder": "work/TASK-062/handoff/code.md",
     "tester": "work/TASK-062/handoff/test.md",
-    "verifier": "work/TASK-062/handoff/verify.md"
+    "verifier": "work/TASK-062/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "independent oracle = tester before/after diff vs a8e8d51 over 102 inputs + 4 profiles, 9 mutations and a data-only synthetic exam; saved in work/TASK-062/evidence"
+    }
   },
   "user_notes": [],
   "picked_at": "2026-11-03T00:06:12Z",
-  "updated_at": "2026-11-03T00:46:10Z",
+  "updated_at": "2026-11-03T00:46:20Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -79,5 +89,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report, DONE; REQ-0070 slice B; REQ-0069 scoreboard"
+  "next": ""
 }
