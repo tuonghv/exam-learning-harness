@@ -24,6 +24,17 @@ class AnswerNoteMatch(unittest.TestCase):
         self.assertFalse(se.match("abc (1.5)", "abc"))
         self.assertFalse(se.match("x(2)", "x"))
 
+    def test_67_sign_kept(self):
+        self.assertFalse(se.match("-sqrt(2) (xấp xỉ 1.4142)", "sqrt(2)"))
+        self.assertFalse(se.match("-sqrt(2) (xấp xỉ -1.4142)", "sqrt(2)"))
+        self.assertFalse(se.match("\u2212sqrt(2) (xấp xỉ 1.4142)", "sqrt(2)"))
+        self.assertFalse(se.match("sqrt(2) (xấp xỉ 1.4142)", "-sqrt(2)"))
+        self.assertFalse(se.match("sqrt(2) (xấp xỉ 1.4142)", "\u2212sqrt(2)"))
+        self.assertTrue(se.match("-sqrt(2) (xấp xỉ -1.4142)", "-sqrt(2)"))
+        self.assertTrue(se.match("\u2212sqrt(2) (xấp xỉ -1.4142)", "-sqrt(2)"))
+        self.assertTrue(se.match("-sqrt(2) (approx)", "\u2212sqrt(2)"))
+        self.assertFalse(se.match("-sqrt(2) (approx)", "sqrt(2)"))
+
     def test_67_unchanged(self):
         self.assertTrue(se.match("2.5 (approx) m/s^2", "2.50 m/s^2"))
         self.assertTrue(se.match("1/2", "1/2"))

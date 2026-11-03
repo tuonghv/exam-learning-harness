@@ -44,7 +44,7 @@ def match(answer, key):
         (kv, d, ke, unit_k), (av, _, ae, unit_a) = mk, ma
         return (_unit_ok(unit_k, unit_a)
                 and abs(av * 10 ** ae - kv * 10 ** ke) <= (0.5 * 10 ** (-d) + 1e-12) * 10 ** ke)
-    return na == nk or _note_match(a, k)
+    return na == nk or _note_match(a, k, answer, key)
 
 
 _NOTE = re.compile(r"^(.*\S)\s+\(([^()]*)\)\s*\.?\s*$", re.S)
@@ -59,8 +59,20 @@ def _exact_value(s):
         return None
 
 
-def _note_match(answer, key):
+_SIGN = re.compile(r"^\s*(?:[-*]\s+)?([-\u2212])(?!\s)")
+
+
+def _neg(raw):
+    """Leading minus (ASCII or U+2212) that is a sign, not a '- ' bullet; _strip drops it otherwise."""
+    return bool(_SIGN.match(str(raw))) or str(raw).lstrip().startswith("\u2212")
+
+
+def _note_match(answer, key, raw_answer=None, raw_key=None):
     """67.1: value part equals the key and one trailing (note) agrees with it (never strips the key)."""
+    neg = _neg(raw_answer if raw_answer is not None else answer)
+    if neg != _neg(raw_key if raw_key is not None else key):
+        return False
+    answer, key = answer.lstrip("\u2212"), key.lstrip("\u2212")
     m = _NOTE.match(answer)
     if not m or norm(m.group(1)) != norm(key):
         return False
@@ -72,6 +84,7 @@ def _note_match(answer, key):
     v = _exact_value(m.group(1))
     if v is None:
         return False
+    v = -v if neg else v
     x = nums[0].replace(",", ".")
     d = len(x.split(".")[1]) if "." in x else 0
     return abs(v - float(x)) <= 0.5 * 10 ** (-d) + 1e-12
