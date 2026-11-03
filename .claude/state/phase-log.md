@@ -1663,3 +1663,9 @@ Action: Nemesis QA
 Result: no defects
 Decision: paid checks then VERIFIED
 Next: P1
+
+## VERIFIED - TASK-061 - 2026-11-03T00:05:47Z
+Action: Argus verified image scope
+Result: verified; paid P1/P2 0.33 USD
+Decision: VERIFIED
+Next: report then DONE
