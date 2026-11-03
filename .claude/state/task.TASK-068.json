@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-068",
   "title": "Scorer sign blindness: keep the leading minus when comparing with the key (REQ-0076)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0076",
   "acceptance_criteria": [
     "AC1 free replay of saved results for verdict flips",
@@ -38,11 +38,18 @@
       "work/TASK-068/evidence/replay.txt"
     ],
     "command": "python3 -I -m unittest discover -s tests/unit; replay of 323 saved answer/key pairs",
-    "result": "REQ-0076 AC1, AC2 verified: 1321 tests, failures = the 4 known baseline names (docx textbox, check_examples 12b + dgnl pairing, req0012 cwd, scripts_exam); independent replay of 323 saved pairs: 0 verdict flips (the fix is preventive, no saved score was inflated); run-stats and score outputs byte-identical; 9 new tests fail on the old scorer; 5/6 mutations killed (survivor equivalent); side effect: `x = -3` vs `-3` and `\u2212x` vs `-x` now match (correct); limits: replay covers saved pairs only"
+    "result": "REQ-0076 AC1, AC2 verified: 1321 tests, failures = the 4 known baseline names (docx textbox, check_examples 12b + dgnl pairing, req0012 cwd, scripts_exam); independent replay of 323 saved pairs: 0 verdict flips (the fix is preventive, no saved score was inflated); run-stats and score outputs byte-identical; 9 new tests fail on the old scorer; 5/6 mutations killed (survivor equivalent); side effect: `x = -3` vs `-3` and `\u2212x` vs `-x` now match (correct); limits: replay covers saved pairs only",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-068/evidence/replay.txt"
+      ],
+      "reason": "independent replay of 323 saved pairs with old and new scorer, sign adversarial table, mutations"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-68-scorer-sign.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -53,11 +60,14 @@
     },
     "coder": "work/TASK-068/handoff/code.md",
     "tester": "work/TASK-068/handoff/test.md",
-    "verifier": "work/TASK-068/handoff/verify.md"
+    "verifier": "work/TASK-068/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "independent oracle = tester replay of 323 saved answer/key pairs old vs new scorer (0 flips), sign adversarial table and mutations"
+    }
   },
   "user_notes": [],
   "picked_at": "2026-11-03T04:21:24Z",
-  "updated_at": "2026-11-03T09:40:43Z",
+  "updated_at": "2026-11-03T09:40:44Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -66,5 +76,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report, DONE; TASK-069"
+  "next": ""
 }
