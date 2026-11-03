@@ -36,6 +36,7 @@ For every non-trivial change answer: what can this break, how will we detect it,
 Task: TASK-00N · Status: draft | approved by user (<date>, "<quote>")
 ## Goal (user-visible outcome, and how we know it happened)
 ## Constraints (invariants touched, compatibility, trust boundary)
+## Generality (one line: which exam kinds the change covers; no exam-, subject- or language-specific literal in code; a new exam kind is data: config/subjects.json, config/lang.json, config/genexam_profiles.json, prompts; default config keeps old inputs byte-identical with a named golden test; one test uses a synthetic non-DGNL exam)
 ## Known incidents (matching rows of `docs/notes/incidents.md`, or "none")
 ## Plan modes (optional: one line per mode, impact or why not affected)
 ## Design

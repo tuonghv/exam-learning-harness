@@ -279,13 +279,18 @@ def _glued(word):
     return clusters >= 2
 
 
-def _odd_chars(tok):
-    """True when a token holds a char outside Latin/Vietnamese letters, digits, punctuation, common math."""
+_SCRIPTS = tuple(w.upper() for w in langtable.raw("scripts", langtable.load()))
+
+
+def _odd_chars(tok, scripts=None):
+    """True when a token holds a char outside Latin/Vietnamese letters, digits, punctuation, common math;
+    `scripts` = extra allowed Unicode script prefixes (config/lang.json "scripts", e.g. GREEK)."""
+    allowed = ("LATIN",) + tuple(scripts if scripts is not None else _SCRIPTS)
     for ch in unicodedata.normalize("NFC", tok):
         if ch.isspace() or ch in _MATH_OK or ch.isdigit() or ord(ch) < 128:
             continue
         cat = unicodedata.category(ch)
-        if cat.startswith("L") and unicodedata.name(ch, "").startswith("LATIN"):
+        if cat.startswith("L") and unicodedata.name(ch, "").startswith(allowed):
             continue
         if cat in ("Sm", "Mn", "Mc") or 0x2010 <= ord(ch) <= 0x2027:
             continue

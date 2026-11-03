@@ -158,7 +158,7 @@ def _check_expected(root, path, sub, ex, fields, notes, errs):
                     % (tag, fin, q["final"]))
             if stat is None or ep.norm(stat) != "verified":
                 err("verification", "%s: Status is not Verified" % tag)
-        if sub == "literature":
+        if router.policy(sub)["task"] == "Open":
             if not q["final"] or ep.norm(q["final"]) != "open (rubric)":
                 err("literature", "%s: Final answer must be Open (rubric)" % tag)
             if "Model answer outline" not in b:

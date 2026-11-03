@@ -1,0 +1,91 @@
+{
+  "hs": {
+    "subject": "math",
+    "subject_label": "Mathematics",
+    "prompt": "dev/genexam.md",
+    "qa_prompt": "dev/genexam_qa.md",
+    "topics": [
+      "logarit và phương trình mũ",
+      "tích phân",
+      "số phức",
+      "hình học Oxyz",
+      "xác suất",
+      "đạo hàm và cực trị",
+      "cấp số cộng và cấp số nhân",
+      "thể tích khối đa diện"
+    ],
+    "check": "reply",
+    "blind": false,
+    "exam_type": "High School Graduation",
+    "level": "Grade 12",
+    "lang": "vi",
+    "instructions": "Giải bài toán, trình bày lời giải và nêu đáp án cuối cùng.",
+    "grading_line": "- 1 điểm: %s (hoặc giá trị tương đương). 0 điểm: giá trị khác."
+  },
+  "dgnl": {
+    "subject": "math",
+    "subject_label": "Mathematics",
+    "prompt": "dev/genexam_dgnl.md",
+    "qa_prompt": "dev/genexam_qa.md",
+    "topics": [
+      "cấp số cộng/nhân và quy luật dãy số",
+      "phần trăm, tỉ lệ, lãi suất",
+      "xác suất cơ bản",
+      "logic: suy luận từ các điều kiện cho trước",
+      "đọc số liệu cho trong lời (trung bình, tỉ lệ)",
+      "chuyển động, công việc chung, bài toán thực tế",
+      "tổ hợp và đếm",
+      "bất phương trình, hàm số đơn giản"
+    ],
+    "check": "mc4",
+    "blind": false,
+    "exam_type": "University Entrance (DGNL)",
+    "level": "Grade 12",
+    "lang": "vi",
+    "instructions": "Chọn đáp án đúng nhất và giải thích ngắn gọn."
+  },
+  "dgnl-en": {
+    "subject": "english",
+    "subject_label": "English",
+    "prompt": "dev/genexam_dgnl_en.md",
+    "qa_prompt": "dev/genexam_qa.md",
+    "topics": [
+      "verb tenses",
+      "conditionals",
+      "word choice (vocabulary in context)",
+      "collocations and phrasal verbs",
+      "reported speech",
+      "passive voice",
+      "reading: detail question",
+      "reading: inference question"
+    ],
+    "check": "mc",
+    "blind": true,
+    "exam_type": "University Entrance (DGNL)",
+    "level": "Grade 12",
+    "lang": "en",
+    "instructions": "Choose the best answer and explain why."
+  },
+  "dgnl-vi": {
+    "subject": "vietnamese",
+    "subject_label": "Vietnamese",
+    "prompt": "dev/genexam_dgnl_vi.md",
+    "qa_prompt": "dev/genexam_qa.md",
+    "topics": [
+      "chính tả và dùng từ đúng",
+      "từ ghép, từ láy và cấu tạo từ",
+      "nghĩa của từ và thành ngữ",
+      "câu: thành phần và lỗi ngữ pháp",
+      "liên kết câu và đoạn",
+      "biện pháp tu từ",
+      "đọc hiểu: chi tiết",
+      "đọc hiểu: suy luận"
+    ],
+    "check": "mc",
+    "blind": true,
+    "exam_type": "University Entrance (DGNL)",
+    "level": "Grade 12",
+    "lang": "vi",
+    "instructions": "Chọn đáp án đúng nhất và giải thích ngắn gọn."
+  }
+}

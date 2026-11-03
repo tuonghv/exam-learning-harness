@@ -44,12 +44,13 @@ _VERDICT = verdict_re(langtable.load())
 
 def _part_format(q, a, exam):
     """Math/physics Part II (a-d true/false) and Part III (one number) answer shapes, else None."""
-    if _policy(exam).get("key") not in ("math", "physics") or q.get("options"):
+    shapes = _policy(exam).get("answer_shapes") or []
+    if q.get("options"):
         return None
-    if set("abcd") <= set(_letters(q.get("text", ""))):
+    if "tf4" in shapes and set("abcd") <= set(_letters(q.get("text", ""))):
         n = len(_VERDICT.findall(a))
         return _chk("format", "four true/false verdicts (a-d)", "pass" if n == 4 else "fail", False)
-    if not _letters(q.get("text", "")):
+    if "number" in shapes and not _letters(q.get("text", "")):
         return _chk("format", "answer holds a number", "pass" if re.search(r"\d", a) else "fail",
                     False)
     return None
@@ -60,7 +61,8 @@ def _format(q, ans, exam):
     task = ((exam.get("fields") or {}).get("Task") or "").strip().casefold()
     if is_open(ans) or _policy(exam)["task"] == "Open":
         ok = a == "Open"
-        return _chk("format", "answer is Open" if ok else "Literature answer must be Open",
+        label = _policy(exam).get("label") or "Literature"
+        return _chk("format", "answer is Open" if ok else "%s answer must be Open" % label,
                     "pass" if ok else "fail", False)
     if q.get("options"):
         ok = bool(re.match(r"^[A-D]$", a)) and a in q["options"]

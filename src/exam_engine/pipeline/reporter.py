@@ -15,6 +15,7 @@ import tempfile
 import time
 
 from exam_engine.core.decision import KINDS, evidence_kind  # noqa: F401
+from exam_engine.pipeline import router
 from exam_engine.utils import md2html
 from exam_engine.utils.text import detect_lang
 
@@ -41,7 +42,8 @@ def _cell(text):
 
 
 def _is_open(q, exam):
-    return q.get("answer") == "Open" or str(exam.get("task") or "").strip().lower() == "literature"
+    return (q.get("answer") == "Open" or str(exam.get("task") or "").strip().lower() == "literature"
+            or router.policy(exam.get("subject"))["task"] == "Open")
 
 
 def _num(x):

@@ -6,7 +6,8 @@ from exam_engine.utils import text
 from exam_engine.utils.text import fold
 
 DEFAULT_POLICY = {"task": "Closed", "checks": ["format", "computed", "quote"],
-                  "score_basis": "official_key", "language": "vi", "prompt": None}
+                  "score_basis": "official_key", "language": "vi", "prompt": None,
+                  "answer_shapes": []}
 
 
 def subjects(config_dir=None):

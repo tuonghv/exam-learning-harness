@@ -50,6 +50,9 @@ Câu 4: x
 """.split("\n")
 
 
+SHORT = {"question": "Q?", "final_answer": "3", "solution": "s", "skill": "sk", "check": "c1"}
+
+
 def sha(s):
     return hashlib.sha256(s.encode()).hexdigest()[:16]
 
@@ -68,6 +71,20 @@ class Golden(unittest.TestCase):
             self.assertEqual(sha(genexam.build_prompt(sub, 7, 1, "hard", p)), prompt, p)
             self.assertEqual(sha(genexam.input_md(sub, OBJ)), inp, p)
             self.assertEqual(sha(genexam.key_md(OBJ)), KEY_SHA, p)
+
+    def test_genexam_branches_and_tables(self):
+        """62.6: all input_md/key_md branches and the profile tables, frozen before they became data."""
+        g = genexam
+        self.assertEqual((sha(g.input_md("math", SHORT)), sha(g.key_md(SHORT))), ("4507832a2f26bad2", "046cadd264d828d6"))
+        self.assertEqual(sha(g.input_md("english", OBJ)), "b7c850b52909e826")
+        self.assertEqual(sha(g.input_md("vietnamese", OBJ)), "935cdfd240e6652c")
+        nopass = dict(OBJ, passage="")
+        self.assertEqual(sha(g.input_md("math", nopass)), "00784f8f203f0d2d")
+        self.assertEqual(sha(g.input_md("english", nopass)), "621dd144c0e81812")
+        self.assertEqual(sha(g.qa_prompt(OBJ)), "2dfc7cac6b37c922")
+        views = [g.PROFILES, g.BLIND, g.PROFILE_SUBJECT, g.PROMPT_OF, g.TOPICS, g.SUBJECTS, g.LANG_MC]
+        self.assertEqual(sha(json.dumps(views, ensure_ascii=False, sort_keys=True)), "fdf3a121b054b699")
+        self.assertEqual(list(g.CHECKS), ["hs", "dgnl", "dgnl-en", "dgnl-vi"])
 
     def test_segment_and_part(self):
         intro, qs, ok = segment.segment(EXAM)

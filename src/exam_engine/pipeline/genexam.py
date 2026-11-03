@@ -16,39 +16,82 @@ from exam_engine.pipeline import verifier
 PROMPT_REL = os.path.join("dev", "genexam.md")
 QA_REL = os.path.join("dev", "genexam_qa.md")
 DGNL_REL = os.path.join("dev", "genexam_dgnl.md")
-PROFILES = ("hs", "dgnl", "dgnl-en", "dgnl-vi")
-BLIND = ("dgnl-en", "dgnl-vi")
-PROFILE_SUBJECT = {"hs": "math", "dgnl": "math", "dgnl-en": "english", "dgnl-vi": "vietnamese"}
-PROMPT_OF = {"hs": PROMPT_REL, "dgnl": DGNL_REL, "dgnl-en": os.path.join("dev", "genexam_dgnl_en.md"),
-             "dgnl-vi": os.path.join("dev", "genexam_dgnl_vi.md")}
 BLIND_REL = os.path.join("dev", "genexam_blind.md")
 LETTERS = "ABCD"
-TOPICS = {
-    "hs": ["logarit và phương trình mũ", "tích phân", "số phức", "hình học Oxyz", "xác suất",
-           "đạo hàm và cực trị", "cấp số cộng và cấp số nhân", "thể tích khối đa diện"],
-    "dgnl-en": ["verb tenses", "conditionals", "word choice (vocabulary in context)", "collocations and phrasal verbs",
-                "reported speech", "passive voice", "reading: detail question", "reading: inference question"],
-    "dgnl-vi": ["chính tả và dùng từ đúng", "từ ghép, từ láy và cấu tạo từ", "nghĩa của từ và thành ngữ",
-                "câu: thành phần và lỗi ngữ pháp", "liên kết câu và đoạn", "biện pháp tu từ",
-                "đọc hiểu: chi tiết", "đọc hiểu: suy luận"],
-    "dgnl": ["cấp số cộng/nhân và quy luật dãy số", "phần trăm, tỉ lệ, lãi suất", "xác suất cơ bản",
-             "logic: suy luận từ các điều kiện cho trước", "đọc số liệu cho trong lời (trung bình, tỉ lệ)",
-             "chuyển động, công việc chung, bài toán thực tế", "tổ hợp và đếm", "bất phương trình, hàm số đơn giản"],
-}
 SOURCE_NOTE = "model knowledge, not an official exam"
-SUBJECTS = {"math": "Mathematics", "english": "English", "vietnamese": "Vietnamese"}
-LANG_MC = {"english": ("en", "Choose the best answer and explain why."),
-           "vietnamese": ("vi", "Chọn đáp án đúng nhất và giải thích ngắn gọn.")}
-FIRST_NUMBER = 101
-MAX_ATTEMPTS = 2
+CHECK_NAMES = ("reply", "mc4", "mc")  # -> check_reply, check_dgnl, check_mc (see CHECKS)
+_KEYS = ("subject", "subject_label", "prompt", "qa_prompt", "topics", "check", "blind", "exam_type", "level",
+         "lang", "instructions")
 
 
 class GenError(Exception):
-    """Structured failure: call_failed, invalid_reply, cost_cap, bad_key, leak (exit 3 / 1)."""
+    """Structured failure: call_failed, invalid_reply, cost_cap, bad_key, leak, bad_profile (exit 3 / 1)."""
 
     def __init__(self, code, message):
         Exception.__init__(self, "%s: %s" % (code, message))
         self.code = code
+
+
+def load_profiles(config_dir=None):
+    """config/genexam_profiles.json as {name: profile}; a bad file or profile -> GenError bad_profile."""
+    path = os.path.join(config_dir or settings.config_dir(), "genexam_profiles.json")
+    try:
+        table = settings.load_json(path)
+    except (OSError, ValueError) as exc:
+        raise GenError("bad_profile", "%s: %s" % (path, exc))
+    if not isinstance(table, dict) or not table:
+        raise GenError("bad_profile", "%s: expected a non-empty object of profiles" % path)
+    for name, pr in table.items():
+        if not isinstance(pr, dict):
+            raise GenError("bad_profile", "%s: profile %r is not an object" % (path, name))
+        miss = [k for k in _KEYS if k not in pr]
+        if miss:
+            raise GenError("bad_profile", "%s: profile %r lacks %s" % (path, name, ", ".join(miss)))
+        if pr["check"] not in CHECK_NAMES:
+            raise GenError("bad_profile", "%s: profile %r has unknown check %r (have: %s)"
+                           % (path, name, pr["check"], ", ".join(CHECK_NAMES)))
+        if not isinstance(pr["topics"], list) or not pr["topics"]:
+            raise GenError("bad_profile", "%s: profile %r needs topics" % (path, name))
+    return table
+
+
+def _rel(p):
+    return os.path.join(*p.split("/"))
+
+
+def apply_profiles(table):
+    """Point the module views (PROFILES, TOPICS, ...) at `table`; the names stay for tests and the CLI."""
+    g = globals()
+    g["PROFILE_TABLE"] = table
+    g["PROFILES"] = tuple(table)
+    g["BLIND"] = tuple(n for n, p in table.items() if p["blind"])
+    g["PROFILE_SUBJECT"] = {n: p["subject"] for n, p in table.items()}
+    g["PROMPT_OF"] = {n: _rel(p["prompt"]) for n, p in table.items()}
+    g["QA_OF"] = {n: _rel(p["qa_prompt"]) for n, p in table.items()}
+    g["TOPICS"] = {n: list(p["topics"]) for n, p in table.items()}
+    g["SUBJECTS"] = {}
+    for p in table.values():
+        g["SUBJECTS"].setdefault(p["subject"], p["subject_label"])
+    g["LANG_MC"] = {}
+    for p in table.values():
+        if p["check"] == "mc":
+            g["LANG_MC"].setdefault(p["subject"], (p["lang"], p["instructions"]))
+
+
+apply_profiles(load_profiles())
+
+
+def _prof(subject, *checks):
+    """First profile of `subject` with one of `checks` (else any profile of the subject)."""
+    rows = [p for p in PROFILE_TABLE.values() if p["subject"] == subject]
+    for p in rows:
+        if p["check"] in checks:
+            return p
+    return rows[0]
+
+
+FIRST_NUMBER = 101
+MAX_ATTEMPTS = 2
 
 
 def template(rel=PROMPT_REL):
@@ -68,17 +111,17 @@ def build_prompt(subject, seed, idx, level="hard", profile="hs"):
         topic(seed, idx, profile))
 
 
-def qa_prompt(obj):
+def qa_prompt(obj, profile="hs"):
     """Review prompt: the question and the worked solution; the model's own final answer is asked for."""
     opts = "".join("%s. %s\n" % (k, v) for k, v in sorted((obj.get("options") or {}).items()))
     return "%s\nQuestion:\n%s\n%s\nSolution to review:\n%s\nClaimed final answer: %s\n" % (
-        template(QA_REL).rstrip("\n"), obj["question"].strip(), opts, obj["solution"].strip(),
+        template(QA_OF[profile]).rstrip("\n"), obj["question"].strip(), opts, obj["solution"].strip(),
         obj["final_answer"].strip())
 
 
-def qa(llm, obj):
+def qa(llm, obj, profile="hs"):
     """(status 'pass'|'fail'|'unknown', note, cost): independent review; its own answer must match the key."""
-    call = llm(qa_prompt(obj))
+    call = llm(qa_prompt(obj, profile))
     if not call.ok:
         return "unknown", "%s %s" % (call.cls, call.reason), call.cost_usd
     rep, why = claude.extract_json(call.text)
@@ -214,29 +257,40 @@ def leak_check(input_text, obj):
 
 def input_md(subject, obj):
     if obj.get("options") and subject in LANG_MC:
+        pr = _prof(subject, "mc")
         lang, instr = LANG_MC[subject]
         body = ["## Instructions", "", instr, ""]
         if obj.get("passage", "").strip():
             body += ["## Passage", "", obj["passage"].strip(), ""]
         return "\n".join([
-            "# Exam Input", "", "Subject: %s" % SUBJECTS[subject], "Level: Grade 12",
-            "Exam type: University Entrance (DGNL)", "Task: Multiple Choice", "Mode: Solve",
+            "# Exam Input", "", "Subject: %s" % SUBJECTS[subject], "Level: %s" % pr["level"],
+            "Exam type: %s" % pr["exam_type"], "Task: Multiple Choice", "Mode: Solve",
             "Skill: %s" % obj["skill"].strip(), "Language: %s" % lang, ""] + body + [
             "## Question 1", "", obj["question"].strip(), ""] + [
             "%s. %s" % (k, obj["options"][k].strip()) for k in LETTERS] + [""])
     if obj.get("options"):
+        pr = _prof(subject, "mc4")
         return "\n".join([
-            "# Exam Input", "", "Subject: %s" % SUBJECTS[subject], "Level: Grade 12",
-            "Exam type: University Entrance (DGNL)", "Task: Multiple Choice", "Mode: Solve",
-            "Skill: %s" % obj["skill"].strip(), "Language: vi", "", "## Instructions", "",
-            "Chọn đáp án đúng nhất và giải thích ngắn gọn.", "", "## Question 1", "",
+            "# Exam Input", "", "Subject: %s" % SUBJECTS[subject], "Level: %s" % pr["level"],
+            "Exam type: %s" % pr["exam_type"], "Task: Multiple Choice", "Mode: Solve",
+            "Skill: %s" % obj["skill"].strip(), "Language: %s" % pr["lang"], "", "## Instructions", "",
+            pr["instructions"], "", "## Question 1", "",
             obj["question"].strip(), "", ""] + ["%s. %s" % (k, obj["options"][k].strip()) for k in LETTERS] + [""])
+    pr = _prof(subject, "reply")
     return "\n".join([
-        "# Exam Input", "", "Subject: %s" % SUBJECTS[subject], "Level: Grade 12",
-        "Exam type: High School Graduation", "Task: Short Answer", "Mode: Solve",
-        "Skill: %s" % obj["skill"].strip(), "Language: vi", "", "## Instructions", "",
-        "Giải bài toán, trình bày lời giải và nêu đáp án cuối cùng.", "", "## Question 1", "",
+        "# Exam Input", "", "Subject: %s" % SUBJECTS[subject], "Level: %s" % pr["level"],
+        "Exam type: %s" % pr["exam_type"], "Task: Short Answer", "Mode: Solve",
+        "Skill: %s" % obj["skill"].strip(), "Language: %s" % pr["lang"], "", "## Instructions", "",
+        pr["instructions"], "", "## Question 1", "",
         obj["question"].strip(), ""])
+
+
+def _grading_line():
+    """Grading line of the first short-answer (check reply) profile; English default when none has one."""
+    for p in PROFILE_TABLE.values():
+        if p["check"] == "reply" and p.get("grading_line"):
+            return p["grading_line"]
+    return "- 1 point: %s. 0 points: any other answer."
 
 
 def key_md(obj):
@@ -255,11 +309,23 @@ def key_md(obj):
         obj["solution"].strip(), "", "### Explanation", "", "- Generated item, not reviewed.", "",
         "### Verification", "", "- Check: %s = %s. Pass" % (obj["check"].strip(), a),
         "- Final answer: %s" % a, "- Status: Verified", "", "### Grading", "",
-        "- 1 điểm: %s (hoặc giá trị tương đương). 0 điểm: giá trị khác." % a, ""])
+        _grading_line() % a, ""])
 
 
-CHECKS = {"hs": lambda o: check_reply(o), "dgnl": lambda o: check_dgnl(o), "dgnl-en": lambda o: check_mc(o),
-          "dgnl-vi": lambda o: check_mc(o)}
+_CHECK_FN = {"reply": lambda o: check_reply(o), "mc4": lambda o: check_dgnl(o), "mc": lambda o: check_mc(o)}
+
+
+class _Checks(dict):
+    """profile -> check function, read through the live profile table (tests swap it with apply_profiles)."""
+
+    def __missing__(self, name):
+        return _CHECK_FN[PROFILE_TABLE[name]["check"]]
+
+    def __iter__(self):
+        return iter(PROFILE_TABLE)
+
+
+CHECKS = _Checks()
 
 
 def _ask(llm, prompt, profile="hs"):
@@ -294,7 +360,7 @@ def generate(subject, n, seed, llm, max_cost=0.5, level="hard", review=True, pro
         cost += spent
         obj["qa"], obj["qa_note"] = "skipped", ""
         if review:
-            obj["qa"], obj["qa_note"], spent = (blind_qa if profile in BLIND else qa)(llm, obj)
+            obj["qa"], obj["qa_note"], spent = (blind_qa(llm, obj) if profile in BLIND else qa(llm, obj, profile))
             cost += spent
         text = input_md(subject, obj)
         bad = leak_check(text, obj)
@@ -339,7 +405,8 @@ def write(subject, items, out, meta):
     man["runs"].append(dict(meta, source=SOURCE_NOTE, items=names, qa_rejected=rejected,
                             qa_counts={k: sum(1 for o, _, _ in items if o.get("qa") == k)
                                        for k in ("pass", "fail", "unknown", "skipped")},
-                            prompt_sha256=hashlib.sha256(template().encode("utf-8")).hexdigest()))
+                            prompt_sha256=hashlib.sha256(
+                                template(PROMPT_OF[meta.get("profile", "hs")]).encode("utf-8")).hexdigest()))
     with open(mp, "w", encoding="utf-8") as fh:
         json.dump(man, fh, ensure_ascii=False, indent=2)
         fh.write("\n")

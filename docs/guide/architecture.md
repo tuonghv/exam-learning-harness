@@ -77,6 +77,7 @@ Prompt variants for a language live under `prompts/<channel>/lang/<code>/`.
 
 ## Invariants
 
+- Generality (user, RAW-00187): no exam-, subject- or language-specific literal in code; a new exam kind is data (`config/subjects.json`, `config/lang.json`, `config/genexam_profiles.json`, prompts); default config keeps old inputs byte-identical (golden test `test_generality_golden`).
 - Eval keys never appear in eval inputs, few-shot files or prompts; the key is opened only in
   `pipeline/scorer.py`, after every model call. No question is reused across sets.
 - Nothing runs without `--mock`, `--dry-run` or `--real`; `--real` is capped by `--max-cost-usd`
