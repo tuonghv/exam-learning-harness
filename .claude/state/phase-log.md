@@ -1885,3 +1885,9 @@ Action: Report written
 Result: TASK-068 verified, docs/report/phase-68-scorer-sign.md
 Decision: DONE
 Next: TASK-069 parsing metrics, TASK-070 route-B structure
+
+## DESIGN - TASK-069 - 2026-11-03T09:40:52Z
+Action: Nova designed parsing metrics
+Result: design COMPLETE
+Decision: board --structure-gold; gold beside synthetic fixtures
+Next: coder tests-first

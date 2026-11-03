@@ -1,16 +1,16 @@
 {
   "task_id": "TASK-069",
   "title": "Parsing accuracy metrics apart from solving accuracy: structure_scores, gold fixtures, board --structure-gold, parse-suspect split (REQ-0074)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0074",
   "acceptance_criteria": [
     "AC1 structure_scores and gold fixtures, board prints parsing accuracy beside solving accuracy",
     "AC2 tokens per question; 65.4/65.7 only if metrics justify"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-69-parsing-metrics.md",
+    "summary": "structure_scores(exam, gold) with gold fixtures, parsing accuracy beside solving accuracy on the board via --structure-gold, parse flags plus parse-suspect vs solver split without gold, tokens per question; 65.4/65.7 only when a non-synthetic miss justifies",
     "reuse": [],
     "risks": []
   },
@@ -38,11 +38,13 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-069/handoff/design.md"
+  },
   "user_notes": [],
   "picked_at": "2026-11-03T09:40:44Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-03T09:40:52Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -50,5 +52,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "Titan: tests first, 69.1-69.6"
 }
