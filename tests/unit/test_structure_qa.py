@@ -107,5 +107,29 @@ class TestFalsePositives(unittest.TestCase):
         self.assertEqual(parser.validate_exam(ex), [])
 
 
+class TestBankRoundTwo(unittest.TestCase):
+    def test_65_6_bank_with_blank_lines_after_range(self):
+        _, ex, _ = emit([q(1, ctx="Questions 1-2: Match.\nA. ONE\n\nB. TWO\n\nC. THREE\nD. FOUR", opts=None), q(2, opts=None)])
+        self.assertEqual(parser.validate_exam(ex), [])
+
+    def test_65_5_every_bank_shape_keeps_all_choice_text(self):
+        banks = [["A. HISTORY", "B. GEOGRAPHY", "C. CIVICS", "D. ECONOMICS"], ["A. 25", "B. 36", "C. 49", "D. 64"],
+                 ["A. NaCl", "B. KOH", "C. HCl", "D. H2O"], ["A. x^2+1", "B. 2x", "C. (x+1)^2", "D. sqrt(x)"],
+                 ["A. LỊCH SỬ", "B. ĐỊA LÍ", "C. GIÁO DỤC", "D. KINH TẾ"], ["A) ONE", "B) TWO", "C) THREE", "D) FOUR"],
+                 ["a. one", "b. two", "c. three", "d. four"], ["A. ONE", "B. TWO", "C. THREE", "D. FOUR", "E. FIVE"]]
+        for bank in banks:
+            for ctx in ("\n".join(bank) + "\nQuestions 1-2: Match.", "Questions 1-2: Match.\n" + "\n".join(bank),
+                        "PART I\n" + "\n".join(bank) + "\nQuestions 1-2: Match.", "A. GRAMMAR\n" + "\n".join(bank) + "\nQuestions 1-2: Match."):
+                text, _, _ = emit([q(1, ctx=ctx, opts=None), q(2, opts=None)])
+                body = text.split("## Question 2")[0]
+                for ln in bank:
+                    self.assertIn(ln[3:], body, (ln, ctx))
+
+    def test_65_8_ambiguous_bank_flagged(self):
+        sh = api._share_context([q(1, ctx="A. HISTORY\nB. GEOGRAPHY\nC. CIVICS\nQuestions 1-2: Match.", opts=None), q(2, opts=None)])
+        self.assertIn("ambiguous_heading", sh[0]["structure"])
+        self.assertEqual(sh[0].get("section", ""), "")
+
+
 if __name__ == "__main__":
     unittest.main()

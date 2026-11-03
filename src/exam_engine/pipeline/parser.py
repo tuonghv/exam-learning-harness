@@ -118,12 +118,12 @@ def parse_exam(path):
             ins = lab.get("Instruction for this group", "").strip()
             pas = lab.get("Passage", "").strip()
             if lab and not opts and pas:  # a shared option bank filed as passage: its trailing A-D lines are the options
-                pl = pas.splitlines()
+                pl = [ln for ln in pas.splitlines() if ln.strip()]  # blank lines between options are skipped
                 k = len(pl)
-                while k and re.match(r"^[A-D]\.\s+\S", pl[k - 1]):
+                while k and re.match(r"^[A-Ea-e][.)]\s+\S", pl[k - 1].strip()):
                     k -= 1
                 if len(pl) - k >= 2:
-                    opts = {ln[0]: ln[2:].strip() for ln in pl[k:]}
+                    opts = {ln.strip()[0].upper(): ln.strip()[2:].strip() for ln in pl[k:]}
                     pas = "\n".join(pl[:k]).strip()
             stem = lab.get("Question text", "").strip() if lab else text
             if lab:  # labelled: text = instruction + passage + stem (labels dropped)
