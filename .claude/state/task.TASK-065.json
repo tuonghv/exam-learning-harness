@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-065",
   "title": "Exam structure and context review and design: hierarchy, instruction inheritance, shared references, cross-page, validation, parsing metrics (REQ-0073)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0073",
   "acceptance_criteria": [
     "AC1 deliverables A-G in one design",
@@ -17,8 +17,18 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/ingest/api.py",
+      "src/exam_engine/ingest/segment.py",
+      "src/exam_engine/pipeline/parser.py",
+      "src/exam_engine/cli.py",
+      "tests/unit/test_structure_scope.py",
+      "tests/unit/test_clean_golden.py",
+      "examples/FORMAT.md",
+      "docs/guide/toolkit-reference.md"
+    ],
+    "summary": "stage 1+: 65.1 section-scoped ranges, 65.2 own override, 65.3 range word case, 65.5 enumerated headings + section stack, 65.6 labelled option scan, 65.8 structure flags (assembly rows + ingest WARN); Section lines in labelled output keep their parent heading (named golden update)"
   },
   "unit_test": {
     "status": "pending",
@@ -41,7 +51,8 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-065/handoff/design.md"
+    "designer": "work/TASK-065/handoff/design.md",
+    "coder": "work/TASK-065/handoff/code.md"
   },
   "user_notes": [
     {
@@ -51,7 +62,7 @@
     }
   ],
   "picked_at": "2026-11-03T02:12:56Z",
-  "updated_at": "2026-11-03T02:13:07Z",
+  "updated_at": "2026-11-03T02:34:43Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -60,5 +71,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Titan: tests first, stage 1 = 65.1, 65.2, 65.6, 65.8"
+  "next": "tester QA"
 }
