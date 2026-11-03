@@ -58,22 +58,36 @@ _HEAD = re.compile(r"^\s*([^\W\d_]{3,12})\s+(IV|V|I{1,3}|\d{1,2})\s*[.:)]?(?:\s|
 _HINT_FALLBACK = "Printed numbering may restart per part or section"
 
 
-def structure_hint(text):
+_ROMAN = {"I": 1, "II": 2, "III": 3, "IV": 4, "V": 5}
+
+
+def structure_hint(text, n=None):
     """Clause naming the parts and their printed question spans, read from the exam text's own
-    headings (`PART I`, `SECTION 2`, `PHẦN III`); the generic clause when fewer than 2 parts are found."""
+    headings (`PART I`, `SECTION 2`, `PHẦN III`). Falls back to the generic clause unless the spans
+    are consistent: >= 2 parts numbered 1, 2, ... each after a blank line, every part non-empty,
+    numbered contiguously from 1 (numbering really restarts), and, when `n` is given, summing to n."""
     parts = []
+    prev = ""
     for line in (text or "").splitlines():
         s = line.strip()
         m = _HEAD.match(s) if len(s) <= 80 else None
         if m and m.group(1).isupper() and not segment._Q.match(s):
-            parts.append([m.group(1).capitalize() + " " + m.group(2), []])
-            continue
-        q = segment._Q.match(s)
-        if q and parts:
-            parts[-1][1].append(int(q.group(1) or q.group(2)))
-    spans = ["%s %d-%d" % (name, min(ns), max(ns)) for name, ns in parts if ns]
-    if len(spans) < 2:
+            parts.append([m.group(1).capitalize(), m.group(2), [], not prev.strip()])
+        else:
+            q = segment._Q.match(s)
+            if q and parts:
+                parts[-1][2].append(int(q.group(1) or q.group(2)))
+        prev = line
+    if len(parts) < 2 or not all(p[3] and p[2] for p in parts):
         return _HINT_FALLBACK
+    seq = [_ROMAN.get(p[1]) or (int(p[1]) if p[1].isdigit() else 0) for p in parts]
+    if seq != list(range(seq[0], seq[0] + len(seq))) or seq[0] != 1 or len(set(p[0] for p in parts)) != 1:
+        return _HINT_FALLBACK
+    if any(sorted(p[2]) != list(range(1, len(p[2]) + 1)) for p in parts):
+        return _HINT_FALLBACK
+    if n is not None and sum(len(p[2]) for p in parts) != n:
+        return _HINT_FALLBACK
+    spans = ["%s %s 1-%d" % (p[0], p[1], len(p[2])) for p in parts]
     return "The printed numbering restarts in each part (%s)" % ", ".join(spans)
 
 
@@ -81,7 +95,7 @@ def route_b_prompt(exam, text=None):
     from exam_engine.pipeline import router
     n = len(exam["questions"])
     return "%s\n\nLanguage: %s\n\n%s\n" % (solver.base_prompt(exam), router.language(exam),
-                                           IMAGE_RULES % (n, structure_hint(text), n))
+                                           IMAGE_RULES % (n, structure_hint(text, n), n))
 
 
 def flagged_items(exam, ids):

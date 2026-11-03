@@ -14,54 +14,87 @@ FALLBACK = "Printed numbering may restart per part or section"
 
 def exam():
     path = os.path.join(ROOT, "examples", "math", "input-001.md")
-    return parser.parse_exam(path)
+    e = parser.parse_exam(path)
+    e["questions"] = e["questions"] * 4  # only the count matters to the prompt
+    return e
+
+
+def qs(k):
+    return "".join("%d. q\n" % i for i in range(1, k + 1))
+
+
+def doc(*parts):
+    """(heading, k) pairs -> text with blank-line-separated headings and k numbered questions."""
+    return "".join("\n%s\n%s" % (h, qs(k)) for h, k in parts)
 
 
 class StructureHint(unittest.TestCase):
     def test_section_headings(self):
-        t = "SECTION 1\n1. a\n2. b\nSECTION 2\n1. c\n2. d\n3. e\n"
-        self.assertIn("(Section 1 1-2, Section 2 1-3)", cross.structure_hint(t))
+        t = doc(("SECTION 1", 2), ("SECTION 2", 3))
+        self.assertIn("(Section 1 1-2, Section 2 1-3)", cross.structure_hint(t, 5))
 
     def test_part_roman_headings(self):
-        t = "PART I\nCâu 1. a\nCâu 12. b\nPART II\nCâu 1. c\nCâu 4. d\nPART III\n1. e\n6. f\n"
-        self.assertIn("(Part I 1-12, Part II 1-4, Part III 1-6)", cross.structure_hint(t))
+        t = doc(("PART I", 12), ("PART II", 4), ("PART III", 6))
+        self.assertIn("(Part I 1-12, Part II 1-4, Part III 1-6)", cross.structure_hint(t, 22))
 
     def test_trial_exam_spans_equal_old_literal(self):
-        t = ("PHẦN I: Thí sinh trả lời từ câu 1 đến câu 12.\nCâu 1. x\nCâu 12. y\n"
-             "PHẦN II: ...\nCâu 1. x\nCâu 4. y\n")
-        h = cross.structure_hint(t)
+        t = doc(("PHẦN I: Thí sinh trả lời từ câu 1 đến câu 12.", 12), ("PHẦN II: ...", 4))
+        h = cross.structure_hint(t, 16)
         self.assertIn("Phần I 1-12", h)
         self.assertIn("Phần II 1-4", h)
 
     def test_no_heading_falls_back(self):
-        for t in ("Câu 1. a\nCâu 2. b\n", "", None, "PART I\n1. a\n"):
+        for t in ("Câu 1. a\nCâu 2. b\n", "", None, doc(("PART I", 1))):
             self.assertEqual(cross.structure_hint(t), FALLBACK)
 
     def test_non_vietnamese_header(self):
-        t = "Subject: Deutsch\nLanguage: de\n\nTEIL 1\nFrage 1. a\n1. b\nTEIL 2\n1. c\n"
-        self.assertIn("Teil 1 1-1", cross.structure_hint(t))
+        t = "Subject: Deutsch\nLanguage: de\n" + doc(("TEIL 1", 1), ("TEIL 2", 1))
+        self.assertIn("Teil 1 1-1", cross.structure_hint(t, 2))
 
-    def test_prompt_uses_hint(self):
-        p = cross.route_b_prompt(exam(), "SECTION 1\n1. a\nSECTION 2\n1. b\n")
-        self.assertIn("Section 2 1-1", p)
+    def test_prompt_uses_hint_only_when_count_matches(self):
+        e = exam()
+        n = len(e["questions"])
+        t = doc(("SECTION 1", 1), ("SECTION 2", n - 1))
+        p = cross.route_b_prompt(e, t)
+        self.assertIn("Section 2 1-%d" % (n - 1), p)
         self.assertIn("Answer every question in every part.", p)
         self.assertNotIn("Part II and III", p)
-        g = cross.route_b_prompt(exam())
+        g = cross.route_b_prompt(e)
         self.assertIn(FALLBACK + "; do NOT use", g)
-        self.assertEqual(g, cross.route_b_prompt(exam(), "no headings"))
+        self.assertEqual(g, cross.route_b_prompt(e, "no headings"))
+        self.assertEqual(g, cross.route_b_prompt(e, doc(("SECTION 1", 1), ("SECTION 2", n + 5))))
 
+    def test_heading_like_line_inside_passage(self):
+        # `PART II` mid-paragraph (no blank line before) must not split a part
+        t = doc(("PART I", 1)) + "The text says:\nPART II\n" + qs(0) + "2. next\n" + doc(("PART II", 2))
+        self.assertEqual(cross.structure_hint(t, 4), FALLBACK)
 
-class StructureHintQA(unittest.TestCase):
-    """70.1 QA: the hint states only spans read from the text; otherwise the fallback."""
+    def test_count_mismatch_falls_back(self):
+        t = doc(("PART I", 2), ("PART II", 2))
+        self.assertIn("Part II 1-2", cross.structure_hint(t, 4))
+        self.assertEqual(cross.structure_hint(t, 5), FALLBACK)
 
-    def test_mixed_headings_use_own_words(self):
-        t = "PART I\n1. a\n2. b\nSECTION 2\n1. c\n2. d\n"
-        self.assertIn("(Part I 1-2, Section 2 1-2)", cross.structure_hint(t))
+    def test_duplicated_or_out_of_order_parts_fall_back(self):
+        self.assertEqual(cross.structure_hint(doc(("PART I", 2), ("PART I", 2)), 4), FALLBACK)
+        self.assertEqual(cross.structure_hint(doc(("PART II", 2), ("PART I", 2)), 4), FALLBACK)
+        self.assertEqual(cross.structure_hint(doc(("PART I", 2), ("PART III", 2)), 4), FALLBACK)
+
+    def test_gaps_or_continued_numbering_fall_back(self):
+        gap = "\nPART I\n1. a\n5. b\n" + doc(("PART II", 1))
+        self.assertEqual(cross.structure_hint(gap, 3), FALLBACK)
+        cont = "\nPART I\n1. a\n2. b\n\nPART II\n3. c\n4. d\n"
+        self.assertEqual(cross.structure_hint(cont, 4), FALLBACK)
+
+    def test_empty_part_falls_back(self):
+        t = doc(("PART I", 2)) + "\nPART II\n" + doc(("PART III", 1))
+        self.assertEqual(cross.structure_hint(t, 3), FALLBACK)
+
+    def test_mixed_heading_words_fall_back(self):
+        self.assertEqual(cross.structure_hint(doc(("PART I", 2), ("SECTION 2", 2)), 4), FALLBACK)
 
     def test_heading_numbers_not_trusted(self):
-        # heading text claims questions 1-40 / 41-50; only the markers actually read are named
-        t = "PART I: answer questions 1 to 40\n1. a\n2. b\nPART II: questions 41-50\n1. c\n"
-        h = cross.structure_hint(t)
+        t = doc(("PART I: answer questions 1 to 40", 2), ("PART II: questions 41-50", 1))
+        h = cross.structure_hint(t, 3)
         self.assertIn("Part I 1-2, Part II 1-1", h)
         for bad in ("40", "41", "50"):
             self.assertNotIn(bad, h)
@@ -71,21 +104,11 @@ class StructureHintQA(unittest.TestCase):
                   "IN SECTION 5 BELOW\n1. a\nPART 2\n1. b\n"):
             self.assertEqual(cross.structure_hint(t), FALLBACK)
 
-    def test_empty_part_is_skipped_not_invented(self):
-        t = "PART I\n1. a\n2. b\nPART II\nPART III\n1. x\n"
-        h = cross.structure_hint(t)
-        self.assertNotIn("Part II ", h.replace("Part III", ""))
-        self.assertIn("Part III 1-1", h)
-
-    def test_only_one_part_with_questions_falls_back(self):
-        self.assertEqual(cross.structure_hint("PART I\n1. a\nPART II\n"), FALLBACK)
-
     def test_huge_input_is_fast_and_bounded(self):
         import time
         t0 = time.time()
-        h = cross.structure_hint("x\n" * 500000 + "".join("PART %d\n1. a\n" % i for i in range(1, 300)))
+        cross.structure_hint("x\n" * 500000 + "".join("\nPART %d\n1. a\n" % i for i in range(1, 300)))
         self.assertLess(time.time() - t0, 5)
-        self.assertTrue(h.startswith("The printed numbering restarts"))
         self.assertEqual(cross.structure_hint("y" * 200000), FALLBACK)
 
     def test_headerless_exam_route_b_prompt_does_not_crash(self):
@@ -95,7 +118,7 @@ class StructureHintQA(unittest.TestCase):
             self.assertIn("count continuously", p)
 
     def test_hint_never_names_a_count(self):
-        h = cross.structure_hint("PART I\n1. a\n2. b\nPART II\n1. c\n")
+        h = cross.structure_hint(doc(("PART I", 2), ("PART II", 1)), 3)
         self.assertNotIn("exactly", h)
         self.assertNotIn("total", h)
 
