@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-074",
   "title": "Solver rule for approximate questions: nearest option, compute ambiguous readings (REQ-0080)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0080",
   "acceptance_criteria": [
     "AC1 dev prompt rule + synthetic test, golden",
@@ -29,12 +29,16 @@
     "result": "1404 tests, only the known baseline failures (coder run); release prompts byte-identical on 47 examples/evals inputs; the rule is in both dev prompts, absent from release; regression set run on the dev channel with the rule shows no regression (run5: 15 pass, 0 fail, 3 uncertain)"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "prompt wording only"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-074/evidence/paid-nearest-rule.txt"
+    ],
+    "command": "unit suite (coder); Math 63 re-solve twice and the regression set once on the dev channel",
+    "result": "REQ-0080 verified with a stated partial outcome: the rule is in the dev solve prompts and applied (solver listed readings and distances) but Math 63 did not flip (0 of 2; a reading ambiguity, REQ-0082); regression set with the rule: 15 pass, 0 fail, 3 uncertain, no regression; release prompts byte-identical; limits: 3 items per kind, one question tested for the target behaviour"
   },
   "report": {
     "status": "pending",
@@ -49,12 +53,15 @@
     },
     "coder": "work/TASK-074/handoff/code.md",
     "tester": {
-      "waiver": "prompt wording change covered by the coder tests (presence, absence in release, golden bytes) and by the real regression run; no logic to mutate"
+      "waiver": "covered by coder tests and the real regression run"
+    },
+    "verifier": {
+      "waiver": "evidence is a real regression run with matching per-item verdicts plus coder tests; the outcome (Math 63 not fixed) is stated plainly"
     }
   },
   "user_notes": [],
   "picked_at": "2026-11-04T03:42:40Z",
-  "updated_at": "2026-11-04T03:57:25Z",
+  "updated_at": "2026-11-04T03:57:39Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-074/"
@@ -65,5 +72,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verified"
+  "next": "report, DONE"
 }
