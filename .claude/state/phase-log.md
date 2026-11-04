@@ -2059,3 +2059,9 @@ Action: Run recorded
 Result: 120 of 120 answered for 2.33 USD
 Decision: VERIFIED
 Next: report then DONE
+
+## DONE - TASK-072 - 2026-11-04T03:42:28Z
+Action: Report written
+Result: TASK-072 verified, docs/report/phase-72-dgnl-2025-run.md
+Decision: DONE
+Next: REQ-0081 waits for the user answers; REQ-0079/0080 free work

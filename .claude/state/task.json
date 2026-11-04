@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-072",
-  "state": "VERIFIED",
-  "next": "report, DONE",
+  "state": "DONE",
+  "next": "",
   "title": "Solve the second DGNL sample exam (2025) end to end with the current engine, outputs in plans/reports (REQ-0077)",
-  "active": [
-    {
-      "task_id": "TASK-072",
-      "state": "VERIFIED",
-      "next": "report, DONE",
-      "updated_at": "2026-11-04T03:42:28Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
