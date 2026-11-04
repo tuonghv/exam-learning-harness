@@ -2161,3 +2161,9 @@ Action: Nova designed the three fixes with file:line root causes
 Result: design COMPLETE
 Decision: adjudication default under --pdf (small conflict set, worst case = today)
 Next: coder tests-first
+
+## IMPLEMENTING - TASK-076 - 2026-11-04T05:41:40Z
+Action: Titan implemented 76.1-76.3
+Result: 1480 tests baseline failures only
+Decision: tester next
+Next: tester

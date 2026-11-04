@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-076",
   "title": "Engine fixes from the 2025 scoring: extract_json last valid object, text/image disagreement settled by adjudication, false missing_text flag (REQ-0083)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0083",
   "acceptance_criteria": [
     "AC1 extract_json last valid object",
@@ -17,8 +17,22 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/adapters/claude.py",
+      "src/exam_engine/pipeline/solver.py",
+      "src/exam_engine/pipeline/cross.py",
+      "src/exam_engine/engine.py",
+      "src/exam_engine/cli.py",
+      "src/exam_engine/core/refcheck.py",
+      "src/exam_engine/pipeline/reporter.py",
+      "src/exam_engine/pipeline/metrics.py",
+      "schemas/result.schema.json",
+      "tests/unit/test_engine_fixes_2025.py",
+      "tests/unit/test_image_scope.py",
+      "docs/guide/toolkit-reference.md"
+    ],
+    "summary": "76.1 extract_json takes the last valid object with schema check; 76.2 text/image conflicts (any status, tentative text) go to adjudication, default under --pdf with --no-adjudicate, source adjudicated; 76.3 refcheck sharing key no longer the Source pages line (refcheck diff over 125 files: only Science id 21 changed)"
   },
   "unit_test": {
     "status": "pending",
@@ -41,7 +55,8 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-076/handoff/design.md"
+    "designer": "work/TASK-076/handoff/design.md",
+    "coder": "work/TASK-076/handoff/code.md"
   },
   "user_notes": [
     {
@@ -51,7 +66,7 @@
     }
   ],
   "picked_at": "2026-11-04T05:18:38Z",
-  "updated_at": "2026-11-04T05:26:09Z",
+  "updated_at": "2026-11-04T05:41:40Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -61,5 +76,5 @@
     "notes": "",
     "next": "RESUME: 1) read work/TASK-076/handoff/design.md; if its line 1 is PROGRESS: COMPLETE accept it (else re-brief a designer with work/TASK-076/handoff/brief-designer.md). 2) write docs/design/phase-76-en"
   },
-  "next": "Titan: tests first 76.1-76.3"
+  "next": "tester QA"
 }

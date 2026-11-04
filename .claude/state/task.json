@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-076",
-  "state": "DESIGN",
-  "next": "Titan: tests first 76.1-76.3",
+  "state": "IMPLEMENTING",
+  "next": "tester QA",
   "title": "Engine fixes from the 2025 scoring: extract_json last valid object, text/image disagreement settled by adjudication, false missing_text flag (REQ-0083)",
   "active": [
     {
       "task_id": "TASK-076",
-      "state": "DESIGN",
-      "next": "Titan: tests first 76.1-76.3",
-      "updated_at": "2026-11-04T05:26:09Z"
+      "state": "IMPLEMENTING",
+      "next": "tester QA",
+      "updated_at": "2026-11-04T05:41:40Z"
     }
   ],
   "max_active": 1
