@@ -12,6 +12,10 @@ Quy tắc
 4. `checks` = ít nhất một cách khác để xác nhận đáp án (thay ngược lại, phân tích đơn vị, trường hợp giới
    hạn, trích dẫn). Với bài tính toán, cũng ghi `expr`: biểu thức số cuối cùng dưới dạng phép tính Python
    thuần, để mã có thể tính lại.
+5. Nếu câu hỏi yêu cầu giá trị xấp xỉ hoặc gần nhất ("gần nhất", "xấp xỉ", "closest", "approximately",
+   "nearest"), hãy tính mọi cách hiểu hợp lý của đề (ví dụ đầu kỳ hoặc cuối kỳ, gồm hoặc không gồm đầu mút),
+   rồi chọn phương án có giá trị gần nhất với một giá trị đã tính. Không bỏ giá trị đã tính chỉ vì không có
+   phương án nào bằng đúng nó. Liệt kê các cách hiểu và khoảng cách tới các phương án trong `checks`.
 
 Output
 {"schema_version":"1.0","questions":[{"id":"1","type":"multiple_choice","answer":"A",

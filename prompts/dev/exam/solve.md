@@ -13,6 +13,11 @@ Rules
    case, quote). For a calculation also give `expr`: the final numeric expression as plain Python
    arithmetic, so code can recompute it.
 5. A `## Group` block is shared context of its questions; `### Sibling answers` is context only, do not re-answer it.
+6. If the question asks for an approximate or nearest value ("closest", "approximately", "nearest",
+   Vietnamese "gần nhất" / "xấp xỉ"), compute every plausible reading of the wording (for example start or
+   end of a period, inclusive or exclusive), then choose the option whose value is nearest to a computed
+   reading. Never discard a computed value only because no option equals it exactly. List the readings and
+   their distances to the options in `checks`.
 
 Output
 {"schema_version":"1.0","questions":[{"id":"1","type":"multiple_choice","answer":"A",
