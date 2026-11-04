@@ -113,6 +113,23 @@ def _flag(q, code):
     return q if code in cur else dict(q, structure=cur + [code])
 
 
+def _with_carrier(q, cur):
+    """76.4: a group member also gets the carrier's figures/tables and page numbers (the carrier is the question
+    that holds the group line in the same range); a member's own figures stay after them."""
+    figs = [f for f in cur.get("figs") or () if f not in (q.get("figures") or ())]
+    pages = [n for n in cur.get("pages") or () if n != q.get("page")]
+    if figs:
+        q = dict(q, figures=figs + list(q.get("figures") or ()))
+    if pages and q.get("page"):
+        q = dict(q, continued_pages=sorted(set(q.get("continued_pages") or ()) | set(pages)))
+    return q
+
+
+def _carrier(q):
+    return {"figs": list(q.get("figures") or ()),
+            "pages": sorted(({q["page"]} if q.get("page") else set()) | set(q.get("continued_pages") or ()))}
+
+
 def _share_context(qs):
     """Repeat a passage with every question of its group ("Questions 46-52", "câu từ 103 đến 105").
 
@@ -143,16 +160,16 @@ def _share_context(qs):
             lo, hi = segment.group_span(m)
             if cur and cur["ctx"] == ctx and (cur["lo"], cur["hi"]) == (lo, hi):
                 cur["last"] = max(cur["last"], num or 0)  # the group line repeated on a member
-                q = dict(q, context=ctx)
+                q = _with_carrier(dict(q, context=ctx), cur)
             else:
                 close()
-                cur = {"lo": lo, "hi": hi, "ctx": ctx, "at": len(out), "last": num or 0}
+                cur = {"lo": lo, "hi": hi, "ctx": ctx, "at": len(out), "last": num or 0, **_carrier(q)}
             ghost = None
         elif cur and num is not None and cur["lo"] < num <= cur["hi"]:
             cur["last"] = max(cur["last"], num)
             if ctx.strip() and ctx != cur["ctx"]:  # nearer text wins: own line leads the question text
                 q = _flag(dict(q, text=(ctx + "\n" + (q.get("text") or "")).strip()), "instruction_override")
-            q = dict(q, context=cur["ctx"])
+            q = _with_carrier(dict(q, context=cur["ctx"]), cur)
         elif ghost and num is not None and ghost[0] <= num <= ghost[1]:
             q = _flag(q, "range_cut_by_section")
         out.append(q)

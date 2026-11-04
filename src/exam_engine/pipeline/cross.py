@@ -123,8 +123,9 @@ def adjudicate_prompt(exam, items):
     qs = {q["id"]: q for q in exam["questions"]}
     blocks = []
     for i, ta, ia in items:
-        blocks.append("id %s: %s\n  text answer: %s | %s\n  image answer: %s | %s" % (
-            i, qs[i]["text"].strip(), ta.get("answer"), ta.get("explanation") or "",
+        opts = "".join("\n%s. %s" % (k, v) for k, v in sorted((qs[i].get("options") or {}).items()))
+        blocks.append("id %s: %s%s\n  text answer: %s | %s\n  image answer: %s | %s" % (
+            i, qs[i]["text"].strip(), opts, ta.get("answer"), ta.get("explanation") or "",
             ia.get("answer"), ia.get("explanation") or ""))
     return "%s\n\nLanguage: %s\n\n%s\n" % (solver.base_prompt(exam), router.language(exam),
                                                ADJUDICATE_RULES % "\n\n".join(blocks))

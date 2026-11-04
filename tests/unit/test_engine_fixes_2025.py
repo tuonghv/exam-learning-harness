@@ -210,5 +210,51 @@ class GroupKey(unittest.TestCase):
         self.assertEqual(refcheck._first_line("Source pages: 3\n## Part\n\nPassage"), "Passage")
 
 
+def gq(i, page, ctx="", figs=(), text="Stem"):
+    return {"id": str(i), "text": text + " %d" % i, "options": {}, "context": ctx, "page": page,
+            "figures": list(figs)}
+
+
+class GroupFigures(unittest.TestCase):
+    """76.4: the group carrier's figures and pages reach the later members."""
+
+    def setUp(self):
+        from exam_engine.ingest import api
+        self.api = api
+        self.qs = [gq(1, 16, "Questions 1-3: Read the data.", ["table of 5 items"]), gq(2, 17), gq(3, 17),
+                   gq(4, 17, figs=["own chart"])]
+
+    def test_members_get_table_and_carrier_page(self):
+        sh = self.api._share_context(self.qs)
+        for q in sh[1:3]:
+            self.assertEqual(q["figures"], ["table of 5 items"])
+            self.assertEqual(q["continued_pages"], [16])
+            lines = "\n".join(self.api.question_lines(q))
+            self.assertIn("[Figure/table: table of 5 items]", lines)
+            self.assertIn("Source pages: 16-17", lines)
+        self.assertEqual(sh[0]["figures"], ["table of 5 items"])
+
+    def test_outside_question_not_leaked(self):
+        sh = self.api._share_context(self.qs)
+        self.assertEqual((sh[3]["figures"], sh[3].get("continued_pages")), (["own chart"], None))
+
+    def test_no_group_figures_unchanged(self):
+        qs = [gq(1, 3, "Questions 1-2: Read."), gq(2, 3)]
+        self.assertEqual(self.api._share_context(qs)[1], dict(qs[1], context="Questions 1-2: Read."))
+
+    def test_adjudication_prompt_has_every_option(self):
+        import tempfile
+        from exam_engine.pipeline import cross, parser
+        body = "Pick the unit.\n\nA. alpha-opt\nB. beta-opt\nC. gamma-opt\nD. delta-opt"
+        with tempfile.TemporaryDirectory() as d:
+            p = os.path.join(d, "e.md")
+            with open(p, "w", encoding="utf-8") as fh:
+                fh.write(TI.exam(body))
+            ex = parser.parse_exam(p)
+        pr = cross.adjudicate_prompt(ex, [(1, T.a(1, "A"), T.a(1, "B"))])
+        for o in ("A. alpha-opt", "B. beta-opt", "C. gamma-opt", "D. delta-opt"):
+            self.assertIn(o, pr)
+
+
 if __name__ == "__main__":
     unittest.main()
