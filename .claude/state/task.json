@@ -1,14 +1,14 @@
 {
   "schema": 2,
   "task_id": "TASK-073",
-  "state": "UNIT_TESTED",
-  "next": "verified",
+  "state": "VERIFIED",
+  "next": "report, DONE",
   "title": "Score the 2025 DGNL sample when the user supplies the official answers (REQ-0081)",
   "active": [
     {
       "task_id": "TASK-073",
-      "state": "UNIT_TESTED",
-      "next": "verified",
+      "state": "VERIFIED",
+      "next": "report, DONE",
       "updated_at": "2026-11-04T05:18:14Z"
     }
   ],
