@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-073",
   "title": "Score the 2025 DGNL sample when the user supplies the official answers (REQ-0081)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0081",
   "acceptance_criteria": [
     "AC1 accuracy per subject and overall with Wilson",
@@ -22,9 +22,9 @@
     "summary": "2025 answers scored: 113/120 (94.2 percent), root causes of the 7 wrong answers found; evidence work/TASK-073/evidence/dgnl2025-score.txt"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "independent recount of the scored table (python, counts only)",
+    "result": "key 120 distinct numbers; 113 of 120 correct; per subject 29/28/29/27; the inspector found the same 7 wrong answers"
   },
   "security": {
     "status": "pending",
@@ -47,11 +47,14 @@
     },
     "coder": {
       "waiver": "no code to write"
+    },
+    "tester": {
+      "waiver": "no code; counts cross-checked by an independent recount"
     }
   },
   "user_notes": [],
   "picked_at": "2026-11-04T03:42:39Z",
-  "updated_at": "2026-11-04T05:18:13Z",
+  "updated_at": "2026-11-04T05:18:14Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -61,5 +64,5 @@
     "notes": "",
     "next": "when the user supplies the answers: score reports/dgnl2025/answers.tsv as in TASK-037, report accuracy and flag separation"
   },
-  "next": "cross-check"
+  "next": "verified"
 }

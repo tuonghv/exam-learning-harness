@@ -2137,3 +2137,9 @@ Action: Coordinator scored and the inspector root-caused
 Result: 113/120
 Decision: cross-check
 Next: cross-check
+
+## UNIT_TESTED - TASK-073 - 2026-11-04T05:18:13Z
+Action: Coordinator recounted
+Result: counts agree
+Decision: VERIFIED next
+Next: verified
