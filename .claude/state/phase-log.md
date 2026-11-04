@@ -2089,3 +2089,9 @@ Action: Rule kept, outcome recorded
 Result: harmless, makes ambiguity visible, Math 63 not fixed
 Decision: VERIFIED
 Next: report then DONE
+
+## DONE - TASK-074 - 2026-11-04T03:57:39Z
+Action: Report written
+Result: TASK-074 verified, docs/report/phase-74-nearest-value-rule.md
+Decision: DONE
+Next: TASK-075 confidence tier (paid question), REQ-0082

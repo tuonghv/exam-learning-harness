@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-074",
-  "state": "VERIFIED",
-  "next": "report, DONE",
+  "state": "DONE",
+  "next": "",
   "title": "Solver rule for approximate questions: nearest option, compute ambiguous readings (REQ-0080)",
-  "active": [
-    {
-      "task_id": "TASK-074",
-      "state": "VERIFIED",
-      "next": "report, DONE",
-      "updated_at": "2026-11-04T03:57:39Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
