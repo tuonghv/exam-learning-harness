@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-078",
   "title": "Solve gate: only questions meeting the verification level are solved (REQ-0024)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0024",
   "acceptance_criteria": [
     "AC1 needs_review not solved, listed skipped",
@@ -43,12 +43,18 @@
     ]
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "no new input surface; sidecar read tolerant of missing or corrupt file; no key or exam text written"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-078/evidence/gate-cmp2.txt",
+      "work/TASK-078/evidence/t78-qa.txt",
+      "work/TASK-078/evidence/task078-full.txt"
+    ],
+    "command": "re-ingest of 4 DGNL 2025 subjects (120 questions) before vs after; gate tests; full suite",
+    "result": "REQ-0024 AC1-AC4 verified: needs_review/unverified skipped at default and listed in sidecar, result.json and report; --min-verification any restores, rejected never solved; skipped never FAIL and counted apart; solver, verifier, decision and prompts untouched; exam.md byte-identical for all 4 subjects, assembly identical but for the file name; limits: no document in the pipeline carries verification data yet, so the gate is dormant on real runs; 4 unrelated full-suite failures pre-exist"
   },
   "report": {
     "status": "pending",
@@ -60,11 +66,12 @@
   "roles": {
     "designer": "work/TASK-078/handoff/design.md",
     "coder": "work/TASK-078/handoff/code.md",
-    "tester": "work/TASK-078/handoff/test.md"
+    "tester": "work/TASK-078/handoff/test.md",
+    "verifier": "work/TASK-078/handoff/verify.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-04T21:09:03Z",
-  "updated_at": "2026-11-04T21:33:02Z",
+  "updated_at": "2026-11-04T21:36:57Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -73,5 +80,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verifier with real evidence: cmp on DGNL refined doc, mock solve skip run"
+  "next": "report, DONE"
 }

@@ -2233,3 +2233,9 @@ Action: Nemesis QA plus guard-test fix
 Result: gate tests 26 pass; 4 unrelated failures pre-existing
 Decision: verify with real ingest+mock solve
 Next: verifier
+
+## VERIFIED - TASK-078 - 2026-11-04T21:36:57Z
+Action: Argus verified the solve gate
+Result: AC1-AC4 pass, DGNL output byte-identical
+Decision: VERIFIED
+Next: report then DONE

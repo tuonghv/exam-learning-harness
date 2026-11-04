@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-078",
-  "state": "UNIT_TESTED",
-  "next": "verifier with real evidence: cmp on DGNL refined doc, mock solve skip run",
+  "state": "VERIFIED",
+  "next": "report, DONE",
   "title": "Solve gate: only questions meeting the verification level are solved (REQ-0024)",
   "active": [
     {
       "task_id": "TASK-078",
-      "state": "UNIT_TESTED",
-      "next": "verifier with real evidence: cmp on DGNL refined doc, mock solve skip run",
-      "updated_at": "2026-11-04T21:33:02Z"
+      "state": "VERIFIED",
+      "next": "report, DONE",
+      "updated_at": "2026-11-04T21:36:57Z"
     }
   ],
   "max_active": 1
