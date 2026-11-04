@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-075",
   "title": "Discriminating confidence tier: option-distance and existing signals (free), optional second sample with permuted options, measurement by confidence group (REQ-0079)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0079",
   "acceptance_criteria": [
     "AC1 design compares >=3 options",
@@ -15,8 +15,18 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/verifier.py",
+      "src/exam_engine/core/decision.py",
+      "src/exam_engine/engine.py",
+      "src/exam_engine/cli.py",
+      "src/exam_engine/pipeline/metrics.py",
+      "schemas/result.schema.json",
+      "tests/unit/test_confidence_tier.py",
+      "docs/guide/toolkit-reference.md"
+    ],
+    "summary": "free slice: verifier.option_distance, core/decision.confidence tier (separate field, PASS bar unchanged, negative signals incl. a named alternative reading), metrics by_confidence with Wilson interval, flag --confidence default off; second sample (75.2) waits for the paid approval"
   },
   "unit_test": {
     "status": "pending",
@@ -39,11 +49,12 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-075/handoff/design.md"
+    "designer": "work/TASK-075/handoff/design.md",
+    "coder": "work/TASK-075/handoff/code.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-04T03:57:40Z",
-  "updated_at": "2026-11-04T03:57:54Z",
+  "updated_at": "2026-11-04T04:09:13Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-075/"
@@ -54,5 +65,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Titan: tests first, free slice 75.1, 75.3, 75.4"
+  "next": "tester QA and replay on the saved scored DGNL runs"
 }

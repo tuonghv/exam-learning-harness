@@ -2101,3 +2101,9 @@ Action: Nova designed the confidence tier; coordinator took decisions 1-3
 Result: design COMPLETE
 Decision: separate tier, same model, scope no_independent_check + doubt; paid P1/P2 need the user
 Next: coder free slice
+
+## IMPLEMENTING - TASK-075 - 2026-11-04T04:09:13Z
+Action: Titan implemented the free slice 75.1, 75.3, 75.4
+Result: 18 new tests; suite baseline failures only
+Decision: tester next
+Next: tester

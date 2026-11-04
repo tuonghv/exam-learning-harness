@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-075",
-  "state": "DESIGN",
-  "next": "Titan: tests first, free slice 75.1, 75.3, 75.4",
+  "state": "IMPLEMENTING",
+  "next": "tester QA and replay on the saved scored DGNL runs",
   "title": "Discriminating confidence tier: option-distance and existing signals (free), optional second sample with permuted options, measurement by confidence group (REQ-0079)",
   "active": [
     {
       "task_id": "TASK-075",
-      "state": "DESIGN",
-      "next": "Titan: tests first, free slice 75.1, 75.3, 75.4",
-      "updated_at": "2026-11-04T03:57:54Z"
+      "state": "IMPLEMENTING",
+      "next": "tester QA and replay on the saved scored DGNL runs",
+      "updated_at": "2026-11-04T04:09:13Z"
     }
   ],
   "max_active": 1
