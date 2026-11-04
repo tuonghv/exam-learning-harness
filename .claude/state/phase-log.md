@@ -2209,3 +2209,9 @@ Action: Argus verified
 Result: learning loop in place
 Decision: VERIFIED
 Next: report then DONE
+
+## DONE - TASK-077 - 2026-11-04T07:57:06Z
+Action: Report written
+Result: TASK-077 verified, docs/report/phase-77-answer-cause-loop.md
+Decision: DONE
+Next: remaining open: REQ-0078 extraction gold, REQ-0024 parked

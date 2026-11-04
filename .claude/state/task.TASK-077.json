@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-077",
   "title": "Answer-driven learning loop: automatic cause records per wrong answer and held-out gain table (REQ-0084)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0084",
   "acceptance_criteria": [
     "AC1 explain reproduces the manual causes",
@@ -46,11 +46,18 @@
       "work/TASK-077/evidence/t77-final-suite.txt"
     ],
     "command": "explain replay on saved 2025 and 2026 runs; gain table by hand; key-leak audit",
-    "result": "REQ-0084 AC1-AC4 verified: explain reproduces the 7 manual causes of the 2025 run (multi-JSON English = 9) and 4 of 5 for 2026 (Q38 unknown, honest); synthetic check tests; held-out gain table computed over all questions (2025 113 to 111 of 120, 2026 36 to 36 of 43 = no measurable change) and on the board; process rule in workflow-roles section 10; key leak 0; rate-limit stop fixed; limits: regression-set gain not wired, small samples"
+    "result": "REQ-0084 AC1-AC4 verified: explain reproduces the 7 manual causes of the 2025 run (multi-JSON English = 9) and 4 of 5 for 2026 (Q38 unknown, honest); synthetic check tests; held-out gain table computed over all questions (2025 113 to 111 of 120, 2026 36 to 36 of 43 = no measurable change) and on the board; process rule in workflow-roles section 10; key leak 0; rate-limit stop fixed; limits: regression-set gain not wired, small samples",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-077/evidence/explain-replay.txt"
+      ],
+      "reason": "tool causes compared with manual causes; gain recounted by hand; key leak audit"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-77-answer-cause-loop.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -59,11 +66,14 @@
     "designer": "work/TASK-077/handoff/design.md",
     "coder": "work/TASK-077/handoff/code.md",
     "tester": "work/TASK-077/handoff/test.md",
-    "verifier": "work/TASK-077/handoff/verify.md"
+    "verifier": "work/TASK-077/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "independent oracle = hand-checked causes and gain by the tester against the saved runs and the official answers; key-leak audit with planted leaks"
+    }
   },
   "user_notes": [],
   "picked_at": "2026-11-04T07:07:44Z",
-  "updated_at": "2026-11-04T07:56:53Z",
+  "updated_at": "2026-11-04T07:57:06Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -72,5 +82,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report, DONE"
+  "next": ""
 }
