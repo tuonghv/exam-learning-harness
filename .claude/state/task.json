@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-074",
-  "state": "IMPLEMENTING",
-  "next": "unit-test gate",
+  "state": "UNIT_TESTED",
+  "next": "verified",
   "title": "Solver rule for approximate questions: nearest option, compute ambiguous readings (REQ-0080)",
   "active": [
     {
       "task_id": "TASK-074",
-      "state": "IMPLEMENTING",
-      "next": "unit-test gate",
-      "updated_at": "2026-11-04T03:57:24Z"
+      "state": "UNIT_TESTED",
+      "next": "verified",
+      "updated_at": "2026-11-04T03:57:25Z"
     }
   ],
   "max_active": 1
