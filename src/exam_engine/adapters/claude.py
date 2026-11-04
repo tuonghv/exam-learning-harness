@@ -30,7 +30,7 @@ def _classify(blob):
                               "credential")):
         return "auth"
     if any(w in low for w in ("429", "rate limit", "rate_limit", "session limit",
-                              "usage limit", "overloaded", "hit your", "-hour limit")):
+                              "usage limit", "overloaded", "hit your", "-hour limit", "reached your limit", "limit reached")):
         return "rate_limit"
     if any(w in low for w in ("500", "502", "503", "504", "service", "unavailable",
                               "connection", "network")):
