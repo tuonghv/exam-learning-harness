@@ -623,7 +623,7 @@
     "created_at": "2026-10-30T15:30:00Z",
     "requirement": "REQ-0034",
     "acceptance_criteria": [
-      "REQ-0034 AC1-AC4: sheet 'Subject – N Questions', 5 per row, 2-digit ids as stored, circled A-D, — for null/Open/non A-D, block at top of report.md/html/pdf plus answers.md, solver/schema unchanged",
+      "REQ-0034 AC1-AC4: sheet 'Subject \u2013 N Questions', 5 per row, 2-digit ids as stored, circled A-D, \u2014 for null/Open/non A-D, block at top of report.md/html/pdf plus answers.md, solver/schema unchanged",
       "REQ-0035 AC1-AC4 phase 1: --view sheet|learn (default sheet), learn view reuses explanation+solution, optional key_concept/common_mistake only if present, no extra LLM cost",
       "Tests in tests/unit/test_exam_report.py with null-answer results (work/dgnl-real Vietnamese/Science), existing report tests stay green, PDF font check for circled letters"
     ],
@@ -1437,7 +1437,7 @@
     "task_id": "TASK-076",
     "title": "Engine fixes from the 2025 scoring: extract_json last valid object, text/image disagreement settled by adjudication, false missing_text flag (REQ-0083)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-04T14:00:00",
     "requirement": "REQ-0083",
     "acceptance_criteria": [
@@ -1445,6 +1445,15 @@
       "AC2 disagreement via adjudication",
       "AC3 missing_text false positive",
       "AC4 one real re-run, no regression"
+    ],
+    "completed_at": "2026-11-04T07:07:43Z",
+    "report": "docs/report/phase-76-engine-fixes-2025.md",
+    "user_notes": [
+      {
+        "raw": "RAW-00202",
+        "note": "user: after answers, deep dive each mistake (parsing or context not read) and show the gain; becomes REQ-0084/TASK-077; TASK-076 gain must be reported on the other exam too",
+        "at": "2026-11-04T05:25:35Z"
+      }
     ]
   },
   {

@@ -2179,3 +2179,9 @@ Action: Argus verified; coordinator ran the paid re-runs
 Result: null accuracy result, defects removed
 Decision: VERIFIED
 Next: report then DONE
+
+## DONE - TASK-076 - 2026-11-04T07:07:43Z
+Action: Report written
+Result: TASK-076 verified, docs/report/phase-76-engine-fixes-2025.md
+Decision: DONE
+Next: TASK-077 learning loop (REQ-0084)

@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-076",
   "title": "Engine fixes from the 2025 scoring: extract_json last valid object, text/image disagreement settled by adjudication, false missing_text flag (REQ-0083)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0083",
   "acceptance_criteria": [
     "AC1 extract_json last valid object",
@@ -51,11 +51,18 @@
       "work/TASK-076/evidence/identity-head.txt"
     ],
     "command": "unit suite; free replays; paid re-runs on the learn exam (2025) and held-out sets",
-    "result": "REQ-0083 AC1-AC4 verified with a stated null accuracy result: the six fixes are correct and safe (verifier), but the measured accuracy gain is within noise: 2025 learn exam 113 to 111 of 120 (English 59 fixed; 17, 39 run-to-run variation; 27 harmed by adjudication, now opt-in); keyed regression set unchanged (15 pass, 18 of 18 identical); 2026 slice 36 to 36 (comparable 39: 32 to 36 from earlier phases); the gain is removal of context-delivery defects (lost second JSON object, group table not shared, adjudication prompt without options, false missing_text flag); limits: noise about 5 percent flips, n of changed answers 1-4"
+    "result": "REQ-0083 AC1-AC4 verified with a stated null accuracy result: the six fixes are correct and safe (verifier), but the measured accuracy gain is within noise: 2025 learn exam 113 to 111 of 120 (English 59 fixed; 17, 39 run-to-run variation; 27 harmed by adjudication, now opt-in); keyed regression set unchanged (15 pass, 18 of 18 identical); 2026 slice 36 to 36 (comparable 39: 32 to 36 from earlier phases); the gain is removal of context-delivery defects (lost second JSON object, group table not shared, adjudication prompt without options, false missing_text flag); limits: noise about 5 percent flips, n of changed answers 1-4",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-076/evidence/paid-gain.txt"
+      ],
+      "reason": "learn and held-out sets scored against the official answers; prompt identity at HEAD; the null result is stated"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-76-engine-fixes-2025.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -64,7 +71,10 @@
     "designer": "work/TASK-076/handoff/design.md",
     "coder": "work/TASK-076/handoff/code.md",
     "tester": "work/TASK-076/handoff/test.md",
-    "verifier": "work/TASK-076/handoff/verify.md"
+    "verifier": "work/TASK-076/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "the oracle is the official answers (scoring only): learn exam and two held-out sets scored by the coordinator; defects traced by the inspector against the PDF; identity of 295 prompts by the tester"
+    }
   },
   "user_notes": [
     {
@@ -74,7 +84,7 @@
     }
   ],
   "picked_at": "2026-11-04T05:18:38Z",
-  "updated_at": "2026-11-04T07:07:25Z",
+  "updated_at": "2026-11-04T07:07:43Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -84,5 +94,5 @@
     "notes": "",
     "next": "RESUME: 1) read work/TASK-076/handoff/design.md; if its line 1 is PROGRESS: COMPLETE accept it (else re-brief a designer with work/TASK-076/handoff/brief-designer.md). 2) write docs/design/phase-76-en"
   },
-  "next": "report, DONE"
+  "next": ""
 }
