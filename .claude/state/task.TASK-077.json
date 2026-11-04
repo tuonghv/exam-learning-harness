@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-077",
   "title": "Answer-driven learning loop: automatic cause records per wrong answer and held-out gain table (REQ-0084)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0084",
   "acceptance_criteria": [
     "AC1 explain reproduces the manual causes",
@@ -30,9 +30,9 @@
     "summary": "pipeline/explain.py (join, extraction/context/path/solver checks, primary cause), run-stats explain and gain, board flags, rate-limit message stops the run; replay reproduces 2025 manual causes (7 of 7) and 2026 (24, 63, 65, 112; 38 mismatch noted)"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "1573 tests, only the 4 known baseline failures (final run before the last 3-test rate-limit change; test_exam_llm and test_explain re-run after it); key leak audit 0; default output byte-identical to 32dcdf9; 7 mutations caught; hand checks of 5 causes agree except 2026 Q38 (tool unknown, honest)"
   },
   "security": {
     "status": "pending",
@@ -51,11 +51,12 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-077/handoff/design.md",
-    "coder": "work/TASK-077/handoff/code.md"
+    "coder": "work/TASK-077/handoff/code.md",
+    "tester": "work/TASK-077/handoff/test.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-04T07:07:44Z",
-  "updated_at": "2026-11-04T07:39:49Z",
+  "updated_at": "2026-11-04T07:56:52Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -64,5 +65,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tester QA incl. real gain spec"
+  "next": "verified"
 }

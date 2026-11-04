@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-077",
-  "state": "IMPLEMENTING",
-  "next": "tester QA incl. real gain spec",
+  "state": "UNIT_TESTED",
+  "next": "verified",
   "title": "Answer-driven learning loop: automatic cause records per wrong answer and held-out gain table (REQ-0084)",
   "active": [
     {
       "task_id": "TASK-077",
-      "state": "IMPLEMENTING",
-      "next": "tester QA incl. real gain spec",
-      "updated_at": "2026-11-04T07:39:49Z"
+      "state": "UNIT_TESTED",
+      "next": "verified",
+      "updated_at": "2026-11-04T07:56:52Z"
     }
   ],
   "max_active": 1
