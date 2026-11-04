@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-078",
   "title": "Solve gate: only questions meeting the verification level are solved (REQ-0024)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0024",
   "acceptance_criteria": [
     "AC1 needs_review not solved, listed skipped",
@@ -32,9 +32,15 @@
     "summary": "ingest gate by min_verification (api default any, CLI verified via engine.json), skipped list in assembly sidecar, result.json skipped_unverified + report lines + schema; 14 tests; DGNL refined re-ingest byte-identical"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit -p 'test_solve_gate*.py'; test_assembly_qa.py",
+    "result": "26 gate tests pass (1 expected failure documents pre-existing QA-1); test_assembly_qa 11 pass after the engine.json guard now compares only the release selection; 4 other full-suite failures reproduce on the base commit (pre-existing)",
+    "files": [
+      "tests/unit/test_solve_gate.py",
+      "tests/unit/test_solve_gate_qa.py",
+      "tests/unit/test_assembly_qa.py",
+      "tests/unit/test_settings.py"
+    ]
   },
   "security": {
     "status": "pending",
@@ -53,11 +59,12 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-078/handoff/design.md",
-    "coder": "work/TASK-078/handoff/code.md"
+    "coder": "work/TASK-078/handoff/code.md",
+    "tester": "work/TASK-078/handoff/test.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-04T21:09:03Z",
-  "updated_at": "2026-11-04T21:27:59Z",
+  "updated_at": "2026-11-04T21:33:02Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -66,5 +73,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tester QA: isolate the 4 non-gate full-suite failures"
+  "next": "verifier with real evidence: cmp on DGNL refined doc, mock solve skip run"
 }

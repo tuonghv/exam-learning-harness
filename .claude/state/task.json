@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-078",
-  "state": "IMPLEMENTING",
-  "next": "tester QA: isolate the 4 non-gate full-suite failures",
+  "state": "UNIT_TESTED",
+  "next": "verifier with real evidence: cmp on DGNL refined doc, mock solve skip run",
   "title": "Solve gate: only questions meeting the verification level are solved (REQ-0024)",
   "active": [
     {
       "task_id": "TASK-078",
-      "state": "IMPLEMENTING",
-      "next": "tester QA: isolate the 4 non-gate full-suite failures",
-      "updated_at": "2026-11-04T21:27:59Z"
+      "state": "UNIT_TESTED",
+      "next": "verifier with real evidence: cmp on DGNL refined doc, mock solve skip run",
+      "updated_at": "2026-11-04T21:33:02Z"
     }
   ],
   "max_active": 1

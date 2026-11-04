@@ -2227,3 +2227,9 @@ Action: Titan implemented the solve gate
 Result: 14 tests pass; full suite 5 fail+1 error pending triage
 Decision: tester next
 Next: tester
+
+## UNIT_TESTED - TASK-078 - 2026-11-04T21:33:02Z
+Action: Nemesis QA plus guard-test fix
+Result: gate tests 26 pass; 4 unrelated failures pre-existing
+Decision: verify with real ingest+mock solve
+Next: verifier
