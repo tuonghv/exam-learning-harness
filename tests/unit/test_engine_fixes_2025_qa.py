@@ -201,9 +201,8 @@ class CliDefaults(T.Base):
     def test_default_cfg_without_pdf_has_no_adjudicate_key(self):
         self.assertNotIn("adjudicate", self.calls_line())
 
-    def test_pdf_default_on_and_opt_out(self):
-        self.assertTrue(self.calls_line("--pdf", "d.json").get("adjudicate"))
-        self.assertNotIn("adjudicate", self.calls_line("--pdf", "d.json", "--no-adjudicate"))
+    def test_pdf_adjudicate_is_opt_in(self):
+        self.assertNotIn("adjudicate", self.calls_line("--pdf", "d.json"))
         self.assertTrue(self.calls_line("--pdf", "d.json", "--adjudicate").get("adjudicate"))
 
 

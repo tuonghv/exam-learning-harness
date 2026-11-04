@@ -45,8 +45,7 @@ none found in brief scope (main: check docs/notes/incidents.md for "Extra data" 
   (ii) NEW "tentative" text: `ans` has a non-empty answer but `answer_status != "answered"` (declined() true, decision.py:12) and the
   image answer differs. apply_image :190-199 then stores `r["text_ans"] = old ans` before replacing (id 29 round 1 shape).
   Excluded: ids whose status was PASS before the image call (snapshot `before = {i: status}` taken in image_check before apply_image).
-- Default: adjudication runs whenever the conflict set is non-empty and an image call ran (needs `--pdf`); `--no-adjudicate`
-  opts out (cfg["adjudicate"] default True under --pdf; cli.py:64-72, 107-108). See Decision D2 (user OK needed: adds a paid call).
+- Default (changed, see D-coordinator-3): adjudication is OPT-IN (`--adjudicate`, needs `--pdf`); when on it runs whenever the conflict set is non-empty and an image call ran. `--no-adjudicate` was removed.
 - adjudicate(exam, recs, rn, ids): items = (id, text side, image side), text side = `text_ans` for (ii) else `ans`.
   One call for all conflict ids of the run (unchanged prompt). Outcome per id:
   - reply answer == text side: `ans` = text side; FAIL keeps FAIL+reason; else UNCERTAIN "needs_review: adjudicated".
@@ -65,6 +64,13 @@ none found in brief scope (main: check docs/notes/incidents.md for "Extra data" 
 - Side effect to check: questions that shared only a `Source pages:` line (same page, different group or no group) used to
   share a figure; now they do not -> possible NEW flags (these were false negatives). Gate in Verification row 76.3b.
 - Existing md files keep the baked marker; the fix shows after the exam text is rebuilt from the saved ingest doc (0 calls).
+
+### 76.4 Group figures once per group, carrier pages (ingest/api.py `_share_context`, `_with_carrier`, `question_lines`)
+- A figure/table on the group carrier (the question holding the group line) reaches every later member of the same range group, and the carrier's pages are unioned into the members' pages (Source pages). In the labelled render the shared figure line sits in the group's `### Passage` (once per group in the prompt, groups() equality unchanged); the unlabelled path keeps member copies. A figure of a question outside the group is not shared.
+### 76.5 Adjudication prompt carries the options (pipeline/cross.py `adjudicate_prompt`)
+- Each conflict item now includes options A-D besides the stem/passage/figures.
+### 76.6 Decide-from-text rule (cross.py `ADJUDICATE_RULES`)
+- Wording only: decide from the exam text first; outside knowledge only if the text does not decide, then uncertainty at least medium and say so; prefer the reading backed by a quote from the text.
 
 ## Failure modes
 | Failure | System response | Operator sees |
@@ -105,7 +111,7 @@ none found in brief scope (main: check docs/notes/incidents.md for "Extra data" 
 - D3 refcheck: skip structural lines in the sharing key - rejected: "options carry their own data" heuristic (subject-specific, untestable generally), group-context table lookup (needs parser groups at ingest).
 
 - D-coordinator-1 (D2, taken within my autonomy, user told afterwards): adjudication is on by default under `--pdf` with `--no-adjudicate` to opt out. It runs only when the conflict set is non-empty (a few ids per run, one call about 0.05 USD) and only on runs that already use the paid image call; the worst case equals today (status stays UNCERTAIN or FAIL, never PASS).
-- D-coordinator-2 Gain is reported on both exams (learn 2025, hold-out 2026 and the regression set), see REQ-0084.
+- D-coordinator-2 Gain is reported on both exams (learn 2025, hold-out 2026 and the regression set), see REQ-0084.- D-coordinator-3 (D2 reversed, measured): the full 2025 re-solve with all fixes scored 111/120 vs 113/120 before (59 fixed; 17, 27, 39 flipped wrong). Adjudication ran on 3 ids (printed 27, 51, 117): 27 was correct and was changed to a wrong answer, 51 stayed correct, 117 stayed wrong: 0 of 2 conflicts fixed, 1 harmed (n=3). Adjudication is therefore opt-in (`--adjudicate`); all other fixes stay.
 ## Out of scope
 Fences with several objects; reasoning errors (Vietnamese 16, English 60, Math 67, Science 111 answer); key oddities; prompt changes.
 
