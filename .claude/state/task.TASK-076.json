@@ -41,7 +41,13 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {},
-  "user_notes": [],
+  "user_notes": [
+    {
+      "raw": "RAW-00202",
+      "note": "user: after answers, deep dive each mistake (parsing or context not read) and show the gain; becomes REQ-0084/TASK-077; TASK-076 gain must be reported on the other exam too",
+      "at": "2026-11-04T05:25:35Z"
+    }
+  ],
   "picked_at": "2026-11-04T05:18:38Z",
   "updated_at": "",
   "updated_by": "",
