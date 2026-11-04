@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-075",
-  "state": "VERIFIED",
-  "next": "report, DONE",
+  "state": "DONE",
+  "next": "",
   "title": "Discriminating confidence tier: option-distance and existing signals (free), optional second sample with permuted options, measurement by confidence group (REQ-0079)",
-  "active": [
-    {
-      "task_id": "TASK-075",
-      "state": "VERIFIED",
-      "next": "report, DONE",
-      "updated_at": "2026-11-04T05:03:56Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
