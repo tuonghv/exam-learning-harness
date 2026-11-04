@@ -1492,7 +1492,7 @@
       "AC3 skipped never FAIL, counted separately",
       "AC4 solve prompts/schema/decision unchanged"
     ],
-    "completed_at": "2026-11-04T21:37:14Z",
+    "completed_at": "2026-11-04T21:37:15Z",
     "report": "docs/report/phase-78-verified-solve-gate.md"
   }
 ]
