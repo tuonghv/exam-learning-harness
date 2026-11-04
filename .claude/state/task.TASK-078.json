@@ -1,0 +1,56 @@
+{
+  "task_id": "TASK-078",
+  "title": "Solve gate: only questions meeting the verification level are solved (REQ-0024)",
+  "state": "TODO",
+  "requirement": "REQ-0024",
+  "acceptance_criteria": [
+    "AC1 needs_review not sent to claude, listed skipped",
+    "AC2 --min-verification any restores; plain exam files unchanged",
+    "AC3 skipped never FAIL, counted separately",
+    "AC4 solve prompts/schema/decision unchanged"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {},
+  "user_notes": [],
+  "picked_at": "2026-11-04T21:09:03Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
