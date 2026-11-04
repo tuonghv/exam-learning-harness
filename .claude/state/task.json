@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-076",
-  "state": "UNIT_TESTED",
-  "next": "verified",
+  "state": "VERIFIED",
+  "next": "report, DONE",
   "title": "Engine fixes from the 2025 scoring: extract_json last valid object, text/image disagreement settled by adjudication, false missing_text flag (REQ-0083)",
   "active": [
     {
       "task_id": "TASK-076",
-      "state": "UNIT_TESTED",
-      "next": "verified",
-      "updated_at": "2026-11-04T07:07:24Z"
+      "state": "VERIFIED",
+      "next": "report, DONE",
+      "updated_at": "2026-11-04T07:07:25Z"
     }
   ],
   "max_active": 1
