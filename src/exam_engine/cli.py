@@ -62,13 +62,15 @@ def solve_main(argv=None):
     ap.add_argument("--image-scope", choices=("flagged", "declined", "doubt"), default="flagged",
                     help="which questions reach the image call: flagged (default), + declined/cut, + doubtful (needs --pdf)")
     ap.add_argument("--adjudicate", action="store_true",
-                    help="one extra text call for ids whose text and image answers differ (needs --pdf)")
+                    help="(default under --pdf) one extra text call for ids whose text and image answers differ")
+    ap.add_argument("--no-adjudicate", action="store_true",
+                    help="skip the tie-break call under --pdf")
     ap.add_argument("--confidence", action="store_true",
                     help="add a confidence tier per answered question (free; PASS bar unchanged)")
     ap.add_argument("--second-sample", action="store_true",
                     help="paid: re-solve no-check/doubt MCQ answers with permuted options; implies --confidence")
     a = ap.parse_args(argv)
-    if (a.image_scope != "flagged" or a.adjudicate) and not a.pdf:
+    if (a.image_scope != "flagged" or a.adjudicate or a.no_adjudicate) and not a.pdf:
         print("usage: --image-scope declined|doubt and --adjudicate need --pdf", file=sys.stderr)
         return 2
     if a.max_image_pages is not None and (not a.pdf or a.max_image_pages < 0):
@@ -104,7 +106,7 @@ def solve_main(argv=None):
         cfg.update(image_pdf=a.pdf, max_image_pages=4 if a.max_image_pages is None else a.max_image_pages)
         if a.image_scope != "flagged":  # only non-default values enter cfg: default runs stay byte-identical
             cfg["image_scope"] = a.image_scope
-        if a.adjudicate:
+        if not a.no_adjudicate:  # 76.2: tie-break on by default; runs only when a conflict exists
             cfg["adjudicate"] = True
     if a.second_sample:
         cfg["second_sample"] = True

@@ -147,7 +147,7 @@ def solve_round(exam, rn, recs, ids, prompt, tag="solve"):
             if recs[i]["status"] is None:
                 recs[i]["status"], recs[i]["reason"] = "UNCERTAIN", "call_failed"
         return
-    obj, err = claude.extract_json(c.text)
+    obj, err = claude.extract_json(c.text, sch.SOLVE_OUT)
     problems = [err] if err else sch.validate(obj, sch.SOLVE_OUT)
     if problems:
         for i in ids:

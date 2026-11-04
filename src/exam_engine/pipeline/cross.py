@@ -162,7 +162,7 @@ def same_answer(a, b):
 
 def parse_reply(text):
     """({id: answer dict}, None) or (None, reason)."""
-    obj, err = claude.extract_json(text)
+    obj, err = claude.extract_json(text, sch.SOLVE_OUT)
     problems = [err] if err else sch.validate(obj, sch.SOLVE_OUT)
     if problems:
         return None, problems[0]

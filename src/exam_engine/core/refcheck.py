@@ -45,9 +45,12 @@ def referenced_parts(text, shared_figure=False):
     return out
 
 
+_STRUCT = re.compile(r"(Source pages:|#{1,6}\s)")
+
+
 def _first_line(text):
     for ln in unicodedata.normalize("NFC", text or "").split("\n"):
-        if ln.strip():
+        if ln.strip() and not _STRUCT.match(ln.strip()):  # the page-span line and section heads are no group key
             return ln.strip()
     return None
 

@@ -188,6 +188,10 @@ def apply_image(exam, recs, got, targets, flags, fail=None, scope="flagged"):
                     r["status"], r["reason"] = "UNCERTAIN", "needs_review: text/image differ"
                 r["findings"].append(finding("image", "image_differs", "image answer: %s" % g["answer"]))
             else:
+                old = r["ans"]
+                if (old is not None and not is_open(old) and str(old.get("answer") or "").strip()
+                        and not cross.same_answer(old["answer"], g["answer"])):
+                    r["text_ans"], r["image_ans"] = old, g  # tentative text answer kept for the tie-break
                 r["attempts"] += 1
                 r.update(ans=g, review=None, source="image")
                 r["code_checks"] = verifier.det_checks(qs[i], g, exam)
@@ -212,9 +216,16 @@ def apply_image(exam, recs, got, targets, flags, fail=None, scope="flagged"):
 
 
 def adjudicate(exam, recs, rn, ids):
-    """60.6: one text call for the ids whose text and image answers differ; answer replaced with a recorded reason."""
-    items = [(i, recs[i]["ans"], recs[i]["image_ans"]) for i in ids]
-    c = rn.call(cross.adjudicate_prompt(exam, items), "adjudicate")
+    """60.6/76.2: one text call for the ids whose text and image answers differ (incl. a FAIL or a tentative
+    text answer); the answer is replaced with a recorded reason. A failed call keeps the pre-call result."""
+    side = {i: recs[i].get("text_ans") or recs[i]["ans"] for i in ids}
+    items = [(i, side[i], recs[i]["image_ans"]) for i in ids]
+    try:
+        c = rn.call(cross.adjudicate_prompt(exam, items), "adjudicate")
+    except Stop as exc:
+        for i in ids:
+            recs[i]["findings"].append(finding("image", "adjudication_failed", exc.message))
+        return
     got, err = cross.parse_reply(c.text) if c.ok else (None, c.reason or c.cls or "failed")
     for i in ids:
         r = recs[i]
@@ -223,9 +234,12 @@ def adjudicate(exam, recs, rn, ids):
             r["findings"].append(finding("image", "adjudication_failed", err or "not in reply"))
             continue
         r["findings"].append(finding("image", "adjudicated", "adjudicated: %s (text %s, image %s)" % (
-            g["answer"], r["ans"]["answer"], r["image_ans"]["answer"])))
-        r["ans"] = g
-        r["status"], r["reason"] = "UNCERTAIN", "needs_review: adjudicated"
+            g["answer"], side[i]["answer"], r["image_ans"]["answer"])))
+        keep_fail = (r["status"] == "FAIL" and "text_ans" not in r
+                     and cross.same_answer(g["answer"], side[i]["answer"]))
+        if not keep_fail:
+            r["status"], r["reason"] = "UNCERTAIN", "needs_review: adjudicated"
+        r["ans"] = side[i] if keep_fail else g
 
 
 def second_targets(recs, skip):
@@ -261,7 +275,7 @@ def second_sample(exam, recs, rn, ids):
             for i in part:
                 recs[i]["findings"].append(finding("second", "second_skipped", stop))
             continue
-        obj, err = claude.extract_json(c.text) if c.ok else (None, c.reason or "call failed")
+        obj, err = claude.extract_json(c.text, sch.SOLVE_OUT) if c.ok else (None, c.reason or "call failed")
         problems = [err] if err else sch.validate(obj, sch.SOLVE_OUT)
         if problems:
             for i in part:
@@ -299,6 +313,7 @@ def image_check(exam, recs, rn, flags, skip, cfg, image):
         recs[i]["findings"].append(finding("image", "image_skipped", why))
     if not targets:
         return
+    before = {i: recs[i]["status"] for i in targets}
     try:
         pngs = [image["render"](n) for n in pages]
         for b in pngs:  # the render is injected: send only real, bounded PNGs
@@ -319,7 +334,7 @@ def image_check(exam, recs, rn, flags, skip, cfg, image):
     extra = apply_image(exam, recs, got, targets, flags, None, scope)
     if extra:
         print("WARN: image reply ids not asked, ignored: %s" % ", ".join(extra), file=sys.stderr)
-    diff = [i for i in targets if recs[i].get("image_ans") is not None and recs[i]["reason"] == "needs_review: text/image differ"]
+    diff = [i for i in targets if recs[i].get("image_ans") is not None and before[i] != "PASS"]
     if cfg.get("adjudicate") and diff:
         adjudicate(exam, recs, rn, diff)
 

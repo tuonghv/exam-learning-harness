@@ -130,8 +130,26 @@ def _load(s):
     return obj if isinstance(obj, dict) else None
 
 
-def extract_json(text):
-    """(obj, None) for a JSON object, else (None, reason)."""
+def _objects(text):
+    """Every top-level JSON object decoded left to right (a reply with a self-correction holds several)."""
+    dec, out, k = json.JSONDecoder(), [], text.find("{")
+    while k >= 0:
+        try:
+            obj, end = dec.raw_decode(text, k)
+        except (RecursionError, MemoryError):
+            break
+        except ValueError:
+            k = text.find("{", k + 1)
+            continue
+        if isinstance(obj, dict):
+            out.append(obj)
+        k = text.find("{", end)
+    return out
+
+
+def extract_json(text, schema=None):
+    """(obj, None) for a JSON object, else (None, reason). With `schema`, a reply holding several
+    objects (prose between) yields the LAST one if it validates: the model retracted the earlier."""
     if not isinstance(text, str) or not text.strip():
         return None, "empty text"
     obj = _load(text.strip())
@@ -149,4 +167,12 @@ def extract_json(text):
         obj = _load(text[i:j + 1])
         if obj is not None:
             return obj, None
+    if schema is not None:
+        objs = _objects(text)
+        if len(objs) > 1:
+            from exam_engine.core import schema as sch
+            bad = sch.validate(objs[-1], schema)
+            if not bad:
+                return objs[-1], None
+            return None, "last of %d JSON objects invalid: %s" % (len(objs), bad[0])
     return None, "no valid JSON object found"

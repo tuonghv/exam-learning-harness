@@ -187,7 +187,7 @@ class Cli(T.Base):
     def test_11_flags_need_pdf_and_reach_cfg(self):
         from unittest import mock
         from exam_engine import cli
-        for flag in (["--image-scope", "doubt"], ["--adjudicate"]):
+        for flag in (["--image-scope", "doubt"], ["--adjudicate"], ["--no-adjudicate"]):
             code, _o, e = self.main("x.md", "--dry-run", *flag)
             self.assertEqual(code, 2)
             self.assertIn("need --pdf", e)
@@ -203,6 +203,8 @@ class Cli(T.Base):
                 mock.patch.object(cli.engine, "run", fake_run):
             self.main(path, "--mock", mockf, "--out", self.out, "--pdf", "d.json")
             self.assertNotIn("image_scope", seen["cfg"])
+            self.assertTrue(seen["cfg"]["adjudicate"])  # 76.2: default under --pdf
+            self.main(path, "--mock", mockf, "--out", self.out, "--pdf", "d.json", "--no-adjudicate")
             self.assertNotIn("adjudicate", seen["cfg"])
             self.main(path, "--mock", mockf, "--out", self.out, "--pdf", "d.json",
                         "--image-scope", "declined", "--adjudicate")
