@@ -623,7 +623,7 @@
     "created_at": "2026-10-30T15:30:00Z",
     "requirement": "REQ-0034",
     "acceptance_criteria": [
-      "REQ-0034 AC1-AC4: sheet 'Subject \u2013 N Questions', 5 per row, 2-digit ids as stored, circled A-D, \u2014 for null/Open/non A-D, block at top of report.md/html/pdf plus answers.md, solver/schema unchanged",
+      "REQ-0034 AC1-AC4: sheet 'Subject – N Questions', 5 per row, 2-digit ids as stored, circled A-D, — for null/Open/non A-D, block at top of report.md/html/pdf plus answers.md, solver/schema unchanged",
       "REQ-0035 AC1-AC4 phase 1: --view sheet|learn (default sheet), learn view reuses explanation+solution, optional key_concept/common_mistake only if present, no extra LLM cost",
       "Tests in tests/unit/test_exam_report.py with null-answer results (work/dgnl-real Vietnamese/Science), existing report tests stay green, PDF font check for circled letters"
     ],
@@ -1366,5 +1366,18 @@
     ],
     "completed_at": "2026-11-03T11:40:01Z",
     "report": "docs/report/phase-71-ocr-misread-signals.md"
+  },
+  {
+    "task_id": "TASK-072",
+    "title": "Solve the second DGNL sample exam (2025) end to end with the current engine, outputs in plans/reports (REQ-0077)",
+    "priority": 1,
+    "status": "queued",
+    "created_at": "2026-11-04T08:00:00",
+    "requirement": "REQ-0077",
+    "acceptance_criteria": [
+      "AC1 layout inspection and run plan with cost",
+      "AC2 run inside the cap, coverage/flags/cost reported, generality gaps listed",
+      "AC3 scored when answers arrive"
+    ]
   }
 ]
