@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-074",
   "title": "Solver rule for approximate questions: nearest option, compute ambiguous readings (REQ-0080)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0080",
   "acceptance_criteria": [
     "AC1 dev prompt rule + synthetic test, golden",
@@ -15,8 +15,13 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "prompts/dev/exam/solve.md",
+      "prompts/dev/lang/vi/exam/solve.md",
+      "tests/unit/test_nearest_value_rule.py"
+    ],
+    "summary": "dev prompt rule 6 (English) and rule 5 (Vietnamese) for approximate questions: compute plausible readings, choose the nearest option, list readings and distances in checks; release prompts untouched"
   },
   "unit_test": {
     "status": "pending",
@@ -41,11 +46,12 @@
   "roles": {
     "designer": {
       "waiver": "one prompt rule; design written by the coordinator from the root-cause report"
-    }
+    },
+    "coder": "work/TASK-074/handoff/code.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-04T03:42:40Z",
-  "updated_at": "2026-11-04T03:43:00Z",
+  "updated_at": "2026-11-04T03:57:24Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-074/"
@@ -56,5 +62,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Titan: tests first, 74.1-74.2"
+  "next": "unit-test gate"
 }
