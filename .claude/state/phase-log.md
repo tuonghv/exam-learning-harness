@@ -2095,3 +2095,9 @@ Action: Report written
 Result: TASK-074 verified, docs/report/phase-74-nearest-value-rule.md
 Decision: DONE
 Next: TASK-075 confidence tier (paid question), REQ-0082
+
+## DESIGN - TASK-075 - 2026-11-04T03:57:54Z
+Action: Nova designed the confidence tier; coordinator took decisions 1-3
+Result: design COMPLETE
+Decision: separate tier, same model, scope no_independent_check + doubt; paid P1/P2 need the user
+Next: coder free slice
