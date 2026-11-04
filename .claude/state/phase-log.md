@@ -2125,3 +2125,9 @@ Action: Report written
 Result: TASK-075 verified, docs/report/phase-75-confidence-tier.md
 Decision: DONE
 Next: REQ-0081 scoring of the 2025 sample pools the tier data; REQ-0082 ambiguous readings
+
+## DESIGN - TASK-073 - 2026-11-04T05:18:12Z
+Action: Coordinator defined the scoring
+Result: design COMPLETE
+Decision: score then root-cause
+Next: evidence
