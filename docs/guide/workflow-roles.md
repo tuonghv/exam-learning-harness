@@ -113,3 +113,11 @@ The user checks a task from committed paths only (RAW-00171, RAW-00174, REQ-0061
 - Gates (flagged tasks): VERIFIED needs `verification.published` files that exist, are not git-ignored and scan clean;
   DONE needs the report to cite >=1 existing `docs/report/evidence/<T>/<file>` and an INDEX row.
 - Index: `_evidence.py index [--check]` regenerates `docs/report/INDEX.md` (deterministic); advance.sh runs it at DONE.
+
+## 10. Answer-driven learning loop (user, RAW-00199/00202; phase 77)
+When the user gives official answers for a solved exam:
+1. Keep the list in git-ignored `input/` (`input/dgnl/*.answer.txt` is ignored); it is for scoring only and never reaches a solver input, a prompt, a tracked file or a reply beyond counts and question numbers.
+2. Run `run-stats explain` on each saved run (free, no AI) into `reports/`; record cause counts and question numbers only.
+3. Fix only engine causes (infrastructure, extraction, context_not_delivered, reply_path), one task each; send `key_oddity_candidate` and solver-reasoning rows to the user as a short list to check.
+4. After a fix, run `run-stats gain` over ALL questions (declined ones count as not correct). Claim a gain only from a held-out row (an exam the fix was not learned from) with changed answers >= 5; otherwise say "no measurable change".
+5. Report both numbers when an exclusion is tempting (a slice artifact, a declined question): the honest figure includes them.
