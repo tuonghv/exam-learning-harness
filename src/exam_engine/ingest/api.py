@@ -120,6 +120,8 @@ def _with_carrier(q, cur):
     pages = [n for n in cur.get("pages") or () if n != q.get("page")]
     if figs:
         q = dict(q, figures=figs + list(q.get("figures") or ()))
+    if cur.get("figs"):
+        q = dict(q, group_figures=list(cur["figs"]))
     if pages and q.get("page"):
         q = dict(q, continued_pages=sorted(set(q.get("continued_pages") or ()) | set(pages)))
     return q
@@ -164,6 +166,8 @@ def _share_context(qs):
             else:
                 close()
                 cur = {"lo": lo, "hi": hi, "ctx": ctx, "at": len(out), "last": num or 0, **_carrier(q)}
+                if cur["figs"]:
+                    q = dict(q, group_figures=list(cur["figs"]))
             ghost = None
         elif cur and num is not None and cur["lo"] < num <= cur["hi"]:
             cur["last"] = max(cur["last"], num)
@@ -203,13 +207,15 @@ def question_lines(q):
                                       and len(pg) > 1 else ",".join(map(str, pg))), ""]
     if guide:  # four-level form: instruction / passage / question text (FORMAT.md)
         out += ["### Instruction for this group", "", guide, ""]
-        if passage:
-            out += ["### Passage", "", passage, ""]
+        shared = ["[Figure/table: %s]" % f for f in q.get("group_figures") or ()]  # once per group, with the passage
+        if passage or shared:
+            out += ["### Passage", ""] + ([passage] if passage else []) + shared + [""]
         out += ["### Question text", ""]
     elif q.get("context"):
         out += [q["context"], ""]
     out += [q.get("text") or "", ""]
-    return out + ["[Figure/table: %s]" % f for f in q.get("figures") or ()]
+    own = [f for f in q.get("figures") or () if not guide or f not in (q.get("group_figures") or ())]
+    return out + ["[Figure/table: %s]" % f for f in own]
 
 
 def _section_lines(q, prev):

@@ -114,6 +114,10 @@ CONTINUES = "A question may continue on the next attached page.\n"
 ADJUDICATE_RULES = (
     "Two readings of the same question disagree: one from the exam text, one from the page image. "
     "For each question below choose ONE final answer and explain why in the explanation. "
+    "Decide from the exam text (passage, figures, question) first. Use outside knowledge only if the text "
+    "does not decide, and then set uncertainty at least medium and say in the explanation that outside "
+    "knowledge was used. If one reading is supported by a quote from the text and the other only by "
+    "outside knowledge, choose the text-supported one. "
     "Use exactly these ids.\n%s")
 
 

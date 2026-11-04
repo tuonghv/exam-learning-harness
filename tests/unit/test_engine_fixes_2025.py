@@ -254,6 +254,8 @@ class GroupFigures(unittest.TestCase):
         pr = cross.adjudicate_prompt(ex, [(1, T.a(1, "A"), T.a(1, "B"))])
         for o in ("A. alpha-opt", "B. beta-opt", "C. gamma-opt", "D. delta-opt"):
             self.assertIn(o, pr)
+        self.assertIn("Decide from the exam text", pr)
+        self.assertIn("choose the text-supported one", pr)
 
 
 if __name__ == "__main__":
