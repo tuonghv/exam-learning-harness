@@ -218,6 +218,7 @@
                     "format",
                     "quote",
                     "key_match",
+                    "option_distance",
                     "ai_review"
                   ]
                 },
@@ -323,6 +324,15 @@
             "type": "integer",
             "minimum": 1
           },
+          "confidence": {
+            "type": "string",
+            "enum": [
+              "verified",
+              "likely_ok",
+              "unknown",
+              "likely_wrong"
+            ]
+          },
           "source": {
             "type": "string",
             "enum": [
@@ -382,6 +392,9 @@
         "unresolved": {
           "type": "integer",
           "minimum": 0
+        },
+        "confidence": {
+          "type": "object"
         },
         "points": {
           "type": [

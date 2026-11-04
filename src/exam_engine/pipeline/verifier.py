@@ -154,6 +154,38 @@ def _computed(ans):
                 "pass" if ok else "fail", True)
 
 
+def option_distance(q, ans):
+    """75.1: the solver's expr against the numeric options. None when not applicable; never "fail", never
+    independent (the expr is the solver's own work), so decide() and the status cannot change."""
+    opts, key = q.get("options") or {}, str(ans.get("answer") or "").strip()
+    if not ans.get("expr") or key not in opts or len(opts) < 2:
+        return None
+    try:
+        v = safe_eval(ans["expr"])
+    except ValueError:
+        return None
+    vals = {}
+    for k, t in opts.items():
+        nums = _NUM.findall(str(t).replace("\u2212", "-"))
+        if len(nums) != 1:
+            return None  # one number per option only: "19.975.000" or "3; 5" gives two
+        vals[k] = float(nums[0].replace(",", "."))
+    order = sorted(vals, key=lambda k: abs(vals[k] - v))
+    near, d1, d2 = order[0], abs(vals[order[0]] - v), abs(vals[order[1]] - v)
+    unique = d2 >= 2 * d1 and d2 > d1
+    detail = "expr=%.10g nearest=%s chosen=%s" % (v, near, key)
+    if unique and near == key:
+        return _chk("option_distance", detail, "pass", False)
+    ov = vals[near]
+    if unique and ov and 0.5 <= v / ov <= 2:
+        detail += " mismatch"
+    return _chk("option_distance", detail, "unknown", False)
+
+
+def option_mismatch(chk):
+    return bool(chk) and chk["kind"] == "option_distance" and chk["detail"].endswith(" mismatch")
+
+
 _ELISION = re.compile(r"\(\.\.\.\)|\[\.\.\.\]|\.\.\.|\u2026")
 
 

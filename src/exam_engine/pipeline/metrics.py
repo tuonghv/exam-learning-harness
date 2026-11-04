@@ -206,6 +206,8 @@ def compute(result, log_lines=None, exam=None, key=None, qa=None, needs_review=N
         counts["structure_flags"] = flags
         m["by_parse_flag"] = {"flagged": _slice([r for r in rows if r["parse_flag"]]),
                               "clean": _slice([r for r in rows if not r["parse_flag"]])}
+    if key_blk and any(q.get("confidence") for q in qs):  # 75.4: key only for --confidence results
+        m["confidence"] = _by_confidence(rows, qs)
     if quality:  # only the board asks: stats/metrics.json stay byte-identical (63.1)
         m["quality"] = _quality(rows, qs, counts, qa_blk, key_blk, structure is not None)
     return m
@@ -243,6 +245,24 @@ def _outcome(q, key_ok):
     return "unkeyed_answered" if key_ok is None else ("correct" if key_ok else "wrong")
 
 
+def _by_confidence(rows, qs):
+    """75.4: keyed answered questions per confidence tier, silent wrong in likely_ok, recall of wrong answers."""
+    tiers = {}
+    for q, r in zip(qs, rows):
+        if r["answered"] and r["key_ok"] is not None:
+            t = tiers.setdefault(q.get("confidence") or "none", {"n": 0, "correct": 0})
+            t["n"] += 1
+            t["correct"] += bool(r["key_ok"])
+    for t in tiers.values():
+        t["wrong"] = t["n"] - t["correct"]
+        t["precision"] = _rate(t["correct"], t["n"])
+        t["precision_ci"] = wilson(t["correct"], t["n"])
+    wrong = sum(t["wrong"] for t in tiers.values())
+    lw = tiers.get("likely_wrong", {}).get("wrong", 0)
+    return {"by_confidence": tiers, "wrong_in_likely_ok": tiers.get("likely_ok", {}).get("wrong", 0),
+            "wrong_recall": {"k": lw, "n": wrong, "rate": _rate(lw, wrong), "ci": wilson(lw, wrong)}}
+
+
 def _quality(rows, qs, counts, qa_blk, key_blk, structured=False):
     """63.1: key quality (from key_ok: given key or scorer score) and QA proxy of one run."""
     flag = {str(q.get("id")): _flagged(q) for q in qs}
@@ -276,6 +296,8 @@ def _quality(rows, qs, counts, qa_blk, key_blk, structured=False):
                     "proxy_false_alarm": _rate(len(qfl_ok), len(qfl)),
                     "needs_review_by_why": counts.get("needs_review_by_why"),
                     "image_agrees": counts.get("image_agrees"), "image_differs": counts.get("image_differs")}
+    if key_blk and any(q.get("confidence") for q in qs):  # 75.4: keys only for --confidence results
+        out.update(_by_confidence(rows, qs))
     if structured:  # 69.3: parse-suspect vs solver split; named apart from the engine-review `flagged`
         out["parse_flagged"] = sum(1 for r in rows if r["parse_flag"])
         if key_blk:
@@ -490,6 +512,13 @@ def block(m):
         img += " mapped %d" % c["answer_mapped"]
     if c.get("needs_review_by_why"):
         img += " review_why " + ",".join("%s=%d" % kv for kv in sorted(c["needs_review_by_why"].items()))
+    bc = (m.get("confidence") or {}).get("by_confidence")
+    cl = []
+    if bc:  # 75.4: one extra line only for --confidence results
+        cl = ["confidence: " + " | ".join(
+            "%s %d/%d%s" % (t, bc[t]["correct"], bc[t]["n"], " [%.2f,%.2f]" % bc[t]["precision_ci"]
+                            if bc[t]["precision_ci"] else "")
+            for t in ("verified", "likely_ok", "unknown", "likely_wrong", "none") if t in bc)]
     return [
         "metrics: answered %d/%d declined %d malformed %d retry %s%s" % (
             c["answered"], m["n"], c["declined"], c["malformed"], _pct(r.get("retry_rate")), img),
@@ -497,7 +526,7 @@ def block(m):
         "cost: calls %s $%s llm_s %s" % (
             "-" if cost.get("calls") is None else cost["calls"], "-" if usd is None else "%.4f" % usd,
             "-" if cost.get("llm_s") is None else cost["llm_s"]),
-    ]
+    ] + cl
 
 
 def load_refined_why(path):

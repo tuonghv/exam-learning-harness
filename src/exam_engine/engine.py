@@ -13,7 +13,7 @@ import sys
 from exam_engine.adapters import claude
 from exam_engine.core import refcheck, schema as sch
 from exam_engine.core.decision import decide_rec, evidence_kind, is_open, new_rec
-from exam_engine.core.decision import declined, finding
+from exam_engine.core.decision import TIERS, confidence, declined, finding
 from exam_engine.pipeline import cross, metrics, parser, prompts, reporter, router, scorer, solver, verifier
 
 BLOCKING = ("auth", "rate_limit", "service")
@@ -265,6 +265,7 @@ def build_result(exam, exam_path, recs, cfg, rn, stopped):
     miss = visual_flags(exam)
     pgs = {q["id"]: q["pages"] for q in exam["questions"] if q.get("pages")}
     qs = []
+    qmap = {q["id"]: q for q in exam["questions"]}
     for i in sorted(recs):
         r = recs[i]
         a = r["ans"] or {}
@@ -274,15 +275,27 @@ def build_result(exam, exam_path, recs, cfg, rn, stopped):
             r["status"], r["reason"] = "UNCERTAIN", "not_solved"
         if r["reason"] == "solver_declined" and miss.get(i):
             r["reason"] = "solver_declined: missing_text (%s)" % ", ".join(miss[i])
+        extra = {}
+        if cfg.get("confidence"):  # 75.1/75.3: only with --confidence, so default result.json is unchanged
+            oc = verifier.option_distance(qmap.get(i) or {}, a)
+            fnd = r["findings"] + ([finding("deterministic", "option_mismatch", oc["detail"])]
+                                   if verifier.option_mismatch(oc) else [])
+            view = dict(r, findings=fnd)
+            tier = confidence(view, list((qmap.get(i) or {}).get("options") or {}))
+            extra = {"confidence": tier} if tier else {}
+            r_checks = r["checks"] + ([oc] if oc else [])
+            r_findings = fnd
+        else:
+            r_checks, r_findings = r["checks"], r["findings"]
         sc = r["score"] or {"points": None, "max": None, "basis": "none", "detail": "no key"}
         qs.append({
             "id": str(i), "evidence_kind": evidence_kind(r), "answer": a.get("answer"), "solution": a.get("solution") or [],
             "explanation": a.get("explanation") or "",
             "uncertainty": a.get("uncertainty") or {"level": "high", "reason": "no answer"},
-            "checks": r["checks"], "verification_status": r["status"],
-            "status_reason": r["reason"], "qa_findings": r["findings"], "score": sc,
+            "checks": r_checks, "verification_status": r["status"],
+            "status_reason": r["reason"], "qa_findings": r_findings, "score": sc,
             "attempts": max(1, r["attempts"]), "unresolved": r["status"] != "PASS" and r["reason"] != "no_independent_check",
-            "error": r["error"], **({"pages": pgs[i]} if pgs.get(i) else {}),
+            "error": r["error"], **extra, **({"pages": pgs[i]} if pgs.get(i) else {}),
             **({"source": r["source"]} if r.get("source") else {})})
     pts = [q["score"]["points"] for q in qs if q["score"]["points"] is not None]
     mx = [q["score"]["max"] for q in qs if q["score"]["max"] is not None]
@@ -303,6 +316,9 @@ def build_result(exam, exam_path, recs, cfg, rn, stopped):
                     "fail": sum(q["verification_status"] == "FAIL" for q in qs),
                     "uncertain": sum(q["verification_status"] == "UNCERTAIN" for q in qs),
                     "unresolved": sum(q["unresolved"] for q in qs),
+                    **({"confidence": {t: sum(q.get("confidence") == t for q in qs) for t in TIERS
+                                       if any(q.get("confidence") == t for q in qs)}}
+                       if cfg.get("confidence") else {}),
                     "points": sum(pts) if pts else None, "max_points": sum(mx) if mx else None}}
 
 
