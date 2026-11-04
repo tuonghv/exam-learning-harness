@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-037",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "scoring evidence recorded",
   "title": "Score the user's labelled real pages with extract-eval (REQ-0040); waits for the user's labelled pages",
   "active": [
     {
       "task_id": "TASK-037",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "scoring evidence recorded",
+      "updated_at": "2026-11-04T03:24:21Z"
     }
   ],
   "max_active": 1

@@ -2005,3 +2005,9 @@ Action: Report written
 Result: TASK-034 verified, docs/report/phase-34-compaction-measure.md
 Decision: DONE
 Next: TASK-037 waits for the user pages
+
+## DESIGN - TASK-037 - 2026-11-04T03:24:21Z
+Action: Coordinator defined the scoring method
+Result: design COMPLETE
+Decision: inspector scores, engine re-solves the worst questions
+Next: record evidence

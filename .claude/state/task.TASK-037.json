@@ -1,15 +1,17 @@
 {
   "task_id": "TASK-037",
   "title": "Score the user's labelled real pages with extract-eval (REQ-0040); waits for the user's labelled pages",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0040",
   "acceptance_criteria": [
-    "REQ-0040 AC1-AC2"
+    "AC1 gold stored outside solver inputs",
+    "AC2 end-to-end accuracy scored, n=120",
+    "AC3 extraction-only gold split to REQ-0078"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-37-dgnl-real-score.md",
+    "summary": "score saved DGNL runs against the official answers (scoring only), re-solve worst questions with the current engine, root-cause the remaining wrong answers",
     "reuse": [],
     "risks": []
   },
@@ -37,11 +39,15 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": {
+      "waiver": "analysis task without code; design written by the coordinator"
+    }
+  },
   "user_notes": [],
   "picked_at": "2026-11-03T11:46:52Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-04T03:24:21Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -50,5 +56,5 @@
     "notes": "",
     "next": "when the user gives the page path: run extract-eval on the labelled pages, measure accuracy and the OCR low_conf false-alarm share"
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "scoring evidence recorded"
 }
