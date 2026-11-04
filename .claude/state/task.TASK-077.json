@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-077",
   "title": "Answer-driven learning loop: automatic cause records per wrong answer and held-out gain table (REQ-0084)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0084",
   "acceptance_criteria": [
     "AC1 explain reproduces the manual causes",
@@ -35,12 +35,18 @@
     "result": "1573 tests, only the 4 known baseline failures (final run before the last 3-test rate-limit change; test_exam_llm and test_explain re-run after it); key leak audit 0; default output byte-identical to 32dcdf9; 7 mutations caught; hand checks of 5 causes agree except 2026 Q38 (tool unknown, honest)"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "no key letters or exam text in any output (audit 0 leaks, planted leaks caught)"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-077/evidence/explain-replay.txt",
+      "work/TASK-077/evidence/gain-real.txt",
+      "work/TASK-077/evidence/t77-final-suite.txt"
+    ],
+    "command": "explain replay on saved 2025 and 2026 runs; gain table by hand; key-leak audit",
+    "result": "REQ-0084 AC1-AC4 verified: explain reproduces the 7 manual causes of the 2025 run (multi-JSON English = 9) and 4 of 5 for 2026 (Q38 unknown, honest); synthetic check tests; held-out gain table computed over all questions (2025 113 to 111 of 120, 2026 36 to 36 of 43 = no measurable change) and on the board; process rule in workflow-roles section 10; key leak 0; rate-limit stop fixed; limits: regression-set gain not wired, small samples"
   },
   "report": {
     "status": "pending",
@@ -52,11 +58,12 @@
   "roles": {
     "designer": "work/TASK-077/handoff/design.md",
     "coder": "work/TASK-077/handoff/code.md",
-    "tester": "work/TASK-077/handoff/test.md"
+    "tester": "work/TASK-077/handoff/test.md",
+    "verifier": "work/TASK-077/handoff/verify.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-04T07:07:44Z",
-  "updated_at": "2026-11-04T07:56:52Z",
+  "updated_at": "2026-11-04T07:56:53Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -65,5 +72,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verified"
+  "next": "report, DONE"
 }

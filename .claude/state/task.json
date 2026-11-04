@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-077",
-  "state": "UNIT_TESTED",
-  "next": "verified",
+  "state": "VERIFIED",
+  "next": "report, DONE",
   "title": "Answer-driven learning loop: automatic cause records per wrong answer and held-out gain table (REQ-0084)",
   "active": [
     {
       "task_id": "TASK-077",
-      "state": "UNIT_TESTED",
-      "next": "verified",
-      "updated_at": "2026-11-04T07:56:52Z"
+      "state": "VERIFIED",
+      "next": "report, DONE",
+      "updated_at": "2026-11-04T07:56:53Z"
     }
   ],
   "max_active": 1
