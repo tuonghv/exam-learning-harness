@@ -12,7 +12,7 @@ Verdict: the fixes remove real defects, but no accuracy gain is measurable: the 
 ## Measured (answers used for scoring only; counts and question numbers recorded)
 - Learn exam, 2025: 113 to 111 of 120. English 59 fixed; 17 and 39 flipped (about 5 percent of answers flip between identical runs); 27 harmed by adjudication.
 - Keyed regression set (held-out): 15 pass, 0 fail, 3 uncertain, identical verdicts on all 18 items.
-- 2026 slice with refined text (held-out, 43 questions): 36 to 36. English 57-60 are declined with missing_text because the passage start is not in the refined pages (correct); on the other 39, 32 to 36, from the earlier window and image-retry work, not from this task.
+- 2026 slice with refined text (held-out, 43 questions): 36 to 36 (4 fixed, 4 regressed; checked by hand in TASK-077). The 4 regressions are English 57-60, declined with missing_text because the passage start is not in the refined pages (a slice artifact; the engine refuses instead of guessing). The 4 fixes (Vietnamese 10, 14, 23, Math 66) come from the earlier window and image-retry work, not from this task. Dropping the 4 declined questions would give 32 to 36 of 39, but that choice is mine and flatters the result: the honest figure is 36 to 36 of 43.
 - Spend: about 4.0 USD.
 
 ## Limits
