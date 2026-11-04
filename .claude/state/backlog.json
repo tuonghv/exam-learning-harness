@@ -1421,7 +1421,7 @@
       "AC1 design compares >=3 options",
       "AC2 implemented tests-first, measured on scored DGNL answers with Wilson intervals, paid checks inside caps"
     ],
-    "completed_at": "2026-11-04T05:04:02Z",
+    "completed_at": "2026-11-04T05:04:03Z",
     "report": "docs/report/phase-75-confidence-tier.md"
   }
 ]
