@@ -153,7 +153,7 @@ def compute(result, log_lines=None, exam=None, key=None, qa=None, needs_review=N
         "needs_review": needs_review,
     }
     if any(q.get("source") for q in qs):  # keys only for image-check runs: old metrics.json stay identical
-        counts["image_checked"] = sum(1 for q in qs if q.get("source") in ("image", "text+image"))
+        counts["image_checked"] = sum(1 for q in qs if q.get("source") in ("image", "text+image", "adjudicated"))
         counts["image_changed"] = sum(1 for q in qs if q.get("source") == "image"
                                       or _reason(q).startswith("needs_review: text/image"))
     scope = (result.get("run") or {}).get("image_scope")

@@ -342,7 +342,8 @@
             "enum": [
               "text",
               "image",
-              "text+image"
+              "text+image",
+              "adjudicated"
             ]
           },
           "unresolved": {

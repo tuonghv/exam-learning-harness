@@ -240,6 +240,7 @@ def adjudicate(exam, recs, rn, ids):
         if not keep_fail:
             r["status"], r["reason"] = "UNCERTAIN", "needs_review: adjudicated"
         r["ans"] = side[i] if keep_fail else g
+        r["source"] = "adjudicated"
 
 
 def second_targets(recs, skip):

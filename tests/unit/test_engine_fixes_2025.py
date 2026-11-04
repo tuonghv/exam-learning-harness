@@ -157,6 +157,18 @@ class Adjudication(TI.Base):
             n[adj] = len(llm.prompts)
         self.assertEqual(n, {True: 3, False: 2})
 
+    def test_adjudicated_source_validates_and_reports(self):
+        from exam_engine.pipeline import metrics
+        text = TI.exam("Source pages: 3\n\n" + TI.FIG)
+        im, image = self.img(None, T.solve(T.a(1, "6")))
+        llm = T.Script(T.solve(T.a(1, "5")), T.qa((1, "agree")), T.solve(T.a(1, "6")))
+        res, _ = self.run_img(text, llm, image, adjudicate=True)
+        self.assertEqual(res["questions"][0]["source"], "adjudicated")
+        self.assertEqual(sch.validate(res, sch.RESULT), [])
+        self.assertEqual(metrics.compute(res)["counts"]["image_checked"], 1)
+        with open(res["reports"]["md"], encoding="utf-8") as fh:
+            self.assertIn("- Source: adjudicated", fh.read())
+
     def test_no_pdf_no_call(self):
         path = self.write("exam.md", TI.exam("Compute 3+4."))
         llm = T.Script(T.solve(T.a(1, "7")), T.qa((1, "agree")))

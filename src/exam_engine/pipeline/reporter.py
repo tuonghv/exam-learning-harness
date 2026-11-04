@@ -180,7 +180,7 @@ def build_markdown(result, metrics=None):
         md.append("- Answer: %s" % ("Open (needs a human rubric)" if opened else
                                     _one_line(q.get("answer")) or "none"))
         md.append("- Verdict: **%s**" % verdict)
-        if q.get("source") in ("image", "text+image"):
+        if q.get("source") in ("image", "text+image", "adjudicated"):
             md.append("- Source: %s" % q["source"])
         md.append("- Reason: %s" % (_one_line(q.get("status_reason")) or "-"))
         md.append("- Evidence: %s" % (q.get("evidence_kind") or evidence_kind(q)))
