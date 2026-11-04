@@ -281,7 +281,8 @@ def build_result(exam, exam_path, recs, cfg, rn, stopped):
             fnd = r["findings"] + ([finding("deterministic", "option_mismatch", oc["detail"])]
                                    if verifier.option_mismatch(oc) else [])
             view = dict(r, findings=fnd)
-            tier = confidence(view, list((qmap.get(i) or {}).get("options") or {}))
+            opts = (qmap.get(i) or {}).get("options") or {}
+            tier = confidence(view, list(opts), bool(a) and verifier.option_for_value(a.get("answer"), opts))
             extra = {"confidence": tier} if tier else {}
             r_checks = r["checks"] + ([oc] if oc else [])
             r_findings = fnd

@@ -82,10 +82,11 @@ def names_other_option(ans, keys):
                for k in keys)
 
 
-def confidence(rec, keys=None):
+def confidence(rec, keys=None, mapped=False):
     """75.3 tier beside the status, never an input to decide(): verified | likely_ok | unknown | likely_wrong,
     None for declined/open/no answer. Negative signals only; likely_ok needs an outside positive channel
-    (image agrees) and no negative one. keys = option letters of the question."""
+    (image agrees) and no negative one. keys = option letters of the question; mapped = the answer is a
+    value that maps to exactly one option (option_for_value), so a failed `format` check is no signal."""
     ans = rec.get("ans")
     if not ans or declined(ans) or is_open(ans):
         return None
@@ -94,7 +95,8 @@ def confidence(rec, keys=None):
     codes = {f.get("code") for f in rec.get("findings") or []}
     verdict = (rec.get("review") or {}).get("verdict")
     level = (ans.get("uncertainty") or {}).get("level")
-    if (rec.get("status") == "FAIL" or verdict in ("disagree", "unsure") or codes & _WRONG_CODES
+    fmt_only = mapped and str(rec.get("reason") or "").startswith("check_failed: format")
+    if ((rec.get("status") == "FAIL" and not fmt_only) or verdict in ("disagree", "unsure") or codes & _WRONG_CODES
             or level == "high" or names_other_option(ans, keys)):
         return "likely_wrong"
     soft = (rec.get("attempts") or 0) > 1 or codes & _SOFT_CODES or level != "low"

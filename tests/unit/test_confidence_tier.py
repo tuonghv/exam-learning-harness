@@ -56,6 +56,16 @@ class OptionDistance(unittest.TestCase):
         self.assertIsNone(verifier.option_distance(Q, ans("B", "import os")))
 
 
+class MappedEngine(t.Base):
+    def tier(self, answer):
+        self.go(MCQ, t.Script(t.solve(t.a(1, answer, expr=None)), t.qa((1, "agree"))), confidence=True)
+        return self.result_file()["questions"][0].get("confidence")
+
+    def test_value_maps_vs_not(self):
+        self.assertNotEqual(self.tier("40"), "likely_wrong")
+        self.assertEqual(self.tier("33"), "likely_wrong")
+
+
 class Tier(unittest.TestCase):
     keys = ["A", "B", "C", "D"]
 
@@ -78,6 +88,13 @@ class Tier(unittest.TestCase):
                   rec(codes=["image_differs"]), rec(codes=["option_mismatch"]),
                   rec(codes=["adjudicated"]), rec(codes=["second_differs"])):
             self.assertEqual(self.tier(r), "likely_wrong", r)
+
+    def test_value_answer_format_fail_is_no_flag_when_mapped(self):
+        r = rec(status="FAIL", reason="check_failed: format", answer="40")
+        self.assertEqual(dec.confidence(r, self.keys, mapped=True), "unknown")
+        self.assertEqual(dec.confidence(r, self.keys, mapped=False), "likely_wrong")
+        r = rec(status="FAIL", reason="check_failed: computed", answer="40")
+        self.assertEqual(dec.confidence(r, self.keys, mapped=True), "likely_wrong")
 
     def test_unknown_when_no_positive_channel(self):
         self.assertEqual(self.tier(rec()), "unknown")
@@ -181,6 +198,76 @@ class Metrics(unittest.TestCase):
         self.assertNotIn("confidence", m)
         self.assertNotIn("by_confidence", m["quality"])
         self.assertEqual(len(metrics.block(m)), 3)
+
+
+class Adversarial(unittest.TestCase):
+    """TASK-075 QA: malformed/missing fields, unicode, value answers, false positives of the alternative-reading rule."""
+    keys = list("ABCD")
+
+    def test_missing_optional_fields_do_not_crash(self):
+        base = rec()["ans"]
+        for r in ({}, {"ans": dict(base, uncertainty=None)}, {"ans": dict(base, issues=None)},
+                  {"ans": dict(base), "findings": None, "review": None, "attempts": None, "status": None}):
+            r.setdefault("ans", base)
+            self.assertIn(dec.confidence(r, self.keys), (None, "unknown", "likely_wrong"))
+        self.assertIsNone(dec.confidence({}, self.keys))
+        r = {"ans": dict(base, uncertainty=None), "findings": None, "review": None, "attempts": None}
+        self.assertEqual(dec.confidence(r, self.keys), "unknown")  # level None is not low: never likely_ok
+
+    def test_medium_without_reason_is_not_flagged(self):
+        r = rec(answer="C", level="medium", why=None)
+        self.assertEqual(dec.confidence(r, self.keys), "unknown")
+        r["ans"]["uncertainty"] = {"level": "medium"}
+        self.assertEqual(dec.confidence(r, self.keys), "unknown")
+
+    def test_unicode_and_lowercase_letters_are_not_option_keys(self):
+        for why in ("\uff22 is the other one", "\u0412 option", "b is the other", "B1 variant", "AB"):
+            self.assertFalse(dec.names_other_option(
+                {"answer": "A", "uncertainty": {"level": "medium", "reason": why}}, self.keys), why)
+
+    def test_unicode_keys_match_only_themselves(self):
+        a = {"answer": "A", "uncertainty": {"level": "medium", "reason": "\uff22 is the other"}}
+        self.assertTrue(dec.names_other_option(a, ["A", "\uff22"]))
+
+    def test_explanation_text_is_never_read(self):
+        # confident solver listing wrong options in the explanation: no flag, whatever the level
+        for level in ("low", "medium"):
+            r = rec(answer="C", level=level, why="calculation matches")
+            r["ans"]["explanation"] = "Options A, B and D are far off; C matches."
+            self.assertEqual(dec.confidence(r, self.keys), "unknown")
+
+    def test_value_answer_keys_unaffected(self):
+        r = rec(answer="230%", level="medium", why="plain")
+        self.assertEqual(dec.confidence(r, self.keys), "unknown")
+        r = rec(status="FAIL", reason="check_failed: format", answer="230%")
+        self.assertEqual(dec.confidence(r, self.keys), "likely_wrong")  # known: a format FAIL on a value answer
+
+    def test_eliminated_option_in_medium_reason_is_flagged_known_limit(self):
+        # replay run3: reasons like "A and D are weaker" flag a right answer; documents the false-alarm class
+        r = rec(answer="C", level="medium", why="options A and D are weaker")
+        self.assertEqual(dec.confidence(r, self.keys), "likely_wrong")
+
+    def test_wilson_known_values(self):
+        lo, hi = metrics.wilson(5, 10)
+        self.assertEqual((round(lo, 3), round(hi, 3)), (0.237, 0.763))
+        lo, hi = metrics.wilson(10, 10)
+        self.assertEqual((round(lo, 3), hi), (0.722, 1.0))
+        self.assertIsNone(metrics.wilson(0, 0))
+
+    def test_wrong_in_likely_ok_counts_silent_wrong(self):
+        res = mres([("B", "likely_ok"), ("A", "likely_ok"), ("A", "unknown")])
+        m = metrics.compute(res, key={"1": "A", "2": "A", "3": "A"})
+        self.assertEqual(m["confidence"]["wrong_in_likely_ok"], 1)
+        self.assertEqual(m["confidence"]["wrong_recall"]["k"], 0)
+        self.assertEqual(m["confidence"]["wrong_recall"]["n"], 1)
+
+    def test_flag_default_off_via_cli(self):
+        import test_exam_run as er
+        ap = os.path.join(er.ROOT, "src", "exam_engine", "cli.py")
+        with open(ap, encoding="utf8") as fh:
+            src = fh.read()
+        self.assertIn('"--confidence", action="store_true"', src)  # no default=True
+        self.assertNotIn("confidence=True", src)
 
 
 if __name__ == "__main__":
