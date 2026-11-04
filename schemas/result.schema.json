@@ -139,6 +139,13 @@
         }
       }
     },
+    "skipped_unverified": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["printed", "status", "reasons"]
+      }
+    },
     "questions": {
       "type": "array",
       "items": {
@@ -400,6 +407,10 @@
         },
         "confidence": {
           "type": "object"
+        },
+        "skipped_unverified": {
+          "type": "integer",
+          "minimum": 0
         },
         "points": {
           "type": [

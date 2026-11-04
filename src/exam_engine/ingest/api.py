@@ -71,7 +71,7 @@ def to_exam_text(doc, config=None):
                                        if p["kind"] == "answer_key"), doc["source"]["name"]))
     src = doc["source"]
     if (config or {}).get("use_refined"):
-        return _from_refined(doc, config.get("questions"))
+        return _from_refined(doc, config.get("questions"), config)
     if (doc.get("extraction") or {}).get("method") == "image" and not any(
             b["type"] != "image" and b["text"].strip()
             for pg in doc["pages"] for b in pg["blocks"]):
@@ -93,7 +93,7 @@ def to_exam_text(doc, config=None):
     out += ["%s: %s" % (k, v) for k, v in meta.items()]
     out.append("")
     if src.get("format") != "md":
-        return _from_questions(doc, out)
+        return _from_questions(doc, out, config)
     for page in doc["pages"]:
         for blk in page["blocks"]:
             if blk["type"] == "heading":
@@ -224,30 +224,78 @@ def _section_lines(q, prev):
     return (["## Section: %s" % sec, ""] if sec and sec != prev else []), (sec or prev)
 
 
-def _selected_refined(doc, spec=None):
-    """(questions, their question_lines, incomplete reasons) as written to the exam text."""
+LEVELS = {"verified": ("verified",), "any": ("verified", "unverified", "needs_review")}  # REQ-0024; rejected never passes
+
+
+def _labels(qs, refined=False):
+    """Printed number per question: refined `id`, else `n` / `s<sec>.<n>` after a restart (as `assembly` rows)."""
+    if refined:
+        return [q["id"] for q in qs]
+    sec, multi, out = 0, len(segment.runs(qs)) > 1, []
+    for k, q in enumerate(qs, 1):
+        if q["n"] == 1 and k > 1:
+            sec += 1
+        out.append("s%d.%d" % (sec + 1, q["n"]) if multi else str(q["n"]))
+    return out
+
+
+def _gate(qs, config=None, refined=False):
+    """-> (indices to keep, skipped [{printed, status, reasons}]) for `config["min_verification"]` (default any).
+
+    Active only when some question carries `verification`; there a missing key counts as unverified."""
+    lvl = (config or {}).get("min_verification", "any")
+    if lvl not in LEVELS:
+        raise ValueError("min_verification: %r (use verified or any)" % (lvl,))
+    if not any("verification" in q for q in qs):
+        return list(range(len(qs))), []
+    labels = _labels(qs, refined)
+    keep, skipped = [], []
+    for i, q in enumerate(qs):
+        v = q.get("verification") or {}
+        st = v.get("status") or "unverified"
+        if st in LEVELS[lvl]:
+            keep.append(i)
+        else:
+            skipped.append({"printed": labels[i], "status": st, "reasons": list(v.get("reasons") or [])})
+    return keep, skipped
+
+
+def _pick_refined(doc, spec=None, config=None):
+    """(kept refined questions after context sharing, slice and gate; skipped)."""
     qs = _share_context(refined_questions(doc))  # before the slice: a group's carrier may lie outside `spec`
     if spec:
         want = set(parts.parse_pages(spec))
         qs = [q for q in qs if q["id"].isdigit() and int(q["id"]) in want]
+    keep, skipped = _gate(qs, config, refined=True)
+    return [qs[i] for i in keep], skipped
+
+
+def _selected_refined(doc, spec=None, config=None):
+    """(questions, their question_lines, incomplete reasons) as written to the exam text."""
+    qs, _ = _pick_refined(doc, spec, config)
     lines = [question_lines(q) for q in qs]
     return qs, lines, refcheck.incomplete_by_question(qs, ["\n".join(ln) for ln in lines])
 
 
-def _from_refined(doc, spec=None):
+def _from_refined(doc, spec=None, config=None):
     """Exam text from doc["refined"] questions (origin ai); `spec` keeps question numbers like 61-90."""
     meta = doc.get("meta") or {}
     missing = [k for k in REQUIRED if not meta.get(k)]
     if missing:
         raise IngestError("missing_header", "missing exam header(s): %s (use --meta K=V)"
                           % ", ".join(missing))
-    qs, lines, why = _selected_refined(doc, spec)
+    qs, lines, why = _selected_refined(doc, spec, config)
+    skipped = _pick_refined(doc, spec, config)[1]
     if not qs:
-        raise IngestError("no_questions", "no refined questions selected in %s" % doc["source"]["name"])
+        raise IngestError("no_questions", _none_left(skipped, "refined questions selected in %s" % doc["source"]["name"],
+                                                     config))
     out = ["# Exam Input", ""] + ["%s: %s" % (k, v) for k, v in meta.items()]
     first = int(qs[0]["id"])
     out += ["", "## Instructions", "", "Choose the best answer and explain why."]
-    if first != 1:
+    if skipped:  # kept ids may have gaps: the N + offset line would be wrong
+        out += ["", "Questions are numbered from 1 here; printed numbers: %s."
+                % ", ".join("%d=%s" % (k, q["id"]) for k, q in enumerate(qs, 1))]
+    elif first != 1:
         out += ["", "Questions are numbered from 1 here; the printed exam number of question N is N + %d "
                 "(passages may refer to printed numbers)." % (first - 1)]
     out.append("")
@@ -263,21 +311,29 @@ def _from_refined(doc, spec=None):
     return "\n".join(out).rstrip("\n") + "\n"
 
 
-def _printed(qs):
+def _none_left(skipped, what, config):
+    if skipped:
+        return "all %d question(s) below min_verification=%s" % (len(skipped), (config or {}).get("min_verification", "any"))
+    return "no " + what
+
+
+def _printed(qs, labels=None):
     """"1=1, 2=150" (restarts: "11=s2.1"): exam position = printed number."""
-    sec, parts_ = 0, []
-    multi = len(segment.runs(qs)) > 1
-    for k, q in enumerate(qs, 1):
-        if q["n"] == 1 and k > 1:
-            sec += 1
-        parts_.append("%d=%s" % (k, "s%d.%d" % (sec + 1, q["n"]) if multi else q["n"]))
-    return ", ".join(parts_)
+    return ", ".join("%d=%s" % (k, lb) for k, lb in enumerate(labels or _labels(qs), 1))
 
 
-def _selected_questions(doc):
+def _pick_questions(doc, config=None):
+    """(kept raw questions, their context-shared copies, skipped, printed labels of the kept)."""
+    raw = doc.get("questions") or []
+    ctx = _share_context([dict(q, id=str(q["n"])) for q in raw])  # before the gate: a skipped carrier still shares
+    keep, skipped = _gate(raw, config)
+    labels = _labels(raw)
+    return ([raw[i] for i in keep], [ctx[i] for i in keep], skipped, [labels[i] for i in keep])
+
+
+def _selected_questions(doc, config=None):
     """(context-shared segmented questions, incomplete reasons) as written to the exam text."""
-    qs = doc.get("questions") or []
-    ctx = _share_context([dict(q, id=str(q["n"])) for q in qs])
+    qs, ctx, _, _ = _pick_questions(doc, config)
     return ctx, refcheck.incomplete_by_question(qs, [q["text"] for q in qs])
 
 
@@ -293,21 +349,16 @@ def assembly(doc, config=None):
     cfg = config or {}
     rows = []
     if cfg.get("use_refined"):
-        qs, _, why = _selected_refined(doc, cfg.get("questions"))
+        qs, _, why = _selected_refined(doc, cfg.get("questions"), cfg)
         flags = [q.get("structure") or [] for q in qs]
         pages = [sorted(({q["page"]} if q.get("page") else set()) | set(q.get("continued_pages") or ()))
                  for q in qs]
         printed = [q["id"] for q in qs]
     else:
-        raw = doc.get("questions") or []
-        ctx, why = _selected_questions(doc)
+        raw, ctx, _, printed = _pick_questions(doc, cfg)
+        why = refcheck.incomplete_by_question(raw, [q["text"] for q in raw])
         flags = [q.get("structure") or [] for q in ctx]
         pages = [[] for _ in raw]
-        sec, multi, printed = 0, len(segment.runs(raw)) > 1, []
-        for k, q in enumerate(raw, 1):
-            if q["n"] == 1 and k > 1:
-                sec += 1
-            printed.append("s%d.%d" % (sec + 1, q["n"]) if multi else str(q["n"]))
     for k, (pr, pg, w, fl) in enumerate(zip(printed, pages, why, flags), 1):
         unc = any(r.split(" ")[0] in UNCERTAIN for r in w)
         rows.append(dict({"id": str(k), "printed": pr, "source_pages": pg,
@@ -317,20 +368,27 @@ def assembly(doc, config=None):
     return rows
 
 
-def _from_questions(doc, out):
+def skipped(doc, config=None):
+    """Questions the gate left out of the exam text: [{printed, status, reasons}] (empty when none)."""
+    if (config or {}).get("use_refined"):
+        return _pick_refined(doc, config.get("questions"), config)[1]
+    return _gate(doc.get("questions") or [], config)[1]
+
+
+def _from_questions(doc, out, config=None):
     """Exam text from the segmented `questions` (non-Markdown sources); never edits the text."""
-    qs = doc.get("questions") or []
+    qs, ctx, skip, labels = _pick_questions(doc, config)
     if not qs:
-        raise IngestError("no_questions", "no segmented questions in %s; fix the saved "
-                          "document (--out) by hand" % doc["source"]["name"])
+        raise IngestError("no_questions", _none_left(skip, "segmented questions in %s; fix the saved "
+                          "document (--out) by hand" % doc["source"]["name"], config))
     renum = [q["n"] for q in qs] != list(range(1, len(qs) + 1))
     if doc.get("intro") or renum:
         out += ["## Instructions", ""]
         if doc.get("intro"):
             out += [doc["intro"], ""]
         if renum:
-            out += ["Questions are numbered from 1 here; printed numbers: %s." % _printed(qs), ""]
-    ctx, why = _selected_questions(doc)
+            out += ["Questions are numbered from 1 here; printed numbers: %s." % _printed(qs, labels), ""]
+    why = refcheck.incomplete_by_question(qs, [q["text"] for q in qs])
     prev = ""
     for k, (q, w) in enumerate(zip(ctx, why), 1):
         sl, prev = _section_lines(q, prev)

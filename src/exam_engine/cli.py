@@ -480,6 +480,9 @@ def ingest_main(argv):
                     help="allow --exam-out although answer-key pages are present")
     ap.add_argument("--refined", metavar="DOC.json", help="exam text from the AI-refined questions of this document")
     ap.add_argument("--questions", metavar="SPEC", help="with --refined: keep only these question numbers, e.g. 61-90")
+    ap.add_argument("--min-verification", choices=["verified", "any"],
+                    default=settings.load_config("engine").get("min_verification", "verified"),
+                    help="with --exam-out: questions below this level are left out (rejected always); recorded as skipped")
     ap.add_argument("--meta", action="append", default=[], metavar="K=V")
     ap.add_argument("--boundary-ai", choices=["off", "haiku"],
                     default=settings.load_config("engine").get("boundary_ai", "off"),
@@ -538,7 +541,7 @@ def ingest_main(argv):
             with open(args.out, "w", encoding="utf-8") as fh:
                 fh.write(blob)
         if args.exam_out:
-            cfg2 = {"allow_key_pages": args.allow_key_pages}
+            cfg2 = {"allow_key_pages": args.allow_key_pages, "min_verification": args.min_verification}
             if args.refined:
                 with open(args.refined, encoding="utf-8") as fh:
                     doc["refined"] = json.load(fh)["refined"]
@@ -552,6 +555,11 @@ def ingest_main(argv):
                     if r.get("structure"):
                         print("WARN: structure: q%s %s" % (r["id"], ", ".join(r["structure"])), file=sys.stderr)
                 side = {"schema": "assembly/1", "exam": os.path.basename(args.exam_out), "questions": rows}
+                skipped = api.skipped(doc, cfg2)
+                if skipped:  # key only when something was left out (REQ-0024)
+                    side["skipped"] = skipped
+                    for it in skipped:
+                        print("WARN: skipped_unverified: q%s %s" % (it["printed"], it["status"]), file=sys.stderr)
                 with open(args.exam_out + ".assembly.json", "w", encoding="utf-8") as fh:
                     fh.write(json.dumps(side, ensure_ascii=False, indent=2) + "\n")
     except IngestError as exc:

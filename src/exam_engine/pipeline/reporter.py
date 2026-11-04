@@ -167,6 +167,11 @@ def build_markdown(result, metrics=None):
         ", stopped: %s" % _one_line(run["stopped"]) if run.get("stopped") else ""))
     md.append("- Totals: PASS %d, FAIL %d, UNCERTAIN %d, unresolved %d" % (
         s["pass"], s["fail"], s["uncertain"], s["unresolved"]))
+    if result.get("skipped_unverified"):
+        md.append("- Skipped (unverified): %d" % len(result["skipped_unverified"]))
+        for it in result["skipped_unverified"]:
+            md.append("  - printed %s: %s%s" % (_one_line(it["printed"]), _one_line(it["status"]),
+                                                " (%s)" % _one_line("; ".join(it["reasons"])) if it.get("reasons") else ""))
     if s.get("points") is not None or s.get("max_points") is not None:
         md.append("- Points: %s / %s" % (_num(s.get("points")), _num(s.get("max_points"))))
     md.append("")

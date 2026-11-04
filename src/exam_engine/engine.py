@@ -382,6 +382,7 @@ def build_result(exam, exam_path, recs, cfg, rn, stopped):
     pts = [q["score"]["points"] for q in qs if q["score"]["points"] is not None]
     mx = [q["score"]["max"] for q in qs if q["score"]["max"] is not None]
     f = exam["fields"]
+    skipped = _skipped_unverified(exam_path)
     return {
         "schema_version": 1,
         "exam": {"path": exam_path, "subject": f.get("Subject"), "level": f.get("Level"),
@@ -401,7 +402,20 @@ def build_result(exam, exam_path, recs, cfg, rn, stopped):
                     **({"confidence": {t: sum(q.get("confidence") == t for q in qs) for t in TIERS
                                        if any(q.get("confidence") == t for q in qs)}}
                        if cfg.get("confidence") else {}),
-                    "points": sum(pts) if pts else None, "max_points": sum(mx) if mx else None}}
+                    "points": sum(pts) if pts else None, "max_points": sum(mx) if mx else None,
+                    **({"skipped_unverified": len(skipped)} if skipped else {})},
+        **({"skipped_unverified": skipped} if skipped else {})}
+
+
+def _skipped_unverified(exam_path):
+    """`skipped` of <exam>.assembly.json (REQ-0024); [] when the file is missing or unreadable."""
+    try:
+        with open(exam_path + ".assembly.json", encoding="utf-8") as fh:
+            items = json.load(fh).get("skipped") or []
+        return [{"printed": str(i["printed"]), "status": str(i["status"]),
+                 "reasons": [str(r) for r in i.get("reasons") or []]} for i in items]
+    except (OSError, ValueError, TypeError, KeyError, AttributeError):
+        return []
 
 
 def run(exam_path, out_dir, cfg, llm, sink=None, reports=True, image=None):

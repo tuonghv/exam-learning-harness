@@ -198,11 +198,16 @@ class Prompts(unittest.TestCase):
                       open(os.path.join(ROOT, "prompts/dev/ingest/refine.md"), encoding="utf-8").read())
 
     def test_48_releases_untouched_and_default_release(self):
-        r = subprocess.run(["git", "diff", "--name-only", BASE, "--", "prompts/releases", "config/engine.json"],
+        r = subprocess.run(["git", "diff", "--name-only", BASE, "--", "prompts/releases"],
                            cwd=ROOT, capture_output=True, text=True)
         if r.returncode:
             self.skipTest("baseline absent")
         self.assertEqual(r.stdout.strip(), "")
+        b = subprocess.run(["git", "show", BASE + ":config/engine.json"], cwd=ROOT, capture_output=True, text=True)
+        if b.returncode == 0:  # the default release selection is unchanged; other keys may be added (TASK-078)
+            old, new = json.loads(b.stdout), json.load(open(os.path.join(ROOT, "config/engine.json")))
+            for k in ("prompt_channel", "prompt_release"):
+                self.assertEqual(old.get(k), new.get(k), k)
         for root, _, files in os.walk(os.path.join(ROOT, "prompts", "releases")):
             for f in files:
                 self.assertNotIn("missing_text:", open(os.path.join(root, f), encoding="utf-8").read(), f)
