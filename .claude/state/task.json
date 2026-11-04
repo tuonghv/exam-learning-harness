@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-074",
-  "state": "DONE",
-  "next": "",
-  "title": "Solver rule for approximate questions: nearest option, compute ambiguous readings (REQ-0080)",
-  "active": [],
+  "task_id": "TASK-075",
+  "state": "TODO",
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "title": "Discriminating confidence tier: option-distance and existing signals (free), optional second sample with permuted options, measurement by confidence group (REQ-0079)",
+  "active": [
+    {
+      "task_id": "TASK-075",
+      "state": "TODO",
+      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+      "updated_at": ""
+    }
+  ],
   "max_active": 1
 }
