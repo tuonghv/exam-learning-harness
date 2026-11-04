@@ -1400,7 +1400,7 @@
     "task_id": "TASK-074",
     "title": "Solver rule for approximate questions: nearest option, compute ambiguous readings (REQ-0080)",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-11-04T10:01:00",
     "requirement": "REQ-0080",
     "acceptance_criteria": [
