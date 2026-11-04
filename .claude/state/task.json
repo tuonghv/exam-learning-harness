@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-072",
-  "state": "DESIGN",
-  "next": "run done; record evidence",
+  "state": "IMPLEMENTING",
+  "next": "cross-check of the counts",
   "title": "Solve the second DGNL sample exam (2025) end to end with the current engine, outputs in plans/reports (REQ-0077)",
   "active": [
     {
       "task_id": "TASK-072",
-      "state": "DESIGN",
-      "next": "run done; record evidence",
-      "updated_at": "2026-11-04T03:42:05Z"
+      "state": "IMPLEMENTING",
+      "next": "cross-check of the counts",
+      "updated_at": "2026-11-04T03:42:14Z"
     }
   ],
   "max_active": 1
