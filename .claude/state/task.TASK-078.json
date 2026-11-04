@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-078",
   "title": "Solve gate: only questions meeting the verification level are solved (REQ-0024)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0024",
   "acceptance_criteria": [
     "AC1 needs_review not solved, listed skipped",
@@ -17,8 +17,19 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/ingest/api.py",
+      "src/exam_engine/cli.py",
+      "src/exam_engine/engine.py",
+      "src/exam_engine/pipeline/reporter.py",
+      "config/engine.json",
+      "schemas/result.schema.json",
+      "tests/unit/test_solve_gate.py",
+      "tests/unit/test_settings.py",
+      "docs/guide/toolkit-reference.md"
+    ],
+    "summary": "ingest gate by min_verification (api default any, CLI verified via engine.json), skipped list in assembly sidecar, result.json skipped_unverified + report lines + schema; 14 tests; DGNL refined re-ingest byte-identical"
   },
   "unit_test": {
     "status": "pending",
@@ -41,11 +52,12 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-078/handoff/design.md"
+    "designer": "work/TASK-078/handoff/design.md",
+    "coder": "work/TASK-078/handoff/code.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-04T21:09:03Z",
-  "updated_at": "2026-11-04T21:12:15Z",
+  "updated_at": "2026-11-04T21:27:59Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -54,5 +66,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Titan: tests first 78.1-78.3"
+  "next": "tester QA: isolate the 4 non-gate full-suite failures"
 }
