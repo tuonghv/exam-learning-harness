@@ -1483,7 +1483,7 @@
     "task_id": "TASK-078",
     "title": "Solve gate: only questions meeting the verification level are solved (REQ-0024)",
     "priority": 2,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-05T09:00:00",
     "requirement": "REQ-0024",
     "acceptance_criteria": [
@@ -1491,6 +1491,8 @@
       "AC2 --min-verification any restores; plain exam files unchanged",
       "AC3 skipped never FAIL, counted separately",
       "AC4 solve prompts/schema/decision unchanged"
-    ]
+    ],
+    "completed_at": "2026-11-04T21:37:14Z",
+    "report": "docs/report/phase-78-verified-solve-gate.md"
   }
 ]

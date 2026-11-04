@@ -2239,3 +2239,9 @@ Action: Argus verified the solve gate
 Result: AC1-AC4 pass, DGNL output byte-identical
 Decision: VERIFIED
 Next: report then DONE
+
+## DONE - TASK-078 - 2026-11-04T21:37:14Z
+Action: Report written
+Result: TASK-078 verified, docs/report/phase-78-verified-solve-gate.md
+Decision: DONE
+Next: remaining open: REQ-0078 extraction gold (needs user)

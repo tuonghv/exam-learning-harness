@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-078",
-  "state": "VERIFIED",
-  "next": "report, DONE",
+  "state": "DONE",
+  "next": "",
   "title": "Solve gate: only questions meeting the verification level are solved (REQ-0024)",
-  "active": [
-    {
-      "task_id": "TASK-078",
-      "state": "VERIFIED",
-      "next": "report, DONE",
-      "updated_at": "2026-11-04T21:36:57Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
