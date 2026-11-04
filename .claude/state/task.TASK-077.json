@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-077",
   "title": "Answer-driven learning loop: automatic cause records per wrong answer and held-out gain table (REQ-0084)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0084",
   "acceptance_criteria": [
     "AC1 explain reproduces the manual causes",
@@ -17,8 +17,17 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/explain.py",
+      "src/exam_engine/pipeline/metrics.py",
+      "src/exam_engine/cli.py",
+      "src/exam_engine/adapters/claude.py",
+      "tests/unit/test_explain.py",
+      "tests/unit/test_exam_llm.py",
+      "docs/guide/toolkit-reference.md"
+    ],
+    "summary": "pipeline/explain.py (join, extraction/context/path/solver checks, primary cause), run-stats explain and gain, board flags, rate-limit message stops the run; replay reproduces 2025 manual causes (7 of 7) and 2026 (24, 63, 65, 112; 38 mismatch noted)"
   },
   "unit_test": {
     "status": "pending",
@@ -41,11 +50,12 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-077/handoff/design.md"
+    "designer": "work/TASK-077/handoff/design.md",
+    "coder": "work/TASK-077/handoff/code.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-04T07:07:44Z",
-  "updated_at": "2026-11-04T07:14:26Z",
+  "updated_at": "2026-11-04T07:39:49Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -54,5 +64,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Titan: tests first 77.1-77.9, 77.11"
+  "next": "tester QA incl. real gain spec"
 }
