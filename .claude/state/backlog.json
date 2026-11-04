@@ -1470,6 +1470,13 @@
       "AC4 on the board"
     ],
     "completed_at": "2026-11-04T07:57:07Z",
-    "report": "docs/report/phase-77-answer-cause-loop.md"
+    "report": "docs/report/phase-77-answer-cause-loop.md",
+    "user_notes": [
+      {
+        "raw": "RAW-00203",
+        "note": "user: no gain seen (113 to 111); key for Math 65/67 may itself be wrong - recheck independently",
+        "at": "2026-11-04T08:56:28Z"
+      }
+    ]
   }
 ]
