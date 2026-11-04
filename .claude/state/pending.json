@@ -36,5 +36,13 @@
     "recommendation": "Yes: put the answer list next to the PDF and tell me; scoring then runs at once and shows whether the flagged questions hold the wrong answers",
     "kind": "block",
     "asked_at": "2026-11-04T03:42:40Z"
+  },
+  {
+    "id": "Q-1793764674",
+    "task_id": "TASK-075",
+    "question": "Approve paid proof runs for the confidence tier: P1 second sample on 2026 Math+Vietnamese (cap 6 USD, expected 1-2), P2 English+Science only if P1 flags a wrong answer (cap 6 USD)?",
+    "recommendation": "Yes: caps are ceilings, real cost should be about 1-2 USD for P1; the free negative signals ship first and do not need the money",
+    "kind": "paid",
+    "asked_at": "2026-11-04T03:57:54Z"
   }
 ]
