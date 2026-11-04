@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-073",
   "title": "Score the 2025 DGNL sample when the user supplies the official answers (REQ-0081)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0081",
   "acceptance_criteria": [
     "AC1 accuracy per subject and overall with Wilson",
@@ -36,11 +36,18 @@
       "work/TASK-073/evidence/dgnl2025-score.txt"
     ],
     "command": "scoring of the 2025 run against the official answers; root-cause analysis against the PDF",
-    "result": "REQ-0081 AC1, AC2 verified: 113/120 = 94.2 percent [88.4, 97.1]; image-only source 4/7 (57 percent) versus text 101/103; 7 wrong: 2 engine defects (107, 117 image right but text kept), 1 engine flip (59), 1 malformed-reply path (English: two JSON objects), 1 false missing_text flag (Science 111), solver or key oddities (16, 60, 67); engine fixes go to REQ-0083; limits: 7 wrong answers, the image-only pattern is a hypothesis"
+    "result": "REQ-0081 AC1, AC2 verified: 113/120 = 94.2 percent [88.4, 97.1]; image-only source 4/7 (57 percent) versus text 101/103; 7 wrong: 2 engine defects (107, 117 image right but text kept), 1 engine flip (59), 1 malformed-reply path (English: two JSON objects), 1 false missing_text flag (Science 111), solver or key oddities (16, 60, 67); engine fixes go to REQ-0083; limits: 7 wrong answers, the image-only pattern is a hypothesis",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-073/evidence/dgnl2025-score.txt"
+      ],
+      "reason": "two independent counts against the official answers; root causes checked against the PDF by recomputation"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-73-dgnl-2025-score.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -57,11 +64,14 @@
     },
     "verifier": {
       "waiver": "two independent counts agree; no code to verify; the root causes are stated with their uncertainty"
+    },
+    "crosscheck": {
+      "waiver": "the oracle is the official answers: scores counted by the coordinator and the inspector with the same 7 wrong answers; no generator under test"
     }
   },
   "user_notes": [],
   "picked_at": "2026-11-04T03:42:39Z",
-  "updated_at": "2026-11-04T05:18:14Z",
+  "updated_at": "2026-11-04T05:18:37Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -71,5 +81,5 @@
     "notes": "",
     "next": "when the user supplies the answers: score reports/dgnl2025/answers.tsv as in TASK-037, report accuracy and flag separation"
   },
-  "next": "report, DONE"
+  "next": ""
 }

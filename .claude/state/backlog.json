@@ -1388,7 +1388,7 @@
     "task_id": "TASK-073",
     "title": "Score the 2025 DGNL sample when the user supplies the official answers (REQ-0081)",
     "priority": 3,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-04T10:00:00",
     "requirement": "REQ-0081",
     "acceptance_criteria": [
@@ -1401,7 +1401,9 @@
         "note": "answers given in input/dgnl; give stats and improve the engine from the findings",
         "at": "2026-11-04T05:14:40Z"
       }
-    ]
+    ],
+    "completed_at": "2026-11-04T05:18:37Z",
+    "report": "docs/report/phase-73-dgnl-2025-score.md"
   },
   {
     "task_id": "TASK-074",
