@@ -1394,6 +1394,13 @@
     "acceptance_criteria": [
       "AC1 accuracy per subject and overall",
       "AC2 flag-versus-wrong separation"
+    ],
+    "user_notes": [
+      {
+        "raw": "RAW-00199",
+        "note": "answers given in input/dgnl; give stats and improve the engine from the findings",
+        "at": "2026-11-04T05:14:40Z"
+      }
     ]
   },
   {

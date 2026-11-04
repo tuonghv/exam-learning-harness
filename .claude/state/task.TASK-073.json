@@ -51,8 +51,5 @@
     "notes": "",
     "next": "when the user supplies the answers: score reports/dgnl2025/answers.tsv as in TASK-037, report accuracy and flag separation"
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-  "status": "held",
-  "held_at": "2026-11-04T03:42:40Z",
-  "held_reason": "waits for the 2025 official answers from the user"
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
 }

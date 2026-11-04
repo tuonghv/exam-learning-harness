@@ -35,7 +35,9 @@
     "question": "Send the official answers of the 2025 DGNL sample when you find them (a file next to the PDF in input/dgnl is enough).",
     "recommendation": "Yes: put the answer list next to the PDF and tell me; scoring then runs at once and shows whether the flagged questions hold the wrong answers",
     "kind": "block",
-    "asked_at": "2026-11-04T03:42:40Z"
+    "asked_at": "2026-11-04T03:42:40Z",
+    "answered_at": "2026-11-04T05:14:40Z",
+    "answer": "User RAW-00199: the 2025 answers are in input/dgnl next to the PDF; score and improve the engine"
   },
   {
     "id": "Q-1793764674",
