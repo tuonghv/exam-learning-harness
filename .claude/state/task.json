@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-037",
-  "state": "DESIGN",
-  "next": "scoring evidence recorded",
+  "state": "IMPLEMENTING",
+  "next": "cross-check",
   "title": "Score the user's labelled real pages with extract-eval (REQ-0040); waits for the user's labelled pages",
   "active": [
     {
       "task_id": "TASK-037",
-      "state": "DESIGN",
-      "next": "scoring evidence recorded",
-      "updated_at": "2026-11-04T03:24:21Z"
+      "state": "IMPLEMENTING",
+      "next": "cross-check",
+      "updated_at": "2026-11-04T03:24:33Z"
     }
   ],
   "max_active": 1

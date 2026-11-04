@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-037",
   "title": "Score the user's labelled real pages with extract-eval (REQ-0040); waits for the user's labelled pages",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0040",
   "acceptance_criteria": [
     "AC1 gold stored outside solver inputs",
@@ -16,8 +16,11 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "docs/design/phase-37-dgnl-real-score.md"
+    ],
+    "summary": "no code: saved DGNL runs scored against the official answers, worst questions re-solved with the current engine, remaining wrong answers root-caused; evidence work/TASK-037/evidence/dgnl-score.txt"
   },
   "unit_test": {
     "status": "pending",
@@ -41,12 +44,15 @@
   "evidence_required": false,
   "roles": {
     "designer": {
-      "waiver": "analysis task without code; design written by the coordinator"
+      "waiver": "analysis task without code"
+    },
+    "coder": {
+      "waiver": "no code to write: read-only scoring plus engine re-solve"
     }
   },
   "user_notes": [],
   "picked_at": "2026-11-03T11:46:52Z",
-  "updated_at": "2026-11-04T03:24:21Z",
+  "updated_at": "2026-11-04T03:24:33Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -56,5 +62,5 @@
     "notes": "",
     "next": "when the user gives the page path: run extract-eval on the labelled pages, measure accuracy and the OCR low_conf false-alarm share"
   },
-  "next": "scoring evidence recorded"
+  "next": "cross-check"
 }
