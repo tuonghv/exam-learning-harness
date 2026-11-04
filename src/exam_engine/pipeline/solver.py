@@ -189,24 +189,48 @@ def solve_round(exam, rn, recs, ids, prompt, tag="solve"):
         decide_rec(r)
 
 
+# 75.2: shapes whose meaning depends on the option slots or on other questions (structural, no model call).
+# Stem: a keyword then a standalone uppercase letter ("option B", "phương án A"); "A(1;2)" point names do not match.
+_STEM_LETTER = re.compile(r"(?i:ph[uư][oơ]ng [aá]n|đ[aá]p [aáàả]n|dap an|option|choice|answer|statement|câu|cau|ý)"
+                          r"\s*[:(]?\s*[A-E](?![\w(])")
+# Option: "all/none of the above", "tất cả các đáp án trên", "không có đáp án nào" (letter references are
+# caught separately: any standalone option key inside an option text).
+_OPT_ALL = re.compile(r"(?i:\b(?:all|none|neither|both) of (?:the|these|those)\b|\bthe above\b"
+                      r"|t[aấ]t c[aả] c[aá]c|không có (?:đáp|phương) án|khong co (?:dap|phuong) an"
+                      r"|c[aá]c (?:đáp án|phương án|ý) (?:trên|còn lại))")
+
+
+_STEM_REF = re.compile(r"(?i:\b(?:c[aâ]u|question)\s*\d+)")  # ASCII "cau 1" that parser.deps may not read
+
+
+def _unsafe(q, keys, depends):
+    stem = str(q.get("stem") or q.get("text") or "")
+    texts = [str(t) for t in q["options"].values()]
+    return (depends or _STEM_REF.search(stem) is not None or _STEM_LETTER.search(stem) is not None
+            or any(_OPT_ALL.search(t) for t in texts)
+            or any(re.search(r"(?<!\w)%s(?!\w)" % re.escape(x), t) for x in keys for t in texts))
+
+
 def permuted(exam, ids):
     """75.2: (exam2, back). exam2 holds only the `ids` questions, in reverse order, each with its option texts
     rotated by 1 + id % (k-1) so the correct position always moves; back[id][new letter] = original letter.
-    An id whose option text names one of its own letters is left out of back (not permuted, not sampled)."""
+    An id left out of back is `permutation_unsafe` (stem or option names a letter, "all of the above",
+    or the stem depends on another question) and is not sampled; exam2["unsafe"] lists them."""
     qs, out, back = {q["id"]: q for q in exam["questions"]}, [], {}
+    dep = parser.deps(exam)
     for i in sorted(ids, reverse=True):
         q = dict(qs[i])
         keys = sorted(q.get("options") or {})
         k = len(keys)
         out.append(q)
-        if k < 2 or any(re.search(r"(?<!\w)%s(?!\w)" % re.escape(x), str(t))
-                        for x in keys for t in q["options"].values()):
+        if k < 2 or _unsafe(q, keys, bool(dep.get(i))):
             continue
         sh = 1 + i % (k - 1)
         texts = [q["options"][x] for x in keys]
         q["options"] = {keys[j]: texts[(j + sh) % k] for j in range(k)}
         back[i] = {keys[j]: keys[(j + sh) % k] for j in range(k)}
-    exam2 = dict(exam, questions=[q for q in out if q["id"] in back])
+    exam2 = dict(exam, questions=[q for q in out if q["id"] in back],
+                 unsafe=[i for i in sorted(ids) if i not in back])
     return exam2, back
 
 

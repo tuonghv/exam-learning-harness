@@ -413,3 +413,27 @@ class SecondSample(t.Base):
 
 def exam_llm_call(text, cost):
     return t.exam_llm.Call(True, text, cost, "", "", 0.0)
+
+
+class Unsafe(unittest.TestCase):
+    def skipped(self, stem, opts=None):
+        q = {"id": 1, "stem": stem, "options": opts or {"A": "1", "B": "2", "C": "3", "D": "4"}}
+        e2, back = solver.permuted({"questions": [q]}, [1])
+        return 1 not in back
+
+    def test_stem_option_references_left_out(self):
+        for stem in ("Which of phương án A is wrong?", "Cho đáp án B", "Is option C true?", "choice D", "câu A"):
+            self.assertTrue(self.skipped(stem), stem)
+
+    def test_all_none_above_left_out(self):
+        for last in ("All of the above", "None of the above", "Tất cả các đáp án trên",
+                     "Không có đáp án nào đúng", "cả A và B"):
+            self.assertTrue(self.skipped("Pick.", {"A": "1", "B": "2", "C": "3", "D": last}), last)
+
+    def test_dependent_stem_left_out(self):
+        self.assertTrue(self.skipped("Dùng kết quả câu 3, tính x."))
+        self.assertFalse(self.skipped("Câu hỏi về thủ đô."))
+
+    def test_point_names_and_formulas_are_permuted(self):
+        for stem in ("Cho A(1;2) và B(3;4), tính AB.", "Find A + B when A = 2", "Point A is on line d."):
+            self.assertFalse(self.skipped(stem), stem)

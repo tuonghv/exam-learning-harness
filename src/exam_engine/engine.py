@@ -245,7 +245,7 @@ def second_sample(exam, recs, rn, ids):
     exam2, back = solver.permuted(exam, ids)
     for i in ids:
         if i not in back:
-            recs[i]["findings"].append(finding("second", "second_skipped", "not permuted"))
+            recs[i]["findings"].append(finding("second", "second_skipped", "permutation_unsafe"))
     ids = [i for i in ids if i in back]
     stop = None
     for n in range(0, len(ids), SECOND_BATCH):
