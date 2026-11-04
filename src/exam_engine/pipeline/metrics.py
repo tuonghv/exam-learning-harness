@@ -798,3 +798,107 @@ def board_text(name, k):
         out.append("  input ~tok/q %.1f (prompt bytes/%d, all calls)" % (cur["in_tok_per_q"], BYTES_PER_TOKEN))
     out.append("  verdict %s%s" % (k["verdict"], "  " + k["flag"] if k["flag"] else ""))
     return out
+
+
+# ---- 77.8/77.9 held-out gain and board add-ons (free, read-only) ----
+
+GAIN_COLS = ("change", "exam", "role", "n", "before_k", "after_k", "before_lo", "before_hi", "after_lo",
+             "after_hi", "fixed", "regressed", "noise_flips", "noise_src", "flag", "verdict")
+GAIN_RULES = (
+    "# a learn-exam gain is not evidence; claim only heldout_gain",
+    "# one run each flips about 5 percent of answers; small_n rows are anecdotes",
+    "# overlapping intervals = no claim")
+SMALL_N = 5
+
+
+def _load_result(ref):
+    with open(os.path.join(ref, "result.json"), encoding="utf-8") as fh:
+        return json.load(fh)
+
+
+def _gain_correct(refs, key, off, resolve, explain):
+    """{(position, id): bool} of keyed questions of the runs `refs` (a ref or {"ref", "offset"})."""
+    out = {}
+    for pos, item in enumerate(refs):
+        ref, o = (item["ref"], item.get("offset", off)) if isinstance(item, dict) else (item, off)
+        for q in resolve(ref).get("questions") or []:
+            qid = str(q.get("id"))
+            want = key.get(str(int(qid) + o)) if qid.isdigit() else None
+            if want is not None:
+                out[(pos, qid)] = explain.letter_of(q.get("answer"), None) == want
+    return out
+
+
+def gain_rows(spec, resolve=None):
+    """Rows (dicts of GAIN_COLS) per change x exam from the spec; see docs/design phase-77 77.8."""
+    from exam_engine.pipeline import explain
+    resolve = resolve or _load_result
+    keys = {n: explain.load_key(e["key"]) for n, e in (spec.get("exams") or {}).items()}
+    rows = []
+    for ch in spec.get("changes") or []:
+        for run in ch.get("runs") or []:
+            name = run["exam"]
+            if name not in keys:
+                raise ValueError("gain spec: unknown exam %s" % name)
+            off = run.get("offset", spec["exams"][name].get("offset", 0))
+            b = _gain_correct(run["before"], keys[name], off, resolve, explain)
+            a = _gain_correct(run["after"], keys[name], off, resolve, explain)
+            ids = sorted(b.keys() & a.keys())
+            n = len(ids)
+            bk, ak = sum(b[i] for i in ids), sum(a[i] for i in ids)
+            fixed = sum(1 for i in ids if a[i] and not b[i])
+            reg = sum(1 for i in ids if b[i] and not a[i])
+            pair = (spec.get("noise") or {}).get(name)
+            if pair and len(pair) == 2:
+                n1 = _gain_correct(pair[0], keys[name], off, resolve, explain)
+                n2 = _gain_correct(pair[1], keys[name], off, resolve, explain)
+                flips, nsrc = sum(1 for i in n1.keys() & n2.keys() if n1[i] != n2[i]), "pair"
+            else:
+                flips, nsrc = -(-n // 20), "assumed_5pct"
+            role = "learn" if name == ch.get("learn") else "heldout"
+            verdict = "no_measurable_change"
+            if role == "learn":
+                verdict = "learn_only"
+            elif abs(ak - bk) > flips and decisive(fixed, reg) and not noise(fixed, reg) and ak != bk:
+                verdict = "heldout_gain" if ak > bk else "heldout_loss"
+            bi, ai = wilson(bk, n) or (None, None), wilson(ak, n) or (None, None)
+            rows.append({"change": ch.get("change"), "exam": name, "role": role, "n": n, "before_k": bk,
+                         "after_k": ak, "before_lo": bi[0], "before_hi": bi[1], "after_lo": ai[0],
+                         "after_hi": ai[1], "fixed": fixed, "regressed": reg, "noise_flips": flips,
+                         "noise_src": nsrc, "flag": "small_n" if fixed + reg < SMALL_N else "-",
+                         "verdict": verdict})
+    return rows
+
+
+def gain_tsv(rows):
+    def cell(v):
+        return "na" if v is None else ("%.3f" % v if isinstance(v, float) else str(v))
+    return "\n".join(["\t".join(GAIN_COLS)] + ["\t".join(cell(r[c]) for c in GAIN_COLS) for r in rows]
+                     + list(GAIN_RULES))
+
+
+def _tsv_rows(path):
+    with open(path, encoding="utf-8") as fh:
+        lines = [ln.rstrip("\n") for ln in fh if ln.strip() and not ln.startswith("#")]
+    head = lines[0].split("\t") if lines else []
+    return head, [dict(zip(head, ln.split("\t"))) for ln in lines[1:]]
+
+
+def causes_text(paths):
+    """`causes <cause>=k ... (wrong n, flagged-right m)` from explain TSV files."""
+    cnt, wrong, flagged = {}, 0, 0
+    for p in paths:
+        for r in _tsv_rows(p)[1]:
+            cnt[r.get("primary")] = cnt.get(r.get("primary"), 0) + 1
+            if r.get("outcome") == "flagged_right":
+                flagged += 1
+            else:
+                wrong += 1
+    return "causes %s (wrong %d, flagged-right %d)" % (
+        " ".join("%s=%d" % kv for kv in sorted(cnt.items())) or "-", wrong, flagged)
+
+
+def gain_board_lines(path):
+    head, rows = _tsv_rows(path)
+    return (["gain", "  " + "\t".join(head)] + ["  " + "\t".join(r.get(c, "-") for c in head) for r in rows]
+            + list(GAIN_RULES))

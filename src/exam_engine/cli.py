@@ -17,8 +17,8 @@ from exam_engine import engine, settings
 from exam_engine.adapters import claude
 from exam_engine.core import schema as sch
 from exam_engine.core.decision import decide
-from exam_engine.pipeline import (examples_check, metrics, parser, planrun, prompts, report_build, reporter,
-                                  router, scorer, solver, verifier)
+from exam_engine.pipeline import (examples_check, explain, metrics, parser, planrun, prompts, report_build,
+                                  reporter, router, scorer, solver, verifier)
 
 COMMANDS = ("solve", "parse", "verify", "report", "plan-import", "check-examples", "score", "prompts",
             "check-prompts", "ingest", "ingest-inspect", "ingest-refine", "cross-solve", "benchmark",
@@ -1477,6 +1477,64 @@ def _rs_board_packs(specs, n_exams):
     return out
 
 
+def _rs_explain(a):
+    """77.7: free cause table of the wrong / flagged-right answers of saved runs. The key only scores;
+    no output cell holds a letter or exam text."""
+    if not a.refs or not (a.ans_key or a.calibrate):
+        print("usage: exam.py run-stats explain RESULT_DIR[=EXAM]... --key FILE [--exam FILE] [--pdf FILE] "
+              "[--calibrate] [--json]", file=sys.stderr)
+        return 2
+    key = explain.load_key(a.ans_key) if a.ans_key else {}
+    pages = explain.pdf_pages(a.pdf) if a.pdf else None
+    rows, multi, matched, total, cal, unreliable = [], 0, 0, 0, [], 0
+    for ref in a.refs:
+        d, _, e = ref.partition("=")
+        path = e or a.exam or os.path.join(d, "input", "exam.md")
+        exam, code = _load_exam(path)
+        if exam is None:
+            return code
+        result = _rs_resolve(d, a.history, a.legacy)[0]
+        subj = re.sub(r"[^A-Za-z0-9_-]", "_", str((result.get("exam") or {}).get("subject") or os.path.basename(d)))
+        calls = os.path.join(d, "calls")
+        if a.calibrate:
+            cal += ["subject %s" % subj] + explain.calibrate(
+                explain.analyze(explain.join(result, exam, calls, subj)), pages or [])
+            continue
+        got, m, mt, ok = explain.explain(result, exam, calls, pages, key, subj)
+        rows += got
+        unreliable += pages is not None and not ok
+        multi, matched, total = multi + m, matched + mt, total + len(result.get("questions") or [])
+    if a.calibrate:
+        print("\n".join(cal) if pages else "calibrate: pdf_text=na")
+        return 0
+    if not matched:
+        print("ERROR: key matches 0 of %d ids" % total, file=sys.stderr)
+        return 2
+    foot = explain.footer(rows, multi, pages is not None, unreliable)
+    if a.json:
+        print(json.dumps({"rows": [{c: r.get(c) for c in explain.COLUMNS} for r in rows], "footer": foot},
+                         ensure_ascii=False, indent=2, sort_keys=True))
+    else:
+        print(explain.tsv(rows))
+        print(foot)
+    return 0
+
+
+def _rs_gain(a):
+    """77.8: before/after accuracy on the learn and held-out exams from an explicit spec file."""
+    if not a.spec:
+        print("usage: exam.py run-stats gain --spec FILE [--json]", file=sys.stderr)
+        return 2
+    spec = settings.load_json(a.spec)
+    rows = metrics.gain_rows(spec, lambda ref: _rs_resolve(ref, a.history, a.legacy)[0])
+    if a.json:
+        print(json.dumps({"rows": rows, "rules": list(metrics.GAIN_RULES)}, ensure_ascii=False, indent=2,
+                         sort_keys=True))
+    else:
+        print(metrics.gain_tsv(rows))
+    return 0
+
+
 def _rs_board_qa(packs, line, offset):
     files = list(packs.get(None, []))
     for scope, fs in packs.items():
@@ -1536,19 +1594,27 @@ def _rs_board(a):
         doc = {"kinds": out, "no_sha": no_sha, "skipped": skipped}
         if gold is not None:
             doc["structure_gold"] = gold
+        if a.explain:
+            doc["causes"] = metrics.causes_text(a.explain)
+        if a.gain:
+            doc["gain"] = metrics.gain_board_lines(a.gain)
         print(json.dumps(doc, ensure_ascii=False, indent=2, sort_keys=True))
     else:
         for k, blk in out.items():
             print("\n".join(metrics.board_text(k.split("|", 1)[1], blk)))
             if gold is not None:
                 print(_rs_gold_text(gold))
+        if a.explain:
+            print(metrics.causes_text(a.explain))
+        if a.gain:
+            print("\n".join(metrics.gain_board_lines(a.gain)))
     return 1 if any(b["verdict"] == "regression" for b in out.values()) else 0
 
 
 def run_stats_main(argv):
     """run-stats stats|compare|trend|backfill|board: metrics of solve runs (TASK-056); exit 0 ok, 1 regression, 2 error."""
     ap = argparse.ArgumentParser(prog="exam run-stats")
-    ap.add_argument("sub", choices=("stats", "compare", "trend", "backfill", "recheck", "board"))
+    ap.add_argument("sub", choices=("stats", "compare", "trend", "backfill", "recheck", "board", "explain", "gain"))
     ap.add_argument("refs", nargs="*", help="stats: RESULT_DIR; compare: A B; backfill: DIR...")
     ap.add_argument("--exam")
     ap.add_argument("--key", dest="ans_key")
@@ -1565,6 +1631,11 @@ def run_stats_main(argv):
     ap.add_argument("--structure-gold", metavar="FILE", help="board: parsing scores of --exam against a gold list")
     ap.add_argument("--kind", help="board: only this subject/language/level")
     ap.add_argument("--source", choices=("solve", "backfill", "regset"), help="board, trend: only this history source")
+    ap.add_argument("--pdf", metavar="FILE", help="explain: the exam PDF (extraction check)")
+    ap.add_argument("--calibrate", action="store_true", help="explain: score quantiles instead of the table")
+    ap.add_argument("--spec", metavar="FILE", help="gain: spec of changes, exams, keys and before/after runs")
+    ap.add_argument("--explain", metavar="TSV", action="append", help="board: explain output(s) to summarise")
+    ap.add_argument("--gain", metavar="TSV", help="board: gain output to print")
     try:
         a = ap.parse_args(argv)
     except SystemExit as exc:
@@ -1576,7 +1647,8 @@ def run_stats_main(argv):
             print("usage: exam.py run-stats stats RESULT_DIR", file=sys.stderr)
             return 2
         return {"stats": _rs_stats, "compare": _rs_compare, "trend": _rs_trend,
-                "backfill": _rs_backfill, "recheck": _rs_recheck, "board": _rs_board}[a.sub](a)
+                "backfill": _rs_backfill, "recheck": _rs_recheck, "board": _rs_board,
+                "explain": _rs_explain, "gain": _rs_gain}[a.sub](a)
     except (OSError, ValueError) as exc:
         print("ERROR: %s" % exc, file=sys.stderr)
         return 2

@@ -95,6 +95,8 @@ class RunClaude(NoRealProcess):
             (Fake(rc=1, err="401 Unauthorized: please login"), "auth"),
             (Fake(rc=1, err="429 rate limit hit"), "rate_limit"),
             (Fake(rc=1, err="Claude AI usage limit reached"), "rate_limit"),
+            (Fake(rc=1, err="You've hit your 5-hour limit \u00b7 resets 1:10am (Asia/Ho_Chi_Minh)"), "rate_limit"),
+            (Fake(out=env("You've hit your 5-hour limit \u00b7 resets 1:10am", is_error=True)), "rate_limit"),
             (Fake(rc=1, err="503 service unavailable"), "service"),
             (Fake(rc=1, err="boom"), "other"),
             (Fake(out=env("Invalid API key", is_error=True)), "auth"),
