@@ -2047,3 +2047,9 @@ Action: Coordinator ran the pipeline on the 2025 sample
 Result: 120/120 answered, 2.33 USD
 Decision: cross-check then VERIFIED
 Next: cross-check
+
+## UNIT_TESTED - TASK-072 - 2026-11-04T03:42:14Z
+Action: Coordinator cross-checked the counts
+Result: table and costs agree
+Decision: VERIFIED next
+Next: verified

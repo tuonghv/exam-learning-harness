@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-072",
   "title": "Solve the second DGNL sample exam (2025) end to end with the current engine, outputs in plans/reports (REQ-0077)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0077",
   "acceptance_criteria": [
     "AC1 layout inspection and run plan with cost",
@@ -23,9 +23,9 @@
     "summary": "run executed: refine 15 pages, four exam files, four solves, answers table in reports/dgnl2025 (untracked); no code"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "independent recount of the answers table and costs from result.json and the run logs",
+    "result": "120 distinct printed numbers 1-120, all answers are letters A-D, solve cost 1.6095 USD plus refine 0.7203 USD = 2.33 USD; no code changed"
   },
   "security": {
     "status": "pending",
@@ -47,7 +47,10 @@
       "waiver": "run task without code"
     },
     "coder": {
-      "waiver": "no code to write: pipeline run"
+      "waiver": "no code to write"
+    },
+    "tester": {
+      "waiver": "no code; counts cross-checked by an independent recount"
     }
   },
   "user_notes": [],
@@ -61,5 +64,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "cross-check of the counts"
+  "next": "verified"
 }
