@@ -2155,3 +2155,9 @@ Action: Report written
 Result: TASK-073 verified, docs/report/phase-73-dgnl-2025-score.md
 Decision: DONE
 Next: TASK-076 engine fixes (REQ-0083)
+
+## DESIGN - TASK-076 - 2026-11-04T05:26:09Z
+Action: Nova designed the three fixes with file:line root causes
+Result: design COMPLETE
+Decision: adjudication default under --pdf (small conflict set, worst case = today)
+Next: coder tests-first

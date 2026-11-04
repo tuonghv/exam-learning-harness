@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-076",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "Titan: tests first 76.1-76.3",
   "title": "Engine fixes from the 2025 scoring: extract_json last valid object, text/image disagreement settled by adjudication, false missing_text flag (REQ-0083)",
   "active": [
     {
       "task_id": "TASK-076",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "Titan: tests first 76.1-76.3",
+      "updated_at": "2026-11-04T05:26:09Z"
     }
   ],
   "max_active": 1
