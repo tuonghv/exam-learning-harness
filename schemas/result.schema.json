@@ -275,7 +275,8 @@
                     "deterministic",
                     "ai_review",
                     "score",
-                    "image"
+                    "image",
+                    "second"
                   ]
                 },
                 "code": {
@@ -323,6 +324,9 @@
           "attempts": {
             "type": "integer",
             "minimum": 1
+          },
+          "second_answer": {
+            "type": "string"
           },
           "confidence": {
             "type": "string",

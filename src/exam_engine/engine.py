@@ -20,8 +20,11 @@ BLOCKING = ("auth", "rate_limit", "service")
 
 
 def call_cap(cfg):
-    return 1 + 2 * cfg["max_attempts"] + (1 if cfg.get("image_pdf") else 0) + (1 if cfg.get("adjudicate") else 0)
+    return (1 + 2 * cfg["max_attempts"] + (1 if cfg.get("image_pdf") else 0) + (1 if cfg.get("adjudicate") else 0)
+            + (SECOND_CALLS if cfg.get("second_sample") else 0))
 
+
+SECOND_BATCH, SECOND_CALLS = 15, 10  # 75.2: ids per second-sample call, extra call budget
 
 PNG_SIG = b"\x89PNG\r\n\x1a\n"
 MAX_PNG_BYTES = 8 * 1024 * 1024
@@ -225,6 +228,66 @@ def adjudicate(exam, recs, rn, ids):
         r["status"], r["reason"] = "UNCERTAIN", "needs_review: adjudicated"
 
 
+def second_targets(recs, skip):
+    """75.2: answered letter-MCQ ids with no independent check or a doubt reason, ascending."""
+    return [i for i in sorted(recs) if i not in skip and recs[i]["ans"] is not None
+            and not declined(recs[i]["ans"]) and not is_open(recs[i]["ans"])
+            and recs[i]["status"] == "UNCERTAIN"
+            and (recs[i]["reason"] == "no_independent_check" or recs[i]["reason"] in DOUBT_REASONS)]
+
+
+def second_sample(exam, recs, rn, ids):
+    """75.2: re-solve `ids` with permuted option and question order, in batches. Sets rec["second"] (original
+    letter) and a finding per id; never touches rec["ans"], the checks or the status. A call or budget stop
+    ends the sample: its remaining ids get `second_skipped`, never `second_differs`."""
+    with_opts = {q["id"] for q in exam["questions"] if q.get("options")}
+    ids = [i for i in ids if i in with_opts]
+    exam2, back = solver.permuted(exam, ids)
+    for i in ids:
+        if i not in back:
+            recs[i]["findings"].append(finding("second", "second_skipped", "not permuted"))
+    ids = [i for i in ids if i in back]
+    stop = None
+    for n in range(0, len(ids), SECOND_BATCH):
+        part = ids[n:n + SECOND_BATCH]
+        if stop:
+            for i in part:
+                recs[i]["findings"].append(finding("second", "second_skipped", stop))
+            continue
+        try:
+            c = rn.call(solver.second_prompt(exam2, part), "second")
+        except Stop as exc:
+            stop = exc.message
+            for i in part:
+                recs[i]["findings"].append(finding("second", "second_skipped", stop))
+            continue
+        obj, err = claude.extract_json(c.text) if c.ok else (None, c.reason or "call failed")
+        problems = [err] if err else sch.validate(obj, sch.SOLVE_OUT)
+        if problems:
+            for i in part:
+                recs[i]["findings"].append(finding("second", "second_failed", str(problems[0])[:120]))
+            continue
+        got = {}
+        for a in obj["questions"]:
+            got.setdefault(a["id"], a)
+        q2 = {q["id"]: q for q in exam2["questions"]}
+        for i in part:
+            a = got.get(str(i)) or {}
+            raw = str(a.get("answer") or "").strip()
+            if a.get("answer_status") != "answered":
+                raw = ""
+            elif raw not in back[i]:
+                raw = verifier.option_for_value(raw, q2[i]["options"]) or ""
+            if not raw or raw not in back[i]:
+                recs[i]["findings"].append(finding("second", "second_missing", "no usable second answer"))
+                continue
+            orig = back[i][raw]
+            recs[i]["second"] = orig
+            same = orig == str(recs[i]["ans"].get("answer")).strip()
+            recs[i]["findings"].append(finding("second", "second_agrees" if same else "second_differs",
+                                               "second answer: %s" % orig))
+
+
 def image_check(exam, recs, rn, flags, skip, cfg, image):
     """The one image call for the flagged questions (after the text rounds)."""
     scope = cfg.get("image_scope", "flagged")
@@ -284,6 +347,8 @@ def build_result(exam, exam_path, recs, cfg, rn, stopped):
             opts = (qmap.get(i) or {}).get("options") or {}
             tier = confidence(view, list(opts), bool(a) and verifier.option_for_value(a.get("answer"), opts))
             extra = {"confidence": tier} if tier else {}
+            if r.get("second"):
+                extra["second_answer"] = r["second"]
             r_checks = r["checks"] + ([oc] if oc else [])
             r_findings = fnd
         else:
@@ -365,6 +430,8 @@ def run(exam_path, out_dir, cfg, llm, sink=None, reports=True, image=None):
                 break
         if image:
             image_check(exam, recs, rn, flags, skip, cfg, image)
+        if cfg.get("second_sample"):
+            second_sample(exam, recs, rn, second_targets(recs, skip))
     except Stop as stop:
         stopped = (stop.cls, stop.message)
         for i, r in recs.items():  # a stop inside a round: decide what has an answer

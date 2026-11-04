@@ -272,3 +272,144 @@ class Adversarial(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+# ---- 75.2 second sample ----
+from exam_engine import engine as eng  # noqa: E402
+from exam_engine.pipeline import parser as eparser, solver  # noqa: E402
+
+
+def mcq(n, extra=""):
+    body = t.HEAD % ("English", "Multiple Choice") + "## Instructions\n\nChoose.\n\n"
+    for i in range(1, n + 1):
+        body += "## Question %d\n\nPick %d.\n\nA. o%d1\nB. o%d2\nC. o%d3\nD. o%d4\n\n" % ((i, i) + (i,) * 4)
+    return body + extra
+
+
+def reply_for(prompt, pick):
+    """Fake second reply: for each '## Question N' in the prompt, answer the letter whose text is o<N><pick>."""
+    import re
+    out = []
+    for n in re.findall(r"## Question (\d+)", prompt):
+        m = re.search(r"\n([A-D])\. o%s%d\b" % (n, pick(int(n))), prompt)
+        out.append(t.a(n, m.group(1) if m else "A", expr=None))
+    return t.solve(*out)
+
+
+class Permuted(unittest.TestCase):
+    def exam(self, n=4):
+        import tempfile
+        d = tempfile.mkdtemp()
+        p = os.path.join(d, "e.md")
+        with open(p, "w") as fh:
+            fh.write(mcq(n))
+        return eparser.parse_exam(p)
+
+    def test_rotation_moves_every_position_and_back_inverts(self):
+        exam = self.exam(6)
+        exam2, back = solver.permuted(exam, [1, 2, 3, 4, 5, 6])
+        orig = {q["id"]: q for q in exam["questions"]}
+        for q in exam2["questions"]:
+            for new, old in back[q["id"]].items():
+                self.assertEqual(q["options"][new], orig[q["id"]]["options"][old])
+                self.assertNotEqual(new, old)
+        self.assertEqual([q["id"] for q in exam2["questions"]], [6, 5, 4, 3, 2, 1])
+
+    def test_two_options_and_letter_reference(self):
+        exam = self.exam(2)
+        for q in exam["questions"]:
+            q["options"] = {"A": "x", "B": "y"}
+        exam["questions"][1]["options"] = {"A": "same as B", "B": "y"}
+        exam2, back = solver.permuted(exam, [1, 2])
+        self.assertEqual(back[1], {"A": "B", "B": "A"})
+        self.assertNotIn(2, back)  # names letter B: not permuted
+
+
+class SecondSample(t.Base):
+    def first(self, n, answers="B"):
+        return [t.solve(*[t.a(i, answers, expr=None) for i in range(1, n + 1)]),
+                t.qa(*[(i, "agree") for i in range(1, n + 1)])]
+
+    def run_ss(self, n, pick, **kw):
+        items = self.first(n)
+        llm = t.Script(*items)
+        orig = llm.__call__
+
+        def both(prompt):
+            if "Solve independently" in prompt:
+                llm.items.append(reply_for(prompt, pick))
+            return orig(prompt)
+        self.go(mcq(n), both, second_sample=True, confidence=True, **kw)
+        return llm, {q["id"]: q for q in self.result_file()["questions"]}
+
+    def test_agree_and_differ_per_id_with_mapping(self):
+        # first answers all B (text o?2). pick 2 -> second picks o?2 again (agree); pick 3 for id 2 -> differ
+        llm, qs = self.run_ss(3, lambda n: 3 if n == 2 else 2)
+        self.assertEqual(qs["1"]["confidence"], "likely_ok")
+        self.assertEqual(qs["2"]["confidence"], "likely_wrong")
+        self.assertEqual(qs["3"]["confidence"], "likely_ok")
+        self.assertEqual(qs["1"]["second_answer"], "B")
+        self.assertEqual(qs["2"]["second_answer"], "C")
+
+    def test_prompt_clean_and_status_untouched(self):
+        llm, qs = self.run_ss(2, lambda n: 3)
+        sp = llm.prompts[-1]
+        self.assertTrue(sp.rstrip().endswith("Solve independently."))
+        self.assertNotIn("Answer:", sp)
+        self.assertLess(sp.index("## Question 2"), sp.index("## Question 1"))
+        for q in qs.values():
+            self.assertEqual((q["answer"], q["verification_status"], q["status_reason"]),
+                             ("B", "UNCERTAIN", "no_independent_check"))
+
+    def test_scope_excludes_pass_fail_declined(self):
+        recs = {}
+        for i, (st, rs) in enumerate([("PASS", "x"), ("FAIL", "reviewer_disagrees"),
+                                      ("UNCERTAIN", "no_independent_check"),
+                                      ("UNCERTAIN", "reviewer_unsure"), ("UNCERTAIN", "solver_declined"),
+                                      ("UNCERTAIN", "open_task_no_rubric")], 1):
+            r = {"ans": ans("B"), "status": st, "reason": rs}
+            if rs == "solver_declined":
+                r["ans"]["answer_status"] = "declined"
+            if rs == "open_task_no_rubric":
+                r["ans"]["answer"] = "Open"
+            recs[i] = r
+        self.assertEqual(eng.second_targets(recs, {}), [3, 4])
+        self.assertEqual(eng.second_targets(recs, {3: "x"}), [4])
+
+    def test_malformed_second_reply_changes_no_tier(self):
+        llm = t.Script(*self.first(2), "not json")
+        self.go(mcq(2), llm, second_sample=True, confidence=True)
+        qs = self.result_file()["questions"]
+        for q in qs:
+            self.assertEqual(q["confidence"], "unknown")
+            self.assertIn("second_failed", [f["code"] for f in q["qa_findings"]])
+            self.assertNotIn("second_answer", q)
+
+    def test_cost_cap_stops_sample_without_differ(self):
+        n = eng.SECOND_BATCH + 3
+        items = self.first(n)
+        items[0] = exam_llm_call(items[0], 0.0)
+        llm = t.Script(*items)
+        orig = llm.__call__
+
+        def both(prompt):
+            if "Solve independently" in prompt:
+                llm.items.append(exam_llm_call(reply_for(prompt, lambda k: 3), 2.0))  # costs past the cap
+            return orig(prompt)
+        self.go(mcq(n), both, second_sample=True, confidence=True, max_cost_usd=1.0)
+        qs = {q["id"]: q for q in self.result_file()["questions"]}
+        codes = lambda i: [f["code"] for f in qs[str(i)]["qa_findings"]]  # noqa: E731
+        self.assertIn("second_differs", codes(1))  # first batch ran
+        self.assertIn("second_skipped", codes(n))  # second batch stopped by the cap
+        self.assertNotIn("second_differs", codes(n))
+        self.assertEqual(qs[str(n)]["confidence"], "unknown")
+
+    def test_default_run_makes_no_second_call(self):
+        llm = t.Script(*self.first(2))
+        self.go(mcq(2), llm)
+        self.assertEqual(len(llm.prompts), 2)
+        self.assertNotIn("second_answer", self.result_file()["questions"][0])
+
+
+def exam_llm_call(text, cost):
+    return t.exam_llm.Call(True, text, cost, "", "", 0.0)

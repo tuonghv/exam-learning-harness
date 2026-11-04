@@ -187,3 +187,31 @@ def solve_round(exam, rn, recs, ids, prompt, tag="solve"):
             if k["result"] == "fail":
                 r["findings"].append(finding("deterministic", k["kind"], k["detail"]))
         decide_rec(r)
+
+
+def permuted(exam, ids):
+    """75.2: (exam2, back). exam2 holds only the `ids` questions, in reverse order, each with its option texts
+    rotated by 1 + id % (k-1) so the correct position always moves; back[id][new letter] = original letter.
+    An id whose option text names one of its own letters is left out of back (not permuted, not sampled)."""
+    qs, out, back = {q["id"]: q for q in exam["questions"]}, [], {}
+    for i in sorted(ids, reverse=True):
+        q = dict(qs[i])
+        keys = sorted(q.get("options") or {})
+        k = len(keys)
+        out.append(q)
+        if k < 2 or any(re.search(r"(?<!\w)%s(?!\w)" % re.escape(x), str(t))
+                        for x in keys for t in q["options"].values()):
+            continue
+        sh = 1 + i % (k - 1)
+        texts = [q["options"][x] for x in keys]
+        q["options"] = {keys[j]: texts[(j + sh) % k] for j in range(k)}
+        back[i] = {keys[j]: keys[(j + sh) % k] for j in range(k)}
+    exam2 = dict(exam, questions=[q for q in out if q["id"] in back])
+    return exam2, back
+
+
+def second_prompt(exam2, ids):
+    """Independent re-solve: the rules, the context and the permuted questions only (no key, no first answer,
+    no review notes, no few-shot)."""
+    return ("%s\n\nLanguage: %s\n\n%s\n%s\n\nSolve independently.\n" % (
+        base_prompt(exam2), router.language(exam2), exam_context(exam2), render_questions(exam2, set(ids))))

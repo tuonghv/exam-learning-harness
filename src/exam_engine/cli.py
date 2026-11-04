@@ -65,6 +65,8 @@ def solve_main(argv=None):
                     help="one extra text call for ids whose text and image answers differ (needs --pdf)")
     ap.add_argument("--confidence", action="store_true",
                     help="add a confidence tier per answered question (free; PASS bar unchanged)")
+    ap.add_argument("--second-sample", action="store_true",
+                    help="paid: re-solve no-check/doubt MCQ answers with permuted options; implies --confidence")
     a = ap.parse_args(argv)
     if (a.image_scope != "flagged" or a.adjudicate) and not a.pdf:
         print("usage: --image-scope declined|doubt and --adjudicate need --pdf", file=sys.stderr)
@@ -104,7 +106,9 @@ def solve_main(argv=None):
             cfg["image_scope"] = a.image_scope
         if a.adjudicate:
             cfg["adjudicate"] = True
-    if a.confidence:  # cfg key only when set: default config_sha256 and result.json stay unchanged
+    if a.second_sample:
+        cfg["second_sample"] = True
+    if a.confidence or a.second_sample:  # cfg key only when set: default config_sha256 and result.json stay unchanged
         cfg["confidence"] = True
     if a.dry_run:
         try:
