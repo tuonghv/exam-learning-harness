@@ -43,6 +43,8 @@
     "question": "Approve paid proof runs for the confidence tier: P1 second sample on 2026 Math+Vietnamese (cap 6 USD, expected 1-2), P2 English+Science only if P1 flags a wrong answer (cap 6 USD)?",
     "recommendation": "Yes: caps are ceilings, real cost should be about 1-2 USD for P1; the free negative signals ship first and do not need the money",
     "kind": "paid",
-    "asked_at": "2026-11-04T03:57:54Z"
+    "asked_at": "2026-11-04T03:57:54Z",
+    "answered_at": "2026-11-04T05:03:50Z",
+    "answer": "Coordinator decision: P1 ran at a 1.25 USD cap per subject (1.11 spent); P2 skipped, the 2025 answers will be pooled instead"
   }
 ]

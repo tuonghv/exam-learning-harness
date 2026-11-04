@@ -47,3 +47,6 @@ workspace/
 
 # keyed regression set (local copy of evals/regset.example.json)
 evals/regset.json
+
+# answer lists and exam PDFs supplied by the user (scoring only, never tracked)
+input/dgnl/*.answer.txt
