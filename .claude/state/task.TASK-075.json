@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-075",
   "title": "Discriminating confidence tier: option-distance and existing signals (free), optional second sample with permuted options, measurement by confidence group (REQ-0079)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0079",
   "acceptance_criteria": [
     "AC1 design compares >=3 options",
@@ -29,9 +29,9 @@
     "summary": "free slice: verifier.option_distance, core/decision.confidence tier (separate field, PASS bar unchanged, negative signals incl. a named alternative reading), metrics by_confidence with Wilson interval, flag --confidence default off; second sample (75.2) waits for the paid approval"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "1460 tests, only the 4 known baseline failures; default-off output byte-identical to e90202d; second-sample mapping correct (option-text mock: all agree; letter mock: all differ; compared in original letters); caps correct (stop mid-way gives second_skipped, never second_differs); 8+7 mutations killed; tester D1 D4 D5 D6 fixed; free replay: signals alone do not separate (0 of 4 real wrong answers caught)"
   },
   "security": {
     "status": "pending",
@@ -50,7 +50,8 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-075/handoff/design.md",
-    "coder": "work/TASK-075/handoff/code.md"
+    "coder": "work/TASK-075/handoff/code.md",
+    "tester": "work/TASK-075/handoff/test.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-04T03:57:40Z",
@@ -65,5 +66,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tester QA and replay on the saved scored DGNL runs"
+  "next": "verified"
 }
