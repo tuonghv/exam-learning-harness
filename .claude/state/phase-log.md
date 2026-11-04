@@ -2017,3 +2017,9 @@ Action: Scoring done by the inspector, re-solve by the coordinator
 Result: run3 111/120; current engine 115/120 projected
 Decision: cross-check then VERIFIED
 Next: cross-check
+
+## UNIT_TESTED - TASK-037 - 2026-11-04T03:24:51Z
+Action: Coordinator cross-checked the scores
+Result: counts agree
+Decision: VERIFIED next
+Next: verified
