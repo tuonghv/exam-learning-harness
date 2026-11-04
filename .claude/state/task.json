@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-037",
-  "state": "VERIFIED",
-  "next": "report, DONE; TASK-072",
+  "state": "DONE",
+  "next": "",
   "title": "Score the user's labelled real pages with extract-eval (REQ-0040); waits for the user's labelled pages",
-  "active": [
-    {
-      "task_id": "TASK-037",
-      "state": "VERIFIED",
-      "next": "report, DONE; TASK-072",
-      "updated_at": "2026-11-04T03:24:52Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

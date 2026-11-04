@@ -2029,3 +2029,9 @@ Action: Scores recorded
 Result: 92.5 percent on run3, 95.8 projected for the current engine
 Decision: VERIFIED
 Next: report then DONE
+
+## DONE - TASK-037 - 2026-11-04T03:24:52Z
+Action: Report written
+Result: TASK-037 verified, docs/report/phase-37-dgnl-real-score.md
+Decision: DONE
+Next: TASK-072 second DGNL sample; REQ-0079 discriminating confidence; REQ-0080 nearest-value rule

@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-037",
   "title": "Score the user's labelled real pages with extract-eval (REQ-0040); waits for the user's labelled pages",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0040",
   "acceptance_criteria": [
     "AC1 gold stored outside solver inputs",
@@ -37,11 +37,18 @@
       "work/TASK-037/evidence/dgnl-score.txt"
     ],
     "command": "scoring of saved DGNL runs against the official answers; current-engine re-solve of the worst questions; root-cause check against the PDF",
-    "result": "REQ-0040 AC1-AC3 verified: run3 111/120 correct (92.5 percent; 94.9 percent of answered); every answer UNCERTAIN, 0 PASS; current engine fixes 4 of 9 losses (Vietnamese 10, 14, 23, Math 66) -> projected 115/120; remaining wrong: Vietnamese 24 and Math 63 solver reasoning, Math 65 likely key oddity; limits: Math offset mapping matched 8 of 30 by text, English 38 and Science 112 not re-run, one exam"
+    "result": "REQ-0040 AC1-AC3 verified: run3 111/120 correct (92.5 percent; 94.9 percent of answered); every answer UNCERTAIN, 0 PASS; current engine fixes 4 of 9 losses (Vietnamese 10, 14, 23, Math 66) -> projected 115/120; remaining wrong: Vietnamese 24 and Math 63 solver reasoning, Math 65 likely key oddity; limits: Math offset mapping matched 8 of 30 by text, English 38 and Science 112 not re-run, one exam",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-037/evidence/dgnl-score.txt"
+      ],
+      "reason": "two independent counts of saved runs against the official answers; current engine re-solved against the same answers"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-37-dgnl-real-score.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -58,11 +65,14 @@
     },
     "verifier": {
       "waiver": "two independent counts agree; no code to verify"
+    },
+    "crosscheck": {
+      "waiver": "independent oracle = the official answers: scoring counted twice (inspector and coordinator) with matching numbers; no generator under test"
     }
   },
   "user_notes": [],
   "picked_at": "2026-11-03T11:46:52Z",
-  "updated_at": "2026-11-04T03:24:52Z",
+  "updated_at": "2026-11-04T03:24:53Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -72,5 +82,5 @@
     "notes": "",
     "next": "when the user gives the page path: run extract-eval on the labelled pages, measure accuracy and the OCR low_conf false-alarm share"
   },
-  "next": "report, DONE; TASK-072"
+  "next": ""
 }
