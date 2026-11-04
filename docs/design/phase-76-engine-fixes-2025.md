@@ -14,7 +14,7 @@ replay shows the 9 English ids parsed, ids 17/27/29 adjudicated, id 21 unflagged
 ## Constraints
 - Single-object, fenced and garbage replies parse exactly as today (all extract_json callers).
 - No `--pdf` run: prompts, calls/, result.json byte-identical. Adjudication never changes a PASS (status before the image call).
-- Prompts unchanged (adjudicate_prompt cross.py:120 reused as is). No solve reply cache exists (only ingest ReplyCache, keyed on prompt+model; no prompt changes), so no cache-key issue.
+- Prompts: the adjudication prompt gains the options A-D per item (76.5) and a text-first rule (76.6); the solve prompts are unchanged. No solve reply cache exists (only ingest ReplyCache, keyed on prompt+model; no prompt changes), so no cache-key issue.
 - Trust boundary unchanged: replies stay untrusted, validated by core/schema.
 
 ## Generality
@@ -104,13 +104,13 @@ none found in brief scope (main: check docs/notes/incidents.md for "Extra data" 
 
 ## Decisions
 - D1 extract_json: last object + schema check, opt-in by schema - rejected: first object (the retracted one), any-valid object (hides a bad correction), always-on for all callers (changes genexam/refine parsing untested).
-- D2 tie-break: (a) adjudication, default on under --pdf with `--no-adjudicate` - NEEDS USER OK (adds one paid call per run).
+- D2 tie-break: (a) adjudication - originally proposed default on under --pdf; SUPERSEDED by D-coordinator-3 below: opt-in (`--adjudicate`) after the measurement.
   - (b) uncertainty rule: 0 USD but fitted to 3 cases; id 17/27 text was medium, id 29 text tentative; image side uncertainty not comparable; would encode a guess. Rejected.
   - (c) third vote via --second-sample: ~0.06-0.1 USD per batch, a text-only resolve correlates with the text round (wrong in 17/27), and 75.2 defines it as never touching `ans`. Rejected.
   - (a) expected: the adjudicator sees both explanations; effect on 17/27/29 unknown until the paid slice; worst case equals today (status stays UNCERTAIN/FAIL, never PASS). Alternative if user declines default-on: keep `--adjudicate` opt-in and enable it in the DGNL plan/benchmark config.
 - D3 refcheck: skip structural lines in the sharing key - rejected: "options carry their own data" heuristic (subject-specific, untestable generally), group-context table lookup (needs parser groups at ingest).
 
-- D-coordinator-1 (D2, taken within my autonomy, user told afterwards): adjudication is on by default under `--pdf` with `--no-adjudicate` to opt out. It runs only when the conflict set is non-empty (a few ids per run, one call about 0.05 USD) and only on runs that already use the paid image call; the worst case equals today (status stays UNCERTAIN or FAIL, never PASS).
+- D-coordinator-1 (SUPERSEDED by D-coordinator-3; kept as history): adjudication was to be on by default under `--pdf` with `--no-adjudicate` to opt out. It runs only when the conflict set is non-empty (a few ids per run, one call about 0.05 USD) and only on runs that already use the paid image call; the worst case equals today (status stays UNCERTAIN or FAIL, never PASS).
 - D-coordinator-2 Gain is reported on both exams (learn 2025, hold-out 2026 and the regression set), see REQ-0084.- D-coordinator-3 (D2 reversed, measured): the full 2025 re-solve with all fixes scored 111/120 vs 113/120 before (59 fixed; 17, 27, 39 flipped wrong). Adjudication ran on 3 ids (printed 27, 51, 117): 27 was correct and was changed to a wrong answer, 51 stayed correct, 117 stayed wrong: 0 of 2 conflicts fixed, 1 harmed (n=3). Adjudication is therefore opt-in (`--adjudicate`); all other fixes stay.
 ## Out of scope
 Fences with several objects; reasoning errors (Vietnamese 16, English 60, Math 67, Science 111 answer); key oddities; prompt changes.
