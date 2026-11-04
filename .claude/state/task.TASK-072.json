@@ -1,0 +1,55 @@
+{
+  "task_id": "TASK-072",
+  "title": "Solve the second DGNL sample exam (2025) end to end with the current engine, outputs in plans/reports (REQ-0077)",
+  "state": "TODO",
+  "requirement": "REQ-0077",
+  "acceptance_criteria": [
+    "AC1 layout inspection and run plan with cost",
+    "AC2 run inside the cap, coverage/flags/cost reported, generality gaps listed",
+    "AC3 scored when answers arrive"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {},
+  "user_notes": [],
+  "picked_at": "2026-11-04T03:24:53Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
