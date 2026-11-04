@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-074",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "Titan: tests first, 74.1-74.2",
   "title": "Solver rule for approximate questions: nearest option, compute ambiguous readings (REQ-0080)",
   "active": [
     {
       "task_id": "TASK-074",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "Titan: tests first, 74.1-74.2",
+      "updated_at": "2026-11-04T03:43:00Z"
     }
   ],
   "max_active": 1

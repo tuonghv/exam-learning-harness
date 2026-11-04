@@ -1,16 +1,16 @@
 {
   "task_id": "TASK-074",
   "title": "Solver rule for approximate questions: nearest option, compute ambiguous readings (REQ-0080)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0080",
   "acceptance_criteria": [
     "AC1 dev prompt rule + synthetic test, golden",
     "AC2 regset re-score and DGNL Math 63"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-74-nearest-value-rule.md",
+    "summary": "dev prompt rule for approximate questions: compute plausible readings and choose the nearest option; tests, then a Math 63 re-solve and one regression-set dev run",
     "reuse": [],
     "risks": []
   },
@@ -38,11 +38,15 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": {
+      "waiver": "one prompt rule; design written by the coordinator from the root-cause report"
+    }
+  },
   "user_notes": [],
   "picked_at": "2026-11-04T03:42:40Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-04T03:43:00Z",
+  "updated_by": "main",
   "scope": [
     "work/TASK-074/"
   ],
@@ -52,5 +56,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "Titan: tests first, 74.1-74.2"
 }

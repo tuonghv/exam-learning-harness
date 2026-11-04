@@ -2065,3 +2065,9 @@ Action: Report written
 Result: TASK-072 verified, docs/report/phase-72-dgnl-2025-run.md
 Decision: DONE
 Next: REQ-0081 waits for the user answers; REQ-0079/0080 free work
+
+## DESIGN - TASK-074 - 2026-11-04T03:42:59Z
+Action: Coordinator designed the nearest-value rule from the Math 63 root cause
+Result: design COMPLETE
+Decision: prompt rule in the dev channel, paid checks by the coordinator
+Next: coder tests-first
