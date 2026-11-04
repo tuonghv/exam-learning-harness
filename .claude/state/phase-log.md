@@ -2185,3 +2185,9 @@ Action: Report written
 Result: TASK-076 verified, docs/report/phase-76-engine-fixes-2025.md
 Decision: DONE
 Next: TASK-077 learning loop (REQ-0084)
+
+## DESIGN - TASK-077 - 2026-11-04T07:14:26Z
+Action: Nova designed the learning loop
+Result: design COMPLETE
+Decision: free deterministic checks; solver_reasoning unless an independent recomputation exists
+Next: coder tests-first

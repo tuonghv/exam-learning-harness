@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-077",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "Titan: tests first 77.1-77.9, 77.11",
   "title": "Answer-driven learning loop: automatic cause records per wrong answer and held-out gain table (REQ-0084)",
   "active": [
     {
       "task_id": "TASK-077",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "Titan: tests first 77.1-77.9, 77.11",
+      "updated_at": "2026-11-04T07:14:26Z"
     }
   ],
   "max_active": 1
