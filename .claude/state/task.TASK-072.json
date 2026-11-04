@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-072",
   "title": "Solve the second DGNL sample exam (2025) end to end with the current engine, outputs in plans/reports (REQ-0077)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0077",
   "acceptance_criteria": [
     "AC1 layout inspection and run plan with cost",
@@ -28,12 +28,16 @@
     "result": "120 distinct printed numbers 1-120, all answers are letters A-D, solve cost 1.6095 USD plus refine 0.7203 USD = 2.33 USD; no code changed"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "outputs only in untracked plans/reports; no answers fed to the solver (the PDF has none)"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-072/evidence/dgnl2025-run.txt"
+    ],
+    "command": "pipeline run on the 2025 sample; independent recount of the table and costs",
+    "result": "REQ-0077 AC1, AC2 verified (AC3 split to REQ-0081): refine 120 of 120 questions, windows whole at 52, 64, 90, 111, 0.7203 USD; four solves 120 of 120 answered, 0 declined, 1.6095 USD (total 2.33 USD); flagged for check: printed 1, 17, 28, 106, 107, 108, 117; no accuracy claim without answers; limits: Math pages 14-15 embedded images not individually viewed, English 9 malformed first-round replies recovered"
   },
   "report": {
     "status": "pending",
@@ -50,12 +54,15 @@
       "waiver": "no code to write"
     },
     "tester": {
-      "waiver": "no code; counts cross-checked by an independent recount"
+      "waiver": "no code; counts cross-checked"
+    },
+    "verifier": {
+      "waiver": "two counts agree; no code to verify; accuracy is not claimed"
     }
   },
   "user_notes": [],
   "picked_at": "2026-11-04T03:24:53Z",
-  "updated_at": "2026-11-04T03:42:14Z",
+  "updated_at": "2026-11-04T03:42:28Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -64,5 +71,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verified"
+  "next": "report, DONE"
 }
