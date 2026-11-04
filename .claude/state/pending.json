@@ -28,5 +28,13 @@
     "asked_at": "2026-11-03T11:46:57Z",
     "answered_at": "2026-11-04T03:16:59Z",
     "answer": "User RAW-00197: the answer list sits in input/dgnl next to the PDF; compare the solved DGNL results with it"
+  },
+  {
+    "id": "Q-1793763760",
+    "task_id": "TASK-073",
+    "question": "Send the official answers of the 2025 DGNL sample when you find them (a file next to the PDF in input/dgnl is enough).",
+    "recommendation": "Yes: put the answer list next to the PDF and tell me; scoring then runs at once and shows whether the flagged questions hold the wrong answers",
+    "kind": "block",
+    "asked_at": "2026-11-04T03:42:40Z"
   }
 ]
