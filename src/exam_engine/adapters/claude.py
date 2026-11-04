@@ -158,6 +158,14 @@ def extract_json(text, schema=None):
     fences = _FENCE.findall(text)
     if len(fences) > 1:
         return None, "more than one code fence"
+    if schema is not None:  # several objects (fenced or not): the model retracted the earlier ones
+        objs = _objects(text)
+        if len(objs) > 1:
+            from exam_engine.core import schema as sch
+            bad = sch.validate(objs[-1], schema)
+            if not bad:
+                return objs[-1], None
+            return None, "last of %d JSON objects invalid: %s" % (len(objs), bad[0])
     if fences:
         obj = _load(fences[0].strip())
         if obj is not None:
@@ -167,12 +175,4 @@ def extract_json(text, schema=None):
         obj = _load(text[i:j + 1])
         if obj is not None:
             return obj, None
-    if schema is not None:
-        objs = _objects(text)
-        if len(objs) > 1:
-            from exam_engine.core import schema as sch
-            bad = sch.validate(objs[-1], schema)
-            if not bad:
-                return objs[-1], None
-            return None, "last of %d JSON objects invalid: %s" % (len(objs), bad[0])
     return None, "no valid JSON object found"

@@ -169,6 +169,18 @@ class Adjudication(TI.Base):
         with open(res["reports"]["md"], encoding="utf-8") as fh:
             self.assertIn("- Source: adjudicated", fh.read())
 
+    def test_idle_adjudication_not_counted_in_cap(self):
+        from exam_engine import cli
+        plain = TI.load(self.tmp, TI.exam("Compute 3+4."))
+        fig = TI.load(self.tmp, TI.exam(TI.FIG))
+        for ex, kw, kept in ((plain, {}, False), (fig, {}, True), (plain, {"image_scope": "doubt"}, True)):
+            cfg = T.cfg(image_pdf="d.json", adjudicate=True, **kw)
+            cli._drop_idle_adjudication(cfg, ex)
+            self.assertEqual("adjudicate" in cfg, kept)
+        cfg = T.cfg(image_pdf="d.json", adjudicate=True)
+        cli._drop_idle_adjudication(cfg, plain)
+        self.assertEqual(er.call_cap(cfg), er.call_cap(T.cfg(image_pdf="d.json")))
+
     def test_no_pdf_no_call(self):
         path = self.write("exam.md", TI.exam("Compute 3+4."))
         llm = T.Script(T.solve(T.a(1, "7")), T.qa((1, "agree")))

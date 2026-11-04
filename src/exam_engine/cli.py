@@ -125,6 +125,7 @@ def solve_main(argv=None):
             for e in errs:
                 print("ERROR: input: %s" % e, file=sys.stderr)
             return 2
+        _drop_idle_adjudication(cfg, exam)
         print("calls <= %d, cap $%.2f (dry run: no call made)" % (
             engine.call_cap(cfg), a.max_cost_usd))
         image = None
@@ -153,6 +154,8 @@ def solve_main(argv=None):
     tmp = None
     try:
         image = None
+        if cfg.get("adjudicate"):
+            _drop_idle_adjudication(cfg, parser.parse_exam(a.exam))
         if a.real:
             print("calls <= %d, cap $%.2f" % (engine.call_cap(cfg), a.max_cost_usd), flush=True)
             tmp = tempfile.mkdtemp(prefix="exam_run_")
@@ -1191,6 +1194,12 @@ def gold_pdf_main(argv):
         return 2
     print("wrote %s pages=%d" % (a.out, info["pages"]))
     return 0
+
+
+def _drop_idle_adjudication(cfg, exam):
+    """76.2: the tie-break call needs an image call; with the default scope and no flagged question none can run."""
+    if cfg.get("adjudicate") and cfg.get("image_scope", "flagged") == "flagged" and not any(engine.visual_flags(exam).values()):
+        del cfg["adjudicate"]
 
 
 def main(argv=None):

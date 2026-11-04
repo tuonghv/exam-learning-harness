@@ -68,9 +68,7 @@ class ExtractAdversarial(unittest.TestCase):
         a, err = got("```json\n%s\n```\n```json\n%s\n```" % (ans("A"), ans("B")))
         self.assertEqual((a, err), (None, "more than one code fence"))
 
-    @unittest.expectedFailure
     def test_gap_fenced_first_then_unfenced_correction(self):
-        # known gap (design: fences out of scope): the fenced retracted object is taken, not the later one
         self.assertEqual(got("```json\n%s\n```\nCorrection: %s" % (ans("A"), ans("B")))[0], "B")
 
     def test_only_solve_callers_pass_a_schema(self):
