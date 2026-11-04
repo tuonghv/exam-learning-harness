@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-075",
   "title": "Discriminating confidence tier: option-distance and existing signals (free), optional second sample with permuted options, measurement by confidence group (REQ-0079)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0079",
   "acceptance_criteria": [
     "AC1 design compares >=3 options",
@@ -34,12 +34,17 @@
     "result": "1460 tests, only the 4 known baseline failures; default-off output byte-identical to e90202d; second-sample mapping correct (option-text mock: all agree; letter mock: all differ; compared in original letters); caps correct (stop mid-way gives second_skipped, never second_differs); 8+7 mutations killed; tester D1 D4 D5 D6 fixed; free replay: signals alone do not separate (0 of 4 real wrong answers caught)"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "no finding; scoring-only use of the answer list, counts and numbers only"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-075/evidence/paid-p1-second-sample.txt",
+      "work/TASK-075/evidence/t75-final-suite.txt"
+    ],
+    "command": "unit suite; free replay of the confidence signals on scored DGNL run 3; paid P1 second sample on 2026 Math and Vietnamese (1.11 USD)",
+    "result": "REQ-0079 AC1 verified; AC2 verified with a stated weak outcome: PASS bar unchanged (separate default-off tier), 1460 tests baseline failures only; free signals alone do not separate (0 of 4 real wrong answers caught, 7 false alarms); paid second sample: likely_ok 46/47 = 97.9 percent [88.9, 99.6] versus 91.4 percent [81.4, 96.3] overall, likely_wrong 3 with 1 wrong, 1 of 5 wrong answers flagged; a hopeful signal, not a result: n of wrong answers is about 5 against about 20 needed; Math 65 may be a key oddity; P2 skipped, to be pooled with the 2025 answers (REQ-0081)"
   },
   "report": {
     "status": "pending",
@@ -51,11 +56,12 @@
   "roles": {
     "designer": "work/TASK-075/handoff/design.md",
     "coder": "work/TASK-075/handoff/code.md",
-    "tester": "work/TASK-075/handoff/test.md"
+    "tester": "work/TASK-075/handoff/test.md",
+    "verifier": "work/TASK-075/handoff/verify.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-04T03:57:40Z",
-  "updated_at": "2026-11-04T05:02:31Z",
+  "updated_at": "2026-11-04T05:03:56Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-075/"
@@ -66,5 +72,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verified"
+  "next": "report, DONE"
 }
