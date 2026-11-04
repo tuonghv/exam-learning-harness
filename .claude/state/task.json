@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-072",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "run done; record evidence",
   "title": "Solve the second DGNL sample exam (2025) end to end with the current engine, outputs in plans/reports (REQ-0077)",
   "active": [
     {
       "task_id": "TASK-072",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "run done; record evidence",
+      "updated_at": "2026-11-04T03:42:05Z"
     }
   ],
   "max_active": 1

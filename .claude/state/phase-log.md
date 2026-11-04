@@ -2035,3 +2035,9 @@ Action: Report written
 Result: TASK-037 verified, docs/report/phase-37-dgnl-real-score.md
 Decision: DONE
 Next: TASK-072 second DGNL sample; REQ-0079 discriminating confidence; REQ-0080 nearest-value rule
+
+## DESIGN - TASK-072 - 2026-11-04T03:42:04Z
+Action: Coordinator wrote the run plan from the inspector layout report
+Result: design COMPLETE
+Decision: refine all pages, solve four subjects with image scope doubt
+Next: evidence

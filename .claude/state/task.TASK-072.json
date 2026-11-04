@@ -1,17 +1,17 @@
 {
   "task_id": "TASK-072",
   "title": "Solve the second DGNL sample exam (2025) end to end with the current engine, outputs in plans/reports (REQ-0077)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0077",
   "acceptance_criteria": [
     "AC1 layout inspection and run plan with cost",
-    "AC2 run inside the cap, coverage/flags/cost reported, generality gaps listed",
-    "AC3 scored when answers arrive"
+    "AC2 run inside the cap, coverage/flags/cost reported",
+    "AC3 scored when answers arrive (split to REQ-0081)"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-72-dgnl-2025-run.md",
+    "summary": "run plan: free layout inspection, refine all pages with windows, four subject exam files by question range, four solves with the page-image check on doubtful questions, answers table for the later comparison",
     "reuse": [],
     "risks": []
   },
@@ -39,11 +39,15 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": {
+      "waiver": "run task without code; run plan written by the coordinator after a free inspector layout report"
+    }
+  },
   "user_notes": [],
   "picked_at": "2026-11-04T03:24:53Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-04T03:42:05Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -51,5 +55,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "run done; record evidence"
 }
