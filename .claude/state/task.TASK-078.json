@@ -1,18 +1,18 @@
 {
   "task_id": "TASK-078",
   "title": "Solve gate: only questions meeting the verification level are solved (REQ-0024)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0024",
   "acceptance_criteria": [
-    "AC1 needs_review not sent to claude, listed skipped",
-    "AC2 --min-verification any restores; plain exam files unchanged",
-    "AC3 skipped never FAIL, counted separately",
-    "AC4 solve prompts/schema/decision unchanged"
+    "AC1 needs_review not solved, listed skipped",
+    "AC2 any restores, plain files unchanged",
+    "AC3 skipped never FAIL, counted apart",
+    "AC4 solve untouched"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-78-verified-solve-gate.md",
+    "summary": "gate in ingest --exam-out by min_verification (verified default via engine.json, api default any); skipped list in assembly sidecar -> result.json skipped_unverified; solve unchanged; no-verification docs byte-identical",
     "reuse": [],
     "risks": []
   },
@@ -40,11 +40,13 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-078/handoff/design.md"
+  },
   "user_notes": [],
   "picked_at": "2026-11-04T21:09:03Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-04T21:12:15Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -52,5 +54,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "Titan: tests first 78.1-78.3"
 }
