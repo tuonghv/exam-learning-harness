@@ -25,6 +25,8 @@
     "question": "Send 3-5 labelled real exam pages with their correct answers (path under input/) so I can measure real accuracy and the OCR false-alarm share (REQ-0040).",
     "recommendation": "Yes: put the pages and an answer list under input/ and tell me the path; it is the only way to measure real scans",
     "kind": "block",
-    "asked_at": "2026-11-03T11:46:57Z"
+    "asked_at": "2026-11-03T11:46:57Z",
+    "answered_at": "2026-11-04T03:16:59Z",
+    "answer": "User RAW-00197: the answer list sits in input/dgnl next to the PDF; compare the solved DGNL results with it"
   }
 ]

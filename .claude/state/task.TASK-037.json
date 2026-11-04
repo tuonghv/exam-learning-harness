@@ -50,8 +50,5 @@
     "notes": "",
     "next": "when the user gives the page path: run extract-eval on the labelled pages, measure accuracy and the OCR low_conf false-alarm share"
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-  "status": "held",
-  "held_at": "2026-11-03T11:47:02Z",
-  "held_reason": "waits for the user labelled pages (question registered)"
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
 }

@@ -771,6 +771,13 @@
     "requirement": "REQ-0040",
     "acceptance_criteria": [
       "REQ-0040 AC1-AC2"
+    ],
+    "user_notes": [
+      {
+        "raw": "RAW-00197",
+        "note": "answer list is in input/dgnl next to the PDF; compare the already solved DGNL results with it",
+        "at": "2026-11-04T03:17:00Z"
+      }
     ]
   },
   {
