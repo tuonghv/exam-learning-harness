@@ -2251,3 +2251,9 @@ Action: Coordinator designed diacritics rule + check
 Result: design written
 Decision: prompt rule + code check; designer waived
 Next: coder implements
+
+## IMPLEMENTING - TASK-079 - 2026-11-05T21:05:57Z
+Action: Coordinator implemented rule and check
+Result: 13 targeted tests pass; full suite 4 unrelated failures
+Decision: failures out of scope (user)
+Next: UNIT_TESTED

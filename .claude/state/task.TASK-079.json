@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-079",
   "title": "Vietnamese solve explanations must carry diacritics: prompt rule + deterministic check/retry (REQ-0087)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0087",
   "acceptance_criteria": [
     "AC1 solve.md rule",
@@ -17,8 +17,17 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "prompts/dev/exam/solve.md",
+      "prompts/dev/lang/vi/exam/solve.md",
+      "schemas/result.schema.json",
+      "src/exam_engine/pipeline/verifier.py",
+      "src/exam_engine/utils/text.py",
+      "tests/unit/test_vi_diacritics.py",
+      "tests/unit/test_nearest_value_rule.py"
+    ],
+    "summary": "solve.md vi diacritics rule (en+vi prompts), verifier diacritics code check (fail -> existing retry), has_accents helper, schema kind; 7 new tests"
   },
   "unit_test": {
     "status": "pending",
@@ -43,6 +52,9 @@
   "roles": {
     "designer": {
       "waiver": "small single-file design written by coordinator; user asked for a direct fix (RAW-00219)"
+    },
+    "coder": {
+      "waiver": "small change coded by coordinator in prior session; user chose direct fix (RAW-00219)"
     }
   },
   "user_notes": [
@@ -58,7 +70,7 @@
     }
   ],
   "picked_at": "2026-11-05T11:44:32Z",
-  "updated_at": "2026-11-05T11:45:09Z",
+  "updated_at": "2026-11-05T21:05:57Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -68,5 +80,5 @@
     "notes": "",
     "next": "coder running 79.1-79.2 (+vi guide); then tester, verifier; ask user to move default prompt_release"
   },
-  "next": "coder: tests first 79.1-79.2"
+  "next": "unit_test: record full-suite result (4 unrelated failures: dgnl x3, docx textbox x1)"
 }
