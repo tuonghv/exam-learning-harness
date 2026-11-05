@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-079",
-  "state": "IMPLEMENTING",
-  "next": "unit_test: record full-suite result (4 unrelated failures: dgnl x3, docx textbox x1)",
+  "state": "UNIT_TESTED",
+  "next": "verify: real check on vi sample + dhqg2024 re-solve needs user approval (paid)",
   "title": "Vietnamese solve explanations must carry diacritics: prompt rule + deterministic check/retry (REQ-0087)",
   "active": [
     {
       "task_id": "TASK-079",
-      "state": "IMPLEMENTING",
-      "next": "unit_test: record full-suite result (4 unrelated failures: dgnl x3, docx textbox x1)",
-      "updated_at": "2026-11-05T21:05:57Z"
+      "state": "UNIT_TESTED",
+      "next": "verify: real check on vi sample + dhqg2024 re-solve needs user approval (paid)",
+      "updated_at": "2026-11-05T21:06:07Z"
     }
   ],
   "max_active": 1
