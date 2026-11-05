@@ -1,18 +1,18 @@
 {
   "task_id": "TASK-079",
   "title": "Vietnamese solve explanations must carry diacritics: prompt rule + deterministic check/retry (REQ-0087)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0087",
   "acceptance_criteria": [
-    "AC1 solve.md states the diacritics rule for Language: vi",
-    "AC2 reply with Vietnamese words but no accented chars in solution/explanation fails a code check and is retried (unit test)",
-    "AC3 English/Language: en and accented replies unaffected",
-    "AC4 re-solve of dhqg2024 English yields accented explanations"
+    "AC1 solve.md rule",
+    "AC2 unaccented vi reply fails check and is retried",
+    "AC3 en and accented unaffected",
+    "AC4 re-solve dhqg2024 English accented"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-79-vi-diacritics.md",
+    "summary": "solve.md diacritics rule + verifier diacritics code check (fail -> existing retry); en and accented unaffected",
     "reuse": [],
     "risks": []
   },
@@ -40,7 +40,11 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": {
+      "waiver": "small single-file design written by coordinator; user asked for a direct fix (RAW-00219)"
+    }
+  },
   "user_notes": [
     {
       "raw": "RAW-00220",
@@ -49,8 +53,8 @@
     }
   ],
   "picked_at": "2026-11-05T11:44:32Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-05T11:45:09Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -58,5 +62,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder: tests first 79.1-79.2"
 }

@@ -2245,3 +2245,9 @@ Action: Report written
 Result: TASK-078 verified, docs/report/phase-78-verified-solve-gate.md
 Decision: DONE
 Next: remaining open: REQ-0078 extraction gold (needs user)
+
+## DESIGN - TASK-079 - 2026-11-05T11:45:09Z
+Action: Coordinator designed diacritics rule + check
+Result: design written
+Decision: prompt rule + code check; designer waived
+Next: coder implements
