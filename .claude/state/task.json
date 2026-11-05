@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-078",
-  "state": "DONE",
-  "next": "",
-  "title": "Solve gate: only questions meeting the verification level are solved (REQ-0024)",
-  "active": [],
+  "task_id": "TASK-079",
+  "state": "TODO",
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "title": "Vietnamese solve explanations must carry diacritics: prompt rule + deterministic check/retry (REQ-0087)",
+  "active": [
+    {
+      "task_id": "TASK-079",
+      "state": "TODO",
+      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+      "updated_at": ""
+    }
+  ],
   "max_active": 1
 }
