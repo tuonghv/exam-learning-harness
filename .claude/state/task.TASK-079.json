@@ -50,6 +50,11 @@
       "raw": "RAW-00220",
       "note": "vi explanations must be proper accented Vietnamese (e.g. M\u1ec7nh \u0111\u1ec1 quan h\u1ec7), not unaccented",
       "at": "2026-11-05T11:45:02Z"
+    },
+    {
+      "raw": "RAW-00221",
+      "note": "default lang is vi, so the solve guide/prompt itself should be Vietnamese",
+      "at": "2026-11-05T11:48:05Z"
     }
   ],
   "picked_at": "2026-11-05T11:44:32Z",
@@ -60,7 +65,8 @@
   "inputs": {},
   "checkpoint": {
     "done": [],
-    "notes": ""
+    "notes": "",
+    "next": "coder running 79.1-79.2 (+vi guide); then tester, verifier; ask user to move default prompt_release"
   },
   "next": "coder: tests first 79.1-79.2"
 }
