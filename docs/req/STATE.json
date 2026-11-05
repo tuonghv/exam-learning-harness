@@ -1,5 +1,5 @@
 {
-  "focus": "",
-  "next": "",
-  "updated": "2026-11-05 04:37"
+  "focus": "REQ-0087",
+  "next": "Start TASK: add diacritics rule to solve.md + validator in ingest, then re-solve English",
+  "updated": "2026-11-05 18:42"
 }
