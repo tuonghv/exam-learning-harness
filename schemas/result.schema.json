@@ -226,6 +226,7 @@
                     "quote",
                     "key_match",
                     "option_distance",
+                    "diacritics",
                     "ai_review"
                   ]
                 },

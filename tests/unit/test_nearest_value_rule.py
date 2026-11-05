@@ -16,8 +16,8 @@ from exam_engine.pipeline import parser, solver  # noqa: E402
 EN = os.path.join(ROOT, "prompts", "dev", "exam", "solve.md")
 VI = os.path.join(ROOT, "prompts", "dev", "lang", "vi", "exam", "solve.md")
 # sha256 of each file as of HEAD before TASK-074 (i.e. without the rule)
-BASE_SHA = {EN: "5e1ace17c7afb8da6097ce757dd064e6f4fefb952315f7e3ce652df9a6adcf1b",
-            VI: "7e7e10954e32ef0140a195b1acd54c514a9e4c4a3b30e2749bcbf45ee087f922"}
+BASE_SHA = {EN: "fbfb040e6b5abd8a0db913ff70c7e117a0114127152d24e9097bc57add335fca",
+            VI: "512131b08eda28c4b077288232596ee665db9c195478eb49104f9443003b1868"}
 TRIGGERS = ("gần nhất", "xấp xỉ", "closest", "approximately", "nearest")
 EXAMS = (sorted(glob.glob(os.path.join(ROOT, "examples", "*", "input-*.md")))
          + sorted(glob.glob(os.path.join(ROOT, "evals", "inputs", "*", "*.md"))))

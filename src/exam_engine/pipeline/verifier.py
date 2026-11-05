@@ -12,7 +12,7 @@ from exam_engine.core.decision import declined, decide_rec, finding, is_open
 from exam_engine.core.safe_eval import safe_eval
 from exam_engine.pipeline import parser, router
 from exam_engine.utils import langtable
-from exam_engine.utils.text import fold, norm
+from exam_engine.utils.text import fold, has_accents, norm
 
 _NUM = re.compile(r"-?\d+(?:[.,]\d+)?")
 
@@ -229,6 +229,20 @@ def _quotes(q, ans, exam):
     return out
 
 
+_VI_ASCII = frozenset("khong cua nen dung sai va la duoc cho voi mot nhung thi nay".split())
+
+
+def _diacritics(ans, exam):
+    """79.2: a Vietnamese reply written as unaccented ASCII fails (the retry loop re-asks)."""
+    parts = [ans.get("solution"), ans.get("explanation"), ans.get("checks")]
+    text = " ".join(" ".join(map(str, p)) if isinstance(p, list) else str(p or "") for p in parts)
+    hits = sum(1 for w in re.findall(r"[a-z]+", text.casefold()) if w in _VI_ASCII)
+    if router.language(exam) == "vi" and hits >= 4 and not has_accents(text):
+        return _chk("diacritics", "explanation is Vietnamese without diacritics; rewrite with full diacritics",
+                    "fail", False)
+    return _chk("diacritics", "ok", "pass", False)
+
+
 def det_checks(q, ans, exam):
     """Code-only checks for one question (empty when the solver declined, D4)."""
     if declined(ans):
@@ -237,9 +251,10 @@ def det_checks(q, ans, exam):
     quote = lambda: _quotes(q, ans, exam) if "quote" in want else []  # noqa: E731
     fmt = _format(q, ans, exam) if "format" in want else None
     if is_open(ans):
-        return [fmt] + quote() if fmt else quote()  # D7: format + quote only
+        dia = _diacritics(ans, exam)  # D7: format + quote only, plus a diacritics fail
+        return ([fmt] if fmt else []) + quote() + ([dia] if dia["result"] == "fail" else [])
     out = [c for c in (fmt, _computed(ans) if "computed" in want else None) if c]
-    return out + quote()
+    return out + quote() + [_diacritics(ans, exam)]
 
 
 def qa_prompt(exam, recs, ids):

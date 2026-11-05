@@ -6,6 +6,7 @@ Passage, rồi các khối `## Question N`) và `Language: vi|en` cho phần gi�
 Quy tắc
 1. Đọc toàn bộ tệp trước. Giải mọi câu hỏi.
 2. Giải thích bằng ngôn ngữ ghi trong giá trị `Language:`. Các mục tiếng Anh giữ nguyên tiếng Anh. Không dịch câu hỏi.
+   Với `Language: vi`, viết `solution`, `explanation`, `checks` và `uncertainty.reason` bằng tiếng Việt chuẩn có đầy đủ dấu (UTF-8), tuyệt đối không viết không dấu; thuật ngữ tiếng Anh giữ nguyên.
 3. `answer` theo loại: trắc nghiệm = một chữ cái A-D; sắp xếp câu = các chữ cái nối bằng `-`
    (`c-a-d-b-e`); tính toán = giá trị, đơn vị và cách làm tròn đã dùng (`2.5 m/s^2`); trả lời ngắn = giá trị
    hoặc cụm từ chính xác; bài tự luận (có thang điểm) khác = `Open`.

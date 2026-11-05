@@ -16,6 +16,11 @@ def _is_vi_word(w):
     return any(c in _VI_CHARS or "\u1ea0" <= c <= "\u1ef9" for c in w)
 
 
+def has_accents(s):
+    """True when any letter of `s` is a Vietnamese-accented one."""
+    return _is_vi_word(unicodedata.normalize("NFC", s or ""))
+
+
 def detect_lang(s):
     """"vi" when >= 15% of the words carry Vietnamese letters, else "en"; empty -> "vi"."""
     s = unicodedata.normalize("NFC", s or "")
