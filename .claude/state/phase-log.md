@@ -2269,3 +2269,9 @@ Action: Real re-solve of dhqg2024 English with the new rule
 Result: unaccented 11/20 -> 0/20, all 20 accented, $0.21
 Decision: VERIFIED
 Next: report then DONE
+
+## DONE - TASK-079 - 2026-11-06T21:36:50Z
+Action: Report written
+Result: TASK-079 verified, docs/report/phase-79-vi-diacritics.md
+Decision: DONE
+Next: other dhqg2024 subjects not re-solved

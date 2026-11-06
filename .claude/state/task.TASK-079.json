@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-079",
   "title": "Vietnamese solve explanations must carry diacritics: prompt rule + deterministic check/retry (REQ-0087)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0087",
   "acceptance_criteria": [
     "AC1 solve.md rule",
@@ -44,11 +44,18 @@
       "work/TASK-079/evidence/resolve-english.txt"
     ],
     "command": "solve work/dhqg2024/English.md --real (Language vi) before vs after; targeted unit tests",
-    "result": "REQ-0087 AC1-AC3 verified: prompt rule present in both solve.md; unaccented vi reply fails diacritics check and is retried (unit); real re-solve of dhqg2024 English: unaccented-vi explanations 11/20 -> 0/20, accented 5 -> 20; cost $0.21; limits: stopword heuristic, 4 unrelated full-suite failures pre-exist"
+    "result": "REQ-0087 AC1-AC3 verified: prompt rule present in both solve.md; unaccented vi reply fails diacritics check and is retried (unit); real re-solve of dhqg2024 English: unaccented-vi explanations 11/20 -> 0/20, accented 5 -> 20; cost $0.21; limits: stopword heuristic, 4 unrelated full-suite failures pre-exist",
+    "quality": {
+      "kind": "real-run",
+      "evidence": [
+        "work/TASK-079/evidence/resolve-english.txt"
+      ],
+      "reason": "real re-solve of dhqg2024 English: unaccented vi explanations 11/20 -> 0/20"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-79-vi-diacritics.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -65,6 +72,9 @@
     },
     "verifier": {
       "waiver": "coordinator verified directly with the approved real run; small change"
+    },
+    "crosscheck": {
+      "waiver": "oracle = old vs new real run of the same input, counted by script; plus unit tests"
     }
   },
   "user_notes": [
@@ -80,7 +90,7 @@
     }
   ],
   "picked_at": "2026-11-05T11:44:32Z",
-  "updated_at": "2026-11-06T21:36:33Z",
+  "updated_at": "2026-11-06T21:36:51Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -90,5 +100,5 @@
     "notes": "",
     "next": "coder running 79.1-79.2 (+vi guide); then tester, verifier; ask user to move default prompt_release"
   },
-  "next": "report, DONE"
+  "next": ""
 }

@@ -1499,7 +1499,7 @@
     "task_id": "TASK-079",
     "title": "Vietnamese solve explanations must carry diacritics: prompt rule + deterministic check/retry (REQ-0087)",
     "priority": 2,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-05T18:30:00",
     "requirement": "REQ-0087",
     "acceptance_criteria": [
@@ -1507,6 +1507,20 @@
       "AC2 reply with Vietnamese words but no accented chars in solution/explanation fails a code check and is retried (unit test)",
       "AC3 English/Language: en and accented replies unaffected",
       "AC4 re-solve of dhqg2024 English yields accented explanations"
+    ],
+    "completed_at": "2026-11-06T21:36:50Z",
+    "report": "docs/report/phase-79-vi-diacritics.md",
+    "user_notes": [
+      {
+        "raw": "RAW-00220",
+        "note": "vi explanations must be proper accented Vietnamese (e.g. M\u1ec7nh \u0111\u1ec1 quan h\u1ec7), not unaccented",
+        "at": "2026-11-05T11:45:02Z"
+      },
+      {
+        "raw": "RAW-00221",
+        "note": "default lang is vi, so the solve guide/prompt itself should be Vietnamese",
+        "at": "2026-11-05T11:48:05Z"
+      }
     ]
   }
 ]

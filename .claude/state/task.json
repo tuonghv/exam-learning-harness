@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-079",
-  "state": "VERIFIED",
-  "next": "report, DONE",
+  "state": "DONE",
+  "next": "",
   "title": "Vietnamese solve explanations must carry diacritics: prompt rule + deterministic check/retry (REQ-0087)",
-  "active": [
-    {
-      "task_id": "TASK-079",
-      "state": "VERIFIED",
-      "next": "report, DONE",
-      "updated_at": "2026-11-06T21:36:33Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

@@ -1,0 +1,8 @@
+TASK-079 AC4 real run (user-approved, RAW-00224): solve work/dhqg2024/English.md --real --max-cost-usd 0.6 --out plans/dhqg2024/out-English-t79
+cost: calls 4 $0.2134; answered 19/20 declined 1 malformed 0
+Count of questions by explanation script (stopword heuristic, solution+explanation):
+run                 questions  accented  unaccented-vi  diacritics findings
+out-English (old)   20         5         11             0
+out-English-t79     20         20        0              0
+Sample explanation (Q1): Collocation 'cast doubt on'. A, B, D không đi với 'cast doubt' theo nghĩa nghi ngờ.
+Unit: 13 targeted tests OK; full suite 4 unrelated failures (dgnl x3, docx textbox x1).
