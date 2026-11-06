@@ -1,0 +1,56 @@
+{
+  "task_id": "TASK-080",
+  "title": "Solve De-thi-minh-hoa-2026-Final.pdf end to end with the current engine, cap 3 USD (REQ-0085)",
+  "state": "TODO",
+  "requirement": "REQ-0085",
+  "acceptance_criteria": [
+    "AC1 free ingest and cost estimate recorded",
+    "AC2 refine + solve of all sections within 3 USD cap; answers by printed number with status/doubt",
+    "AC3 scored against the answer file (counts and numbers only)"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {},
+  "user_notes": [],
+  "picked_at": "2026-11-06T21:52:03Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": "",
+    "next": "wait for parts/status.txt ALLDONE, merge refined, split 4 sections, solve each (cap 1.5), score vs answer file"
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
