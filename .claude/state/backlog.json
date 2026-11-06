@@ -1527,13 +1527,15 @@
     "task_id": "TASK-080",
     "title": "Solve De-thi-minh-hoa-2026-Final.pdf end to end with the current engine, cap 3 USD (REQ-0085)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-07T05:00:00",
     "requirement": "REQ-0085",
     "acceptance_criteria": [
       "AC1 free ingest and cost estimate recorded",
       "AC2 refine + solve of all sections within 3 USD cap; answers by printed number with status/doubt",
       "AC3 scored against the answer file (counts and numbers only)"
-    ]
+    ],
+    "completed_at": "2026-11-06T23:33:03Z",
+    "report": "docs/report/phase-80-dgnl2026-final-solve.md"
   }
 ]

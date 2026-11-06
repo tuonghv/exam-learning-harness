@@ -1,0 +1,11 @@
+TASK-080 / REQ-0085 summary (counts and numbers only)
+AC1 free ingest: 22 pages, 0 usable questions from native text; estimate ~2.4 USD (guide rates ~0.04/page refine + ~0.3-0.45/section)
+Refine (paid, 3 batches 4-9,10-15,16-22): 1.0593 USD; merged 120 questions; needs_review: 67, 89
+Solve (paid): Vietnamese 0.3987, English 0.2512, Math 0.3046, Science 0.4735 = 1.4280 USD
+Total paid 2.4873 USD <= 3.00 cap
+Answered: Vietnamese 30/30, English 28/30 (2 declined), Math 30/30, Science 30/30
+AC3 score vs answer file: Vietnamese 28/30, English 28/30, Math 28/30, Science 29/30 = 113/120 (94.2%)
+Wrong numbers: 21 24 37 38 63 65 112 (37 = declined). Doubt of wrong: high 1, medium 3, low 3
+Doubt of correct: low 102, medium 11 -> low-doubt answers 102/108 correct
+Per-number table: reports/dgnl2026-t80/answers.tsv (untracked)
+Note: all sections exited 1 (every answer verification_status UNCERTAIN, no independent check without key at solve time)
