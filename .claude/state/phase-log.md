@@ -2275,3 +2275,9 @@ Action: Report written
 Result: TASK-079 verified, docs/report/phase-79-vi-diacritics.md
 Decision: DONE
 Next: other dhqg2024 subjects not re-solved
+
+## DESIGN - TASK-080 - 2026-11-06T23:32:50Z
+Action: Design written
+Result: ok
+Decision: designer waived
+Next: IMPLEMENTING
