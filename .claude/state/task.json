@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-080",
-  "state": "DESIGN",
-  "next": "run done; record",
+  "state": "IMPLEMENTING",
+  "next": "unit tests n/a",
   "title": "Solve De-thi-minh-hoa-2026-Final.pdf end to end with the current engine, cap 3 USD (REQ-0085)",
   "active": [
     {
       "task_id": "TASK-080",
-      "state": "DESIGN",
-      "next": "run done; record",
-      "updated_at": "2026-11-06T23:32:50Z"
+      "state": "IMPLEMENTING",
+      "next": "unit tests n/a",
+      "updated_at": "2026-11-06T23:32:56Z"
     }
   ],
   "max_active": 1
