@@ -1572,7 +1572,7 @@
     "task_id": "TASK-083",
     "title": "Per-exam solve cache keyed by pinned model ID + prompt hash + data hash, already-solved confirm (REQ-0089)",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-11-07T10:30:00",
     "requirement": "REQ-0089",
     "acceptance_criteria": [

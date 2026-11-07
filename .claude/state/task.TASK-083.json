@@ -1,0 +1,63 @@
+{
+  "task_id": "TASK-083",
+  "title": "Per-exam solve cache keyed by pinned model ID + prompt hash + data hash, already-solved confirm (REQ-0089)",
+  "state": "TODO",
+  "requirement": "REQ-0089",
+  "acceptance_criteria": [
+    "AC1 mock: 2nd run 0 calls, cached in trace; model/prompt/data change misses",
+    "AC2 unpinned model alias rejected",
+    "AC3 already-solved exam asks confirm or needs --fresh; no TTY refuses",
+    "AC4 cache per exam file, reuses replycache.py, eval keys excluded",
+    "AC5 proof on a small exam (few questions), paid cap small"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {},
+  "user_notes": [
+    {
+      "raw": "RAW-00243",
+      "note": "cache per exam file, not shared; small exam proof first (RAW-00242)",
+      "at": "2026-11-07T03:15:03Z"
+    }
+  ],
+  "picked_at": "2026-11-07T03:15:00Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
