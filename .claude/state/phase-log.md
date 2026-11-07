@@ -2395,3 +2395,9 @@ Action: Report written
 Result: docs/report/phase-83-solve-cache.md
 Decision: DONE
 Next: none
+
+## DESIGN - TASK-084 - 2026-11-07T07:03:42Z
+Action: Design drafted; user chose best option AC4 (a)
+Result: docs/design/phase-84-solve-cache-followups.md
+Decision: DESIGN
+Next: IMPLEMENTING

@@ -1,19 +1,19 @@
 {
   "task_id": "TASK-084",
   "title": "Solve cache follow-ups: already-solved shows paid run, guard rn.cache, cost range check, alias-pinned refine/boundary keys (REQ-0090)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0090",
   "acceptance_criteria": [
     "AC1 already-solved line shows the original paid run cost and calls",
     "AC2 build_result tolerates a runner without cache",
     "AC3 bad cached cost_usd is a miss",
-    "AC4 refine/boundary cache keys use a pinned model or refuse alias",
+    "AC4 refine/boundary cache keys use a pinned model",
     "AC5 unit test for the metrics cache line"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-84-solve-cache-followups.md",
+    "summary": "84.1 last_solved reports the original paid run; 84.2 getattr guard on rn.cache; 84.3 cached cost range check; 84.4 claude.resolve maps aliases via model_pins for refine/ingest --real, unresolved refused; 84.5 direct metrics.block test",
     "reuse": [],
     "risks": []
   },
@@ -41,17 +41,24 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-084/handoff/design.md"
+  },
   "user_notes": [
     {
       "raw": "RAW-00250",
       "note": "start REQ-0090 follow-ups",
       "at": "2026-11-07T06:57:09Z"
+    },
+    {
+      "raw": "RAW-00251",
+      "note": "AC4 D1: user asked for my best pick -> (a) resolve aliases via model_pins; recommendations must be marked best",
+      "at": "2026-11-07T07:03:30Z"
     }
   ],
   "picked_at": "2026-11-07T06:57:08Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-07T07:03:42Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -59,5 +66,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder implements 84.1-84.4, tester 84.5 and tests"
 }

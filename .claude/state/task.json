@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-084",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "coder implements 84.1-84.4, tester 84.5 and tests",
   "title": "Solve cache follow-ups: already-solved shows paid run, guard rn.cache, cost range check, alias-pinned refine/boundary keys (REQ-0090)",
   "active": [
     {
       "task_id": "TASK-084",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "coder implements 84.1-84.4, tester 84.5 and tests",
+      "updated_at": "2026-11-07T07:03:42Z"
     }
   ],
   "max_active": 1
