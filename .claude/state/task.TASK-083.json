@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-083",
   "title": "Per-exam solve cache keyed by pinned model ID + prompt hash + data hash, already-solved confirm (REQ-0089)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0089",
   "acceptance_criteria": [
     "AC1 mock: 2nd run 0 calls, cached in trace; model/prompt/data change misses",
@@ -18,8 +18,17 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/engine.py",
+      "src/exam_engine/cli.py",
+      "src/exam_engine/pipeline/planrun.py",
+      "src/exam_engine/adapters/claude.py",
+      "src/exam_engine/pipeline/metrics.py",
+      "schemas/result.schema.json",
+      "config/engine.json"
+    ],
+    "summary": "Runner.call per-exam ReplyCache (ns solve), claude.pinned + model_pins (--real only), plans/<exam-id>/cache, planrun.last_solved + --fresh/--yes, cached/cost_saved in result/plan/index/metrics"
   },
   "unit_test": {
     "status": "pending",
@@ -42,7 +51,8 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-083/handoff/design.md"
+    "designer": "work/TASK-083/handoff/design.md",
+    "coder": "work/TASK-083/handoff/code.md"
   },
   "user_notes": [
     {
@@ -52,14 +62,23 @@
     }
   ],
   "picked_at": "2026-11-07T03:15:00Z",
-  "updated_at": "2026-11-07T03:22:40Z",
+  "updated_at": "2026-11-07T03:34:49Z",
   "updated_by": "main",
-  "scope": [],
+  "scope": [
+    "src/exam_engine/engine.py",
+    "src/exam_engine/cli.py",
+    "src/exam_engine/pipeline/planrun.py",
+    "src/exam_engine/adapters/claude.py",
+    "src/exam_engine/pipeline/metrics.py",
+    "schemas/result.schema.json",
+    "config/engine.json",
+    "tests/unit"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
     "done": [],
     "notes": ""
   },
-  "next": "coder implements 83.1-83.5 (Runner cache, pins, per-exam dir, solved check, trace); tester runs mock tests"
+  "next": "tester writes mock tests for 83.1-83.5 and updates --real tests that use the alias model"
 }

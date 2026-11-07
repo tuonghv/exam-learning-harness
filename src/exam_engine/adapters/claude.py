@@ -19,6 +19,15 @@ _TOKEN = re.compile(r"\b(?:sk-[A-Za-z0-9_-]{8,}|Bearer\s+\S+|[A-Za-z0-9_-]{32,})
 _FENCE = re.compile(r"```[A-Za-z]*[ \t]*\n?(.*?)```", re.S)
 
 
+def pinned(model, pins=None):
+    """(ok, hint) 83.2: a pinned model is a full `claude-...` ID with a digit, not `-latest`, not a pin alias."""
+    pins = pins or {}
+    m = model or ""
+    if m.startswith("claude-") and any(ch.isdigit() for ch in m) and not m.endswith("-latest") and m not in pins:
+        return True, ""
+    return False, "--model %s" % (pins.get(m) or "claude-<family>-<version>")
+
+
 def mask(s):
     s = _EMAIL.sub("<email>", str(s))
     return _TOKEN.sub("<token>", s)

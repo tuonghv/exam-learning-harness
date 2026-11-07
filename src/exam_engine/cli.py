@@ -48,6 +48,8 @@ def solve_main(argv=None):
     ap.add_argument("--timeout", type=float, default=d["timeout"])
     ap.add_argument("--model", default=d["model"])
     ap.add_argument("--no-pdf", action="store_true", help="write report.md only")
+    ap.add_argument("--fresh", action="store_true", help="--real: skip the solve cache reads and the re-run prompt (paid)")
+    ap.add_argument("--yes", action="store_true", help="--real: confirm a re-run of an already solved exam (reads the cache)")
     ap.add_argument("--history", metavar="FILE",
                     help="append a metrics line to FILE (default with --real: plans/run-history.jsonl)")
     ap.add_argument("--lang", choices=("vi", "en", "auto"),
@@ -90,6 +92,27 @@ def solve_main(argv=None):
     if a.max_attempts < 1 or a.max_cost_usd < 0 or a.timeout <= 0:
         print("usage: --max-attempts >= 1, --max-cost-usd >= 0, --timeout > 0", file=sys.stderr)
         return 2
+    cache = None
+    if a.real:
+        ok, hint = claude.pinned(a.model, d.get("model_pins"))
+        if not ok:
+            print("ERROR: model '%s' is an alias; the solve cache needs a pinned ID: %s" % (a.model, hint),
+                  file=sys.stderr)
+            return 2
+        prev = None if a.fresh else planrun.last_solved(DEFAULT_OUT_ROOT, a.exam)
+        if prev and not a.yes:
+            print("already solved: %s model=%s cost=$%s calls=%s -> %s" % (
+                prev["finished_utc"], prev["model"], prev["cost_usd"], prev["calls"], prev["dir"]), file=sys.stderr)
+            print("re-run reads the cache (unchanged calls cost $0); --fresh forces a full paid re-solve",
+                  file=sys.stderr)
+            if not sys.stdin.isatty():
+                print("refused: not a terminal; pass --yes to continue with the cache or --fresh to re-solve",
+                      file=sys.stderr)
+                return 2
+            if input("re-run? [y/N] ").strip().lower() != "y":
+                return 0
+        from exam_engine.ingest import replycache
+        cache = replycache.ReplyCache(os.path.join(DEFAULT_OUT_ROOT, planrun.exam_id_of(a.exam), "cache"))
     plan_only = not a.dry_run and not a.out  # default layout: report goes to reports/ via report_build
     if plan_only:
         try:
@@ -172,7 +195,8 @@ def solve_main(argv=None):
         result, code = None, None
         try:
             result, code = engine.run(a.exam, a.out, cfg, llm, sink=pw.record, reports=not plan_only,
-                                    **({"image": image} if image else {}))
+                                    **({"image": image} if image else {}),
+                                    **({"cache": cache, "fresh": a.fresh} if cache is not None else {}))
         finally:  # a crash still leaves plan.json (failed) and the captured calls
             pw.finish(result, code, time.time() - t0)
         wall = round(time.time() - t0, 1)

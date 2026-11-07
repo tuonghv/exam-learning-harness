@@ -1,1 +1,1 @@
-{"max_attempts": 2, "max_cost_usd": 1.0, "timeout": 300, "model": "sonnet", "prompt_channel": "release", "prompt_release": "v1.0.0", "min_verification": "verified"}
+{"max_attempts": 2, "max_cost_usd": 1.0, "timeout": 300, "model": "sonnet", "prompt_channel": "release", "prompt_release": "v1.0.0", "min_verification": "verified", "model_pins": {"sonnet": "claude-sonnet-5-5", "opus": "claude-opus-5-5", "haiku": "claude-haiku-5-5"}}

@@ -9,6 +9,7 @@ import json
 import os
 import re
 import sys
+import time
 
 from exam_engine.adapters import claude
 from exam_engine.core import refcheck, schema as sch
@@ -39,12 +40,45 @@ class Stop(Exception):
 class Runner(object):
     """Counts calls and cost, enforces the caps, logs one line per call."""
 
-    def __init__(self, cfg, llm, log, sink=None, llm_images=None):
+    def __init__(self, cfg, llm, log, sink=None, llm_images=None, cache=None, fresh=False):
         self.cfg, self.llm, self.log, self.sink = cfg, llm, log, sink
         self.llm_images = llm_images
+        self.cache, self.fresh = cache, fresh  # 83.1: ReplyCache or None (mock/dry-run never get one)
         self.calls, self.cost = 0, 0.0
+        self.hits, self.saved = 0, 0.0
+
+    def _key(self, prompt, images):
+        sha = lambda b: hashlib.sha256(b).hexdigest()
+        return "%s\0%s\0%s" % (self.cfg["model"], sha(prompt.encode("utf-8")), ",".join(sha(b) for b in images or ()))
+
+    def _hit(self, key):
+        h = None if self.fresh else self.cache.get("solve", key)
+        if (isinstance(h, dict) and isinstance(h.get("text"), str) and h["text"]
+                and isinstance(h.get("cost_usd"), (int, float)) and not isinstance(h["cost_usd"], bool)):
+            return h
+        return None
+
+    def _sink(self, n, tag, prompt, c, images, pages, cached):
+        if not self.sink:
+            return
+        kw = {"cached": True} if cached else {}
+        if images:
+            self.sink(n, tag, prompt, c, pages=pages, page_sha256=[hashlib.sha256(b).hexdigest() for b in images], **kw)
+        else:
+            self.sink(n, tag, prompt, c, **kw)
 
     def call(self, prompt, tag=None, images=None, pages=None):
+        key = self._key(prompt, images) if self.cache else None
+        h = self._hit(key) if self.cache else None
+        if h:  # a hit is free: checked before the caps so a fully cached run never trips them
+            c = claude.Call(True, h["text"], 0.0, "", "", 0.0)
+            self.hits += 1
+            self.saved += h["cost_usd"]
+            seq = self.calls + self.hits
+            self.log.append("cache hit seq=%d tag=%s saved=%.4f prompt_sha256=%s" % (
+                seq, tag, h["cost_usd"], hashlib.sha256(prompt.encode("utf-8")).hexdigest()))
+            self._sink(seq, tag, prompt, c, images, pages, True)
+            return c
         if self.cost >= self.cfg["max_cost_usd"]:
             raise Stop("cost_cap", "cost cap $%.2f reached" % self.cfg["max_cost_usd"])
         if self.calls >= call_cap(self.cfg):
@@ -56,12 +90,10 @@ class Runner(object):
             self.calls, c.ok, c.cls or "-", c.duration_s or 0.0, c.cost_usd or 0.0,
             len(prompt.encode("utf-8")), len((c.text or "").encode("utf-8")))
             + (" images=%d" % len(images) if images else ""))
-        if self.sink:  # before any Stop, so a crash loses no paid reply
-            if images:
-                self.sink(self.calls, tag, prompt, c, pages=pages,
-                          page_sha256=[hashlib.sha256(b).hexdigest() for b in images])
-            else:
-                self.sink(self.calls, tag, prompt, c)
+        if self.cache and c.ok:
+            self.cache.put("solve", key, {"text": c.text, "cost_usd": c.cost_usd or 0.0, "model": self.cfg["model"],
+                                          "tag": tag, "created_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())})
+        self._sink(self.calls + self.hits, tag, prompt, c, images, pages, False)  # before any Stop: a crash loses no paid reply
         if not c.ok and c.cls in BLOCKING:
             raise Stop(c.cls, c.reason)
         return c
@@ -393,7 +425,8 @@ def build_result(exam, exam_path, recs, cfg, rn, stopped):
                 "cost_usd": round(rn.cost, 6), "calls": rn.calls,
                 "stopped": stopped[0] if stopped else None,
                 "prompt": prompts.prompt_info(),
-                **({"image_scope": cfg["image_scope"]} if cfg.get("image_scope", "flagged") != "flagged" else {})},
+                **({"image_scope": cfg["image_scope"]} if cfg.get("image_scope", "flagged") != "flagged" else {}),
+                **({"cached": rn.hits, "cost_saved_usd": round(rn.saved, 6)} if rn.cache is not None else {})},
         "questions": qs,
         "summary": {"pass": sum(q["verification_status"] == "PASS" for q in qs),
                     "fail": sum(q["verification_status"] == "FAIL" for q in qs),
@@ -418,7 +451,7 @@ def _skipped_unverified(exam_path):
         return []
 
 
-def run(exam_path, out_dir, cfg, llm, sink=None, reports=True, image=None):
+def run(exam_path, out_dir, cfg, llm, sink=None, reports=True, image=None, cache=None, fresh=False):
     """(result, exit_code); result is None on exit 2. `image` = {"llm": f(prompt, pngs), "render": f(page),
     "key_pages": set, "have_pages": set|None} enables the page-image check (cfg["image_pdf"])."""
     try:
@@ -437,7 +470,7 @@ def run(exam_path, out_dir, cfg, llm, sink=None, reports=True, image=None):
         print("WARN: %s" % w, file=sys.stderr)
     log = []
     image = image if cfg.get("image_pdf") else None
-    rn = Runner(cfg, llm, log, sink, image["llm"] if image else None)
+    rn = Runner(cfg, llm, log, sink, image["llm"] if image else None, cache, fresh)
     recs = {q["id"]: new_rec() for q in exam["questions"]}
     stopped = None
     skip = incomplete_ids(exam)

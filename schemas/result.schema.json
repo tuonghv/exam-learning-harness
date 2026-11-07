@@ -108,6 +108,14 @@
           "type": "integer",
           "minimum": 0
         },
+        "cached": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "cost_saved_usd": {
+          "type": "number",
+          "minimum": 0
+        },
         "stopped": {
           "type": [
             "string",

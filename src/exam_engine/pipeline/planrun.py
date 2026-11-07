@@ -111,7 +111,7 @@ class PlanWriter(object):
         except OSError as exc:
             self._warn(exc)
 
-    def record(self, n, tag, prompt, call, pages=None, page_sha256=None):
+    def record(self, n, tag, prompt, call, pages=None, page_sha256=None, cached=False):
         """Sink for Runner.call: one prompt file, one reply file, one flushed index line."""
         if not self.ok:
             return
@@ -127,6 +127,8 @@ class PlanWriter(object):
                     "cost_usd": call.cost_usd or 0.0, "prompt_bytes": len(prompt.encode("utf-8")),
                     "reply_bytes": len(text.encode("utf-8")), "prompt_sha256": _sha(prompt),
                     "reply_sha256": _sha(text)}
+            if cached:  # 83.5: served from the solve cache, no paid call
+                line["cached"] = True
             if pages is not None:  # image call: page numbers only, PNGs are not stored
                 line["pages"] = list(pages)
                 line["page_sha256"] = list(page_sha256 or [])
@@ -150,10 +152,40 @@ class PlanWriter(object):
             "wall_s": round(wall_s if wall_s is not None else time.time() - self.t0, 1),
             "calls": run.get("calls", self.calls), "cost_usd": run.get("cost_usd", 0.0),
             "calls_captured": self.ok})
+        for k in ("cached", "cost_saved_usd"):  # only when a cache was active
+            if k in run:
+                self.meta[k] = run[k]
         try:
             _dump(os.path.join(self.dir, "plan.json"), self.meta)
         except OSError as exc:
             self._warn(exc)
+
+
+def last_solved(root, exam_path):
+    """Newest finished real solve of this exact exam file under root/<exam-id>/*/plan.json, else None (83.4)."""
+    base = os.path.join(root, exam_id_of(exam_path))
+    try:
+        sha = metrics.file_sha256(exam_path)
+        names = os.listdir(base)
+    except OSError:
+        return None
+    best = None
+    for name in names:
+        try:
+            with open(os.path.join(base, name, "plan.json"), encoding="utf-8") as fh:
+                p = json.load(fh)
+        except (OSError, ValueError):
+            continue
+        if not (isinstance(p, dict) and p.get("source") == "solve" and p.get("status") == "done"
+                and p.get("llm") == "claude-p" and (p.get("exam") or {}).get("sha256") == sha):
+            continue
+        if best is None or str(p.get("finished_utc") or "") > str(best[1].get("finished_utc") or ""):
+            best = (name, p)
+    if best is None:
+        return None
+    p = best[1]
+    return {"dir": os.path.join(base, best[0]), "finished_utc": p.get("finished_utc"), "model": p.get("model"),
+            "cost_usd": p.get("cost_usd", 0.0), "calls": p.get("calls", 0)}
 
 
 def load(plan_dir):

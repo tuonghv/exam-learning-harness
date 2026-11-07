@@ -187,6 +187,8 @@ def compute(result, log_lines=None, exam=None, key=None, qa=None, needs_review=N
     qa_blk, unmatched = _qa_block(rows, qa)
     cost = dict(_log_cost(log_lines), calls=run.get("calls"), cost_usd=run.get("cost_usd"),
                 tokens=None, wall_s=None)
+    if run.get("cached") is not None:  # 83.5: keys only when a solve cache was active
+        cost["cached"], cost["cost_saved_usd"] = run.get("cached"), run.get("cost_saved_usd")
     cost["cost_per_answered"] = (cost["cost_usd"] / len(ans)) if ans and cost["cost_usd"] is not None else None
     subject = (result.get("exam") or {}).get("subject")
     m = {
@@ -526,7 +528,8 @@ def block(m):
         "cost: calls %s $%s llm_s %s" % (
             "-" if cost.get("calls") is None else cost["calls"], "-" if usd is None else "%.4f" % usd,
             "-" if cost.get("llm_s") is None else cost["llm_s"]),
-    ] + cl
+    ] + (["cache: hits=%s saved=$%.4f" % (cost["cached"], cost.get("cost_saved_usd") or 0.0)]
+         if cost.get("cached") is not None else []) + cl
 
 
 def load_refined_why(path):

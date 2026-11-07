@@ -2371,3 +2371,9 @@ Action: Design drafted by designer; user accepted D1a D2 D3a (RAW-00245)
 Result: docs/design/phase-83-solve-cache.md
 Decision: DESIGN
 Next: IMPLEMENTING
+
+## IMPLEMENTING - TASK-083 - 2026-11-07T03:34:49Z
+Action: Coder implemented 83.1-83.5
+Result: work/TASK-083/handoff/code.md; golden tests pass
+Decision: IMPLEMENTING
+Next: UNIT_TESTED
