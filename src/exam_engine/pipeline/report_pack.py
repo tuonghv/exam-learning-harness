@@ -94,11 +94,34 @@ def _summary_md(sm, exam, run):
     return "\n".join(md) + "\n"
 
 
+def _pdf_siblings(out_dir, lang):
+    """A pdf next to every md whose registered kind lists pdf (registry flag pdf_with_md)."""
+    kinds = rk.load()["kinds"]
+    for f in sorted(os.listdir(out_dir)):
+        p = rk.parse(f)
+        if not p or p["ext"] != "md" or "pdf" not in kinds[p["kind"]]["ext"]:
+            continue
+        md = os.path.join(out_dir, f)
+        pdf_path = os.path.splitext(md)[0] + ".pdf"
+        if os.path.isfile(pdf_path):
+            continue
+        ok, note = reporter.md_to_pdf(md, pdf_path, lang=lang)
+        if not ok:
+            raise ValueError("PDF failed for %s: %s" % (f, note))
+
+
 def build_pack(plan_dirs, out_dir, exam, run, key=None, pdf=True):
     """Build the pack in out_dir; returns {files, expected, parts, correct, total}. ValueError on a bad plan, bad
     name part, unregistered extra file or a registered kind without a file."""
     run = run if run.startswith("run-") else "run-" + run
+    if pdf and reporter.find_pdf_renderer() is None:
+        raise ValueError("no PDF renderer found (Chrome, weasyprint, wkhtmltopdf); install one or use --no-pdf")
     os.makedirs(out_dir, exist_ok=True)
+    if pdf:  # a pdf of an earlier run must not stand in for the md written now
+        for f in os.listdir(out_dir):
+            p = rk.parse(f)
+            if p and p["ext"] == "pdf" and os.path.isfile(os.path.join(out_dir, f[:-4] + ".md")):
+                os.remove(os.path.join(out_dir, f))
     keymap = explain.load_key(key) if key else None
     if key and not keymap:
         raise ValueError("no letter keys found in %s" % key)
@@ -119,12 +142,6 @@ def build_pack(plan_dirs, out_dir, exam, run, key=None, pdf=True):
     cmd = os.path.join(out_dir, rk.name(exam, "all", "solution-report", run, "md"))
     with open(cmd, "w", encoding="utf-8") as fh:
         fh.write(combined)
-    if pdf:
-        ok, note = reporter.md_to_pdf(cmd, os.path.splitext(cmd)[0] + ".pdf",
-                                      lang=reporter.learn_lang(parts[0]["result"]))
-        if not ok:
-            with open(cmd, "a", encoding="utf-8") as fh:
-                fh.write("\nPDF skipped: %s\n" % note)
     rows = _rows(parts)
     _tsv(os.path.join(out_dir, rk.name(exam, "all", "answer-table", run, "tsv")),
          ["subject", "id", "printed", "answer", "status", "doubt", "error", "score"],
@@ -143,9 +160,11 @@ def build_pack(plan_dirs, out_dir, exam, run, key=None, pdf=True):
         with open(os.path.join(out_dir, rk.name(exam, "all", "score-summary", run, "md")), "w", encoding="utf-8") as fh:
             fh.write(_summary_md(sm, exam, run))
         correct, total = sm["total_correct"], sm["total"]
+    if pdf:
+        _pdf_siblings(out_dir, reporter.learn_lang(parts[0]["result"]))
     want = rk.expected(exam, subjects, run, key=bool(keymap), pdf=pdf)
     have = sorted(f for f in os.listdir(out_dir) if f != rk.INDEX_NAME)
-    missing = [w for w in want if w not in have and not (w.endswith(".pdf") and w[:-4] + ".html" in have)]
+    missing = [w for w in want if w not in have]
     extra = [h for h in have if rk.classify(h)[1] != "standard"]
     if missing or extra:
         raise ValueError("pack check failed: missing %s; unregistered %s" % (missing, extra))

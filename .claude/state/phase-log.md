@@ -2461,3 +2461,9 @@ Action: Design drafted; best picks A/A
 Result: docs/design/phase-86-md-needs-pdf.md
 Decision: DESIGN
 Next: IMPLEMENTING
+
+## IMPLEMENTING - TASK-086 - 2026-11-07T22:13:27Z
+Action: Coder implemented 86.1-86.6 and rebuilt reports/dgnl2026
+Result: md 10 = pdf 10; checker 62 checks 0 failed
+Decision: IMPLEMENTING
+Next: UNIT_TESTED

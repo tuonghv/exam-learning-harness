@@ -107,9 +107,14 @@ def main(argv):
             if ext in spec.get("optional_ext", []):
                 continue
             got = sum(1 for v in parsed.values() if v and v["kind"] == kind and v["ext"] == ext)
-            if ext == "pdf" and got == 0:  # no renderer: the html stands in
-                got = sum(1 for v in parsed.values() if v and v["kind"] == kind and v["ext"] == "html")
             chk("count %s.%s" % (kind, ext), per, got)
+    if jload(reg).get("pdf_with_md"):  # registry flag: no kind is named here
+        stems = {}
+        for f, v in parsed.items():
+            if v and v["ext"] in ("md", "pdf"):
+                stems.setdefault(f.rpartition(".")[0], set()).add(v["ext"])
+        chk("md without pdf", 0, sum(1 for e in stems.values() if "md" in e and "pdf" not in e))
+        chk("pdf without md", 0, sum(1 for e in stems.values() if "pdf" in e and "md" not in e))
     by = {}
     for f, v in parsed.items():
         if v:

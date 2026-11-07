@@ -1,7 +1,8 @@
 {
   "pattern": "<exam>_<subject>_<kind>_<run>.<ext>",
+  "pdf_with_md": true,
   "kinds": {
-    "answer-sheet": {"ext": ["md"], "scope": "subject", "count": "questions", "needs": "",
+    "answer-sheet": {"ext": ["md", "pdf"], "scope": "subject", "count": "questions", "needs": "",
       "description": "one subject's answers as a bubble grid (letters only, a dash for a declined question)",
       "legacy": ["answers.md"]},
     "solution-report": {"ext": ["md", "pdf", "html"], "optional_ext": ["html"], "scope": "both", "count": "questions", "needs": "sheet",
@@ -16,7 +17,7 @@
     "score-vs-key": {"ext": ["tsv"], "scope": "all", "count": "rows", "needs": "key",
       "description": "whole exam checked against the official answers: key, ours, correct/WRONG/declined, status, doubt, flag",
       "legacy": []},
-    "score-summary": {"ext": ["md", "json"], "scope": "all", "count": "none", "needs": "key",
+    "score-summary": {"ext": ["md", "pdf", "json"], "scope": "all", "count": "none", "needs": "key",
       "description": "whole exam score: per subject correct/wrong/declined, cost, calls, items not correct, doubt vs outcome",
       "legacy": []},
     "metrics": {"ext": ["json"], "scope": "subject", "count": "none", "needs": "",
