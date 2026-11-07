@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0086",
-  "next": "unit gate (no code change), then verify: crosscheck answers.tsv vs source pages",
-  "updated": "2026-11-07 08:19"
+  "next": "verify: crosscheck 120 = answered + declined, hand-recompute sample, read declined pages",
+  "updated": "2026-11-07 08:20"
 }

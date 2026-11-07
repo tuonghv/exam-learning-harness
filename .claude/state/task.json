@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-081",
-  "state": "IMPLEMENTING",
-  "next": "unit gate (no code change), then verify: crosscheck answers.tsv vs source pages",
+  "state": "UNIT_TESTED",
+  "next": "verify: crosscheck 120 = answered + declined, hand-recompute sample, read declined pages",
   "title": "Solve De-thi-mau-DHQG-HCM-2024.pdf end to end with the current engine, cap 5 USD (REQ-0086)",
   "active": [
     {
       "task_id": "TASK-081",
-      "state": "IMPLEMENTING",
-      "next": "unit gate (no code change), then verify: crosscheck answers.tsv vs source pages",
-      "updated_at": "2026-11-07T01:19:59Z"
+      "state": "UNIT_TESTED",
+      "next": "verify: crosscheck 120 = answered + declined, hand-recompute sample, read declined pages",
+      "updated_at": "2026-11-07T01:20:05Z"
     }
   ],
   "max_active": 1
