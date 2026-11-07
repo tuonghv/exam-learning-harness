@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-083",
-  "state": "UNIT_TESTED",
-  "next": "83.6 small-exam real proof (few questions, tiny cap, main after user ok), then verifier",
+  "state": "VERIFIED",
+  "next": "write docs/report/phase-83-solve-cache.md, then DONE; log DEF-B/C/D as follow-up",
   "title": "Per-exam solve cache keyed by pinned model ID + prompt hash + data hash, already-solved confirm (REQ-0089)",
   "active": [
     {
       "task_id": "TASK-083",
-      "state": "UNIT_TESTED",
-      "next": "83.6 small-exam real proof (few questions, tiny cap, main after user ok), then verifier",
-      "updated_at": "2026-11-07T03:52:38Z"
+      "state": "VERIFIED",
+      "next": "write docs/report/phase-83-solve-cache.md, then DONE; log DEF-B/C/D as follow-up",
+      "updated_at": "2026-11-07T06:17:26Z"
     }
   ],
   "max_active": 1
