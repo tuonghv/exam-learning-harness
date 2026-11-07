@@ -1,0 +1,64 @@
+{
+  "task_id": "TASK-086",
+  "title": "Every report .md has a .pdf: registry rule, writers, checker, pack rebuild (REQ-0093)",
+  "state": "TODO",
+  "requirement": "REQ-0093",
+  "acceptance_criteria": [
+    "AC1 registry: every kind with md lists pdf",
+    "AC2 pack writes pdf beside every md",
+    "AC3 checker fails on md without pdf and pdf without md",
+    "AC4 INDEX lists pdfs",
+    "AC5 pack rebuilt at $0, counts md=pdf",
+    "AC6 no renderer = clear failure"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {},
+  "user_notes": [
+    {
+      "raw": "RAW-00263",
+      "note": "each .md kind has a .pdf; validate so never missed; rebuild and tell",
+      "at": "2026-11-07T22:08:14Z"
+    }
+  ],
+  "picked_at": "2026-11-07T22:08:14Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
