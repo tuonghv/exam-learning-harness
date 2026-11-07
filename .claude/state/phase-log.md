@@ -2305,3 +2305,9 @@ Action: Report written
 Result: docs/report/phase-80-dgnl2026-final-solve.md
 Decision: DONE
 Next: none
+
+## DESIGN - TASK-081 - 2026-11-07T00:50:00Z
+Action: Design drafted by designer, doc written
+Result: docs/design/phase-81-dhqg2024-solve.md
+Decision: DESIGN
+Next: IMPLEMENTING: run 81.1 free estimate

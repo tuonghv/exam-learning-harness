@@ -1,17 +1,17 @@
 {
   "task_id": "TASK-081",
   "title": "Solve De-thi-mau-DHQG-HCM-2024.pdf end to end with the current engine, cap 5 USD (REQ-0086)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0086",
   "acceptance_criteria": [
-    "AC1 free ingest and cost estimate recorded",
+    "AC1 free ingest and cost estimate recorded, total <= 5 USD",
     "AC2 refine + solve of all sections within 5 USD cap; answers by printed number with status/doubt",
-    "AC3 detailed solutions in .md rendered to PDF; outputs only in plans/ and reports/"
+    "AC3 detailed solutions .md rendered to PDF; outputs only in plans/ and reports/"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-81-dhqg2024-solve.md",
+    "summary": "Run-only task: free ingest+estimate, 2-page slice, overlapped refine batches, 4 section solves (1.0 USD cap each, 5 USD total), answers.tsv, learn-view md+pdf reports in plans/ and reports/ t81 dirs",
     "reuse": [],
     "risks": []
   },
@@ -39,11 +39,13 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-081/handoff/design.md"
+  },
   "user_notes": [],
   "picked_at": "2026-11-07T00:47:57Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-07T00:50:00Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -51,5 +53,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Await designer handoff work/TASK-081/handoff/design.md, write docs/design/phase-81-*.md, advance to DESIGN"
+  "next": "81.1 free ingest + cost estimate, then slice 81.2 (coder/main run, paid steps by main only)"
 }
