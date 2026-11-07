@@ -2341,3 +2341,9 @@ Action: Design drafted by designer
 Result: docs/design/phase-82-refine-keeps-table-cells.md
 Decision: DESIGN
 Next: IMPLEMENTING
+
+## IMPLEMENTING - TASK-082 - 2026-11-07T01:35:20Z
+Action: Coder implemented 82.1-82.2
+Result: prompts/dev/ingest/refine.md, src/exam_engine/ingest/refine.py; test_ingest_refine 43 OK
+Decision: IMPLEMENTING
+Next: UNIT_TESTED

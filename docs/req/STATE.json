@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0088",
-  "next": "coder implements 82.1-82.3 (prompt rule 5 + _native_tables), tester runs mock tests",
-  "updated": "2026-11-07 08:32"
+  "next": "tester writes 82.3 mock tests, saves evidence; then UNIT_TESTED",
+  "updated": "2026-11-07 08:35"
 }

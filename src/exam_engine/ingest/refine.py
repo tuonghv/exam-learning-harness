@@ -252,6 +252,49 @@ def _page_text(doc, n):
     return ""
 
 
+def _cells(tb):
+    rows = tb.get("rows")
+    lines = [" | ".join(map(str, r)) if isinstance(r, (list, tuple)) else str(r) for r in rows] \
+        if rows else (tb.get("text") or "").split("\n")
+    return [c.strip() for ln in lines for c in ln.split(" | ") if c.strip()]
+
+
+def _native_tables(doc, qs):
+    """Append a source table's text to the figure entry that describes it, when the refined
+    page does not already carry its cells. Returns warnings."""
+    warns, used = [], set()
+    for pg in doc.get("pages", ()):
+        for tb in pg.get("blocks", ()):
+            if tb.get("type") != "table" or tb.get("origin") == "ai" or not (tb.get("text") or "").strip():
+                continue
+            on = [q for q in qs if pg["n"] in ({q["page"]} | set(q.get("continued_pages") or ()))]
+            if not on or id(tb) in used:
+                continue
+            cells = _cells(tb)
+            data = [c for c in cells if any(ch.isdigit() for ch in c)]
+            labels = [c for c in cells if c not in data]
+            hay = fold(" ".join(" ".join([q.get("text") or "", q.get("context") or ""]
+                                         + list((q.get("options") or {}).values())
+                                         + list(q.get("figures") or ())) for q in on))
+            need = data or cells
+            if sum(1 for c in need if fold(c) in hay) >= 0.8 * len(need):
+                continue
+            best, share = None, 0.0
+            for q in on:
+                for i, f in enumerate(q.get("figures") or ()):
+                    ff = fold(f)
+                    hit = sum(1 for c in labels if re.search(r"\b%s\b" % re.escape(fold(c)), ff))
+                    if labels and hit / len(labels) > share:
+                        best, share = q, hit / len(labels)
+            if best is None:
+                warns.append({"level": "warning", "code": "native_table_unplaced", "page": pg["n"],
+                              "message": "source table on page %d has no matching figure entry" % pg["n"]})
+                continue
+            best["figures"].append(tb["text"])
+            used.add(id(tb))
+    return warns
+
+
 def similarity(refined_q, original_q, page_text):
     """difflib ratio of folded text: vs the same-numbered source question, else the share found in the page."""
     opts = refined_q.get("options", {})
@@ -598,6 +641,7 @@ def refine(doc, spec, llm, source_path=None, max_cost=1.0, model="sonnet", allow
                            "w": w, "extra": extra}
         if still and pending is None:
             qs[cand[0]]["cut"] = True  # beyond K (or no next page): the bridge takes over
+    wwarn.extend(_native_tables(doc, qs))
     out["refined"] = {"model": model,
                       "prompt_sha256": hashlib.sha256(template().encode("utf-8")).hexdigest(),
                       "pages": pages, "questions": qs, "calls": calls,

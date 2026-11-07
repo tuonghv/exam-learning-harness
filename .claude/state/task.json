@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-082",
-  "state": "DESIGN",
-  "next": "coder implements 82.1-82.3 (prompt rule 5 + _native_tables), tester runs mock tests",
+  "state": "IMPLEMENTING",
+  "next": "tester writes 82.3 mock tests, saves evidence; then UNIT_TESTED",
   "title": "Refine keeps data-table cell values so the solver does not decline (REQ-0088)",
   "active": [
     {
       "task_id": "TASK-082",
-      "state": "DESIGN",
-      "next": "coder implements 82.1-82.3 (prompt rule 5 + _native_tables), tester runs mock tests",
-      "updated_at": "2026-11-07T01:32:28Z"
+      "state": "IMPLEMENTING",
+      "next": "tester writes 82.3 mock tests, saves evidence; then UNIT_TESTED",
+      "updated_at": "2026-11-07T01:35:20Z"
     }
   ],
   "max_active": 1

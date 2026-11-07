@@ -5,7 +5,7 @@ Rules
 2. Keep the original language and wording. Write math in plain text (x^2, sqrt(x), a/b, pi).
 3. One entry per question, in page order. `id` is the question number as printed.
 4. Multiple choice: put the options under `options` with keys A, B, C, D. No options: `{}`.
-5. Pictures, graphs or tables you cannot transcribe: describe the kind briefly under `figures`.
+5. Tables: transcribe every cell under `figures`, one row per line, cells separated by ` | ` (header row first). Charts and graphs: give the title, axis labels and every printed value/label. Only a picture with no printed values is described briefly.
 6. If part of a question is unreadable, transcribe the rest and set `"unreadable": true`; the same for a line cut at the top or bottom edge.
 7. A reading passage or shared instruction for several questions (e.g. "Questions 46-52: read the passage") goes in `context` of the FIRST question that uses it, copied in full; later ones leave `context` empty.
 8. Everything printed above the first question number that continues the previous page (rest of a sentence, its figure or table, its options, more passage paragraphs) goes in the top-level `continues` {"text","options","figures","passage"}, never in `questions`, never with a number; `"passage": true` when it is passage text. A page with no question number at all puts all of it in `continues` (or in `carry` if it is a new passage for later questions).

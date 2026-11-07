@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-082",
   "title": "Refine keeps data-table cell values so the solver does not decline (REQ-0088)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0088",
   "acceptance_criteria": [
     "AC1 refine keeps table cell values in the question context (mock-tested)",
@@ -16,8 +16,12 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "prompts/dev/ingest/refine.md",
+      "src/exam_engine/ingest/refine.py"
+    ],
+    "summary": "refine prompt rule 5 transcribes tables cell by cell; _native_tables appends the page's native table text to the matching figure entry (warning native_table_unplaced when unmatched)"
   },
   "unit_test": {
     "status": "pending",
@@ -40,18 +44,23 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-082/handoff/design.md"
+    "designer": "work/TASK-082/handoff/design.md",
+    "coder": "work/TASK-082/handoff/code.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-07T01:29:20Z",
-  "updated_at": "2026-11-07T01:32:28Z",
+  "updated_at": "2026-11-07T01:35:20Z",
   "updated_by": "main",
-  "scope": [],
+  "scope": [
+    "prompts/dev/ingest/refine.md",
+    "src/exam_engine/ingest/refine.py",
+    "tests/unit/test_ingest_refine.py"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
     "done": [],
     "notes": ""
   },
-  "next": "coder implements 82.1-82.3 (prompt rule 5 + _native_tables), tester runs mock tests"
+  "next": "tester writes 82.3 mock tests, saves evidence; then UNIT_TESTED"
 }
