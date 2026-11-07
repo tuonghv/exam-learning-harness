@@ -207,6 +207,18 @@ def write_index(folder):
         elif status == "legacy" and wt is not None:
             desc = ("old format (before TASK-085): no question text, raw explanation; kept for history" if not wt
                     else "old format (before TASK-085): question text for %d of %d questions; kept for history" % (wt, cnt))
+        elif status == "legacy" and kind == "solution-report" and not rel.endswith((".md", ".tsv")):
+            # a legacy pdf/html must not claim the new kind's description: say what its sibling report.md shows
+            sib = os.path.join(folder, os.path.dirname(rel), "report.md")
+            scnt, swt = count_of(sib, kind) if os.path.isfile(sib) else (None, None)
+            ext = rel.rsplit(".", 1)[-1].upper()
+            if swt is None:
+                desc = "old format %s; content not inspected" % ext
+            elif swt == 0:
+                desc = "old format (before TASK-085): %s of the sibling report.md; no question text; kept for history" % ext
+            else:
+                desc = ("old format (before TASK-085): %s of the sibling report.md; question text for %d of %d questions; "
+                        "kept for history" % (ext, swt, scnt))
         else:
             desc = kinds[kind]["description"] if kind else "not in config/report_kinds.json"
         c = "-" if cnt is None else (str(cnt) if wt is None else "%d (with_text %d/%d)" % (cnt, wt, cnt))

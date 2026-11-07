@@ -497,6 +497,34 @@ class LegacyCounts(unittest.TestCase):
         self.assertIn("question text for 1 of 2", row)
         self.assertNotIn("hybrid full report", row)
 
+    def test_85_3_legacy_pdf_description_comes_from_sibling_md(self):
+        self.put("Math/report.md", self.legacy_text(3))
+        self.put("Math/report.pdf", "%PDF")
+        row = self.row("Math/report.pdf")
+        self.assertIn("no question text", row)
+        self.assertNotIn("question and options", row)
+
+    def test_85_3_legacy_pdf_without_sibling_is_not_inspected(self):
+        self.put("Math/report.pdf", "%PDF")
+        row = self.row("Math/report.pdf")
+        self.assertIn("content not inspected", row)
+        self.assertNotIn("question and options", row)
+
+    def test_85_3_legacy_pdf_with_text_sibling_says_question_text(self):
+        blk = "".join("### Question %d\n\nStem %d\n\nA. x\nB. y\n\n**Đáp án: A**\n\n" % (i, i) for i in (1, 2))
+        self.put("Math/report.md", blk)
+        self.put("Math/report.pdf", "%PDF")
+        row = self.row("Math/report.pdf")
+        self.assertIn("question text for 2 of 2", row)
+        self.assertNotIn("no question text", row)
+
+    def test_85_3_standard_name_pdf_keeps_kind_description(self):
+        fn = rk.name("ex", "math", "solution-report", "run-a", "pdf")
+        self.put(fn, "%PDF")
+        row = self.row(fn)
+        self.assertIn("standard", row)
+        self.assertIn(rk.load()["kinds"]["solution-report"]["description"].replace("|", "/"), row)
+
     def test_85_3_real_dhqg2024_t81_index(self):
         real = os.path.join(ROOT, "reports", "dhqg2024-t81")
         if not os.path.isfile(os.path.join(real, "ALL-120", "report.md")):
