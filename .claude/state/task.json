@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-086",
-  "state": "IMPLEMENTING",
-  "next": "tester fixes 2 fixtures and adds the 86 tests; verifier recount",
+  "state": "UNIT_TESTED",
+  "next": "verifier recount of reports/dgnl2026 (md = pdf, checker, INDEX) and the AC1-AC6 audit",
   "title": "Every report .md has a .pdf: registry rule, writers, checker, pack rebuild (REQ-0093)",
   "active": [
     {
       "task_id": "TASK-086",
-      "state": "IMPLEMENTING",
-      "next": "tester fixes 2 fixtures and adds the 86 tests; verifier recount",
-      "updated_at": "2026-11-07T22:13:27Z"
+      "state": "UNIT_TESTED",
+      "next": "verifier recount of reports/dgnl2026 (md = pdf, checker, INDEX) and the AC1-AC6 audit",
+      "updated_at": "2026-11-07T22:25:11Z"
     }
   ],
   "max_active": 1

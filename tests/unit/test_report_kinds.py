@@ -376,10 +376,11 @@ class Packed(unittest.TestCase):
 
     # ---- AC10 checker, both directions ----
     def args(self, pack):
-        # the pack was built with pdf=False; the checker expects the solution-report pdf (or html), so add stand-ins
+        # the pack was built with pdf=False; 86.1 wants a pdf beside every md of a kind that lists pdf
+        kinds = rk.load()["kinds"]
         for n in os.listdir(pack):
             p = rk.parse(n)
-            if p and p["kind"] == "solution-report" and p["ext"] == "md":
+            if p and p["ext"] == "md" and "pdf" in kinds[p["kind"]]["ext"]:
                 open(os.path.join(pack, n[:-3] + ".pdf"), "w").close()
         rk.write_index(pack)  # the checker compares INDEX.md with the files
         return [pack] + self.plans + ["--key", self.key]
@@ -426,6 +427,140 @@ class Packed(unittest.TestCase):
         self.assertNotRegex(out2, r"extra-kind[^\n]*\tFAIL")
         self.assertIn("unregistered files\t0\t0\tok", out2)
         self.assertEqual(rc2, 0, out2)
+
+    # ---- TASK-086 / REQ-0093: every md has a pdf ----
+    def _pdf_of(self, d, kind):
+        return sorted(os.path.join(d, n) for n in os.listdir(d)
+                      if (rk.parse(n) or {}).get("kind") == kind and n.endswith(".pdf"))
+
+    def test_86_5_checker_md_without_pdf_fails(self):
+        args = self.args(self.work)
+        os.remove(self._pdf_of(self.work, "answer-sheet")[0])
+        rk.write_index(self.work)
+        rc, out = checker(*args)
+        self.assertEqual(rc, 1, out)
+        self.assertRegex(out, r"md without pdf\t0\t1\tFAIL")
+
+    def test_86_5_checker_pdf_without_md_fails(self):
+        args = self.args(self.work)
+        for n in os.listdir(self.work):
+            if (rk.parse(n) or {}).get("kind") == "score-summary" and n.endswith(".md"):
+                os.remove(os.path.join(self.work, n))
+        rk.write_index(self.work)
+        rc, out = checker(*args)
+        self.assertEqual(rc, 1, out)
+        self.assertRegex(out, r"pdf without md\t0\t1\tFAIL")
+
+    def test_86_5_checker_complete_pack_has_both_checks_ok(self):
+        rc, out = checker(*self.args(self.work))
+        self.assertEqual(rc, 0, out)
+        self.assertRegex(out, r"md without pdf\t0\t0\tok")
+        self.assertRegex(out, r"pdf without md\t0\t0\tok")
+
+    def test_86_5_checker_flag_comes_from_registry_copy(self):
+        reg = copy.deepcopy(rk.load())
+        reg["pdf_with_md"] = False
+        for k in ("answer-sheet", "score-summary"):
+            reg["kinds"][k]["ext"] = [e for e in reg["kinds"][k]["ext"] if e != "pdf"]
+        rp = os.path.join(self.tmp, "reg86.json")
+        with open(rp, "w", encoding="utf-8") as fh:
+            json.dump(reg, fh)
+        self.addCleanup(os.remove, rp)
+        args = self.args(self.work)
+        for k in ("answer-sheet", "score-summary"):
+            for f in self._pdf_of(self.work, k):
+                os.remove(f)
+        with mock.patch.object(rk, "REGISTRY", rp):
+            rk.write_index(self.work)
+        rc, out = checker(*args, "--registry", rp)
+        self.assertEqual(rc, 0, out)
+        self.assertNotIn("md without pdf", out)
+        reg["pdf_with_md"] = True  # same files, flag on: the pair check now bites
+        with open(rp, "w", encoding="utf-8") as fh:
+            json.dump(reg, fh)
+        rc, out = checker(*args, "--registry", rp)
+        self.assertEqual(rc, 1, out)
+        self.assertRegex(out, r"md without pdf\t0\t[1-9]\d*\tFAIL")
+
+    def _fake_pdf(self, fail_on=None):
+        calls = []
+
+        def fake(md, pdf, **kw):
+            calls.append(md)
+            if fail_on and fail_on in os.path.basename(md):
+                return False, "boom"
+            with open(pdf, "w") as fh:
+                fh.write("%PDF fake")
+            return True, ""
+        return fake, calls
+
+    def _build(self, out, **patches):
+        self.addCleanup(shutil.rmtree, out, True)
+        with mock.patch.object(reporter, "git_info", return_value=None):
+            return report_pack.build_pack(self.plans, out, "ex", "run-t", key=self.key, **patches)
+
+    def test_86_2_pack_with_renderer_has_pdf_beside_every_md(self):
+        fake, _ = self._fake_pdf()
+        out = os.path.join(self.tmp, "o86a")
+        with mock.patch.object(reporter, "find_pdf_renderer", return_value=("chrome", "x")), \
+                mock.patch.object(reporter, "md_to_pdf", fake):
+            info = self._build(out)
+        names = os.listdir(out)
+        mds = [n for n in names if n.endswith(".md") and n != "INDEX.md"]
+        kinds = {rk.parse(n)["kind"] for n in mds}
+        self.assertTrue({"answer-sheet", "score-summary", "solution-report"} <= kinds, kinds)
+        for n in mds:
+            self.assertIn(n[:-3] + ".pdf", names, n)
+
+    def test_86_3_no_renderer_raises_and_writes_nothing(self):
+        out = os.path.join(self.tmp, "o86b")
+        with mock.patch.object(reporter, "find_pdf_renderer", return_value=None):
+            with self.assertRaises(ValueError) as cm:
+                self._build(out)
+        self.assertIn("no PDF renderer", str(cm.exception))
+        self.assertFalse(os.path.exists(out) and os.listdir(out))
+
+    def test_86_4_one_md_failing_names_the_file(self):
+        fake, _ = self._fake_pdf(fail_on="score-summary")
+        out = os.path.join(self.tmp, "o86c")
+        with mock.patch.object(reporter, "find_pdf_renderer", return_value=("chrome", "x")), \
+                mock.patch.object(reporter, "md_to_pdf", fake):
+            with self.assertRaises(ValueError) as cm:
+                self._build(out)
+        self.assertIn("score-summary", str(cm.exception))
+        self.assertIn("boom", str(cm.exception))
+
+    def test_86_2_stale_pdf_removed_when_md_is_rewritten(self):
+        fake, calls = self._fake_pdf()
+        out = os.path.join(self.tmp, "o86d")
+        os.makedirs(out)
+        stale = os.path.join(out, rk.name("ex", "all", "score-summary", "run-t", "pdf"))
+        for ext, body in (("pdf", "OLD"), ("md", "old")):  # an earlier run left both
+            with open(stale[:-3] + ext, "w") as fh:
+                fh.write(body)
+        with mock.patch.object(reporter, "find_pdf_renderer", return_value=("chrome", "x")), \
+                mock.patch.object(reporter, "md_to_pdf", fake):
+            self._build(out)
+        with open(stale) as fh:
+            self.assertEqual(fh.read(), "%PDF fake")
+
+    def test_86_6_pdf_false_pack_writes_no_pdf_and_passes_self_check(self):
+        self.assertFalse([n for n in os.listdir(self.pack) if n.endswith(".pdf")])
+        self.assertFalse([n for n in self.info["expected"] if n.endswith(".pdf")])
+
+    def test_86_1_registry_invariant_md_kinds_list_pdf(self):
+        reg = rk.load()
+        self.assertTrue(reg.get("pdf_with_md"))
+        for k, spec in reg["kinds"].items():
+            if "md" in spec["ext"]:
+                self.assertIn("pdf", spec["ext"], k)
+
+    def test_86_7_report_index_legacy_report_md_only_does_not_fail(self):
+        d = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, d, True)
+        open(os.path.join(d, "report.md"), "w").close()
+        quiet(rk.write_index, d)
+        self.assertTrue(os.path.isfile(os.path.join(d, "INDEX.md")))
 
     def test_85_10_checker_reads_no_exam_engine(self):
         with open(CHECKER, encoding="utf-8") as fh:

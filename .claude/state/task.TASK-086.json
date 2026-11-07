@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-086",
   "title": "Every report .md has a .pdf: registry rule, writers, checker, pack rebuild (REQ-0093)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0093",
   "acceptance_criteria": [
     "AC1 registry: every kind with md lists pdf",
@@ -29,9 +29,9 @@
     "summary": "registry pdf_with_md + pdf in answer-sheet and score-summary; build_pack renders pdf beside every md, missing renderer is a clear error, stale pdf removed; checker fails on md without pdf and pdf without md; pack rebuilt md 10 = pdf 10, 62 checks 0 failed, 113/120"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "test_report_kinds 54 OK (11 new 86 tests, 9 fail on previous code); full suite 1701 run, only the 4 known pre-existing failures"
   },
   "security": {
     "status": "pending",
@@ -50,7 +50,8 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-086/handoff/design.md",
-    "coder": "work/TASK-086/handoff/code.md"
+    "coder": "work/TASK-086/handoff/code.md",
+    "tester": "work/TASK-086/handoff/test.md"
   },
   "user_notes": [
     {
@@ -60,7 +61,7 @@
     }
   ],
   "picked_at": "2026-11-07T22:08:14Z",
-  "updated_at": "2026-11-07T22:13:27Z",
+  "updated_at": "2026-11-07T22:25:11Z",
   "updated_by": "main",
   "scope": [
     "config/report_kinds.json",
@@ -75,5 +76,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tester fixes 2 fixtures and adds the 86 tests; verifier recount"
+  "next": "verifier recount of reports/dgnl2026 (md = pdf, checker, INDEX) and the AC1-AC6 audit"
 }

@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0093",
-  "next": "tester fixes 2 fixtures and adds the 86 tests; verifier recount",
-  "updated": "2026-11-08 05:13"
+  "next": "verifier recount of reports/dgnl2026 (md = pdf, checker, INDEX) and the AC1-AC6 audit",
+  "updated": "2026-11-08 05:25"
 }

@@ -2467,3 +2467,9 @@ Action: Coder implemented 86.1-86.6 and rebuilt reports/dgnl2026
 Result: md 10 = pdf 10; checker 62 checks 0 failed
 Decision: IMPLEMENTING
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-086 - 2026-11-07T22:25:10Z
+Action: Tester fixed 2 fixtures, added 11 tests, full suite
+Result: 1701 run, 4 pre-existing failures
+Decision: UNIT_TESTED
+Next: VERIFIED
