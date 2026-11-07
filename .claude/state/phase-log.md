@@ -2365,3 +2365,9 @@ Action: Report written
 Result: docs/report/phase-82-refine-keeps-table-cells.md
 Decision: DONE
 Next: none
+
+## DESIGN - TASK-083 - 2026-11-07T03:22:40Z
+Action: Design drafted by designer; user accepted D1a D2 D3a (RAW-00245)
+Result: docs/design/phase-83-solve-cache.md
+Decision: DESIGN
+Next: IMPLEMENTING

@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-083",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "coder implements 83.1-83.5 (Runner cache, pins, per-exam dir, solved check, trace); tester runs mock tests",
   "title": "Per-exam solve cache keyed by pinned model ID + prompt hash + data hash, already-solved confirm (REQ-0089)",
   "active": [
     {
       "task_id": "TASK-083",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "coder implements 83.1-83.5 (Runner cache, pins, per-exam dir, solved check, trace); tester runs mock tests",
+      "updated_at": "2026-11-07T03:22:40Z"
     }
   ],
   "max_active": 1

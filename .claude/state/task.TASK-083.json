@@ -1,19 +1,19 @@
 {
   "task_id": "TASK-083",
   "title": "Per-exam solve cache keyed by pinned model ID + prompt hash + data hash, already-solved confirm (REQ-0089)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0089",
   "acceptance_criteria": [
     "AC1 mock: 2nd run 0 calls, cached in trace; model/prompt/data change misses",
-    "AC2 unpinned model alias rejected",
-    "AC3 already-solved exam asks confirm or needs --fresh; no TTY refuses",
-    "AC4 cache per exam file, reuses replycache.py, eval keys excluded",
+    "AC2 unpinned model alias rejected for --real",
+    "AC3 already-solved exam asks confirm or needs --yes/--fresh; no TTY refuses",
+    "AC4 cache per exam, reuses replycache.py, eval keys excluded",
     "AC5 proof on a small exam (few questions), paid cap small"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-83-solve-cache.md",
+    "summary": "Per-exam solve cache in Runner.call reusing ReplyCache (key = pinned model + prompt sha + image shas); model_pins alias rejection for --real; already-solved check via plans/<exam-id>/*/plan.json with --yes/--fresh, no-TTY refuses; trace/metrics cached+saved; mock tests then small-exam paid proof",
     "reuse": [],
     "risks": []
   },
@@ -41,7 +41,9 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-083/handoff/design.md"
+  },
   "user_notes": [
     {
       "raw": "RAW-00243",
@@ -50,8 +52,8 @@
     }
   ],
   "picked_at": "2026-11-07T03:15:00Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-07T03:22:40Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -59,5 +61,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder implements 83.1-83.5 (Runner cache, pins, per-exam dir, solved check, trace); tester runs mock tests"
 }
