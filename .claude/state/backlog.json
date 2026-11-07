@@ -1620,5 +1620,24 @@
         "at": "2026-11-07T07:03:30Z"
       }
     ]
+  },
+  {
+    "task_id": "TASK-085",
+    "title": "Standard report names + hybrid solution-report + report-kind registry + QA, regenerated DGNL 2026 pack at $0 (REQ-0092)",
+    "priority": 1,
+    "status": "queued",
+    "created_at": "2026-11-07T13:00:00",
+    "requirement": "REQ-0092",
+    "acceptance_criteria": [
+      "AC1 engine writes standard names only; no bare report.md/answers.md in new output",
+      "AC2 INDEX.md per exam folder with kind, description, counts",
+      "AC3 registry docs/guide/report-kinds.md used by report_build/scorer",
+      "AC4 readers accept old and new names",
+      "AC5 test fails on a non-standard name",
+      "AC6 format change announced old->new",
+      "AC7 hybrid solution-report: question+options, status, doubt in words, accented steps, subject headings",
+      "AC8 QA recount of the pack against the registry",
+      "AC9 DGNL 2026 pack regenerated from stored run, $0"
+    ]
   }
 ]
