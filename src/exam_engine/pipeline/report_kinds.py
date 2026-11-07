@@ -9,8 +9,9 @@ import json
 import os
 import re
 
-REGISTRY = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(
-    os.path.abspath(__file__))))), "config", "report_kinds.json")
+from exam_engine import settings
+
+REGISTRY = os.path.join(settings.config_dir(), "report_kinds.json")
 PART = re.compile(r"^[a-z0-9-]+$")
 INDEX_NAME = "INDEX.md"
 _cache = {}

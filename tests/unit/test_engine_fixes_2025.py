@@ -167,7 +167,8 @@ class Adjudication(TI.Base):
         self.assertEqual(sch.validate(res, sch.RESULT), [])
         self.assertEqual(metrics.compute(res)["counts"]["image_checked"], 1)
         with open(res["reports"]["md"], encoding="utf-8") as fh:
-            self.assertIn("- Source: adjudicated", fh.read())
+            from exam_engine.pipeline import reporter
+            self.assertIn("- %s: adjudicated" % reporter.LABELS[reporter.learn_lang(res)]["source"], fh.read())
 
     def test_idle_adjudication_not_counted_in_cap(self):
         from exam_engine import cli

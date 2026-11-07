@@ -12,6 +12,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
 sys.path.insert(0, os.path.join(ROOT, "src"))
 from exam_engine import cli  # noqa: E402
+from exam_engine.pipeline import report_kinds as rk  # noqa: E402
 from exam_engine.pipeline import metrics  # noqa: E402
 
 INPUT_001 = os.path.join(ROOT, "examples", "english", "input-001.md")
@@ -186,7 +187,7 @@ class SolveTest(Base):
         i = [n for n, ln in enumerate(lines) if ln.startswith("pass=")][0]
         tail = [ln for ln in lines[i + 1:] if ln.startswith(("metrics:", "accuracy:", "cost:"))]
         self.assertEqual(len(tail), 3)
-        with open(os.path.join(self.tmp, "o", "report.md"), encoding="utf-8") as f:
+        with open(rk.find(os.path.join(self.tmp, "o"), "solution-report"), encoding="utf-8") as f:
             self.assertIn("\n## Metrics\n", f.read())
         self.assertFalse(os.path.exists(os.path.join(self.tmp, "results")))
         self.assertFalse(os.path.exists(self.hist))

@@ -14,6 +14,7 @@ from unittest import mock
 ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 sys.path.insert(0, os.path.join(ROOT, "src"))
 from exam_engine import cli, engine  # noqa: E402
+from exam_engine.pipeline import report_kinds as rk  # noqa: E402
 from exam_engine.adapters import claude  # noqa: E402
 from exam_engine.pipeline import planrun, reporter  # noqa: E402
 
@@ -29,6 +30,7 @@ def quiet(fn, *a):
 def rd(p, mode="r"):
     with open(p, mode) as fh:
         return fh.read()
+
 
 
 class PlanQA(unittest.TestCase):
@@ -115,12 +117,12 @@ class PlanQA(unittest.TestCase):
         (d,) = self.runs()
         dflt = os.path.join(self.tmp, "reports", "input-001", os.path.basename(d), "sheet")
         for other in (os.path.join(self.tmp, "r"), dflt):
-            for f in ("report.md", "answers.md"):
-                self.assertEqual(rd(os.path.join(flat, f)), rd(os.path.join(other, f)), f)
-        md = rd(os.path.join(flat, "report.md"))
+            for kind in ("solution-report", "answer-sheet"):
+                self.assertEqual(rd(rk.find(flat, kind)), rd(rk.find(other, kind)), kind)
+        md = rd(rk.find(flat, "solution-report"))
         self.assertIn("## Metrics", md)
-        mine = json.loads(rd(os.path.join(self.tmp, "r", "metrics.json")))
-        self.assertEqual(mine, json.loads(rd(os.path.join(dflt, "metrics.json"))))
+        mine = json.loads(rd(rk.find(os.path.join(self.tmp, "r"), "metrics", ext="json")))
+        self.assertEqual(mine, json.loads(rd(rk.find(dflt, "metrics", ext="json"))))
         self.assertTrue(mine)
 
     def test_58_1_token_in_reply_masked_in_calls_through_engine(self):

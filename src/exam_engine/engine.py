@@ -521,7 +521,7 @@ def run(exam_path, out_dir, cfg, llm, sink=None, reports=True, image=None, cache
     except Exception:  # noqa: BLE001 - metrics are extra; they must never fail a run
         result["metrics"] = None
     result["reports"] = (reporter.write_reports(result, out_dir, pdf=cfg.get("pdf", False),
-                                                metrics=result["metrics"]) if reports else None)
+                                                metrics=result["metrics"], exam=exam) if reports else None)
     if stopped:
         return result, 3
     s = result["summary"]

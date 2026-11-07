@@ -83,7 +83,8 @@ class ShimParity(Base):
         new = run(EXAM, "solve", *args, "--out", a, cwd=self.tmp)
         old = run(os.path.join(SHIMS, "exam_run.py"), *args, "--out", b, cwd=self.tmp)
         self.assertEqual(new[0], old[0])
-        self.assertEqual(new[1].replace(a, "OUT"), old[1].replace(b, "OUT"))
+        # REQ-0092: the run part of the report name comes from the out dir (run-a / run-b)
+        self.assertEqual(new[1].replace(a, "OUT").replace("run-a", "run-X"), old[1].replace(b, "OUT").replace("run-b", "run-X"))
         self.assertTrue(new[1].startswith("pass="))
         self.assertEqual(json.loads(text(os.path.join(a, "result.json")))["questions"],
                          json.loads(text(os.path.join(b, "result.json")))["questions"])

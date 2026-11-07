@@ -2437,3 +2437,9 @@ Action: Coder implemented 85.1-85.6 and generated reports/dgnl2026 at $0
 Result: checker 58 checks 0 failed
 Decision: IMPLEMENTING
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-085 - 2026-11-07T14:52:15Z
+Action: Tester 30 tests, fix round for D-T1 and D-A, full suite
+Result: 1677 run, 4 pre-existing failures
+Decision: UNIT_TESTED
+Next: VERIFIED

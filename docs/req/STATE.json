@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0092",
-  "next": "tester writes tests and updates the 8 tests that name report.md/answers.md; main runs report-index on old folders",
-  "updated": "2026-11-07 21:30"
+  "next": "verifier QA recount of reports/dgnl2026 against the registry and plans; main runs report-index on old folders",
+  "updated": "2026-11-07 21:52"
 }

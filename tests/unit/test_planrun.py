@@ -14,6 +14,7 @@ import unittest
 ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 sys.path.insert(0, os.path.join(ROOT, "src"))
 from exam_engine import cli, engine  # noqa: E402
+from exam_engine.pipeline import report_kinds as rk  # noqa: E402
 from exam_engine.adapters import claude  # noqa: E402
 from exam_engine.pipeline import planrun  # noqa: E402
 
@@ -79,7 +80,7 @@ class PlanRunTest(unittest.TestCase):
         self.assertIn(self.solve(), (0, 1))
         self.assertTrue(os.path.isfile(os.path.join(self.plan_dir(), "result.json")))
         rid = os.path.basename(self.plan_dir())
-        self.assertTrue(os.path.isfile(os.path.join("reports", "input-001", rid, "sheet", "report.md")))
+        self.assertTrue(rk.find(os.path.join("reports", "input-001", rid, "sheet"), "solution-report") is not None)
         self.assertEqual(subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True).stdout, "")
 
     def test_out_honoured_and_plan_inside(self):

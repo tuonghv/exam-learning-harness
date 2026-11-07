@@ -63,7 +63,7 @@ class Exam(unittest.TestCase):
         code, o, _ = run(EXAM, "report", os.path.join(out, "result.json"), "--out", out2,
                          "--no-pdf", cwd=self.tmp)
         self.assertEqual(code, 0)
-        self.assertTrue(os.path.isfile(os.path.join(out2, "report.md")))
+        self.assertTrue(any("_solution-report_" in n and n.endswith(".md") for n in os.listdir(out2)))  # REQ-0092 name
 
     def test_solve_and_old_exam_run_print_the_same_summary(self):
         a, b = os.path.join(self.tmp, "o"), os.path.join(self.tmp, "o")

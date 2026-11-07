@@ -55,7 +55,7 @@ class Run(TI.Base):
     def test_report_and_metrics(self):
         res, _ = self.run_with_plan(T.solve(T.a(1, "6")))
         md = reporter.build_markdown(res)
-        self.assertEqual(md.count("- Source: text+image"), 1)
+        self.assertEqual(md.count("- %s: text+image" % reporter.LABELS[reporter.learn_lang(res)]["source"]), 1)
         c = metrics.compute(res)["counts"]
         self.assertEqual((c["image_checked"], c["image_changed"]), (1, 1))
         self.assertIn("image 1 checked 1 changed", metrics.block(metrics.compute(res))[0])

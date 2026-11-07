@@ -13,6 +13,7 @@ from unittest import mock
 ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 sys.path.insert(0, os.path.join(ROOT, "src"))
 from exam_engine import cli  # noqa: E402
+from exam_engine.pipeline import report_kinds as rk  # noqa: E402
 from exam_engine.pipeline import planrun, reporter  # noqa: E402
 
 FIX = os.path.join(ROOT, "tests", "fixtures", "plan_import", "run-small")
@@ -68,8 +69,8 @@ class PlanImportTest(unittest.TestCase):
             code, _, err = run(cli.report_main, [self.plan(), "--no-pdf"])
         self.assertEqual(code, 0, err)
         d = os.path.join(self.tmp, "reports", "ex", os.path.basename(self.plan()), "sheet")
-        self.assertTrue(os.path.isfile(os.path.join(d, "report.md")))
-        self.assertTrue(os.path.isfile(os.path.join(d, "metrics.json")))
+        self.assertIsNotNone(rk.find(d, "solution-report"))
+        self.assertIsNotNone(rk.find(d, "metrics", ext="json"))
 
     def test_idempotent(self):
         self.imp()

@@ -16,7 +16,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
 TOOLS = os.path.join(ROOT, "tools", "examples")  # the old-command shims
 sys.path.insert(0, os.path.join(ROOT, "src"))
-from exam_engine.pipeline import reporter as rp  # noqa: E402
+from exam_engine.pipeline import reporter as rp, report_kinds as rk  # noqa: E402
 from exam_engine import cli, engine as er  # noqa: E402
 from exam_engine.core import schema as sch  # noqa: E402
 
@@ -112,12 +112,31 @@ class Base(unittest.TestCase):
         self.addCleanup(g.stop)
         self.out = os.path.join(self.tmp, "out")
 
+    # REQ-0092: files carry standard names; tests keep the legacy name as the handle for the kind
+    LEGACY = {"report.md": ("solution-report", "md"), "report.html": ("solution-report", "html"),
+              "report.pdf": ("solution-report", "pdf"), "learning.md": ("learning-report", "md"), "answers.md": ("answer-sheet", "md")}
+
+    def path(self, legacy):
+        kind, ext = self.LEGACY[legacy]
+        if os.path.isdir(self.out):
+            for n in sorted(os.listdir(self.out)):
+                p = rk.parse(n)
+                if p and p["kind"] == kind and p["ext"] == ext:
+                    return os.path.join(self.out, n)
+        n = rp.default_names(result(), self.out)
+        return os.path.join(self.out, rk.name(n["exam"], n["subject"], kind, n["run"], ext))
+
     def read(self, name):
-        with open(os.path.join(self.out, name), encoding="utf-8") as fh:
+        with open(self.path(name) if name in self.LEGACY else os.path.join(self.out, name), encoding="utf-8") as fh:
             return fh.read()
 
     def files(self):
-        return sorted(f for f in os.listdir(self.out) if f != "run.log")
+        back = {v: k for k, v in self.LEGACY.items()}
+        out = []
+        for f in os.listdir(self.out):
+            p = rk.parse(f)
+            out.append(back.get((p["kind"], p["ext"]), f) if p else f)
+        return sorted(x for x in out if x != "run.log")
 
 
 class EvidenceKind(unittest.TestCase):
@@ -156,7 +175,7 @@ class Markdown(Base):
     def test_2_contains_answer_verdict_evidence_checks_totals(self):
         r = result([question(1, answer="3.46", checks=[chk("computed", "pass", True, "2*sqrt(3)=3.46")])])
         md = rp.build_markdown(r)
-        for s in ("Question 1", "3.46", "**PASS**", "code oracle", "| computed | pass | yes |",
+        for s in ("Question 1", "3.46", "Status: PASS", "code oracle", "Check computed: pass",
                   "2*sqrt(3)=3.46", "Totals: PASS 1, FAIL 0, UNCERTAIN 0, unresolved 0",
                   "Points: 1 / 1", "step one", "because"):
             self.assertIn(s, md)
@@ -190,11 +209,9 @@ class Markdown(Base):
         detail = "a | b\nc | d\r\ne"
         q = question(1, checks=[chk("quote|x", "pass", False, detail)])
         md = rp.build_markdown(result([q]))
-        rows = [l for l in md.split("\n") if l.startswith("| ") and "---" not in l]
-        self.assertEqual(len(rows), 2)  # header + the one check row
+        rows = [l for l in md.split("\n") if l.startswith("- Check")]
+        self.assertEqual(len(rows), 1)  # hybrid layout: one bullet per check, newlines folded
         h = self.render(md, None)
-        self.assertEqual(h.count("<td>"), 4)
-        self.assertEqual(h.count("<th>"), 4)
         self.assertIn("a | b c | d e", h)
 
     def test_2_newline_in_answer_and_id_stays_one_bullet(self):
@@ -206,8 +223,8 @@ class Markdown(Base):
         q = question(1, explanation="```python\nx", solution=["# step", "**PASS**"])
         md = rp.build_markdown(result([q]))
         self.assertNotIn("\n```", md)
-        self.assertNotIn("**PASS**", md.split("### Solution")[1])
-        self.assertIn("### Uncertainty", md)  # nothing swallowed after the fence
+        self.assertNotIn("**PASS**", md.split("Steps:")[1])
+        self.assertIn("Why:", md)  # nothing swallowed after the fence
 
     def test_2_vietnamese_passes_unchanged(self):
         q = question(1, answer=VI, explanation=VI, solution=[VI],
@@ -218,7 +235,7 @@ class Markdown(Base):
         self.assertIn("Toán", md)
         info = rp.write_reports(r, self.out, pdf=True, renderer=CHROME, runner=Runner("junk"))
         self.assertIsNotNone(info["html"])
-        self.assertFalse(os.path.exists(os.path.join(self.out, "report.pdf")))  # D1
+        self.assertFalse(os.path.exists(self.path("report.pdf")))  # D1
         self.assertIn(VI, self.read("report.md"))
         h = self.read("report.html")
         self.assertIn(VI, h)
@@ -242,7 +259,7 @@ class Markdown(Base):
         md = rp.build_markdown(result([q], summary={"pass": 0, "fail": 0, "uncertain": 1,
                                                     "unresolved": 0}, task="Essay", subject="Literature"))
         self.assertIn("Open", md)
-        self.assertIn("**UNCERTAIN**", md)
+        self.assertIn("Status: UNCERTAIN", md)
         self.assertIn("human rubric", md)
 
     def test_3_literature_task_marks_open_even_with_text_answer(self):
@@ -310,14 +327,14 @@ class Pdf(Base):
             info = rp.write_reports(result(), self.out, pdf=True)
         self.assertTrue(info["pdf_status"].startswith("skipped"))
         self.assertIsNone(info["pdf"])
-        self.assertEqual(info["html"], os.path.join(self.out, "report.html"))
+        self.assertEqual(info["html"], self.path("report.html"))
         self.assertEqual(self.files(), ["answers.md", "report.html", "report.md"])
         self.assertIn("PDF skipped: no PDF renderer found", self.read("report.md"))
 
     def test_7_fake_renderer_ok_pdf_written_html_removed(self):
         info, runner = self.run_reports("pdf")
         self.assertTrue(info["pdf_status"].startswith("ok"))
-        self.assertEqual(info["pdf"], os.path.join(self.out, "report.pdf"))
+        self.assertEqual(info["pdf"], self.path("report.pdf"))
         self.assertIsNone(info["html"])
         self.assertEqual(self.files(), ["answers.md", "report.md", "report.pdf"])
         self.assertNotIn("PDF skipped", self.read("report.md"))
@@ -341,7 +358,7 @@ class Pdf(Base):
             info, runner = self.run_reports("pdf", renderer=(kind, "/fake/" + kind))
             self.assertTrue(info["pdf_status"].startswith("ok"), kind)
             self.assertEqual(runner.argvs[0][0], "/fake/" + kind)
-            self.assertEqual(runner.argvs[0][-1], os.path.abspath(os.path.join(self.out, "report.pdf")))
+            self.assertEqual(runner.argvs[0][-1], os.path.abspath(self.path("report.pdf")))
             shutil.rmtree(self.out)
 
     def test_8_hang_is_terminated_at_timeout_and_html_kept(self):
@@ -384,14 +401,14 @@ class Pdf(Base):
         self.assertIsNone(info["pdf"])
         self.assertIn("no valid PDF", info["pdf_status"])
         self.assertIn("PDF skipped", self.read("report.md"))
-        self.assertTrue(os.path.exists(os.path.join(self.out, "report.html")))
+        self.assertTrue(os.path.exists(self.path("report.html")))
         for p in self.profile_dirs(runner):
             self.assertFalse(os.path.exists(p))
 
     def test_8_renderer_exits_without_output_is_failure(self):
         info, _ = self.run_reports("dead")
         self.assertTrue(info["pdf_status"].startswith("skipped"))
-        self.assertTrue(os.path.exists(os.path.join(self.out, "report.html")))
+        self.assertTrue(os.path.exists(self.path("report.html")))
 
     def test_8_runner_that_raises_does_not_propagate(self):
         def boom(argv, **kw):
@@ -399,15 +416,15 @@ class Pdf(Base):
         info = rp.write_reports(result(), self.out, pdf=True, renderer=CHROME, runner=boom)
         self.assertTrue(info["pdf_status"].startswith("skipped"))
         self.assertIn("OSError", info["pdf_status"])
-        self.assertTrue(os.path.exists(os.path.join(self.out, "report.html")))
+        self.assertTrue(os.path.exists(self.path("report.html")))
 
     def test_8_stale_pdf_is_not_mistaken_for_success(self):
         os.makedirs(self.out)
-        with open(os.path.join(self.out, "report.pdf"), "wb") as fh:
+        with open(self.path("report.pdf"), "wb") as fh:
             fh.write(b"%PDF-old")
         info, _ = self.run_reports("dead")
         self.assertIsNone(info["pdf"])
-        self.assertFalse(os.path.exists(os.path.join(self.out, "report.pdf")))
+        self.assertFalse(os.path.exists(self.path("report.pdf")))
 
     def test_pdf_false_writes_only_md(self):
         info = rp.write_reports(result(), self.out, pdf=False, runner=Runner("pdf"))
@@ -486,7 +503,7 @@ class Cli(Base):
         s = res["summary"]
         self.assertIn("Totals: PASS %d, FAIL %d, UNCERTAIN %d, unresolved %d" % (
             s["pass"], s["fail"], s["uncertain"], s["unresolved"]), md)
-        self.assertIn("report.md", out)
+        self.assertIn("solution-report", out)
 
 
 def sheet_qs(ids, answers=None):
@@ -550,7 +567,7 @@ class AnswerSheet(Base):
         self.assertTrue(md.startswith("# Exam report:"))
         self.assertLess(md.index("## Answer sheet"), md.index("## Question 1"))
         self.assertEqual(self.read("answers.md"), rp.build_answer_sheet(r))
-        self.assertEqual(info["answers"], os.path.join(self.out, "answers.md"))
+        self.assertEqual(info["answers"], self.path("answers.md"))
         self.assertEqual(rp.build_markdown(r), before)
         self.assertNotIn("\n```", before)
 
@@ -583,7 +600,7 @@ class LearnView(Base):
         self.assertIn("FAIL", out.split("### Question 02")[1].split("### Question 03")[0])
         self.assertNotIn("verdict", out.split("### Question 01")[1].split("### Question 02")[0])
         rp.write_reports(result(qs), self.out, pdf=False, view="learn")
-        md = self.read("report.md")
+        md = self.read("learning.md")
         self.assertLess(md.index("## Learning view"), md.index("## Question 1"))
         self.assertNotIn("## Answer sheet", md)
 

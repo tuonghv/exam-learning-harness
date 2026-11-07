@@ -14,6 +14,7 @@ ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
 sys.path.insert(0, os.path.join(ROOT, "src"))
 sys.path.insert(0, HERE)
 from exam_engine import cli, engine as er  # noqa: E402
+from exam_engine.pipeline import report_kinds as rk  # noqa: E402
 from exam_engine.core import schema as sch  # noqa: E402
 from exam_engine.ingest import api  # noqa: E402
 from exam_engine.ingest.schema import IngestError  # noqa: E402
@@ -167,7 +168,7 @@ class Pipeline(unittest.TestCase):
         self.assertEqual(res["summary"]["skipped_unverified"], 2)
         self.assertEqual([x["status"] for x in res["skipped_unverified"]], ["needs_review", "rejected"])
         self.assertEqual(res["skipped_unverified"][0]["reasons"], ["blurry"])
-        self.assertIn("Skipped (unverified): 2", open(os.path.join(out, "report.md")).read())
+        self.assertIn("Skipped (unverified): 2", open(rk.find(out, "solution-report")).read())
         s = res["summary"]
         self.assertEqual((s["pass"] + s["fail"] + s["uncertain"], len(res["questions"])), (1, 1))
         self.assertEqual(sch.validate(res, sch.RESULT), [])

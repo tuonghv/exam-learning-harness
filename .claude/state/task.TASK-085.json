@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-085",
   "title": "Standard report names + hybrid solution-report + report-kind registry + QA, regenerated DGNL 2026 pack at $0 (REQ-0092)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0092",
   "acceptance_criteria": [
     "AC1 engine writes standard names only",
@@ -36,9 +36,9 @@
     "summary": "registry config/report_kinds.json + report_kinds.py; writers emit standard names, legacy still read; INDEX.md writer; hybrid solution-report; report-pack command; tools/check_report_pack.py (58 checks, 0 failed on reports/dgnl2026, 113/120)"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "test_report_kinds 30 OK; full suite 1677 run, only the 4 known pre-existing failures (3 examples/dgnl check-examples incl. cwd_independence, 1 docx text-box); D-T1 and D-A fixed"
   },
   "security": {
     "status": "pending",
@@ -57,7 +57,8 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-085/handoff/design.md",
-    "coder": "work/TASK-085/handoff/code.md"
+    "coder": "work/TASK-085/handoff/code.md",
+    "tester": "work/TASK-085/handoff/test2.md"
   },
   "user_notes": [
     {
@@ -72,7 +73,7 @@
     }
   ],
   "picked_at": "2026-11-07T13:46:44Z",
-  "updated_at": "2026-11-07T14:30:08Z",
+  "updated_at": "2026-11-07T14:52:16Z",
   "updated_by": "main",
   "scope": [
     "config/report_kinds.json",
@@ -83,7 +84,9 @@
     "src/exam_engine/cli.py",
     "tools/check_report_pack.py",
     "docs/guide/report-kinds.md",
-    "tests/unit"
+    "tests/unit",
+    "tests/unit/*.py",
+    "src/exam_engine/engine.py"
   ],
   "depends_on": [],
   "inputs": {},
@@ -91,5 +94,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tester writes tests and updates the 8 tests that name report.md/answers.md; main runs report-index on old folders"
+  "next": "verifier QA recount of reports/dgnl2026 against the registry and plans; main runs report-index on old folders"
 }
