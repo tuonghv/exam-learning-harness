@@ -1,0 +1,36 @@
+{
+  "pattern": "<exam>_<subject>_<kind>_<run>.<ext>",
+  "kinds": {
+    "answer-sheet": {"ext": ["md"], "scope": "subject", "count": "questions", "needs": "",
+      "description": "one subject's answers as a bubble grid (letters only, a dash for a declined question)",
+      "legacy": ["answers.md"]},
+    "solution-report": {"ext": ["md", "pdf", "html"], "optional_ext": ["html"], "scope": "both", "count": "questions", "needs": "sheet",
+      "description": "hybrid full report: question and options, answer, status, doubt in words, steps, explanation, checks (html only when no PDF renderer)",
+      "legacy": ["report.md", "report.pdf", "report.html"]},
+    "learning-report": {"ext": ["md", "pdf", "html"], "optional_ext": ["html"], "scope": "subject", "count": "questions", "needs": "learn",
+      "description": "study view of one subject (answer, why, steps) written for --view learn",
+      "legacy": []},
+    "answer-table": {"ext": ["tsv"], "scope": "all", "count": "rows", "needs": "",
+      "description": "whole exam, one row per question: subject, printed no., answer, status, doubt, error, score",
+      "legacy": ["answers.tsv"]},
+    "score-vs-key": {"ext": ["tsv"], "scope": "all", "count": "rows", "needs": "key",
+      "description": "whole exam checked against the official answers: key, ours, correct/WRONG/declined, status, doubt, flag",
+      "legacy": []},
+    "score-summary": {"ext": ["md", "json"], "scope": "all", "count": "none", "needs": "key",
+      "description": "whole exam score: per subject correct/wrong/declined, cost, calls, items not correct, doubt vs outcome",
+      "legacy": []},
+    "metrics": {"ext": ["json"], "scope": "subject", "count": "none", "needs": "",
+      "description": "per-run metrics (calls, cost, coverage) of one subject",
+      "legacy": ["metrics.json"]},
+    "result-data": {"ext": ["json"], "scope": "subject", "count": "none", "needs": "",
+      "description": "provenance of a report: plan run id, result sha256, view, engine git",
+      "legacy": ["report.json"]},
+    "run-log": {"ext": ["log"], "scope": "subject", "count": "none", "needs": "",
+      "description": "copy of the plan run.log (call lines) kept with the pack",
+      "legacy": ["run.log"]}
+  },
+  "superseded": [
+    {"glob": "dhqg2024/solutions.*", "note": "superseded 2026-11-05 by dhqg2024-t81/ALL-120/report.* (raw-JSON doubt, unaccented steps)"},
+    {"glob": "dgnl2026-crosscheck/*", "note": "superseded by reports/dgnl2026/ (run-f pack, standard names, hybrid solution-report)"}
+  ]
+}

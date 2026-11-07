@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-085",
-  "state": "DESIGN",
-  "next": "coder implements 85.1-85.5 (registry, writers, INDEX, hybrid, pack); tester 85.6 checker + tests",
+  "state": "IMPLEMENTING",
+  "next": "tester writes tests and updates the 8 tests that name report.md/answers.md; main runs report-index on old folders",
   "title": "Standard report names + hybrid solution-report + report-kind registry + QA, regenerated DGNL 2026 pack at $0 (REQ-0092)",
   "active": [
     {
       "task_id": "TASK-085",
-      "state": "DESIGN",
-      "next": "coder implements 85.1-85.5 (registry, writers, INDEX, hybrid, pack); tester 85.6 checker + tests",
-      "updated_at": "2026-11-07T14:22:59Z"
+      "state": "IMPLEMENTING",
+      "next": "tester writes tests and updates the 8 tests that name report.md/answers.md; main runs report-index on old folders",
+      "updated_at": "2026-11-07T14:30:08Z"
     }
   ],
   "max_active": 1

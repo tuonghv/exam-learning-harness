@@ -2431,3 +2431,9 @@ Action: Design drafted; user accepted all decisions
 Result: docs/design/phase-85-standard-report-names.md
 Decision: DESIGN
 Next: IMPLEMENTING
+
+## IMPLEMENTING - TASK-085 - 2026-11-07T14:30:08Z
+Action: Coder implemented 85.1-85.6 and generated reports/dgnl2026 at $0
+Result: checker 58 checks 0 failed
+Decision: IMPLEMENTING
+Next: UNIT_TESTED

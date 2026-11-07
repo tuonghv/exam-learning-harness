@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-085",
   "title": "Standard report names + hybrid solution-report + report-kind registry + QA, regenerated DGNL 2026 pack at $0 (REQ-0092)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0092",
   "acceptance_criteria": [
     "AC1 engine writes standard names only",
@@ -22,8 +22,18 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "config/report_kinds.json",
+      "src/exam_engine/pipeline/report_kinds.py",
+      "src/exam_engine/pipeline/report_pack.py",
+      "src/exam_engine/pipeline/reporter.py",
+      "src/exam_engine/pipeline/report_build.py",
+      "src/exam_engine/cli.py",
+      "tools/check_report_pack.py",
+      "docs/guide/report-kinds.md"
+    ],
+    "summary": "registry config/report_kinds.json + report_kinds.py; writers emit standard names, legacy still read; INDEX.md writer; hybrid solution-report; report-pack command; tools/check_report_pack.py (58 checks, 0 failed on reports/dgnl2026, 113/120)"
   },
   "unit_test": {
     "status": "pending",
@@ -46,7 +56,8 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-085/handoff/design.md"
+    "designer": "work/TASK-085/handoff/design.md",
+    "coder": "work/TASK-085/handoff/code.md"
   },
   "user_notes": [
     {
@@ -61,14 +72,24 @@
     }
   ],
   "picked_at": "2026-11-07T13:46:44Z",
-  "updated_at": "2026-11-07T14:22:59Z",
+  "updated_at": "2026-11-07T14:30:08Z",
   "updated_by": "main",
-  "scope": [],
+  "scope": [
+    "config/report_kinds.json",
+    "src/exam_engine/pipeline/report_kinds.py",
+    "src/exam_engine/pipeline/report_pack.py",
+    "src/exam_engine/pipeline/reporter.py",
+    "src/exam_engine/pipeline/report_build.py",
+    "src/exam_engine/cli.py",
+    "tools/check_report_pack.py",
+    "docs/guide/report-kinds.md",
+    "tests/unit"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
     "done": [],
     "notes": ""
   },
-  "next": "coder implements 85.1-85.5 (registry, writers, INDEX, hybrid, pack); tester 85.6 checker + tests"
+  "next": "tester writes tests and updates the 8 tests that name report.md/answers.md; main runs report-index on old folders"
 }

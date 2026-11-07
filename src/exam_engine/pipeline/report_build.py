@@ -7,7 +7,7 @@ import hashlib
 import json
 import os
 
-from exam_engine.pipeline import metrics, parser, planrun, reporter, router
+from exam_engine.pipeline import metrics, parser, planrun, report_kinds, reporter, router
 
 
 def _dump(path, obj):
@@ -36,8 +36,10 @@ def _exam(plan_dir, text, lang):
         return None
 
 
-def build(plan_dir, out_dir, *, view="sheet", pdf=False, renderer=None, runner=None, engine_git=None):
-    """Write the report of plan_dir into out_dir; returns dict(reports, metrics, result).
+def build(plan_dir, out_dir, *, view="sheet", pdf=False, renderer=None, runner=None, engine_git=None,
+          exam_name=None, run_name=None, subject_name=None):
+    """Write the standard-named report of plan_dir into out_dir; returns dict(reports, metrics, result, exam, names).
+    exam_name/run_name/subject_name override the name parts (default: from the result and the out dir).
     ValueError when the plan has no result.json."""
     if view not in reporter.VIEWS:
         raise ValueError("unknown view %r" % view)
@@ -51,13 +53,18 @@ def build(plan_dir, out_dir, *, view="sheet", pdf=False, renderer=None, runner=N
     except Exception:  # noqa: BLE001 - metrics are extra; the report must still build
         m = None
     kw = {} if runner is None else {"runner": runner}
+    names = dict(reporter.default_names(result, out_dir))
+    names.update({k: v for k, v in (("exam", exam_name), ("run", run_name), ("subject", subject_name)) if v})
     reports = reporter.write_reports(result, out_dir, pdf=pdf, renderer=renderer, view=view,
-                                     metrics=m, **kw)
-    _dump(os.path.join(out_dir, "metrics.json"), m)
+                                     metrics=m, exam=exam, names=names, **kw)
+    def path(kind):
+        return os.path.join(out_dir, report_kinds.name(names["exam"], names["subject"], kind, names["run"],
+                                                       report_kinds.load()["kinds"][kind]["ext"][0]))
+    _dump(path("metrics"), m)
     plan = loaded["plan"] or {}
     with open(os.path.join(plan_dir, "result.json"), "rb") as fh:
         rsha = hashlib.sha256(fh.read()).hexdigest()
-    _dump(os.path.join(out_dir, "report.json"),
+    _dump(path("result-data"),
           {"plan_run_id": plan.get("plan_run_id"), "exam_id": plan.get("exam_id"),
            "result_sha256": rsha, "view": view, "engine_git": engine_git})
-    return {"reports": reports, "metrics": m, "result": result}
+    return {"reports": reports, "metrics": m, "result": result, "exam": exam, "names": names}

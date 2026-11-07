@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Report stage: result dict -> report.md, report.html, report.pdf (best effort).
+"""Report stage: result dict -> <exam>_<subject>_solution-report_<run>.md/.html/.pdf (best effort; names: report_kinds).
 
 All model text is data: it is escaped by md2html and never executed. The PDF
 needs a local renderer (Chrome, weasyprint, wkhtmltopdf); without one the HTML
@@ -87,11 +87,22 @@ def build_answer_sheet(result):
 LABELS = {
     "en": {"title": "Learning view", "question": "Question", "answer": "Answer",
            "open": "Open (needs a human rubric)", "verdict": "verdict", "why": "Why",
-           "steps": "Steps", "key_concept": "Key concept", "common_mistake": "Common mistake"},
+           "steps": "Steps", "key_concept": "Key concept", "common_mistake": "Common mistake",
+           "status": "Status", "doubt": "Doubt", "levels": {"low": "low", "medium": "medium", "high": "high"},
+           "no_text": "<question text not stored in this run>", "evidence": "Evidence", "score": "Score",
+           "source": "Source", "check": "Check", "independent": "independent", "qa": "QA finding",
+           "error": "Error", "open_note": "Open question: no automatic score; a human rubric is needed."},
     "vi": {"title": "Ph\u1ea7n h\u1ecdc", "question": "C\u00e2u", "answer": "\u0110\u00e1p \u00e1n",
            "open": "M\u1edf (c\u1ea7n ch\u1ea5m theo thang \u0111i\u1ec3m)", "verdict": "k\u1ebft qu\u1ea3",
            "why": "V\u00ec sao", "steps": "C\u00e1c b\u01b0\u1edbc",
-           "key_concept": "Kh\u00e1i ni\u1ec7m ch\u00ednh", "common_mistake": "L\u1ed7i th\u01b0\u1eddng g\u1eb7p"},
+           "key_concept": "Kh\u00e1i ni\u1ec7m ch\u00ednh", "common_mistake": "L\u1ed7i th\u01b0\u1eddng g\u1eb7p",
+           "status": "Tr\u1ea1ng th\u00e1i", "doubt": "\u0110\u1ed9 nghi ng\u1edd",
+           "levels": {"low": "th\u1ea5p", "medium": "trung b\u00ecnh", "high": "cao"},
+           "no_text": "<n\u1ed9i dung c\u00e2u h\u1ecfi kh\u00f4ng \u0111\u01b0\u1ee3c l\u01b0u trong l\u1ea7n ch\u1ea1y n\u00e0y>",
+           "evidence": "B\u1eb1ng ch\u1ee9ng", "score": "\u0110i\u1ec3m", "source": "Ngu\u1ed3n",
+           "check": "Ki\u1ec3m tra", "independent": "\u0111\u1ed9c l\u1eadp", "qa": "Ph\u00e1t hi\u1ec7n QA",
+           "error": "L\u1ed7i",
+           "open_note": "C\u00e2u m\u1edf: kh\u00f4ng ch\u1ea5m t\u1ef1 \u0111\u1ed9ng, c\u1ea7n thang \u0111i\u1ec3m."},
 }
 
 
@@ -147,16 +158,7 @@ def git_info(root):
         return None
 
 
-def _compose(result, view, metrics=None):
-    """report.md text: the title, then the chosen view, then the full body."""
-    body = build_markdown(result, metrics)
-    title, rest = body.split("\n", 1)
-    block = ("## Answer sheet\n\n" + build_answer_sheet(result)) if view == "sheet" \
-        else build_learning_view(result)
-    return title + "\n\n" + block + "\n" + rest.lstrip("\n")
-
-
-def build_markdown(result, metrics=None):
+def _header(result, metrics=None):
     exam, run, s = result["exam"], result["run"], result["summary"]
     md = ["# Exam report: %s" % _one_line(exam.get("subject") or exam.get("path")), ""]
     md.append("- Exam: %s, %s, %s, task %s, mode %s" % (
@@ -178,48 +180,103 @@ def build_markdown(result, metrics=None):
     if metrics:
         from exam_engine.pipeline import metrics as _metrics
         md += ["## Metrics", ""] + ["- " + ln for ln in _metrics.block(metrics)] + [""]
+    return md
+
+
+def _text_lines(text):
+    """Exam text (untrusted data) as separate one-line paragraphs."""
+    return [_one_line(ln) for ln in str(text or "").splitlines() if ln.strip()]
+
+
+def _question_block(q, result, exam_q, ctx, L):
+    """Hybrid block of one question: text and options (when stored), answer, status, doubt in words, steps."""
+    exam = result["exam"]
+    opened = _is_open(q, exam)
+    md = ["### %s %s" % (L["question"], _one_line(q["id"])), ""]
+    if exam_q is None:
+        md += [L["no_text"], ""]
+    else:
+        context = (exam_q.get("instruction") or "", exam_q.get("passage") or "")
+        if context != ctx[0]:  # a shared instruction/passage is printed once per run of questions
+            ctx[0] = context
+            md += [x for part in context for ln in _text_lines(part) for x in (ln, "")]
+        md += [x for ln in _text_lines(exam_q.get("stem") or exam_q.get("text")) for x in (ln, "")]
+        opts = exam_q.get("options") or {}
+        if opts:
+            md += ["%s. %s  " % (_one_line(k), _one_line(v)) for k, v in opts.items()] + [""]
+    md += ["**%s: %s**" % (L["answer"], L["open"] if opened else (_one_line(q.get("answer")) or "none")), ""]
+    md.append("- %s: %s (%s)" % (L["status"], q["verification_status"], _one_line(q.get("status_reason")) or "-"))
+    u = q.get("uncertainty") or {}
+    lvl = _one_line(u.get("level"))
+    md.append("- %s: %s - %s" % (L["doubt"], L["levels"].get(lvl, lvl or "-"), _one_line(u.get("reason")) or "-"))
+    if q.get("source") in ("image", "text+image", "adjudicated"):
+        md.append("- %s: %s" % (L["source"], q["source"]))
+    md.append("- %s: %s" % (L["evidence"], q.get("evidence_kind") or evidence_kind(q)))
+    sc = q.get("score") or {}
+    md.append("- %s: %s / %s (%s)" % (L["score"], _num(sc.get("points")), _num(sc.get("max")), _one_line(sc.get("basis"))))
+    if opened:
+        md.append("- %s" % L["open_note"])
+    for c in q.get("checks") or []:
+        md.append("- %s %s: %s%s - %s" % (L["check"], _one_line(c.get("kind")), _one_line(c.get("result")),
+                                         " (%s)" % L["independent"] if c.get("independent") else "",
+                                         _one_line(c.get("detail")) or "-"))
+    for f in q.get("qa_findings") or []:
+        md.append("- %s %s / %s: %s" % (L["qa"], _one_line(f.get("source")), _one_line(f.get("code")),
+                                       _one_line(f.get("message"))))
+    if q.get("error"):
+        md.append("- %s: %s: %s" % (L["error"], _one_line(q["error"].get("cls")), _one_line(q["error"].get("message"))))
+    md.append("")
+    if q.get("solution"):
+        md += ["%s:" % L["steps"], ""] + ["%d. %s" % (n, _one_line(t)) for n, t in enumerate(q["solution"], 1)] + [""]
+    if q.get("explanation"):
+        md += ["%s: %s" % (L["why"], _one_line(q["explanation"])), ""]
+    return md
+
+
+def _subject_section(result, exam=None):
+    """`## <subject>` and one hybrid block per question; exam = parsed exam (parser.parse_exam) or None."""
+    L = LABELS[learn_lang(result)]
+    by_id = {str(x.get("id")): x for x in (exam or {}).get("questions", [])}
+    md = ["## %s" % (_one_line(result["exam"].get("subject")) or "Exam"), ""]
+    ctx = [None]
     for q in result["questions"]:
-        verdict = q["verification_status"]
-        opened = _is_open(q, exam)
-        md += ["## Question %s" % _one_line(q["id"]), ""]
-        md.append("- Answer: %s" % ("Open (needs a human rubric)" if opened else
-                                    _one_line(q.get("answer")) or "none"))
-        md.append("- Verdict: **%s**" % verdict)
-        if q.get("source") in ("image", "text+image", "adjudicated"):
-            md.append("- Source: %s" % q["source"])
-        md.append("- Reason: %s" % (_one_line(q.get("status_reason")) or "-"))
-        md.append("- Evidence: %s" % (q.get("evidence_kind") or evidence_kind(q)))
-        sc = q.get("score") or {}
-        md.append("- Score: %s / %s (%s)" % (_num(sc.get("points")), _num(sc.get("max")),
-                                              _one_line(sc.get("basis"))))
-        if opened:
-            md.append("- Open question: no automatic score; a human rubric is needed.")
-        if q.get("error"):
-            md.append("- Error: %s: %s" % (_one_line(q["error"].get("cls")),
-                                           _one_line(q["error"].get("message"))))
-        md.append("")
-        if q.get("checks"):
-            md += ["| Check | Result | Independent | Detail |", "| --- | --- | --- | --- |"]
-            for c in q["checks"]:
-                md.append("| %s | %s | %s | %s |" % (
-                    _cell(c.get("kind")), _cell(c.get("result")),
-                    "yes" if c.get("independent") else "no", _cell(c.get("detail"))))
-            md.append("")
-        if q.get("qa_findings"):
-            md += ["### QA findings", ""]
-            md += ["- %s / %s: %s" % (_one_line(f.get("source")), _one_line(f.get("code")),
-                                      _one_line(f.get("message"))) for f in q["qa_findings"]]
-            md.append("")
-        if q.get("explanation"):
-            md += ["### Explanation", "", _one_line(q["explanation"]), ""]
-        if q.get("solution"):
-            md += ["### Solution", ""]
-            md += ["%d. %s" % (n, _one_line(t)) for n, t in enumerate(q["solution"], 1)]
-            md.append("")
-        u = q.get("uncertainty") or {}
-        md += ["### Uncertainty", "", "%s: %s" % (_one_line(u.get("level")) or "-",
-                                                  _one_line(u.get("reason")) or "-"), ""]
+        md += _question_block(q, result, by_id.get(str(q["id"])), ctx, L)
+    return md
+
+
+def build_markdown(result, metrics=None, exam=None, view=None):
+    """Hybrid solution report: header, metrics, optional view block (sheet: answer grid; learn: study view), then
+    the subject section with question text, options, answer, status, doubt in words, steps (REQ-0092 AC7)."""
+    md = _header(result, metrics)
+    if view == "sheet":
+        md += ["## Answer sheet", "", build_answer_sheet(result)]
+    elif view == "learn":
+        md += [build_learning_view(result)]
+    md += _subject_section(result, exam)
     return "\n".join(md).rstrip("\n") + "\n"
+
+
+def build_combined_markdown(items, title="Exam report: all subjects"):
+    """One report for several subjects; items = [(result, metrics, exam)] in plan order."""
+    md = ["# %s" % _one_line(title), "", "## Totals", ""]
+    tot = {"pass": 0, "fail": 0, "uncertain": 0, "unresolved": 0}
+    for result, _m, _e in items:
+        s = result["summary"]
+        for k in tot:
+            tot[k] += s[k]
+        md.append("- %s: PASS %d, FAIL %d, UNCERTAIN %d, unresolved %d, %d question(s)" % (
+            _one_line(result["exam"].get("subject")), s["pass"], s["fail"], s["uncertain"], s["unresolved"],
+            len(result["questions"])))
+    md += ["- All: PASS %d, FAIL %d, UNCERTAIN %d, unresolved %d" % (
+        tot["pass"], tot["fail"], tot["uncertain"], tot["unresolved"]), ""]
+    for result, _m, exam in items:
+        md += _subject_section(result, exam)
+    return "\n".join(md).rstrip("\n") + "\n"
+
+
+def _compose(result, view, metrics=None, exam=None):
+    """The solution/learning report text for a view."""
+    return build_markdown(result, metrics, exam, view)
 
 
 def find_pdf_renderer(env=None, which=shutil.which):
@@ -347,19 +404,32 @@ def md_to_pdf(md_path, pdf_path, *, lang="en", renderer=None, timeout=None,
             shutil.rmtree(profile, ignore_errors=True)
 
 
+def default_names(result, out_dir):
+    """{exam, subject, run} name parts from a result and its out dir (all slugged, never empty)."""
+    from exam_engine.pipeline import report_kinds as rk
+    ex = result.get("exam") or {}
+    stem = os.path.splitext(os.path.basename(str(ex.get("path") or "")))[0]
+    return {"exam": rk.slug(stem) or "exam", "subject": rk.slug(ex.get("subject")) or "all",
+            "run": rk.short_run(os.path.basename(os.path.abspath(out_dir)))}
+
+
 def write_reports(result, out_dir, *, pdf=True, renderer=None, runner=subprocess.Popen,
-                  view="sheet", metrics=None):
-    """Write report.md and answers.md always; report.html/report.pdf when a render is asked for.
+                  view="sheet", metrics=None, exam=None, names=None):
+    """Write the standard-named report: <exam>_<subject>_solution-report_<run>.md (view learn: learning-report)
+    and ..._answer-sheet_<run>.md always; .pdf (else .html) when a render is asked for. `names` =
+    {exam, subject, run} (missing parts default from the result); `exam` = parsed exam for question text.
     Returns dict(md, answers, html, pdf, pdf_status); html/pdf are paths or None."""
+    from exam_engine.pipeline import report_kinds as rk
     if view not in VIEWS:
         raise ValueError("unknown view %r" % view)
+    n = dict(default_names(result, out_dir), **(names or {}))
+    kind = "solution-report" if view == "sheet" else "learning-report"
     os.makedirs(out_dir, exist_ok=True)
-    md_path = os.path.join(out_dir, "report.md")
-    html_path = os.path.join(out_dir, "report.html")
-    pdf_path = os.path.join(out_dir, "report.pdf")
-    answers_path = os.path.join(out_dir, "answers.md")
+    md_path, pdf_path, html_path = (os.path.join(out_dir, rk.name(n["exam"], n["subject"], kind, n["run"], e))
+                                    for e in ("md", "pdf", "html"))
+    answers_path = os.path.join(out_dir, rk.name(n["exam"], n["subject"], "answer-sheet", n["run"], "md"))
     with open(md_path, "w", encoding="utf-8") as fh:
-        fh.write(_compose(result, view, metrics))
+        fh.write(_compose(result, view, metrics, exam))
     with open(answers_path, "w", encoding="utf-8") as fh:
         fh.write(build_answer_sheet(result))
     info = {"md": md_path, "answers": answers_path, "html": None, "pdf": None, "pdf_status": "not requested"}

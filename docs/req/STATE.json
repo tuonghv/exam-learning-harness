@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0092",
-  "next": "coder implements 85.1-85.5 (registry, writers, INDEX, hybrid, pack); tester 85.6 checker + tests",
-  "updated": "2026-11-07 21:22"
+  "next": "tester writes tests and updates the 8 tests that name report.md/answers.md; main runs report-index on old folders",
+  "updated": "2026-11-07 21:30"
 }

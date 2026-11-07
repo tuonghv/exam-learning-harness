@@ -18,11 +18,12 @@ from exam_engine.adapters import claude
 from exam_engine.core import schema as sch
 from exam_engine.core.decision import decide
 from exam_engine.pipeline import (examples_check, explain, metrics, parser, planrun, prompts, report_build,
-                                  reporter, router, scorer, solver, verifier)
+                                  report_kinds, report_pack, reporter, router, scorer, solver, verifier)
 
 COMMANDS = ("solve", "parse", "verify", "report", "plan-import", "check-examples", "score", "prompts",
             "check-prompts", "ingest", "ingest-inspect", "ingest-refine", "cross-solve", "benchmark",
-            "extract-eval", "gold-pdf", "gen-exams", "lessons", "review-pack", "review-apply", "run-stats")
+            "extract-eval", "gold-pdf", "gen-exams", "lessons", "review-pack", "review-apply", "run-stats",
+            "report-pack", "report-index")
 DEFAULT_HISTORY = os.path.join("plans", "run-history.jsonl")
 LEGACY_HISTORY = (os.path.join("reports", "run-history.jsonl"),  # read-only fallbacks (RAW-00174, phase 58)
                   os.path.join("results", "run-history.jsonl"))
@@ -387,6 +388,8 @@ def _report_plan(argv):
     ap.add_argument("plan_run")
     ap.add_argument("--view", choices=reporter.VIEWS, default="sheet")
     ap.add_argument("--no-pdf", action="store_true")
+    ap.add_argument("--exam-name", help="exam part of the file names (default: slug of the result exam path)")
+    ap.add_argument("--run-name", help="run part of the file names, run-<x> (default: from the out dir name)")
     ap.add_argument("--report-id", "--id", dest="rid", help="default: the view name; same id overwrites")
     ap.add_argument("--out", help="override the output dir")
     a = ap.parse_args(argv)
@@ -402,13 +405,48 @@ def _report_plan(argv):
         return 2
     try:
         info = report_build.build(plan, out, view=a.view, pdf=not a.no_pdf,
-                                  engine_git=reporter.git_info(_REPO_ROOT))
+                                  engine_git=reporter.git_info(_REPO_ROOT), exam_name=a.exam_name,
+                                  run_name=report_kinds.short_run(a.run_name) if a.run_name else None)
     except (OSError, ValueError) as exc:
         print("ERROR: %s" % exc, file=sys.stderr)
         return 2
     for key in ("md", "answers", "html", "pdf"):
         if info["reports"].get(key):
             print("report %s -> %s" % (key, info["reports"][key]))
+    return 0
+
+
+def report_pack_main(argv):
+    """report-pack PLAN_RUN... --out DIR --exam NAME --run ID [--key FILE] [--no-pdf]: standard-named pack, $0."""
+    ap = argparse.ArgumentParser(prog="exam report-pack", description="Build one standard-named report folder "
+                                 "from several stored plan runs (no model call) and write its INDEX.md.")
+    ap.add_argument("plans", nargs="+")
+    ap.add_argument("--out", required=True)
+    ap.add_argument("--exam", required=True, help="exam part of the names, [a-z0-9-]+")
+    ap.add_argument("--run", required=True, help="run id: f or run-f")
+    ap.add_argument("--key", help="answer key file: adds score-vs-key and score-summary")
+    ap.add_argument("--no-pdf", action="store_true")
+    a = ap.parse_args(argv)
+    try:
+        info = report_pack.build_pack([os.path.abspath(p.rstrip("/")) for p in a.plans], a.out, a.exam,
+                                      report_kinds.short_run(a.run) if not a.run.startswith("run-") else a.run,
+                                      key=a.key, pdf=not a.no_pdf)
+    except (OSError, ValueError) as exc:
+        print("ERROR: %s" % exc, file=sys.stderr)
+        return 2
+    print("report-pack %d file(s) + %s -> %s" % (len(info["files"]), report_kinds.INDEX_NAME, a.out))
+    if info["total"]:
+        print("score %d/%d" % (info["correct"], info["total"]))
+    return 0
+
+
+def report_index_main(argv):
+    """report-index DIR...: (re)write INDEX.md of each exam report folder."""
+    if not argv or any(not os.path.isdir(d) for d in argv):
+        print("usage: exam.py report-index DIR...", file=sys.stderr)
+        return 2
+    for d in argv:
+        print("report-index -> %s" % report_kinds.write_index(d))
     return 0
 
 
@@ -1258,7 +1296,8 @@ def main(argv=None):
              "extract-eval": extract_eval_main, "gold-pdf": gold_pdf_main,
              "gen-exams": genexam_main, "lessons": lessons_main,
              "review-pack": review_pack_main, "review-apply": review_apply_main,
-             "run-stats": run_stats_main}
+             "run-stats": run_stats_main, "report-pack": report_pack_main,
+             "report-index": report_index_main}
     if cmd not in table:
         print(USAGE, file=sys.stderr)
         return 2
