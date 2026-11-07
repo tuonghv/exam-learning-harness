@@ -51,6 +51,11 @@
       "raw": "RAW-00258",
       "note": "hybrid approved, no extra AI cost, standard names, register report names, QA cross-check",
       "at": "2026-11-07T13:46:44Z"
+    },
+    {
+      "raw": "RAW-00259",
+      "note": "AC10: registry-driven generation; register a new kind once, QA fails on unregistered or missed kinds",
+      "at": "2026-11-07T13:47:53Z"
     }
   ],
   "picked_at": "2026-11-07T13:46:44Z",
