@@ -1,0 +1,9 @@
+# Phase 85 report - standard report names, hybrid solution-report, registry (REQ-0092)
+
+- Result: report files are named by kind `<exam>_<subject>_<kind>_<run>.<ext>` from one registry `config/report_kinds.json` (doc: `docs/guide/report-kinds.md`, test keeps both equal). Kinds: answer-sheet, solution-report, learning-report, answer-table, score-vs-key, score-summary, metrics, result-data, run-log. Writers emit only standard names; readers still accept old names (legacy). `exam report-index DIR` writes an INDEX.md per folder (kind, status standard/legacy/superseded/unregistered, count, description computed from the file). `exam report-pack` rebuilds a whole-exam pack from stored plans at $0.
+- Hybrid solution-report: per question the question text and options, answer, status, doubt in words, accented steps, one heading per subject; also at solve time. Replaces the old `report.md` (no question text) and the one-off `solutions.md`.
+- Never miss a kind (AC10): `tools/check_report_pack.py` fails on an unregistered file and on a registered kind with no file; adding a kind = one registry entry.
+- DGNL 2026 pack: `reports/dgnl2026/` 30 files + INDEX.md from run-f; checker 58 checks 0 failed; 113 of 120 correct (same 7 items as before: 24, 38, 43, 63, 65, 66, 112). The old `reports/dgnl2026-crosscheck/` is marked superseded.
+- Tests: `test_report_kinds` 43; full suite 1690 run, only the 4 known pre-existing failures. QA caught and fixed 6 defects in the generated indexes (doubled counts, false "question text" claims for legacy files and their PDFs).
+- Open (low): benchmark output still writes a bare `report.md` (documented under "Not covered yet"); other exams keep old names until their reports are rebuilt (`report-index` labels them legacy); no paid call in this task.
+- Evidence: `work/TASK-085/evidence/` (untracked).

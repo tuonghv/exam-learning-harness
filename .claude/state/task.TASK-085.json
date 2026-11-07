@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-085",
   "title": "Standard report names + hybrid solution-report + report-kind registry + QA, regenerated DGNL 2026 pack at $0 (REQ-0092)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0092",
   "acceptance_criteria": [
     "AC1 engine writes standard names only",
@@ -54,11 +54,18 @@
       "work/TASK-085/handoff/verify2.md"
     ],
     "command": "python3 -I tools/check_report_pack.py reports/dgnl2026 ... --expect-correct 113; unit-full; verifier recount of 4 INDEX files",
-    "result": "pack 30 files + INDEX, 58 checks 0 failed, 113/120; verifier AC1-AC10 PASS and D1-D6 closed (D6 fixed after, rows grepped by main); full suite 1690 run, only the 4 known pre-existing failures"
+    "result": "pack 30 files + INDEX, 58 checks 0 failed, 113/120; verifier AC1-AC10 PASS and D1-D6 closed (D6 fixed after, rows grepped by main); full suite 1690 run, only the 4 known pre-existing failures",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-085/evidence/pack-check.txt"
+      ],
+      "reason": "pack recounted independently by the verifier and by tools/check_report_pack.py from result.json and the key"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-85-standard-report-names.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -67,7 +74,8 @@
     "designer": "work/TASK-085/handoff/design.md",
     "coder": "work/TASK-085/handoff/code.md",
     "tester": "work/TASK-085/handoff/test2.md",
-    "verifier": "work/TASK-085/handoff/verify2.md"
+    "verifier": "work/TASK-085/handoff/verify2.md",
+    "crosscheck": "work/TASK-085/handoff/verify2.md"
   },
   "user_notes": [
     {
@@ -82,7 +90,7 @@
     }
   ],
   "picked_at": "2026-11-07T13:46:44Z",
-  "updated_at": "2026-11-07T15:32:15Z",
+  "updated_at": "2026-11-07T15:32:28Z",
   "updated_by": "main",
   "scope": [
     "config/report_kinds.json",
@@ -103,5 +111,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "write docs/report/phase-85-standard-report-names.md, then DONE"
+  "next": ""
 }

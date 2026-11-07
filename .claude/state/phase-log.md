@@ -2449,3 +2449,9 @@ Action: Verifier QA recount, checker run, full suite
 Result: AC1-AC10 PASS, 1690 tests only known failures
 Decision: VERIFIED
 Next: DONE: report
+
+## DONE - TASK-085 - 2026-11-07T15:32:27Z
+Action: Report written
+Result: docs/report/phase-85-standard-report-names.md
+Decision: DONE
+Next: none
