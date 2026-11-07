@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-084",
-  "state": "DESIGN",
-  "next": "coder implements 84.1-84.4, tester 84.5 and tests",
+  "state": "IMPLEMENTING",
+  "next": "tester writes tests for 84.1-84.5 and runs the full suite",
   "title": "Solve cache follow-ups: already-solved shows paid run, guard rn.cache, cost range check, alias-pinned refine/boundary keys (REQ-0090)",
   "active": [
     {
       "task_id": "TASK-084",
-      "state": "DESIGN",
-      "next": "coder implements 84.1-84.4, tester 84.5 and tests",
-      "updated_at": "2026-11-07T07:03:42Z"
+      "state": "IMPLEMENTING",
+      "next": "tester writes tests for 84.1-84.5 and runs the full suite",
+      "updated_at": "2026-11-07T12:19:32Z"
     }
   ],
   "max_active": 1

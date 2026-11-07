@@ -6,6 +6,7 @@ Counts calls and cost, enforces the caps, logs one line per call. run() returns
 """
 import hashlib
 import json
+import math
 import os
 import re
 import sys
@@ -54,7 +55,8 @@ class Runner(object):
     def _hit(self, key):
         h = None if self.fresh else self.cache.get("solve", key)
         if (isinstance(h, dict) and isinstance(h.get("text"), str) and h["text"]
-                and isinstance(h.get("cost_usd"), (int, float)) and not isinstance(h["cost_usd"], bool)):
+                and isinstance(h.get("cost_usd"), (int, float)) and not isinstance(h["cost_usd"], bool)
+                and math.isfinite(h["cost_usd"]) and h["cost_usd"] >= 0):
             return h
         return None
 
@@ -426,7 +428,7 @@ def build_result(exam, exam_path, recs, cfg, rn, stopped):
                 "stopped": stopped[0] if stopped else None,
                 "prompt": prompts.prompt_info(),
                 **({"image_scope": cfg["image_scope"]} if cfg.get("image_scope", "flagged") != "flagged" else {}),
-                **({"cached": rn.hits, "cost_saved_usd": round(rn.saved, 6)} if rn.cache is not None else {})},
+                **({"cached": rn.hits, "cost_saved_usd": round(rn.saved, 6)} if getattr(rn, "cache", None) is not None else {})},
         "questions": qs,
         "summary": {"pass": sum(q["verification_status"] == "PASS" for q in qs),
                     "fail": sum(q["verification_status"] == "FAIL" for q in qs),

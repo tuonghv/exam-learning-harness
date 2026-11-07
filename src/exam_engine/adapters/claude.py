@@ -19,6 +19,11 @@ _TOKEN = re.compile(r"\b(?:sk-[A-Za-z0-9_-]{8,}|Bearer\s+\S+|[A-Za-z0-9_-]{32,})
 _FENCE = re.compile(r"```[A-Za-z]*[ \t]*\n?(.*?)```", re.S)
 
 
+def resolve(model, pins=None):
+    """84.4: map a pin alias (sonnet) to its full ID; anything else is returned unchanged."""
+    return (pins or {}).get(model, model)
+
+
 def pinned(model, pins=None):
     """(ok, hint) 83.2: a pinned model is a full `claude-...` ID with a digit, not `-latest`, not a pin alias."""
     pins = pins or {}

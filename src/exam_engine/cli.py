@@ -549,13 +549,19 @@ def ingest_main(argv):
         if args.boundary_ai == "haiku":
             from exam_engine.ingest import boundary, replycache
             ask = None
+            bmodel = "haiku"
             if args.real:
+                pins = settings.load_config("engine").get("model_pins")
+                bmodel = claude.resolve("haiku", pins)
+                if not claude.pinned(bmodel, pins)[0]:
+                    print("ERROR: boundary model '%s' is not pinned" % bmodel, file=sys.stderr)
+                    return 2
                 tmp = tempfile.mkdtemp(prefix="exam_boundary_")
-                ask = boundary.make_real_ask("haiku", settings.load_config("engine")["timeout"], tmp)
+                ask = boundary.make_real_ask(bmodel, settings.load_config("engine")["timeout"], tmp)
             elif args.mock:
                 ask = engine.mock_llm(args.mock)
             reviewer = boundary.Reviewer(
-                ask, "haiku", args.max_cost_usd,
+                ask, bmodel, args.max_cost_usd,
                 replycache.ReplyCache(args.cache if args.real else None), dry_run=args.dry_run,
                 keep_text=bool(args.boundary_trace), known=router.known_names())
             cfg["boundary"] = reviewer
@@ -714,6 +720,14 @@ def refine_main(argv):
     if a.max_cost_usd < 0 or a.timeout <= 0:
         print("usage: --max-cost-usd >= 0, --timeout > 0", file=sys.stderr)
         return 2
+    if a.real:
+        pins = settings.load_config("engine").get("model_pins")
+        a.model = claude.resolve(a.model, pins)
+        ok, hint = claude.pinned(a.model, pins)
+        if not ok:
+            print("ERROR: model '%s' is an alias; the refine cache needs a pinned ID: %s" % (a.model, hint),
+                  file=sys.stderr)
+            return 2
     a.files, a.file = a.file, a.file[0]
     exts = [os.path.splitext(f)[1].lower().lstrip(".") for f in a.files]
     if len(a.files) > 1 and not all(e in IMAGE_FORMATS for e in exts):

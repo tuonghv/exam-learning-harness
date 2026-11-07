@@ -179,8 +179,9 @@ def last_solved(root, exam_path):
         if not (isinstance(p, dict) and p.get("source") == "solve" and p.get("status") == "done"
                 and p.get("llm") == "claude-p" and (p.get("exam") or {}).get("sha256") == sha):
             continue
-        if best is None or str(p.get("finished_utc") or "") > str(best[1].get("finished_utc") or ""):
-            best = (name, p)
+        key = (bool(p.get("calls") or not p.get("cached")), str(p.get("finished_utc") or ""))
+        if best is None or key > best[2]:
+            best = (name, p, key)
     if best is None:
         return None
     p = best[1]

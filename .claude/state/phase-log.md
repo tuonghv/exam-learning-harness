@@ -2401,3 +2401,9 @@ Action: Design drafted; user chose best option AC4 (a)
 Result: docs/design/phase-84-solve-cache-followups.md
 Decision: DESIGN
 Next: IMPLEMENTING
+
+## IMPLEMENTING - TASK-084 - 2026-11-07T12:19:32Z
+Action: Coder implemented 84.1-84.4
+Result: work/TASK-084/handoff/code.md; test_solve_cache 15 OK
+Decision: IMPLEMENTING
+Next: UNIT_TESTED

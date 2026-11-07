@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-084",
   "title": "Solve cache follow-ups: already-solved shows paid run, guard rn.cache, cost range check, alias-pinned refine/boundary keys (REQ-0090)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0090",
   "acceptance_criteria": [
     "AC1 already-solved line shows the original paid run cost and calls",
@@ -18,8 +18,14 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/engine.py",
+      "src/exam_engine/cli.py",
+      "src/exam_engine/pipeline/planrun.py",
+      "src/exam_engine/adapters/claude.py"
+    ],
+    "summary": "last_solved reports original paid run; getattr guard on rn.cache; cached cost range check; claude.resolve maps aliases via model_pins for refine/ingest --real, unresolved refused"
   },
   "unit_test": {
     "status": "pending",
@@ -42,7 +48,8 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-084/handoff/design.md"
+    "designer": "work/TASK-084/handoff/design.md",
+    "coder": "work/TASK-084/handoff/code.md"
   },
   "user_notes": [
     {
@@ -57,14 +64,21 @@
     }
   ],
   "picked_at": "2026-11-07T06:57:08Z",
-  "updated_at": "2026-11-07T07:03:42Z",
+  "updated_at": "2026-11-07T12:19:32Z",
   "updated_by": "main",
-  "scope": [],
+  "scope": [
+    "src/exam_engine/engine.py",
+    "src/exam_engine/cli.py",
+    "src/exam_engine/pipeline/planrun.py",
+    "src/exam_engine/adapters/claude.py",
+    "tests/unit/test_solve_cache.py",
+    "tests/unit/test_cache_followups.py"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
     "done": [],
     "notes": ""
   },
-  "next": "coder implements 84.1-84.4, tester 84.5 and tests"
+  "next": "tester writes tests for 84.1-84.5 and runs the full suite"
 }
