@@ -1653,5 +1653,21 @@
         "at": "2026-11-07T13:47:53Z"
       }
     ]
+  },
+  {
+    "task_id": "TASK-086",
+    "title": "Every report .md has a .pdf: registry rule, writers, checker, pack rebuild (REQ-0093)",
+    "priority": 1,
+    "status": "queued",
+    "created_at": "2026-11-08T09:00:00",
+    "requirement": "REQ-0093",
+    "acceptance_criteria": [
+      "AC1 registry: every kind with md lists pdf",
+      "AC2 pack writes pdf beside every md",
+      "AC3 checker fails on md without pdf and pdf without md",
+      "AC4 INDEX lists pdfs",
+      "AC5 pack rebuilt at $0, counts md=pdf",
+      "AC6 no renderer = clear failure"
+    ]
   }
 ]
