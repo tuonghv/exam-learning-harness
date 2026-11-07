@@ -2353,3 +2353,9 @@ Action: Tester added NativeTable tests, ran full suite
 Result: 51 OK in file; 1613 total, 4 known failures
 Decision: UNIT_TESTED
 Next: VERIFIED
+
+## VERIFIED - TASK-082 - 2026-11-07T01:52:54Z
+Action: Real re-run of 64-67 and verifier pass
+Result: 4/4 answered, match recompute, 0.11 USD
+Decision: VERIFIED
+Next: DONE: report

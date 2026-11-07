@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-082",
-  "state": "UNIT_TESTED",
-  "next": "82.4 real re-run of printed 64-67 (cap 0.3 USD, main), then verifier",
+  "state": "VERIFIED",
+  "next": "write docs/report/phase-82-refine-keeps-table-cells.md, then DONE",
   "title": "Refine keeps data-table cell values so the solver does not decline (REQ-0088)",
   "active": [
     {
       "task_id": "TASK-082",
-      "state": "UNIT_TESTED",
-      "next": "82.4 real re-run of printed 64-67 (cap 0.3 USD, main), then verifier",
-      "updated_at": "2026-11-07T01:44:49Z"
+      "state": "VERIFIED",
+      "next": "write docs/report/phase-82-refine-keeps-table-cells.md, then DONE",
+      "updated_at": "2026-11-07T01:52:55Z"
     }
   ],
   "max_active": 1
