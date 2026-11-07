@@ -1,23 +1,23 @@
 {
   "task_id": "TASK-085",
   "title": "Standard report names + hybrid solution-report + report-kind registry + QA, regenerated DGNL 2026 pack at $0 (REQ-0092)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0092",
   "acceptance_criteria": [
-    "AC1 engine writes standard names only; no bare report.md/answers.md in new output",
+    "AC1 engine writes standard names only",
     "AC2 INDEX.md per exam folder with kind, description, counts",
-    "AC3 registry docs/guide/report-kinds.md used by report_build/scorer",
+    "AC3 registry config/report_kinds.json + docs/guide/report-kinds.md, single source",
     "AC4 readers accept old and new names",
-    "AC5 test fails on a non-standard name",
-    "AC6 format change announced old->new",
-    "AC7 hybrid solution-report: question+options, status, doubt in words, accented steps, subject headings",
+    "AC5 test fails on non-standard name",
+    "AC7 hybrid solution-report",
     "AC8 QA recount of the pack against the registry",
-    "AC9 DGNL 2026 pack regenerated from stored run, $0"
+    "AC9 DGNL 2026 pack regenerated at $0",
+    "AC10 unregistered file or missed registered kind fails the check"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-85-standard-report-names.md",
+    "summary": "config/report_kinds.json registry + report_kinds.py (name/parse/find/classify/write_index); writers emit standard names, readers accept legacy; INDEX.md per folder; hybrid solution-report from plan input/exam.md; report_pack regenerates reports/dgnl2026/ at $0; tools/check_report_pack.py QA incl. unregistered and missed kinds",
     "reuse": [],
     "risks": []
   },
@@ -45,7 +45,9 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-085/handoff/design.md"
+  },
   "user_notes": [
     {
       "raw": "RAW-00258",
@@ -59,8 +61,8 @@
     }
   ],
   "picked_at": "2026-11-07T13:46:44Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-07T14:22:59Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -68,5 +70,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder implements 85.1-85.5 (registry, writers, INDEX, hybrid, pack); tester 85.6 checker + tests"
 }

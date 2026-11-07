@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0092",
-  "next": "answer Q1/Q2 then DESIGN",
-  "updated": "2026-11-07 20:35"
+  "next": "coder implements 85.1-85.5 (registry, writers, INDEX, hybrid, pack); tester 85.6 checker + tests",
+  "updated": "2026-11-07 21:22"
 }

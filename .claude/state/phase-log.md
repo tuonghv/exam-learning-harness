@@ -2425,3 +2425,9 @@ Action: Report written
 Result: docs/report/phase-84-solve-cache-followups.md
 Decision: DONE
 Next: none
+
+## DESIGN - TASK-085 - 2026-11-07T14:22:59Z
+Action: Design drafted; user accepted all decisions
+Result: docs/design/phase-85-standard-report-names.md
+Decision: DESIGN
+Next: IMPLEMENTING

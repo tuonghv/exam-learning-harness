@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-085",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "coder implements 85.1-85.5 (registry, writers, INDEX, hybrid, pack); tester 85.6 checker + tests",
   "title": "Standard report names + hybrid solution-report + report-kind registry + QA, regenerated DGNL 2026 pack at $0 (REQ-0092)",
   "active": [
     {
       "task_id": "TASK-085",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "coder implements 85.1-85.5 (registry, writers, INDEX, hybrid, pack); tester 85.6 checker + tests",
+      "updated_at": "2026-11-07T14:22:59Z"
     }
   ],
   "max_active": 1
