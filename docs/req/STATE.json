@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0086",
-  "next": "TASK-081 design from designer handoff, then advance to DESIGN",
-  "updated": "2026-11-07 07:48"
+  "next": "unit gate (no code change), then verify: crosscheck answers.tsv vs source pages",
+  "updated": "2026-11-07 08:19"
 }

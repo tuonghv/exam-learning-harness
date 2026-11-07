@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-081",
-  "state": "DESIGN",
-  "next": "81.1 free ingest + cost estimate, then slice 81.2 (coder/main run, paid steps by main only)",
+  "state": "IMPLEMENTING",
+  "next": "unit gate (no code change), then verify: crosscheck answers.tsv vs source pages",
   "title": "Solve De-thi-mau-DHQG-HCM-2024.pdf end to end with the current engine, cap 5 USD (REQ-0086)",
   "active": [
     {
       "task_id": "TASK-081",
-      "state": "DESIGN",
-      "next": "81.1 free ingest + cost estimate, then slice 81.2 (coder/main run, paid steps by main only)",
-      "updated_at": "2026-11-07T00:50:00Z"
+      "state": "IMPLEMENTING",
+      "next": "unit gate (no code change), then verify: crosscheck answers.tsv vs source pages",
+      "updated_at": "2026-11-07T01:19:59Z"
     }
   ],
   "max_active": 1

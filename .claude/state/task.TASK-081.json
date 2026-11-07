@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-081",
   "title": "Solve De-thi-mau-DHQG-HCM-2024.pdf end to end with the current engine, cap 5 USD (REQ-0086)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0086",
   "acceptance_criteria": [
     "AC1 free ingest and cost estimate recorded, total <= 5 USD",
@@ -16,8 +16,11 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "docs/design/phase-81-dhqg2024-solve.md"
+    ],
+    "summary": "Run-only: free estimate (3.4 USD), refine pp1-16 (0.67 USD, 120 q), 4 section solves (1.44 USD), answers.tsv, diff-prior.tsv, learn-view md+pdf reports in reports/dhqg2024-t81; real layout is 16 pages, Vi 1-20, En 21-40, Math 41-70, Science 71-120"
   },
   "unit_test": {
     "status": "pending",
@@ -40,11 +43,14 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-081/handoff/design.md"
+    "designer": "work/TASK-081/handoff/design.md",
+    "coder": {
+      "waiver": "run-only task; paid steps are main-only and the guard refuses coder writes to plans/; coder did the free ingest+estimate (code.md)"
+    }
   },
   "user_notes": [],
   "picked_at": "2026-11-07T00:47:57Z",
-  "updated_at": "2026-11-07T00:50:00Z",
+  "updated_at": "2026-11-07T01:19:59Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -53,5 +59,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "81.1 free ingest + cost estimate, then slice 81.2 (coder/main run, paid steps by main only)"
+  "next": "unit gate (no code change), then verify: crosscheck answers.tsv vs source pages"
 }
