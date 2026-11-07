@@ -2359,3 +2359,9 @@ Action: Real re-run of 64-67 and verifier pass
 Result: 4/4 answered, match recompute, 0.11 USD
 Decision: VERIFIED
 Next: DONE: report
+
+## DONE - TASK-082 - 2026-11-07T01:52:55Z
+Action: Report written
+Result: docs/report/phase-82-refine-keeps-table-cells.md
+Decision: DONE
+Next: none

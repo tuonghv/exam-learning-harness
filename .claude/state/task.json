@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-082",
-  "state": "VERIFIED",
-  "next": "write docs/report/phase-82-refine-keeps-table-cells.md, then DONE",
+  "state": "DONE",
+  "next": "",
   "title": "Refine keeps data-table cell values so the solver does not decline (REQ-0088)",
-  "active": [
-    {
-      "task_id": "TASK-082",
-      "state": "VERIFIED",
-      "next": "write docs/report/phase-82-refine-keeps-table-cells.md, then DONE",
-      "updated_at": "2026-11-07T01:52:55Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

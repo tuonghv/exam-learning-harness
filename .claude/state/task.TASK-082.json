@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-082",
   "title": "Refine keeps data-table cell values so the solver does not decline (REQ-0088)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0088",
   "acceptance_criteria": [
     "AC1 refine keeps table cell values in the question context (mock-tested)",
@@ -41,11 +41,18 @@
       "work/TASK-082/handoff/verify.md"
     ],
     "command": "python3 -I scripts/exam.py ingest-refine ... --pages 8 --real; solve of printed 64-67; unit-full",
-    "result": "refine page 8 now keeps the bus-fare table cells; printed 64-67 answered D,A,D,B (match independent recompute from pdf text), none declined; cost 0.1133 of 0.3 USD; unit suite 1613 run, only the 4 known pre-existing failures"
+    "result": "refine page 8 now keeps the bus-fare table cells; printed 64-67 answered D,A,D,B (match independent recompute from pdf text), none declined; cost 0.1133 of 0.3 USD; unit suite 1613 run, only the 4 known pre-existing failures",
+    "quality": {
+      "kind": "real-run",
+      "evidence": [
+        "work/TASK-082/evidence/rerun-64-67.txt"
+      ],
+      "reason": "real re-run of printed 64-67 compared with an independent recompute from the PDF text"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-82-refine-keeps-table-cells.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -54,7 +61,8 @@
     "designer": "work/TASK-082/handoff/design.md",
     "coder": "work/TASK-082/handoff/code.md",
     "tester": "work/TASK-082/handoff/test.md",
-    "verifier": "work/TASK-082/handoff/verify.md"
+    "verifier": "work/TASK-082/handoff/verify.md",
+    "crosscheck": "work/TASK-082/handoff/verify.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-07T01:29:20Z",
@@ -71,5 +79,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "write docs/report/phase-82-refine-keeps-table-cells.md, then DONE"
+  "next": ""
 }

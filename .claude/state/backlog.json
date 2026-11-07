@@ -1557,13 +1557,15 @@
     "task_id": "TASK-082",
     "title": "Refine keeps data-table cell values so the solver does not decline (REQ-0088)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-07T07:00:00",
     "requirement": "REQ-0088",
     "acceptance_criteria": [
       "AC1 refine keeps table cell values in the question context (mock-tested)",
       "AC2 unit test for the table path, no new unit failure",
       "AC3 real re-run of printed 64-67 only, cap 0.3 USD, answers instead of declines"
-    ]
+    ],
+    "completed_at": "2026-11-07T01:52:55Z",
+    "report": "docs/report/phase-82-refine-keeps-table-cells.md"
   }
 ]
