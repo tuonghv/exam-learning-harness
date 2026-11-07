@@ -1582,7 +1582,7 @@
       "AC4 cache per exam file, reuses replycache.py, eval keys excluded",
       "AC5 proof on a small exam (few questions), paid cap small"
     ],
-    "completed_at": "2026-11-07T06:18:39Z",
+    "completed_at": "2026-11-07T06:18:43Z",
     "report": "docs/report/phase-83-solve-cache.md",
     "user_notes": [
       {
