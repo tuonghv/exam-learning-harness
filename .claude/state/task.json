@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-084",
-  "state": "UNIT_TESTED",
-  "next": "verifier checks AC1-AC5; small real proof of AC1 (cached re-run then already-solved line) by main with tiny cap",
+  "state": "VERIFIED",
+  "next": "write docs/report/phase-84-solve-cache-followups.md, then DONE",
   "title": "Solve cache follow-ups: already-solved shows paid run, guard rn.cache, cost range check, alias-pinned refine/boundary keys (REQ-0090)",
   "active": [
     {
       "task_id": "TASK-084",
-      "state": "UNIT_TESTED",
-      "next": "verifier checks AC1-AC5; small real proof of AC1 (cached re-run then already-solved line) by main with tiny cap",
-      "updated_at": "2026-11-07T12:28:19Z"
+      "state": "VERIFIED",
+      "next": "write docs/report/phase-84-solve-cache-followups.md, then DONE",
+      "updated_at": "2026-11-07T12:29:38Z"
     }
   ],
   "max_active": 1

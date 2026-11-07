@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0090",
-  "next": "verifier checks AC1-AC5; small real proof of AC1 (cached re-run then already-solved line) by main with tiny cap",
-  "updated": "2026-11-07 19:28"
+  "next": "write docs/report/phase-84-solve-cache-followups.md, then DONE",
+  "updated": "2026-11-07 19:29"
 }

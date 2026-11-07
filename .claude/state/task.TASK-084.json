@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-084",
   "title": "Solve cache follow-ups: already-solved shows paid run, guard rn.cache, cost range check, alias-pinned refine/boundary keys (REQ-0090)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0090",
   "acceptance_criteria": [
     "AC1 already-solved line shows the original paid run cost and calls",
@@ -33,12 +33,19 @@
     "result": "test_cache_followups 19 OK, test_solve_cache 15 OK; full suite 1647 run, only the 4 known pre-existing failures; main bite check: removing the cost range check in engine._hit makes 4 tests fail"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "alias handling and cache shape checks only; no shell, no key leakage; unresolved alias refused before any call"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-084/evidence/real-proof.txt",
+      "work/TASK-084/evidence/full.txt",
+      "work/TASK-084/evidence/unit.txt",
+      "work/TASK-084/handoff/verify.md"
+    ],
+    "command": "python3 -I scripts/exam.py solve cacheproof-en.md --real (already-solved line, free); unit-full; verifier recompute vs paid result.json",
+    "result": "AC1 line shows cost 0.046096 calls 3 = paid run; AC1-AC5 PASS by verifier; full suite 1647 run, only the 4 pre-existing failures; bite check on cost range check fails 4 tests"
   },
   "report": {
     "status": "pending",
@@ -50,7 +57,8 @@
   "roles": {
     "designer": "work/TASK-084/handoff/design.md",
     "coder": "work/TASK-084/handoff/code.md",
-    "tester": "work/TASK-084/handoff/test.md"
+    "tester": "work/TASK-084/handoff/test.md",
+    "verifier": "work/TASK-084/handoff/verify.md"
   },
   "user_notes": [
     {
@@ -65,7 +73,7 @@
     }
   ],
   "picked_at": "2026-11-07T06:57:08Z",
-  "updated_at": "2026-11-07T12:28:19Z",
+  "updated_at": "2026-11-07T12:29:38Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/engine.py",
@@ -81,5 +89,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verifier checks AC1-AC5; small real proof of AC1 (cached re-run then already-solved line) by main with tiny cap"
+  "next": "write docs/report/phase-84-solve-cache-followups.md, then DONE"
 }
