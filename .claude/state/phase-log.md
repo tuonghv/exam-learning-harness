@@ -2455,3 +2455,9 @@ Action: Report written
 Result: docs/report/phase-85-standard-report-names.md
 Decision: DONE
 Next: none
+
+## DESIGN - TASK-086 - 2026-11-07T22:09:47Z
+Action: Design drafted; best picks A/A
+Result: docs/design/phase-86-md-needs-pdf.md
+Decision: DESIGN
+Next: IMPLEMENTING

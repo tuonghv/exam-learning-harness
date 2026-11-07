@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-086",
   "title": "Every report .md has a .pdf: registry rule, writers, checker, pack rebuild (REQ-0093)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0093",
   "acceptance_criteria": [
     "AC1 registry: every kind with md lists pdf",
@@ -12,9 +12,9 @@
     "AC6 no renderer = clear failure"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-86-md-needs-pdf.md",
+    "summary": "registry pdf_with_md flag + ext lists (answer-sheet, score-summary gain pdf); build_pack renders pdf beside every md via md_to_pdf, missing renderer is a clear failure; checker fails on md without pdf and pdf without md; INDEX lists pdfs; legacy folders untouched; rebuild reports/dgnl2026 to 35 files, md 10 = pdf 10",
     "reuse": [],
     "risks": []
   },
@@ -42,7 +42,9 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-086/handoff/design.md"
+  },
   "user_notes": [
     {
       "raw": "RAW-00263",
@@ -51,8 +53,8 @@
     }
   ],
   "picked_at": "2026-11-07T22:08:14Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-07T22:09:47Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -60,5 +62,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder implements 86.1-86.6; tester updates fixtures and adds tests; rebuild pack"
 }

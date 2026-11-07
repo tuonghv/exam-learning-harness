@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0093",
-  "next": "TASK-086 design",
-  "updated": "2026-11-08 05:08"
+  "next": "coder implements 86.1-86.6; tester updates fixtures and adds tests; rebuild pack",
+  "updated": "2026-11-08 05:09"
 }
