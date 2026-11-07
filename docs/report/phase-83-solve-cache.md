@@ -1,0 +1,7 @@
+# Phase 83 report - per-exam solve cache (REQ-0089)
+
+- Result: `--real` solves now go through a per-exam reply cache (`plans/<exam-id>/cache/`, reusing `ingest/replycache.py`). Key = sha256 of namespace + pinned model ID + prompt sha256 + image shas; eval keys never enter it. Unpinned aliases (`sonnet`) are refused for `--real` with the full ID named (`model_pins` in `config/engine.json`). Solving an already solved exam prints when/model/cost and refuses without a terminal unless `--yes` (use the cache) or `--fresh` (force paid). Mock runs are untouched.
+- Real proof (1-question English exam, claude-sonnet-5-5): run 1 = 3 calls, $0.0461; run 2 with `--yes` = 0 calls, 3 hits, saved $0.0461, questions identical; run 3 without a flag refused (rc 2); alias refused (rc 2). Independent sha256 recompute matches the cache entry filename. Total paid $0.046.
+- Tests: 15 new in `tests/unit/test_solve_cache.py`; three existing tests adjusted for the pinned-model rule. Full suite 1628 run, only the 4 known pre-existing failures.
+- Open (low): DEF-B `engine.build_result` reads `rn.cache` unguarded; DEF-C the "already solved" line shows the newest (cached) run's $0 instead of the original paid cost; DEF-D cache `cost_usd` not range-checked; metrics `cache:` assertion is weak; refine/boundary caches still key on aliases; AC2 miss behaviour verified by unit tests only. The cache is per exam, so identical questions in two exams are paid twice (user choice, RAW-00243).
+- Evidence: `work/TASK-083/evidence/` (real-proof, full-suite, unit; untracked).

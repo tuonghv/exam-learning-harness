@@ -1572,7 +1572,7 @@
     "task_id": "TASK-083",
     "title": "Per-exam solve cache keyed by pinned model ID + prompt hash + data hash, already-solved confirm (REQ-0089)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-07T10:30:00",
     "requirement": "REQ-0089",
     "acceptance_criteria": [
@@ -1581,6 +1581,15 @@
       "AC3 already-solved exam asks confirm or needs --fresh; no TTY refuses",
       "AC4 cache per exam file, reuses replycache.py, eval keys excluded",
       "AC5 proof on a small exam (few questions), paid cap small"
+    ],
+    "completed_at": "2026-11-07T06:18:39Z",
+    "report": "docs/report/phase-83-solve-cache.md",
+    "user_notes": [
+      {
+        "raw": "RAW-00243",
+        "note": "cache per exam file, not shared; small exam proof first (RAW-00242)",
+        "at": "2026-11-07T03:15:03Z"
+      }
     ]
   }
 ]

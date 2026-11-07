@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-083",
   "title": "Per-exam solve cache keyed by pinned model ID + prompt hash + data hash, already-solved confirm (REQ-0089)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0089",
   "acceptance_criteria": [
     "AC1 mock: 2nd run 0 calls, cached in trace; model/prompt/data change misses",
@@ -48,11 +48,18 @@
       "work/TASK-083/handoff/verify.md"
     ],
     "command": "python3 -I scripts/exam.py solve cacheproof-en.md --real --model claude-sonnet-5-5 (run1, run2 --yes, run3 refused, alias refused); unit-full; sha256 key recompute",
-    "result": "run1 3 calls $0.0461; run2 0 calls, 3 hits, saved $0.0461, questions identical; run3 refused rc=2; alias rejected rc=2; cache entry filename matches independent sha256 recompute; full suite 1628 run, only the 4 pre-existing failures; verifier AC1-AC8 PASS (AC2/AC5 on unit tests)"
+    "result": "run1 3 calls $0.0461; run2 0 calls, 3 hits, saved $0.0461, questions identical; run3 refused rc=2; alias rejected rc=2; cache entry filename matches independent sha256 recompute; full suite 1628 run, only the 4 pre-existing failures; verifier AC1-AC8 PASS (AC2/AC5 on unit tests)",
+    "quality": {
+      "kind": "real-run",
+      "evidence": [
+        "work/TASK-083/evidence/real-proof.txt"
+      ],
+      "reason": "real paid 1-question run twice plus refusal checks; cache key recomputed independently with sha256"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-83-solve-cache.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -61,7 +68,8 @@
     "designer": "work/TASK-083/handoff/design.md",
     "coder": "work/TASK-083/handoff/code.md",
     "tester": "work/TASK-083/handoff/test.md",
-    "verifier": "work/TASK-083/handoff/verify.md"
+    "verifier": "work/TASK-083/handoff/verify.md",
+    "crosscheck": "work/TASK-083/handoff/verify.md"
   },
   "user_notes": [
     {
@@ -71,7 +79,7 @@
     }
   ],
   "picked_at": "2026-11-07T03:15:00Z",
-  "updated_at": "2026-11-07T06:17:26Z",
+  "updated_at": "2026-11-07T06:18:39Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/engine.py",
@@ -93,5 +101,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "write docs/report/phase-83-solve-cache.md, then DONE; log DEF-B/C/D as follow-up"
+  "next": ""
 }

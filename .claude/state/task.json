@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-083",
-  "state": "VERIFIED",
-  "next": "write docs/report/phase-83-solve-cache.md, then DONE; log DEF-B/C/D as follow-up",
+  "state": "DONE",
+  "next": "",
   "title": "Per-exam solve cache keyed by pinned model ID + prompt hash + data hash, already-solved confirm (REQ-0089)",
-  "active": [
-    {
-      "task_id": "TASK-083",
-      "state": "VERIFIED",
-      "next": "write docs/report/phase-83-solve-cache.md, then DONE; log DEF-B/C/D as follow-up",
-      "updated_at": "2026-11-07T06:17:26Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
