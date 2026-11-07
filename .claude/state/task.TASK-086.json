@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-086",
   "title": "Every report .md has a .pdf: registry rule, writers, checker, pack rebuild (REQ-0093)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0093",
   "acceptance_criteria": [
     "AC1 registry: every kind with md lists pdf",
@@ -45,11 +45,18 @@
       "work/TASK-086/handoff/verify.md"
     ],
     "command": "python3 -I tools/check_report_pack.py reports/dgnl2026 ... --expect-correct 113; unit-full; verifier recount; pdftotext on solution-report and answer-sheet pdfs",
-    "result": "pack 10 md + 10 pdf (+INDEX.md), no orphan either way; checker 62 checks 0 failed, 113/120; legacy folders untouched (newest file dates before this task); full suite 1701 run, only the 4 known pre-existing failures; verifier AC1-AC6 PASS"
+    "result": "pack 10 md + 10 pdf (+INDEX.md), no orphan either way; checker 62 checks 0 failed, 113/120; legacy folders untouched (newest file dates before this task); full suite 1701 run, only the 4 known pre-existing failures; verifier AC1-AC6 PASS",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-086/evidence/pack-check.txt"
+      ],
+      "reason": "pack recounted independently by the verifier and by the checker; pdf content read with pdftotext"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-86-md-needs-pdf.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -58,7 +65,8 @@
     "designer": "work/TASK-086/handoff/design.md",
     "coder": "work/TASK-086/handoff/code.md",
     "tester": "work/TASK-086/handoff/test.md",
-    "verifier": "work/TASK-086/handoff/verify.md"
+    "verifier": "work/TASK-086/handoff/verify.md",
+    "crosscheck": "work/TASK-086/handoff/verify.md"
   },
   "user_notes": [
     {
@@ -68,7 +76,7 @@
     }
   ],
   "picked_at": "2026-11-07T22:08:14Z",
-  "updated_at": "2026-11-07T22:26:27Z",
+  "updated_at": "2026-11-07T22:26:37Z",
   "updated_by": "main",
   "scope": [
     "config/report_kinds.json",
@@ -83,5 +91,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "write docs/report/phase-86-md-needs-pdf.md, then DONE"
+  "next": ""
 }

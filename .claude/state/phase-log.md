@@ -2479,3 +2479,9 @@ Action: Verifier recount plus main checker, legacy and pdftotext checks
 Result: AC1-AC6 PASS, md 10 = pdf 10
 Decision: VERIFIED
 Next: DONE: report
+
+## DONE - TASK-086 - 2026-11-07T22:26:36Z
+Action: Report written
+Result: docs/report/phase-86-md-needs-pdf.md
+Decision: DONE
+Next: none

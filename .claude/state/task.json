@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-086",
-  "state": "VERIFIED",
-  "next": "write docs/report/phase-86-md-needs-pdf.md, then DONE",
+  "state": "DONE",
+  "next": "",
   "title": "Every report .md has a .pdf: registry rule, writers, checker, pack rebuild (REQ-0093)",
-  "active": [
-    {
-      "task_id": "TASK-086",
-      "state": "VERIFIED",
-      "next": "write docs/report/phase-86-md-needs-pdf.md, then DONE",
-      "updated_at": "2026-11-07T22:26:27Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
