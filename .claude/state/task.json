@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-086",
-  "state": "UNIT_TESTED",
-  "next": "verifier recount of reports/dgnl2026 (md = pdf, checker, INDEX) and the AC1-AC6 audit",
+  "state": "VERIFIED",
+  "next": "write docs/report/phase-86-md-needs-pdf.md, then DONE",
   "title": "Every report .md has a .pdf: registry rule, writers, checker, pack rebuild (REQ-0093)",
   "active": [
     {
       "task_id": "TASK-086",
-      "state": "UNIT_TESTED",
-      "next": "verifier recount of reports/dgnl2026 (md = pdf, checker, INDEX) and the AC1-AC6 audit",
-      "updated_at": "2026-11-07T22:25:11Z"
+      "state": "VERIFIED",
+      "next": "write docs/report/phase-86-md-needs-pdf.md, then DONE",
+      "updated_at": "2026-11-07T22:26:27Z"
     }
   ],
   "max_active": 1

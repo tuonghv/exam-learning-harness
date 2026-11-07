@@ -2473,3 +2473,9 @@ Action: Tester fixed 2 fixtures, added 11 tests, full suite
 Result: 1701 run, 4 pre-existing failures
 Decision: UNIT_TESTED
 Next: VERIFIED
+
+## VERIFIED - TASK-086 - 2026-11-07T22:26:27Z
+Action: Verifier recount plus main checker, legacy and pdftotext checks
+Result: AC1-AC6 PASS, md 10 = pdf 10
+Decision: VERIFIED
+Next: DONE: report
