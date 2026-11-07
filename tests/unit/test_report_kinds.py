@@ -433,5 +433,80 @@ class Packed(unittest.TestCase):
         self.assertNotRegex(src, r"(?m)^\s*(import|from)\s+exam_engine")
 
 
+class LegacyCounts(unittest.TestCase):
+    """85.3 rounds 3-4: legacy count_of / with_text / INDEX description."""
+
+    def setUp(self):
+        self.d = tempfile.mkdtemp(prefix="rk_leg_")
+        self.addCleanup(shutil.rmtree, self.d, True)
+
+    def put(self, rel, text):
+        p = os.path.join(self.d, rel)
+        os.makedirs(os.path.dirname(p), exist_ok=True)
+        with open(p, "w", encoding="utf-8") as fh:
+            fh.write(text)
+        return p
+
+    @staticmethod
+    def legacy_text(n):
+        return "".join("### Question %d\n\nStem %d\n\n**Đáp án: A**\n\n## Question %d\nraw explanation A. x ... B. y ... C. z\n\n"
+                       % (i, i, i) for i in range(1, n + 1))
+
+    def row(self, rel):
+        with open(rk.write_index(self.d), encoding="utf-8") as fh:
+            return next(ln for ln in fh if ln.startswith("| " + rel))
+
+    def test_85_3_count_of_counts_one_heading_style(self):
+        p = self.put("ALL-120/report.md", self.legacy_text(120))
+        self.assertEqual(rk.count_of(p, "solution-report"), (120, 0))
+
+    def test_85_3_count_of_falls_back_to_h2(self):
+        p = self.put("X/report.md", "## Question 1\nx\n## Question 2\ny\n")
+        self.assertEqual(rk.count_of(p, "solution-report")[0], 2)
+
+    def test_85_3_with_text_ignores_one_line_options(self):
+        p = self.put("X/report.md", "### Question 1\n\nStem\n\nA. x ... B. y ... C. z\n\n**Đáp án: A**\n")
+        self.assertEqual(rk.count_of(p, "solution-report"), (1, 0))
+
+    def test_85_3_with_text_hybrid_block(self):
+        one = "### Question %d\n\nStem\n\nA. a\nB. b\nC. c\nD. d\n\n**Đáp án: A**\n\n"
+        p = self.put("X/report.md", one % 1 + one % 2)
+        self.assertEqual(rk.count_of(p, "solution-report"), (2, 2))
+
+    def test_85_3_roman_numerals_are_not_options(self):
+        p = self.put("X/report.md", "### Question 1\n\nStem\nI. one\nII. two\nIII. three\n\n**Đáp án: A**\n")
+        self.assertEqual(rk.count_of(p, "solution-report"), (1, 0))
+
+    def test_85_3_block_without_stem_or_answer_is_not_text(self):
+        self.assertFalse(rk._has_text("\nA. a\nB. b\n**Đáp án: A**\n"))
+        self.assertFalse(rk._has_text("\nStem\nA. a\nB. b\n"))
+
+    def test_85_3_index_legacy_no_text_description(self):
+        self.put("ALL-120/report.md", self.legacy_text(120))
+        row = self.row("ALL-120/report.md")
+        self.assertIn("| legacy |", row)
+        self.assertIn("120 (with_text 0/120)", row)
+        self.assertIn("no question text", row)
+        self.assertNotIn("hybrid full report", row)
+
+    def test_85_3_index_legacy_with_options_description(self):
+        self.put("ALL-120/report.md", "### Question 1\n\nStem\n\nA. a\nB. b\n\n**Đáp án: A**\n\n"
+                 "### Question 2\n\nStem\n**Đáp án: A**\n")
+        row = self.row("ALL-120/report.md")
+        self.assertIn("2 (with_text 1/2)", row)
+        self.assertIn("question text for 1 of 2", row)
+        self.assertNotIn("hybrid full report", row)
+
+    def test_85_3_real_dhqg2024_t81_index(self):
+        real = os.path.join(ROOT, "reports", "dhqg2024-t81")
+        if not os.path.isfile(os.path.join(real, "ALL-120", "report.md")):
+            self.skipTest("reports/dhqg2024-t81 absent")
+        dst = os.path.join(self.d, "dhqg2024-t81")
+        shutil.copytree(real, dst)
+        with open(rk.write_index(dst), encoding="utf-8") as fh:
+            row = next(ln for ln in fh if ln.startswith("| ALL-120/report.md"))
+        self.assertIn("120 (with_text 0/120)", row)
+
+
 if __name__ == "__main__":
     unittest.main()

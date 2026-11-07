@@ -141,11 +141,6 @@ def _read(path):
         return None
 
 
-def _no_text_lines():
-    from exam_engine.pipeline import reporter
-    return {v["no_text"] for v in reporter.LABELS.values()}
-
-
 def count_of(path, kind):
     """(count, with_text) for the INDEX: questions of an md report/sheet, rows of a tsv; (None, None) otherwise."""
     how = load()["kinds"].get(kind, {}).get("count", "none")
@@ -158,9 +153,31 @@ def count_of(path, kind):
     if kind == "answer-sheet":
         m = re.search(r"(\d+) Questions", text)
         return (int(m.group(1)) if m else None), None
-    n = len(re.findall(r"^#{2,3} \S+ \d+\s*$", text, re.M))
-    miss = sum(1 for ln in text.splitlines() if ln.strip() in _no_text_lines())
-    return n, n - miss
+    # one heading style only: legacy files repeat "## Question N" inside the raw explanation
+    head = r"^### \S+ \d+\s*$"
+    if not re.search(head, text, re.M):
+        head = r"^## \S+ \d+\s*$"
+    blocks = re.split(head, text, flags=re.M)[1:]
+    return len(blocks), sum(1 for b in blocks if _has_text(b))
+
+
+def _has_text(block):
+    """True when a stem and >= 2 consecutive own-line options with distinct letters precede the answer line."""
+    lines = block.splitlines()
+    ans = next((i for i, ln in enumerate(lines) if re.match(r"\s*(\*\*|- )?Đáp án", ln)), None)
+    if ans is None:
+        return False
+    first = None
+    run = []
+    for i, ln in enumerate(lines[:ans]):
+        m = re.match(r"([A-Z])\.\s", ln)
+        if m and ((not run and m.group(1) == "A") or (run and ord(m.group(1)) == ord(run[-1]) + 1)):
+            if not run:
+                first = i
+            run.append(m.group(1))
+        elif run:
+            break
+    return len(run) >= 2 and any(ln.strip() for ln in lines[:first])
 
 
 def write_index(folder):
@@ -187,6 +204,9 @@ def write_index(folder):
             per_kind[kind] = per_kind.get(kind, 0) + 1
         if status == "superseded":
             desc = superseded_note(rel, root_name)
+        elif status == "legacy" and wt is not None:
+            desc = ("old format (before TASK-085): no question text, raw explanation; kept for history" if not wt
+                    else "old format (before TASK-085): question text for %d of %d questions; kept for history" % (wt, cnt))
         else:
             desc = kinds[kind]["description"] if kind else "not in config/report_kinds.json"
         c = "-" if cnt is None else (str(cnt) if wt is None else "%d (with_text %d/%d)" % (cnt, wt, cnt))

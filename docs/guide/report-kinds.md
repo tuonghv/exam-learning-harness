@@ -34,3 +34,7 @@ File name: `<exam>_<subject>_<kind>_<run>.<ext>`
 - `exam report-pack PLAN... --out DIR --exam N --run R [--key FILE] [--no-pdf]`: whole-exam pack + `INDEX.md`, $0.
 - `exam report-index DIR...`: (re)write `INDEX.md` of existing folders.
 - `python3 -I tools/check_report_pack.py PACK PLAN... [--key FILE] [--expect-correct N]`: independent recount; fails on an unregistered file or a registered kind with no file.
+
+## Not covered yet
+
+- Benchmark output: `pipeline/benchmark.py` writes a bare `report.md` (+ `summary.json`) into its out dir. It is a cost/benchmark summary, not an exam report; it keeps the old name and is outside REQ-0092 / TASK-085.
