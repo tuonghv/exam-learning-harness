@@ -2419,3 +2419,9 @@ Action: Free real check and verifier pass
 Result: AC1-AC5 PASS
 Decision: VERIFIED
 Next: DONE: report
+
+## DONE - TASK-084 - 2026-11-07T12:29:38Z
+Action: Report written
+Result: docs/report/phase-84-solve-cache-followups.md
+Decision: DONE
+Next: none

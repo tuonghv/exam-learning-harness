@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-084",
   "title": "Solve cache follow-ups: already-solved shows paid run, guard rn.cache, cost range check, alias-pinned refine/boundary keys (REQ-0090)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0090",
   "acceptance_criteria": [
     "AC1 already-solved line shows the original paid run cost and calls",
@@ -45,11 +45,18 @@
       "work/TASK-084/handoff/verify.md"
     ],
     "command": "python3 -I scripts/exam.py solve cacheproof-en.md --real (already-solved line, free); unit-full; verifier recompute vs paid result.json",
-    "result": "AC1 line shows cost 0.046096 calls 3 = paid run; AC1-AC5 PASS by verifier; full suite 1647 run, only the 4 pre-existing failures; bite check on cost range check fails 4 tests"
+    "result": "AC1 line shows cost 0.046096 calls 3 = paid run; AC1-AC5 PASS by verifier; full suite 1647 run, only the 4 pre-existing failures; bite check on cost range check fails 4 tests",
+    "quality": {
+      "kind": "real-run",
+      "evidence": [
+        "work/TASK-084/evidence/real-proof.txt"
+      ],
+      "reason": "already-solved line checked on a real earlier paid run and compared with its result.json"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-84-solve-cache-followups.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -58,7 +65,8 @@
     "designer": "work/TASK-084/handoff/design.md",
     "coder": "work/TASK-084/handoff/code.md",
     "tester": "work/TASK-084/handoff/test.md",
-    "verifier": "work/TASK-084/handoff/verify.md"
+    "verifier": "work/TASK-084/handoff/verify.md",
+    "crosscheck": "work/TASK-084/handoff/verify.md"
   },
   "user_notes": [
     {
@@ -89,5 +97,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "write docs/report/phase-84-solve-cache-followups.md, then DONE"
+  "next": ""
 }

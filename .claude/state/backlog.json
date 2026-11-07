@@ -1596,7 +1596,7 @@
     "task_id": "TASK-084",
     "title": "Solve cache follow-ups: already-solved shows paid run, guard rn.cache, cost range check, alias-pinned refine/boundary keys (REQ-0090)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-07T11:30:00",
     "requirement": "REQ-0090",
     "acceptance_criteria": [
@@ -1605,6 +1605,20 @@
       "AC3 bad cached cost_usd is a miss",
       "AC4 refine/boundary cache keys use a pinned model or refuse alias",
       "AC5 unit test for the metrics cache line"
+    ],
+    "completed_at": "2026-11-07T12:29:38Z",
+    "report": "docs/report/phase-84-solve-cache-followups.md",
+    "user_notes": [
+      {
+        "raw": "RAW-00250",
+        "note": "start REQ-0090 follow-ups",
+        "at": "2026-11-07T06:57:09Z"
+      },
+      {
+        "raw": "RAW-00251",
+        "note": "AC4 D1: user asked for my best pick -> (a) resolve aliases via model_pins; recommendations must be marked best",
+        "at": "2026-11-07T07:03:30Z"
+      }
     ]
   }
 ]

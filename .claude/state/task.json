@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-084",
-  "state": "VERIFIED",
-  "next": "write docs/report/phase-84-solve-cache-followups.md, then DONE",
+  "state": "DONE",
+  "next": "",
   "title": "Solve cache follow-ups: already-solved shows paid run, guard rn.cache, cost range check, alias-pinned refine/boundary keys (REQ-0090)",
-  "active": [
-    {
-      "task_id": "TASK-084",
-      "state": "VERIFIED",
-      "next": "write docs/report/phase-84-solve-cache-followups.md, then DONE",
-      "updated_at": "2026-11-07T12:29:38Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
