@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-081",
-  "state": "DONE",
-  "next": "",
-  "title": "Solve De-thi-mau-DHQG-HCM-2024.pdf end to end with the current engine, cap 5 USD (REQ-0086)",
-  "active": [],
+  "task_id": "TASK-082",
+  "state": "TODO",
+  "next": "Await designer handoff work/TASK-082/handoff/design.md, write docs/design/phase-82-*.md, advance to DESIGN",
+  "title": "Refine keeps data-table cell values so the solver does not decline (REQ-0088)",
+  "active": [
+    {
+      "task_id": "TASK-082",
+      "state": "TODO",
+      "next": "Await designer handoff work/TASK-082/handoff/design.md, write docs/design/phase-82-*.md, advance to DESIGN",
+      "updated_at": ""
+    }
+  ],
   "max_active": 1
 }
