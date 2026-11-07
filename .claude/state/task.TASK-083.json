@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-083",
   "title": "Per-exam solve cache keyed by pinned model ID + prompt hash + data hash, already-solved confirm (REQ-0089)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0089",
   "acceptance_criteria": [
     "AC1 mock: 2nd run 0 calls, cached in trace; model/prompt/data change misses",
@@ -31,9 +31,9 @@
     "summary": "Runner.call per-exam ReplyCache (ns solve), claude.pinned + model_pins (--real only), plans/<exam-id>/cache, planrun.last_solved + --fresh/--yes, cached/cost_saved in result/plan/index/metrics"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "test_solve_cache 15 OK; full suite 1628 run, only the 4 known pre-existing failures (3 examples/dgnl check-examples, 1 docx text-box; the 3 check-examples also fail at eb63338)"
   },
   "security": {
     "status": "pending",
@@ -52,7 +52,8 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-083/handoff/design.md",
-    "coder": "work/TASK-083/handoff/code.md"
+    "coder": "work/TASK-083/handoff/code.md",
+    "tester": "work/TASK-083/handoff/test.md"
   },
   "user_notes": [
     {
@@ -62,7 +63,7 @@
     }
   ],
   "picked_at": "2026-11-07T03:15:00Z",
-  "updated_at": "2026-11-07T03:34:49Z",
+  "updated_at": "2026-11-07T03:52:38Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/engine.py",
@@ -72,7 +73,11 @@
     "src/exam_engine/pipeline/metrics.py",
     "schemas/result.schema.json",
     "config/engine.json",
-    "tests/unit"
+    "tests/unit",
+    "tests/unit/test_solve_cache.py",
+    "tests/unit/test_exam_run.py",
+    "tests/unit/test_group_model.py",
+    "tests/unit/test_settings.py"
   ],
   "depends_on": [],
   "inputs": {},
@@ -80,5 +85,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tester writes mock tests for 83.1-83.5 and updates --real tests that use the alias model"
+  "next": "83.6 small-exam real proof (few questions, tiny cap, main after user ok), then verifier"
 }

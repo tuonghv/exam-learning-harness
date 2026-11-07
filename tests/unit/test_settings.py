@@ -32,7 +32,7 @@ class Settings(unittest.TestCase):
 
     def test_engine_defaults(self):
         cfg = settings.load_config("engine")
-        self.assertEqual(sorted(cfg), ["max_attempts", "max_cost_usd", "min_verification", "model",
+        self.assertEqual(sorted(cfg), ["max_attempts", "max_cost_usd", "min_verification", "model", "model_pins",
                                        "prompt_channel", "prompt_release", "timeout"])
 
     def test_config_dir_override(self):

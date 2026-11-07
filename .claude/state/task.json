@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-083",
-  "state": "IMPLEMENTING",
-  "next": "tester writes mock tests for 83.1-83.5 and updates --real tests that use the alias model",
+  "state": "UNIT_TESTED",
+  "next": "83.6 small-exam real proof (few questions, tiny cap, main after user ok), then verifier",
   "title": "Per-exam solve cache keyed by pinned model ID + prompt hash + data hash, already-solved confirm (REQ-0089)",
   "active": [
     {
       "task_id": "TASK-083",
-      "state": "IMPLEMENTING",
-      "next": "tester writes mock tests for 83.1-83.5 and updates --real tests that use the alias model",
-      "updated_at": "2026-11-07T03:34:49Z"
+      "state": "UNIT_TESTED",
+      "next": "83.6 small-exam real proof (few questions, tiny cap, main after user ok), then verifier",
+      "updated_at": "2026-11-07T03:52:38Z"
     }
   ],
   "max_active": 1

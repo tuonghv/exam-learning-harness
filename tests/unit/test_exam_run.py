@@ -439,7 +439,7 @@ class Cli(Base):
                 mock.patch.object(cli.reporter, "git_info", return_value=None), \
                 contextlib.redirect_stdout(o), contextlib.redirect_stderr(io.StringIO()):
             code = cli.solve_main([INPUT_001, "--real", "--out", self.out, "--max-cost-usd", "0.5",
-                                   "--model", "haiku", "--timeout", "9",
+                                   "--model", "claude-haiku-4-5", "--timeout", "9",
                                    "--history", os.path.join(self.tmp, "h.jsonl")])
         self.assertEqual(code, 3)
         self.assertIn("calls <= 5, cap $0.50", seen["printed"])
@@ -447,7 +447,7 @@ class Cli(Base):
         self.assertEqual(seen["listing"], [])
         self.assertNotEqual(os.path.realpath(seen["cwd"]), os.path.realpath(ROOT))
         self.assertFalse(os.path.exists(seen["cwd"]))  # removed afterwards
-        self.assertEqual((seen["model"], seen["timeout"]), ("haiku", 9.0))
+        self.assertEqual((seen["model"], seen["timeout"]), ("claude-haiku-4-5", 9.0))
         self.assertEqual(self.result_file()["run"]["llm"], "claude-p")
 
     def test_12_invalid_exam_through_main_is_exit_2(self):

@@ -104,7 +104,7 @@ class TestPages(unittest.TestCase):
         rec = {"ans": None, "status": None, "reason": None, "score": None, "checks": [],
                "findings": [], "attempts": 0, "error": None}
         class Rn:
-            cost, calls = 0.0, 0
+            cost, calls, cache = 0.0, 0, None
         cfg = {"llm_name": "x", "model": "m", "max_attempts": 1, "timeout": 1, "max_cost_usd": None}
         res = engine.build_result(ex, "e.md", {1: rec}, cfg, Rn(), None)
         self.assertEqual(res["questions"][0]["pages"], [3, 4])
