@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-082",
   "title": "Refine keeps data-table cell values so the solver does not decline (REQ-0088)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0088",
   "acceptance_criteria": [
     "AC1 refine keeps table cell values in the question context (mock-tested)",
@@ -9,9 +9,9 @@
     "AC3 real re-run of printed 64-67 only, cap 0.3 USD, answers instead of declines"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-82-refine-keeps-table-cells.md",
+    "summary": "Change refine prompt rule 5 to copy tables cell by cell; add _native_tables fallback that appends the page's native table text to the matching figure entry; 7 mock tests; real re-run of 64-67 under 0.3 USD by main",
     "reuse": [],
     "risks": []
   },
@@ -39,11 +39,13 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-082/handoff/design.md"
+  },
   "user_notes": [],
   "picked_at": "2026-11-07T01:29:20Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-07T01:32:28Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -51,5 +53,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Await designer handoff work/TASK-082/handoff/design.md, write docs/design/phase-82-*.md, advance to DESIGN"
+  "next": "coder implements 82.1-82.3 (prompt rule 5 + _native_tables), tester runs mock tests"
 }

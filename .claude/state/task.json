@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-082",
-  "state": "TODO",
-  "next": "Await designer handoff work/TASK-082/handoff/design.md, write docs/design/phase-82-*.md, advance to DESIGN",
+  "state": "DESIGN",
+  "next": "coder implements 82.1-82.3 (prompt rule 5 + _native_tables), tester runs mock tests",
   "title": "Refine keeps data-table cell values so the solver does not decline (REQ-0088)",
   "active": [
     {
       "task_id": "TASK-082",
-      "state": "TODO",
-      "next": "Await designer handoff work/TASK-082/handoff/design.md, write docs/design/phase-82-*.md, advance to DESIGN",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "coder implements 82.1-82.3 (prompt rule 5 + _native_tables), tester runs mock tests",
+      "updated_at": "2026-11-07T01:32:28Z"
     }
   ],
   "max_active": 1

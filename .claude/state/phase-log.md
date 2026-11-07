@@ -2335,3 +2335,9 @@ Action: Report written
 Result: docs/report/phase-81-dhqg2024-solve.md
 Decision: DONE
 Next: none
+
+## DESIGN - TASK-082 - 2026-11-07T01:32:28Z
+Action: Design drafted by designer
+Result: docs/design/phase-82-refine-keeps-table-cells.md
+Decision: DESIGN
+Next: IMPLEMENTING

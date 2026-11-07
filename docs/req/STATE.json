@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0088",
-  "next": "TASK-082 design from designer handoff",
-  "updated": "2026-11-07 08:29"
+  "next": "coder implements 82.1-82.3 (prompt rule 5 + _native_tables), tester runs mock tests",
+  "updated": "2026-11-07 08:32"
 }
