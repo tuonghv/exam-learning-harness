@@ -2323,3 +2323,9 @@ Action: Ran unit suite on unchanged tree
 Result: 4 pre-existing failures unrelated to this task
 Decision: UNIT_TESTED
 Next: VERIFIED
+
+## VERIFIED - TASK-081 - 2026-11-07T01:23:08Z
+Action: Crosscheck counts + verifier independent recompute
+Result: AC1 AC3 pass, AC2 met with 11 declined (5 wrongly) and table-loss defect filed
+Decision: VERIFIED
+Next: DONE: report

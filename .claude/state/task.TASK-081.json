@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-081",
   "title": "Solve De-thi-mau-DHQG-HCM-2024.pdf end to end with the current engine, cap 5 USD (REQ-0086)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0086",
   "acceptance_criteria": [
     "AC1 free ingest and cost estimate recorded, total <= 5 USD",
@@ -28,12 +28,17 @@
     "result": "1605 run, 4 failures/errors (test_d1_text_box, test_12b_real_repo_passes, test_cwd_independence, test_check_examples_ok: examples/dgnl unknown subject dir); tracked code unchanged by this run-only task, so pre-existing and out of scope (see Defects)"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "no code, config or tracked content change; no question text in tracked files; paid calls capped per run"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-081/evidence/crosscheck-counts.txt",
+      "work/TASK-081/handoff/verify.md"
+    ],
+    "command": "bash .claude/scripts/save-evidence.sh crosscheck-counts -- bash /tmp/xc.sh; verifier handoff",
+    "result": "120 rows = 109 answered + 11 declined (matches solver summaries); cost 2.11 of 5 USD; 8 reports (4 md + 4 pdf), 0 tracked files under plans/reports; independent recompute from pdf text: Math 64-67 = D,A,D,B but declined (table values lost in refine, new REQ); declines 57, 105 legitimate; 9 wrongly declined; 62/68/69 chart-only, unverifiable; all answers UNCERTAIN (no key)"
   },
   "report": {
     "status": "pending",
@@ -46,11 +51,12 @@
     "designer": "work/TASK-081/handoff/design.md",
     "coder": {
       "waiver": "run-only task; paid steps are main-only and the guard refuses coder writes to plans/; coder did the free ingest+estimate (code.md)"
-    }
+    },
+    "verifier": "work/TASK-081/handoff/verify.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-07T00:47:57Z",
-  "updated_at": "2026-11-07T01:20:05Z",
+  "updated_at": "2026-11-07T01:23:08Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -59,5 +65,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verify: crosscheck 120 = answered + declined, hand-recompute sample, read declined pages"
+  "next": "write docs/report/phase-81-dhqg2024-solve.md, then DONE"
 }
