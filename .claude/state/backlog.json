@@ -1606,7 +1606,7 @@
       "AC4 refine/boundary cache keys use a pinned model or refuse alias",
       "AC5 unit test for the metrics cache line"
     ],
-    "completed_at": "2026-11-07T12:29:38Z",
+    "completed_at": "2026-11-07T12:29:43Z",
     "report": "docs/report/phase-84-solve-cache-followups.md",
     "user_notes": [
       {
