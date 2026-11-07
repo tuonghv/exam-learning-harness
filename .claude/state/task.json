@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-081",
-  "state": "VERIFIED",
-  "next": "write docs/report/phase-81-dhqg2024-solve.md, then DONE",
+  "state": "DONE",
+  "next": "",
   "title": "Solve De-thi-mau-DHQG-HCM-2024.pdf end to end with the current engine, cap 5 USD (REQ-0086)",
-  "active": [
-    {
-      "task_id": "TASK-081",
-      "state": "VERIFIED",
-      "next": "write docs/report/phase-81-dhqg2024-solve.md, then DONE",
-      "updated_at": "2026-11-07T01:23:08Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

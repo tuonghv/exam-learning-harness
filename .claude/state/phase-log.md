@@ -2329,3 +2329,9 @@ Action: Crosscheck counts + verifier independent recompute
 Result: AC1 AC3 pass, AC2 met with 11 declined (5 wrongly) and table-loss defect filed
 Decision: VERIFIED
 Next: DONE: report
+
+## DONE - TASK-081 - 2026-11-07T01:23:30Z
+Action: Report written
+Result: docs/report/phase-81-dhqg2024-solve.md
+Decision: DONE
+Next: none

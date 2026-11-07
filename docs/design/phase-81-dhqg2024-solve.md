@@ -106,3 +106,6 @@ Engine fixes (value->letter mapping, renderer fallback); scoring (no answer file
 none (no code/content touched). Note: `scripts/exam.py solve --dry-run` estimate output not checked by designer; main confirm via `--help`/dry-run in 81.1.
 
 Nova
+
+## Outcome note
+Real layout: 16 pages; Vietnamese 1-20, English 21-40, Math 41-70, Science 71-120 (cover table). Refine batches 1-2, 3-7, 7-11, 11-16; solve caps 0.6/0.6/1.0/1.5. See docs/report/phase-81-dhqg2024-solve.md.
