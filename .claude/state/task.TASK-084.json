@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-084",
   "title": "Solve cache follow-ups: already-solved shows paid run, guard rn.cache, cost range check, alias-pinned refine/boundary keys (REQ-0090)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0090",
   "acceptance_criteria": [
     "AC1 already-solved line shows the original paid run cost and calls",
@@ -28,9 +28,9 @@
     "summary": "last_solved reports original paid run; getattr guard on rn.cache; cached cost range check; claude.resolve maps aliases via model_pins for refine/ingest --real, unresolved refused"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "test_cache_followups 19 OK, test_solve_cache 15 OK; full suite 1647 run, only the 4 known pre-existing failures; main bite check: removing the cost range check in engine._hit makes 4 tests fail"
   },
   "security": {
     "status": "pending",
@@ -49,7 +49,8 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-084/handoff/design.md",
-    "coder": "work/TASK-084/handoff/code.md"
+    "coder": "work/TASK-084/handoff/code.md",
+    "tester": "work/TASK-084/handoff/test.md"
   },
   "user_notes": [
     {
@@ -64,7 +65,7 @@
     }
   ],
   "picked_at": "2026-11-07T06:57:08Z",
-  "updated_at": "2026-11-07T12:19:32Z",
+  "updated_at": "2026-11-07T12:28:19Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/engine.py",
@@ -80,5 +81,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tester writes tests for 84.1-84.5 and runs the full suite"
+  "next": "verifier checks AC1-AC5; small real proof of AC1 (cached re-run then already-solved line) by main with tiny cap"
 }

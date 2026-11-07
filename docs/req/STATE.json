@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0090",
-  "next": "tester writes tests for 84.1-84.5 and runs the full suite",
-  "updated": "2026-11-07 19:19"
+  "next": "verifier checks AC1-AC5; small real proof of AC1 (cached re-run then already-solved line) by main with tiny cap",
+  "updated": "2026-11-07 19:28"
 }

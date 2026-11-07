@@ -213,11 +213,10 @@ class T5Corrupt(Base):
         self.assertGreater(res["run"]["cached"], 0)
         self.assertGreater(res["run"]["cost_saved_usd"], 0)
         from exam_engine.pipeline import metrics
-        m = metrics.compute(res) if hasattr(metrics, "compute") else None
-        if m is not None and "cost" in m:
-            self.assertEqual(m["cost"]["cached"], res["run"]["cached"])
-            self.assertIn("cost_saved_usd", m["cost"])
-            self.assertIn("cache: hits=", "\n".join(metrics.block(m)) if hasattr(metrics, "block") else "cache: hits=")
+        m = metrics.compute(res)
+        self.assertEqual(m["cost"]["cached"], res["run"]["cached"])
+        self.assertIn("cost_saved_usd", m["cost"])
+        self.assertIn("cache: hits=%d" % res["run"]["cached"], "\n".join(metrics.block(m)))
 
 
 class T6Isolation(Base):

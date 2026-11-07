@@ -2407,3 +2407,9 @@ Action: Coder implemented 84.1-84.4
 Result: work/TASK-084/handoff/code.md; test_solve_cache 15 OK
 Decision: IMPLEMENTING
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-084 - 2026-11-07T12:28:19Z
+Action: Tester added 19 tests; main confirmed full run and a bite check
+Result: 1647 run, 4 pre-existing failures
+Decision: UNIT_TESTED
+Next: VERIFIED
