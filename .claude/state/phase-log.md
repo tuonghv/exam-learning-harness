@@ -2347,3 +2347,9 @@ Action: Coder implemented 82.1-82.2
 Result: prompts/dev/ingest/refine.md, src/exam_engine/ingest/refine.py; test_ingest_refine 43 OK
 Decision: IMPLEMENTING
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-082 - 2026-11-07T01:44:49Z
+Action: Tester added NativeTable tests, ran full suite
+Result: 51 OK in file; 1613 total, 4 known failures
+Decision: UNIT_TESTED
+Next: VERIFIED

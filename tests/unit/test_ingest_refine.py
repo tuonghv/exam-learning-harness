@@ -426,8 +426,6 @@ class TestCli(Base):
         self.assertIn("not found", err)
 
 
-if __name__ == "__main__":
-    unittest.main()
 
 
 class AllPagesAndRefinedText(unittest.TestCase):
@@ -484,3 +482,75 @@ class AllPagesAndRefinedText(unittest.TestCase):
         self.assertIn("PASSAGE", out["refined"]["questions"][0]["context"])
         text = api.to_exam_text(out, {"use_refined": True})
         self.assertIn("[Figure/table: pie 30%]", text)
+
+
+TABLE = "Year | Sales\n2020 | 100\n2021 | 250"
+OPTS4 = {"A": "a", "B": "b", "C": "c", "D": "d"}
+
+
+def table_doc(text=TABLE, page=1, origin="extracted"):
+    doc = make_doc()
+    doc["pages"][page - 1]["blocks"].append(
+        {"id": "t1", "order": 50, "type": "table", "text": text, "origin": origin})
+    return doc
+
+
+class NativeTable(Base):
+    """82.3: a source table's cells survive refine when the model kept only the figure kind."""
+
+    def run_refine(self, doc, *qs):
+        return refine.refine(doc, "1", Fake([reply(*qs)]))
+
+    def test_t1_table_appended_to_matching_figure(self):
+        out = self.run_refine(table_doc(), q(1, "Read the chart?", OPTS4, figures=["Table of Year and Sales"]))
+        figs = out["refined"]["questions"][0]["figures"]
+        self.assertEqual(figs, ["Table of Year and Sales", TABLE])
+        self.assertIn("250", figs[-1])
+        self.assertEqual(validate_document(out), [])
+
+    def test_t2_covered_table_not_duplicated(self):
+        out = self.run_refine(table_doc(), q(1, "Read the chart?", OPTS4,
+                                             figures=["Year Sales 2020 100 2021 250"]))
+        self.assertEqual(out["refined"]["questions"][0]["figures"], ["Year Sales 2020 100 2021 250"])
+        self.assertNotIn("native_table_unplaced", [w["code"] for w in out["warnings"]])
+
+    def test_t3_two_figures_best_label_wins(self):
+        out = self.run_refine(table_doc(), q(1, "Read?", OPTS4, figures=["Bar chart of Cost and Region", "Table of Year and Sales"]))
+        figs = out["refined"]["questions"][0]["figures"]
+        self.assertEqual(figs[:2], ["Bar chart of Cost and Region", "Table of Year and Sales"])
+        self.assertEqual(figs[2:], [TABLE])
+
+    def test_t4_unplaced_warns_and_leaves_figures(self):
+        out = self.run_refine(table_doc(), q(1, "Read?", OPTS4))
+        self.assertEqual(out["refined"]["questions"][0]["figures"], [])
+        w = [w for w in out["warnings"] if w["code"] == "native_table_unplaced"]
+        self.assertEqual((len(w), w[0]["page"], w[0]["level"]), (1, 1, "warning"))
+
+    def test_t5_no_table_block_is_byte_identical(self):
+        qq = q(1, "Read?", OPTS4, figures=["Table of Year and Sales"])
+        a = self.run_refine(make_doc(), qq)
+        with mock.patch.object(refine, "_native_tables", return_value=[]):
+            b = self.run_refine(make_doc(), qq)
+        self.assertEqual(json.dumps(a["refined"], sort_keys=True), json.dumps(b["refined"], sort_keys=True))
+        self.assertEqual(a["warnings"], b["warnings"])
+
+    def test_t5b_ai_origin_or_empty_table_ignored(self):
+        for doc in (table_doc(origin="ai"), table_doc(text="  ")):
+            out = self.run_refine(doc, q(1, "Read?", OPTS4, figures=["Table of Year and Sales"]))
+            self.assertEqual(out["refined"]["questions"][0]["figures"], ["Table of Year and Sales"])
+
+    def test_t6_synthetic_non_dgnl_exam(self):
+        doc = table_doc(text="Quarter | Revenue\nQ1 | 10\nQ2 | 20", page=2)
+        out = refine.refine(doc, "2", Fake([reply(q(2, "Which quarter?", OPTS4, figures=["Table: Quarter, Revenue"]))]))
+        self.assertEqual(out["refined"]["questions"][0]["figures"][-1], "Quarter | Revenue\nQ1 | 10\nQ2 | 20")
+
+    def test_t7_prompt_rules(self):
+        path = os.path.join(os.path.dirname(__file__), "..", "..", "prompts", "dev", "ingest", "refine.md")
+        with open(path, encoding="utf-8") as fh:
+            txt = fh.read()
+        self.assertIn("every cell", txt)
+        self.assertIn("\n12. Never transcribe running headers", txt)
+
+
+if __name__ == "__main__":
+    unittest.main()

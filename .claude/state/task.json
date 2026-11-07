@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-082",
-  "state": "IMPLEMENTING",
-  "next": "tester writes 82.3 mock tests, saves evidence; then UNIT_TESTED",
+  "state": "UNIT_TESTED",
+  "next": "82.4 real re-run of printed 64-67 (cap 0.3 USD, main), then verifier",
   "title": "Refine keeps data-table cell values so the solver does not decline (REQ-0088)",
   "active": [
     {
       "task_id": "TASK-082",
-      "state": "IMPLEMENTING",
-      "next": "tester writes 82.3 mock tests, saves evidence; then UNIT_TESTED",
-      "updated_at": "2026-11-07T01:35:20Z"
+      "state": "UNIT_TESTED",
+      "next": "82.4 real re-run of printed 64-67 (cap 0.3 USD, main), then verifier",
+      "updated_at": "2026-11-07T01:44:49Z"
     }
   ],
   "max_active": 1

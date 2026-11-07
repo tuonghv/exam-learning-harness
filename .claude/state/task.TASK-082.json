@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-082",
   "title": "Refine keeps data-table cell values so the solver does not decline (REQ-0088)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0088",
   "acceptance_criteria": [
     "AC1 refine keeps table cell values in the question context (mock-tested)",
@@ -24,9 +24,9 @@
     "summary": "refine prompt rule 5 transcribes tables cell by cell; _native_tables appends the page's native table text to the matching figure entry (warning native_table_unplaced when unmatched)"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "test_ingest_refine 51 OK (8 new NativeTable tests; 4 bite with _native_tables no-op); full suite 1613 run, only the 4 known pre-existing failures"
   },
   "security": {
     "status": "pending",
@@ -45,11 +45,12 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-082/handoff/design.md",
-    "coder": "work/TASK-082/handoff/code.md"
+    "coder": "work/TASK-082/handoff/code.md",
+    "tester": "work/TASK-082/handoff/test.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-07T01:29:20Z",
-  "updated_at": "2026-11-07T01:35:20Z",
+  "updated_at": "2026-11-07T01:44:49Z",
   "updated_by": "main",
   "scope": [
     "prompts/dev/ingest/refine.md",
@@ -62,5 +63,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tester writes 82.3 mock tests, saves evidence; then UNIT_TESTED"
+  "next": "82.4 real re-run of printed 64-67 (cap 0.3 USD, main), then verifier"
 }
