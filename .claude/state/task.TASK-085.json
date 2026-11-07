@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-085",
   "title": "Standard report names + hybrid solution-report + report-kind registry + QA, regenerated DGNL 2026 pack at $0 (REQ-0092)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0092",
   "acceptance_criteria": [
     "AC1 engine writes standard names only",
@@ -41,12 +41,20 @@
     "result": "test_report_kinds 30 OK; full suite 1677 run, only the 4 known pre-existing failures (3 examples/dgnl check-examples incl. cwd_independence, 1 docx text-box); D-T1 and D-A fixed"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "deterministic file/report code only; no shell, no AI calls, no key text in reports other than scoring outputs kept in git-ignored reports/; names validated by registry pattern"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-085/evidence/pack-check.txt",
+      "work/TASK-085/evidence/full-final.raw",
+      "work/TASK-085/evidence/unit.txt",
+      "work/TASK-085/handoff/verify.md",
+      "work/TASK-085/handoff/verify2.md"
+    ],
+    "command": "python3 -I tools/check_report_pack.py reports/dgnl2026 ... --expect-correct 113; unit-full; verifier recount of 4 INDEX files",
+    "result": "pack 30 files + INDEX, 58 checks 0 failed, 113/120; verifier AC1-AC10 PASS and D1-D6 closed (D6 fixed after, rows grepped by main); full suite 1690 run, only the 4 known pre-existing failures"
   },
   "report": {
     "status": "pending",
@@ -58,7 +66,8 @@
   "roles": {
     "designer": "work/TASK-085/handoff/design.md",
     "coder": "work/TASK-085/handoff/code.md",
-    "tester": "work/TASK-085/handoff/test2.md"
+    "tester": "work/TASK-085/handoff/test2.md",
+    "verifier": "work/TASK-085/handoff/verify2.md"
   },
   "user_notes": [
     {
@@ -73,7 +82,7 @@
     }
   ],
   "picked_at": "2026-11-07T13:46:44Z",
-  "updated_at": "2026-11-07T14:52:16Z",
+  "updated_at": "2026-11-07T15:32:15Z",
   "updated_by": "main",
   "scope": [
     "config/report_kinds.json",
@@ -94,5 +103,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verifier QA recount of reports/dgnl2026 against the registry and plans; main runs report-index on old folders"
+  "next": "write docs/report/phase-85-standard-report-names.md, then DONE"
 }
