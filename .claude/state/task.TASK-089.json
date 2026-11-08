@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-089",
   "title": "Role briefs use the fast test modes (REQ-0097)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0097",
   "acceptance_criteria": [
     "AC1 Tests line names --affected/--fast and main-only --full",
@@ -10,9 +10,9 @@
     "AC4 no settings/hooks/agent_setup touched, no plain unittest discover left"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-89-role-briefs-test-modes.md",
+    "summary": "wording-only edit of the Tests line in 4 role briefs (generated project block, user OK) and tester step, plus a doc paragraph; --full stays with main",
     "reuse": [],
     "risks": []
   },
@@ -40,7 +40,11 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": {
+      "waiver": "wording-only edit of 5 lines, no code; design is 12 lines written by main"
+    }
+  },
   "user_notes": [
     {
       "raw": "RAW-00274",
@@ -49,14 +53,21 @@
     }
   ],
   "picked_at": "2026-11-08T04:04:48Z",
-  "updated_at": "",
-  "updated_by": "",
-  "scope": [],
+  "updated_at": "2026-11-08T04:04:49Z",
+  "updated_by": "main",
+  "scope": [
+    ".claude/agents/coder.md",
+    ".claude/agents/designer.md",
+    ".claude/agents/tester.md",
+    ".claude/agents/verifier.md",
+    "docs/guide/workflow-roles.md",
+    "docs/design/phase-89-role-briefs-test-modes.md"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "commit the brief edits (IMPLEMENTING) then grep check and --fast (UNIT_TESTED)"
 }

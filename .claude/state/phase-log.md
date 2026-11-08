@@ -2545,3 +2545,9 @@ Action: Report written
 Result: docs/report/phase-88-fast-test-tiers.md
 Decision: DONE
 Next: none
+
+## DESIGN - TASK-089 - 2026-11-08T04:04:48Z
+Action: Design for the brief wording
+Result: docs/design/phase-89-role-briefs-test-modes.md
+Decision: DESIGN
+Next: IMPLEMENTING
