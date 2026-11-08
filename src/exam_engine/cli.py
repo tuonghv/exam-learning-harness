@@ -23,7 +23,7 @@ from exam_engine.pipeline import (examples_check, explain, metrics, parser, plan
 COMMANDS = ("solve", "parse", "verify", "report", "plan-import", "check-examples", "score", "prompts",
             "check-prompts", "ingest", "ingest-inspect", "ingest-refine", "cross-solve", "benchmark",
             "extract-eval", "gold-pdf", "gen-exams", "lessons", "review-pack", "review-apply", "run-stats",
-            "report-pack", "report-index", "run-list", "run-compare", "plans-migrate")
+            "report-pack", "report-index", "run-list", "run-compare", "plans-migrate", "publish")
 DEFAULT_HISTORY = os.path.join("plans", "run-history.jsonl")
 LEGACY_HISTORY = (os.path.join("reports", "run-history.jsonl"),  # read-only fallbacks (RAW-00174, phase 58)
                   os.path.join("results", "run-history.jsonl"))
@@ -47,6 +47,8 @@ def solve_main(argv=None):
     ap.add_argument("--key")
     ap.add_argument("--mock")
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--publish", action="store_true",
+                    help="allow writing into line main (the published line); default: refused, use --line <dev>")
     ap.add_argument("--real", action="store_true")
     ap.add_argument("--max-attempts", type=int, default=d["max_attempts"])
     ap.add_argument("--max-cost-usd", type=float, default=d["max_cost_usd"])
@@ -107,6 +109,14 @@ def solve_main(argv=None):
     if a.max_attempts < 1 or a.max_cost_usd < 0 or a.timeout <= 0:
         print("usage: --max-attempts >= 1, --max-cost-usd >= 0, --timeout > 0", file=sys.stderr)
         return 2
+    try:  # before any prompt or call: a main run needs --publish
+        if not a.dry_run and not a.out:
+            runlayout.require_publish(a.line, a.publish, "solve", DEFAULT_OUT_ROOT, a.plan_exam)
+        elif a.out:
+            runlayout.require_publish(None, a.publish, "solve --out", a.out)
+    except ValueError as exc:
+        print("ERROR: %s" % exc, file=sys.stderr)
+        return 2
     cache = None
     if a.real:
         ok, hint = claude.pinned(a.model, d.get("model_pins"))
@@ -133,7 +143,7 @@ def solve_main(argv=None):
         try:
             stem = planrun.exam_id_of(a.exam)
             a.out = planrun.claim_run_dir(DEFAULT_OUT_ROOT, a.plan_exam, line=a.line,
-                                          subject=stem if a.plan_exam != stem else None)
+                                          subject=stem if a.plan_exam != stem else None, publish=a.publish)
         except ValueError as exc:
             print("ERROR: %s" % exc, file=sys.stderr)
             return 2
@@ -322,7 +332,7 @@ def _build_default_report(a, result):
     """solve without --out: the report goes through report_build into a new reports/<exam>/run-<id>/ (+ run.json)."""
     pexam, pline = runlayout.exam_line_of_plan_dir(a.out)
     out = runlayout.new_report_run(DEFAULT_REPORT_ROOT, pexam if pline != "-" else planrun.exam_id_of(a.exam),
-                                   line=pline)
+                                   line=pline, publish=a.publish)
     git = reporter.git_info(_REPO_ROOT)
     info = report_build.build(a.out, out, view="sheet", pdf=not a.no_pdf, engine_git=git)
     runlayout.finish_report_run(out, [a.out], "sheet", git, "solve")
@@ -411,6 +421,8 @@ def _report_plan(argv):
     ap.add_argument("--run-name", help="run part of the file names, run-<x> (default: from the out dir name)")
     ap.add_argument("--report-id", "--id", dest="rid", help="report run id (default: new UTC id); same id overwrites that run")
     ap.add_argument("--out", help="override the output dir")
+    ap.add_argument("--publish", action="store_true",
+                    help="allow writing into line main (the published line); default: refused, use --line <dev>")
     a = ap.parse_args(argv)
     plan = os.path.abspath(a.plan_run.rstrip("/"))
     try:
@@ -420,7 +432,9 @@ def _report_plan(argv):
         planrun.safe_id(meta.get("plan_run_id") or os.path.basename(plan), "plan run id")
         if a.rid:
             planrun.safe_id(a.rid, "report id")
-        out = a.out or runlayout.new_report_run(DEFAULT_REPORT_ROOT, exam_id, a.rid, line=pline)
+        if a.out:
+            runlayout.require_publish(None, a.publish, "report --out", a.out)
+        out = a.out or runlayout.new_report_run(DEFAULT_REPORT_ROOT, exam_id, a.rid, line=pline, publish=a.publish)
     except ValueError as exc:
         print("ERROR: %s" % exc, file=sys.stderr)
         return 2
@@ -452,10 +466,15 @@ def report_pack_main(argv):
     ap.add_argument("--run", help="run part of the names: f or run-f (default: from the out dir name)")
     ap.add_argument("--key", help="answer key file: adds score-vs-key and score-summary")
     ap.add_argument("--no-pdf", action="store_true")
+    ap.add_argument("--publish", action="store_true",
+                    help="allow writing into line main (the published line); default: refused, use --line <dev>")
     a = ap.parse_args(argv)
     try:
         line = runlayout.exam_line_of_plan_dir(a.plans[0])[1]  # mirror the line of the first plan run
-        out = a.out or runlayout.new_report_run(DEFAULT_REPORT_ROOT, report_kinds.slug(a.exam) or "exam", line=line)
+        if a.out:
+            runlayout.require_publish(None, a.publish, "report-pack --out", a.out)
+        out = a.out or runlayout.new_report_run(DEFAULT_REPORT_ROOT, report_kinds.slug(a.exam) or "exam", line=line,
+                                                publish=a.publish)
         run = a.run or os.path.basename(os.path.abspath(out))
         info = report_pack.build_pack([os.path.abspath(p.rstrip("/")) for p in a.plans], out, a.exam,
                                       report_kinds.short_run(run) if not run.startswith("run-") else run,
@@ -464,6 +483,74 @@ def report_pack_main(argv):
         print("ERROR: %s" % exc, file=sys.stderr)
         return 2
     print("report-pack %d file(s) + %s -> %s" % (len(info["files"]), report_kinds.INDEX_NAME, out))
+    if info["total"]:
+        print("score %d/%d" % (info["correct"], info["total"]))
+    return 0
+
+
+def _publish_selection(plans_root, reports_root, exam, line):
+    """([(plan dir, subject)], source report run row or None): plan runs of the latest complete pack of `line`
+    (run.json cmd report-pack/publish, every plan run in `line` and present), else the latest plan run per subject."""
+    packs = [r for r in runlayout.list_report_runs(reports_root, exam, line=line)
+             if r["layout"] == "run" and (r["manifest"] or {}).get("cmd") in ("report-pack", "publish")]
+    for r in sorted(packs, key=lambda r: (runlayout.id_time(r["id"]), r["id"]), reverse=True):
+        prs = r["manifest"].get("plan_runs") or []
+        dirs = [runlayout.plan_run_dir(plans_root, exam, p.get("plan_run_id"), line=line)
+                for p in prs if isinstance(p, dict) and p.get("line") == line and p.get("exam_id") == exam
+                and p.get("plan_run_id")]
+        if prs and len(dirs) == len(prs) and all(os.path.isdir(d) for d in dirs):
+            return [(d, None) for d in dirs], r
+    latest = {}
+    for r in runlayout.list_plan_runs(plans_root, exam, line=line):
+        latest[r["subject"]] = r  # list is time-sorted: the last of a subject wins
+    return [(r["dir"], r["subject"]) for r in sorted(latest.values(), key=lambda r: r["id"])], None
+
+
+def publish_main(argv):
+    """publish EXAM --from LINE [--view sheet|learn] [--run ID] [--key FILE] [--no-pdf]: new main report run, $0."""
+    ap = argparse.ArgumentParser(prog="exam publish", description="Publish a dev line: build a NEW report run in "
+                                 "line main from the line's plan runs (no model call; earlier main runs stay).")
+    ap.add_argument("exam")
+    ap.add_argument("--from", dest="line", required=True, metavar="LINE", help="dev line to publish (not main)")
+    ap.add_argument("--view", choices=reporter.VIEWS, default="sheet")
+    ap.add_argument("--run", help="run part of the file names (default: LINE)")
+    ap.add_argument("--key", dest="keyfile", help="answer key file (default: the key recorded in the source pack run.json)")
+    ap.add_argument("--no-pdf", action="store_true")
+    ap.add_argument("--plans", default=DEFAULT_OUT_ROOT)
+    ap.add_argument("--reports", default=DEFAULT_REPORT_ROOT)
+    a = ap.parse_args(argv)
+    out = None
+    try:
+        exam, line = planrun.safe_id(a.exam, "exam id"), runlayout.safe_line(a.line)
+        if runlayout.is_published_line(line):
+            raise ValueError("--from LINE must be a dev line, not %r" % line)
+        sel, src = _publish_selection(a.plans, a.reports, exam, line)
+        if not sel:
+            raise ValueError("no plan runs in line %s of %s under %s" % (line, exam, a.plans))
+        for d, _s in sel:
+            if not os.path.isfile(os.path.join(d, "result.json")):
+                raise ValueError("%s has no result.json" % d)
+        print("publish %s from line %s (%s):" % (exam, line, "pack run-" + src["id"] if src else "latest per subject"))
+        for d, _s in sel:
+            print("  %s" % d)
+        kf = a.keyfile or ((src or {}).get("manifest") or {}).get("key")
+        if kf and not os.path.isfile(kf):
+            raise ValueError("answer key %s not found; pass --key" % kf)
+        if not kf:
+            print("WARN: no key: score files skipped; pass --key", file=sys.stderr)
+        run = a.run or line
+        out = runlayout.new_report_run(a.reports, exam, line=runlayout.LINE_DEFAULT, publish=True)
+        info = report_pack.build_pack([d for d, _s in sel], out, report_kinds.slug(exam) or "exam",
+                                      report_kinds.short_run(run) if not run.startswith("run-") else run,
+                                      key=kf, pdf=not a.no_pdf, engine_git=reporter.git_info(_REPO_ROOT),
+                                      view=a.view, cmd="publish",
+                                      extra={"published_from": line, "source_report_run": src["id"] if src else None})
+    except (OSError, ValueError) as exc:
+        if out and not os.path.isfile(os.path.join(out, runlayout.RUN_JSON)):
+            shutil.rmtree(out, ignore_errors=True)  # a half-built run never stays as an incomplete main run
+        print("ERROR: %s" % exc, file=sys.stderr)
+        return 2
+    print("publish %d file(s) -> %s" % (len(info["files"]), out))
     if info["total"]:
         print("score %d/%d" % (info["correct"], info["total"]))
     return 0
@@ -495,6 +582,8 @@ def plan_import_main(argv):
     ap.add_argument("--exam-id", help="default: basename of the result exam.path")
     ap.add_argument("--line", default=runlayout.LINE_DEFAULT, metavar="NAME",
                     help="plan line folder: plans/<exam>/<line>/runs/<id> (default main)")
+    ap.add_argument("--publish", action="store_true",
+                    help="allow writing into line main (the published line); default: refused, use --line <dev>")
     ap.add_argument("--trace", metavar="FILE", action="append", default=[],
                     help="refine *.trace.json to copy into ingest/ (repeatable; <= 20 MB, no symlinks)")
     ap.add_argument("--ingest-cache", metavar="DIR",
@@ -504,7 +593,7 @@ def plan_import_main(argv):
         plan, status = planrun.import_dir(a.dir, DEFAULT_OUT_ROOT, exam_path=a.exam, exam_id=a.exam_id,
                                           ingest_cache=a.ingest_cache,
                                           traces_extra=[os.path.abspath(t) for t in a.trace],
-                                          line=runlayout.safe_line(a.line))
+                                          line=runlayout.safe_line(a.line), publish=a.publish)
     except (OSError, ValueError) as exc:
         print("ERROR: %s" % exc, file=sys.stderr)
         return 2
@@ -1357,6 +1446,10 @@ def _rl_label(r):
     return r["id"] + (" (%s)" % r["alias"] if r.get("alias") else "")
 
 
+def _rl_publish(line):
+    return runlayout.PUBLISHED if runlayout.is_published_line(line) else runlayout.DEV
+
+
 def run_list_main(argv):
     """run-list EXAM [--line L] [--plans DIR] [--reports DIR]: plan runs -> report runs, cost, score (all layouts)."""
     ap = argparse.ArgumentParser(prog="exam run-list", description="List the plan runs and report runs of one exam "
@@ -1436,19 +1529,20 @@ def run_list_main(argv):
 
     print("# Runs: %s" % exam)
     print()
-    print("| plan run | line | subject | layout | status | model | calls | cost_usd | report runs | score |")
-    print("| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |")
+    print("| plan run | line | subject | layout | status | model | calls | cost_usd | report runs | score | publish |")
+    print("| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |")
     for label, r in rows:
         st, model, calls, cost = _rl_stats(r)
         rl = linked(label, r)
-        print("| %s | %s | %s | %s | %s | %s | %s | %s | %s | %s |" % (
+        print("| %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s |" % (
             label, r.get("line", "-"), r.get("subject") or "-", r["layout"], st, model, calls, cost,
-            ", ".join(os.path.basename(x["dir"]) for x in rl) or "-", _rl_score([x["dir"] for x in rl])))
+            ", ".join(os.path.basename(x["dir"]) for x in rl) or "-", _rl_score([x["dir"] for x in rl]),
+            _rl_publish(r.get("line", "-"))))
     print()
     print("## Report runs")
     print()
-    print("| report run | layout | view | plan runs |")
-    print("| --- | --- | --- | --- |")
+    print("| report run | layout | view | plan runs | line | publish |")
+    print("| --- | --- | --- | --- | --- | --- |")
     for rr in reps:
         man = rr["manifest"] or {}
         pl = ", ".join("%s/%s" % (p.get("exam_id"), p.get("plan_run_id")) for p in man.get("plan_runs", [])
@@ -1459,7 +1553,8 @@ def run_list_main(argv):
             pl = "line %s (run unknown)" % man.get("plan_line")
         elif man.get("link") == "unknown":
             pl = "unknown"
-        print("| %s | %s | %s | %s |" % (os.path.basename(rr["dir"]), rr["layout"], man.get("view", "-"), pl or "-"))
+        print("| %s | %s | %s | %s | %s | %s |" % (os.path.basename(rr["dir"]), rr["layout"], man.get("view", "-"),
+                                                 pl or "-", rr.get("line", "-"), _rl_publish(rr.get("line", "-"))))
     return 0
 
 
@@ -1485,7 +1580,8 @@ def main(argv=None):
              "review-pack": review_pack_main, "review-apply": review_apply_main,
              "run-stats": run_stats_main, "report-pack": report_pack_main,
              "report-index": report_index_main, "run-list": run_list_main,
-             "run-compare": run_compare_main, "plans-migrate": plansmigrate.main}
+             "run-compare": run_compare_main, "plans-migrate": plansmigrate.main,
+             "publish": publish_main}
     if cmd not in table:
         print(USAGE, file=sys.stderr)
         return 2

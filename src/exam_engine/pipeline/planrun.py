@@ -43,10 +43,11 @@ def safe_id(value, what="id"):
     return value
 
 
-def claim_run_dir(root, exam_id, line=None, subject=None):
+def claim_run_dir(root, exam_id, line=None, subject=None, publish=False):
     """New plan run dir <exam>/<line>/runs/<UTC YYYYMMDD-HHMMSS>[-<subject>][-N] under root (makedirs exist_ok=False)."""
     from exam_engine.pipeline import runlayout
-    return runlayout.new_plan_run(root, exam_id, line=line or runlayout.LINE_DEFAULT, subject=subject)
+    return runlayout.new_plan_run(root, exam_id, line=line or runlayout.LINE_DEFAULT, subject=subject,
+                                  publish=publish)
 
 
 def _sha(text):
@@ -257,7 +258,7 @@ def _copy_assembly(exam_path, input_dir):
         shutil.copyfile(side, os.path.join(input_dir, "assembly.json"))
 
 
-def import_dir(src, root, exam_path=None, exam_id=None, ingest_cache=None, traces_extra=(), line=None):
+def import_dir(src, root, exam_path=None, exam_id=None, ingest_cache=None, traces_extra=(), line=None, publish=False):
     """Old run dir (result.json [+ run.log, *.trace.json]) -> <root>/<exam-id>/<line>/runs/<id>/; (plan_dir, status).
     status "skipped" when the same dir with the same result.json was imported before.
     ValueError when src has no readable result.json or an id is invalid. traces_extra: more
@@ -289,7 +290,7 @@ def import_dir(src, root, exam_path=None, exam_id=None, ingest_cache=None, trace
     if hit:
         return hit, "skipped"
     line = line or "main"
-    out = claim_run_dir(root, exam_id, line=line)
+    out = claim_run_dir(root, exam_id, line=line, publish=publish)
     shutil.copyfile(rpath, os.path.join(out, "result.json"))
     log = None
     if _plain_file_quiet(os.path.join(src, "run.log")):

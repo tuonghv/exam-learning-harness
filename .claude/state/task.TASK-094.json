@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-094",
   "title": "main is the published line: write guard (--publish), exam publish, run-list published/dev, docs (REQ-0101)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0101",
   "acceptance_criteria": [
     "AC1 writes into main refused without --publish, dev lines unaffected",
@@ -18,8 +18,16 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/cli.py",
+      "src/exam_engine/pipeline/runlayout.py",
+      "src/exam_engine/pipeline/planrun.py",
+      "src/exam_engine/pipeline/report_pack.py",
+      "src/exam_engine/pipeline/report_kinds.py",
+      "docs/guide/toolkit-reference.md"
+    ],
+    "summary": "runlayout.require_publish guard on every writer of a line named main under the repo plans/ and reports/ roots, --publish flag, exam publish EXAM --from LINE (new main report run at $0, run.json published_from), solve --line main --publish, run-list publish column, exam INDEX lines table; demo on a scratch copy; real trees untouched; --fast 1844 tests, 4 known + 1 test needing an edit (test_90_5 header order)"
   },
   "unit_test": {
     "status": "pending",
@@ -42,7 +50,8 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-094/handoff/design.md"
+    "designer": "work/TASK-094/handoff/design.md",
+    "coder": "work/TASK-094/handoff/code.md"
   },
   "user_notes": [
     {
@@ -52,14 +61,24 @@
     }
   ],
   "picked_at": "2026-11-08T07:01:21Z",
-  "updated_at": "2026-11-08T07:04:55Z",
+  "updated_at": "2026-11-08T07:13:45Z",
   "updated_by": "main",
-  "scope": [],
+  "scope": [
+    "src/exam_engine/cli.py",
+    "src/exam_engine/pipeline/runlayout.py",
+    "src/exam_engine/pipeline/planrun.py",
+    "src/exam_engine/pipeline/report_pack.py",
+    "src/exam_engine/pipeline/report_kinds.py",
+    "docs/guide/toolkit-reference.md",
+    "docs/guide/workflow-roles.md",
+    "docs/design/phase-94-main-published-line.md",
+    "tests/unit/*.py"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
     "done": [],
     "notes": ""
   },
-  "next": "coder implements 94.1-94.5 and 94.8; tester with --affected/--fast; main runs the gate and the first publication"
+  "next": "tester adds the 94.8 tests and fixes test_90_5; main writes workflow-roles section 12, runs the gate, then the first publication"
 }

@@ -2701,3 +2701,9 @@ Action: Design drafted; best picks D1-D3
 Result: docs/design/phase-94-main-published-line.md
 Decision: DESIGN
 Next: IMPLEMENTING
+
+## IMPLEMENTING - TASK-094 - 2026-11-08T07:13:45Z
+Action: Coder implemented 94.1-94.5
+Result: demo on a scratch copy; real trees untouched
+Decision: IMPLEMENTING
+Next: UNIT_TESTED

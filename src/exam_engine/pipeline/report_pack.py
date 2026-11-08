@@ -110,7 +110,8 @@ def _pdf_siblings(out_dir, lang):
             raise ValueError("PDF failed for %s: %s" % (f, note))
 
 
-def build_pack(plan_dirs, out_dir, exam, run, key=None, pdf=True, engine_git=None):
+def build_pack(plan_dirs, out_dir, exam, run, key=None, pdf=True, engine_git=None, view="sheet", cmd="report-pack",
+               extra=None):
     """Build the pack in out_dir; returns {files, expected, parts, correct, total}. ValueError on a bad plan, bad
     name part, unregistered extra file or a registered kind without a file."""
     run = run if run.startswith("run-") else "run-" + run
@@ -127,7 +128,7 @@ def build_pack(plan_dirs, out_dir, exam, run, key=None, pdf=True, engine_git=Non
         raise ValueError("no letter keys found in %s" % key)
     parts = []
     for pd in plan_dirs:
-        info = report_build.build(pd, out_dir, view="sheet", pdf=pdf, exam_name=exam, run_name=run, engine_git=engine_git)
+        info = report_build.build(pd, out_dir, view=view, pdf=pdf, exam_name=exam, run_name=run, engine_git=engine_git)
         nm = info["names"]
         src = os.path.join(pd, "run.log")
         if os.path.isfile(src):
@@ -139,8 +140,8 @@ def build_pack(plan_dirs, out_dir, exam, run, key=None, pdf=True, engine_git=Non
         raise ValueError("two plans have the same subject name: %s" % subjects)
     combined = reporter.build_combined_markdown([(p["result"], p["metrics"], p["exam"]) for p in parts],
                                                 title="Exam report: %s (all subjects, %s)" % (exam, run))
-    cmd = os.path.join(out_dir, rk.name(exam, "all", "solution-report", run, "md"))
-    with open(cmd, "w", encoding="utf-8") as fh:
+    combined_md = os.path.join(out_dir, rk.name(exam, "all", "solution-report", run, "md"))
+    with open(combined_md, "w", encoding="utf-8") as fh:
         fh.write(combined)
     rows = _rows(parts)
     _tsv(os.path.join(out_dir, rk.name(exam, "all", "answer-table", run, "tsv")),
@@ -162,11 +163,16 @@ def build_pack(plan_dirs, out_dir, exam, run, key=None, pdf=True, engine_git=Non
         correct, total = sm["total_correct"], sm["total"]
     if pdf:
         _pdf_siblings(out_dir, reporter.learn_lang(parts[0]["result"]))
-    want = rk.expected(exam, subjects, run, key=bool(keymap), pdf=pdf)
+    want = rk.expected(exam, subjects, run, key=bool(keymap), pdf=pdf, view=view)
     have = sorted(f for f in os.listdir(out_dir) if f not in (rk.INDEX_NAME, runlayout.RUN_JSON))
     missing = [w for w in want if w not in have]
-    extra = [h for h in have if rk.classify(h)[1] != "standard"]
-    if missing or extra:
-        raise ValueError("pack check failed: missing %s; unregistered %s" % (missing, extra))
-    runlayout.finish_report_run(out_dir, plan_dirs, "sheet", engine_git, "report-pack")
+    stray = [h for h in have if rk.classify(h)[1] != "standard"]
+    if missing or stray:
+        raise ValueError("pack check failed: missing %s; unregistered %s" % (missing, stray))
+    meta = dict(extra or {})
+    if key:  # recorded so a later publish can reuse the key (repo-relative when inside the cwd)
+        rel = os.path.relpath(os.path.abspath(key))
+        meta.update(key=os.path.abspath(key) if rel.startswith("..") else rel.replace(os.sep, "/"),
+                    key_sha256=runlayout._sha_file(key))
+    runlayout.finish_report_run(out_dir, plan_dirs, view, engine_git, cmd, extra=meta or None)
     return {"files": have, "expected": want, "parts": parts, "correct": correct, "total": total}

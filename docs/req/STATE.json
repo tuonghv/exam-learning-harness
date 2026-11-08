@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0101",
-  "next": "coder implements 94.1-94.5 and 94.8; tester with --affected/--fast; main runs the gate and the first publication",
-  "updated": "2026-11-08 14:04"
+  "next": "tester adds the 94.8 tests and fixes test_90_5; main writes workflow-roles section 12, runs the gate, then the first publication",
+  "updated": "2026-11-08 14:13"
 }

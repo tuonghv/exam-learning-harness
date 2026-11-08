@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-094",
-  "state": "DESIGN",
-  "next": "coder implements 94.1-94.5 and 94.8; tester with --affected/--fast; main runs the gate and the first publication",
+  "state": "IMPLEMENTING",
+  "next": "tester adds the 94.8 tests and fixes test_90_5; main writes workflow-roles section 12, runs the gate, then the first publication",
   "title": "main is the published line: write guard (--publish), exam publish, run-list published/dev, docs (REQ-0101)",
   "active": [
     {
       "task_id": "TASK-094",
-      "state": "DESIGN",
-      "next": "coder implements 94.1-94.5 and 94.8; tester with --affected/--fast; main runs the gate and the first publication",
-      "updated_at": "2026-11-08T07:04:55Z"
+      "state": "IMPLEMENTING",
+      "next": "tester adds the 94.8 tests and fixes test_90_5; main writes workflow-roles section 12, runs the gate, then the first publication",
+      "updated_at": "2026-11-08T07:13:45Z"
     }
   ],
   "max_active": 1

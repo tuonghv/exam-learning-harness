@@ -79,6 +79,43 @@ def safe_line(line):
     return line
 
 
+# Plans/reports trees of this repo (real paths): a write to their main line needs --publish. Tests patch it.
+PROTECTED_ROOTS = tuple(os.path.realpath(os.path.join(
+    os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), d))
+    for d in ("plans", "reports"))
+PUBLISHED = "published"
+DEV = "dev"
+
+
+class PublishRequired(ValueError):
+    """A write into the published line (main) without --publish."""
+
+
+def is_published_line(line):
+    """main (and the layout without a line, '-' / None) is the published line; any other line is dev."""
+    return line in (LINE_DEFAULT, None, "-")
+
+
+def require_publish(line, publish, what, root, exam=None):
+    """Raise PublishRequired when `what` would write into the published line of a protected root without publish.
+    line None: derived from root (a --out path: <protected>/<exam>/<line>/...). Roots outside PROTECTED_ROOTS pass."""
+    rp = os.path.realpath(root)
+    for prot in PROTECTED_ROOTS:
+        if rp == prot or rp.startswith(prot + os.sep):
+            break
+    else:
+        return
+    parts = [x for x in os.path.relpath(rp, prot).split(os.sep) if x != "."]
+    if line is None:
+        line = parts[1] if len(parts) >= 2 else None
+    if publish or not is_published_line(line):
+        return
+    exam = exam or (parts[0] if parts else None)
+    raise PublishRequired("%s: line 'main'%s is the published line; tests/experiments use --line <name> (e.g. --line v3); "
+                          "pass --publish only when the user asked for a main run."
+                          % (what, " of %s" % exam if exam else ""))
+
+
 def _jload(path):
     try:
         with open(path, encoding="utf-8") as fh:
@@ -227,8 +264,9 @@ def plan_run_dir(root, exam_id, run_id, line=None):
     return os.path.join(base, LINE_DEFAULT, RUNS, rid)
 
 
-def new_plan_run(root, exam_id, line=LINE_DEFAULT, subject=None, now=None):
-    """Claimed plans/<exam>/<line>/runs/<UTC stamp>[-<subject>][-N]."""
+def new_plan_run(root, exam_id, line=LINE_DEFAULT, subject=None, now=None, publish=False):
+    """Claimed plans/<exam>/<line>/runs/<UTC stamp>[-<subject>][-N]. Main of a protected root needs publish."""
+    require_publish(line, publish, "new plan run", root, exam_id)
     tag = subject_tag(subject) if subject else None
     return _claim_dir(os.path.join(root, _safe(exam_id, "exam id"), safe_line(line), RUNS),
                       new_run_id(now) + ("-" + tag if tag else ""))
@@ -304,8 +342,10 @@ def list_plan_runs(root, exam_id, line=None):
     return out
 
 
-def new_report_run(root, exam_id, run_id=None, line=None):
-    """reports/<exam>[/<line>]/run-<id>. A given id (with or without 'run-') reuses the dir (overwrite); none = fresh id."""
+def new_report_run(root, exam_id, run_id=None, line=None, publish=False):
+    """reports/<exam>[/<line>]/run-<id>. A given id (with or without 'run-') reuses the dir (overwrite); none = fresh id.
+    Main (or no line) of a protected root needs publish."""
+    require_publish(line, publish, "new report run", root, exam_id)
     base = os.path.join(root, _safe(exam_id, "exam id"))
     if line and line != "-":
         base = os.path.join(base, safe_line(line))
@@ -446,14 +486,40 @@ def write_report_manifest(report_dir, plan_dirs, view, engine_git, cmd, repo_roo
     return man
 
 
-def finish_report_run(report_dir, plan_dirs, view, engine_git, cmd, repo_root=None):
-    """run.json, then INDEX.md of the run folder and, for a run folder in the new layout, of its exam folder."""
+def finish_report_run(report_dir, plan_dirs, view, engine_git, cmd, repo_root=None, extra=None):
+    """run.json, then INDEX.md of the run folder and, for a run folder in the new layout, of its (line or exam) folder;
+    a run in a line folder also refreshes the exam folder's INDEX.md (lines table)."""
     from exam_engine.pipeline import report_kinds as rk
-    man = write_report_manifest(report_dir, plan_dirs, view, engine_git, cmd, repo_root=repo_root)
+    man = write_report_manifest(report_dir, plan_dirs, view, engine_git, cmd, repo_root=repo_root, extra=extra)
     rk.write_index(report_dir)
-    if NEW_ID.match(man["report_run_id"]) and os.path.basename(os.path.abspath(report_dir)).startswith(REPORT_PREFIX):
-        rk.write_index(os.path.dirname(os.path.abspath(report_dir)))
+    ad = os.path.abspath(report_dir)
+    if NEW_ID.match(man["report_run_id"]) and os.path.basename(ad).startswith(REPORT_PREFIX):
+        parent = os.path.dirname(ad)
+        rk.write_index(parent)
+        lines = [p.get("line") for p in man["plan_runs"] if p.get("line")]
+        if lines and os.path.basename(parent) in (LINE_DEFAULT, lines[0]):
+            rk.write_index(os.path.dirname(parent))
     return man
+
+
+def lines_table(exam_folder):
+    """Markdown lines of the lines table of a reports exam folder holding line folders (main first), else []."""
+    try:
+        names = sorted(os.listdir(exam_folder))
+    except OSError:
+        return []
+    lines = [n for n in names if os.path.isdir(os.path.join(exam_folder, n)) and not os.path.islink(os.path.join(exam_folder, n))
+             and _is_line_report_dir(os.path.join(exam_folder, n))]
+    if not any(not n.startswith(REPORT_PREFIX) for n in lines):
+        return []
+    lines = [n for n in lines if not n.startswith(REPORT_PREFIX)]
+    lines.sort(key=lambda n: (n != LINE_DEFAULT, n))
+    rows = ["## Lines", "", "| Line | Publish | Report runs | Latest |", "| --- | --- | --- | --- |"]
+    for n in lines:
+        runs = [r for r in scan_report_runs(os.path.join(exam_folder, n), skip_lines=False) if r["layout"] == "run"]
+        rows.append("| %s | %s | %d | %s |" % (n, PUBLISHED if is_published_line(n) else DEV, len(runs),
+                                              "run-" + runs[-1]["id"] if runs else "-"))
+    return rows + [""]
 
 
 def plan_ref(man_plan, root):
