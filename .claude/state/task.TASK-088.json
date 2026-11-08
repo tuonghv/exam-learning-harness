@@ -1,0 +1,66 @@
+{
+  "task_id": "TASK-088",
+  "title": "Fast test mode: tiers, --fast, --affected, --full in a git worktree with cached result (REQ-0096)",
+  "state": "TODO",
+  "requirement": "REQ-0096",
+  "acceptance_criteria": [
+    "AC1 timing report script and summary",
+    "AC2 config/test_tiers.json, --fast skips slow tier",
+    "AC3 --affected maps changed files to tests, falls back to --fast",
+    "AC4 --full result file with tree hash, reused when unchanged",
+    "AC5 fast+slow = all tests, untagged test runs in fast",
+    "AC6 docs and role briefs",
+    "AC7 known failures reported as known",
+    "AC8 --full runs in a throwaway git worktree in the background"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {},
+  "user_notes": [
+    {
+      "raw": "RAW-00273",
+      "note": "run the suite in a git worktree like _code-security-scanner; --fast / skip heavy; best rule: --full once per task before VERIFIED, cached by tree hash",
+      "at": "2026-11-08T02:18:51Z"
+    }
+  ],
+  "picked_at": "2026-11-08T02:19:04Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}

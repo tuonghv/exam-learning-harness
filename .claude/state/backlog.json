@@ -1709,7 +1709,7 @@
     "task_id": "TASK-088",
     "title": "Fast test mode: tiers, --fast, --affected, --full in a git worktree with cached result (REQ-0096)",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-11-08T12:00:00",
     "requirement": "REQ-0096",
     "acceptance_criteria": [
