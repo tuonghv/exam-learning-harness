@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-092",
   "title": "Build the DHQG 2024 hybrid report pack in the new layout from the t81 runs (REQ-0094)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0094",
   "acceptance_criteria": [
     "AC1 pack at $0, every md has a pdf, checker passes (keyless pack accepted)",
@@ -24,9 +24,9 @@
     "summary": "python3 -I scripts/exam.py report-pack on the four t81 plan runs (--exam dhqg2024 --run t81) wrote reports/dhqg2024/t81/run-20261108-055609 (31 files + INDEX.md + run.json), $0"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/check_report_pack.py reports/dhqg2024/t81/run-20261108-055609 + 4 plan dirs; recount of questions/options/raw JSON",
+    "result": "checker 53 checks 0 failed (keyless pack accepted); 120/120 questions with A-D options in the all-subjects solution-report, 0 raw level JSON lines; per-subject headings equal result.json questions (20/20/30/50); md-with-pdf pairs 9 = 9"
   },
   "security": {
     "status": "pending",
@@ -62,7 +62,7 @@
     }
   ],
   "picked_at": "2026-11-08T05:55:43Z",
-  "updated_at": "2026-11-08T05:57:01Z",
+  "updated_at": "2026-11-08T05:57:02Z",
   "updated_by": "main",
   "scope": [
     "docs/design/phase-92-dhqg2024-pack.md"
@@ -73,5 +73,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "checker and recount, then a verifier"
+  "next": "verifier recount"
 }
