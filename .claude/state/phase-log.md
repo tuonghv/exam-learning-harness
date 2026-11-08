@@ -2761,3 +2761,9 @@ Action: Design from the real plan data; decisions D1-D4 best
 Result: docs/design/phase-96-report-answer-overlay.md
 Decision: DESIGN
 Next: IMPLEMENTING
+
+## IMPLEMENTING - TASK-096 - 2026-11-08T08:17:46Z
+Action: Coder implemented 96.1-96.4
+Result: scratch demo ok; real trees untouched
+Decision: IMPLEMENTING
+Next: UNIT_TESTED

@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-096",
   "title": "Overlay the corrected printed 64-67 (t82) into the DHQG 2024 report, labelled, then publish into main (REQ-0103)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0103",
   "acceptance_criteria": [
     "AC1 documented overlay mechanism with identity check and refusal on text mismatch",
@@ -18,8 +18,18 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/overlay.py",
+      "src/exam_engine/pipeline/report_build.py",
+      "src/exam_engine/pipeline/report_pack.py",
+      "src/exam_engine/pipeline/reporter.py",
+      "src/exam_engine/cli.py",
+      "tools/check_report_pack.py",
+      "docs/guide/report-kinds.md",
+      "docs/guide/toolkit-reference.md"
+    ],
+    "summary": "overlay.py (--overlay PLAN_DIR:ID, validation by stem+options hash, base must be declined, never writes result.json), hooks in report_build/report_pack/reporter/cli/check_report_pack; scratch demo on t81+t82: printed 64-67 = D,A,D,B, 115/5 answered/declined (before 111/9), 116 of 120 blocks byte-equal, 0 none, checker 60 checks 0 failed and 2 failed after tampering; refusals exit 2; publish inherits the overlay; run-list shows t82 published; --affected 0 new failures"
   },
   "unit_test": {
     "status": "pending",
@@ -42,7 +52,8 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-096/handoff/design.md"
+    "designer": "work/TASK-096/handoff/design.md",
+    "coder": "work/TASK-096/handoff/code.md"
   },
   "user_notes": [
     {
@@ -52,14 +63,25 @@
     }
   ],
   "picked_at": "2026-11-08T08:07:27Z",
-  "updated_at": "2026-11-08T08:11:39Z",
+  "updated_at": "2026-11-08T08:17:46Z",
   "updated_by": "main",
-  "scope": [],
+  "scope": [
+    "src/exam_engine/pipeline/overlay.py",
+    "src/exam_engine/pipeline/report_build.py",
+    "src/exam_engine/pipeline/report_pack.py",
+    "src/exam_engine/pipeline/reporter.py",
+    "src/exam_engine/cli.py",
+    "tools/check_report_pack.py",
+    "docs/guide/report-kinds.md",
+    "docs/guide/toolkit-reference.md",
+    "docs/design/phase-96-report-answer-overlay.md",
+    "tests/unit/*.py"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
     "done": [],
     "notes": ""
   },
-  "next": "coder implements overlay.py and the hooks; tester; gate; main builds the dev run then publishes"
+  "next": "tester writes test_overlay.py; main runs the gate, builds the real dev run and publishes"
 }

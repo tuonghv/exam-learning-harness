@@ -92,7 +92,8 @@ LABELS = {
            "no_text": "<question text not stored in this run>", "evidence": "Evidence", "score": "Score",
            "source": "Source", "check": "Check", "independent": "independent", "qa": "QA finding",
            "error": "Error", "no_answer": "no answer (solver declined)", "no_evidence": "no passed check",
-           "no_score": "not scored", "open_note": "Open question: no automatic score; a human rubric is needed."},
+           "no_score": "not scored", "overlay": "Answer source",
+           "overlay_fmt": "plan run %s of line %s (%s)", "open_note": "Open question: no automatic score; a human rubric is needed."},
     "vi": {"title": "Ph\u1ea7n h\u1ecdc", "question": "C\u00e2u", "answer": "\u0110\u00e1p \u00e1n",
            "open": "M\u1edf (c\u1ea7n ch\u1ea5m theo thang \u0111i\u1ec3m)", "verdict": "k\u1ebft qu\u1ea3",
            "why": "V\u00ec sao", "steps": "C\u00e1c b\u01b0\u1edbc",
@@ -105,7 +106,8 @@ LABELS = {
            "error": "L\u1ed7i",
            "no_answer": "ch\u01b0a c\u00f3 \u0111\u00e1p \u00e1n (solver t\u1eeb ch\u1ed1i)",
            "no_evidence": "kh\u00f4ng c\u00f3 (ch\u01b0a c\u00f3 ki\u1ec3m tra n\u00e0o \u0111\u1ea1t)",
-           "no_score": "ch\u01b0a ch\u1ea5m",
+           "no_score": "ch\u01b0a ch\u1ea5m", "overlay": "Ngu\u1ed3n \u0111\u00e1p \u00e1n",
+           "overlay_fmt": "l\u1ea7n ch\u1ea1y plan %s c\u1ee7a line %s (%s)",
            "open_note": "C\u00e2u m\u1edf: kh\u00f4ng ch\u1ea5m t\u1ef1 \u0111\u1ed9ng, c\u1ea7n thang \u0111i\u1ec3m."},
 }
 
@@ -209,6 +211,10 @@ def _question_block(q, result, exam_q, ctx, L):
         if opts:
             md += ["%s. %s  " % (_one_line(k), _one_line(v)) for k, v in opts.items()] + [""]
     md += ["**%s: %s**" % (L["answer"], L["open"] if opened else (_one_line(q.get("answer")) or L["no_answer"])), ""]
+    if q.get("overlay"):
+        o = q["overlay"]
+        md.append("- %s: %s" % (L["overlay"], L["overlay_fmt"] % (_one_line(o.get("plan_run_id")), _one_line(o.get("line")),
+                                                                   _one_line(o.get("reason")))))
     md.append("- %s: %s (%s)" % (L["status"], q["verification_status"], _one_line(q.get("status_reason")) or "-"))
     u = q.get("uncertainty") or {}
     lvl = _one_line(u.get("level"))

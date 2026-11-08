@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-096",
-  "state": "DESIGN",
-  "next": "coder implements overlay.py and the hooks; tester; gate; main builds the dev run then publishes",
+  "state": "IMPLEMENTING",
+  "next": "tester writes test_overlay.py; main runs the gate, builds the real dev run and publishes",
   "title": "Overlay the corrected printed 64-67 (t82) into the DHQG 2024 report, labelled, then publish into main (REQ-0103)",
   "active": [
     {
       "task_id": "TASK-096",
-      "state": "DESIGN",
-      "next": "coder implements overlay.py and the hooks; tester; gate; main builds the dev run then publishes",
-      "updated_at": "2026-11-08T08:11:39Z"
+      "state": "IMPLEMENTING",
+      "next": "tester writes test_overlay.py; main runs the gate, builds the real dev run and publishes",
+      "updated_at": "2026-11-08T08:17:46Z"
     }
   ],
   "max_active": 1

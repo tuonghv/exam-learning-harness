@@ -17,7 +17,7 @@ from exam_engine import engine, settings
 from exam_engine.adapters import claude
 from exam_engine.core import schema as sch
 from exam_engine.core.decision import decide
-from exam_engine.pipeline import (examples_check, explain, metrics, parser, planrun, prompts, report_build,
+from exam_engine.pipeline import (examples_check, explain, metrics, overlay, parser, planrun, prompts, report_build,
                                   plansmigrate, report_kinds, report_pack, reporter, router, runlayout, scorer, solver, verifier)
 
 COMMANDS = ("solve", "parse", "verify", "report", "plan-import", "check-examples", "score", "prompts",
@@ -456,6 +456,25 @@ def _report_plan(argv):
     return 0
 
 
+def _add_overlay_args(ap):
+    ap.add_argument("--overlay", action="append", default=[], metavar="PLAN_DIR:PRINTED[,PRINTED...]",
+                    help="take answer/solution/status/doubt of these printed numbers from another plan run "
+                         "(declined base questions only; in memory, no result.json is written; repeatable)")
+    ap.add_argument("--overlay-reason", metavar="TEXT", help="why (required with --overlay; shown on each source line)")
+
+
+def _ranges(nums):
+    """[64, 65, 66, 67, 70] -> '64-67,70'."""
+    out, nums = [], sorted(nums)
+    while nums:
+        j = 0
+        while j + 1 < len(nums) and nums[j + 1] == nums[j] + 1:
+            j += 1
+        out.append(str(nums[0]) if j == 0 else "%d-%d" % (nums[0], nums[j]))
+        nums = nums[j + 1:]
+    return ",".join(out)
+
+
 def report_pack_main(argv):
     """report-pack PLAN_RUN... --out DIR --exam NAME --run ID [--key FILE] [--no-pdf]: standard-named pack, $0."""
     ap = argparse.ArgumentParser(prog="exam report-pack", description="Build one standard-named report folder "
@@ -468,17 +487,21 @@ def report_pack_main(argv):
     ap.add_argument("--no-pdf", action="store_true")
     ap.add_argument("--publish", action="store_true",
                     help="allow writing into line main (the published line); default: refused, use --line <dev>")
+    _add_overlay_args(ap)
     a = ap.parse_args(argv)
     try:
+        plan_dirs = [os.path.abspath(p.rstrip("/")) for p in a.plans]
+        overlays = overlay.resolve(a.overlay, plan_dirs, a.overlay_reason)  # every check before any write
         line = runlayout.exam_line_of_plan_dir(a.plans[0])[1]  # mirror the line of the first plan run
         if a.out:
             runlayout.require_publish(None, a.publish, "report-pack --out", a.out)
         out = a.out or runlayout.new_report_run(DEFAULT_REPORT_ROOT, report_kinds.slug(a.exam) or "exam", line=line,
                                                 publish=a.publish)
         run = a.run or os.path.basename(os.path.abspath(out))
-        info = report_pack.build_pack([os.path.abspath(p.rstrip("/")) for p in a.plans], out, a.exam,
+        info = report_pack.build_pack(plan_dirs, out, a.exam,
                                       report_kinds.short_run(run) if not run.startswith("run-") else run,
-                                      key=a.key, pdf=not a.no_pdf, engine_git=reporter.git_info(_REPO_ROOT))
+                                      key=a.key, pdf=not a.no_pdf, engine_git=reporter.git_info(_REPO_ROOT),
+                                      overlays=overlays)
     except (OSError, ValueError) as exc:
         print("ERROR: %s" % exc, file=sys.stderr)
         return 2
@@ -518,6 +541,7 @@ def publish_main(argv):
     ap.add_argument("--no-pdf", action="store_true")
     ap.add_argument("--plans", default=DEFAULT_OUT_ROOT)
     ap.add_argument("--reports", default=DEFAULT_REPORT_ROOT)
+    _add_overlay_args(ap)
     a = ap.parse_args(argv)
     out = None
     try:
@@ -539,11 +563,19 @@ def publish_main(argv):
         if not kf:
             print("WARN: no key: score files skipped; pass --key", file=sys.stderr)
         run = a.run or line
+        specs, reason = a.overlay, a.overlay_reason
+        if not specs:  # inherit the source pack's overlays like the key
+            inherited = [o for o in ((src or {}).get("manifest") or {}).get("overlays") or [] if isinstance(o, dict)]
+            specs = ["%s:%s" % (o["dir"], ",".join(str(q["printed"]) for q in o["questions"])) for o in inherited]
+            reason = reason or "; ".join(sorted({o.get("reason") or "" for o in inherited})) or None
+            for o in inherited:
+                print("overlay inherited: %s printed %s" % (o["plan_run_id"], _ranges([q["printed"] for q in o["questions"]])))
+        overlays = overlay.resolve(specs, [d for d, _s in sel], reason)
         out = runlayout.new_report_run(a.reports, exam, line=runlayout.LINE_DEFAULT, publish=True)
         info = report_pack.build_pack([d for d, _s in sel], out, report_kinds.slug(exam) or "exam",
                                       report_kinds.short_run(run) if not run.startswith("run-") else run,
                                       key=kf, pdf=not a.no_pdf, engine_git=reporter.git_info(_REPO_ROOT),
-                                      view=a.view, cmd="publish",
+                                      view=a.view, cmd="publish", overlays=overlays,
                                       extra={"published_from": line, "source_report_run": src["id"] if src else None})
     except (OSError, ValueError) as exc:
         if out and not os.path.isfile(os.path.join(out, runlayout.RUN_JSON)):
@@ -551,6 +583,9 @@ def publish_main(argv):
         print("ERROR: %s" % exc, file=sys.stderr)
         return 2
     print("publish %d file(s) -> %s" % (len(info["files"]), out))
+    man = runlayout._jload(os.path.join(out, runlayout.RUN_JSON)) or {}
+    prev = man.get("prev_report_run")
+    print("main: %s -> %s" % ("run-" + prev if prev else "(none)", os.path.basename(out)))
     if info["total"]:
         print("score %d/%d" % (info["correct"], info["total"]))
     return 0
@@ -1454,6 +1489,10 @@ def _rl_plan_keys(man, exam):
     """[(line, key)] of a report run's plan_runs; key = plan run id, or `exam/id` for another exam's plan run."""
     out = []
     for pr in man.get("plan_runs", []):
+        if isinstance(pr, dict):
+            key = pr.get("plan_run_id") if pr.get("exam_id") == exam else "%s/%s" % (pr.get("exam_id"), pr.get("plan_run_id"))
+            out.append((pr.get("line"), key))
+    for pr in man.get("overlays") or []:  # an overlay plan run counts as part of the report run (TASK-096)
         if isinstance(pr, dict):
             key = pr.get("plan_run_id") if pr.get("exam_id") == exam else "%s/%s" % (pr.get("exam_id"), pr.get("plan_run_id"))
             out.append((pr.get("line"), key))

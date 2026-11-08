@@ -9,7 +9,7 @@ import json
 import os
 import shutil
 
-from exam_engine.pipeline import explain, report_build, report_kinds as rk, reporter, runlayout
+from exam_engine.pipeline import explain, planrun, report_build, report_kinds as rk, reporter, runlayout
 
 LETTERS = "ABCD"
 
@@ -111,8 +111,10 @@ def _pdf_siblings(out_dir, lang):
 
 
 def build_pack(plan_dirs, out_dir, exam, run, key=None, pdf=True, engine_git=None, view="sheet", cmd="report-pack",
-               extra=None):
-    """Build the pack in out_dir; returns {files, expected, parts, correct, total}. ValueError on a bad plan, bad
+               extra=None, overlays=None):
+    """overlays: entries from overlay.resolve (validated by the caller before any write); each is applied in
+    memory to the plan of its subject and recorded in run.json `overlays`.
+    Build the pack in out_dir; returns {files, expected, parts, correct, total}. ValueError on a bad plan, bad
     name part, unregistered extra file or a registered kind without a file."""
     run = run if run.startswith("run-") else "run-" + run
     if pdf and reporter.find_pdf_renderer() is None:
@@ -128,7 +130,10 @@ def build_pack(plan_dirs, out_dir, exam, run, key=None, pdf=True, engine_git=Non
         raise ValueError("no letter keys found in %s" % key)
     parts = []
     for pd in plan_dirs:
-        info = report_build.build(pd, out_dir, view=view, pdf=pdf, exam_name=exam, run_name=run, engine_git=engine_git)
+        subj = ((planrun.load(pd)["result"] or {}).get("exam") or {}).get("subject")
+        mine = [o for o in overlays or [] if o["subject"] == subj]
+        info = report_build.build(pd, out_dir, view=view, pdf=pdf, exam_name=exam, run_name=run, engine_git=engine_git,
+                                  overlay=mine[0] if mine else None)
         nm = info["names"]
         src = os.path.join(pd, "run.log")
         if os.path.isfile(src):
@@ -170,6 +175,8 @@ def build_pack(plan_dirs, out_dir, exam, run, key=None, pdf=True, engine_git=Non
     if missing or stray:
         raise ValueError("pack check failed: missing %s; unregistered %s" % (missing, stray))
     meta = dict(extra or {})
+    if overlays:
+        meta["overlays"] = list(overlays)
     if key:  # recorded so a later publish can reuse the key (repo-relative when inside the cwd)
         rel = os.path.relpath(os.path.abspath(key))
         meta.update(key=os.path.abspath(key) if rel.startswith("..") else rel.replace(os.sep, "/"),

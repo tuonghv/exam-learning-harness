@@ -67,6 +67,17 @@ def read(path):
         return ""
 
 
+SOURCE_LINE = re.compile(r"^- (?:Ngu\u1ed3n \u0111\u00e1p \u00e1n|Answer source): ", re.M)
+
+
+def question_text(plan, qid):
+    """Whitespace-collapsed '### Question text' section of question qid in plan/input/exam.md ('' when absent)."""
+    m = re.search(r"^## Question %s[ \t]*$(.*?)(?=^## |\Z)" % re.escape(str(qid)), read(os.path.join(plan, "input", "exam.md")),
+                  re.M | re.S)
+    t = re.search(r"^### Question text[ \t]*$(.*)", m.group(1), re.M | re.S) if m else None
+    return " ".join(t.group(1).split()) if t else ""
+
+
 def main(argv):
     args, key, expect, reg = [], None, None, os.path.join(HERE, "..", "config", "report_kinds.json")
     i = 0
@@ -108,6 +119,28 @@ def main(argv):
             with open(os.path.join(pd, "result.json"), "rb") as fh:
                 want.append(hashlib.sha256(fh.read()).hexdigest())
         chk("run.json result_sha256 mismatches", 0, sum(1 for w in want if w not in got))
+    overlays = [o for o in (man.get("overlays") or []) if isinstance(o, dict)] if os.path.isfile(os.path.join(pack, "run.json")) else []
+    ovl = {}  # (subject, base id) -> overlay letter
+    if overlays:
+        bad_sha = bad_text = 0
+        for o in overlays:
+            rpath = os.path.join(o.get("dir") or "", "result.json")
+            try:
+                with open(rpath, "rb") as fh:
+                    bad_sha += hashlib.sha256(fh.read()).hexdigest() != o.get("result_sha256")
+                ores = jload(rpath)
+            except (OSError, ValueError):
+                bad_sha, ores = bad_sha + 1, {"questions": []}
+            base_dir = next((x["plan"] for x in results if x["r"]["exam"].get("subject") == o.get("subject")), None)
+            for q in o.get("questions", []):
+                if base_dir is None or not question_text(o.get("dir") or "", q["id"]) \
+                        or question_text(o["dir"], q["id"]) != question_text(base_dir, q["base_id"]):
+                    bad_text += 1
+                oq = next((x for x in ores["questions"] if str(x["id"]) == str(q["id"])), {})
+                a = (oq.get("answer") or "").strip().upper() if isinstance(oq.get("answer"), str) else ""
+                ovl[(o.get("subject"), str(q["base_id"]))] = a if a in ("A", "B", "C", "D") else "-"
+        chk("overlay result_sha256 mismatches", 0, bad_sha)
+        chk("overlay text differs", 0, bad_text)
     chk("unregistered files", 0, sum(1 for v in parsed.values() if v is None))
     chk("exam/run parts", 1, len({(v["exam"], v["run"]) for v in parsed.values() if v}))
     # AC10: every applicable registered kind has exactly its expected files
@@ -144,6 +177,9 @@ def main(argv):
         chk("questions answer-sheet %s" % s, n, m.group(1) if m else 0)
         nt = sum(1 for ln in sr.splitlines() if re.match(r"^<[^<>]+>$", ln.strip()))
         chk("with_text %s" % s, n, len(heads) - nt)
+        if overlays:
+            chk("overlay source lines %s" % s, sum(len(o["questions"]) for o in overlays if slug(o.get("subject")) == s),
+                len(SOURCE_LINE.findall(sr)))
         chk("raw-JSON doubt lines %s" % s, 0, len(re.findall(r"""[{]\s*["']level["']""", sr)))
         chk("log copy %s" % s, 1, 1 if ("run-log", s, "log") in by else 0)
         meta = jload(by[("result-data", s, "json")]) if ("result-data", s, "json") in by else {}
@@ -151,6 +187,8 @@ def main(argv):
     chk("questions total", total, qsum)
     allsr = read(by.get(("solution-report", "all", "md"), ""))
     chk("questions combined solution-report", total, len(re.findall(r"^### \S+ (\d+)\s*$", allsr, re.M)))
+    if overlays:
+        chk("overlay source lines combined", sum(len(o["questions"]) for o in overlays), len(SOURCE_LINE.findall(allsr)))
     # answer-table letters = result answers
     tab = [ln.split("\t") for ln in read(by.get(("answer-table", "all", "tsv"), "")).splitlines()[1:] if ln.strip()]
     chk("answer-table rows", total, len(tab))
@@ -159,6 +197,7 @@ def main(argv):
         for q in x["r"]["questions"]:
             a = (q.get("answer") or "").strip().upper() if isinstance(q.get("answer"), str) else ""
             want[(x["r"]["exam"].get("subject"), str(q["id"]))] = a if a in ("A", "B", "C", "D") else "-"
+    want.update(ovl)
     chk("answer-table letters differ", 0, sum(1 for r in tab if want.get((r[0], r[1])) != r[3]))
     if key:
         km = key_map(key)
