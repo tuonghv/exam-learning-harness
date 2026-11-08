@@ -1784,7 +1784,7 @@
     "task_id": "TASK-091",
     "title": "Convert old reports into reports/<exam>/<line>/run-<id> with reviewed dry-run, backup, manifest, undo (REQ-0099)",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-11-08T17:00:00",
     "requirement": "REQ-0099",
     "acceptance_criteria": [
