@@ -121,3 +121,12 @@ When the user gives official answers for a solved exam:
 3. Fix only engine causes (infrastructure, extraction, context_not_delivered, reply_path), one task each; send `key_oddity_candidate` and solver-reasoning rows to the user as a short list to check.
 4. After a fix, run `run-stats gain` over ALL questions (declined ones count as not correct). Claim a gain only from a held-out row (an exam the fix was not learned from) with changed answers >= 5; otherwise say "no measurable change".
 5. Report both numbers when an exclusion is tempting (a slice artifact, a declined question): the honest figure includes them.
+
+## 11. Test modes (user, RAW-00271/00273; phase 88)
+The full unit suite takes about 6 minutes, 300 s of it in 6 tests, so roles use `tools/run_tests.py` (run with `python3 -I`; detail in `docs/guide/testing.md`):
+| When | Mode | Time |
+|---|---|---|
+| iterating on a change | `--affected` (tests of the changed files) | seconds |
+| before every commit | `--fast` (all except the slow tier in `config/test_tiers.json`) | about 50 s |
+| gate, once per task before VERIFIED | `--full` (git worktree of HEAD, detached; result `work/test-runs/<tree-hash>.json`, reused while the tree is unchanged) | about 6 min, background |
+Known failures are listed in `config/test_tiers.json` and reported as known. The role briefs' own test line (inside the generated `agent-setup:project` block) still names the plain unittest command; changing it needs the user's confirmation (generated from `.claude/agent_setup.json`).

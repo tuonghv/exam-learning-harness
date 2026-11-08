@@ -52,7 +52,21 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-088/handoff/design.md",
-    "coder": "work/TASK-088/handoff/code.md"
+    "coder": "work/TASK-088/handoff/code.md",
+    "grants": {
+      "coder": [
+        ".claude/skills/unit-test/SKILL.md",
+        ".claude/skills/verify/SKILL.md"
+      ],
+      "tester": [
+        ".claude/skills/unit-test/SKILL.md",
+        ".claude/skills/verify/SKILL.md"
+      ]
+    },
+    "grants_auto": [
+      ".claude/skills/unit-test/SKILL.md",
+      ".claude/skills/verify/SKILL.md"
+    ]
   },
   "user_notes": [
     {
@@ -69,7 +83,11 @@
     "config/test_tiers.json",
     "docs/guide/testing.md",
     "docs/guide/toolkit-reference.md",
-    "tests/unit/*.py"
+    "tests/unit/*.py",
+    "tests/unit/test_run_tests.py",
+    ".claude/skills/unit-test/SKILL.md",
+    ".claude/skills/verify/SKILL.md",
+    "docs/guide/workflow-roles.md"
   ],
   "depends_on": [],
   "inputs": {},

@@ -24,7 +24,7 @@ script in isolation:
 
 Keep UNIT_TESTED and VERIFIED distinct: unit tests prove the code; the `verify` skill proves the behavior.
 
-Before UNIT_TESTED run the whole suite once, `python3 -I -m unittest discover -s tests/unit` (0 tests run is a failure). While iterating, add `-p 'test_<name>.py'`. Record
+Test modes (docs/guide/testing.md): while iterating `python3 -I tools/run_tests.py --affected` (seconds); before a commit `--fast` (about 50 s); before UNIT_TESTED/VERIFIED the gate `--full` ONCE per task, detached in a git worktree, then read `work/test-runs/<tree-hash>.json` (reused when the tree is unchanged; never start it twice). 0 tests run is a failure. The plain `python3 -I -m unittest discover -s tests/unit` (about 6 minutes) is the fallback. While iterating on one file, `-p 'test_<name>.py'` also works. Record
 `unit_test.command` (the exact commands) and `unit_test.result` (per-suite pass/fail counts, plus the
 bites-on-old-code count); 0 tests run is a failure, not a pass.
 

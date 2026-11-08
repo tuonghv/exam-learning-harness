@@ -26,7 +26,7 @@ Choose a tier per acceptance item and record it in `verification.evidence`.
 Rules:
 1. Batch, never one-by-one: one script runs all of a phase's Verification rows; build fixtures once.
 2. No heavy run for a small item; Tier 1 proves a one-function fix.
-3. Reuse evidence: a unit test that already runs the real script counts for its row (cite it). Run the full suite once per phase, in the background; filter while iterating.
+3. Reuse evidence: a unit test that already runs the real script counts for its row (cite it). Run the full gate once per task: `python3 -I tools/run_tests.py --full` (detached worktree, result in `work/test-runs/<tree-hash>.json`, reused when the tree is unchanged); use `--fast` / `--affected` while iterating (docs/guide/testing.md).
 4. Go up a tier only when the cheaper check could not see the failure; write down why.
 
 ## HEAD vs new, same inputs
@@ -34,7 +34,7 @@ For behaviour changes, build two scratch copies (`git archive HEAD | tar -x -C <
 
 ## Before calling the verifier role: save the evidence
 The `verifier` has no Bash and judges only files in `work/<TASK>/evidence/`; a claim without a file is UNVERIFIED. Save each check with `.claude/scripts/save-evidence.sh <name> -- <cmd...>` (header with task, command, HEAD, time, rc; returns the command's rc; use `bash -c '...'` for pipes). One file per claim, and name each file in the verifier request:
-- [ ] the unit suites the change touches: `unit-<suite> -- python3 -I -m unittest discover -s tests/unit`
+- [ ] the unit suites the change touches: `unit-<suite> -- python3 -I tools/run_tests.py --affected` (gate: `--full` result file)
 - [ ] the real run for each acceptance item: `run-<item> -- ...`
 - [ ] for a behaviour change, both sides with the same inputs: `before-<x>` and `after-<x>`
 
