@@ -32,3 +32,16 @@ Runs `python3 -I -m unittest discover -s tests/unit` in a throwaway detached wor
 - Only committed files are gated: uncommitted tracked changes print `DIRTY: n files not in the gate (commit first)`.
 - Gate passes when `new == []` (exit 0). Data-dependent tests that need git-ignored `work/` data skip in the worktree; the `skipped` count is recorded.
 - One run at a time (`work/test-runs/.full.lock/pid`; a dead pid is broken, a live one exits 3). Stale `elh-test-*` worktrees are removed on each run and by `--clean`; the worktree is removed in `finally`.
+
+## Measured timings (2026-11-08, AC1; `python3 -I tools/run_tests.py --time`)
+Full suite 1752 tests = 368.8 s at measurement time (today 1789 tests, gate 367.8 s). Six tests cost ~300 s; the other ~1,740 cost ~60 s together.
+| Seconds | Test | Tier |
+|---|---|---|
+| 156.3 | test_window_golden.TestIngestGolden.test_existing_pdfs_unchanged_but_cut_warnings | slow |
+| 49.5 | test_ocr_respace.TestOcrFamilies.test_glued_tokens_per_page | slow |
+| 27.2 | test_ocr_respace.TestOcrFamilies.test_respacing_beats_bridge_text_with_vie | slow |
+| 26.7 | test_completeness_measure_pdf.Families.test_chain_ocr_runs_on_a_scanned_family | slow |
+| 20.8 | test_completeness_measure_pdf.Families.test_window_oracle_whole_questions_no_orphans | slow |
+| 19.4 | test_completeness_measure_pdf.Families.test_chain_vision_mock_replies_all_families | slow |
+Per file: test_window_golden 156 s, test_completeness_measure_pdf 77 s, test_ocr_respace 77 s, test_assembly_qa 9.5 s. Measured wall times: `--fast` about 50 s, `--affected` seconds, `--full` about 6 min in the background (a repeat on an unchanged tree prints REUSED). Counts: `--list` gives all = fast + slow (1789 = 1769 + 20); a plain grep of `def test` finds 1786 because some tests are generated at load time, so use `--list`.
+Mutation proofs of the runner tests (3): dropping `_FailedTest` from the tier filter fails 1 test; removing the `cache_ignore` filter in `tree_key` fails 2; making `tier_of` always return fast fails 6.
