@@ -44,7 +44,7 @@ class PlanImportTest(unittest.TestCase):
         return run(cli.plan_import_main, [self.src, "--exam", EXAM, "--exam-id", "ex"] + list(extra))
 
     def plan(self):
-        base = os.path.join(self.tmp, "plans", "ex")
+        base = os.path.join(self.tmp, "plans", "ex", "runs")
         return os.path.join(base, sorted(os.listdir(base))[0])
 
     def test_import_layout_and_meta(self):
@@ -68,7 +68,9 @@ class PlanImportTest(unittest.TestCase):
         with mock.patch.object(socket, "socket", side_effect=AssertionError("network")):
             code, _, err = run(cli.report_main, [self.plan(), "--no-pdf"])
         self.assertEqual(code, 0, err)
-        d = os.path.join(self.tmp, "reports", "ex", os.path.basename(self.plan()), "sheet")
+        base = os.path.join(self.tmp, "reports", "ex")
+        (rdir,) = [n for n in os.listdir(base) if n.startswith("run-")]
+        d = os.path.join(base, rdir)
         self.assertIsNotNone(rk.find(d, "solution-report"))
         self.assertIsNotNone(rk.find(d, "metrics", ext="json"))
 
@@ -77,14 +79,14 @@ class PlanImportTest(unittest.TestCase):
         code, out, _ = self.imp()
         self.assertEqual(code, 0)
         self.assertIn("skipped", out)
-        self.assertEqual(len(os.listdir(os.path.join(self.tmp, "plans", "ex"))), 1)
+        self.assertEqual(len(os.listdir(os.path.join(self.tmp, "plans", "ex", "runs"))), 1)
 
     def test_changed_result_is_a_new_import(self):
         self.imp()
         with open(os.path.join(self.src, "result.json"), "a") as fh:
             fh.write("\n")
         self.imp()
-        self.assertEqual(len(os.listdir(os.path.join(self.tmp, "plans", "ex"))), 2)
+        self.assertEqual(len(os.listdir(os.path.join(self.tmp, "plans", "ex", "runs"))), 2)
 
     def test_missing_run_log_tolerated(self):
         os.remove(os.path.join(self.src, "run.log"))
@@ -103,7 +105,7 @@ class PlanImportTest(unittest.TestCase):
     def test_exam_unreadable_is_tolerated(self):
         code, _, _ = run(cli.plan_import_main, [self.src])  # result exam.path is relative, not readable
         self.assertEqual(code, 0)
-        base = os.path.join(self.tmp, "plans", "input-001")  # exam-id defaults to the result exam path
+        base = os.path.join(self.tmp, "plans", "input-001", "runs")  # exam-id defaults to the result exam path
         self.assertFalse(os.path.exists(os.path.join(base, os.listdir(base)[0], "input")))
 
     def test_trace_and_ingest_cache_picked_up(self):
@@ -201,7 +203,7 @@ class PlanImportTest(unittest.TestCase):
         root = os.path.join(self.tmp, "p")
         d1 = planrun.claim_run_dir(root, planrun.exam_id_of("Đề 1.md"))
         d2 = planrun.claim_run_dir(root, planrun.exam_id_of("De 1.md"))
-        self.assertEqual(os.path.dirname(d1), os.path.join(root, "De-1"))
+        self.assertEqual(os.path.dirname(d1), os.path.join(root, "De-1", "runs"))
         self.assertNotEqual(d1, d2)
         self.assertEqual(os.path.dirname(d1), os.path.dirname(d2))
 

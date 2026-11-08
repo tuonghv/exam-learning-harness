@@ -2497,3 +2497,9 @@ Action: Coder implemented 87.1-87.7
 Result: work/TASK-087/handoff/code.md; mock demo shows new layout
 Decision: IMPLEMENTING
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-087 - 2026-11-08T01:59:16Z
+Action: Tester added 46 tests and fixed 8 layout-dependent test files; main re-ran the full suite
+Result: 1747 run, 4 pre-existing failures
+Decision: UNIT_TESTED
+Next: VERIFIED

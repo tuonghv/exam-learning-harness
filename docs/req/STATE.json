@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0095",
-  "next": "tester writes test_runlayout.py and fixes layout-dependent tests; verifier recount",
-  "updated": "2026-11-08 08:41"
+  "next": "verifier recount: layout on mock run, legacy untouched, run-list/compare, run.json skip, readers on both layouts",
+  "updated": "2026-11-08 08:59"
 }

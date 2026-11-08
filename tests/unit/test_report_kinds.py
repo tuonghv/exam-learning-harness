@@ -163,7 +163,7 @@ class Packed(unittest.TestCase):
                 quiet(cli.solve_main, [EXAM, "--mock", MOCK, "--no-pdf"])
         finally:
             os.chdir(cwd)
-        base = os.path.join(cls.tmp, "plans", "input-001")
+        base = os.path.join(cls.tmp, "plans", "input-001", "runs")
         src = os.path.join(base, os.listdir(base)[0])
         cls.plans = []
         for sub in ("Alpha", "Beta"):
@@ -198,7 +198,7 @@ class Packed(unittest.TestCase):
         return sorted(os.listdir(d or self.work))
 
     def test_85_2_writers_emit_only_standard_names(self):
-        names = [n for n in self.listing() if n != "INDEX.md"]
+        names = [n for n in self.listing() if n not in ("INDEX.md", "run.json")]  # 87.3: run.json is no report file
         self.assertEqual(names, sorted(self.info["files"]))
         for n in names:
             self.assertIsNotNone(rk.parse(n), n)
@@ -287,7 +287,7 @@ class Packed(unittest.TestCase):
         with open(os.path.join(self.work, "INDEX.md"), encoding="utf-8") as fh:
             md = fh.read()
         self.assertNotIn("| INDEX.md |", md)
-        self.assertIn("- total: %d" % (len(self.listing()) - 1), md)
+        self.assertIn("- total: %d" % (len(self.listing()) - 2), md)  # minus INDEX.md and run.json
 
     # ---- AC4 hybrid solution-report ----
     def result(self):
@@ -338,7 +338,7 @@ class Packed(unittest.TestCase):
         self.assertEqual(self.info["total"], 2 * self.n)
         self.assertIsInstance(self.info["correct"], int)
         want = rk.expected("ex", ["alpha", "beta"], "run-t", key=True, pdf=False)
-        self.assertEqual([f for f in self.listing() if f != "INDEX.md"], want)  # exactly the registry's list
+        self.assertEqual([f for f in self.listing() if f not in ("INDEX.md", "run.json")], want)  # exactly the registry's list
         with open(os.path.join(self.work, rk.name("ex", "all", "answer-table", "run-t", "tsv")), encoding="utf-8") as fh:
             self.assertEqual(len(fh.read().splitlines()), 1 + 2 * self.n)
 

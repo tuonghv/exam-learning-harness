@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-087",
   "title": "Run-based plans/reports layout with report runs per plan run (REQ-0095), modeled on _code-security-scanner history/compare",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0095",
   "acceptance_criteria": [
     "AC1 plans/<exam>/runs/<plan-run-id>/",
@@ -34,9 +34,9 @@
     "summary": "runlayout.py resolver; new plan runs under plans/<exam>/runs/<YYYYMMDD-HHMMSS[-N]>, report runs under reports/<exam>/run-<id> with run.json; last_solved/_already_imported read both layouts; run-list and run-compare; exam runs index; legacy untouched; mock demo: 1 plan run, 4 report runs"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit",
+    "result": "test_runlayout 46 OK; full suite 1747 run (main re-run after the tester's last fix), only the 4 known pre-existing failures"
   },
   "security": {
     "status": "pending",
@@ -55,7 +55,8 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-087/handoff/design.md",
-    "coder": "work/TASK-087/handoff/code.md"
+    "coder": "work/TASK-087/handoff/code.md",
+    "tester": "work/TASK-087/handoff/test.md"
   },
   "user_notes": [
     {
@@ -65,7 +66,7 @@
     }
   ],
   "picked_at": "2026-11-08T01:31:01Z",
-  "updated_at": "2026-11-08T01:41:25Z",
+  "updated_at": "2026-11-08T01:59:16Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/runlayout.py",
@@ -84,5 +85,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tester writes test_runlayout.py and fixes layout-dependent tests; verifier recount"
+  "next": "verifier recount: layout on mock run, legacy untouched, run-list/compare, run.json skip, readers on both layouts"
 }

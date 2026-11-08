@@ -68,12 +68,12 @@ class ReportBuildTest(unittest.TestCase):
         p.start()
         self.addCleanup(p.stop)
         self.assertIn(quiet(cli.solve_main, [EXAM, "--mock", MOCK, "--no-pdf"]), (0, 1))
-        base = os.path.join(self.tmp, "plans", "input-001")
+        base = os.path.join(self.tmp, "plans", "input-001", "runs")
         self.plan = os.path.join(base, os.listdir(base)[0])
 
     def test_default_solve_report_in_reports_tree(self):
         rid = os.path.basename(self.plan)
-        d = os.path.join(self.tmp, "reports", "input-001", rid, "sheet")
+        d = os.path.join(self.tmp, "reports", "input-001", "run-" + rid)  # 87.3: one run dir, files flat
         names = sorted(os.listdir(d))
         for kind, ext in (("solution-report", "md"), ("answer-sheet", "md"), ("metrics", "json"), ("result-data", "json")):
             self.assertIsNotNone(stdpath(d, kind, ext), names)
@@ -86,8 +86,10 @@ class ReportBuildTest(unittest.TestCase):
         for d in (a, b):
             report_build.build(self.plan, d, pdf=False)
         self.assertEqual(tree(a), tree(b))
-        self.assertEqual(tree(a), tree(os.path.join(self.tmp, "reports", "input-001",
-                                                    os.path.basename(self.plan), "sheet")))
+        run = tree(os.path.join(self.tmp, "reports", "input-001", "run-" + os.path.basename(self.plan)))
+        for k in ("run.json", "INDEX.md"):  # the run dir adds its manifest and index; the report files are equal
+            run.pop(k)
+        self.assertEqual(tree(a), run)
 
     def test_metrics_use_stored_exam(self):
         info = report_build.build(self.plan, os.path.join(self.tmp, "x"))
@@ -130,10 +132,14 @@ class ReportBuildTest(unittest.TestCase):
     def test_many_reports_per_plan_run(self):
         for args in (["--report-id", "a"], ["--report-id", "b"], ["--view", "learn", "--report-id", "l"]):
             self.assertEqual(quiet(cli.report_main, [self.plan, "--no-pdf"] + args), 0)
-        base = os.path.join(self.tmp, "reports", "input-001", os.path.basename(self.plan))
-        self.assertEqual(sorted(os.listdir(base)), ["a", "b", "l", "sheet"])
-        self.assertEqual(tree(os.path.join(base, "a")), tree(os.path.join(base, "b")))
-        self.assertNotEqual(pick(tree(os.path.join(base, "a")), "report.md"), pick(tree(os.path.join(base, "l")), "learning.md"))
+        base = os.path.join(self.tmp, "reports", "input-001")
+        self.assertEqual(sorted(os.listdir(base)), ["INDEX.md", "run-" + os.path.basename(self.plan), "run-a", "run-b", "run-l"])  # INDEX.md = exam runs index (87.6)
+
+        def body(n):  # report files only: run.json holds created_utc, INDEX.md lists the run
+            t = tree(os.path.join(base, n))
+            return {k: v for k, v in t.items() if k not in ("run.json", "INDEX.md")}
+        self.assertEqual(body("run-a"), body("run-b"))
+        self.assertNotEqual(pick(body("run-a"), "report.md"), pick(body("run-l"), "learning.md"))
 
     def test_incomplete_plan_exit_2_and_old_form(self):
         empty = os.path.join(self.tmp, "empty")

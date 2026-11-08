@@ -82,8 +82,8 @@ class Base(unittest.TestCase):
         return code, o.getvalue(), e.getvalue(), llm
 
     def plans(self, eid="exam-a"):
-        base = os.path.join(self.tmp, "plans", eid)
-        return sorted(d for d in os.listdir(base) if d != "cache") if os.path.isdir(base) else []
+        base = os.path.join(self.tmp, "plans", eid, "runs")
+        return sorted(os.listdir(base)) if os.path.isdir(base) else []
 
 
 class T1HitSkipsLlm(Base):
@@ -104,7 +104,7 @@ class T1HitSkipsLlm(Base):
         code, _, err, l2 = self.cli("--yes")
         self.assertEqual(len(l2.prompts), 0, err)
         self.assertIn(code, (0, 1))
-        d = os.path.join(self.tmp, "plans", "exam-a", self.plans()[-1])
+        d = os.path.join(self.tmp, "plans", "exam-a", "runs", self.plans()[-1])
         with open(os.path.join(d, "calls", "index.jsonl"), encoding="utf-8") as fh:
             rows = [json.loads(x) for x in fh if x.strip()]
         self.assertTrue(rows)
@@ -207,7 +207,7 @@ class T5Corrupt(Base):
     def test_5_metrics_and_block_cache_line(self):
         self.cli()
         self.cli("--yes")
-        d = os.path.join(self.tmp, "plans", "exam-a", self.plans()[-1])
+        d = os.path.join(self.tmp, "plans", "exam-a", "runs", self.plans()[-1])
         with open(os.path.join(d, "result.json"), encoding="utf-8") as fh:
             res = json.load(fh)
         self.assertGreater(res["run"]["cached"], 0)
@@ -258,7 +258,7 @@ class T8Mock(Base):
     def test_8_mock_never_creates_cache_and_has_no_new_fields(self):
         self.assertIn(self.mock_run(None), (0, 1))
         self.assertFalse([p for p in self._glob("cache")])
-        d = os.path.join(self.tmp, "plans", "input-001")
+        d = os.path.join(self.tmp, "plans", "input-001", "runs")
         d = os.path.join(d, os.listdir(d)[0])
         with open(os.path.join(d, "result.json"), encoding="utf-8") as fh:
             res = json.load(fh)
