@@ -1896,5 +1896,20 @@
         "at": "2026-11-08T07:33:04Z"
       }
     ]
+  },
+  {
+    "task_id": "TASK-096",
+    "title": "Overlay the corrected printed 64-67 (t82) into the DHQG 2024 report, labelled, then publish into main (REQ-0103)",
+    "priority": 1,
+    "status": "queued",
+    "created_at": "2026-11-09T09:00:00",
+    "requirement": "REQ-0103",
+    "acceptance_criteria": [
+      "AC1 documented overlay mechanism with identity check and refusal on text mismatch",
+      "AC2 4 questions D,A,D,B labelled with their source, 116 others unchanged, 115 answered 5 declined, 0 none",
+      "AC3 run.json lists base plan runs and the overlay, checker passes, plans/ unchanged",
+      "AC4 dev report run first, then published into main, run-list shows the t82 plan run published",
+      "AC5 tests and gate"
+    ]
   }
 ]
