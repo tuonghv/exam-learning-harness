@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-096",
-  "state": "UNIT_TESTED",
-  "next": "verifier audit of the code and of the real dev run + the published main run",
+  "state": "VERIFIED",
+  "next": "write docs/report/phase-96-report-answer-overlay.md, then DONE",
   "title": "Overlay the corrected printed 64-67 (t82) into the DHQG 2024 report, labelled, then publish into main (REQ-0103)",
   "active": [
     {
       "task_id": "TASK-096",
-      "state": "UNIT_TESTED",
-      "next": "verifier audit of the code and of the real dev run + the published main run",
-      "updated_at": "2026-11-08T08:31:02Z"
+      "state": "VERIFIED",
+      "next": "write docs/report/phase-96-report-answer-overlay.md, then DONE",
+      "updated_at": "2026-11-08T08:33:09Z"
     }
   ],
   "max_active": 1

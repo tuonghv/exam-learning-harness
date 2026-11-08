@@ -2773,3 +2773,9 @@ Action: Tester 26 tests, gate run, real dev run built and published into main
 Result: 1920 run, new=[]; dev run run-20261108-082400, main run-20261108-083026
 Decision: UNIT_TESTED
 Next: VERIFIED
+
+## VERIFIED - TASK-096 - 2026-11-08T08:33:08Z
+Action: Overlay built, dev run verified, published into main
+Result: AC1-AC5 PASS
+Decision: VERIFIED
+Next: DONE: report
