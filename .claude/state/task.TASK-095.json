@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-095",
   "title": "Publish badge from the main report runs' plan links; exam INDEX ignores line-level INDEX.md (REQ-0102)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0102",
   "acceptance_criteria": [
     "AC1 run-list publish badge from main report links",
@@ -30,12 +30,20 @@
     "result": "gate: ran 1894, new=[], known=4, gate_ok true, 367.5 s, worktree removed; test_publish_badge 11 OK (8 fail on the previous code); --fast 1874 tests 54.4 s only the 4 known"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "display-only change; no write to plans/ or reports/ other than regenerated INDEX.md; no model call, no shell"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-095/evidence/run-list-after.txt",
+      "work/TASK-095/evidence/unreg-after.txt",
+      "work/TASK-095/evidence/main-checks.txt",
+      "work/TASK-095/evidence/gate-full.json",
+      "work/TASK-095/handoff/verify2.md"
+    ],
+    "command": "python3 -I scripts/exam.py run-list dgnl2026/dhqg2024; report-index on both exam folders; plans/ sha256 compare; gate --full",
+    "result": "22 run-list rows equal the verifier's recomputation from main report run.json plan_runs (8 published, 14 dev, 0 diffs); exam-level unregistered rows 18->3 and 19->4 (the remaining 7 are superseded files, cosmetic follow-up D1); plans/ 1599 files sha256 identical; only cli.py and report_kinds.py changed; gate ran 1894, new=[], known=4; verifier AC1-AC3 PASS"
   },
   "report": {
     "status": "pending",
@@ -47,7 +55,8 @@
   "roles": {
     "designer": "work/TASK-095/handoff/design.md",
     "coder": "work/TASK-095/handoff/code.md",
-    "tester": "work/TASK-095/handoff/test.md"
+    "tester": "work/TASK-095/handoff/test.md",
+    "verifier": "work/TASK-095/handoff/verify2.md"
   },
   "user_notes": [
     {
@@ -57,7 +66,7 @@
     }
   ],
   "picked_at": "2026-11-08T07:33:04Z",
-  "updated_at": "2026-11-08T07:46:45Z",
+  "updated_at": "2026-11-08T07:48:50Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
@@ -72,5 +81,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verifier recount of run-list and the regenerated exam indexes"
+  "next": "write docs/report/phase-95-publish-badge-and-index.md, then DONE"
 }
