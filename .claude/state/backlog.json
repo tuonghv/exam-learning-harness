@@ -1808,7 +1808,7 @@
     "task_id": "TASK-092",
     "title": "Build the DHQG 2024 hybrid report pack in the new layout from the t81 runs (REQ-0094)",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-11-08T19:00:00",
     "requirement": "REQ-0094",
     "acceptance_criteria": [

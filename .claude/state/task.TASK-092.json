@@ -1,0 +1,62 @@
+{
+  "task_id": "TASK-092",
+  "title": "Build the DHQG 2024 hybrid report pack in the new layout from the t81 runs (REQ-0094)",
+  "state": "TODO",
+  "requirement": "REQ-0094",
+  "acceptance_criteria": [
+    "AC1 pack at $0, every md has a pdf, checker passes (keyless pack accepted)",
+    "AC2 all-subjects solution-report 120/120 with question text, no raw JSON doubt lines",
+    "AC3 reply names each file and kind; old solutions.md = solution-report",
+    "AC4 corrected 64-67 (t82) not merged; pack = one run, note says which run each answer comes from"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {},
+  "user_notes": [
+    {
+      "raw": "RAW-00282",
+      "note": "pack for DHQG 2024 in the new layout; one run t81; corrected 64-67 stay a note",
+      "at": "2026-11-08T05:55:43Z"
+    }
+  ],
+  "picked_at": "2026-11-08T05:55:43Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
