@@ -2803,3 +2803,9 @@ Action: Tests and full gate
 Result: gate_ok, new=[]
 Decision: UNIT_TESTED
 Next: VERIFIED
+
+## VERIFIED - TASK-097 - 2026-11-08T10:30:12Z
+Action: Recount on real INDEX files and checker
+Result: AC1-AC3 pass
+Decision: VERIFIED
+Next: DONE

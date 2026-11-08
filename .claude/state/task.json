@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-097",
-  "state": "UNIT_TESTED",
-  "next": "recount of the INDEX files and checker, then VERIFIED",
+  "state": "VERIFIED",
+  "next": "report, then DONE",
   "title": "Small fixes: exam INDEX shows run-superseded files as superseded; checker refuses an overlay plan dir clearly (REQ-0104)",
   "active": [
     {
       "task_id": "TASK-097",
-      "state": "UNIT_TESTED",
-      "next": "recount of the INDEX files and checker, then VERIFIED",
-      "updated_at": "2026-11-08T10:30:03Z"
+      "state": "VERIFIED",
+      "next": "report, then DONE",
+      "updated_at": "2026-11-08T10:30:12Z"
     }
   ],
   "max_active": 1

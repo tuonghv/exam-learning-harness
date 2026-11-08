@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-097",
   "title": "Small fixes: exam INDEX shows run-superseded files as superseded; checker refuses an overlay plan dir clearly (REQ-0104)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0104",
   "acceptance_criteria": [
     "AC1 both exam INDEX files show 0 unregistered, the 7 files superseded with the run.json note",
@@ -29,12 +29,17 @@
     "result": "gate_ok true, new=[], known=4, 375 s; 2 new tests (test_104_1 checker exit 2, test_104_2 run.json superseded in the exam index)"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "reads run.json and file names only, no write outside INDEX.md, no model call"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-097/evidence/recount.txt",
+      "work/TASK-097/evidence/gate-full.json"
+    ],
+    "command": "report-index on reports/dgnl2026 and reports/dhqg2024; grep recount of the 7 rows against run.json globs; checker on the published DHQG run and with the overlay dir; file count of plans/",
+    "result": "7 files superseded with the run.json note, 0 unregistered in both exam INDEX files; dgnl f run: 16 superseded rows = 16 files in the run; checker 60 checks 0 failed; overlay dir as PLAN_DIR exit 2 with one-line message; plans/ 1599 files"
   },
   "report": {
     "status": "pending",
@@ -51,12 +56,15 @@
       "waiver": "about 30 lines by the coordinator"
     },
     "tester": {
-      "waiver": "the 2 tests are written by the coordinator; the gate result is the independent evidence"
+      "waiver": "2 tests by the coordinator; gate is the evidence"
+    },
+    "verifier": {
+      "waiver": "coordinator recount with grep against run.json; reporting-only change"
     }
   },
   "user_notes": [],
   "picked_at": "2026-11-08T10:22:12Z",
-  "updated_at": "2026-11-08T10:30:03Z",
+  "updated_at": "2026-11-08T10:30:12Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/report_kinds.py",
@@ -69,5 +77,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "recount of the INDEX files and checker, then VERIFIED"
+  "next": "report, then DONE"
 }
