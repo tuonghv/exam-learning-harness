@@ -1,0 +1,1605 @@
+{
+ "folders": {
+  "cacheproof-en": {
+   "exam": "cacheproof-en",
+   "line": "main"
+  },
+  "confidence": "keep",
+  "crosssolve-070": "keep",
+  "dgnl-retry": "keep",
+  "dgnl-window": "keep",
+  "dgnl2025": {
+   "exam": "dgnl2025",
+   "line": "main"
+  },
+  "dgnl2025-fix": {
+   "exam": "dgnl2025",
+   "line": "fix"
+  },
+  "dgnl2025-fix2": {
+   "exam": "dgnl2025",
+   "line": "fix2"
+  },
+  "dgnl2025-noise": {
+   "exam": "dgnl2025",
+   "line": "noise"
+  },
+  "dgnl2025-noise2": {
+   "exam": "dgnl2025",
+   "line": "noise2"
+  },
+  "dgnl2025-v2": {
+   "exam": "dgnl2025",
+   "line": "v2"
+  },
+  "dgnl2026-t80": {
+   "exam": "dgnl2026",
+   "line": "t80"
+  },
+  "dgnl2026-v2": {
+   "exam": "dgnl2026",
+   "line": "v2"
+  },
+  "dgnl2026f": {
+   "exam": "dgnl2026",
+   "line": "f"
+  },
+  "dhqg2024": {
+   "exam": "dhqg2024",
+   "line": "main"
+  },
+  "dhqg2024-t81": {
+   "exam": "dhqg2024",
+   "line": "t81"
+  },
+  "dhqg2024-t82": {
+   "exam": "dhqg2024",
+   "line": "t82"
+  },
+  "regset": "keep",
+  "trial-image": "keep"
+ },
+ "moves": [
+  {
+   "exam": "cacheproof-en",
+   "kind": "run",
+   "line": "main",
+   "new": "cacheproof-en/main/runs/20261107-035802",
+   "old": "cacheproof-en/20261107T035802Z",
+   "plan_run_id": "20261107T035802Z",
+   "plan_sha256": "8bd3aeead606d1986b8d50b2cae98a5a40d46418f2246c75ee39c0dc7148b0c4",
+   "subject": null
+  },
+  {
+   "exam": "cacheproof-en",
+   "kind": "run",
+   "line": "main",
+   "new": "cacheproof-en/main/runs/20261107-035827",
+   "old": "cacheproof-en/20261107T035827Z",
+   "plan_run_id": "20261107T035827Z",
+   "plan_sha256": "a965b7f4bbe4461456ebfbe947a03fb407d79121035f7d4e5fa1df3098decdb6",
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "fix",
+   "new": "dgnl2025/fix/English-ingest.json",
+   "old": "dgnl2025-fix/English-ingest.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "fix",
+   "new": "dgnl2025/fix/English.log",
+   "old": "dgnl2025-fix/English.log",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "fix",
+   "new": "dgnl2025/fix/English.md",
+   "old": "dgnl2025-fix/English.md",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "fix",
+   "new": "dgnl2025/fix/English.md.assembly.json",
+   "old": "dgnl2025-fix/English.md.assembly.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "fix",
+   "new": "dgnl2025/fix/Science-ingest.json",
+   "old": "dgnl2025-fix/Science-ingest.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "fix",
+   "new": "dgnl2025/fix/Science.log",
+   "old": "dgnl2025-fix/Science.log",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "fix",
+   "new": "dgnl2025/fix/Science.md",
+   "old": "dgnl2025-fix/Science.md",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "fix",
+   "new": "dgnl2025/fix/Science.md.assembly.json",
+   "old": "dgnl2025-fix/Science.md.assembly.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "run",
+   "line": "fix",
+   "new": "dgnl2025/fix/runs/20261104-060728-english",
+   "old": "dgnl2025-fix/out-English",
+   "plan_run_id": "out-English",
+   "plan_sha256": "4a1ef9d322c35871f643f755614eb02b3fa512cfc9e60317d74935f1c71b7318",
+   "subject": "english"
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "run",
+   "line": "fix",
+   "new": "dgnl2025/fix/runs/20261104-060956-science",
+   "old": "dgnl2025-fix/out-Science",
+   "plan_run_id": "out-Science",
+   "plan_sha256": "c45219ac9324d64349c086e09ce380af8ec23976999739b07117a271b251c29b",
+   "subject": "science"
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "fix2",
+   "new": "dgnl2025/fix2/Science-ingest.json",
+   "old": "dgnl2025-fix2/Science-ingest.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "fix2",
+   "new": "dgnl2025/fix2/Science.log",
+   "old": "dgnl2025-fix2/Science.log",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "fix2",
+   "new": "dgnl2025/fix2/Science.md",
+   "old": "dgnl2025-fix2/Science.md",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "fix2",
+   "new": "dgnl2025/fix2/Science.md.assembly.json",
+   "old": "dgnl2025-fix2/Science.md.assembly.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "run",
+   "line": "fix2",
+   "new": "dgnl2025/fix2/runs/20261104-062141-science",
+   "old": "dgnl2025-fix2/out-Science",
+   "plan_run_id": "out-Science",
+   "plan_sha256": "d785c136f74381918862fa95976b63d063f9f58a4a3fa30fb20999dd0945ea8f",
+   "subject": "science"
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "noise",
+   "new": "dgnl2025/noise/English.log",
+   "old": "dgnl2025-noise/English.log",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "noise",
+   "new": "dgnl2025/noise/English.md",
+   "old": "dgnl2025-noise/English.md",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "noise",
+   "new": "dgnl2025/noise/Math.log",
+   "old": "dgnl2025-noise/Math.log",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "noise",
+   "new": "dgnl2025/noise/Math.md",
+   "old": "dgnl2025-noise/Math.md",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "noise",
+   "new": "dgnl2025/noise/Science.log",
+   "old": "dgnl2025-noise/Science.log",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "noise",
+   "new": "dgnl2025/noise/Science.md",
+   "old": "dgnl2025-noise/Science.md",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "noise",
+   "new": "dgnl2025/noise/Vietnamese.log",
+   "old": "dgnl2025-noise/Vietnamese.log",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "noise",
+   "new": "dgnl2025/noise/Vietnamese.md",
+   "old": "dgnl2025-noise/Vietnamese.md",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "noise",
+   "new": "dgnl2025/noise/done.txt",
+   "old": "dgnl2025-noise/done.txt",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "run",
+   "line": "noise",
+   "new": "dgnl2025/noise/runs/20261104-090407-english",
+   "old": "dgnl2025-noise/out-English",
+   "plan_run_id": "out-English",
+   "plan_sha256": "cc718924ee87bb99165689db312f07f07839a8d4c9e8630879cead9cc240296c",
+   "subject": "english"
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "run",
+   "line": "noise",
+   "new": "dgnl2025/noise/runs/20261104-085845-math",
+   "old": "dgnl2025-noise/out-Math",
+   "plan_run_id": "out-Math",
+   "plan_sha256": "d83a1b75c526319251d9452825edb9f86802314daa61a53481387706781cf5cd",
+   "subject": "math"
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "run",
+   "line": "noise",
+   "new": "dgnl2025/noise/runs/20261104-090627-science",
+   "old": "dgnl2025-noise/out-Science",
+   "plan_run_id": "out-Science",
+   "plan_sha256": "a83c76ad8b6abc3f5ad18e3abc7a6f67585ac8f65ca65459975a0f6d5a830c3b",
+   "subject": "science"
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "run",
+   "line": "noise",
+   "new": "dgnl2025/noise/runs/20261104-090059-vietnamese",
+   "old": "dgnl2025-noise/out-Vietnamese",
+   "plan_run_id": "out-Vietnamese",
+   "plan_sha256": "801d6e37dcab6a17fb2156db1d65194f4fe411c958643cd0d410d1038cfd07ed",
+   "subject": "vietnamese"
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "noise",
+   "new": "dgnl2025/noise/run.sh",
+   "old": "dgnl2025-noise/run.sh",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "noise2",
+   "new": "dgnl2025/noise2/English.log",
+   "old": "dgnl2025-noise2/English.log",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "noise2",
+   "new": "dgnl2025/noise2/English.md",
+   "old": "dgnl2025-noise2/English.md",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "noise2",
+   "new": "dgnl2025/noise2/Science.log",
+   "old": "dgnl2025-noise2/Science.log",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "noise2",
+   "new": "dgnl2025/noise2/Science.md",
+   "old": "dgnl2025-noise2/Science.md",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "noise2",
+   "new": "dgnl2025/noise2/blind.json",
+   "old": "dgnl2025-noise2/blind.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "noise2",
+   "new": "dgnl2025/noise2/done.txt",
+   "old": "dgnl2025-noise2/done.txt",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "run",
+   "line": "noise2",
+   "new": "dgnl2025/noise2/runs/20261104-103812-english",
+   "old": "dgnl2025-noise2/out-English",
+   "plan_run_id": "out-English",
+   "plan_sha256": "c2e98678ab9ff860cc227f75d007b2e5f8913ce770facb1217e6626c0e8d9bfb",
+   "subject": "english"
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "run",
+   "line": "noise2",
+   "new": "dgnl2025/noise2/runs/20261104-104104-science",
+   "old": "dgnl2025-noise2/out-Science",
+   "plan_run_id": "out-Science",
+   "plan_sha256": "6d1ddcb19bde19185fa03668c8ff61bb3d30201508d8c0cf13e74eb1a18db0a1",
+   "subject": "science"
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "noise2",
+   "new": "dgnl2025/noise2/run.sh",
+   "old": "dgnl2025-noise2/run.sh",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "noise2",
+   "new": "dgnl2025/noise2/wrong.json",
+   "old": "dgnl2025-noise2/wrong.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "v2",
+   "new": "dgnl2025/v2/English-ingest.json",
+   "old": "dgnl2025-v2/English-ingest.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "v2",
+   "new": "dgnl2025/v2/English.log",
+   "old": "dgnl2025-v2/English.log",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "v2",
+   "new": "dgnl2025/v2/English.md",
+   "old": "dgnl2025-v2/English.md",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "v2",
+   "new": "dgnl2025/v2/English.md.assembly.json",
+   "old": "dgnl2025-v2/English.md.assembly.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "v2",
+   "new": "dgnl2025/v2/Math-ingest.json",
+   "old": "dgnl2025-v2/Math-ingest.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "v2",
+   "new": "dgnl2025/v2/Math.log",
+   "old": "dgnl2025-v2/Math.log",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "v2",
+   "new": "dgnl2025/v2/Math.md",
+   "old": "dgnl2025-v2/Math.md",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "v2",
+   "new": "dgnl2025/v2/Math.md.assembly.json",
+   "old": "dgnl2025-v2/Math.md.assembly.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "v2",
+   "new": "dgnl2025/v2/Science-ingest.json",
+   "old": "dgnl2025-v2/Science-ingest.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "v2",
+   "new": "dgnl2025/v2/Science.log",
+   "old": "dgnl2025-v2/Science.log",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "v2",
+   "new": "dgnl2025/v2/Science.md",
+   "old": "dgnl2025-v2/Science.md",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "v2",
+   "new": "dgnl2025/v2/Science.md.assembly.json",
+   "old": "dgnl2025-v2/Science.md.assembly.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "v2",
+   "new": "dgnl2025/v2/Vietnamese-ingest.json",
+   "old": "dgnl2025-v2/Vietnamese-ingest.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "v2",
+   "new": "dgnl2025/v2/Vietnamese.log",
+   "old": "dgnl2025-v2/Vietnamese.log",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "v2",
+   "new": "dgnl2025/v2/Vietnamese.md",
+   "old": "dgnl2025-v2/Vietnamese.md",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "v2",
+   "new": "dgnl2025/v2/Vietnamese.md.assembly.json",
+   "old": "dgnl2025-v2/Vietnamese.md.assembly.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "run",
+   "line": "v2",
+   "new": "dgnl2025/v2/runs/20261104-064054-english",
+   "old": "dgnl2025-v2/out-English",
+   "plan_run_id": "out-English",
+   "plan_sha256": "234fceb17ac1ddad274124b0fd3ee75c16dea7a76cfe3f488e107ffff7c12a9d",
+   "subject": "english"
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "run",
+   "line": "v2",
+   "new": "dgnl2025/v2/runs/20261104-064414-math",
+   "old": "dgnl2025-v2/out-Math",
+   "plan_run_id": "out-Math",
+   "plan_sha256": "037ed5a382bce7a50bc66eaaf5bd62e7c989e2ade17f63b364082ecd4396a364",
+   "subject": "math"
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "run",
+   "line": "v2",
+   "new": "dgnl2025/v2/runs/20261104-064600-science",
+   "old": "dgnl2025-v2/out-Science",
+   "plan_run_id": "out-Science",
+   "plan_sha256": "d77ecaa7266106a194b254d891e4549b102ba6418aa89de04b469ada3f57d7b5",
+   "subject": "science"
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "run",
+   "line": "v2",
+   "new": "dgnl2025/v2/runs/20261104-063756-vietnamese",
+   "old": "dgnl2025-v2/out-Vietnamese",
+   "plan_run_id": "out-Vietnamese",
+   "plan_sha256": "7de2a00da3167f9ce64b34cc657052d1d43fc052feb51d8a44c249eeaccd4ed1",
+   "subject": "vietnamese"
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "main",
+   "new": "dgnl2025/main/English-ingest.json",
+   "old": "dgnl2025/English-ingest.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "main",
+   "new": "dgnl2025/main/English.log",
+   "old": "dgnl2025/English.log",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "main",
+   "new": "dgnl2025/main/English.md",
+   "old": "dgnl2025/English.md",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "main",
+   "new": "dgnl2025/main/English.md.assembly.json",
+   "old": "dgnl2025/English.md.assembly.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "main",
+   "new": "dgnl2025/main/Math-ingest.json",
+   "old": "dgnl2025/Math-ingest.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "main",
+   "new": "dgnl2025/main/Math.log",
+   "old": "dgnl2025/Math.log",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "main",
+   "new": "dgnl2025/main/Math.md",
+   "old": "dgnl2025/Math.md",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "main",
+   "new": "dgnl2025/main/Math.md.assembly.json",
+   "old": "dgnl2025/Math.md.assembly.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "main",
+   "new": "dgnl2025/main/Science-ingest.json",
+   "old": "dgnl2025/Science-ingest.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "main",
+   "new": "dgnl2025/main/Science.log",
+   "old": "dgnl2025/Science.log",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "main",
+   "new": "dgnl2025/main/Science.md",
+   "old": "dgnl2025/Science.md",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "main",
+   "new": "dgnl2025/main/Science.md.assembly.json",
+   "old": "dgnl2025/Science.md.assembly.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "main",
+   "new": "dgnl2025/main/Vietnamese-ingest.json",
+   "old": "dgnl2025/Vietnamese-ingest.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "main",
+   "new": "dgnl2025/main/Vietnamese.log",
+   "old": "dgnl2025/Vietnamese.log",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "main",
+   "new": "dgnl2025/main/Vietnamese.md",
+   "old": "dgnl2025/Vietnamese.md",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "main",
+   "new": "dgnl2025/main/Vietnamese.md.assembly.json",
+   "old": "dgnl2025/Vietnamese.md.assembly.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "run",
+   "line": "main",
+   "new": "dgnl2025/main/runs/20261104-033245-english",
+   "old": "dgnl2025/out-English",
+   "plan_run_id": "out-English",
+   "plan_sha256": "6025b1984af39c2ac5761caef8d056f09927e6943407bde505c04e53fd16a0b1",
+   "subject": "english"
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "run",
+   "line": "main",
+   "new": "dgnl2025/main/runs/20261104-033551-math",
+   "old": "dgnl2025/out-Math",
+   "plan_run_id": "out-Math",
+   "plan_sha256": "daaabac96b7027f47ad77dad2875a4c0f9f50bdb7264bfdfd08a74f60b39b3f4",
+   "subject": "math"
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "run",
+   "line": "main",
+   "new": "dgnl2025/main/runs/20261104-033731-science",
+   "old": "dgnl2025/out-Science",
+   "plan_run_id": "out-Science",
+   "plan_sha256": "bb1d11a334eb9d4c1864d097a2662bec91308ab2ef7d7fa259568089ceb3f4d8",
+   "subject": "science"
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "run",
+   "line": "main",
+   "new": "dgnl2025/main/runs/20261104-033012-vietnamese",
+   "old": "dgnl2025/out-Vietnamese",
+   "plan_run_id": "out-Vietnamese",
+   "plan_sha256": "f8ffb88b29e6e1822ffa3bb81fcdcf360b98b0c24fdb16d2f0191c2d90393611",
+   "subject": "vietnamese"
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "main",
+   "new": "dgnl2025/main/refine.log",
+   "old": "dgnl2025/refine.log",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "main",
+   "new": "dgnl2025/main/refined",
+   "old": "dgnl2025/refined",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2025",
+   "kind": "file",
+   "line": "main",
+   "new": "dgnl2025/main/refined.trace.json",
+   "old": "dgnl2025/refined.trace.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2026",
+   "kind": "file",
+   "line": "t80",
+   "new": "dgnl2026/t80/English.log",
+   "old": "dgnl2026-t80/English.log",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2026",
+   "kind": "file",
+   "line": "t80",
+   "new": "dgnl2026/t80/Math.log",
+   "old": "dgnl2026-t80/Math.log",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2026",
+   "kind": "file",
+   "line": "t80",
+   "new": "dgnl2026/t80/Science.log",
+   "old": "dgnl2026-t80/Science.log",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2026",
+   "kind": "file",
+   "line": "t80",
+   "new": "dgnl2026/t80/Vietnamese.log",
+   "old": "dgnl2026-t80/Vietnamese.log",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2026",
+   "kind": "run",
+   "line": "t80",
+   "new": "dgnl2026/t80/runs/20261106-232448-english",
+   "old": "dgnl2026-t80/out-English",
+   "plan_run_id": "out-English",
+   "plan_sha256": "eb8a15a126fd05cc6c13a33f4c9c004be7cfe03db4fcd1896147a5a5fb0e5d0c",
+   "subject": "english"
+  },
+  {
+   "exam": "dgnl2026",
+   "kind": "run",
+   "line": "t80",
+   "new": "dgnl2026/t80/runs/20261106-232619-math",
+   "old": "dgnl2026-t80/out-Math",
+   "plan_run_id": "out-Math",
+   "plan_sha256": "6b92cdb74cf7c742e8716b5470556b91c424a434f8ab523d04b5ba79074018bc",
+   "subject": "math"
+  },
+  {
+   "exam": "dgnl2026",
+   "kind": "run",
+   "line": "t80",
+   "new": "dgnl2026/t80/runs/20261106-232816-science",
+   "old": "dgnl2026-t80/out-Science",
+   "plan_run_id": "out-Science",
+   "plan_sha256": "ce3db36acc9f0a6ebe5c149ed4d24f20ebc86477279f8362ca1d3be57fb5adbe",
+   "subject": "science"
+  },
+  {
+   "exam": "dgnl2026",
+   "kind": "run",
+   "line": "t80",
+   "new": "dgnl2026/t80/runs/20261106-232221-vietnamese",
+   "old": "dgnl2026-t80/out-Vietnamese",
+   "plan_run_id": "out-Vietnamese",
+   "plan_sha256": "9ea7b248345339176d60998fbdf5c0ddc83af6f8697a924d0b5f7763cb60d985",
+   "subject": "vietnamese"
+  },
+  {
+   "exam": "dgnl2026",
+   "kind": "file",
+   "line": "v2",
+   "new": "dgnl2026/v2/English-ingest.json",
+   "old": "dgnl2026-v2/English-ingest.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2026",
+   "kind": "file",
+   "line": "v2",
+   "new": "dgnl2026/v2/English.log",
+   "old": "dgnl2026-v2/English.log",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2026",
+   "kind": "file",
+   "line": "v2",
+   "new": "dgnl2026/v2/English.md",
+   "old": "dgnl2026-v2/English.md",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2026",
+   "kind": "file",
+   "line": "v2",
+   "new": "dgnl2026/v2/English.md.assembly.json",
+   "old": "dgnl2026-v2/English.md.assembly.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2026",
+   "kind": "file",
+   "line": "v2",
+   "new": "dgnl2026/v2/Math-ingest.json",
+   "old": "dgnl2026-v2/Math-ingest.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2026",
+   "kind": "file",
+   "line": "v2",
+   "new": "dgnl2026/v2/Math.log",
+   "old": "dgnl2026-v2/Math.log",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2026",
+   "kind": "file",
+   "line": "v2",
+   "new": "dgnl2026/v2/Math.md",
+   "old": "dgnl2026-v2/Math.md",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2026",
+   "kind": "file",
+   "line": "v2",
+   "new": "dgnl2026/v2/Math.md.assembly.json",
+   "old": "dgnl2026-v2/Math.md.assembly.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2026",
+   "kind": "file",
+   "line": "v2",
+   "new": "dgnl2026/v2/Vietnamese-ingest.json",
+   "old": "dgnl2026-v2/Vietnamese-ingest.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2026",
+   "kind": "file",
+   "line": "v2",
+   "new": "dgnl2026/v2/Vietnamese.log",
+   "old": "dgnl2026-v2/Vietnamese.log",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2026",
+   "kind": "file",
+   "line": "v2",
+   "new": "dgnl2026/v2/Vietnamese.md",
+   "old": "dgnl2026-v2/Vietnamese.md",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2026",
+   "kind": "file",
+   "line": "v2",
+   "new": "dgnl2026/v2/Vietnamese.md.assembly.json",
+   "old": "dgnl2026-v2/Vietnamese.md.assembly.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dgnl2026",
+   "kind": "run",
+   "line": "v2",
+   "new": "dgnl2026/v2/runs/20261104-065821-english",
+   "old": "dgnl2026-v2/out-English",
+   "plan_run_id": "out-English",
+   "plan_sha256": "002236e76f29008d94f14ced4892ee03cf5dafa7f3179a68ff9a506623751417",
+   "subject": "english"
+  },
+  {
+   "exam": "dgnl2026",
+   "kind": "run",
+   "line": "v2",
+   "new": "dgnl2026/v2/runs/20261104-065910-math",
+   "old": "dgnl2026-v2/out-Math",
+   "plan_run_id": "out-Math",
+   "plan_sha256": "5cec08db0876352766f18d896832fe100ee7bf2d4f79d16d182e8834b32a63ef",
+   "subject": "math"
+  },
+  {
+   "exam": "dgnl2026",
+   "kind": "run",
+   "line": "v2",
+   "new": "dgnl2026/v2/runs/20261104-065600-vietnamese",
+   "old": "dgnl2026-v2/out-Vietnamese",
+   "plan_run_id": "out-Vietnamese",
+   "plan_sha256": "6dc8c11c2575a83f73ddad9e722bb14a4f4fc83d0ef8d6eaef8ed746221f9dc1",
+   "subject": "vietnamese"
+  },
+  {
+   "exam": "dgnl2026",
+   "kind": "run",
+   "line": "f",
+   "new": "dgnl2026/f/runs/20261105-100543-english",
+   "old": "dgnl2026f/out-English",
+   "plan_run_id": "out-English",
+   "plan_sha256": "66c20123b1c816ac60cca08821a39e60a7b82f32468f139ff8b342b7777b3bc5",
+   "subject": "english"
+  },
+  {
+   "exam": "dgnl2026",
+   "kind": "run",
+   "line": "f",
+   "new": "dgnl2026/f/runs/20261105-100543-math",
+   "old": "dgnl2026f/out-Math",
+   "plan_run_id": "out-Math",
+   "plan_sha256": "500126a484e8fc1865fbc3ef63d27d259e78231cdc6563ee3d4cb93f718402cb",
+   "subject": "math"
+  },
+  {
+   "exam": "dgnl2026",
+   "kind": "run",
+   "line": "f",
+   "new": "dgnl2026/f/runs/20261105-100543-science",
+   "old": "dgnl2026f/out-Science",
+   "plan_run_id": "out-Science",
+   "plan_sha256": "741d6dae155b37a698695eb94ef7f71cc07921acfc3aedfc1f30c678b629e1a5",
+   "subject": "science"
+  },
+  {
+   "exam": "dgnl2026",
+   "kind": "run",
+   "line": "f",
+   "new": "dgnl2026/f/runs/20261105-144607-science2",
+   "old": "dgnl2026f/out-Science2",
+   "plan_run_id": "out-Science2",
+   "plan_sha256": "d8bda332c2966c127c0451adfbb38ebb1975ff061a27f29188823f42f77243a5",
+   "subject": "science2"
+  },
+  {
+   "exam": "dgnl2026",
+   "kind": "run",
+   "line": "f",
+   "new": "dgnl2026/f/runs/20261105-100541-vietnamese",
+   "old": "dgnl2026f/out-Vietnamese",
+   "plan_run_id": "out-Vietnamese",
+   "plan_sha256": "300d2e60a5a946813b0798a9a1332b6e579f54d870608ee282756d7c1eef8f60",
+   "subject": "vietnamese"
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "file",
+   "line": "t81",
+   "new": "dhqg2024/t81/all-result.json",
+   "old": "dhqg2024-t81/all-result.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "file",
+   "line": "t81",
+   "new": "dhqg2024/t81/answers.tsv",
+   "old": "dhqg2024-t81/answers.tsv",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "cache",
+   "line": "t81",
+   "new": "dhqg2024/t81/cache",
+   "old": "dhqg2024-t81/cache",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "file",
+   "line": "t81",
+   "new": "dhqg2024/t81/cost.tsv",
+   "old": "dhqg2024-t81/cost.tsv",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "file",
+   "line": "t81",
+   "new": "dhqg2024/t81/diff-prior.tsv",
+   "old": "dhqg2024-t81/diff-prior.tsv",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "file",
+   "line": "t81",
+   "new": "dhqg2024/t81/doc.json",
+   "old": "dhqg2024-t81/doc.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "file",
+   "line": "t81",
+   "new": "dhqg2024/t81/e-English.md",
+   "old": "dhqg2024-t81/e-English.md",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "file",
+   "line": "t81",
+   "new": "dhqg2024/t81/e-English.md.assembly.json",
+   "old": "dhqg2024-t81/e-English.md.assembly.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "file",
+   "line": "t81",
+   "new": "dhqg2024/t81/e-Math.md",
+   "old": "dhqg2024-t81/e-Math.md",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "file",
+   "line": "t81",
+   "new": "dhqg2024/t81/e-Math.md.assembly.json",
+   "old": "dhqg2024-t81/e-Math.md.assembly.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "file",
+   "line": "t81",
+   "new": "dhqg2024/t81/e-Science.md",
+   "old": "dhqg2024-t81/e-Science.md",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "file",
+   "line": "t81",
+   "new": "dhqg2024/t81/e-Science.md.assembly.json",
+   "old": "dhqg2024-t81/e-Science.md.assembly.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "file",
+   "line": "t81",
+   "new": "dhqg2024/t81/e-Vietnamese.md",
+   "old": "dhqg2024-t81/e-Vietnamese.md",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "file",
+   "line": "t81",
+   "new": "dhqg2024/t81/e-Vietnamese.md.assembly.json",
+   "old": "dhqg2024-t81/e-Vietnamese.md.assembly.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "file",
+   "line": "t81",
+   "new": "dhqg2024/t81/estimate.txt",
+   "old": "dhqg2024-t81/estimate.txt",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "file",
+   "line": "t81",
+   "new": "dhqg2024/t81/merged.json",
+   "old": "dhqg2024-t81/merged.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "file",
+   "line": "t81",
+   "new": "dhqg2024/t81/parts",
+   "old": "dhqg2024-t81/parts",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "run",
+   "line": "t81",
+   "new": "dhqg2024/t81/runs/20261107-005812-english",
+   "old": "dhqg2024-t81/run-English",
+   "plan_run_id": "run-English",
+   "plan_sha256": "1126ddab781075417e51f6d175008a34376af3f016b81cd8d92a934b07f4a274",
+   "subject": "english"
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "run",
+   "line": "t81",
+   "new": "dhqg2024/t81/runs/20261107-005940-math",
+   "old": "dhqg2024-t81/run-Math",
+   "plan_run_id": "run-Math",
+   "plan_sha256": "27e2a451aab7f23dc525c081d5927ca3b86f26ca0d04909e41f3c32fb733ce70",
+   "subject": "math"
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "run",
+   "line": "t81",
+   "new": "dhqg2024/t81/runs/20261107-010203-science",
+   "old": "dhqg2024-t81/run-Science",
+   "plan_run_id": "run-Science",
+   "plan_sha256": "188ffb85b4d3f5f799c72a392fb43d68bd06e513ad38b680d91c518c9f4a38c3",
+   "subject": "science"
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "run",
+   "line": "t81",
+   "new": "dhqg2024/t81/runs/20261107-005624-vietnamese",
+   "old": "dhqg2024-t81/run-Vietnamese",
+   "plan_run_id": "run-Vietnamese",
+   "plan_sha256": "6ded15317a7d44eb67c5657c05a6e6b55fa449a41c845a3bd41d68ca1d802f2a",
+   "subject": "vietnamese"
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "file",
+   "line": "t81",
+   "new": "dhqg2024/t81/run-all.sh",
+   "old": "dhqg2024-t81/run-all.sh",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "file",
+   "line": "t81",
+   "new": "dhqg2024/t81/solve-English.log",
+   "old": "dhqg2024-t81/solve-English.log",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "file",
+   "line": "t81",
+   "new": "dhqg2024/t81/solve-Math.log",
+   "old": "dhqg2024-t81/solve-Math.log",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "file",
+   "line": "t81",
+   "new": "dhqg2024/t81/solve-Science.log",
+   "old": "dhqg2024-t81/solve-Science.log",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "file",
+   "line": "t81",
+   "new": "dhqg2024/t81/solve-Vietnamese.log",
+   "old": "dhqg2024-t81/solve-Vietnamese.log",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "file",
+   "line": "t81",
+   "new": "dhqg2024/t81/solve-status.txt",
+   "old": "dhqg2024-t81/solve-status.txt",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "file",
+   "line": "t81",
+   "new": "dhqg2024/t81/work",
+   "old": "dhqg2024-t81/work",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "cache",
+   "line": "t82",
+   "new": "dhqg2024/t82/cache",
+   "old": "dhqg2024-t82/cache",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "file",
+   "line": "t82",
+   "new": "dhqg2024/t82/cost.tsv",
+   "old": "dhqg2024-t82/cost.tsv",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "file",
+   "line": "t82",
+   "new": "dhqg2024/t82/e-64-67.md",
+   "old": "dhqg2024-t82/e-64-67.md",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "file",
+   "line": "t82",
+   "new": "dhqg2024/t82/e-64-67.md.assembly.json",
+   "old": "dhqg2024-t82/e-64-67.md.assembly.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "file",
+   "line": "t82",
+   "new": "dhqg2024/t82/merged.json",
+   "old": "dhqg2024-t82/merged.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "file",
+   "line": "t82",
+   "new": "dhqg2024/t82/p8.json",
+   "old": "dhqg2024-t82/p8.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "file",
+   "line": "t82",
+   "new": "dhqg2024/t82/p8.json.trace.json",
+   "old": "dhqg2024-t82/p8.json.trace.json",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "run",
+   "line": "t82",
+   "new": "dhqg2024/t82/runs/20261107-014525",
+   "old": "dhqg2024-t82/run",
+   "plan_run_id": "run",
+   "plan_sha256": "8af906f2ad137348937f38983209a0a2cc0e693566e7960519af3dab31a229f0",
+   "subject": null
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "file",
+   "line": "main",
+   "new": "dhqg2024/main/answers.tsv",
+   "old": "dhqg2024/answers.tsv",
+   "plan_run_id": null,
+   "plan_sha256": null,
+   "subject": null
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "run",
+   "line": "main",
+   "new": "dhqg2024/main/runs/20261105-104103-english",
+   "old": "dhqg2024/out-English",
+   "plan_run_id": "out-English",
+   "plan_sha256": "208db4d011f3af52b472247e8a9cb20878ebfbf3e06f5b2d8cab9626b352f3e0",
+   "subject": "english"
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "run",
+   "line": "main",
+   "new": "dhqg2024/main/runs/20261106-213444-english-t79",
+   "old": "dhqg2024/out-English-t79",
+   "plan_run_id": "out-English-t79",
+   "plan_sha256": "a2777d6878be6fd1691b85fc217e3d56d866233185efabdcdfa6402daa33bfcf",
+   "subject": "english-t79"
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "run",
+   "line": "main",
+   "new": "dhqg2024/main/runs/20261105-104103-math",
+   "old": "dhqg2024/out-Math",
+   "plan_run_id": "out-Math",
+   "plan_sha256": "3e06b634cbee3a14314a78fa34762836ca109489e369a6bffc3d21de76c3ebb4",
+   "subject": "math"
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "run",
+   "line": "main",
+   "new": "dhqg2024/main/runs/20261105-104103-science",
+   "old": "dhqg2024/out-Science",
+   "plan_run_id": "out-Science",
+   "plan_sha256": "f71715b3e7455a36a8a01b330181c678e5d32e197c81b821ab75a29c97e5552e",
+   "subject": "science"
+  },
+  {
+   "exam": "dhqg2024",
+   "kind": "run",
+   "line": "main",
+   "new": "dhqg2024/main/runs/20261105-104650-vietnamese",
+   "old": "dhqg2024/out-Vietnamese",
+   "plan_run_id": "out-Vietnamese",
+   "plan_sha256": "77ac0d286824896a67cb7e48ed025c77ec3a474e8abea54f6481aa6679e3cbac",
+   "subject": "vietnamese"
+  }
+ ],
+ "schema": 1
+}

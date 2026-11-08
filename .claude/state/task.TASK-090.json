@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-090",
   "title": "Line-based plans layout plans/<exam>/<line>/runs/<id>, solve --line, safe plans migration with dry-run/backup/undo (REQ-0098)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0098",
   "acceptance_criteria": [
     "AC1 --line default main, resolver reads old/REQ-0095/new layouts",
@@ -19,8 +19,17 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/runlayout.py",
+      "src/exam_engine/pipeline/planrun.py",
+      "src/exam_engine/pipeline/plansmigrate.py",
+      "src/exam_engine/cli.py",
+      "config/plans_migration.json",
+      "docs/guide/report-kinds.md",
+      "docs/guide/toolkit-reference.md"
+    ],
+    "summary": "line-based layout plans/<exam>/<line>/runs/<id>[-subject] with --line and --exam-id; resolver over old/REQ-0095/new layouts; exam plans-migrate --dry-run/--apply/--undo (backup, MIGRATION.json, history rewrite, rollback, resume); run-list/compare/stats by EXAM/LINE/ID; reports mirror; dry-run map 154 moves, 0 unmapped; scratch round trip equal (1597 files, 22166666 bytes, 41/41 plan.json sha256, 208/208 history paths, run-list rows 13/13); real plans/ untouched"
   },
   "unit_test": {
     "status": "pending",
@@ -43,7 +52,8 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-090/handoff/design.md"
+    "designer": "work/TASK-090/handoff/design.md",
+    "coder": "work/TASK-090/handoff/code.md"
   },
   "user_notes": [
     {
@@ -53,14 +63,23 @@
     }
   ],
   "picked_at": "2026-11-08T04:13:54Z",
-  "updated_at": "2026-11-08T04:19:16Z",
+  "updated_at": "2026-11-08T04:32:50Z",
   "updated_by": "main",
-  "scope": [],
+  "scope": [
+    "src/exam_engine/pipeline/runlayout.py",
+    "src/exam_engine/pipeline/planrun.py",
+    "src/exam_engine/pipeline/plansmigrate.py",
+    "src/exam_engine/cli.py",
+    "config/plans_migration.json",
+    "docs/guide/report-kinds.md",
+    "docs/guide/toolkit-reference.md",
+    "tests/unit/*.py"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
     "done": [],
     "notes": ""
   },
-  "next": "coder implements 90.1-90.8 without touching real plans/; tester tests on tmp trees; main produces the dry-run table for the user"
+  "next": "tester updates the 6 layout-dependent test files and writes test_plansmigrate.py; main shows the user the dry-run table"
 }

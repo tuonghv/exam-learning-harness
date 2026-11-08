@@ -1,6 +1,6 @@
 """Plan run: every raw LLM call of a solve, written as it happens (REQ-0062, phase 58).
 
-plans/<exam-id>/runs/<plan-run-id>/ (old: plans/<exam-id>/<plan-run-id>/) holds plan.json, config.json, input/exam.md, calls/index.jsonl +
+plans/<exam>/<line>/runs/<plan-run-id>/ (old: plans/<exam>/runs/<id>/ and plans/<exam>/<id>/) holds plan.json, config.json, input/exam.md, calls/index.jsonl +
 calls/NNN-{prompt,reply}.txt, and (written by the engine) result.json + run.log. Capture never fails a
 run: a write error prints one WARN and turns capture off. Replies go through claude.mask (token
 pattern); the sha256 in index.jsonl is of the unmasked text.
@@ -43,10 +43,10 @@ def safe_id(value, what="id"):
     return value
 
 
-def claim_run_dir(root, exam_id):
-    """New plan run dir runs/<UTC YYYYMMDD-HHMMSS>[-N] under root/<exam-id> (makedirs exist_ok=False, runlayout)."""
+def claim_run_dir(root, exam_id, line=None, subject=None):
+    """New plan run dir <exam>/<line>/runs/<UTC YYYYMMDD-HHMMSS>[-<subject>][-N] under root (makedirs exist_ok=False)."""
     from exam_engine.pipeline import runlayout
-    return runlayout.new_plan_run(root, exam_id)
+    return runlayout.new_plan_run(root, exam_id, line=line or runlayout.LINE_DEFAULT, subject=subject)
 
 
 def _sha(text):
@@ -60,8 +60,9 @@ def _dump(path, obj):
 
 
 class PlanWriter(object):
-    def __init__(self, plan_dir, exam_path, cfg, repo_root=None):
+    def __init__(self, plan_dir, exam_path, cfg, repo_root=None, plan_exam=None, line=None):
         self.dir, self.exam_path, self.cfg, self.repo_root = plan_dir, exam_path, cfg, repo_root
+        self.plan_exam, self.line = plan_exam, line  # set for a line-layout run: written to plan.json
         self.meta = None
         self.ok = True
         self.calls = 0
@@ -98,6 +99,8 @@ class PlanWriter(object):
                 "llm": self.cfg.get("llm_name"), "config_sha256": _sha(canon),
                 "exam": {"path": self.exam_path, "sha256": metrics.file_sha256(self.exam_path)},
                 "calls": 0, "cost_usd": 0.0, "calls_captured": True, "imported_from": None}
+            if self.plan_exam and self.line:
+                self.meta.update(plan_exam=self.plan_exam, line=self.line)
             _dump(os.path.join(self.dir, "plan.json"), self.meta)
         except OSError as exc:
             self._warn(exc)
@@ -152,12 +155,13 @@ class PlanWriter(object):
             self._warn(exc)
 
 
-def last_solved(root, exam_path):
-    """Newest finished real solve of this exact exam file, in both layouts (runs/<id> and legacy <id>), else None (83.4)."""
+def last_solved(root, exam_path, exam_id=None):
+    """Newest finished real solve of this exact exam file in every layout and line of the exam folder
+    (exam_id, default the file stem), else None (83.4)."""
     from exam_engine.pipeline import runlayout
     try:
         sha = metrics.file_sha256(exam_path)
-        runs = runlayout.list_plan_runs(root, exam_id_of(exam_path))
+        runs = runlayout.list_plan_runs(root, exam_id or exam_id_of(exam_path))
     except (OSError, ValueError):
         return None
     best = None
@@ -253,8 +257,8 @@ def _copy_assembly(exam_path, input_dir):
         shutil.copyfile(side, os.path.join(input_dir, "assembly.json"))
 
 
-def import_dir(src, root, exam_path=None, exam_id=None, ingest_cache=None, traces_extra=()):
-    """Old run dir (result.json [+ run.log, *.trace.json]) -> <root>/<exam-id>/<run>/; (plan_dir, status).
+def import_dir(src, root, exam_path=None, exam_id=None, ingest_cache=None, traces_extra=(), line=None):
+    """Old run dir (result.json [+ run.log, *.trace.json]) -> <root>/<exam-id>/<line>/runs/<id>/; (plan_dir, status).
     status "skipped" when the same dir with the same result.json was imported before.
     ValueError when src has no readable result.json or an id is invalid. traces_extra: more
     *.trace.json files (any place) to copy into ingest/. result.json exam.path is read only when
@@ -284,7 +288,8 @@ def import_dir(src, root, exam_path=None, exam_id=None, ingest_cache=None, trace
     hit = _already_imported(root, exam_id, src, rsha)
     if hit:
         return hit, "skipped"
-    out = claim_run_dir(root, exam_id)
+    line = line or "main"
+    out = claim_run_dir(root, exam_id, line=line)
     shutil.copyfile(rpath, os.path.join(out, "result.json"))
     log = None
     if _plain_file_quiet(os.path.join(src, "run.log")):
@@ -326,5 +331,5 @@ def import_dir(src, root, exam_path=None, exam_id=None, ingest_cache=None, trace
         "wall_s": None, "git": None, "prompt": run.get("prompt"), "model": run.get("model"),
         "llm": run.get("llm"), "config_sha256": None, "exam": exam, "calls": run.get("calls", 0),
         "cost_usd": run.get("cost_usd", 0.0), "calls_captured": False, "imported_from": src,
-        "result_sha256": rsha, "ingest_files": ingest})
+        "result_sha256": rsha, "ingest_files": ingest, "plan_exam": exam_id, "line": line})
     return out, "imported"

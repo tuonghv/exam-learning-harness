@@ -1,8 +1,10 @@
-"""Run-based layout (TASK-087, REQ-0095): the one place that knows where plan runs and report runs live.
+"""Line-based layout (TASK-090, REQ-0098; run-based TASK-087, REQ-0095): the one place that knows where plan runs and
+report runs live.
 
-New: plans/<exam>/runs/<YYYYMMDD-HHMMSS>[-N]/ (UTC) and reports/<exam>/run-<id>/ with run.json.
-Old layouts (plans/<exam>/<run>/, reports/<exam>/<run>/<report-id>/, out-X dirs) stay readable and are
-never moved. The solve cache stays plans/<exam>/cache. Pure stdlib; no model call; the only clock is
+New: plans/<exam>/<line>/runs/<YYYYMMDD-HHMMSS>[-<subject>][-N]/ (UTC, line default `main`) and
+reports/<exam>/<line>/run-<id>/ with run.json. Readable for ever: plans/<exam>/runs/<id> (REQ-0095),
+plans/<exam>/<run>/ (legacy) and, after `exam plans-migrate`, the old paths through plans/MIGRATION.json
+(migrated()). The solve cache stays plans/<exam>/cache for every line. Pure stdlib; no model call; the only clock is
 new_run_id / the created_utc stamp (both take `now`). planrun and report_kinds are imported lazily
 (they import this module back).
 """
@@ -16,7 +18,10 @@ RUNS = "runs"
 CACHE = "cache"
 REPORT_PREFIX = "run-"
 RUN_JSON = "run.json"
-NEW_ID = re.compile(r"^\d{8}-\d{6}(-\d+)?$")
+LINE_DEFAULT = "main"
+MIGRATION_JSON = "MIGRATION.json"
+NEW_ID = re.compile(r"^\d{8}-\d{6}(-\d+)?$")  # report run ids
+PLAN_ID = re.compile(r"^(\d{8}-\d{6})(?:-([a-z][a-z0-9._-]*?))?(?:-(\d+))?$")  # plan run ids: stamp[-subject][-N]
 _OLD_ID = re.compile(r"^(\d{8})T(\d{6})Z(-\d+)?$")
 
 
@@ -46,7 +51,7 @@ def _claim_dir(base, stamp, prefix=""):
 
 def id_time(run_id):
     """Sort string of an id: 'YYYYMMDDHHMMSS' for the new and the old (YYYYMMDDTHHMMSSZ) format, else ''."""
-    m = NEW_ID.match(run_id or "")
+    m = PLAN_ID.match(run_id or "")
     if m:
         return run_id[:8] + run_id[9:15]
     m = _OLD_ID.match(run_id or "")
@@ -54,7 +59,23 @@ def id_time(run_id):
 
 
 def _suffix(run_id):
-    return int(run_id[16:]) if NEW_ID.match(run_id or "") and len(run_id) > 16 else 1
+    m = PLAN_ID.match(run_id or "")
+    return int(m.group(3)) if m and m.group(3) else 1
+
+
+def subject_tag(text):
+    """Lowercase subject tag of a run id from a file stem or folder name, or None (must start with a letter)."""
+    t = re.sub(r"[^a-z0-9._-]", "-", str(text or "").lower())
+    t = re.sub(r"-{2,}", "-", t).strip("-._")
+    return t if re.match(r"^[a-z][a-z0-9._-]*$", t) else None
+
+
+def safe_line(line):
+    """Line name used as a path component: a safe id that is not a reserved folder name."""
+    line = _safe(line, "line")
+    if line in (RUNS, CACHE):
+        raise ValueError("invalid line %r (reserved name)" % line)
+    return line
 
 
 def _jload(path):
@@ -70,29 +91,134 @@ def cache_dir(root, exam_id):
     return os.path.join(root, _safe(exam_id, "exam id"), CACHE)
 
 
-def plan_run_dir(root, exam_id, run_id):
-    """root/exam/runs/id if it exists, else the legacy root/exam/id if it exists, else the new path."""
+def line_dirs(base):
+    """Names of the line folders below an exam folder: real dirs that hold a runs/ dir (sorted)."""
+    try:
+        names = sorted(os.listdir(base))
+    except OSError:
+        return []
+    return [n for n in names if n not in (RUNS, CACHE) and not os.path.islink(os.path.join(base, n))
+            and os.path.isdir(os.path.join(base, n, RUNS))]
+
+
+def _manifest(root):
+    """root/MIGRATION.json when its state is `applied`, else None."""
+    man = _jload(os.path.join(root, MIGRATION_JSON))
+    return man if man and man.get("state") == "applied" else None
+
+
+def _rel_to_root(root, path):
+    """Posix path of `path` below root (absolute, cwd-relative or root-prefixed), or None when outside."""
+    absroot = os.path.abspath(root)
+    p = path
+    if not os.path.isabs(p):
+        pre = os.path.basename(absroot) + "/"
+        norm = os.path.normpath(p).replace(os.sep, "/")
+        if norm.startswith(pre):
+            return norm[len(pre):]
+        if not os.path.exists(p):
+            return None if norm.startswith("..") else norm
+        p = os.path.abspath(p)
+    rel = os.path.relpath(os.path.normpath(p), absroot)
+    if rel == ".." or rel.startswith(".." + os.sep):
+        return None
+    return rel.replace(os.sep, "/")
+
+
+def _moved(man, rel):
+    """(move entry, mapped relative path) of the longest old path that is a prefix of rel, else (None, None)."""
+    best = None
+    for mv in man.get("moves", []):
+        old = mv.get("old", "")
+        if (rel == old or rel.startswith(old + "/")) and (best is None or len(old) > len(best["old"])):
+            best = mv
+    if best is None:
+        return None, None
+    return best, best["new"] + rel[len(best["old"]):]
+
+
+def migrated(root, path):
+    """New path of an OLD plans path (absolute history path, `OLD/ID` ref or `plans/OLD/ID`) per root/MIGRATION.json,
+    else None. Longest-prefix match over the applied moves; a path that was never moved gives None."""
+    man = _manifest(root)
+    rel = _rel_to_root(root, path) if man else None
+    if rel is None:
+        return None
+    _mv, new = _moved(man, rel)
+    return os.path.join(root, *new.split("/")) if new else None
+
+
+def folder_alias(root, name):
+    """(exam, line) an OLD folder name below root was migrated to (MIGRATION.json folders map), else None."""
+    man = _manifest(root)
+    ent = (man or {}).get("folders", {}).get(name)
+    return (ent["exam"], ent["line"]) if isinstance(ent, dict) else None
+
+
+def migration_folders(root):
+    """{old folder: (exam, line)} of the applied MIGRATION.json (kept folders are not listed)."""
+    return {k: (v["exam"], v["line"]) for k, v in ((_manifest(root) or {}).get("folders") or {}).items()
+            if isinstance(v, dict)}
+
+
+def exam_line_of_plan_dir(plan_dir):
+    """(exam, line) of a plan dir: plan.json plan_exam+line (new runs), else the MIGRATION.json entry of its new
+    path, else REQ-0095 runs/<id> -> (exam, '-'), else legacy <exam>/<run> -> (exam, '-')."""
+    d = os.path.abspath(plan_dir.rstrip("/"))
+    meta = _jload(os.path.join(d, "plan.json")) or {}
+    if meta.get("plan_exam") and meta.get("line"):
+        return meta["plan_exam"], meta["line"]
+    probe = d
+    for _ in range(5):
+        probe = os.path.dirname(probe)
+        if os.path.isfile(os.path.join(probe, MIGRATION_JSON)):
+            man = _manifest(probe)
+            rel = _rel_to_root(probe, d) if man else None
+            for mv in (man or {}).get("moves", []):
+                if rel and mv.get("kind") == "run" and mv.get("new") == rel and mv.get("exam"):
+                    return mv["exam"], mv["line"]
+            break
+    parent = os.path.dirname(d)
+    if os.path.basename(parent) == RUNS:
+        parent = os.path.dirname(parent)
+    return os.path.basename(parent), "-"
+
+
+def plan_run_dir(root, exam_id, run_id, line=None):
+    """Plan run dir. line given: root/exam/line/runs/id. Else the one line holding id (ValueError when two do),
+    then root/exam/runs/id (REQ-0095), the legacy root/exam/id, the migrated path of exam/id, else the main path."""
     base = os.path.join(root, _safe(exam_id, "exam id"))
     rid = _safe(run_id, "plan run id")
-    new, old = os.path.join(base, RUNS, rid), os.path.join(base, rid)
-    if os.path.isdir(new):
-        return new
+    if line:
+        return os.path.join(base, safe_line(line), RUNS, rid)
+    hits = [os.path.join(base, ln, RUNS, rid) for ln in line_dirs(base)
+            if os.path.isdir(os.path.join(base, ln, RUNS, rid))]
+    if len(hits) > 1:
+        raise ValueError("ambiguous: %s in lines %s; use EXAM/LINE/ID" % (
+            rid, ", ".join(os.path.basename(os.path.dirname(os.path.dirname(h))) for h in hits)))
+    if hits:
+        return hits[0]
+    req95, old = os.path.join(base, RUNS, rid), os.path.join(base, rid)
+    if os.path.isdir(req95):
+        return req95
     if rid not in (RUNS, CACHE) and os.path.isdir(old):
         return old
-    return new
+    mig = migrated(root, "%s/%s" % (exam_id, rid))
+    if mig and os.path.isdir(mig):
+        return mig
+    return os.path.join(base, LINE_DEFAULT, RUNS, rid)
 
 
-def new_plan_run(root, exam_id, now=None):
-    """Claimed plans/<exam>/runs/<UTC stamp>[-N]."""
-    return _claim_dir(os.path.join(root, _safe(exam_id, "exam id"), RUNS), new_run_id(now))
+def new_plan_run(root, exam_id, line=LINE_DEFAULT, subject=None, now=None):
+    """Claimed plans/<exam>/<line>/runs/<UTC stamp>[-<subject>][-N]."""
+    tag = subject_tag(subject) if subject else None
+    return _claim_dir(os.path.join(root, _safe(exam_id, "exam id"), safe_line(line), RUNS),
+                      new_run_id(now) + ("-" + tag if tag else ""))
 
 
 def exam_of_plan_dir(plan_dir):
-    """Exam id of a plan dir path: the parent name, or the grandparent when the parent is `runs` (defect D1)."""
-    parent = os.path.dirname(os.path.abspath(plan_dir.rstrip("/")))
-    if os.path.basename(parent) == RUNS:
-        parent = os.path.dirname(parent)
-    return os.path.basename(parent)
+    """Exam id of a plan dir path (first item of exam_line_of_plan_dir)."""
+    return exam_line_of_plan_dir(plan_dir)[0]
 
 
 def _norm_time(text):
@@ -113,10 +239,31 @@ def _plan_key(run_id, plan):
     return (t, _suffix(run_id), run_id)
 
 
-def list_plan_runs(root, exam_id):
-    """[{id, dir, layout 'runs'|'legacy', plan dict|None}] sorted by (started/imported/id time, id), never mtime."""
+def _run_row(d, name, layout, line):
+    plan = _jload(os.path.join(d, "plan.json"))
+    m = PLAN_ID.match(name)
+    alias = (plan or {}).get("plan_run_id")
+    return {"id": name, "dir": d, "layout": layout, "line": line, "subject": m.group(2) if m else None,
+            "alias": alias if alias and alias != name else None, "plan": plan}
+
+
+def list_plan_runs(root, exam_id, line=None):
+    """[{id, dir, layout 'line'|'runs'|'legacy', line, subject, alias, plan}] of one exam, sorted by (started/imported/id
+    time, id), never mtime. line given: only that line folder; else every line, REQ-0095 runs/ (line '-') and legacy."""
     base = os.path.join(root, _safe(exam_id, "exam id"))
     out = []
+    for ln in ([safe_line(line)] if line else line_dirs(base)):
+        try:
+            names = sorted(os.listdir(os.path.join(base, ln, RUNS)))
+        except OSError:
+            continue
+        for n in names:
+            d = os.path.join(base, ln, RUNS, n)
+            if os.path.isdir(d) and not os.path.islink(d):
+                out.append(_run_row(d, n, "line", ln))
+    if line:
+        out.sort(key=lambda r: _plan_key(r["id"], r["plan"]))
+        return out
     try:
         names = sorted(os.listdir(os.path.join(base, RUNS)))
     except OSError:
@@ -124,7 +271,7 @@ def list_plan_runs(root, exam_id):
     for n in names:
         d = os.path.join(base, RUNS, n)
         if os.path.isdir(d) and not os.path.islink(d):
-            out.append({"id": n, "dir": d, "layout": "runs", "plan": _jload(os.path.join(d, "plan.json"))})
+            out.append(_run_row(d, n, "runs", "-"))
     try:
         names = sorted(os.listdir(base))
     except OSError:
@@ -134,14 +281,16 @@ def list_plan_runs(root, exam_id):
         if n in (RUNS, CACHE) or os.path.islink(d) or not os.path.isdir(d):
             continue
         if os.path.isfile(os.path.join(d, "plan.json")) or os.path.isfile(os.path.join(d, "result.json")):
-            out.append({"id": n, "dir": d, "layout": "legacy", "plan": _jload(os.path.join(d, "plan.json"))})
+            out.append(_run_row(d, n, "legacy", "-"))
     out.sort(key=lambda r: _plan_key(r["id"], r["plan"]))
     return out
 
 
-def new_report_run(root, exam_id, run_id=None):
-    """reports/<exam>/run-<id>. A given id (with or without 'run-') reuses the dir (overwrite); none = fresh id."""
+def new_report_run(root, exam_id, run_id=None, line=None):
+    """reports/<exam>[/<line>]/run-<id>. A given id (with or without 'run-') reuses the dir (overwrite); none = fresh id."""
     base = os.path.join(root, _safe(exam_id, "exam id"))
+    if line and line != "-":
+        base = os.path.join(base, safe_line(line))
     if run_id:
         rid = run_id[len(REPORT_PREFIX):] if run_id.startswith(REPORT_PREFIX) else run_id
         d = os.path.join(base, REPORT_PREFIX + _safe(rid, "report run id"))
@@ -172,8 +321,18 @@ def legacy_plan_link(d):
     return None
 
 
-def scan_report_runs(exam_dir):
-    """[{id, dir, layout 'run'|'incomplete'|'legacy', manifest, warn}] of one reports/<exam> folder."""
+def _is_line_report_dir(d):
+    """A report line folder: a dir that holds at least one run-<id> dir (it is scanned on its own)."""
+    try:
+        return any(n.startswith(REPORT_PREFIX) and NEW_ID.match(n[len(REPORT_PREFIX):])
+                   and os.path.isdir(os.path.join(d, n)) for n in os.listdir(d))
+    except OSError:
+        return False
+
+
+def scan_report_runs(exam_dir, skip_lines=True):
+    """[{id, dir, layout 'run'|'incomplete'|'legacy', manifest, warn}] of one reports folder (exam or line folder).
+    Line folders below an exam folder (they hold run-<id> dirs) are skipped: list_report_runs scans them."""
     out = []
     try:
         names = sorted(os.listdir(exam_dir))
@@ -189,14 +348,29 @@ def scan_report_runs(exam_dir):
             man = _jload(os.path.join(d, RUN_JSON)) if has else None
             out.append({"id": rid, "dir": d, "layout": "run" if man else "incomplete", "manifest": man,
                         "warn": has and man is None})
+        elif skip_lines and _is_line_report_dir(d):
+            continue
         else:
             out.append({"id": n, "dir": d, "layout": "legacy", "manifest": None, "warn": False})
     out.sort(key=lambda r: (id_time(r["id"]) if r["layout"] != "legacy" else "", r["id"]))
     return out
 
 
-def list_report_runs(root, exam_id):
-    return scan_report_runs(os.path.join(root, _safe(exam_id, "exam id")))
+def list_report_runs(root, exam_id, line=None):
+    """Report runs of reports/<exam> (line '-') plus those of each line folder (rows get a `line` key).
+    line given: only that line folder."""
+    base = os.path.join(root, _safe(exam_id, "exam id"))
+    out = []
+    if not line:
+        out = [dict(r, line="-") for r in scan_report_runs(base)]
+        lines = [n for n in sorted(os.listdir(base)) if os.path.isdir(os.path.join(base, n))
+                 and not os.path.islink(os.path.join(base, n)) and _is_line_report_dir(os.path.join(base, n))] \
+            if os.path.isdir(base) else []
+    else:
+        lines = [safe_line(line)]
+    for ln in lines:
+        out.extend(dict(r, line=ln) for r in scan_report_runs(os.path.join(base, ln), skip_lines=False))
+    return out
 
 
 def new_run_dirs(folder):
@@ -222,10 +396,14 @@ def write_report_manifest(report_dir, plan_dirs, view, engine_git, cmd, repo_roo
         pd = os.path.abspath(pd.rstrip("/"))
         meta = _jload(os.path.join(pd, "plan.json")) or {}
         rel = os.path.relpath(pd, repo_root)
-        plans.append({"exam_id": meta.get("exam_id") or exam_of_plan_dir(pd),
-                      "plan_run_id": meta.get("plan_run_id") or os.path.basename(pd),
-                      "dir": pd if rel.startswith("..") else rel.replace(os.sep, "/"),
-                      "result_sha256": _sha_file(os.path.join(pd, "result.json"))})
+        pexam, pline = exam_line_of_plan_dir(pd)
+        ent = {"exam_id": meta.get("exam_id") or pexam,
+               "plan_run_id": os.path.basename(pd) if pline != "-" else meta.get("plan_run_id") or os.path.basename(pd),
+               "dir": pd if rel.startswith("..") else rel.replace(os.sep, "/"),
+               "result_sha256": _sha_file(os.path.join(pd, "result.json"))}
+        if pline != "-":  # line layout: exam_id is the plan folder (plan.json exam_id is the subject stem)
+            ent.update(exam_id=pexam, line=pline)
+        plans.append(ent)
     rid = report_run_id(report_dir)
     exam_folder = os.path.dirname(report_dir)
     prev = None
@@ -258,11 +436,14 @@ def finish_report_run(report_dir, plan_dirs, view, engine_git, cmd, repo_root=No
 
 
 def plan_ref(man_plan, root):
-    """Plan run dir named by one run.json plan_runs entry, resolved under root (both layouts)."""
+    """Plan run dir named by one run.json plan_runs entry, resolved under root (all layouts, migrated paths)."""
     try:
-        return plan_run_dir(root, man_plan["exam_id"], man_plan["plan_run_id"])
+        d = plan_run_dir(root, man_plan["exam_id"], man_plan["plan_run_id"], line=man_plan.get("line"))
     except (KeyError, ValueError):
         return None
+    if not os.path.isdir(d) and man_plan.get("dir"):
+        return migrated(root, man_plan["dir"]) or d
+    return d
 
 
 def runs_table(folder):

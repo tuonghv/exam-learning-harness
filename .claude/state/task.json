@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-090",
-  "state": "DESIGN",
-  "next": "coder implements 90.1-90.8 without touching real plans/; tester tests on tmp trees; main produces the dry-run table for the user",
+  "state": "IMPLEMENTING",
+  "next": "tester updates the 6 layout-dependent test files and writes test_plansmigrate.py; main shows the user the dry-run table",
   "title": "Line-based plans layout plans/<exam>/<line>/runs/<id>, solve --line, safe plans migration with dry-run/backup/undo (REQ-0098)",
   "active": [
     {
       "task_id": "TASK-090",
-      "state": "DESIGN",
-      "next": "coder implements 90.1-90.8 without touching real plans/; tester tests on tmp trees; main produces the dry-run table for the user",
-      "updated_at": "2026-11-08T04:19:16Z"
+      "state": "IMPLEMENTING",
+      "next": "tester updates the 6 layout-dependent test files and writes test_plansmigrate.py; main shows the user the dry-run table",
+      "updated_at": "2026-11-08T04:32:50Z"
     }
   ],
   "max_active": 1

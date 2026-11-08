@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0098",
-  "next": "coder implements 90.1-90.8 without touching real plans/; tester tests on tmp trees; main produces the dry-run table for the user",
-  "updated": "2026-11-08 11:19"
+  "next": "tester updates the 6 layout-dependent test files and writes test_plansmigrate.py; main shows the user the dry-run table",
+  "updated": "2026-11-08 11:32"
 }

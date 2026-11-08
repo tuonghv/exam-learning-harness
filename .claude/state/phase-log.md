@@ -2581,3 +2581,9 @@ Action: Design drafted from the real tree; --exam-id taken as best pick
 Result: docs/design/phase-90-line-based-plans.md
 Decision: DESIGN
 Next: IMPLEMENTING
+
+## IMPLEMENTING - TASK-090 - 2026-11-08T04:32:49Z
+Action: Coder implemented 90.1-90.8 and proved apply+undo on a scratch copy
+Result: real plans/ untouched; map 154 moves
+Decision: IMPLEMENTING
+Next: UNIT_TESTED
