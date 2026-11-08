@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-087",
-  "state": "UNIT_TESTED",
-  "next": "verifier recount: layout on mock run, legacy untouched, run-list/compare, run.json skip, readers on both layouts",
+  "state": "VERIFIED",
+  "next": "write docs/report/phase-87-run-based-layout.md, then DONE",
   "title": "Run-based plans/reports layout with report runs per plan run (REQ-0095), modeled on _code-security-scanner history/compare",
   "active": [
     {
       "task_id": "TASK-087",
-      "state": "UNIT_TESTED",
-      "next": "verifier recount: layout on mock run, legacy untouched, run-list/compare, run.json skip, readers on both layouts",
-      "updated_at": "2026-11-08T01:59:16Z"
+      "state": "VERIFIED",
+      "next": "write docs/report/phase-87-run-based-layout.md, then DONE",
+      "updated_at": "2026-11-08T02:10:19Z"
     }
   ],
   "max_active": 1

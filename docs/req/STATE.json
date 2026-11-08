@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0095",
-  "next": "verifier recount: layout on mock run, legacy untouched, run-list/compare, run.json skip, readers on both layouts",
-  "updated": "2026-11-08 08:59"
+  "next": "write docs/report/phase-87-run-based-layout.md, then DONE",
+  "updated": "2026-11-08 09:10"
 }

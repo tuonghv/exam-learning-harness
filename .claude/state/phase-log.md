@@ -2503,3 +2503,9 @@ Action: Tester added 46 tests and fixed 8 layout-dependent test files; main re-r
 Result: 1747 run, 4 pre-existing failures
 Decision: UNIT_TESTED
 Next: VERIFIED
+
+## VERIFIED - TASK-087 - 2026-11-08T02:10:19Z
+Action: Verifier pass plus main real-data checks and full suite
+Result: AC1-AC7 PASS, 1752 tests only known failures
+Decision: VERIFIED
+Next: DONE: report
