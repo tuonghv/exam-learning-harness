@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-091",
-  "state": "VERIFIED",
-  "next": "write docs/report/phase-91-reports-run-layout.md, then DONE",
+  "state": "DONE",
+  "next": "",
   "title": "Convert old reports into reports/<exam>/<line>/run-<id> with reviewed dry-run, backup, manifest, undo (REQ-0099)",
-  "active": [
-    {
-      "task_id": "TASK-091",
-      "state": "VERIFIED",
-      "next": "write docs/report/phase-91-reports-run-layout.md, then DONE",
-      "updated_at": "2026-11-08T05:46:26Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

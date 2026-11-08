@@ -1784,7 +1784,7 @@
     "task_id": "TASK-091",
     "title": "Convert old reports into reports/<exam>/<line>/run-<id> with reviewed dry-run, backup, manifest, undo (REQ-0099)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-08T17:00:00",
     "requirement": "REQ-0099",
     "acceptance_criteria": [
@@ -1793,6 +1793,15 @@
       "AC3 apply with backup, manifest, undo, recount equal",
       "AC4 readers accept new and legacy report layouts, flat pack gets a line+run folder",
       "AC5 tests and QA recount, no report content changed"
+    ],
+    "completed_at": "2026-11-08T05:46:46Z",
+    "report": "docs/report/phase-91-reports-run-layout.md",
+    "user_notes": [
+      {
+        "raw": "RAW-00279",
+        "note": "convert old reports; user reviews the dry-run before apply",
+        "at": "2026-11-08T05:10:36Z"
+      }
     ]
   }
 ]

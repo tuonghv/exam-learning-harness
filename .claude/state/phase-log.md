@@ -2629,3 +2629,9 @@ Action: Real apply after the user's OK, recounts and verifier
 Result: AC1-AC5 PASS
 Decision: VERIFIED
 Next: DONE: report
+
+## DONE - TASK-091 - 2026-11-08T05:46:46Z
+Action: Report written
+Result: docs/report/phase-91-reports-run-layout.md
+Decision: DONE
+Next: none

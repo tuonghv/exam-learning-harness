@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-091",
   "title": "Convert old reports into reports/<exam>/<line>/run-<id> with reviewed dry-run, backup, manifest, undo (REQ-0099)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0099",
   "acceptance_criteria": [
     "AC1 complete map no UNMAPPED",
@@ -53,11 +53,19 @@
       "work/TASK-091/handoff/verify2.md"
     ],
     "command": "plans-migrate --root reports --dry-run, --apply --backup-dir work/backups (user: apply), --verify; independent recount from the saved before-sha; readers; gate --full",
-    "result": "real apply: 11 report runs, 81 files moved, 30 generated; --verify 8 checks 0 failed; 112/112 content files equal sha256 at the new paths (0 different, 0 missing); files 153 = 112 + 11 run.json + 19 INDEX.md + MIGRATION.json + 10 index copies; pack run.json links 4 plan runs by result_sha256 (match the real result.json); run-list report-runs column and pack checker (64 checks, 0 failed, 113/120) work on the moved tree; superseded rows present for crosscheck and dhqg2024/solutions*, none for the pack; gate ran 1852, new=[], known=4"
+    "result": "real apply: 11 report runs, 81 files moved, 30 generated; --verify 8 checks 0 failed; 112/112 content files equal sha256 at the new paths (0 different, 0 missing); files 153 = 112 + 11 run.json + 19 INDEX.md + MIGRATION.json + 10 index copies; pack run.json links 4 plan runs by result_sha256 (match the real result.json); run-list report-runs column and pack checker (64 checks, 0 failed, 113/120) work on the moved tree; superseded rows present for crosscheck and dhqg2024/solutions*, none for the pack; gate ran 1852, new=[], known=4",
+    "quality": {
+      "kind": "real-run",
+      "evidence": [
+        "work/TASK-091/evidence/recount.txt",
+        "work/TASK-091/evidence/verify-real.txt"
+      ],
+      "reason": "real apply on the real reports/ tree with backup, --verify 8 checks, independent sha256 recount of all 112 content files against a saved snapshot"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-91-reports-run-layout.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -66,7 +74,8 @@
     "designer": "work/TASK-091/handoff/design.md",
     "coder": "work/TASK-091/handoff/code.md",
     "tester": "work/TASK-091/handoff/test.md",
-    "verifier": "work/TASK-091/handoff/verify2.md"
+    "verifier": "work/TASK-091/handoff/verify2.md",
+    "crosscheck": "work/TASK-091/handoff/verify2.md"
   },
   "user_notes": [
     {
@@ -76,7 +85,7 @@
     }
   ],
   "picked_at": "2026-11-08T05:10:36Z",
-  "updated_at": "2026-11-08T05:46:26Z",
+  "updated_at": "2026-11-08T05:46:46Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/plansmigrate.py",
@@ -95,5 +104,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "write docs/report/phase-91-reports-run-layout.md, then DONE"
+  "next": ""
 }
