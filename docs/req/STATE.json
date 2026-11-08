@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0097",
-  "next": "grep check, --fast run, verifier",
-  "updated": "2026-11-08 11:04"
+  "next": "verifier reads the four briefs and the doc paragraph",
+  "updated": "2026-11-08 11:06"
 }

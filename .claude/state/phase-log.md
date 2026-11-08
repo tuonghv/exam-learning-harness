@@ -2557,3 +2557,9 @@ Action: Brief wording edited
 Result: 4 briefs + workflow-roles; user OK RAW-00274
 Decision: IMPLEMENTING
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-089 - 2026-11-08T04:06:03Z
+Action: Grep check and --fast run
+Result: AC4 holds
+Decision: UNIT_TESTED
+Next: VERIFIED

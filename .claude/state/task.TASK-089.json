@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-089",
   "title": "Role briefs use the fast test modes (REQ-0097)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0097",
   "acceptance_criteria": [
     "AC1 Tests line names --affected/--fast and main-only --full",
@@ -28,9 +28,9 @@
     "summary": "Tests line of coder/designer/tester/verifier briefs names --affected/--fast and main-only --full; tester step uses --fast; workflow-roles section 11 states it with the regeneration caveat"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "grep -c 'unittest discover' .claude/agents/*.md; python3 -I tools/run_tests.py --fast",
+    "result": "0 plain unittest lines in the four briefs; run_tests.py named in each; --fast 52.8 s, only the 4 known failures; settings/hooks/agent_setup.json untouched"
   },
   "security": {
     "status": "pending",
@@ -49,10 +49,13 @@
   "evidence_required": false,
   "roles": {
     "designer": {
-      "waiver": "wording-only edit of 5 lines, no code; design is 12 lines written by main"
+      "waiver": "wording-only edit, design by main"
     },
     "coder": {
-      "waiver": "wording-only edit of agent brief text and one doc paragraph, done by main; no code"
+      "waiver": "wording-only edit by main"
+    },
+    "tester": {
+      "waiver": "no code: check is a grep and a --fast run"
     }
   },
   "user_notes": [
@@ -63,7 +66,7 @@
     }
   ],
   "picked_at": "2026-11-08T04:04:48Z",
-  "updated_at": "2026-11-08T04:04:56Z",
+  "updated_at": "2026-11-08T04:06:03Z",
   "updated_by": "main",
   "scope": [
     ".claude/agents/coder.md",
@@ -79,5 +82,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "grep check, --fast run, verifier"
+  "next": "verifier reads the four briefs and the doc paragraph"
 }
