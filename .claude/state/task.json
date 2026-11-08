@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-095",
-  "state": "IMPLEMENTING",
-  "next": "tester adds the badge and index tests; main runs the gate and report-index on the exam folders",
+  "state": "UNIT_TESTED",
+  "next": "verifier recount of run-list and the regenerated exam indexes",
   "title": "Publish badge from the main report runs' plan links; exam INDEX ignores line-level INDEX.md (REQ-0102)",
   "active": [
     {
       "task_id": "TASK-095",
-      "state": "IMPLEMENTING",
-      "next": "tester adds the badge and index tests; main runs the gate and report-index on the exam folders",
-      "updated_at": "2026-11-08T07:37:58Z"
+      "state": "UNIT_TESTED",
+      "next": "verifier recount of run-list and the regenerated exam indexes",
+      "updated_at": "2026-11-08T07:46:45Z"
     }
   ],
   "max_active": 1

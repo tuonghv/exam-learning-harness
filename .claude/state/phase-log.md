@@ -2737,3 +2737,9 @@ Action: Coder implemented 95.1 and 95.2
 Result: real run-list matches the design
 Decision: IMPLEMENTING
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-095 - 2026-11-08T07:46:45Z
+Action: Tester 11 tests, gate run, exam indexes regenerated
+Result: 1894 run, new=[]
+Decision: UNIT_TESTED
+Next: VERIFIED
