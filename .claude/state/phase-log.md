@@ -2809,3 +2809,9 @@ Action: Recount on real INDEX files and checker
 Result: AC1-AC3 pass
 Decision: VERIFIED
 Next: DONE
+
+## DONE - TASK-097 - 2026-11-08T10:30:18Z
+Action: Report written
+Result: docs/report/phase-97-small-fixes.md
+Decision: DONE
+Next: none
