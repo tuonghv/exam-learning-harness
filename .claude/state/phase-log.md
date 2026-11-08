@@ -2725,3 +2725,9 @@ Action: Report written
 Result: docs/report/phase-94-main-published-line.md
 Decision: DONE
 Next: none
+
+## DESIGN - TASK-095 - 2026-11-08T07:36:10Z
+Action: Design for the badge and index scan
+Result: docs/design/phase-95-publish-badge-and-index.md
+Decision: DESIGN
+Next: IMPLEMENTING

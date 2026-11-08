@@ -1,17 +1,17 @@
 {
   "task_id": "TASK-095",
   "title": "Publish badge from the main report runs' plan links; exam INDEX ignores line-level INDEX.md (REQ-0102)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0102",
   "acceptance_criteria": [
-    "AC1 run-list publish badge = plan runs linked by a main report run's plan_runs, others dev",
-    "AC2 exam INDEX.md has no unregistered row for line-level INDEX.md, a truly unknown file is still flagged",
-    "AC3 announced with run-list before/after for dgnl2026 and dhqg2024"
+    "AC1 run-list publish badge from main report links",
+    "AC2 exam INDEX no unregistered row for generated INDEX.md/run.json, unknown file still flagged",
+    "AC3 announced with run-list before/after"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-95-publish-badge-and-index.md",
+    "summary": "run-list badge published iff a complete main report run links the plan run through plan_runs (existing linked() handles aliases), else dev; exam-level INDEX skips generated INDEX.md (first line '# Reports index: ') and run.json; Lines table unchanged",
     "reuse": [],
     "risks": []
   },
@@ -39,7 +39,9 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-095/handoff/design.md"
+  },
   "user_notes": [
     {
       "raw": "RAW-00288",
@@ -48,8 +50,8 @@
     }
   ],
   "picked_at": "2026-11-08T07:33:04Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-08T07:36:10Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -57,5 +59,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder changes cli.run_list_main and report_kinds.render_index; tester; gate"
 }

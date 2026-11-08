@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0102",
-  "next": "TASK-095 design",
-  "updated": "2026-11-08 14:33"
+  "next": "coder changes cli.run_list_main and report_kinds.render_index; tester; gate",
+  "updated": "2026-11-08 14:36"
 }
