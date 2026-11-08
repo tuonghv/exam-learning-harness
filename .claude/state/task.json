@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-088",
-  "state": "VERIFIED",
-  "next": "write docs/report/phase-88-fast-test-tiers.md, then DONE",
+  "state": "DONE",
+  "next": "",
   "title": "Fast test mode: tiers, --fast, --affected, --full in a git worktree with cached result (REQ-0096)",
-  "active": [
-    {
-      "task_id": "TASK-088",
-      "state": "VERIFIED",
-      "next": "write docs/report/phase-88-fast-test-tiers.md, then DONE",
-      "updated_at": "2026-11-08T02:50:33Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-088",
   "title": "Fast test mode: tiers, --fast, --affected, --full in a git worktree with cached result (REQ-0096)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0096",
   "acceptance_criteria": [
     "AC1 timing report script and summary",
@@ -49,11 +49,18 @@
       "work/TASK-088/handoff/verify2.md"
     ],
     "command": "python3 -I tools/run_tests.py --list/--fast/--affected/--full; --full REUSED check; verifier audit AC1-AC8",
-    "result": "--list 1789 = 1769 fast + 20 slow; --fast ~50 s vs 370 s; --affected 0.2 s on runlayout.py; real gate in a worktree ran 1789, new=[], known=4, 367.8 s, worktree removed; second --full REUSED; agent briefs, settings, hooks, agent_setup.json untouched (user decision); verifier AC1-AC8 PASS"
+    "result": "--list 1789 = 1769 fast + 20 slow; --fast ~50 s vs 370 s; --affected 0.2 s on runlayout.py; real gate in a worktree ran 1789, new=[], known=4, 367.8 s, worktree removed; second --full REUSED; agent briefs, settings, hooks, agent_setup.json untouched (user decision); verifier AC1-AC8 PASS",
+    "quality": {
+      "kind": "real-run",
+      "evidence": [
+        "work/TASK-088/evidence/gate-full.json"
+      ],
+      "reason": "real --full gate run in a worktree, --fast and --affected timings measured, REUSED check"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-88-fast-test-tiers.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -76,7 +83,8 @@
       ".claude/skills/verify/SKILL.md"
     ],
     "tester": "work/TASK-088/handoff/test.md",
-    "verifier": "work/TASK-088/handoff/verify2.md"
+    "verifier": "work/TASK-088/handoff/verify2.md",
+    "crosscheck": "work/TASK-088/handoff/verify2.md"
   },
   "user_notes": [
     {
@@ -86,7 +94,7 @@
     }
   ],
   "picked_at": "2026-11-08T02:19:04Z",
-  "updated_at": "2026-11-08T02:50:33Z",
+  "updated_at": "2026-11-08T02:50:45Z",
   "updated_by": "main",
   "scope": [
     "tools/run_tests.py",
@@ -105,5 +113,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "write docs/report/phase-88-fast-test-tiers.md, then DONE"
+  "next": ""
 }
