@@ -96,6 +96,16 @@ def main(argv):
         return 2
     pack, plans = args[0], args[1:]
     kinds = jload(reg)["kinds"]
+    try:  # REQ-0104: an overlay plan dir is read from run.json, it is not a PLAN_DIR argument
+        ov_dirs = {os.path.abspath(o.get("dir") or "") for o in (jload(os.path.join(pack, "run.json")).get("overlays") or [])
+                   if isinstance(o, dict)}
+    except (OSError, ValueError, AttributeError):
+        ov_dirs = set()
+    bad_arg = [pd for pd in plans if os.path.abspath(pd) in ov_dirs]
+    if bad_arg:
+        print("usage error: %s is an overlay plan dir of this pack (run.json overlays); the checker reads overlays itself. "
+              "Pass only the base PLAN_DIRs, one per subject." % ", ".join(bad_arg), file=sys.stderr)
+        return 2
     rows = []
 
     def chk(name, exp, got):

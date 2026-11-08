@@ -2791,3 +2791,9 @@ Action: Short design
 Result: docs/design/phase-97-small-fixes.md
 Decision: DESIGN
 Next: IMPLEMENTING
+
+## IMPLEMENTING - TASK-097 - 2026-11-08T10:23:16Z
+Action: Coded both fixes
+Result: --affected 341 tests OK
+Decision: IMPLEMENTING
+Next: UNIT_TESTED

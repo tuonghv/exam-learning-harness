@@ -103,6 +103,21 @@ def run_superseded(folder):
     return [s for s in sup if isinstance(s, dict) and isinstance(s.get("glob"), str)]
 
 
+def nested_superseded(folder, rel, cache):
+    """Note of the first `superseded` glob of a run.json in a parent folder of rel (glob matched against the
+    path inside that run folder), else None. cache: {dir: [{glob, note}]} shared by the caller (REQ-0104)."""
+    parts = rel.split("/")
+    for i in range(len(parts) - 1, 0, -1):
+        d = "/".join(parts[:i])
+        if d not in cache:
+            cache[d] = run_superseded(os.path.join(folder, d))
+        sub = "/".join(parts[i:])
+        for sup in cache[d]:
+            if fnmatch.fnmatch(sub, sup["glob"]):
+                return sup.get("note", "")
+    return None
+
+
 def classify(rel, root_name=None, extra=None):
     """(kind|None, 'standard'|'legacy'|'superseded'|None) of a path relative to an exam folder.
     Superseded globs (registry + extra, the run.json list of a moved run) match the relative path,
@@ -249,16 +264,22 @@ def render_index(folder):
     rels.sort()
     kinds = load()["kinds"]
     sup_extra = run_superseded(folder)
+    nest_cache = {}
     rows, per_kind, stat = [], {}, {"standard": 0, "legacy": 0, "superseded": 0, "unregistered": 0}
     for rel in rels:
         kind, status = classify(rel, root_name, sup_extra)
         cnt, wt = count_of(os.path.join(folder, rel), kind) if kind else (None, None)
+        nested = nested_superseded(folder, rel, nest_cache) if status != "superseded" else None
+        if nested is not None:
+            status = "superseded"
         if status is None:
             status = "unregistered"
         stat[status] += 1
         if kind:
             per_kind[kind] = per_kind.get(kind, 0) + 1
-        if status == "superseded":
+        if nested is not None:
+            desc = nested
+        elif status == "superseded":
             desc = superseded_note(rel, root_name, sup_extra)
         elif status == "legacy" and wt is not None:
             desc = ("old format (before TASK-085): no question text, raw explanation; kept for history" if not wt

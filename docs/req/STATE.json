@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0104",
-  "next": "implement (already coded in the working tree), tests, gate, recount",
+  "next": "tests (test_overlay, test_report_kinds), gate --full on the committed tree, regenerate two INDEX files, recount",
   "updated": "2026-11-08 17:23"
 }
