@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-092",
-  "state": "DESIGN",
-  "next": "run report-pack, then checker and recount",
+  "state": "IMPLEMENTING",
+  "next": "checker and recount, then a verifier",
   "title": "Build the DHQG 2024 hybrid report pack in the new layout from the t81 runs (REQ-0094)",
   "active": [
     {
       "task_id": "TASK-092",
-      "state": "DESIGN",
-      "next": "run report-pack, then checker and recount",
-      "updated_at": "2026-11-08T05:56:01Z"
+      "state": "IMPLEMENTING",
+      "next": "checker and recount, then a verifier",
+      "updated_at": "2026-11-08T05:57:01Z"
     }
   ],
   "max_active": 1

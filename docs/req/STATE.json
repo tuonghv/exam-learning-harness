@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0094",
-  "next": "run report-pack, then checker and recount",
-  "updated": "2026-11-08 12:56"
+  "next": "checker and recount, then a verifier",
+  "updated": "2026-11-08 12:57"
 }

@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-092",
   "title": "Build the DHQG 2024 hybrid report pack in the new layout from the t81 runs (REQ-0094)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0094",
   "acceptance_criteria": [
     "AC1 pack at $0, every md has a pdf, checker passes (keyless pack accepted)",
@@ -17,8 +17,11 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "work/TASK-092/evidence/pack-run.txt"
+    ],
+    "summary": "python3 -I scripts/exam.py report-pack on the four t81 plan runs (--exam dhqg2024 --run t81) wrote reports/dhqg2024/t81/run-20261108-055609 (31 files + INDEX.md + run.json), $0"
   },
   "unit_test": {
     "status": "pending",
@@ -42,7 +45,13 @@
   "evidence_required": false,
   "roles": {
     "designer": {
-      "waiver": "run of an existing command, design written by main (12 lines)"
+      "waiver": "run of an existing command, design written by main"
+    },
+    "coder": {
+      "waiver": "no code change: existing report-pack command"
+    },
+    "tester": {
+      "waiver": "no code: the checker and a recount are the tests"
     }
   },
   "user_notes": [
@@ -53,7 +62,7 @@
     }
   ],
   "picked_at": "2026-11-08T05:55:43Z",
-  "updated_at": "2026-11-08T05:56:01Z",
+  "updated_at": "2026-11-08T05:57:01Z",
   "updated_by": "main",
   "scope": [
     "docs/design/phase-92-dhqg2024-pack.md"
@@ -64,5 +73,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "run report-pack, then checker and recount"
+  "next": "checker and recount, then a verifier"
 }
