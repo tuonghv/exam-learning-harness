@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-093",
   "title": "Readable wording instead of raw 'none' in the solution report; rebuild both packs (REQ-0100)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0100",
   "acceptance_criteria": [
     "AC1 localized phrases, no none token for declined questions in the solution-report",
@@ -18,8 +18,12 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/reporter.py",
+      "src/exam_engine/pipeline/metrics.py"
+    ],
+    "summary": "LABELS vi/en no_answer/no_evidence/no_score; _question_block prints localized phrases instead of raw none (answer, evidence, per-question score); metrics accuracy line 'no key'; data files keep none; --affected 577 tests OK; the confidence tier name 'none' (only with --confidence) is kept as a defined tier"
   },
   "unit_test": {
     "status": "pending",
@@ -42,7 +46,8 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-093/handoff/design.md"
+    "designer": "work/TASK-093/handoff/design.md",
+    "coder": "work/TASK-093/handoff/code.md"
   },
   "user_notes": [
     {
@@ -52,14 +57,19 @@
     }
   ],
   "picked_at": "2026-11-08T06:04:06Z",
-  "updated_at": "2026-11-08T06:07:25Z",
+  "updated_at": "2026-11-08T06:08:28Z",
   "updated_by": "main",
-  "scope": [],
+  "scope": [
+    "src/exam_engine/pipeline/reporter.py",
+    "src/exam_engine/pipeline/metrics.py",
+    "docs/design/phase-93-readable-no-answer-wording.md",
+    "tests/unit/*.py"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
     "done": [],
     "notes": ""
   },
-  "next": "coder changes reporter.py and metrics.py; tester adds 6 tests; main rebuilds both packs"
+  "next": "tester adds the vi/en and parser tests; main rebuilds both packs"
 }

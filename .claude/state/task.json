@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-093",
-  "state": "DESIGN",
-  "next": "coder changes reporter.py and metrics.py; tester adds 6 tests; main rebuilds both packs",
+  "state": "IMPLEMENTING",
+  "next": "tester adds the vi/en and parser tests; main rebuilds both packs",
   "title": "Readable wording instead of raw 'none' in the solution report; rebuild both packs (REQ-0100)",
   "active": [
     {
       "task_id": "TASK-093",
-      "state": "DESIGN",
-      "next": "coder changes reporter.py and metrics.py; tester adds 6 tests; main rebuilds both packs",
-      "updated_at": "2026-11-08T06:07:25Z"
+      "state": "IMPLEMENTING",
+      "next": "tester adds the vi/en and parser tests; main rebuilds both packs",
+      "updated_at": "2026-11-08T06:08:28Z"
     }
   ],
   "max_active": 1

@@ -91,7 +91,8 @@ LABELS = {
            "status": "Status", "doubt": "Doubt", "levels": {"low": "low", "medium": "medium", "high": "high"},
            "no_text": "<question text not stored in this run>", "evidence": "Evidence", "score": "Score",
            "source": "Source", "check": "Check", "independent": "independent", "qa": "QA finding",
-           "error": "Error", "open_note": "Open question: no automatic score; a human rubric is needed."},
+           "error": "Error", "no_answer": "no answer (solver declined)", "no_evidence": "no passed check",
+           "no_score": "not scored", "open_note": "Open question: no automatic score; a human rubric is needed."},
     "vi": {"title": "Ph\u1ea7n h\u1ecdc", "question": "C\u00e2u", "answer": "\u0110\u00e1p \u00e1n",
            "open": "M\u1edf (c\u1ea7n ch\u1ea5m theo thang \u0111i\u1ec3m)", "verdict": "k\u1ebft qu\u1ea3",
            "why": "V\u00ec sao", "steps": "C\u00e1c b\u01b0\u1edbc",
@@ -102,6 +103,9 @@ LABELS = {
            "evidence": "B\u1eb1ng ch\u1ee9ng", "score": "\u0110i\u1ec3m", "source": "Ngu\u1ed3n",
            "check": "Ki\u1ec3m tra", "independent": "\u0111\u1ed9c l\u1eadp", "qa": "Ph\u00e1t hi\u1ec7n QA",
            "error": "L\u1ed7i",
+           "no_answer": "ch\u01b0a c\u00f3 \u0111\u00e1p \u00e1n (solver t\u1eeb ch\u1ed1i)",
+           "no_evidence": "kh\u00f4ng c\u00f3 (ch\u01b0a c\u00f3 ki\u1ec3m tra n\u00e0o \u0111\u1ea1t)",
+           "no_score": "ch\u01b0a ch\u1ea5m",
            "open_note": "C\u00e2u m\u1edf: kh\u00f4ng ch\u1ea5m t\u1ef1 \u0111\u1ed9ng, c\u1ea7n thang \u0111i\u1ec3m."},
 }
 
@@ -204,16 +208,20 @@ def _question_block(q, result, exam_q, ctx, L):
         opts = exam_q.get("options") or {}
         if opts:
             md += ["%s. %s  " % (_one_line(k), _one_line(v)) for k, v in opts.items()] + [""]
-    md += ["**%s: %s**" % (L["answer"], L["open"] if opened else (_one_line(q.get("answer")) or "none")), ""]
+    md += ["**%s: %s**" % (L["answer"], L["open"] if opened else (_one_line(q.get("answer")) or L["no_answer"])), ""]
     md.append("- %s: %s (%s)" % (L["status"], q["verification_status"], _one_line(q.get("status_reason")) or "-"))
     u = q.get("uncertainty") or {}
     lvl = _one_line(u.get("level"))
     md.append("- %s: %s - %s" % (L["doubt"], L["levels"].get(lvl, lvl or "-"), _one_line(u.get("reason")) or "-"))
     if q.get("source") in ("image", "text+image", "adjudicated"):
         md.append("- %s: %s" % (L["source"], q["source"]))
-    md.append("- %s: %s" % (L["evidence"], q.get("evidence_kind") or evidence_kind(q)))
+    ek = q.get("evidence_kind") or evidence_kind(q)
+    md.append("- %s: %s" % (L["evidence"], L["no_evidence"] if ek == "none" else ek))
     sc = q.get("score") or {}
-    md.append("- %s: %s / %s (%s)" % (L["score"], _num(sc.get("points")), _num(sc.get("max")), _one_line(sc.get("basis"))))
+    if sc.get("points") is None and sc.get("max") is None:
+        md.append("- %s: %s" % (L["score"], L["no_score"]))
+    else:
+        md.append("- %s: %s / %s (%s)" % (L["score"], _num(sc.get("points")), _num(sc.get("max")), _one_line(sc.get("basis"))))
     if opened:
         md.append("- %s" % L["open_note"])
     for c in q.get("checks") or []:

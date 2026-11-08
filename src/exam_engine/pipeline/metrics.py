@@ -524,7 +524,7 @@ def block(m):
     return [
         "metrics: answered %d/%d declined %d malformed %d retry %s%s" % (
             c["answered"], m["n"], c["declined"], c["malformed"], _pct(r.get("retry_rate")), img),
-        "accuracy: " + (" | ".join(parts) if parts else "none"),
+        "accuracy: " + (" | ".join(parts) if parts else "no key"),
         "cost: calls %s $%s llm_s %s" % (
             "-" if cost.get("calls") is None else cost["calls"], "-" if usd is None else "%.4f" % usd,
             "-" if cost.get("llm_s") is None else cost["llm_s"]),

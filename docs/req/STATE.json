@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0100",
-  "next": "coder changes reporter.py and metrics.py; tester adds 6 tests; main rebuilds both packs",
-  "updated": "2026-11-08 13:07"
+  "next": "tester adds the vi/en and parser tests; main rebuilds both packs",
+  "updated": "2026-11-08 13:08"
 }
