@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-091",
   "title": "Convert old reports into reports/<exam>/<line>/run-<id> with reviewed dry-run, backup, manifest, undo (REQ-0099)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0099",
   "acceptance_criteria": [
     "AC1 complete map no UNMAPPED",
@@ -37,12 +37,23 @@
     "result": "gate: ran 1852, new=[], known=4, gate_ok true, 367.2 s, worktree removed; test_plansmigrate 57 OK (21 new, ReportsPhase2 rewritten); --fast 1832 tests 53.9 s only the 4 known"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "os.rename inside reports/ only, backup outside the root verified before the move, map entries confined to reports/, no shell, no content file edited; undo via MIGRATION.json or the backup"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-091/evidence/apply-real.txt",
+      "work/TASK-091/evidence/verify-real.txt",
+      "work/TASK-091/evidence/recount.txt",
+      "work/TASK-091/evidence/pre-apply-check.txt",
+      "work/TASK-091/evidence/readers-after.txt",
+      "work/TASK-091/evidence/superseded-check.txt",
+      "work/TASK-091/evidence/gate-full.json",
+      "work/TASK-091/handoff/verify2.md"
+    ],
+    "command": "plans-migrate --root reports --dry-run, --apply --backup-dir work/backups (user: apply), --verify; independent recount from the saved before-sha; readers; gate --full",
+    "result": "real apply: 11 report runs, 81 files moved, 30 generated; --verify 8 checks 0 failed; 112/112 content files equal sha256 at the new paths (0 different, 0 missing); files 153 = 112 + 11 run.json + 19 INDEX.md + MIGRATION.json + 10 index copies; pack run.json links 4 plan runs by result_sha256 (match the real result.json); run-list report-runs column and pack checker (64 checks, 0 failed, 113/120) work on the moved tree; superseded rows present for crosscheck and dhqg2024/solutions*, none for the pack; gate ran 1852, new=[], known=4"
   },
   "report": {
     "status": "pending",
@@ -54,7 +65,8 @@
   "roles": {
     "designer": "work/TASK-091/handoff/design.md",
     "coder": "work/TASK-091/handoff/code.md",
-    "tester": "work/TASK-091/handoff/test.md"
+    "tester": "work/TASK-091/handoff/test.md",
+    "verifier": "work/TASK-091/handoff/verify2.md"
   },
   "user_notes": [
     {
@@ -64,7 +76,7 @@
     }
   ],
   "picked_at": "2026-11-08T05:10:36Z",
-  "updated_at": "2026-11-08T05:37:30Z",
+  "updated_at": "2026-11-08T05:46:26Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/plansmigrate.py",
@@ -83,5 +95,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verifier audit; the user reviews the real reports dry-run table (work/TASK-091/evidence/dry-run-real.txt) before --apply"
+  "next": "write docs/report/phase-91-reports-run-layout.md, then DONE"
 }

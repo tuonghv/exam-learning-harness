@@ -2623,3 +2623,9 @@ Action: Tester 21 new tests, gate run
 Result: 1852 run, new=[], known=4
 Decision: UNIT_TESTED
 Next: VERIFIED
+
+## VERIFIED - TASK-091 - 2026-11-08T05:46:26Z
+Action: Real apply after the user's OK, recounts and verifier
+Result: AC1-AC5 PASS
+Decision: VERIFIED
+Next: DONE: report

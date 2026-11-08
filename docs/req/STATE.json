@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0099",
-  "next": "verifier audit; the user reviews the real reports dry-run table (work/TASK-091/evidence/dry-run-real.txt) before --apply",
-  "updated": "2026-11-08 12:37"
+  "next": "write docs/report/phase-91-reports-run-layout.md, then DONE",
+  "updated": "2026-11-08 12:46"
 }
