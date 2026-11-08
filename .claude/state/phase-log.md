@@ -2785,3 +2785,9 @@ Action: Report written
 Result: docs/report/phase-96-report-answer-overlay.md
 Decision: DONE
 Next: none
+
+## DESIGN - TASK-097 - 2026-11-08T10:23:07Z
+Action: Short design
+Result: docs/design/phase-97-small-fixes.md
+Decision: DESIGN
+Next: IMPLEMENTING

@@ -1,5 +1,5 @@
 {
-  "focus": "",
-  "next": "",
-  "updated": "2026-11-08 15:33"
+  "focus": "REQ-0104",
+  "next": "implement (already coded in the working tree), tests, gate, recount",
+  "updated": "2026-11-08 17:23"
 }

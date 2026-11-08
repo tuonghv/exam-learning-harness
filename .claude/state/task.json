@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-097",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "implement (already coded in the working tree), tests, gate, recount",
   "title": "Small fixes: exam INDEX shows run-superseded files as superseded; checker refuses an overlay plan dir clearly (REQ-0104)",
   "active": [
     {
       "task_id": "TASK-097",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "implement (already coded in the working tree), tests, gate, recount",
+      "updated_at": "2026-11-08T10:23:07Z"
     }
   ],
   "max_active": 1

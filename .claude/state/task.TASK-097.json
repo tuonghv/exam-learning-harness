@@ -1,17 +1,17 @@
 {
   "task_id": "TASK-097",
   "title": "Small fixes: exam INDEX shows run-superseded files as superseded; checker refuses an overlay plan dir clearly (REQ-0104)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0104",
   "acceptance_criteria": [
     "AC1 both exam INDEX files show 0 unregistered, the 7 files superseded with the run.json note",
-    "AC2 checker exits 2 with a usage error for an overlay plan dir, unchanged otherwise",
+    "AC2 checker exits 2 for an overlay plan dir, unchanged otherwise",
     "AC3 tests and gate, only the two INDEX.md files change"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-97-small-fixes.md",
+    "summary": "nested run.json superseded in the exam INDEX (report_kinds.nested_superseded) and an exit-2 usage error in the checker for an overlay plan dir; reporting only, no model call",
     "reuse": [],
     "risks": []
   },
@@ -39,11 +39,15 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": {
+      "waiver": "two small reporting-only fixes (about 30 lines); the coordinator wrote the design doc directly"
+    }
+  },
   "user_notes": [],
   "picked_at": "2026-11-08T10:22:12Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-08T10:23:07Z",
+  "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/report_kinds.py",
     "tools/check_report_pack.py",
@@ -55,5 +59,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "implement (already coded in the working tree), tests, gate, recount"
 }
