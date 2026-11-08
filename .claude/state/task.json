@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-091",
-  "state": "IMPLEMENTING",
-  "next": "tester rewrites ReportsPhase2 and adds the design tests; main shows the user the dry-run table",
+  "state": "UNIT_TESTED",
+  "next": "verifier audit; the user reviews the real reports dry-run table (work/TASK-091/evidence/dry-run-real.txt) before --apply",
   "title": "Convert old reports into reports/<exam>/<line>/run-<id> with reviewed dry-run, backup, manifest, undo (REQ-0099)",
   "active": [
     {
       "task_id": "TASK-091",
-      "state": "IMPLEMENTING",
-      "next": "tester rewrites ReportsPhase2 and adds the design tests; main shows the user the dry-run table",
-      "updated_at": "2026-11-08T05:26:37Z"
+      "state": "UNIT_TESTED",
+      "next": "verifier audit; the user reviews the real reports dry-run table (work/TASK-091/evidence/dry-run-real.txt) before --apply",
+      "updated_at": "2026-11-08T05:37:30Z"
     }
   ],
   "max_active": 1

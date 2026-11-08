@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0099",
-  "next": "tester rewrites ReportsPhase2 and adds the design tests; main shows the user the dry-run table",
-  "updated": "2026-11-08 12:26"
+  "next": "verifier audit; the user reviews the real reports dry-run table (work/TASK-091/evidence/dry-run-real.txt) before --apply",
+  "updated": "2026-11-08 12:37"
 }

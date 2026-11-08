@@ -2617,3 +2617,9 @@ Action: Coder implemented 91.1-91.4 and proved apply+undo on a scratch copy
 Result: real trees untouched; 11 report runs
 Decision: IMPLEMENTING
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-091 - 2026-11-08T05:37:29Z
+Action: Tester 21 new tests, gate run
+Result: 1852 run, new=[], known=4
+Decision: UNIT_TESTED
+Next: VERIFIED

@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-091",
   "title": "Convert old reports into reports/<exam>/<line>/run-<id> with reviewed dry-run, backup, manifest, undo (REQ-0099)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0099",
   "acceptance_criteria": [
     "AC1 complete map no UNMAPPED",
@@ -32,9 +32,9 @@
     "summary": "plansmigrate --root reports groups each old report folder into reports/<exam>/<line>/run-<newest mtime> with run.json (plan runs linked by result_sha256 for the pack, link unknown otherwise), superseded status in run.json, INDEX.md per run; reports map written (10 folders -> 11 report runs, 84 moves, 0 keep, 0 UNMAPPED); scratch apply+verify+undo equal for every file; check_report_pack 53 checks 0 failed on the moved copy; real reports/ and plans/ untouched"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --full (worktree gate) + --fast + test_plansmigrate",
+    "result": "gate: ran 1852, new=[], known=4, gate_ok true, 367.2 s, worktree removed; test_plansmigrate 57 OK (21 new, ReportsPhase2 rewritten); --fast 1832 tests 53.9 s only the 4 known"
   },
   "security": {
     "status": "pending",
@@ -53,7 +53,8 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-091/handoff/design.md",
-    "coder": "work/TASK-091/handoff/code.md"
+    "coder": "work/TASK-091/handoff/code.md",
+    "tester": "work/TASK-091/handoff/test.md"
   },
   "user_notes": [
     {
@@ -63,7 +64,7 @@
     }
   ],
   "picked_at": "2026-11-08T05:10:36Z",
-  "updated_at": "2026-11-08T05:26:37Z",
+  "updated_at": "2026-11-08T05:37:30Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/plansmigrate.py",
@@ -82,5 +83,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tester rewrites ReportsPhase2 and adds the design tests; main shows the user the dry-run table"
+  "next": "verifier audit; the user reviews the real reports dry-run table (work/TASK-091/evidence/dry-run-real.txt) before --apply"
 }
