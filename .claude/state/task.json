@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-094",
-  "state": "IMPLEMENTING",
-  "next": "tester adds the 94.8 tests and fixes test_90_5; main writes workflow-roles section 12, runs the gate, then the first publication",
+  "state": "UNIT_TESTED",
+  "next": "verifier audit of the code; then the first publication into main (main session)",
   "title": "main is the published line: write guard (--publish), exam publish, run-list published/dev, docs (REQ-0101)",
   "active": [
     {
       "task_id": "TASK-094",
-      "state": "IMPLEMENTING",
-      "next": "tester adds the 94.8 tests and fixes test_90_5; main writes workflow-roles section 12, runs the gate, then the first publication",
-      "updated_at": "2026-11-08T07:13:45Z"
+      "state": "UNIT_TESTED",
+      "next": "verifier audit of the code; then the first publication into main (main session)",
+      "updated_at": "2026-11-08T07:23:30Z"
     }
   ],
   "max_active": 1

@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0101",
-  "next": "tester adds the 94.8 tests and fixes test_90_5; main writes workflow-roles section 12, runs the gate, then the first publication",
-  "updated": "2026-11-08 14:13"
+  "next": "verifier audit of the code; then the first publication into main (main session)",
+  "updated": "2026-11-08 14:23"
 }

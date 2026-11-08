@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-094",
   "title": "main is the published line: write guard (--publish), exam publish, run-list published/dev, docs (REQ-0101)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0101",
   "acceptance_criteria": [
     "AC1 writes into main refused without --publish, dev lines unaffected",
@@ -30,9 +30,9 @@
     "summary": "runlayout.require_publish guard on every writer of a line named main under the repo plans/ and reports/ roots, --publish flag, exam publish EXAM --from LINE (new main report run at $0, run.json published_from), solve --line main --publish, run-list publish column, exam INDEX lines table; demo on a scratch copy; real trees untouched; --fast 1844 tests, 4 known + 1 test needing an edit (test_90_5 header order)"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --full (worktree gate) + --fast + test_publish",
+    "result": "gate: ran 1883, new=[], known=4, gate_ok true, 367.8 s, worktree removed; test_publish 19 OK (guard off fails 7, pack selection off fails 3); --fast 1863 tests 54 s only the 4 known"
   },
   "security": {
     "status": "pending",
@@ -51,7 +51,8 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-094/handoff/design.md",
-    "coder": "work/TASK-094/handoff/code.md"
+    "coder": "work/TASK-094/handoff/code.md",
+    "tester": "work/TASK-094/handoff/test.md"
   },
   "user_notes": [
     {
@@ -61,7 +62,7 @@
     }
   ],
   "picked_at": "2026-11-08T07:01:21Z",
-  "updated_at": "2026-11-08T07:13:45Z",
+  "updated_at": "2026-11-08T07:23:30Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
@@ -80,5 +81,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tester adds the 94.8 tests and fixes test_90_5; main writes workflow-roles section 12, runs the gate, then the first publication"
+  "next": "verifier audit of the code; then the first publication into main (main session)"
 }
