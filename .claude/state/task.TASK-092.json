@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-092",
   "title": "Build the DHQG 2024 hybrid report pack in the new layout from the t81 runs (REQ-0094)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0094",
   "acceptance_criteria": [
     "AC1 pack at $0, every md has a pdf, checker passes (keyless pack accepted)",
@@ -29,12 +29,20 @@
     "result": "checker 53 checks 0 failed (keyless pack accepted); 120/120 questions with A-D options in the all-subjects solution-report, 0 raw level JSON lines; per-subject headings equal result.json questions (20/20/30/50); md-with-pdf pairs 9 = 9"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "deterministic report from stored results; no AI call, no shell, no key (keyless pack); legacy folders untouched"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-092/evidence/pack-run.txt",
+      "work/TASK-092/evidence/checker.txt",
+      "work/TASK-092/evidence/recount.txt",
+      "work/TASK-092/evidence/main-checks.txt",
+      "work/TASK-092/handoff/verify2.md"
+    ],
+    "command": "python3 -I scripts/exam.py report-pack (4 t81 plan runs); tools/check_report_pack.py; recount; sha256 of result.json vs run.json; legacy mtime check",
+    "result": "pack reports/dhqg2024/t81/run-20261108-055609: checker 53 checks 0 failed; 9 md = 9 pdf; 120/120 questions with text and options; 0 raw level JSON; answered 19/18/25/49 = 111, declined 9; run.json result_sha256 equal for the 4 plan runs; legacy runs unchanged; printed 64-67 are declined in the t81 run (the t82 re-solve answers D, A, D, B): stated in the report and to the user, not merged (one run per pack); 'none' wording token is a recorded follow-up"
   },
   "report": {
     "status": "pending",
@@ -52,7 +60,8 @@
     },
     "tester": {
       "waiver": "no code: the checker and a recount are the tests"
-    }
+    },
+    "verifier": "work/TASK-092/handoff/verify2.md"
   },
   "user_notes": [
     {
@@ -62,7 +71,7 @@
     }
   ],
   "picked_at": "2026-11-08T05:55:43Z",
-  "updated_at": "2026-11-08T05:57:02Z",
+  "updated_at": "2026-11-08T05:59:31Z",
   "updated_by": "main",
   "scope": [
     "docs/design/phase-92-dhqg2024-pack.md"
@@ -73,5 +82,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verifier recount"
+  "next": "write docs/report/phase-92-dhqg2024-pack.md, then DONE; follow-ups: 'none' wording, optional corrected 64-67 run"
 }
