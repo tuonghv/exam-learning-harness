@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-088",
-  "state": "DONE",
-  "next": "",
-  "title": "Fast test mode: tiers, --fast, --affected, --full in a git worktree with cached result (REQ-0096)",
-  "active": [],
+  "task_id": "TASK-089",
+  "state": "TODO",
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "title": "Role briefs use the fast test modes (REQ-0097)",
+  "active": [
+    {
+      "task_id": "TASK-089",
+      "state": "TODO",
+      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+      "updated_at": ""
+    }
+  ],
   "max_active": 1
 }

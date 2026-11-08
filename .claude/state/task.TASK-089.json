@@ -1,0 +1,62 @@
+{
+  "task_id": "TASK-089",
+  "title": "Role briefs use the fast test modes (REQ-0097)",
+  "state": "TODO",
+  "requirement": "REQ-0097",
+  "acceptance_criteria": [
+    "AC1 Tests line names --affected/--fast and main-only --full",
+    "AC2 tester step uses --fast",
+    "AC3 workflow-roles section 11 updated with regeneration caveat",
+    "AC4 no settings/hooks/agent_setup touched, no plain unittest discover left"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {},
+  "user_notes": [
+    {
+      "raw": "RAW-00274",
+      "note": "user confirmed: briefs then pack, legacy link rule not wanted",
+      "at": "2026-11-08T04:04:48Z"
+    }
+  ],
+  "picked_at": "2026-11-08T04:04:48Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
