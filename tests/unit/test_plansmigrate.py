@@ -12,6 +12,7 @@ import os
 import shutil
 import sys
 import tempfile
+import time
 import unittest
 from unittest import mock
 
@@ -681,17 +682,35 @@ class Lines(unittest.TestCase):
         self.assertEqual(len([d for d in os.listdir("plans") if os.path.isdir(os.path.join("plans", d, "imp", "runs"))]), 1)
 
 
+def jread(path):
+    with open(path, encoding="utf-8") as fh:
+        return json.load(fh)
+
+
+def txt(path):
+    with open(path, encoding="utf-8") as fh:
+        return fh.read()
+
+
+def _stamp(epoch):
+    return time.strftime("%Y%m%d-%H%M%S", time.gmtime(epoch))
+
+
+T0 = 1793800000  # fixed epoch for the synthetic report mtimes (2026-11-04 UTC)
+
+
 class ReportsPhase2(unittest.TestCase):
-    """90.8 phase 2: `plans-migrate --root reports` on a tmp reports/ tree."""
+    """90.8 phase 2 (rewritten for 91.1): `plans-migrate --root reports` moves the old report folders into run folders."""
 
     def test_90_8_reports_root_apply_verify_undo_roundtrip(self):
         tmp = tempfile.mkdtemp(prefix="plansmig_rep_")
         self.addCleanup(shutil.rmtree, tmp, True)
         rep, mp, bk = os.path.join(tmp, "reports"), os.path.join(tmp, "m.json"), os.path.join(tmp, "bk")
-        put(os.path.join(rep, "dgnl2026f", "run-a", "a.md"), "A\n")
+        for rel, text, t in (("dgnl2026f/run-a/a.md", "A\n", 100), ("dgnl2025/run-z/z.md", "Z\n", 200),
+                             ("input-001/run-q/q.md", "Q\n", 300)):
+            put(os.path.join(rep, *rel.split("/")), text)
+            os.utime(os.path.join(rep, *rel.split("/")), (T0 + t, T0 + t))
         put(os.path.join(rep, "dgnl2026f", "INDEX.md"), "idx\n")
-        put(os.path.join(rep, "dgnl2025", "run-z", "z.md"), "Z\n")  # keep (exam level legacy)
-        put(os.path.join(rep, "input-001", "run-q", "q.md"), "Q\n")  # keep
         put(mp, {"schema": 1})
         orig = tree(rep)
         argv = ["--root", rep, "--map", mp]
@@ -699,13 +718,330 @@ class ReportsPhase2(unittest.TestCase):
         self.assertEqual(tree(rep), orig)
         code, out, err = quiet(pm.main, argv + ["--apply", "--backup-dir", bk])
         self.assertEqual(code, 0, out + err)
-        self.assertTrue(os.path.isfile(os.path.join(rep, "dgnl2026", "f", "run-a", "a.md")))
-        self.assertTrue(os.path.isfile(os.path.join(rep, "dgnl2025", "run-z", "z.md")))
+        for exam, line, off, rel in (("dgnl2026", "f", 100, "run-a/a.md"), ("dgnl2025", "main", 200, "run-z/z.md"),
+                                     ("input-001", "main", 300, "run-q/q.md")):  # every folder is mapped now, none kept
+            self.assertTrue(os.path.isfile(os.path.join(rep, exam, line, "run-" + _stamp(T0 + off), *rel.split("/"))), rel)
         self.assertEqual(quiet(pm.main, argv + ["--verify"])[0], 0)
         self.assertEqual(quiet(pm.main, argv + ["--undo"])[0], 0)
         now = tree(rep)
         now.pop("MIGRATION.json", None)
         self.assertEqual(now, orig)
+
+
+class ReportsRunLayout(unittest.TestCase):
+    """TASK-091 / REQ-0099 (91.1-91.4): `plans-migrate --root reports` moves every old report folder into
+    reports/<exam>/<line>/run-<id>/. Tmp trees only; the 10 mapped folder names are the shipped defaults."""
+
+    def setUp(self):
+        self.tmp = tempfile.mkdtemp(prefix="plansmig_rr_")
+        self.addCleanup(shutil.rmtree, self.tmp, True)
+        self.rep, self.plans = os.path.join(self.tmp, "reports"), os.path.join(self.tmp, "plans")
+        self.mp, self.bk = os.path.join(self.tmp, "m.json"), os.path.join(self.tmp, "bk")
+        self.fixture()
+        put(self.mp, {"schema": 1})
+
+    def f(self, rel, text, off):
+        p = os.path.join(self.rep, *rel.split("/"))
+        put(p, text)
+        os.utime(p, (T0 + off, T0 + off))
+
+    def plan(self, exam, line, rid, text):
+        put(os.path.join(self.plans, exam, line, "runs", rid, "result.json"), text)
+        put(os.path.join(self.plans, exam, line, "runs", rid, "plan.json"), {"plan_run_id": rid})
+        return os.path.join(self.plans, exam, line, "runs", rid)
+
+    def fixture(self):
+        self.pd1 = self.plan("dgnl2026", "f", "20261105-100000", {"questions": [], "exam": {"subject": "Math"}, "n": 1})
+        self.pd2 = self.plan("dgnl2026", "f", "20261105-100100", {"questions": [], "exam": {"subject": "Math"}, "n": 2})
+        self.plan("dgnl2025", "main", "20261101-000000", {"n": 3})
+        self.plan("cacheproof-en", "main", "20261107-035802", {"n": 4})
+        rsha = sha(os.path.join(self.pd1, "result.json"))
+        self.f("dgnl2026/dgnl2026_math_result-data_run-1.json", {"plan_run_id": "20261105-100000", "result_sha256": rsha}, 0)
+        self.f("dgnl2026/dgnl2026_all_note_run-1.md", "pack\n", -30)
+        self.f("dgnl2026/INDEX.md", "old pack index\n", 5000)
+        self.f("dgnl2026-crosscheck/x.md", "xc\n", 0)  # same mtime as the pack: tie -> -2
+        self.f("dgnl2026f/English/e.md", "E\n", 100)
+        self.f("dgnl2026f/Math/m.md", "M\n", 50)
+        self.f("dgnl2026-t80/t.md", "T\n", 200)
+        self.f("dgnl2025/z.md", "Z\n", 300)
+        self.f("dhqg2024/sheet-1/s.md", "S\n", 400)
+        self.f("dhqg2024/solutions.md", "sol\n", 500)
+        self.f("dhqg2024/solutions-weasy.pdf", "pdf\n", 450)
+        self.f("dhqg2024-t81/ALL-120/r.md", "R\n", 600)
+        self.f("dhqg2024-t81/dhqg2024_math_result-data_run-1.json", {"result_sha256": "0" * 64}, 590)
+        self.f("dhqg2024-t82/Math/m.md", "M2\n", 700)
+        self.f("cacheproof-en/20261107T035802Z/c.md", "c1\n", 800)
+        self.f("cacheproof-en/20261107T035827Z/c.md", "c2\n", 810)
+        self.f("input-001/20261102T103714Z/q.md", "Q\n", 900)
+
+    def pm(self, *a):
+        return quiet(pm.main, ["--root", self.rep, "--map", self.mp, "--plans-root", self.plans] + list(a))
+
+    def mapped(self):
+        self.assertEqual(self.pm("--dry-run", "--write-map")[0], 0)
+
+    def applied(self):
+        self.mapped()
+        code, out, err = self.pm("--apply", "--backup-dir", self.bk)
+        self.assertEqual(code, 0, out + err)
+
+    def contents(self):
+        """{rel path: sha} of the non-generated files (INDEX.md / run.json / MIGRATION.* left out)."""
+        return {k: v for k, v in tree(self.rep).items()
+                if v != "DIR" and os.path.basename(k) not in ("INDEX.md", "run.json") and not k.startswith("MIGRATION.")}
+
+    def runs(self):
+        with open(self.mp, encoding="utf-8") as fh:
+            return {(r["from"]): r for r in json.load(fh)["report_runs"]}
+
+    def run_dir(self, frm):
+        r = self.runs()[frm]
+        return os.path.join(self.rep, r["exam"], r["line"], "run-" + r["id"])
+
+    def manifest(self, frm):
+        with open(os.path.join(self.run_dir(frm), "run.json"), encoding="utf-8") as fh:
+            return json.load(fh)
+
+    # ---- 91.1 target map
+    def test_91_1_dry_run_changes_nothing_and_maps_every_folder(self):
+        before = (tree(self.rep), tree(self.plans), sha(self.mp))
+        code, out, err = self.pm("--dry-run")
+        self.assertEqual(code, 0, out + err)
+        self.assertEqual((tree(self.rep), tree(self.plans), sha(self.mp)), before)  # tree hash: nothing written
+        self.assertIn("keep=0 unmapped=0 report_runs=11", out)
+        self.assertNotIn("UNMAPPED ", out.replace("== UNMAPPED / refused (0) ==", ""))
+        self.assertNotIn("\nkeep  ", out)
+
+    def test_91_1_run_ids_mtime_name_and_tie(self):
+        self.mapped()
+        ids = {k: r["id"] for k, r in self.runs().items()}
+        self.assertEqual(ids["dgnl2026"], _stamp(T0))  # newest mtime, INDEX.md (mtime T0+5000) ignored
+        self.assertEqual(ids["dgnl2026-crosscheck"], _stamp(T0) + "-2")  # tie, old-folder name order
+        self.assertEqual(ids["dgnl2026f"], _stamp(T0 + 100))
+        self.assertEqual(ids["dhqg2024"], _stamp(T0 + 500))
+        self.assertEqual(ids["cacheproof-en/20261107T035802Z"], "20261107-035802")  # from the stamp dir name
+        self.assertEqual(ids["cacheproof-en/20261107T035827Z"], "20261107-035827")
+        self.assertEqual(ids["input-001/20261102T103714Z"], "20261102-103714")
+        self.assertEqual(len(self.runs()), 11)
+        self.assertTrue(all(r["id_source"] in ("mtime", "name") for r in self.runs().values()))
+
+    def test_91_1_map_id_overrides_and_invalid_or_taken_id_is_refused(self):
+        self.mapped()
+        raw = jread(self.mp)
+        for r in raw["report_runs"]:
+            if r["from"] == "dgnl2025":
+                r["id"] = "20260101-000000"
+        put(self.mp, raw)
+        self.assertEqual(self.pm("--dry-run", "--write-map", "--force")[0], 0)
+        self.assertEqual(self.runs()["dgnl2025"]["id"], "20260101-000000")
+        for r in raw["report_runs"]:
+            if r["from"] == "dgnl2025":
+                r["id"] = "bad id"
+        put(self.mp, raw)
+        code, out, err = self.pm("--dry-run")
+        self.assertEqual(code, 2)
+        self.assertIn("REFUSED", out + err)
+
+    def test_91_1_one_old_folder_is_one_run_folder(self):
+        self.mapped()
+        rd = self.run_dir("dgnl2026f")
+        self.assertEqual(sorted(m["new"] for m in jread(self.mp)["report_moves"] if m["old"].startswith("dgnl2026f/")),
+                         sorted(os.path.relpath(os.path.join(rd, c), self.rep).replace(os.sep, "/") for c in ("English", "Math")))
+
+    def test_91_1_dry_run_without_plans_map_and_unmapped_folder_is_reported(self):
+        put(os.path.join(self.rep, "zz-legacy", "a.md"), "A\n")
+        code, out, err = self.pm("--dry-run")
+        self.assertEqual(code, 2)
+        self.assertIn("UNMAPPED zz-legacy", out)
+
+    # ---- 91.2 map
+    def test_91_2_write_map_keeps_the_plans_section(self):
+        shutil.copy(SHIPPED_MAP, self.mp)
+        with open(self.mp, encoding="utf-8") as fh:
+            before = json.load(fh)
+        code, out, err = self.pm("--dry-run", "--write-map", "--force")
+        self.assertEqual(code, 0, out + err)
+        with open(self.mp, encoding="utf-8") as fh:
+            after = json.load(fh)
+        for k in before:
+            if not k.startswith("report_"):
+                self.assertEqual(after[k], before[k], k)
+        self.assertEqual(len(after["report_runs"]), 11)
+        self.assertEqual(len(after["report_moves"]), 17)
+        self.assertNotIn("keep", after["report_folders"].values())
+
+    # ---- 91.3 apply / verify / undo
+    def test_91_3_run_json_links_status_superseded(self):
+        self.applied()
+        pack = self.manifest("dgnl2026")
+        self.assertEqual(pack["link"], "result_sha256")
+        self.assertEqual([p["plan_run_id"] for p in pack["plan_runs"]], ["20261105-100000"])  # pd2 has another sha
+        self.assertEqual(pack["plan_runs"][0]["result_sha256"], sha(os.path.join(self.pd1, "result.json")))
+        self.assertEqual(pack["status"], "complete")
+        self.assertEqual(self.manifest("dgnl2026f")["link"], "line")
+        self.assertEqual(self.manifest("dgnl2026f")["plan_line"], "f")
+        self.assertEqual(self.manifest("dgnl2026-t80")["link"], "unknown")
+        self.assertEqual(self.manifest("input-001/20261102T103714Z")["link"], "unknown")
+        self.assertEqual(self.manifest("input-001/20261102T103714Z")["exam_id"], "input-001")  # not the line name
+        cp = self.manifest("cacheproof-en/20261107T035802Z")
+        self.assertEqual((cp["link"], [p["plan_run_id"] for p in cp["plan_runs"]]), ("name", ["20261107-035802"]))
+        self.assertEqual(self.manifest("cacheproof-en/20261107T035827Z")["plan_runs"], [])
+        t81 = self.manifest("dhqg2024-t81")  # result-data sha matching no plan run: not claimed as linked
+        self.assertNotEqual(t81["link"], "result_sha256")
+        self.assertEqual(t81["plan_runs"], [])
+        xc = self.manifest("dgnl2026-crosscheck")
+        self.assertEqual((xc["status"], [s["glob"] for s in xc["superseded"]]), ("superseded", ["*"]))
+        self.assertEqual([s["glob"] for s in self.manifest("dhqg2024")["superseded"]], ["solutions*"])
+        self.assertEqual(self.manifest("dgnl2025")["migrated_from"], "dgnl2025")
+
+    def test_91_3_content_files_byte_identical_only_index_and_run_json_added(self):
+        before = self.contents()
+        olds = tree(self.rep)
+        self.applied()
+        moves = jread(self.mp)["report_moves"]
+
+        def new_of(rel):
+            for m in moves:
+                if rel == m["old"] or rel.startswith(m["old"] + "/"):
+                    return m["new"] + rel[len(m["old"]):]
+            self.fail("unmapped file " + rel)
+        after = tree(self.rep)
+        self.assertEqual(len(before), 17 - 1)  # 17 files minus the old INDEX.md
+        for rel, digest in before.items():  # EVERY file: sha256 equal at its mapped path
+            self.assertEqual(after.get(new_of(rel)), digest, rel)
+        mapped_new = set(new_of(r) for r in before)
+        extra = [k for k, v in after.items() if v != "DIR" and k not in mapped_new and not k.startswith("MIGRATION.")]
+        self.assertTrue(extra)
+        self.assertEqual(set(os.path.basename(k) for k in extra), {"INDEX.md", "run.json"})
+        self.assertEqual(sum(1 for k in extra if k.endswith("run.json")), 11)
+        self.assertFalse([n for n in os.listdir(os.path.join(self.rep, "dgnl2026")) if os.path.isfile(os.path.join(self.rep, "dgnl2026", n))])
+        self.assertNotIn("dgnl2026f", os.listdir(self.rep))
+        self.assertIn("old pack index", txt(os.path.join(self.rep, "MIGRATION.index", "dgnl2026", "INDEX.md")))
+        self.assertGreater(len(olds), 0)
+
+    def test_91_3_apply_backs_up_first_renames_only_inside_reports_idempotent(self):
+        self.mapped()
+        outside = tree(self.plans)
+        code, out, err = self.pm("--apply", "--backup-dir", self.bk)
+        self.assertEqual(code, 0, out + err)
+        self.assertIn("backup ok", out)
+        self.assertTrue([n for n in os.listdir(self.bk) if n.endswith(".tar.gz")])
+        self.assertLess(out.index("backup ok"), out.index("plans-migrate applied"))
+        self.assertEqual(tree(self.plans), outside)  # plans/ untouched
+        with open(os.path.join(self.rep, "MIGRATION.json"), encoding="utf-8") as fh:
+            man = json.load(fh)
+        self.assertEqual(man["state"], "applied")
+        self.assertTrue(all(m["state"] == "done" for m in man["moves"]))
+        snap = tree(self.rep)
+        code, out, err = self.pm("--apply", "--backup-dir", self.bk)  # again: no-op
+        self.assertEqual(code, 0, out + err)
+        self.assertEqual(tree(self.rep), snap)
+        self.assertEqual(self.pm("--verify")[0], 0)
+
+    def test_91_3_failure_while_generating_rolls_back_to_the_original_tree(self):
+        orig = tree(self.rep)
+        self.mapped()
+        with mock.patch.object(pm, "_generate", side_effect=OSError("disk full")):
+            code, out, err = self.pm("--apply", "--backup-dir", self.bk)
+        self.assertEqual(code, 1, out + err)
+        self.assertIn("rolled back", err)
+        now = {k: v for k, v in tree(self.rep).items() if not k.startswith("MIGRATION.")}
+        self.assertEqual(now, orig)
+
+    def test_91_3_undo_restores_the_original_tree(self):
+        orig = tree(self.rep)
+        nfiles = sum(1 for v in orig.values() if v != "DIR")
+        nbytes = sum(os.path.getsize(os.path.join(self.rep, k)) for k, v in orig.items() if v != "DIR")
+        self.applied()
+        code, out, err = self.pm("--undo")
+        self.assertEqual(code, 0, out + err)
+        now = tree(self.rep)
+        now.pop("MIGRATION.json", None)
+        self.assertEqual(now, orig)  # every file sha256 and every directory
+        self.assertEqual(sum(1 for v in now.values() if v != "DIR"), nfiles)
+        self.assertEqual(sum(os.path.getsize(os.path.join(self.rep, k)) for k, v in now.items() if v != "DIR"), nbytes)
+        self.assertFalse(os.path.exists(os.path.join(self.rep, "MIGRATION.index")))
+
+    def test_91_3_undo_refuses_an_edited_generated_file(self):
+        self.applied()
+        idx = os.path.join(self.run_dir("dhqg2024"), "INDEX.md")
+        with open(idx, "a", encoding="utf-8") as fh:
+            fh.write("edited by hand\n")
+        code, out, err = self.pm("--undo")
+        self.assertNotEqual(code, 0)
+        self.assertIn("undo refused", err)
+        self.assertTrue(os.path.isfile(idx))  # the edit is kept
+
+    def test_91_3_tree_stats_hash_every_report_file_and_see_a_mutation(self):
+        files, size, shas = pm.tree_stats(self.rep, "reports")
+        self.assertEqual((files, len(shas)), (17, 17))
+        self.assertEqual(shas["dgnl2026f/English/e.md"], sha(os.path.join(self.rep, "dgnl2026f", "English", "e.md")))
+        with open(os.path.join(self.rep, "dgnl2026f", "English", "e.md"), "a", encoding="utf-8") as fh:
+            fh.write("x")
+        _f2, size2, shas2 = pm.tree_stats(self.rep, "reports")
+        self.assertEqual(size2, size + 1)
+        self.assertEqual([k for k in shas if shas[k] != shas2[k]], ["dgnl2026f/English/e.md"])
+        _f3, _s3, content = pm.tree_stats(self.rep, "reports", content=True)
+        self.assertNotIn("dgnl2026/INDEX.md", content)
+
+    def test_91_3_verify_detects_a_mutated_content_file(self):
+        self.applied()
+        p = os.path.join(self.run_dir("dgnl2025"), "z.md")
+        with open(p, "w", encoding="utf-8") as fh:
+            fh.write("Y\n")  # same size as "Z\n": only the sha256 can see it
+        code, out, err = self.pm("--verify")
+        self.assertEqual(code, 1, out + err)
+        self.assertIn("FAIL", out)
+
+    # ---- 91.4 readers
+    def test_91_4_superseded_comes_from_run_json_not_old_folder_globs(self):
+        self.applied()
+        xc = self.run_dir("dgnl2026-crosscheck")
+        self.assertIn("superseded", txt(os.path.join(xc, "INDEX.md")))
+        os.remove(os.path.join(xc, "INDEX.md"))
+        cli_out = quiet(cli.report_index_main, [xc])  # regenerate: old folder name is gone, run.json decides
+        self.assertEqual(cli_out[0], 0, cli_out[1] + cli_out[2])
+        idx = txt(os.path.join(xc, "INDEX.md"))
+        self.assertIn("superseded", idx)
+        self.assertNotIn("dgnl2026-crosscheck", idx)
+        dq = txt(os.path.join(self.run_dir("dhqg2024"), "INDEX.md"))
+        for ln in dq.splitlines():
+            if "solutions.md" in ln or "solutions-weasy.pdf" in ln:
+                self.assertIn("superseded", ln)
+            if "sheet-1" in ln:
+                self.assertNotIn("superseded", ln)
+
+    def test_91_4_moved_reports_are_line_folders(self):
+        self.applied()
+        rows = runlayout.list_report_runs(self.rep, "dgnl2026", line="f")
+        self.assertEqual(sorted(r["id"] for r in rows if r["layout"] == "run"),
+                         sorted([_stamp(T0), _stamp(T0) + "-2", _stamp(T0 + 100)]))
+        self.assertTrue(runlayout._is_line_report_dir(os.path.join(self.rep, "dgnl2026", "f")))
+        self.assertEqual(len(runlayout.list_report_runs(self.rep, "cacheproof-en")), 2)
+
+    def test_91_4_run_list_and_report_index_readers(self):
+        self.applied()
+        code, out, err = quiet(cli.run_list_main, ["dgnl2026", "--line", "f", "--plans", self.plans, "--reports", self.rep])
+        self.assertEqual(code, 0, out + err)
+        self.assertEqual(out.count("line f (run unknown)"), 2)  # two line-linked runs: plan run not identified
+        self.assertIn("20261105-100000", out.split("## Report runs")[1])  # pack: the exact plan run
+        code, out, err = quiet(cli.run_list_main, ["input-001", "--plans", self.plans, "--reports", self.rep])
+        self.assertEqual(code, 0, out + err)
+        self.assertIn("unknown", out.split("## Report runs")[1])
+        old = os.path.join(self.rep, "dgnl2026-crosscheck")
+        code, out, err = quiet(cli.report_index_main, [old])
+        self.assertEqual(code, 2)
+        self.assertIn("was moved to", err)
+
+    def test_91_4_check_report_pack_on_a_moved_pack(self):
+        self.applied()
+        import subprocess
+        pk = self.run_dir("dgnl2026")
+        r = subprocess.run([sys.executable, "-I", os.path.join(ROOT, "tools", "check_report_pack.py"), pk, self.pd1],
+                           capture_output=True, text=True, timeout=60)
+        rows = [ln.split("\t") for ln in r.stdout.splitlines() if ln.startswith("run.json")]
+        self.assertEqual([(x[0], x[3]) for x in rows],
+                         [("run.json plan_runs", "ok"), ("run.json result_sha256 mismatches", "ok")], r.stdout + r.stderr)
 
 
 if __name__ == "__main__":
