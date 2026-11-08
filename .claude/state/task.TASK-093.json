@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-093",
   "title": "Readable wording instead of raw 'none' in the solution report; rebuild both packs (REQ-0100)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0100",
   "acceptance_criteria": [
     "AC1 localized phrases, no none token for declined questions in the solution-report",
@@ -44,11 +44,19 @@
       "work/TASK-093/handoff/verify2.md"
     ],
     "command": "grep/pdftotext none-word recount of old vs new runs; pack checkers; byte compare of data files; gate --full",
-    "result": "none words in solution-report md DGNL 256->0, DHQG 284->0 and in the new pdfs 0 (old pdfs 126 and 140); answered/declined/questions unchanged (119/1/120 and 111/9/120); answer-table, score-vs-key and answer-sheet md identical to the old runs, result-data differs only by engine_git, pdf text equal; checkers 64 and 53 checks 0 failed; gate ran 1864, new=[], known=4"
+    "result": "none words in solution-report md DGNL 256->0, DHQG 284->0 and in the new pdfs 0 (old pdfs 126 and 140); answered/declined/questions unchanged (119/1/120 and 111/9/120); answer-table, score-vs-key and answer-sheet md identical to the old runs, result-data differs only by engine_git, pdf text equal; checkers 64 and 53 checks 0 failed; gate ran 1864, new=[], known=4",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-093/evidence/recount.txt",
+        "work/TASK-093/evidence/pdf-none.txt"
+      ],
+      "reason": "none words recounted in md and pdf of old vs new runs, data files compared byte for byte, pack checkers rerun"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-93-readable-no-answer-wording.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -57,7 +65,8 @@
     "designer": "work/TASK-093/handoff/design.md",
     "coder": "work/TASK-093/handoff/code.md",
     "tester": "work/TASK-093/handoff/test.md",
-    "verifier": "work/TASK-093/handoff/verify2.md"
+    "verifier": "work/TASK-093/handoff/verify2.md",
+    "crosscheck": "work/TASK-093/handoff/verify2.md"
   },
   "user_notes": [
     {
@@ -67,7 +76,7 @@
     }
   ],
   "picked_at": "2026-11-08T06:04:06Z",
-  "updated_at": "2026-11-08T06:19:48Z",
+  "updated_at": "2026-11-08T06:20:07Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/reporter.py",
@@ -81,5 +90,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "write docs/report/phase-93-readable-no-answer-wording.md, then DONE"
+  "next": ""
 }
