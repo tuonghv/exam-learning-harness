@@ -1901,7 +1901,7 @@
     "task_id": "TASK-096",
     "title": "Overlay the corrected printed 64-67 (t82) into the DHQG 2024 report, labelled, then publish into main (REQ-0103)",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-11-09T09:00:00",
     "requirement": "REQ-0103",
     "acceptance_criteria": [

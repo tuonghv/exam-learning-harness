@@ -1,0 +1,63 @@
+{
+  "task_id": "TASK-096",
+  "title": "Overlay the corrected printed 64-67 (t82) into the DHQG 2024 report, labelled, then publish into main (REQ-0103)",
+  "state": "TODO",
+  "requirement": "REQ-0103",
+  "acceptance_criteria": [
+    "AC1 documented overlay mechanism with identity check and refusal on text mismatch",
+    "AC2 4 questions D,A,D,B labelled with their source, 116 others unchanged, 115 answered 5 declined, 0 none",
+    "AC3 run.json lists base plan runs and the overlay, checker passes, plans/ unchanged",
+    "AC4 dev report run first, then published into main, run-list shows the t82 plan run published",
+    "AC5 tests and gate"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {},
+  "user_notes": [
+    {
+      "raw": "RAW-00289",
+      "note": "user: merge 64-67 into the DHQG 2024 report; labelled overlay, no result edited; dev first then publish into main",
+      "at": "2026-11-08T08:07:27Z"
+    }
+  ],
+  "picked_at": "2026-11-08T08:07:27Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
