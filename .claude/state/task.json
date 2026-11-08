@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-093",
-  "state": "UNIT_TESTED",
-  "next": "verifier recount of the two rebuilt report runs",
+  "state": "VERIFIED",
+  "next": "write docs/report/phase-93-readable-no-answer-wording.md, then DONE",
   "title": "Readable wording instead of raw 'none' in the solution report; rebuild both packs (REQ-0100)",
   "active": [
     {
       "task_id": "TASK-093",
-      "state": "UNIT_TESTED",
-      "next": "verifier recount of the two rebuilt report runs",
-      "updated_at": "2026-11-08T06:17:47Z"
+      "state": "VERIFIED",
+      "next": "write docs/report/phase-93-readable-no-answer-wording.md, then DONE",
+      "updated_at": "2026-11-08T06:19:48Z"
     }
   ],
   "max_active": 1

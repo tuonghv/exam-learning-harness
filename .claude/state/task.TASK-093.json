@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-093",
   "title": "Readable wording instead of raw 'none' in the solution report; rebuild both packs (REQ-0100)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0100",
   "acceptance_criteria": [
     "AC1 localized phrases, no none token for declined questions in the solution-report",
@@ -31,12 +31,20 @@
     "result": "gate: ran 1864, new=[], known=4, gate_ok true, 368.9 s, worktree removed; test_report_wording 12 OK (8 fail on the previous code); --fast 1844 tests 54 s only the 4 known"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "render-time text only; data files unchanged; no AI call, no shell"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-093/evidence/recount.txt",
+      "work/TASK-093/evidence/pdf-none.txt",
+      "work/TASK-093/evidence/checkers.txt",
+      "work/TASK-093/evidence/gate-full.json",
+      "work/TASK-093/handoff/verify2.md"
+    ],
+    "command": "grep/pdftotext none-word recount of old vs new runs; pack checkers; byte compare of data files; gate --full",
+    "result": "none words in solution-report md DGNL 256->0, DHQG 284->0 and in the new pdfs 0 (old pdfs 126 and 140); answered/declined/questions unchanged (119/1/120 and 111/9/120); answer-table, score-vs-key and answer-sheet md identical to the old runs, result-data differs only by engine_git, pdf text equal; checkers 64 and 53 checks 0 failed; gate ran 1864, new=[], known=4"
   },
   "report": {
     "status": "pending",
@@ -48,7 +56,8 @@
   "roles": {
     "designer": "work/TASK-093/handoff/design.md",
     "coder": "work/TASK-093/handoff/code.md",
-    "tester": "work/TASK-093/handoff/test.md"
+    "tester": "work/TASK-093/handoff/test.md",
+    "verifier": "work/TASK-093/handoff/verify2.md"
   },
   "user_notes": [
     {
@@ -58,7 +67,7 @@
     }
   ],
   "picked_at": "2026-11-08T06:04:06Z",
-  "updated_at": "2026-11-08T06:17:47Z",
+  "updated_at": "2026-11-08T06:19:48Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/reporter.py",
@@ -72,5 +81,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verifier recount of the two rebuilt report runs"
+  "next": "write docs/report/phase-93-readable-no-answer-wording.md, then DONE"
 }
