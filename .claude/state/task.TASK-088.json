@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-088",
   "title": "Fast test mode: tiers, --fast, --affected, --full in a git worktree with cached result (REQ-0096)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0096",
   "acceptance_criteria": [
     "AC1 timing report script and summary",
@@ -31,9 +31,9 @@
     "summary": "tools/run_tests.py (--fast/--affected/--full/--list/--time), config/test_tiers.json (20 slow ids, 4 known failures), --full in a git worktree of HEAD (mkdtemp, background, result cached by tree hash); measured: all 1752 = fast 1732 + slow 20; --fast 50.5 s vs 370 s full; --full 364 s with new=[] known=4 skipped=40; second --full REUSED"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --full (git worktree of HEAD, detached) + --fast + --affected",
+    "result": "test_run_tests 37 OK in 2.5 s (3 mutations killed); gate --full: ran 1789, new=[], known=4, gate_ok true, 367.8 s, worktree removed; --fast 53 s"
   },
   "security": {
     "status": "pending",
@@ -66,7 +66,8 @@
     "grants_auto": [
       ".claude/skills/unit-test/SKILL.md",
       ".claude/skills/verify/SKILL.md"
-    ]
+    ],
+    "tester": "work/TASK-088/handoff/test.md"
   },
   "user_notes": [
     {
@@ -76,7 +77,7 @@
     }
   ],
   "picked_at": "2026-11-08T02:19:04Z",
-  "updated_at": "2026-11-08T02:38:56Z",
+  "updated_at": "2026-11-08T02:48:04Z",
   "updated_by": "main",
   "scope": [
     "tools/run_tests.py",
@@ -95,5 +96,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tester writes tests/unit/test_run_tests.py; main updates role briefs/docs pointers (88.7)"
+  "next": "verifier audit of AC1-AC8 incl. recompute of tier counts and a --full reuse check"
 }
