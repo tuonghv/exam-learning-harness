@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-094",
   "title": "main is the published line: write guard (--publish), exam publish, run-list published/dev, docs (REQ-0101)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0101",
   "acceptance_criteria": [
     "AC1 writes into main refused without --publish, dev lines unaffected",
@@ -49,11 +49,19 @@
       "work/TASK-094/handoff/verify.md"
     ],
     "command": "python3 -I scripts/exam.py publish dgnl2026 --from f --key ...; publish dhqg2024 --from t81; sha256 of all reports/ and plans/ before/after; check_report_pack on both main runs; gate --full",
-    "result": "first publication: reports/dgnl2026/main/run-20261108-072344 (35 files, 113/120, checker 64 checks 0 failed, published_from f) and reports/dhqg2024/main/run-20261108-072402 (31 files, checker 53 checks 0 failed, published_from t81, prev_report_run the legacy main run); reports 256 -> 329 files (73 new, 0 removed, 1 regenerated INDEX.md), plans/ 1599 files identical; zero none words; gate ran 1883, new=[], known=4; verifier AC1-AC5 PASS"
+    "result": "first publication: reports/dgnl2026/main/run-20261108-072344 (35 files, 113/120, checker 64 checks 0 failed, published_from f) and reports/dhqg2024/main/run-20261108-072402 (31 files, checker 53 checks 0 failed, published_from t81, prev_report_run the legacy main run); reports 256 -> 329 files (73 new, 0 removed, 1 regenerated INDEX.md), plans/ 1599 files identical; zero none words; gate ran 1883, new=[], known=4; verifier AC1-AC5 PASS",
+    "quality": {
+      "kind": "real-run",
+      "evidence": [
+        "work/TASK-094/evidence/untouched.txt",
+        "work/TASK-094/evidence/publish-dgnl.txt"
+      ],
+      "reason": "real publication into main of two exams at zero cost, with sha256 before/after of every file in reports/ and plans/, checkers on both new runs"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-94-main-published-line.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -62,7 +70,8 @@
     "designer": "work/TASK-094/handoff/design.md",
     "coder": "work/TASK-094/handoff/code.md",
     "tester": "work/TASK-094/handoff/test.md",
-    "verifier": "work/TASK-094/handoff/verify.md"
+    "verifier": "work/TASK-094/handoff/verify.md",
+    "crosscheck": "work/TASK-094/handoff/verify.md"
   },
   "user_notes": [
     {
@@ -72,7 +81,7 @@
     }
   ],
   "picked_at": "2026-11-08T07:01:21Z",
-  "updated_at": "2026-11-08T07:26:14Z",
+  "updated_at": "2026-11-08T07:26:25Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
@@ -91,5 +100,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "write docs/report/phase-94-main-published-line.md, then DONE; follow-ups REQ-0102 (publish badge from report links, INDEX scan of sub-INDEX files)"
+  "next": ""
 }
