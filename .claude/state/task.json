@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-094",
-  "state": "UNIT_TESTED",
-  "next": "verifier audit of the code; then the first publication into main (main session)",
+  "state": "VERIFIED",
+  "next": "write docs/report/phase-94-main-published-line.md, then DONE; follow-ups REQ-0102 (publish badge from report links, INDEX scan of sub-INDEX files)",
   "title": "main is the published line: write guard (--publish), exam publish, run-list published/dev, docs (REQ-0101)",
   "active": [
     {
       "task_id": "TASK-094",
-      "state": "UNIT_TESTED",
-      "next": "verifier audit of the code; then the first publication into main (main session)",
-      "updated_at": "2026-11-08T07:23:30Z"
+      "state": "VERIFIED",
+      "next": "write docs/report/phase-94-main-published-line.md, then DONE; follow-ups REQ-0102 (publish badge from report links, INDEX scan of sub-INDEX files)",
+      "updated_at": "2026-11-08T07:26:14Z"
     }
   ],
   "max_active": 1

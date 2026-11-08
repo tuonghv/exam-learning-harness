@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0101",
-  "next": "verifier audit of the code; then the first publication into main (main session)",
-  "updated": "2026-11-08 14:23"
+  "next": "write docs/report/phase-94-main-published-line.md, then DONE; follow-ups REQ-0102 (publish badge from report links, INDEX scan of sub-INDEX files)",
+  "updated": "2026-11-08 14:26"
 }
