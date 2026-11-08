@@ -2587,3 +2587,9 @@ Action: Coder implemented 90.1-90.8 and proved apply+undo on a scratch copy
 Result: real plans/ untouched; map 154 moves
 Decision: IMPLEMENTING
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-090 - 2026-11-08T04:53:06Z
+Action: Tester 39+57 tests, D1/D3 fixed, gate run
+Result: 1834 run, new=[], known=4
+Decision: UNIT_TESTED
+Next: VERIFIED
