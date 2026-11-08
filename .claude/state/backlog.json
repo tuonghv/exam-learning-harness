@@ -1879,13 +1879,22 @@
     "task_id": "TASK-095",
     "title": "Publish badge from the main report runs' plan links; exam INDEX ignores line-level INDEX.md (REQ-0102)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-08T23:00:00",
     "requirement": "REQ-0102",
     "acceptance_criteria": [
       "AC1 run-list publish badge = plan runs linked by a main report run's plan_runs, others dev",
       "AC2 exam INDEX.md has no unregistered row for line-level INDEX.md, a truly unknown file is still flagged",
       "AC3 announced with run-list before/after for dgnl2026 and dhqg2024"
+    ],
+    "completed_at": "2026-11-08T07:49:01Z",
+    "report": "docs/report/phase-95-publish-badge-and-index.md",
+    "user_notes": [
+      {
+        "raw": "RAW-00288",
+        "note": "user: REQ-0102 follow-ups of the main published line",
+        "at": "2026-11-08T07:33:04Z"
+      }
     ]
   }
 ]

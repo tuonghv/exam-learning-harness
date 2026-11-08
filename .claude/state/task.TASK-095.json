@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-095",
   "title": "Publish badge from the main report runs' plan links; exam INDEX ignores line-level INDEX.md (REQ-0102)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0102",
   "acceptance_criteria": [
     "AC1 run-list publish badge from main report links",
@@ -43,11 +43,19 @@
       "work/TASK-095/handoff/verify2.md"
     ],
     "command": "python3 -I scripts/exam.py run-list dgnl2026/dhqg2024; report-index on both exam folders; plans/ sha256 compare; gate --full",
-    "result": "22 run-list rows equal the verifier's recomputation from main report run.json plan_runs (8 published, 14 dev, 0 diffs); exam-level unregistered rows 18->3 and 19->4 (the remaining 7 are superseded files, cosmetic follow-up D1); plans/ 1599 files sha256 identical; only cli.py and report_kinds.py changed; gate ran 1894, new=[], known=4; verifier AC1-AC3 PASS"
+    "result": "22 run-list rows equal the verifier's recomputation from main report run.json plan_runs (8 published, 14 dev, 0 diffs); exam-level unregistered rows 18->3 and 19->4 (the remaining 7 are superseded files, cosmetic follow-up D1); plans/ 1599 files sha256 identical; only cli.py and report_kinds.py changed; gate ran 1894, new=[], known=4; verifier AC1-AC3 PASS",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-095/evidence/run-list-after.txt",
+        "work/TASK-095/evidence/main-checks.txt"
+      ],
+      "reason": "every run-list badge recomputed from the real report run.json plan_runs by the verifier; plans/ hashes compared"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-95-publish-badge-and-index.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -56,7 +64,8 @@
     "designer": "work/TASK-095/handoff/design.md",
     "coder": "work/TASK-095/handoff/code.md",
     "tester": "work/TASK-095/handoff/test.md",
-    "verifier": "work/TASK-095/handoff/verify2.md"
+    "verifier": "work/TASK-095/handoff/verify2.md",
+    "crosscheck": "work/TASK-095/handoff/verify2.md"
   },
   "user_notes": [
     {
@@ -66,7 +75,7 @@
     }
   ],
   "picked_at": "2026-11-08T07:33:04Z",
-  "updated_at": "2026-11-08T07:48:50Z",
+  "updated_at": "2026-11-08T07:49:01Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
@@ -81,5 +90,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "write docs/report/phase-95-publish-badge-and-index.md, then DONE"
+  "next": ""
 }

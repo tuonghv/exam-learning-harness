@@ -2749,3 +2749,9 @@ Action: Verifier pass and main checks
 Result: AC1-AC3 PASS
 Decision: VERIFIED
 Next: DONE: report
+
+## DONE - TASK-095 - 2026-11-08T07:49:01Z
+Action: Report written
+Result: docs/report/phase-95-publish-badge-and-index.md
+Decision: DONE
+Next: none

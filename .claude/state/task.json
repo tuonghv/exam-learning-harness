@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-095",
-  "state": "VERIFIED",
-  "next": "write docs/report/phase-95-publish-badge-and-index.md, then DONE",
+  "state": "DONE",
+  "next": "",
   "title": "Publish badge from the main report runs' plan links; exam INDEX ignores line-level INDEX.md (REQ-0102)",
-  "active": [
-    {
-      "task_id": "TASK-095",
-      "state": "VERIFIED",
-      "next": "write docs/report/phase-95-publish-badge-and-index.md, then DONE",
-      "updated_at": "2026-11-08T07:48:50Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
