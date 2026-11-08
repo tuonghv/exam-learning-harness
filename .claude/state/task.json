@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-090",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "coder implements 90.1-90.8 without touching real plans/; tester tests on tmp trees; main produces the dry-run table for the user",
   "title": "Line-based plans layout plans/<exam>/<line>/runs/<id>, solve --line, safe plans migration with dry-run/backup/undo (REQ-0098)",
   "active": [
     {
       "task_id": "TASK-090",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "coder implements 90.1-90.8 without touching real plans/; tester tests on tmp trees; main produces the dry-run table for the user",
+      "updated_at": "2026-11-08T04:19:16Z"
     }
   ],
   "max_active": 1

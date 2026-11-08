@@ -2575,3 +2575,9 @@ Action: Report written
 Result: docs/report/phase-89-role-briefs-test-modes.md
 Decision: DONE
 Next: none
+
+## DESIGN - TASK-090 - 2026-11-08T04:19:16Z
+Action: Design drafted from the real tree; --exam-id taken as best pick
+Result: docs/design/phase-90-line-based-plans.md
+Decision: DESIGN
+Next: IMPLEMENTING

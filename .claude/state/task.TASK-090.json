@@ -1,20 +1,20 @@
 {
   "task_id": "TASK-090",
   "title": "Line-based plans layout plans/<exam>/<line>/runs/<id>, solve --line, safe plans migration with dry-run/backup/undo (REQ-0098)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0098",
   "acceptance_criteria": [
-    "AC1 --line, default main, resolver reads old/REQ-0095/new layouts",
+    "AC1 --line default main, resolver reads old/REQ-0095/new layouts",
     "AC2 plans-migrate --dry-run/--apply(backup first)/--undo, MIGRATION.json, idempotent",
     "AC3 run-history and run.json references keep working",
     "AC4 explicit reviewed mapping incl. non-exam folders",
     "AC5 shared per-exam cache, run-list grouped by line with subject column",
-    "AC6 tests, real dry-run reviewed by the user before --apply, QA recount before/after"
+    "AC6 tests, dry-run reviewed by the user before --apply, QA recount before/after"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-90-line-based-plans.md",
+    "summary": "runlayout LINE_DEFAULT main, new_plan_run(root, exam, line, subject), resolver over old/REQ-0095/new layouts; solve --line and --exam-id; exam plans-migrate dry-run/apply/undo with backup, MIGRATION.json, history rewrite (50 plan_dir lines), alias by old plan_run_id; run-list/run-compare/run-stats resolve EXAM/LINE/ID and old ids; shared per-exam cache; reports mirror reports/<exam>/<line>/run-<id>; real tree: 50 plan runs, 41 move, 9 stay; real --apply only after the user reviews the dry-run",
     "reuse": [],
     "risks": []
   },
@@ -42,7 +42,9 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-090/handoff/design.md"
+  },
   "user_notes": [
     {
       "raw": "RAW-00277",
@@ -51,8 +53,8 @@
     }
   ],
   "picked_at": "2026-11-08T04:13:54Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-08T04:19:16Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -60,5 +62,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder implements 90.1-90.8 without touching real plans/; tester tests on tmp trees; main produces the dry-run table for the user"
 }

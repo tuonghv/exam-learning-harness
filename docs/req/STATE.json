@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0098",
-  "next": "user answers Q1-Q4, then DESIGN",
-  "updated": "2026-11-08 11:13"
+  "next": "coder implements 90.1-90.8 without touching real plans/; tester tests on tmp trees; main produces the dry-run table for the user",
+  "updated": "2026-11-08 11:19"
 }
