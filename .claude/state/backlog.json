@@ -1759,7 +1759,7 @@
     "task_id": "TASK-090",
     "title": "Line-based plans layout plans/<exam>/<line>/runs/<id>, solve --line, safe plans migration with dry-run/backup/undo (REQ-0098)",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-11-08T15:00:00",
     "requirement": "REQ-0098",
     "acceptance_criteria": [

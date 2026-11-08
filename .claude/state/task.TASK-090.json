@@ -1,0 +1,64 @@
+{
+  "task_id": "TASK-090",
+  "title": "Line-based plans layout plans/<exam>/<line>/runs/<id>, solve --line, safe plans migration with dry-run/backup/undo (REQ-0098)",
+  "state": "TODO",
+  "requirement": "REQ-0098",
+  "acceptance_criteria": [
+    "AC1 --line, default main, resolver reads old/REQ-0095/new layouts",
+    "AC2 plans-migrate --dry-run/--apply(backup first)/--undo, MIGRATION.json, idempotent",
+    "AC3 run-history and run.json references keep working",
+    "AC4 explicit reviewed mapping incl. non-exam folders",
+    "AC5 shared per-exam cache, run-list grouped by line with subject column",
+    "AC6 tests, real dry-run reviewed by the user before --apply, QA recount before/after"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {},
+  "user_notes": [
+    {
+      "raw": "RAW-00277",
+      "note": "Q1-Q4 best; plans conversion OK with dry-run reviewed before apply; pack REQ-0094 after the layout",
+      "at": "2026-11-08T04:13:54Z"
+    }
+  ],
+  "picked_at": "2026-11-08T04:13:54Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
