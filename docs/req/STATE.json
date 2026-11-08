@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0096",
-  "next": "verifier audit of AC1-AC8 incl. recompute of tier counts and a --full reuse check",
-  "updated": "2026-11-08 09:48"
+  "next": "write docs/report/phase-88-fast-test-tiers.md, then DONE",
+  "updated": "2026-11-08 09:50"
 }

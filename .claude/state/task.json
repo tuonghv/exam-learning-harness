@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-088",
-  "state": "UNIT_TESTED",
-  "next": "verifier audit of AC1-AC8 incl. recompute of tier counts and a --full reuse check",
+  "state": "VERIFIED",
+  "next": "write docs/report/phase-88-fast-test-tiers.md, then DONE",
   "title": "Fast test mode: tiers, --fast, --affected, --full in a git worktree with cached result (REQ-0096)",
   "active": [
     {
       "task_id": "TASK-088",
-      "state": "UNIT_TESTED",
-      "next": "verifier audit of AC1-AC8 incl. recompute of tier counts and a --full reuse check",
-      "updated_at": "2026-11-08T02:48:04Z"
+      "state": "VERIFIED",
+      "next": "write docs/report/phase-88-fast-test-tiers.md, then DONE",
+      "updated_at": "2026-11-08T02:50:33Z"
     }
   ],
   "max_active": 1

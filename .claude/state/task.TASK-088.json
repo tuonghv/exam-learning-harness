@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-088",
   "title": "Fast test mode: tiers, --fast, --affected, --full in a git worktree with cached result (REQ-0096)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0096",
   "acceptance_criteria": [
     "AC1 timing report script and summary",
@@ -36,12 +36,20 @@
     "result": "test_run_tests 37 OK in 2.5 s (3 mutations killed); gate --full: ran 1789, new=[], known=4, gate_ok true, 367.8 s, worktree removed; --fast 53 s"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "subprocess without shell, worktree outside the repo removed in finally, lock with dead-pid break, no secrets in result files; verifier security pass clean"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-088/evidence/gate-full.json",
+      "work/TASK-088/evidence/reuse.txt",
+      "work/TASK-088/evidence/affected.txt",
+      "work/TASK-088/evidence/untouched.txt",
+      "work/TASK-088/handoff/verify2.md"
+    ],
+    "command": "python3 -I tools/run_tests.py --list/--fast/--affected/--full; --full REUSED check; verifier audit AC1-AC8",
+    "result": "--list 1789 = 1769 fast + 20 slow; --fast ~50 s vs 370 s; --affected 0.2 s on runlayout.py; real gate in a worktree ran 1789, new=[], known=4, 367.8 s, worktree removed; second --full REUSED; agent briefs, settings, hooks, agent_setup.json untouched (user decision); verifier AC1-AC8 PASS"
   },
   "report": {
     "status": "pending",
@@ -67,7 +75,8 @@
       ".claude/skills/unit-test/SKILL.md",
       ".claude/skills/verify/SKILL.md"
     ],
-    "tester": "work/TASK-088/handoff/test.md"
+    "tester": "work/TASK-088/handoff/test.md",
+    "verifier": "work/TASK-088/handoff/verify2.md"
   },
   "user_notes": [
     {
@@ -77,7 +86,7 @@
     }
   ],
   "picked_at": "2026-11-08T02:19:04Z",
-  "updated_at": "2026-11-08T02:48:04Z",
+  "updated_at": "2026-11-08T02:50:33Z",
   "updated_by": "main",
   "scope": [
     "tools/run_tests.py",
@@ -96,5 +105,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verifier audit of AC1-AC8 incl. recompute of tier counts and a --full reuse check"
+  "next": "write docs/report/phase-88-fast-test-tiers.md, then DONE"
 }
