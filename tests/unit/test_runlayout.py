@@ -19,7 +19,7 @@ from unittest import mock
 ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 sys.path.insert(0, os.path.join(ROOT, "src"))
 from exam_engine import cli  # noqa: E402
-from exam_engine.pipeline import planrun, report_kinds as rk, report_pack, reporter, runlayout  # noqa: E402
+from exam_engine.pipeline import planrun, report_kinds as rk, report_build, report_pack, reporter, runlayout  # noqa: E402
 
 EXAM = os.path.join(ROOT, "examples", "english", "input-001.md")
 MOCK = os.path.join(ROOT, "tests", "unit", "fixtures", "mock_english_001.json")
@@ -198,6 +198,44 @@ class U3ListPlanRuns(unittest.TestCase):
                          os.path.join(self.root, "ex", "runs", "20240101-000000"))
 
 
+class U3bPlanOrder(unittest.TestCase):
+    """D3: one normalised key (time, suffix, id) across new ids, legacy ids and out-X dirs."""
+
+    def setUp(self):
+        self.root = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, self.root, True)
+        ex = os.path.join(self.root, "ex")
+        put(os.path.join(ex, "runs", "20261108-010203-2", "plan.json"), {"started_utc": "2026-11-08T01:02:03Z"})
+        put(os.path.join(ex, "runs", "20261108-010203", "plan.json"), {"started_utc": "2026-11-08T01:02:03Z"})
+        put(os.path.join(ex, "20261107T035802Z", "plan.json"), {})
+        put(os.path.join(ex, "out-A", "plan.json"), {"started_utc": "2026-11-08T01:02:03Z"})  # ties with the new id
+        put(os.path.join(ex, "out-B", "plan.json"), {"imported_utc": "2026-11-07T03:58:02Z"})  # ties with the legacy id
+        put(os.path.join(ex, "out-C", "plan.json"), {"finished_utc": "2026-11-06T00:00:00Z"})
+        put(os.path.join(ex, "out-D", "result.json"), {})  # no time at all
+
+    def test_87_1_exact_order_with_ties(self):
+        ids = [r["id"] for r in runlayout.list_plan_runs(self.root, "ex")]
+        self.assertEqual(ids, ["out-D", "out-C", "20261107T035802Z", "out-B",
+                               "20261108-010203", "out-A", "20261108-010203-2"])
+
+    def test_87_1_order_independent_of_mtime(self):
+        ex = os.path.join(self.root, "ex")
+        os.utime(os.path.join(ex, "out-D"), (4000000000, 4000000000))
+        os.utime(os.path.join(ex, "runs", "20261108-010203-2"), (1, 1))
+        ids = [r["id"] for r in runlayout.list_plan_runs(self.root, "ex")]
+        self.assertEqual(ids[0], "out-D")
+        self.assertEqual(ids[-1], "20261108-010203-2")
+
+    def test_87_5_run_list_rows_in_same_order(self):
+        reports = os.path.join(self.root, "reports")
+        code, out, err = quiet(cli.run_list_main, ["ex", "--plans", self.root, "--reports", reports])
+        self.assertEqual(code, 0, err)
+        rows = [ln.split("|")[1].strip() for ln in out.split("## Report runs")[0].splitlines()
+                if ln.startswith("| ") and "---" not in ln][1:]
+        self.assertEqual(rows, ["out-D", "out-C", "20261107T035802Z", "out-B",
+                                "20261108-010203", "out-A", "20261108-010203-2"])
+
+
 class U7ExamOfPlanDir(unittest.TestCase):
     def test_87_4_both_layouts_never_runs_d1(self):
         self.assertEqual(runlayout.exam_of_plan_dir("/p/plans/ex-1/runs/20240101-000000"), "ex-1")
@@ -348,6 +386,31 @@ class U5ReportRuns(Base):
         self.assertTrue(got["20240101-000000"]["warn"])
         self.assertEqual(got["20240102-000000"]["layout"], "incomplete")
         self.assertFalse(got["20240102-000000"]["warn"])
+
+    def test_87_3_manifest_status_complete_and_prev_chain(self):
+        plan = self.copy_plan()
+        for argv in ([plan, "--no-pdf"], [plan, "--no-pdf", "--view", "learn"]):
+            self.assertEqual(quiet(cli.report_main, argv)[0], 0)
+        a, b = [r for r in runlayout.list_report_runs("reports", "input-001") if r["layout"] == "run"]
+        self.assertEqual(a["manifest"]["status"], "complete")
+        self.assertEqual(b["manifest"]["status"], "complete")
+        self.assertIn("prev_report_run", b["manifest"])
+        self.assertEqual(b["manifest"]["prev_report_run"], a["id"])
+        self.assertIsNone(a["manifest"]["prev_report_run"])
+        direct = runlayout.write_report_manifest(runlayout.new_report_run("reports", "input-001"), [plan], "sheet", None, "report")
+        self.assertEqual(direct["status"], "complete")
+
+    def test_87_3_failed_build_leaves_no_complete_run_json(self):
+        plan = self.copy_plan()
+        with mock.patch.object(report_build, "build", side_effect=ValueError("boom")):
+            code, _, err = quiet(cli.report_main, [plan, "--no-pdf"])
+        self.assertEqual(code, 2)
+        self.assertIn("boom", err)
+        runs = runlayout.list_report_runs("reports", "input-001")
+        self.assertEqual(len(runs), 1)
+        self.assertFalse(os.path.exists(os.path.join(runs[0]["dir"], "run.json")))
+        self.assertEqual(runs[0]["layout"], "incomplete")
+        self.assertEqual(runlayout.new_run_dirs(os.path.join("reports", "input-001")), [])
 
     def test_87_3_legacy_report_dir_named_run_f_is_legacy(self):
         put(os.path.join(self.tmp, "reports", "ex", "run-f", "x.md"))

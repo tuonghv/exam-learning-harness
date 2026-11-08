@@ -95,9 +95,22 @@ def exam_of_plan_dir(plan_dir):
     return os.path.basename(parent)
 
 
+def _norm_time(text):
+    """ISO or compact timestamp -> 'YYYYMMDDHHMMSS' ('' when it has fewer than 14 digits)."""
+    digits = "".join(c for c in str(text or "") if c.isdigit())
+    return digits[:14] if len(digits) >= 14 else ""
+
+
 def _plan_key(run_id, plan):
+    """One comparable key: id time (new/old ids), else plan.json started/imported/finished time, then suffix, id."""
     plan = plan or {}
-    return (str(plan.get("started_utc") or plan.get("imported_utc") or id_time(run_id)), run_id)
+    t = id_time(run_id)
+    if not t:
+        for k in ("started_utc", "imported_utc", "finished_utc"):
+            t = _norm_time(plan.get(k))
+            if t:
+                break
+    return (t, _suffix(run_id), run_id)
 
 
 def list_plan_runs(root, exam_id):
@@ -223,7 +236,7 @@ def write_report_manifest(report_dir, plan_dirs, view, engine_git, cmd, repo_roo
     man = {"schema": 1, "report_run_id": rid,
            "exam_id": plans[0]["exam_id"] if plans else os.path.basename(exam_folder),
            "created_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(now)), "cmd": cmd, "view": view,
-           "plan_runs": plans, "prev_report_run": prev,
+           "plan_runs": plans, "prev_report_run": prev, "status": "complete",
            "registry_sha256": _sha_file(rk.REGISTRY), "engine_git": engine_git}
     path = os.path.join(report_dir, RUN_JSON)
     tmp = path + ".tmp"
