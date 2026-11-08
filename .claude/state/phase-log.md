@@ -2599,3 +2599,9 @@ Action: Real apply after the user's OK, recounts and verifier
 Result: AC1-AC6 PASS, 0 mismatches in the 41-row recount
 Decision: VERIFIED
 Next: DONE: report
+
+## DONE - TASK-090 - 2026-11-08T04:59:39Z
+Action: Report written
+Result: docs/report/phase-90-line-based-plans.md
+Decision: DONE
+Next: none

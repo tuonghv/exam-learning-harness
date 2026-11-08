@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-090",
-  "state": "VERIFIED",
-  "next": "write docs/report/phase-90-line-based-plans.md, then DONE; reports conversion (Q4 phase 2) becomes its own task",
+  "state": "DONE",
+  "next": "",
   "title": "Line-based plans layout plans/<exam>/<line>/runs/<id>, solve --line, safe plans migration with dry-run/backup/undo (REQ-0098)",
-  "active": [
-    {
-      "task_id": "TASK-090",
-      "state": "VERIFIED",
-      "next": "write docs/report/phase-90-line-based-plans.md, then DONE; reports conversion (Q4 phase 2) becomes its own task",
-      "updated_at": "2026-11-08T04:59:25Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
