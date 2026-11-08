@@ -1,0 +1,63 @@
+{
+  "task_id": "TASK-094",
+  "title": "main is the published line: write guard (--publish), exam publish, run-list published/dev, docs (REQ-0101)",
+  "state": "TODO",
+  "requirement": "REQ-0101",
+  "acceptance_criteria": [
+    "AC1 writes into main refused without --publish, dev lines unaffected",
+    "AC2 exam publish EXAM --from LINE builds a new main report run at $0, old main runs kept; solve --line main --publish for a real run",
+    "AC3 agent rules in docs, tests keep working",
+    "AC4 run-list marks published vs dev, INDEX lists main first",
+    "AC5 announced; DGNL 2026 (f) and DHQG 2024 (t81) published into main as new runs"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {},
+  "user_notes": [
+    {
+      "raw": "RAW-00286",
+      "note": "Q1-Q3 best (refuse without --publish; publish builds a new main run at zero cost; publish DGNL f and DHQG t81 now); tests use --line dev, main only on request",
+      "at": "2026-11-08T07:01:21Z"
+    }
+  ],
+  "picked_at": "2026-11-08T07:01:21Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
