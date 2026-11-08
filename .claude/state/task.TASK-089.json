@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-089",
   "title": "Role briefs use the fast test modes (REQ-0097)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0097",
   "acceptance_criteria": [
     "AC1 Tests line names --affected/--fast and main-only --full",
@@ -44,11 +44,18 @@
       "work/TASK-089/handoff/verify.md"
     ],
     "command": "grep checks, run_tests.py --fast, verifier read of 4 briefs + doc; coder.md:20 contradiction fixed and the worktree reason written in the doc",
-    "result": "AC1-AC4 PASS; the commits of TASK-089 touch only the 4 briefs, workflow-roles.md, design doc and state/req files; settings, hooks, agent_setup.json untouched"
+    "result": "AC1-AC4 PASS; the commits of TASK-089 touch only the 4 briefs, workflow-roles.md, design doc and state/req files; settings, hooks, agent_setup.json untouched",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-089/evidence/check.txt"
+      ],
+      "reason": "grep recount of the four briefs, a --fast run and an independent verifier read of the edited lines"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-89-role-briefs-test-modes.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -63,7 +70,8 @@
     "tester": {
       "waiver": "no code: grep and --fast"
     },
-    "verifier": "work/TASK-089/handoff/verify.md"
+    "verifier": "work/TASK-089/handoff/verify.md",
+    "crosscheck": "work/TASK-089/handoff/verify.md"
   },
   "user_notes": [
     {
@@ -73,7 +81,7 @@
     }
   ],
   "picked_at": "2026-11-08T04:04:48Z",
-  "updated_at": "2026-11-08T04:06:48Z",
+  "updated_at": "2026-11-08T04:07:04Z",
   "updated_by": "main",
   "scope": [
     ".claude/agents/coder.md",
@@ -89,5 +97,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "write docs/report/phase-89-role-briefs-test-modes.md, then DONE"
+  "next": ""
 }
