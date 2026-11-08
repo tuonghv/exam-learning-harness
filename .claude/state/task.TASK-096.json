@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-096",
   "title": "Overlay the corrected printed 64-67 (t82) into the DHQG 2024 report, labelled, then publish into main (REQ-0103)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0103",
   "acceptance_criteria": [
     "AC1 documented overlay mechanism with identity check and refusal on text mismatch",
@@ -11,9 +11,9 @@
     "AC5 tests and gate"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-96-report-answer-overlay.md",
+    "summary": "overlay.py: --overlay PLAN_DIR:ID resolve+validate (same exam, stem+options hash, base must be declined/unresolved, printed 64-67 = t81 Math ids 24-27 = t82 ids 1-4), applied at render time to an in-memory copy (never writes result.json), overlaid block shows the t82 fixed table passage and a localized source line, run.json overlays, publish inherits overlays, run-list sees them via plan_runs",
     "reuse": [],
     "risks": []
   },
@@ -41,7 +41,9 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-096/handoff/design.md"
+  },
   "user_notes": [
     {
       "raw": "RAW-00289",
@@ -50,8 +52,8 @@
     }
   ],
   "picked_at": "2026-11-08T08:07:27Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-08T08:11:39Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -59,5 +61,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder implements overlay.py and the hooks; tester; gate; main builds the dev run then publishes"
 }

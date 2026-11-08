@@ -2755,3 +2755,9 @@ Action: Report written
 Result: docs/report/phase-95-publish-badge-and-index.md
 Decision: DONE
 Next: none
+
+## DESIGN - TASK-096 - 2026-11-08T08:11:39Z
+Action: Design from the real plan data; decisions D1-D4 best
+Result: docs/design/phase-96-report-answer-overlay.md
+Decision: DESIGN
+Next: IMPLEMENTING

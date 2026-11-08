@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0103",
-  "next": "TASK-096 design (overlay)",
-  "updated": "2026-11-08 15:07"
+  "next": "coder implements overlay.py and the hooks; tester; gate; main builds the dev run then publishes",
+  "updated": "2026-11-08 15:11"
 }
