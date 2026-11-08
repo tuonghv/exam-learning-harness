@@ -1754,5 +1754,21 @@
         "at": "2026-11-08T04:04:48Z"
       }
     ]
+  },
+  {
+    "task_id": "TASK-090",
+    "title": "Line-based plans layout plans/<exam>/<line>/runs/<id>, solve --line, safe plans migration with dry-run/backup/undo (REQ-0098)",
+    "priority": 1,
+    "status": "queued",
+    "created_at": "2026-11-08T15:00:00",
+    "requirement": "REQ-0098",
+    "acceptance_criteria": [
+      "AC1 --line, default main, resolver reads old/REQ-0095/new layouts",
+      "AC2 plans-migrate --dry-run/--apply(backup first)/--undo, MIGRATION.json, idempotent",
+      "AC3 run-history and run.json references keep working",
+      "AC4 explicit reviewed mapping incl. non-exam folders",
+      "AC5 shared per-exam cache, run-list grouped by line with subject column",
+      "AC6 tests, real dry-run reviewed by the user before --apply, QA recount before/after"
+    ]
   }
 ]
