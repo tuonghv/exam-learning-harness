@@ -2485,3 +2485,9 @@ Action: Report written
 Result: docs/report/phase-86-md-needs-pdf.md
 Decision: DONE
 Next: none
+
+## DESIGN - TASK-087 - 2026-11-08T01:34:42Z
+Action: Design drafted from the scanner repo model; no user decision needed
+Result: docs/design/phase-87-run-based-layout.md
+Decision: DESIGN
+Next: IMPLEMENTING

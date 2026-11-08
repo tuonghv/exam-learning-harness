@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0095",
-  "next": "TASK-087 design (designer reads _code-security-scanner)",
-  "updated": "2026-11-08 08:30"
+  "next": "coder implements 87.1-87.7 (runlayout.py and every reader/writer through it); tester updates fixtures and adds tests",
+  "updated": "2026-11-08 08:34"
 }

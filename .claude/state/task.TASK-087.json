@@ -1,21 +1,21 @@
 {
   "task_id": "TASK-087",
   "title": "Run-based plans/reports layout with report runs per plan run (REQ-0095), modeled on _code-security-scanner history/compare",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0095",
   "acceptance_criteria": [
     "AC1 plans/<exam>/runs/<plan-run-id>/",
     "AC2 reports/<exam>/run-<report-run-id>/ with run.json naming the plan run",
     "AC3 many report runs per plan run, no overwrite",
     "AC4 readers accept old and new layouts, nothing moved",
-    "AC5 run id YYYYMMDD-HHMMSS UTC, INDEX lists report runs with plan run",
+    "AC5 id YYYYMMDD-HHMMSS UTC, INDEX lists report runs with plan run",
     "AC6 tests and QA recount",
-    "AC7 follows the scanner repo model for view/compare history"
+    "AC7 follows the scanner model for view/compare history"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-87-run-based-layout.md",
+    "summary": "runlayout.py resolver (plan_run_dir/new_plan_run/list_plan_runs/new_report_run/list_report_runs, old+new); id YYYYMMDD-HHMMSS UTC with -N suffix; run.json manifest (plan run, view, registry version, engine commit, status, prev run); readers switched to the resolver; exam run-list and run-compare history views; exam INDEX shows runs table plus file table; legacy folders untouched",
     "reuse": [],
     "risks": []
   },
@@ -43,7 +43,9 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-087/handoff/design.md"
+  },
   "user_notes": [
     {
       "raw": "RAW-00268",
@@ -52,8 +54,8 @@
     }
   ],
   "picked_at": "2026-11-08T01:31:01Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-08T01:34:43Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -61,5 +63,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder implements 87.1-87.7 (runlayout.py and every reader/writer through it); tester updates fixtures and adds tests"
 }
