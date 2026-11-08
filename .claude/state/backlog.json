@@ -1803,5 +1803,19 @@
         "at": "2026-11-08T05:10:36Z"
       }
     ]
+  },
+  {
+    "task_id": "TASK-092",
+    "title": "Build the DHQG 2024 hybrid report pack in the new layout from the t81 runs (REQ-0094)",
+    "priority": 1,
+    "status": "queued",
+    "created_at": "2026-11-08T19:00:00",
+    "requirement": "REQ-0094",
+    "acceptance_criteria": [
+      "AC1 pack at $0, every md has a pdf, checker passes (keyless pack accepted)",
+      "AC2 all-subjects solution-report 120/120 with question text, no raw JSON doubt lines",
+      "AC3 reply names each file and kind; old solutions.md = solution-report",
+      "AC4 corrected 64-67 (t82) not merged; pack = one run, note says which run each answer comes from"
+    ]
   }
 ]
