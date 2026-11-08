@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-086",
-  "state": "DONE",
-  "next": "",
-  "title": "Every report .md has a .pdf: registry rule, writers, checker, pack rebuild (REQ-0093)",
-  "active": [],
+  "task_id": "TASK-087",
+  "state": "TODO",
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "title": "Run-based plans/reports layout with report runs per plan run (REQ-0095), modeled on _code-security-scanner history/compare",
+  "active": [
+    {
+      "task_id": "TASK-087",
+      "state": "TODO",
+      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+      "updated_at": ""
+    }
+  ],
   "max_active": 1
 }

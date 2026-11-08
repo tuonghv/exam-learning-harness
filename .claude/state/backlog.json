@@ -1683,7 +1683,7 @@
     "task_id": "TASK-087",
     "title": "Run-based plans/reports layout with report runs per plan run (REQ-0095), modeled on _code-security-scanner history/compare",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-11-08T10:00:00",
     "requirement": "REQ-0095",
     "acceptance_criteria": [
