@@ -73,7 +73,7 @@ class Base(unittest.TestCase):
                 quiet(cli.solve_main, [EXAM, "--mock", MOCK, "--no-pdf"])
         finally:
             os.chdir(cwd)
-        base = os.path.join(cls.master, "plans", "input-001", "runs")
+        base = os.path.join(cls.master, "plans", "input-001", "main", "runs")
         cls.plan_id = os.listdir(base)[0]
         cls.plan_src = os.path.join(base, cls.plan_id)
 
@@ -91,10 +91,11 @@ class Base(unittest.TestCase):
         p.start()
         self.addCleanup(p.stop)
 
-    def copy_plan(self, exam="input-001", rid=None, layout="runs"):
+    def copy_plan(self, exam="input-001", rid=None, layout="line"):
         rid = rid or self.plan_id
-        dst = os.path.join(self.tmp, "plans", exam, "runs", rid) if layout == "runs" \
-            else os.path.join(self.tmp, "plans", exam, rid)
+        dst = {"line": os.path.join(self.tmp, "plans", exam, "main", "runs", rid),
+               "runs": os.path.join(self.tmp, "plans", exam, "runs", rid)}.get(
+            layout, os.path.join(self.tmp, "plans", exam, rid))
         shutil.copytree(self.plan_src, dst)
         return dst
 
@@ -119,6 +120,45 @@ class U1RunId(unittest.TestCase):
         self.assertEqual(runlayout.id_time("out-English"), "")
 
 
+class U1bSubjectSuffix(unittest.TestCase):
+    """D3: a subject tag and the -N collision suffix cannot be confused."""
+    S = "20261107-035802"
+
+    def parts(self, rid):
+        m = runlayout.PLAN_ID.match(rid)
+        return (m.group(2), runlayout._suffix(rid)) if m else None
+
+    def test_90_1_tag_ending_in_digits_joins(self):
+        self.assertEqual(runlayout.subject_tag("math-2"), "math2")
+        self.assertEqual(runlayout.subject_tag("part-10"), "part10")
+        self.assertEqual(runlayout.subject_tag("Part 10"), "part10")
+
+    def test_90_1_tag_with_leading_zero_kept(self):
+        self.assertEqual(runlayout.subject_tag("input-001"), "input-001")
+        self.assertEqual(runlayout.subject_tag("a-0"), "a-0")
+
+    def test_90_1_joined_tag_parses_as_subject_not_suffix(self):
+        for text, tag in (("math-2", "math2"), ("part-10", "part10")):
+            rid = "%s-%s" % (self.S, runlayout.subject_tag(text))
+            self.assertEqual(self.parts(rid), (tag, 1), rid)
+
+    def test_90_1_real_collision_suffix(self):
+        self.assertEqual(self.parts(self.S + "-math2-2"), ("math2", 2))
+        self.assertEqual(self.parts(self.S + "-part10-12"), ("part10", 12))
+        self.assertEqual(self.parts(self.S + "-2"), (None, 2))
+        self.assertEqual(self.parts(self.S), (None, 1))
+
+    def test_90_1_leading_zero_is_not_a_suffix(self):
+        self.assertEqual(self.parts(self.S + "-input-001"), ("input-001", 1))
+        self.assertEqual(self.parts(self.S + "-math-02"), ("math-02", 1))
+
+    def test_90_1_old_ids_still_valid(self):
+        self.assertEqual(runlayout.id_time("20261107T035802Z"), "20261107035802")
+        self.assertEqual(runlayout.id_time("20261107T035802Z-2"), "20261107035802")
+        self.assertEqual(runlayout.id_time("out-X"), "")
+        self.assertTrue(runlayout.PLAN_ID.match(self.S + "-input-001"))
+
+
 class U2Claim(unittest.TestCase):
     def test_87_1_collision_suffix(self):
         root = tempfile.mkdtemp()
@@ -127,7 +167,7 @@ class U2Claim(unittest.TestCase):
         b = runlayout.new_plan_run(root, "ex", now=0)
         c = runlayout.new_plan_run(root, "ex", now=0)
         self.assertEqual([os.path.basename(x) for x in (a, b, c)], ["19700101-000000", "19700101-000000-2", "19700101-000000-3"])
-        self.assertEqual({os.path.dirname(x) for x in (a, b, c)}, {os.path.join(root, "ex", "runs")})
+        self.assertEqual({os.path.dirname(x) for x in (a, b, c)}, {os.path.join(root, "ex", "main", "runs")})
         for x in (a, b, c):
             self.assertTrue(os.path.isdir(x))
 
@@ -135,7 +175,7 @@ class U2Claim(unittest.TestCase):
         root = tempfile.mkdtemp()
         self.addCleanup(shutil.rmtree, root, True)
         d = planrun.claim_run_dir(root, "ex")
-        self.assertEqual(os.path.dirname(d), os.path.join(root, "ex", "runs"))
+        self.assertEqual(os.path.dirname(d), os.path.join(root, "ex", "main", "runs"))
         self.assertRegex(os.path.basename(d), runlayout.NEW_ID)
 
     def test_87_1_unsafe_ids_refused(self):
@@ -188,9 +228,10 @@ class U3ListPlanRuns(unittest.TestCase):
         ex = os.path.join(self.root, "ex")
         self.assertEqual(runlayout.plan_run_dir(self.root, "ex", "20240101-000000"), os.path.join(ex, "runs", "20240101-000000"))
         self.assertEqual(runlayout.plan_run_dir(self.root, "ex", "out-X"), os.path.join(ex, "out-X"))
-        self.assertEqual(runlayout.plan_run_dir(self.root, "ex", "20991231-000000"), os.path.join(ex, "runs", "20991231-000000"))
+        # 90.2: an unknown id resolves to the default line path
+        self.assertEqual(runlayout.plan_run_dir(self.root, "ex", "20991231-000000"), os.path.join(ex, "main", "runs", "20991231-000000"))
         # reserved names never resolve to the legacy dir
-        self.assertEqual(runlayout.plan_run_dir(self.root, "ex", "cache"), os.path.join(ex, "runs", "cache"))
+        self.assertEqual(runlayout.plan_run_dir(self.root, "ex", "cache"), os.path.join(ex, "main", "runs", "cache"))
 
     def test_87_1_same_id_in_both_layouts_new_wins(self):
         put(os.path.join(self.root, "ex", "20240101-000000", "plan.json"), {})
@@ -330,12 +371,12 @@ class U5ReportRuns(Base):
     def test_87_3_rerun_with_same_report_id_overwrites_in_place(self):
         plan = self.copy_plan()
         self.assertEqual(quiet(cli.report_main, [plan, "--no-pdf", "--report-id", "fix"])[0], 0)
-        d = os.path.join("reports", "input-001", "run-fix")
+        d = os.path.join("reports", "input-001", "main", "run-fix")
         self.assertTrue(os.path.isfile(os.path.join(d, "run.json")))
         os.remove(os.path.join(d, "run.json"))
         self.assertEqual(quiet(cli.report_main, [plan, "--no-pdf", "--report-id", "fix"])[0], 0)
         self.assertTrue(os.path.isfile(os.path.join(d, "run.json")))
-        self.assertEqual([n for n in os.listdir(os.path.join("reports", "input-001")) if n.startswith("run-")], ["run-fix"])
+        self.assertEqual([n for n in os.listdir(os.path.join("reports", "input-001", "main")) if n.startswith("run-")], ["run-fix"])
 
     def test_87_3_new_report_run_ids(self):
         root = os.path.join(self.tmp, "reports")
@@ -367,7 +408,7 @@ class U5ReportRuns(Base):
         self.assertEqual(pr["plan_run_id"], self.plan_id)
         self.assertEqual(pr["exam_id"], "input-001")
         self.assertEqual(pr["result_sha256"], sha_of(os.path.join(plan, "result.json")))
-        self.assertEqual(pr["dir"], "plans/input-001/runs/" + self.plan_id)  # relative to cwd
+        self.assertEqual(pr["dir"], "plans/input-001/main/runs/" + self.plan_id)  # relative to cwd
         self.assertIsNone(disk["prev_report_run"])
         self.assertFalse(os.path.exists(os.path.join(out, "run.json.tmp")))
 
@@ -428,8 +469,8 @@ class U6RunJsonChecks(Base):
             put(os.path.join(d, "result.json"), res)
         code, out, err = quiet(cli.report_pack_main, plans + ["--exam", "ex", "--no-pdf"])
         self.assertEqual(code, 0, err)
-        (rr,) = [r for r in os.listdir(os.path.join("reports", "ex")) if r.startswith("run-")]
-        return plans, os.path.join("reports", "ex", rr)
+        (rr,) = [r for r in os.listdir(os.path.join("reports", "ex", "main")) if r.startswith("run-")]
+        return plans, os.path.join("reports", "ex", "main", rr)
 
     def check(self, pack, plans):
         p = subprocess.run([sys.executable, "-I", CHECK, os.path.abspath(pack)] + [os.path.abspath(x) for x in plans], capture_output=True, text=True, cwd=ROOT)
@@ -517,18 +558,19 @@ class U8RunList(unittest.TestCase):
         rows = {ln.split("|")[1].strip(): [c.strip() for c in ln.split("|")[2:-1]] for ln in out.splitlines()
                 if ln.startswith("| ") and "---" not in ln}
         new, old = rows["20240101-000000"], rows["out-Old"]
-        self.assertEqual(new[0], "runs")
-        self.assertEqual(old[0], "legacy")
-        self.assertEqual(new[2:5], ["m-new", "7", "1.25"])
-        self.assertEqual(old[2:5], ["m-old", "4", "0.5"])
-        self.assertIn("run-20240102-000000", new[5])
+        self.assertEqual(new[2], "runs")  # 90.5: columns line, subject precede layout
+        self.assertEqual(old[2], "legacy")
+        self.assertEqual((new[0], old[0]), ("-", "-"))  # no line for runs/ and legacy layouts
+        self.assertEqual(new[4:7], ["m-new", "7", "1.25"])
+        self.assertEqual(old[4:7], ["m-old", "4", "0.5"])
+        self.assertIn("run-20240102-000000", new[7])
         self.assertIn("run-20240102-000000", out)
         self.assertIn("oldfolder", out)
         self.assertIn("legacy", out.split("## Report runs")[1])
         self.assertIn("out-Old", out.split("## Report runs")[1])  # legacy report folder linked via result-data plan_run_id
-        self.assertIn("run-20240102-000000", old[5] if False else new[5])
+        self.assertIn("run-20240102-000000", old[5] if False else new[7])
         self.assertLess(out.index("out-Old"), out.index("20240101-000000"))  # older first
-        self.assertIn("3/4", new[6])  # score from the linked report run's score-summary
+        self.assertIn("3/4", new[8])  # score from the linked report run's score-summary
 
     def test_87_5_read_only(self):
         self.run_list()
@@ -573,14 +615,14 @@ class U9ExamIndexAndLegacy(Base):
     def test_87_6_exam_index_has_runs_table(self):
         plan = self.copy_plan()
         self.assertEqual(quiet(cli.report_main, [plan, "--no-pdf"])[0], 0)
-        with open(os.path.join("reports", "input-001", "INDEX.md"), encoding="utf-8") as fh:
+        with open(os.path.join("reports", "input-001", "main", "INDEX.md"), encoding="utf-8") as fh:
             md = fh.read()
         self.assertIn("## Report runs", md)
         self.assertIn("input-001/" + self.plan_id, md)
-        (rr,) = [n for n in os.listdir(os.path.join("reports", "input-001")) if n.startswith("run-")]
+        (rr,) = [n for n in os.listdir(os.path.join("reports", "input-001", "main")) if n.startswith("run-")]
         self.assertIn(rr, md)
         self.assertNotIn("| report.md |", md)  # run files are listed in the run's own INDEX.md
-        self.assertTrue(os.path.isfile(os.path.join("reports", "input-001", rr, "INDEX.md")))
+        self.assertTrue(os.path.isfile(os.path.join("reports", "input-001", "main", rr, "INDEX.md")))
 
     def legacy_tree(self):
         r = os.path.join(self.tmp, "reports", "leg")
@@ -615,15 +657,15 @@ class U9ExamIndexAndLegacy(Base):
         after.pop(os.path.join(leg, "INDEX.md"), None)
         self.assertEqual(after, before)
         self.assertTrue(os.path.isdir(plan))
-        self.assertFalse(os.path.exists(os.path.join(self.tmp, "plans", "input-001", "runs")))
+        self.assertFalse(os.path.exists(os.path.join(self.tmp, "plans", "input-001", "main", "runs")))
 
     def test_87_7_report_of_legacy_plan_leaves_plan_untouched(self):
         plan = self.copy_plan(rid="out-Legacy", layout="legacy")
         before = snapshot(plan)
         self.assertEqual(quiet(cli.report_main, [plan, "--no-pdf"])[0], 0)
         self.assertEqual(snapshot(plan), before)
-        (rr,) = [n for n in os.listdir(os.path.join("reports", "input-001")) if n.startswith("run-")]
-        man = jread(os.path.join("reports", "input-001", rr, "run.json"))
+        (rr,) = [n for n in os.listdir(os.path.join("reports", "input-001", "main")) if n.startswith("run-")]
+        man = jread(os.path.join("reports", "input-001", "main", rr, "run.json"))
         self.assertEqual(man["exam_id"], "input-001")
         self.assertEqual(man["plan_runs"][0]["dir"], "plans/input-001/out-Legacy")
 
@@ -642,19 +684,19 @@ class E2EMockSolve(unittest.TestCase):
     def test_87_4_mock_solve_writes_runs_layout_and_report_run(self):
         code, out, err = quiet(cli.solve_main, [EXAM, "--mock", MOCK, "--no-pdf"])
         self.assertIn(code, (0, 1), err)
-        base = os.path.join("plans", "input-001")
+        base = os.path.join("plans", "input-001", "main")
         self.assertEqual(sorted(os.listdir(base)), ["runs"])  # no cache dir on a mock run, nothing beside runs/
         (rid,) = os.listdir(os.path.join(base, "runs"))
         self.assertRegex(rid, runlayout.NEW_ID)
         self.assertTrue(os.path.isfile(os.path.join(base, "runs", rid, "result.json")))
         self.assertTrue(os.path.isfile(os.path.join(base, "runs", rid, "plan.json")))
-        self.assertIn(os.path.join("plans", "input-001", "runs", rid), out)
-        rdir = os.path.join("reports", "input-001", "run-" + rid)
+        self.assertIn(os.path.join("plans", "input-001", "main", "runs", rid), out)
+        rdir = os.path.join("reports", "input-001", "main", "run-" + rid)
         man = jread(os.path.join(rdir, "run.json"))
         self.assertEqual(man["cmd"], "solve")
         self.assertEqual(man["plan_runs"][0]["plan_run_id"], rid)
         self.assertTrue(os.path.isfile(os.path.join(rdir, "INDEX.md")))
-        self.assertTrue(os.path.isfile(os.path.join("reports", "input-001", "INDEX.md")))
+        self.assertTrue(os.path.isfile(os.path.join("reports", "input-001", "main", "INDEX.md")))
 
     def test_87_4_explicit_out_unchanged(self):
         quiet(cli.solve_main, [EXAM, "--mock", MOCK, "--no-pdf", "--out", "mine"])

@@ -48,7 +48,7 @@ class PlanRunTest(unittest.TestCase):
             return cli.solve_main([EXAM, "--mock", mock] + list(extra))
 
     def plan_dir(self):
-        base = os.path.join(self.tmp, "plans", "input-001", "runs")
+        base = os.path.join(self.tmp, "plans", "input-001", "main", "runs")
         runs = os.listdir(base)
         self.assertEqual(len(runs), 1)
         return os.path.join(base, runs[0])
@@ -80,7 +80,7 @@ class PlanRunTest(unittest.TestCase):
         self.assertIn(self.solve(), (0, 1))
         self.assertTrue(os.path.isfile(os.path.join(self.plan_dir(), "result.json")))
         rid = os.path.basename(self.plan_dir())
-        self.assertTrue(rk.find(os.path.join("reports", "input-001", "run-" + rid), "solution-report") is not None)
+        self.assertTrue(rk.find(os.path.join("reports", "input-001", "main", "run-" + rid), "solution-report") is not None)
         self.assertEqual(subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True).stdout, "")
 
     def test_out_honoured_and_plan_inside(self):

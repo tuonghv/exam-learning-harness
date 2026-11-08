@@ -283,7 +283,7 @@ class T5MetricsBlock(S.Base):
     def test_84_5_real_run_block_shows_hits(self):
         self.cli()
         self.cli("--yes")
-        d = os.path.join(self.tmp, "plans", "exam-a", "runs", self.plans()[-1])
+        d = os.path.join(self.tmp, "plans", "exam-a", "main", "runs", self.plans()[-1])
         with open(os.path.join(d, "result.json"), encoding="utf-8") as fh:
             res = json.load(fh)
         n = res["run"]["cached"]

@@ -68,12 +68,12 @@ class ReportBuildTest(unittest.TestCase):
         p.start()
         self.addCleanup(p.stop)
         self.assertIn(quiet(cli.solve_main, [EXAM, "--mock", MOCK, "--no-pdf"]), (0, 1))
-        base = os.path.join(self.tmp, "plans", "input-001", "runs")
+        base = os.path.join(self.tmp, "plans", "input-001", "main", "runs")
         self.plan = os.path.join(base, os.listdir(base)[0])
 
     def test_default_solve_report_in_reports_tree(self):
         rid = os.path.basename(self.plan)
-        d = os.path.join(self.tmp, "reports", "input-001", "run-" + rid)  # 87.3: one run dir, files flat
+        d = os.path.join(self.tmp, "reports", "input-001", "main", "run-" + rid)  # 87.3: one run dir, files flat
         names = sorted(os.listdir(d))
         for kind, ext in (("solution-report", "md"), ("answer-sheet", "md"), ("metrics", "json"), ("result-data", "json")):
             self.assertIsNotNone(stdpath(d, kind, ext), names)
@@ -86,7 +86,7 @@ class ReportBuildTest(unittest.TestCase):
         for d in (a, b):
             report_build.build(self.plan, d, pdf=False)
         self.assertEqual(tree(a), tree(b))
-        run = tree(os.path.join(self.tmp, "reports", "input-001", "run-" + os.path.basename(self.plan)))
+        run = tree(os.path.join(self.tmp, "reports", "input-001", "main", "run-" + os.path.basename(self.plan)))
         for k in ("run.json", "INDEX.md"):  # the run dir adds its manifest and index; the report files are equal
             run.pop(k)
         self.assertEqual(tree(a), run)
@@ -132,7 +132,7 @@ class ReportBuildTest(unittest.TestCase):
     def test_many_reports_per_plan_run(self):
         for args in (["--report-id", "a"], ["--report-id", "b"], ["--view", "learn", "--report-id", "l"]):
             self.assertEqual(quiet(cli.report_main, [self.plan, "--no-pdf"] + args), 0)
-        base = os.path.join(self.tmp, "reports", "input-001")
+        base = os.path.join(self.tmp, "reports", "input-001", "main")
         self.assertEqual(sorted(os.listdir(base)), ["INDEX.md", "run-" + os.path.basename(self.plan), "run-a", "run-b", "run-l"])  # INDEX.md = exam runs index (87.6)
 
         def body(n):  # report files only: run.json holds created_utc, INDEX.md lists the run

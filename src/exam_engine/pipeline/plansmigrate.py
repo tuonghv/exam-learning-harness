@@ -17,13 +17,14 @@ import sys
 import tarfile
 import time
 
+from exam_engine import settings
 from exam_engine.pipeline import runlayout
 
 SCHEMA = 1
 HISTORY = "run-history.jsonl"
 MIN_FREE = 64 * 1024 * 1024
 REPO = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", ".."))
-DEFAULT_MAP = os.path.join(REPO, "config", "plans_migration.json")
+DEFAULT_MAP = os.path.join(settings.config_dir(), "plans_migration.json")
 SECTIONS = {"plans": ("folders", "moves"), "reports": ("report_folders", "report_moves")}
 
 

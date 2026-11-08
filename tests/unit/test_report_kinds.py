@@ -163,7 +163,7 @@ class Packed(unittest.TestCase):
                 quiet(cli.solve_main, [EXAM, "--mock", MOCK, "--no-pdf"])
         finally:
             os.chdir(cwd)
-        base = os.path.join(cls.tmp, "plans", "input-001", "runs")
+        base = os.path.join(cls.tmp, "plans", "input-001", "main", "runs")
         src = os.path.join(base, os.listdir(base)[0])
         cls.plans = []
         for sub in ("Alpha", "Beta"):

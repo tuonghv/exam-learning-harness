@@ -21,7 +21,7 @@ RUN_JSON = "run.json"
 LINE_DEFAULT = "main"
 MIGRATION_JSON = "MIGRATION.json"
 NEW_ID = re.compile(r"^\d{8}-\d{6}(-\d+)?$")  # report run ids
-PLAN_ID = re.compile(r"^(\d{8}-\d{6})(?:-([a-z][a-z0-9._-]*?))?(?:-(\d+))?$")  # plan run ids: stamp[-subject][-N]
+PLAN_ID = re.compile(r"^(\d{8}-\d{6})(?:-([a-z][a-z0-9._-]*?))?(?:-([1-9]\d*))?$")  # plan run ids: stamp[-subject][-N]
 _OLD_ID = re.compile(r"^(\d{8})T(\d{6})Z(-\d+)?$")
 
 
@@ -67,6 +67,7 @@ def subject_tag(text):
     """Lowercase subject tag of a run id from a file stem or folder name, or None (must start with a letter)."""
     t = re.sub(r"[^a-z0-9._-]", "-", str(text or "").lower())
     t = re.sub(r"-{2,}", "-", t).strip("-._")
+    t = re.sub(r"-([1-9]\d*)$", r"\1", t)  # -N suffix has no leading zero: a tag never ends in -<N>
     return t if re.match(r"^[a-z][a-z0-9._-]*$", t) else None
 
 

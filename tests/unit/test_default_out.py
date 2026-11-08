@@ -38,7 +38,7 @@ class DefaultOutTest(unittest.TestCase):
 
     def test_no_out_goes_to_ignored_reports_dir(self):
         self.assertIn(self.solve(), (0, 1))
-        base = os.path.join(self.tmp, "plans", "input-001", "runs")
+        base = os.path.join(self.tmp, "plans", "input-001", "main", "runs")
         runs = os.listdir(base)
         self.assertEqual(len(runs), 1)
         self.assertTrue(os.path.isfile(os.path.join(base, runs[0], "result.json")))
@@ -47,7 +47,7 @@ class DefaultOutTest(unittest.TestCase):
     def test_two_runs_do_not_collide(self):
         self.solve()
         self.solve()
-        self.assertEqual(len(os.listdir(os.path.join(self.tmp, "plans", "input-001", "runs"))), 2)
+        self.assertEqual(len(os.listdir(os.path.join(self.tmp, "plans", "input-001", "main", "runs"))), 2)
 
     def test_explicit_out_honoured(self):
         self.solve("--out", "mine")

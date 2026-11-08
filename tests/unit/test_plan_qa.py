@@ -45,7 +45,7 @@ class PlanQA(unittest.TestCase):
         self.addCleanup(p.stop)
 
     def runs(self):
-        base = os.path.join(self.tmp, "plans", "input-001", "runs")
+        base = os.path.join(self.tmp, "plans", "input-001", "main", "runs")
         return sorted(os.path.join(base, r) for r in os.listdir(base))
 
     def _crash_at(self, k, exc):
@@ -90,7 +90,7 @@ class PlanQA(unittest.TestCase):
             inner = real(path)
 
             def llm(prompt):
-                base = os.path.join(self.tmp, "plans", "input-001", "runs")
+                base = os.path.join(self.tmp, "plans", "input-001", "main", "runs")
                 seen.append(os.path.isfile(os.path.join(base, os.listdir(base)[0], "plan.json")))
                 return inner(prompt)
             return llm
@@ -106,7 +106,7 @@ class PlanQA(unittest.TestCase):
         self.assertEqual(len(set(names)), 3, names)
         for d in self.runs():
             self.assertTrue(os.path.isfile(os.path.join(d, "result.json")))
-        reps = os.listdir(os.path.join(self.tmp, "reports", "input-001"))
+        reps = os.listdir(os.path.join(self.tmp, "reports", "input-001", "main"))
         self.assertEqual(sorted(r[len("run-"):] for r in reps if r.startswith("run-")), sorted(names))
 
     def test_58_4_solve_and_report_same_metrics_and_text(self):
@@ -115,7 +115,7 @@ class PlanQA(unittest.TestCase):
         self.assertEqual(quiet(cli.report_main, [flat, "--no-pdf", "--out", os.path.join(self.tmp, "r")]), 0)
         quiet(cli.solve_main, [EXAM, "--mock", MOCK, "--no-pdf"])
         (d,) = self.runs()
-        dflt = os.path.join(self.tmp, "reports", "input-001", "run-" + os.path.basename(d))
+        dflt = os.path.join(self.tmp, "reports", "input-001", "main", "run-" + os.path.basename(d))
         for other in (os.path.join(self.tmp, "r"), dflt):
             for kind in ("solution-report", "answer-sheet"):
                 self.assertEqual(rd(rk.find(flat, kind)), rd(rk.find(other, kind)), kind)
