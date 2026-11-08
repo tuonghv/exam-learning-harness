@@ -1,19 +1,19 @@
 {
   "task_id": "TASK-093",
   "title": "Readable wording instead of raw 'none' in the solution report; rebuild both packs (REQ-0100)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0100",
   "acceptance_criteria": [
-    "AC1 localized phrases, no none token for declined questions",
+    "AC1 localized phrases, no none token for declined questions in the solution-report",
     "AC2 answer-sheet/tsv/result.json unchanged",
     "AC3 checker and parsers accept new text, tests vi/en",
     "AC4 new report runs for dgnl2026/f and dhqg2024/t81, old runs kept",
     "AC5 change announced"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-93-readable-no-answer-wording.md",
+    "summary": "render-time localized vi/en phrases for the four raw none sources in the solution report (answer, evidence, per-question score, accuracy line); data files keep none; parsers unaffected (report_kinds.py:178 matches the \u0110\u00e1p \u00e1n prefix only); two rebuilds at $0 as new report runs, old kept",
     "reuse": [],
     "risks": []
   },
@@ -41,7 +41,9 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-093/handoff/design.md"
+  },
   "user_notes": [
     {
       "raw": "RAW-00283",
@@ -50,8 +52,8 @@
     }
   ],
   "picked_at": "2026-11-08T06:04:06Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-08T06:07:25Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -59,5 +61,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder changes reporter.py and metrics.py; tester adds 6 tests; main rebuilds both packs"
 }

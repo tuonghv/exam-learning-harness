@@ -2665,3 +2665,9 @@ Action: Report written
 Result: docs/report/phase-92-dhqg2024-pack.md
 Decision: DONE
 Next: none
+
+## DESIGN - TASK-093 - 2026-11-08T06:07:25Z
+Action: Design from the real packs (none counts 126/130 and 140/144)
+Result: docs/design/phase-93-readable-no-answer-wording.md
+Decision: DESIGN
+Next: IMPLEMENTING

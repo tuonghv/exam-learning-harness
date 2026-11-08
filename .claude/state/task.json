@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-093",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "coder changes reporter.py and metrics.py; tester adds 6 tests; main rebuilds both packs",
   "title": "Readable wording instead of raw 'none' in the solution report; rebuild both packs (REQ-0100)",
   "active": [
     {
       "task_id": "TASK-093",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "coder changes reporter.py and metrics.py; tester adds 6 tests; main rebuilds both packs",
+      "updated_at": "2026-11-08T06:07:25Z"
     }
   ],
   "max_active": 1
