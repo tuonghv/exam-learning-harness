@@ -7,6 +7,7 @@ unregistered kind OR a registered kind that applies has no file. Output: TSV `ch
 
 usage: python3 -I tools/check_report_pack.py PACK_DIR PLAN_DIR... [--key FILE] [--expect-correct N] [--registry FILE]
 """
+import hashlib
 import json
 import os
 import re
@@ -93,8 +94,20 @@ def main(argv):
     for pd in plans:
         r = jload(os.path.join(pd, "result.json"))
         results.append({"plan": pd, "r": r, "slug": slug(r["exam"].get("subject")), "n": len(r["questions"])})
-    files = sorted(f for f in os.listdir(pack) if f != "INDEX.md" and os.path.isfile(os.path.join(pack, f)))
+    files = sorted(f for f in os.listdir(pack) if f not in ("INDEX.md", "run.json") and os.path.isfile(os.path.join(pack, f)))
     parsed = {f: parse_name(f, kinds) for f in files}
+    if os.path.isfile(os.path.join(pack, "run.json")):  # TASK-087: run manifest is not a kind; it must match the plans
+        try:
+            man = jload(os.path.join(pack, "run.json"))
+            got = [str(p.get("result_sha256")) for p in man.get("plan_runs", [])]
+        except (OSError, ValueError, AttributeError):
+            man, got = {}, []
+        chk("run.json plan_runs", len(plans), len(got))
+        want = []
+        for pd in plans:
+            with open(os.path.join(pd, "result.json"), "rb") as fh:
+                want.append(hashlib.sha256(fh.read()).hexdigest())
+        chk("run.json result_sha256 mismatches", 0, sum(1 for w in want if w not in got))
     chk("unregistered files", 0, sum(1 for v in parsed.values() if v is None))
     chk("exam/run parts", 1, len({(v["exam"], v["run"]) for v in parsed.values() if v}))
     # AC10: every applicable registered kind has exactly its expected files

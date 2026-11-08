@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0095",
-  "next": "coder implements 87.1-87.7 (runlayout.py and every reader/writer through it); tester updates fixtures and adds tests",
-  "updated": "2026-11-08 08:34"
+  "next": "tester writes test_runlayout.py and fixes layout-dependent tests; verifier recount",
+  "updated": "2026-11-08 08:41"
 }

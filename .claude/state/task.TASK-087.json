@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-087",
   "title": "Run-based plans/reports layout with report runs per plan run (REQ-0095), modeled on _code-security-scanner history/compare",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0095",
   "acceptance_criteria": [
     "AC1 plans/<exam>/runs/<plan-run-id>/",
@@ -20,8 +20,18 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/runlayout.py",
+      "src/exam_engine/pipeline/planrun.py",
+      "src/exam_engine/pipeline/report_kinds.py",
+      "src/exam_engine/pipeline/report_pack.py",
+      "src/exam_engine/cli.py",
+      "tools/check_report_pack.py",
+      "docs/guide/report-kinds.md",
+      "docs/guide/toolkit-reference.md"
+    ],
+    "summary": "runlayout.py resolver; new plan runs under plans/<exam>/runs/<YYYYMMDD-HHMMSS[-N]>, report runs under reports/<exam>/run-<id> with run.json; last_solved/_already_imported read both layouts; run-list and run-compare; exam runs index; legacy untouched; mock demo: 1 plan run, 4 report runs"
   },
   "unit_test": {
     "status": "pending",
@@ -44,7 +54,8 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-087/handoff/design.md"
+    "designer": "work/TASK-087/handoff/design.md",
+    "coder": "work/TASK-087/handoff/code.md"
   },
   "user_notes": [
     {
@@ -54,14 +65,24 @@
     }
   ],
   "picked_at": "2026-11-08T01:31:01Z",
-  "updated_at": "2026-11-08T01:34:43Z",
+  "updated_at": "2026-11-08T01:41:25Z",
   "updated_by": "main",
-  "scope": [],
+  "scope": [
+    "src/exam_engine/pipeline/runlayout.py",
+    "src/exam_engine/pipeline/planrun.py",
+    "src/exam_engine/pipeline/report_kinds.py",
+    "src/exam_engine/pipeline/report_pack.py",
+    "src/exam_engine/cli.py",
+    "tools/check_report_pack.py",
+    "docs/guide/report-kinds.md",
+    "docs/guide/toolkit-reference.md",
+    "tests/unit/*.py"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
     "done": [],
     "notes": ""
   },
-  "next": "coder implements 87.1-87.7 (runlayout.py and every reader/writer through it); tester updates fixtures and adds tests"
+  "next": "tester writes test_runlayout.py and fixes layout-dependent tests; verifier recount"
 }

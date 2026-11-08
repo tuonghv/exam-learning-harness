@@ -1,6 +1,6 @@
 """Plan run: every raw LLM call of a solve, written as it happens (REQ-0062, phase 58).
 
-plans/<exam-id>/<plan-run-id>/ holds plan.json, config.json, input/exam.md, calls/index.jsonl +
+plans/<exam-id>/runs/<plan-run-id>/ (old: plans/<exam-id>/<plan-run-id>/) holds plan.json, config.json, input/exam.md, calls/index.jsonl +
 calls/NNN-{prompt,reply}.txt, and (written by the engine) result.json + run.log. Capture never fails a
 run: a write error prints one WARN and turns capture off. Replies go through claude.mask (token
 pattern); the sha256 in index.jsonl is of the unmasked text.
@@ -44,18 +44,9 @@ def safe_id(value, what="id"):
 
 
 def claim_run_dir(root, exam_id):
-    """plans/<exam-id>/<UTC stamp>[-N], created with makedirs(exist_ok=False) so two runs never share one."""
-    base = os.path.join(root, safe_id(exam_id, "exam id"))
-    os.makedirs(base, exist_ok=True)
-    stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
-    n = 1
-    while True:
-        out = os.path.join(base, stamp if n == 1 else "%s-%d" % (stamp, n))
-        try:
-            os.makedirs(out)
-            return out
-        except FileExistsError:
-            n += 1
+    """New plan run dir runs/<UTC YYYYMMDD-HHMMSS>[-N] under root/<exam-id> (makedirs exist_ok=False, runlayout)."""
+    from exam_engine.pipeline import runlayout
+    return runlayout.new_plan_run(root, exam_id)
 
 
 def _sha(text):
@@ -162,30 +153,26 @@ class PlanWriter(object):
 
 
 def last_solved(root, exam_path):
-    """Newest finished real solve of this exact exam file under root/<exam-id>/*/plan.json, else None (83.4)."""
-    base = os.path.join(root, exam_id_of(exam_path))
+    """Newest finished real solve of this exact exam file, in both layouts (runs/<id> and legacy <id>), else None (83.4)."""
+    from exam_engine.pipeline import runlayout
     try:
         sha = metrics.file_sha256(exam_path)
-        names = os.listdir(base)
-    except OSError:
+        runs = runlayout.list_plan_runs(root, exam_id_of(exam_path))
+    except (OSError, ValueError):
         return None
     best = None
-    for name in names:
-        try:
-            with open(os.path.join(base, name, "plan.json"), encoding="utf-8") as fh:
-                p = json.load(fh)
-        except (OSError, ValueError):
-            continue
+    for r in runs:
+        p = r["plan"]
         if not (isinstance(p, dict) and p.get("source") == "solve" and p.get("status") == "done"
                 and p.get("llm") == "claude-p" and (p.get("exam") or {}).get("sha256") == sha):
             continue
         key = (bool(p.get("calls") or not p.get("cached")), str(p.get("finished_utc") or ""))
         if best is None or key > best[2]:
-            best = (name, p, key)
+            best = (r["dir"], p, key)
     if best is None:
         return None
     p = best[1]
-    return {"dir": os.path.join(base, best[0]), "finished_utc": p.get("finished_utc"), "model": p.get("model"),
+    return {"dir": best[0], "finished_utc": p.get("finished_utc"), "model": p.get("model"),
             "cost_usd": p.get("cost_usd", 0.0), "calls": p.get("calls", 0)}
 
 
@@ -206,19 +193,12 @@ _CALL_RE = re.compile(r"^call (\d+) ok=(\S+) cls=(\S+) dur=([\d.]+)s cost=([\d.]
                       r"prompt_bytes=(\d+) answer_bytes=(\d+)")
 
 
-def _already_imported(base, src, rsha):
-    try:
-        names = sorted(os.listdir(base))
-    except OSError:
-        return None
-    for name in names:
-        try:
-            with open(os.path.join(base, name, "plan.json"), encoding="utf-8") as fh:
-                meta = json.load(fh)
-        except (OSError, ValueError):
-            continue
+def _already_imported(root, exam_id, src, rsha):
+    from exam_engine.pipeline import runlayout
+    for r in runlayout.list_plan_runs(root, exam_id):
+        meta = r["plan"] or {}
         if meta.get("imported_from") == src and meta.get("result_sha256") == rsha:
-            return os.path.join(base, name)
+            return r["dir"]
     return None
 
 
@@ -301,7 +281,7 @@ def import_dir(src, root, exam_path=None, exam_id=None, ingest_cache=None, trace
             print("WARN: exam not imported (result exam.path %s is outside the run dir; pass --exam)"
                   % declared, file=sys.stderr)
     exam_id = safe_id(exam_id or exam_id_of(declared or exam_path or src), "exam id")
-    hit = _already_imported(os.path.join(root, exam_id), src, rsha)
+    hit = _already_imported(root, exam_id, src, rsha)
     if hit:
         return hit, "skipped"
     out = claim_run_dir(root, exam_id)

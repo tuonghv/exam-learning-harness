@@ -9,7 +9,7 @@ import json
 import os
 import shutil
 
-from exam_engine.pipeline import explain, report_build, report_kinds as rk, reporter
+from exam_engine.pipeline import explain, report_build, report_kinds as rk, reporter, runlayout
 
 LETTERS = "ABCD"
 
@@ -110,7 +110,7 @@ def _pdf_siblings(out_dir, lang):
             raise ValueError("PDF failed for %s: %s" % (f, note))
 
 
-def build_pack(plan_dirs, out_dir, exam, run, key=None, pdf=True):
+def build_pack(plan_dirs, out_dir, exam, run, key=None, pdf=True, engine_git=None):
     """Build the pack in out_dir; returns {files, expected, parts, correct, total}. ValueError on a bad plan, bad
     name part, unregistered extra file or a registered kind without a file."""
     run = run if run.startswith("run-") else "run-" + run
@@ -127,7 +127,7 @@ def build_pack(plan_dirs, out_dir, exam, run, key=None, pdf=True):
         raise ValueError("no letter keys found in %s" % key)
     parts = []
     for pd in plan_dirs:
-        info = report_build.build(pd, out_dir, view="sheet", pdf=pdf, exam_name=exam, run_name=run)
+        info = report_build.build(pd, out_dir, view="sheet", pdf=pdf, exam_name=exam, run_name=run, engine_git=engine_git)
         nm = info["names"]
         src = os.path.join(pd, "run.log")
         if os.path.isfile(src):
@@ -163,10 +163,10 @@ def build_pack(plan_dirs, out_dir, exam, run, key=None, pdf=True):
     if pdf:
         _pdf_siblings(out_dir, reporter.learn_lang(parts[0]["result"]))
     want = rk.expected(exam, subjects, run, key=bool(keymap), pdf=pdf)
-    have = sorted(f for f in os.listdir(out_dir) if f != rk.INDEX_NAME)
+    have = sorted(f for f in os.listdir(out_dir) if f not in (rk.INDEX_NAME, runlayout.RUN_JSON))
     missing = [w for w in want if w not in have]
     extra = [h for h in have if rk.classify(h)[1] != "standard"]
     if missing or extra:
         raise ValueError("pack check failed: missing %s; unregistered %s" % (missing, extra))
-    rk.write_index(out_dir)
+    runlayout.finish_report_run(out_dir, plan_dirs, "sheet", engine_git, "report-pack")
     return {"files": have, "expected": want, "parts": parts, "correct": correct, "total": total}

@@ -18,12 +18,12 @@ from exam_engine.adapters import claude
 from exam_engine.core import schema as sch
 from exam_engine.core.decision import decide
 from exam_engine.pipeline import (examples_check, explain, metrics, parser, planrun, prompts, report_build,
-                                  report_kinds, report_pack, reporter, router, scorer, solver, verifier)
+                                  report_kinds, report_pack, reporter, router, runlayout, scorer, solver, verifier)
 
 COMMANDS = ("solve", "parse", "verify", "report", "plan-import", "check-examples", "score", "prompts",
             "check-prompts", "ingest", "ingest-inspect", "ingest-refine", "cross-solve", "benchmark",
             "extract-eval", "gold-pdf", "gen-exams", "lessons", "review-pack", "review-apply", "run-stats",
-            "report-pack", "report-index")
+            "report-pack", "report-index", "run-list", "run-compare")
 DEFAULT_HISTORY = os.path.join("plans", "run-history.jsonl")
 LEGACY_HISTORY = (os.path.join("reports", "run-history.jsonl"),  # read-only fallbacks (RAW-00174, phase 58)
                   os.path.join("results", "run-history.jsonl"))
@@ -113,7 +113,7 @@ def solve_main(argv=None):
             if input("re-run? [y/N] ").strip().lower() != "y":
                 return 0
         from exam_engine.ingest import replycache
-        cache = replycache.ReplyCache(os.path.join(DEFAULT_OUT_ROOT, planrun.exam_id_of(a.exam), "cache"))
+        cache = replycache.ReplyCache(runlayout.cache_dir(DEFAULT_OUT_ROOT, planrun.exam_id_of(a.exam)))
     plan_only = not a.dry_run and not a.out  # default layout: report goes to reports/ via report_build
     if plan_only:
         try:
@@ -302,11 +302,11 @@ def _print_image_header(cfg, exam, image):
 
 
 def _build_default_report(a, result):
-    """solve without --out: the report goes through report_build into reports/<exam>/<run>/sheet."""
-    out = os.path.join(DEFAULT_REPORT_ROOT, planrun.safe_id(planrun.exam_id_of(a.exam), "exam id"),
-                       os.path.basename(os.path.abspath(a.out)), "sheet")
-    info = report_build.build(a.out, out, view="sheet", pdf=not a.no_pdf,
-                              engine_git=reporter.git_info(_REPO_ROOT))
+    """solve without --out: the report goes through report_build into a new reports/<exam>/run-<id>/ (+ run.json)."""
+    out = runlayout.new_report_run(DEFAULT_REPORT_ROOT, planrun.exam_id_of(a.exam))
+    git = reporter.git_info(_REPO_ROOT)
+    info = report_build.build(a.out, out, view="sheet", pdf=not a.no_pdf, engine_git=git)
+    runlayout.finish_report_run(out, [a.out], "sheet", git, "solve")
     return info["reports"]
 
 
@@ -384,22 +384,23 @@ def verify_main(argv):
 def _report_plan(argv):
     """report PLAN_RUN [--view sheet|learn] [--no-pdf] [--report-id ID] [--out DIR]"""
     ap = argparse.ArgumentParser(prog="exam report", description="Rebuild a report from a plan run "
-                                 "(no model call). Default out reports/<exam-id>/<plan-run-id>/<report-id>.")
+                                 "(no model call). Default out: a new reports/<exam-id>/run-<id>/ with run.json.")
     ap.add_argument("plan_run")
     ap.add_argument("--view", choices=reporter.VIEWS, default="sheet")
     ap.add_argument("--no-pdf", action="store_true")
     ap.add_argument("--exam-name", help="exam part of the file names (default: slug of the result exam path)")
     ap.add_argument("--run-name", help="run part of the file names, run-<x> (default: from the out dir name)")
-    ap.add_argument("--report-id", "--id", dest="rid", help="default: the view name; same id overwrites")
+    ap.add_argument("--report-id", "--id", dest="rid", help="report run id (default: new UTC id); same id overwrites that run")
     ap.add_argument("--out", help="override the output dir")
     a = ap.parse_args(argv)
     plan = os.path.abspath(a.plan_run.rstrip("/"))
     try:
         meta = planrun.load(plan)["plan"] or {}
-        exam_id = planrun.safe_id(meta.get("exam_id") or os.path.basename(os.path.dirname(plan)), "exam id")
-        run_id = planrun.safe_id(meta.get("plan_run_id") or os.path.basename(plan), "plan run id")
-        rid = planrun.safe_id(a.rid, "report id") if a.rid else a.view
-        out = a.out or os.path.join(DEFAULT_REPORT_ROOT, exam_id, run_id, rid)
+        exam_id = planrun.safe_id(meta.get("exam_id") or runlayout.exam_of_plan_dir(plan), "exam id")
+        planrun.safe_id(meta.get("plan_run_id") or os.path.basename(plan), "plan run id")
+        if a.rid:
+            planrun.safe_id(a.rid, "report id")
+        out = a.out or runlayout.new_report_run(DEFAULT_REPORT_ROOT, exam_id, a.rid)
     except ValueError as exc:
         print("ERROR: %s" % exc, file=sys.stderr)
         return 2
@@ -407,6 +408,11 @@ def _report_plan(argv):
         info = report_build.build(plan, out, view=a.view, pdf=not a.no_pdf,
                                   engine_git=reporter.git_info(_REPO_ROOT), exam_name=a.exam_name,
                                   run_name=report_kinds.short_run(a.run_name) if a.run_name else None)
+        git = reporter.git_info(_REPO_ROOT)
+        if a.out:  # explicit --out: as before plus run.json; no INDEX
+            runlayout.write_report_manifest(out, [plan], a.view, git, "report")
+        else:
+            runlayout.finish_report_run(out, [plan], a.view, git, "report")
     except (OSError, ValueError) as exc:
         print("ERROR: %s" % exc, file=sys.stderr)
         return 2
@@ -421,20 +427,22 @@ def report_pack_main(argv):
     ap = argparse.ArgumentParser(prog="exam report-pack", description="Build one standard-named report folder "
                                  "from several stored plan runs (no model call) and write its INDEX.md.")
     ap.add_argument("plans", nargs="+")
-    ap.add_argument("--out", required=True)
+    ap.add_argument("--out", help="default: a new reports/<exam>/run-<id>/")
     ap.add_argument("--exam", required=True, help="exam part of the names, [a-z0-9-]+")
-    ap.add_argument("--run", required=True, help="run id: f or run-f")
+    ap.add_argument("--run", help="run part of the names: f or run-f (default: from the out dir name)")
     ap.add_argument("--key", help="answer key file: adds score-vs-key and score-summary")
     ap.add_argument("--no-pdf", action="store_true")
     a = ap.parse_args(argv)
     try:
-        info = report_pack.build_pack([os.path.abspath(p.rstrip("/")) for p in a.plans], a.out, a.exam,
-                                      report_kinds.short_run(a.run) if not a.run.startswith("run-") else a.run,
-                                      key=a.key, pdf=not a.no_pdf)
+        out = a.out or runlayout.new_report_run(DEFAULT_REPORT_ROOT, report_kinds.slug(a.exam) or "exam")
+        run = a.run or os.path.basename(os.path.abspath(out))
+        info = report_pack.build_pack([os.path.abspath(p.rstrip("/")) for p in a.plans], out, a.exam,
+                                      report_kinds.short_run(run) if not run.startswith("run-") else run,
+                                      key=a.key, pdf=not a.no_pdf, engine_git=reporter.git_info(_REPO_ROOT))
     except (OSError, ValueError) as exc:
         print("ERROR: %s" % exc, file=sys.stderr)
         return 2
-    print("report-pack %d file(s) + %s -> %s" % (len(info["files"]), report_kinds.INDEX_NAME, a.out))
+    print("report-pack %d file(s) + %s -> %s" % (len(info["files"]), report_kinds.INDEX_NAME, out))
     if info["total"]:
         print("score %d/%d" % (info["correct"], info["total"]))
     return 0
@@ -1284,6 +1292,108 @@ def _drop_idle_adjudication(cfg, exam):
         del cfg["adjudicate"]
 
 
+def _rl_score(report_dirs):
+    """'correct/total' from the newest report run (last in list) that holds a score-summary json, else '-'."""
+    for d in reversed(report_dirs):
+        try:
+            hit = report_kinds.find(d, "score-summary", ext="json")
+            with open(hit[0] if isinstance(hit, (list, tuple)) else hit, encoding="utf-8") as fh:
+                sm = json.load(fh)
+            return "%d/%d" % (sm["total_correct"], sm["total"])
+        except (OSError, ValueError, KeyError, TypeError, IndexError):
+            continue
+    return "-"
+
+
+def _rl_stats(r):
+    """(status, model, calls, cost) of a plan run entry: plan.json first, else result.json run block."""
+    p = r.get("plan") or {}
+    res = {}
+    if not p:
+        try:
+            res = (settings.load_json(os.path.join(r["dir"], "result.json")) or {}).get("run") or {}
+        except (OSError, ValueError):
+            res = {}
+    return (p.get("status") or ("-" if not res else "result"), p.get("model") or res.get("model") or "-",
+            p.get("calls", res.get("calls", "-")), p.get("cost_usd", res.get("cost_usd", "-")))
+
+
+def run_list_main(argv):
+    """run-list EXAM [--plans DIR] [--reports DIR]: plan runs -> report runs, cost, score (both layouts)."""
+    ap = argparse.ArgumentParser(prog="exam run-list", description="List the plan runs and report runs of one exam "
+                                 "(new runs/ and run-<id> layout plus legacy folders). No model call.")
+    ap.add_argument("exam")
+    ap.add_argument("--plans", default=DEFAULT_OUT_ROOT)
+    ap.add_argument("--reports", default=DEFAULT_REPORT_ROOT)
+    try:
+        a = ap.parse_args(argv)
+        plans = runlayout.list_plan_runs(a.plans, a.exam)
+        reps = runlayout.list_report_runs(a.reports, a.exam)
+    except SystemExit as exc:
+        return 2 if exc.code else 0
+    except ValueError as exc:
+        print("ERROR: %s" % exc, file=sys.stderr)
+        return 2
+    if not plans and not reps:
+        print("ERROR: no plan or report folder for exam %s under %s / %s" % (a.exam, a.plans, a.reports),
+              file=sys.stderr)
+        return 2
+    rows = [(r["id"], r) for r in plans]
+    links = {}  # label -> report run entries linking that plan run
+    for rr in reps:
+        man = rr["manifest"] or {}
+        if rr["layout"] == "run":
+            for pr in man.get("plan_runs", []):
+                if not isinstance(pr, dict):
+                    continue
+                label = pr.get("plan_run_id") if pr.get("exam_id") == a.exam else "%s/%s" % (pr.get("exam_id"), pr.get("plan_run_id"))
+                links.setdefault(label, []).append(rr)
+                if pr.get("exam_id") != a.exam and label not in [x[0] for x in rows]:
+                    try:
+                        d = runlayout.plan_run_dir(a.plans, pr["exam_id"], pr["plan_run_id"])
+                    except (KeyError, ValueError):
+                        continue
+                    rows.append((label, {"id": label, "dir": d, "layout": "runs" if os.sep + runlayout.RUNS + os.sep in d else "legacy",
+                                         "plan": settings.load_json(os.path.join(d, "plan.json")) if os.path.isfile(os.path.join(d, "plan.json")) else None}))
+        elif rr["layout"] == "legacy":
+            pid = runlayout.legacy_plan_link(rr["dir"])
+            if pid:
+                links.setdefault(pid, []).append(rr)
+        if rr["warn"]:
+            print("WARN: unreadable %s in %s; shown as incomplete" % (runlayout.RUN_JSON, rr["dir"]), file=sys.stderr)
+    print("# Runs: %s" % a.exam)
+    print()
+    print("| plan run | layout | status | model | calls | cost_usd | report runs | score |")
+    print("| --- | --- | --- | --- | --- | --- | --- | --- |")
+    for label, r in rows:
+        st, model, calls, cost = _rl_stats(r)
+        rl = links.get(label, [])
+        print("| %s | %s | %s | %s | %s | %s | %s | %s |" % (
+            label, r["layout"], st, model, calls, cost,
+            ", ".join(os.path.basename(x["dir"]) for x in rl) or "-", _rl_score([x["dir"] for x in rl])))
+    print()
+    print("## Report runs")
+    print()
+    print("| report run | layout | view | plan runs |")
+    print("| --- | --- | --- | --- |")
+    for rr in reps:
+        man = rr["manifest"] or {}
+        pl = ", ".join("%s/%s" % (p.get("exam_id"), p.get("plan_run_id")) for p in man.get("plan_runs", [])
+                       if isinstance(p, dict))
+        if rr["layout"] == "legacy":
+            pl = runlayout.legacy_plan_link(rr["dir"]) or ""
+        print("| %s | %s | %s | %s |" % (os.path.basename(rr["dir"]), rr["layout"], man.get("view", "-"), pl or "-"))
+    return 0
+
+
+def run_compare_main(argv):
+    """run-compare A B: compare two plan runs (result dir, history run_id or EXAM/PLAN_RUN_ID); run-stats compare."""
+    if len(argv) != 2 or any(x.startswith("-") for x in argv):
+        print("usage: exam.py run-compare A B   (A, B: result dir, history run_id or EXAM/PLAN_RUN_ID)", file=sys.stderr)
+        return 2
+    return run_stats_main(["compare"] + list(argv))
+
+
 def main(argv=None):
     argv = list(sys.argv[1:] if argv is None else argv)
     cmd, rest = (argv[0], argv[1:]) if argv else (None, [])
@@ -1297,7 +1407,8 @@ def main(argv=None):
              "gen-exams": genexam_main, "lessons": lessons_main,
              "review-pack": review_pack_main, "review-apply": review_apply_main,
              "run-stats": run_stats_main, "report-pack": report_pack_main,
-             "report-index": report_index_main}
+             "report-index": report_index_main, "run-list": run_list_main,
+             "run-compare": run_compare_main}
     if cmd not in table:
         print(USAGE, file=sys.stderr)
         return 2
@@ -1313,15 +1424,27 @@ def _rs_lines(a):
     return lines, bad
 
 
+def _rs_plan_ref(ref):
+    """Plan run dir of 'EXAM/ID' (either layout) under DEFAULT_OUT_ROOT, else None."""
+    exam_id, _sep, run_id = ref.partition("/")
+    if not (exam_id and run_id) or "/" in run_id:
+        return None
+    try:
+        d = runlayout.plan_run_dir(DEFAULT_OUT_ROOT, exam_id, run_id)
+    except ValueError:
+        return None
+    return d if os.path.isfile(os.path.join(d, "result.json")) else None
+
+
 def _rs_resolve(ref, hist, legacy=None):
     """(result, log lines, history line or None) for a result dir or a history run_id; ValueError if unknown."""
     lines = _rs_lines(argparse.Namespace(history=hist, legacy=legacy))[0]
     path = ref
     if not os.path.isfile(os.path.join(ref, "result.json")):
         hit = [ln for ln in lines if ln.get("run_id") == ref]
-        if not hit:
-            raise ValueError("%s: not a result dir and not a run_id in %s" % (ref, hist))
-        path = os.path.dirname(hit[-1]["result_path"])
+        path = os.path.dirname(hit[-1]["result_path"]) if hit else _rs_plan_ref(ref)
+        if not path:
+            raise ValueError("%s: not a result dir, not a run_id in %s and not EXAM/PLAN_RUN_ID" % (ref, hist))
     rp = os.path.abspath(os.path.join(path, "result.json"))
     line = ([ln for ln in lines if ln.get("result_path") == rp] or [None])[-1]
     return settings.load_json(rp), metrics.load_log(os.path.join(path, "run.log")), line
@@ -1331,6 +1454,8 @@ def _rs_compute(ref, a):
     result, log, line = _rs_resolve(ref, a.history, a.legacy)
     exam = qa = None
     keymap = scorer.key_letters(a.ans_key) if a.ans_key else None
+    if not os.path.isdir(ref):
+        ref = _rs_plan_ref(ref) or ref
     if a.exam:
         exam, _code = _load_exam(a.exam)
     elif os.path.isfile(os.path.join(ref, "input", "exam.md")):  # plan run: exam copy beside the result

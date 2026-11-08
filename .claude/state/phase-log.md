@@ -2491,3 +2491,9 @@ Action: Design drafted from the scanner repo model; no user decision needed
 Result: docs/design/phase-87-run-based-layout.md
 Decision: DESIGN
 Next: IMPLEMENTING
+
+## IMPLEMENTING - TASK-087 - 2026-11-08T01:41:25Z
+Action: Coder implemented 87.1-87.7
+Result: work/TASK-087/handoff/code.md; mock demo shows new layout
+Decision: IMPLEMENTING
+Next: UNIT_TESTED

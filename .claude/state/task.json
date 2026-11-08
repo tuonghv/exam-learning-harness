@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-087",
-  "state": "DESIGN",
-  "next": "coder implements 87.1-87.7 (runlayout.py and every reader/writer through it); tester updates fixtures and adds tests",
+  "state": "IMPLEMENTING",
+  "next": "tester writes test_runlayout.py and fixes layout-dependent tests; verifier recount",
   "title": "Run-based plans/reports layout with report runs per plan run (REQ-0095), modeled on _code-security-scanner history/compare",
   "active": [
     {
       "task_id": "TASK-087",
-      "state": "DESIGN",
-      "next": "coder implements 87.1-87.7 (runlayout.py and every reader/writer through it); tester updates fixtures and adds tests",
-      "updated_at": "2026-11-08T01:34:43Z"
+      "state": "IMPLEMENTING",
+      "next": "tester writes test_runlayout.py and fixes layout-dependent tests; verifier recount",
+      "updated_at": "2026-11-08T01:41:25Z"
     }
   ],
   "max_active": 1
