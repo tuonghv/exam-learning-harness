@@ -1879,7 +1879,7 @@
     "task_id": "TASK-095",
     "title": "Publish badge from the main report runs' plan links; exam INDEX ignores line-level INDEX.md (REQ-0102)",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-11-08T23:00:00",
     "requirement": "REQ-0102",
     "acceptance_criteria": [
