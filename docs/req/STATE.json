@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0100",
-  "next": "tester adds the vi/en and parser tests; main rebuilds both packs",
-  "updated": "2026-11-08 13:08"
+  "next": "verifier recount of the two rebuilt report runs",
+  "updated": "2026-11-08 13:17"
 }

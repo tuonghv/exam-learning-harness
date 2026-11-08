@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-093",
-  "state": "IMPLEMENTING",
-  "next": "tester adds the vi/en and parser tests; main rebuilds both packs",
+  "state": "UNIT_TESTED",
+  "next": "verifier recount of the two rebuilt report runs",
   "title": "Readable wording instead of raw 'none' in the solution report; rebuild both packs (REQ-0100)",
   "active": [
     {
       "task_id": "TASK-093",
-      "state": "IMPLEMENTING",
-      "next": "tester adds the vi/en and parser tests; main rebuilds both packs",
-      "updated_at": "2026-11-08T06:08:28Z"
+      "state": "UNIT_TESTED",
+      "next": "verifier recount of the two rebuilt report runs",
+      "updated_at": "2026-11-08T06:17:47Z"
     }
   ],
   "max_active": 1
