@@ -509,7 +509,8 @@ class Cli(Fixture):
         self.assertEqual(self.rows(after_old), self.rows(after_line))
         hdr = self.rows(after_line)[0]
         self.assertEqual(hdr[:5], ["plan run", "line", "subject", "layout", "status"])
-        self.assertEqual(hdr[-1], "score")
+        self.assertEqual(hdr[-1], "publish")  # TASK-094: publish is the last plan-table column
+        self.assertIn("score", hdr)
         body = [r for r in self.rows(after_line) if r[0] != "plan run"]
         self.assertEqual(sorted((r[1], r[2]) for r in body), [("fix", "english"), ("fix", "math")])
         # model/calls/cost are unchanged from the pre-migration rows (same run, other path)
