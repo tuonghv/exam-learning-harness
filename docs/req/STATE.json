@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0103",
-  "next": "tester writes test_overlay.py; main runs the gate, builds the real dev run and publishes",
-  "updated": "2026-11-08 15:17"
+  "next": "verifier audit of the code and of the real dev run + the published main run",
+  "updated": "2026-11-08 15:31"
 }

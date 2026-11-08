@@ -2767,3 +2767,9 @@ Action: Coder implemented 96.1-96.4
 Result: scratch demo ok; real trees untouched
 Decision: IMPLEMENTING
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-096 - 2026-11-08T08:31:02Z
+Action: Tester 26 tests, gate run, real dev run built and published into main
+Result: 1920 run, new=[]; dev run run-20261108-082400, main run-20261108-083026
+Decision: UNIT_TESTED
+Next: VERIFIED
