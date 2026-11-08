@@ -2509,3 +2509,9 @@ Action: Verifier pass plus main real-data checks and full suite
 Result: AC1-AC7 PASS, 1752 tests only known failures
 Decision: VERIFIED
 Next: DONE: report
+
+## DONE - TASK-087 - 2026-11-08T02:10:30Z
+Action: Report written
+Result: docs/report/phase-87-run-based-layout.md
+Decision: DONE
+Next: none

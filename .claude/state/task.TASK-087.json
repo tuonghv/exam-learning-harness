@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-087",
   "title": "Run-based plans/reports layout with report runs per plan run (REQ-0095), modeled on _code-security-scanner history/compare",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0095",
   "acceptance_criteria": [
     "AC1 plans/<exam>/runs/<plan-run-id>/",
@@ -50,11 +50,18 @@
       "work/TASK-087/handoff/verify2.md"
     ],
     "command": "python3 -I scripts/exam.py run-list dgnl2026f (vs ls plans/dgnl2026f); report-index on a scratch copy and on all 10 report folders; tools/check_report_pack.py reports/dgnl2026; unit-full",
-    "result": "run-list rows = ls (5 plan runs); legacy INDEX regenerated, no legacy file claims question text, run.json never listed; pack checker 62 checks 0 failed; full suite 1752 run, only the 4 known pre-existing failures; verifier static AC1-AC7 PASS, D2/D3 fixed and tested"
+    "result": "run-list rows = ls (5 plan runs); legacy INDEX regenerated, no legacy file claims question text, run.json never listed; pack checker 62 checks 0 failed; full suite 1752 run, only the 4 known pre-existing failures; verifier static AC1-AC7 PASS, D2/D3 fixed and tested",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-087/evidence/real-check.txt"
+      ],
+      "reason": "run-list recounted against ls of the real legacy plans; indexes and pack checker rerun on real data"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-87-run-based-layout.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -63,7 +70,8 @@
     "designer": "work/TASK-087/handoff/design.md",
     "coder": "work/TASK-087/handoff/code.md",
     "tester": "work/TASK-087/handoff/test.md",
-    "verifier": "work/TASK-087/handoff/verify2.md"
+    "verifier": "work/TASK-087/handoff/verify2.md",
+    "crosscheck": "work/TASK-087/handoff/verify2.md"
   },
   "user_notes": [
     {
@@ -73,7 +81,7 @@
     }
   ],
   "picked_at": "2026-11-08T01:31:01Z",
-  "updated_at": "2026-11-08T02:10:19Z",
+  "updated_at": "2026-11-08T02:10:31Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/runlayout.py",
@@ -92,5 +100,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "write docs/report/phase-87-run-based-layout.md, then DONE"
+  "next": ""
 }

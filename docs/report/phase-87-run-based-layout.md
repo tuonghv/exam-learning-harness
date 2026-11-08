@@ -1,0 +1,9 @@
+# Phase 87 report - run-based plans/reports layout (REQ-0095)
+
+- Result: new solves write `plans/<exam>/runs/<YYYYMMDD-HHMMSS[-N]>/` (UTC id, `-N` on a same-second collision); each report build writes its own `reports/<exam>/run-<id>/` with a `run.json` manifest (plan run link, view, registry version, engine commit, status `complete`, previous report run). One plan run can have many report runs (rebuilt at $0); a rerun never overwrites an older report run. `config`/solve cache stay at `plans/<exam>/cache/`.
+- One resolver module `src/exam_engine/pipeline/runlayout.py` is used by solve, report, report-pack, last_solved, plan-import, run-stats and the pack checker; it reads the new AND the old layouts (`plans/<exam>/<run>/`, `out-*`, `reports/<exam>/<run>/<report-id>/`). Nothing was moved or deleted.
+- History/compare (modeled on `_code-security-scanner`: `runs/<id>`, collision suffix, prev-run link, status in the manifest, recountable history; skipped: `latest` symlink, YAML cards, no code copied): `exam run-list EXAM` (plan runs with layout, status, model, calls, cost, report runs, score) and `exam run-compare A B` (EXAM/ID or paths); exam `INDEX.md` has a runs table plus the file table.
+- Tests: `test_runlayout` 51 (46 + 5 for the D2/D3 fixes); full suite 1752 run, only the 4 known pre-existing failures. Real data check: `run-list dgnl2026f` lists the 5 legacy `out-*` plan runs, same as `ls`.
+- Also fixed on the way: all 10 report-folder INDEX.md files were regenerated; stale ones had claimed "hybrid, question text" for old reports that have none.
+- Open: legacy report folders are not linked to their plan runs (they hold only report.md/answers.md/report.pdf): `run-list` shows `-` for report runs/score of legacy plan runs. Offered rule: report dir `<X>` -> plan run `out-<X>`. No paid call in this task.
+- Evidence: `work/TASK-087/evidence/` (untracked).

@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-087",
-  "state": "VERIFIED",
-  "next": "write docs/report/phase-87-run-based-layout.md, then DONE",
+  "state": "DONE",
+  "next": "",
   "title": "Run-based plans/reports layout with report runs per plan run (REQ-0095), modeled on _code-security-scanner history/compare",
-  "active": [
-    {
-      "task_id": "TASK-087",
-      "state": "VERIFIED",
-      "next": "write docs/report/phase-87-run-based-layout.md, then DONE",
-      "updated_at": "2026-11-08T02:10:19Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
