@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-089",
-  "state": "UNIT_TESTED",
-  "next": "verifier reads the four briefs and the doc paragraph",
+  "state": "VERIFIED",
+  "next": "write docs/report/phase-89-role-briefs-test-modes.md, then DONE",
   "title": "Role briefs use the fast test modes (REQ-0097)",
   "active": [
     {
       "task_id": "TASK-089",
-      "state": "UNIT_TESTED",
-      "next": "verifier reads the four briefs and the doc paragraph",
-      "updated_at": "2026-11-08T04:06:03Z"
+      "state": "VERIFIED",
+      "next": "write docs/report/phase-89-role-briefs-test-modes.md, then DONE",
+      "updated_at": "2026-11-08T04:06:48Z"
     }
   ],
   "max_active": 1

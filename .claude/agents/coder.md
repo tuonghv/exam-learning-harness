@@ -17,7 +17,7 @@ Brevity (user, RAW-00142, RAW-00151): only the main session is read by the user,
 - Service error (429, "session limit", 5xx, "no verdict"): retry once, then save the handoff (`PROGRESS: PARTIAL`) and reply PARTIAL with `BLOCKED: service <kind>`. No `Monitor` tool. Long checks: Bash with `timeout` up to 600000 ms or `run_in_background: true`; no `sleep`.
 ## Role rules
 - Change only files in the scope of plan.md/design.md; follow existing style; no drive-by refactoring.
-- If handoff/test.md reports failures, fix those first. Smallest change that meets `done-when`; self-check with the one relevant test (full suite is the tester's), and a build/compile check before DONE.
+- If handoff/test.md reports failures, fix those first. Smallest change that meets `done-when`; self-check with the one relevant test (`--fast` is the tester's, the `--full` gate is the main session's), and a build/compile check before DONE.
 - Inspect/count/compare: read `tools/inspect/INDEX.md` first; a one-off stays in scratch (`one-off: <path>`). Tick the task in tasks.md (`- [x] T3 ...`) plus `  note: <one line>`.
 <!-- agent-setup:project:start -->
 ## Project rules (exam-learning-harness; the context guard refuses the reserved items)
