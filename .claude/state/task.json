@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-091",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "coder implements 91.1-91.4 (never touching the real reports/); tester tests on tmp trees; main shows the user the dry-run table",
   "title": "Convert old reports into reports/<exam>/<line>/run-<id> with reviewed dry-run, backup, manifest, undo (REQ-0099)",
   "active": [
     {
       "task_id": "TASK-091",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "coder implements 91.1-91.4 (never touching the real reports/); tester tests on tmp trees; main shows the user the dry-run table",
+      "updated_at": "2026-11-08T05:16:11Z"
     }
   ],
   "max_active": 1

@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-091",
   "title": "Convert old reports into reports/<exam>/<line>/run-<id> with reviewed dry-run, backup, manifest, undo (REQ-0099)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0099",
   "acceptance_criteria": [
     "AC1 complete map no UNMAPPED",
@@ -11,9 +11,9 @@
     "AC5 tests and QA recount, no report content changed"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-91-reports-run-layout.md",
+    "summary": "plansmigrate --root reports grouping files of one old folder into reports/<exam>/<line>/run-<newest mtime>; 10 folders -> 11 runs, 0 keep, 0 UNMAPPED; pack -> dgnl2026/f/run-<id> with run.json linking 4 plan runs; crosscheck -> dgnl2026/f superseded via run.json; INDEX.md per run; map written by --write-map and hand-reviewed; tree_stats hashes every report file; readers accept legacy and new; real --apply after the user reviews the dry-run",
     "reuse": [],
     "risks": []
   },
@@ -41,7 +41,9 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-091/handoff/design.md"
+  },
   "user_notes": [
     {
       "raw": "RAW-00279",
@@ -50,8 +52,8 @@
     }
   ],
   "picked_at": "2026-11-08T05:10:36Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-08T05:16:11Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -59,5 +61,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder implements 91.1-91.4 (never touching the real reports/); tester tests on tmp trees; main shows the user the dry-run table"
 }

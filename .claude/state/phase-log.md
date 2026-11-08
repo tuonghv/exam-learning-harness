@@ -2605,3 +2605,9 @@ Action: Report written
 Result: docs/report/phase-90-line-based-plans.md
 Decision: DONE
 Next: none
+
+## DESIGN - TASK-091 - 2026-11-08T05:16:11Z
+Action: Design from the real reports tree; best picks D1/D2
+Result: docs/design/phase-91-reports-run-layout.md
+Decision: DESIGN
+Next: IMPLEMENTING
