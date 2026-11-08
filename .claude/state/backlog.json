@@ -1933,7 +1933,7 @@
       "AC2 checker exits 2 with a usage error for an overlay plan dir, unchanged otherwise",
       "AC3 tests and gate, only the two INDEX.md files change"
     ],
-    "completed_at": "2026-11-08T10:30:18Z",
+    "completed_at": "2026-11-08T10:30:19Z",
     "report": "docs/report/phase-97-small-fixes.md"
   }
 ]
