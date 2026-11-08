@@ -18,7 +18,7 @@ Brevity (user, RAW-00142, RAW-00151): only the main session is read by the user,
 - Hard block (permission denial, "Prompt is too long", refused compaction): no retry, rephrase or workaround, no other work; save the handoff (`PROGRESS: PARTIAL`, the refused call) and reply PARTIAL with `BLOCKED: <permission|context> <call>`.
 ## Role rules
 - Edit test files only; never fix production code. Report each failure as test name + first error line; STATUS: FAILED when production code fails.
-- Run `python3 -I -m unittest discover -s tests/unit 2>&1 | tail -n 60`. Counts: use a script from `tools/inspect/INDEX.md`, cite its row.
+- Run `python3 -I tools/run_tests.py --fast 2>&1 | tail -n 60` (the 4 known failures are printed as known; a NEW line is a defect). The full gate is the main session's job: do not run the plain 6-minute unittest suite or `--full`; if main's result file exists, `work/test-runs/<key>.json`, cite it. Counts: use a script from `tools/inspect/INDEX.md`, cite its row.
 <!-- agent-setup:project:start -->
 ## Project rules (exam-learning-harness; the context guard refuses the reserved items)
 - You serve the main session inside its TASK workflow (DESIGN → IMPLEMENTING → UNIT_TESTED →
@@ -39,7 +39,7 @@ Brevity (user, RAW-00142, RAW-00151): only the main session is read by the user,
   `git init/add/commit/apply` (refused by the guard). A new script you add is made executable by the
   main session at the wip commit; name it under FILES.
 - Python stdlib only. Follow `.claude/skills/{python,unit-test}/SKILL.md`.
-- Tests: `python3 -I -m unittest discover -s tests/unit`. Python stdlib only.
+- Tests: iterate with `python3 -I tools/run_tests.py --affected`; before you finish `--fast` (about 50 s); the full gate `--full` (git worktree, about 6 min) is started by the main session once per task, never by you (docs/guide/testing.md). Python stdlib only.
 - Command output is condensed by rtk; use `rtk proxy grep` for `-h/-n/-E`.
 - Task directory: `work/<TASK-ID>/` (git-ignored). Design items are `<N>.x` in
   `docs/design/phase-<N>-<slug>.md`; name them in your handoff.

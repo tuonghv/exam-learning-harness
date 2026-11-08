@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-089",
   "title": "Role briefs use the fast test modes (REQ-0097)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0097",
   "acceptance_criteria": [
     "AC1 Tests line names --affected/--fast and main-only --full",
@@ -17,8 +17,15 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      ".claude/agents/coder.md",
+      ".claude/agents/designer.md",
+      ".claude/agents/tester.md",
+      ".claude/agents/verifier.md",
+      "docs/guide/workflow-roles.md"
+    ],
+    "summary": "Tests line of coder/designer/tester/verifier briefs names --affected/--fast and main-only --full; tester step uses --fast; workflow-roles section 11 states it with the regeneration caveat"
   },
   "unit_test": {
     "status": "pending",
@@ -43,6 +50,9 @@
   "roles": {
     "designer": {
       "waiver": "wording-only edit of 5 lines, no code; design is 12 lines written by main"
+    },
+    "coder": {
+      "waiver": "wording-only edit of agent brief text and one doc paragraph, done by main; no code"
     }
   },
   "user_notes": [
@@ -53,7 +63,7 @@
     }
   ],
   "picked_at": "2026-11-08T04:04:48Z",
-  "updated_at": "2026-11-08T04:04:49Z",
+  "updated_at": "2026-11-08T04:04:56Z",
   "updated_by": "main",
   "scope": [
     ".claude/agents/coder.md",
@@ -69,5 +79,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "commit the brief edits (IMPLEMENTING) then grep check and --fast (UNIT_TESTED)"
+  "next": "grep check, --fast run, verifier"
 }

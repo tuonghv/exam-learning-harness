@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-089",
-  "state": "DESIGN",
-  "next": "commit the brief edits (IMPLEMENTING) then grep check and --fast (UNIT_TESTED)",
+  "state": "IMPLEMENTING",
+  "next": "grep check, --fast run, verifier",
   "title": "Role briefs use the fast test modes (REQ-0097)",
   "active": [
     {
       "task_id": "TASK-089",
-      "state": "DESIGN",
-      "next": "commit the brief edits (IMPLEMENTING) then grep check and --fast (UNIT_TESTED)",
-      "updated_at": "2026-11-08T04:04:49Z"
+      "state": "IMPLEMENTING",
+      "next": "grep check, --fast run, verifier",
+      "updated_at": "2026-11-08T04:04:56Z"
     }
   ],
   "max_active": 1

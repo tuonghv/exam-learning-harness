@@ -2551,3 +2551,9 @@ Action: Design for the brief wording
 Result: docs/design/phase-89-role-briefs-test-modes.md
 Decision: DESIGN
 Next: IMPLEMENTING
+
+## IMPLEMENTING - TASK-089 - 2026-11-08T04:04:56Z
+Action: Brief wording edited
+Result: 4 briefs + workflow-roles; user OK RAW-00274
+Decision: IMPLEMENTING
+Next: UNIT_TESTED

@@ -129,4 +129,4 @@ The full unit suite takes about 6 minutes, 300 s of it in 6 tests, so roles use 
 | iterating on a change | `--affected` (tests of the changed files) | seconds |
 | before every commit | `--fast` (all except the slow tier in `config/test_tiers.json`) | about 50 s |
 | gate, once per task before VERIFIED | `--full` (git worktree of HEAD, detached; result `work/test-runs/<tree-hash>.json`, reused while the tree is unchanged) | about 6 min, background |
-Known failures are listed in `config/test_tiers.json` and reported as known. The role briefs' own test line (inside the generated `agent-setup:project` block) still names the plain unittest command; changing it needs the user's confirmation (generated from `.claude/agent_setup.json`).
+Known failures are listed in `config/test_tiers.json` and reported as known. The role briefs (coder, designer, tester, verifier) name these modes since the user's OK (RAW-00274): roles run `--affected` and `--fast`; the main session starts `--full`. Their test line sits in the `agent-setup:project` block, which an `agent_setup init` from an external profile would regenerate: re-apply this wording there if that happens.

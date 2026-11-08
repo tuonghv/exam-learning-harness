@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0097",
-  "next": "commit the brief edits (IMPLEMENTING) then grep check and --fast (UNIT_TESTED)",
+  "next": "grep check, --fast run, verifier",
   "updated": "2026-11-08 11:04"
 }
