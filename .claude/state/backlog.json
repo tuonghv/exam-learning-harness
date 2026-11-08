@@ -1901,7 +1901,7 @@
     "task_id": "TASK-096",
     "title": "Overlay the corrected printed 64-67 (t82) into the DHQG 2024 report, labelled, then publish into main (REQ-0103)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-09T09:00:00",
     "requirement": "REQ-0103",
     "acceptance_criteria": [
@@ -1910,6 +1910,15 @@
       "AC3 run.json lists base plan runs and the overlay, checker passes, plans/ unchanged",
       "AC4 dev report run first, then published into main, run-list shows the t82 plan run published",
       "AC5 tests and gate"
+    ],
+    "completed_at": "2026-11-08T08:33:21Z",
+    "report": "docs/report/phase-96-report-answer-overlay.md",
+    "user_notes": [
+      {
+        "raw": "RAW-00289",
+        "note": "user: merge 64-67 into the DHQG 2024 report; labelled overlay, no result edited; dev first then publish into main",
+        "at": "2026-11-08T08:07:27Z"
+      }
     ]
   }
 ]

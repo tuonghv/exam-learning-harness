@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-096",
   "title": "Overlay the corrected printed 64-67 (t82) into the DHQG 2024 report, labelled, then publish into main (REQ-0103)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0103",
   "acceptance_criteria": [
     "AC1 documented overlay mechanism with identity check and refusal on text mismatch",
@@ -51,11 +51,19 @@
       "work/TASK-096/handoff/verify2.md"
     ],
     "command": "report-pack --overlay (dev run run-20261108-082400), exam publish dhqg2024 --from t81 (main run-20261108-083026), pack checkers, byte-block comparison, text identity, sha256 of plans/ and reports/, gate --full",
-    "result": "116 of 120 blocks byte-identical to the previous t81 report, printed 64-67 = D, A, D, B; answered 115 / declined 5 (before 111/9); 0 none words; 4 source lines naming plan run 20261107-014525 of line t82; run.json overlays + base plan runs; stem+options text identity equal for all 4 (own normalisation); checker 60 checks 0 failed on dev and main runs; plans/ 1599 files identical; reports only INDEX.md changed in the publish step, earlier main runs identical; run-list shows the t82 plan run published; gate ran 1920 new=[] known=4; verifier AC1-AC5 PASS"
+    "result": "116 of 120 blocks byte-identical to the previous t81 report, printed 64-67 = D, A, D, B; answered 115 / declined 5 (before 111/9); 0 none words; 4 source lines naming plan run 20261107-014525 of line t82; run.json overlays + base plan runs; stem+options text identity equal for all 4 (own normalisation); checker 60 checks 0 failed on dev and main runs; plans/ 1599 files identical; reports only INDEX.md changed in the publish step, earlier main runs identical; run-list shows the t82 plan run published; gate ran 1920 new=[] known=4; verifier AC1-AC5 PASS",
+    "quality": {
+      "kind": "real-run",
+      "evidence": [
+        "work/TASK-096/evidence/dev-recount.txt",
+        "work/TASK-096/evidence/text-identity.txt"
+      ],
+      "reason": "real overlay build and publication on the DHQG 2024 data at zero cost, 120 blocks compared byte for byte, plans/ and earlier main runs hash-compared, text identity recomputed independently"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-96-report-answer-overlay.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -64,7 +72,8 @@
     "designer": "work/TASK-096/handoff/design.md",
     "coder": "work/TASK-096/handoff/code.md",
     "tester": "work/TASK-096/handoff/test.md",
-    "verifier": "work/TASK-096/handoff/verify2.md"
+    "verifier": "work/TASK-096/handoff/verify2.md",
+    "crosscheck": "work/TASK-096/handoff/verify2.md"
   },
   "user_notes": [
     {
@@ -74,7 +83,7 @@
     }
   ],
   "picked_at": "2026-11-08T08:07:27Z",
-  "updated_at": "2026-11-08T08:33:09Z",
+  "updated_at": "2026-11-08T08:33:22Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/overlay.py",
@@ -94,5 +103,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "write docs/report/phase-96-report-answer-overlay.md, then DONE"
+  "next": ""
 }

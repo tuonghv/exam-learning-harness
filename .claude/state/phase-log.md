@@ -2779,3 +2779,9 @@ Action: Overlay built, dev run verified, published into main
 Result: AC1-AC5 PASS
 Decision: VERIFIED
 Next: DONE: report
+
+## DONE - TASK-096 - 2026-11-08T08:33:21Z
+Action: Report written
+Result: docs/report/phase-96-report-answer-overlay.md
+Decision: DONE
+Next: none

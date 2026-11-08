@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-096",
-  "state": "VERIFIED",
-  "next": "write docs/report/phase-96-report-answer-overlay.md, then DONE",
+  "state": "DONE",
+  "next": "",
   "title": "Overlay the corrected printed 64-67 (t82) into the DHQG 2024 report, labelled, then publish into main (REQ-0103)",
-  "active": [
-    {
-      "task_id": "TASK-096",
-      "state": "VERIFIED",
-      "next": "write docs/report/phase-96-report-answer-overlay.md, then DONE",
-      "updated_at": "2026-11-08T08:33:09Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
