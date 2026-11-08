@@ -1704,5 +1704,30 @@
         "at": "2026-11-08T01:31:01Z"
       }
     ]
+  },
+  {
+    "task_id": "TASK-088",
+    "title": "Fast test mode: tiers, --fast, --affected, --full in a git worktree with cached result (REQ-0096)",
+    "priority": 1,
+    "status": "queued",
+    "created_at": "2026-11-08T12:00:00",
+    "requirement": "REQ-0096",
+    "acceptance_criteria": [
+      "AC1 timing report script and summary",
+      "AC2 config/test_tiers.json, --fast skips slow tier",
+      "AC3 --affected maps changed files to tests, falls back to --fast",
+      "AC4 --full result file with tree hash, reused when unchanged",
+      "AC5 fast+slow = all tests, untagged test runs in fast",
+      "AC6 docs and role briefs",
+      "AC7 known failures reported as known",
+      "AC8 --full runs in a throwaway git worktree in the background"
+    ],
+    "user_notes": [
+      {
+        "raw": "RAW-00273",
+        "note": "run the suite in a git worktree like _code-security-scanner; --fast / skip heavy; best rule: --full once per task before VERIFIED, cached by tree hash",
+        "at": "2026-11-08T02:18:51Z"
+      }
+    ]
   }
 ]
