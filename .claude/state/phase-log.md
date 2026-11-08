@@ -2515,3 +2515,9 @@ Action: Report written
 Result: docs/report/phase-87-run-based-layout.md
 Decision: DONE
 Next: none
+
+## DESIGN - TASK-088 - 2026-11-08T02:21:44Z
+Action: Design drafted with measured timings; best picks D1-D3
+Result: docs/design/phase-88-fast-test-tiers.md
+Decision: DESIGN
+Next: IMPLEMENTING

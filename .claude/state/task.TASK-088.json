@@ -1,22 +1,22 @@
 {
   "task_id": "TASK-088",
   "title": "Fast test mode: tiers, --fast, --affected, --full in a git worktree with cached result (REQ-0096)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0096",
   "acceptance_criteria": [
     "AC1 timing report script and summary",
-    "AC2 config/test_tiers.json, --fast skips slow tier",
+    "AC2 config/test_tiers.json, --fast skips the slow tier",
     "AC3 --affected maps changed files to tests, falls back to --fast",
     "AC4 --full result file with tree hash, reused when unchanged",
-    "AC5 fast+slow = all tests, untagged test runs in fast",
+    "AC5 fast+slow = all tests, untagged runs in fast",
     "AC6 docs and role briefs",
     "AC7 known failures reported as known",
-    "AC8 --full runs in a throwaway git worktree in the background"
+    "AC8 --full in a throwaway git worktree in the background"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-88-fast-test-tiers.md",
+    "summary": "tools/run_tests.py with --fast/--affected/--full/--list; config/test_tiers.json (slow tests by id, known failures, map overrides, default fast); --full in a git worktree of HEAD in mkdtemp, background, result work/test-runs/<tree-hash>.json reused when unchanged; fast+slow == discover check; docs and role briefs say which mode when; hooks/settings enforcement excluded",
     "reuse": [],
     "risks": []
   },
@@ -44,7 +44,9 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-088/handoff/design.md"
+  },
   "user_notes": [
     {
       "raw": "RAW-00273",
@@ -53,8 +55,8 @@
     }
   ],
   "picked_at": "2026-11-08T02:19:04Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-08T02:21:45Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -62,5 +64,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder implements 88.1-88.8 (run_tests.py, test_tiers.json, docs); tester tests the runner"
 }
