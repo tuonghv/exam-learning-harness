@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0098",
-  "next": "verifier audit incl. the real dry-run table; then user reviews and approves the real --apply",
-  "updated": "2026-11-08 11:53"
+  "next": "write docs/report/phase-90-line-based-plans.md, then DONE; reports conversion (Q4 phase 2) becomes its own task",
+  "updated": "2026-11-08 11:59"
 }

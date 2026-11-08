@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-090",
   "title": "Line-based plans layout plans/<exam>/<line>/runs/<id>, solve --line, safe plans migration with dry-run/backup/undo (REQ-0098)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0098",
   "acceptance_criteria": [
     "AC1 --line default main, resolver reads old/REQ-0095/new layouts",
@@ -37,12 +37,21 @@
     "result": "gate: ran 1834, new=[], known=4, gate_ok true, 366.3 s, worktree removed; test_plansmigrate 39, test_runlayout 57; --fast 1814 tests only the 4 known"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "os.rename inside plans/ only, backup outside the root verified before any move, map entries confined to plans/, no shell; undo via MIGRATION.json or the backup; verifier security pass clean"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-090/evidence/apply-real.txt",
+      "work/TASK-090/evidence/verify-real.txt",
+      "work/TASK-090/evidence/apply-summary.txt",
+      "work/TASK-090/evidence/runlist-recount.txt",
+      "work/TASK-090/evidence/gate-full.json",
+      "work/TASK-090/handoff/verify2.md"
+    ],
+    "command": "python3 -I scripts/exam.py plans-migrate --dry-run, --apply --backup-dir work/backups (user: apply), --verify; recounts; gate --full",
+    "result": "real apply: 41 runs, 111 files, 2 caches moved, 41 history lines rewritten; --verify 15 checks 0 failed; files 1597->1599 and bytes +305319 exactly MIGRATION.json + .bak + history growth; plan.json sha256 50/50 equal; backup holds all 874 moved files with equal sizes; 41 run-list rows after equal the status/cost/line of the old plan.json read from the backup (0 mismatches; the first before-capture was garbled and was replaced by this recount); gate ran 1834, new=[], known=4"
   },
   "report": {
     "status": "pending",
@@ -54,7 +63,8 @@
   "roles": {
     "designer": "work/TASK-090/handoff/design.md",
     "coder": "work/TASK-090/handoff/code.md",
-    "tester": "work/TASK-090/handoff/test2.md"
+    "tester": "work/TASK-090/handoff/test2.md",
+    "verifier": "work/TASK-090/handoff/verify2.md"
   },
   "user_notes": [
     {
@@ -64,7 +74,7 @@
     }
   ],
   "picked_at": "2026-11-08T04:13:54Z",
-  "updated_at": "2026-11-08T04:53:06Z",
+  "updated_at": "2026-11-08T04:59:25Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/runlayout.py",
@@ -82,5 +92,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verifier audit incl. the real dry-run table; then user reviews and approves the real --apply"
+  "next": "write docs/report/phase-90-line-based-plans.md, then DONE; reports conversion (Q4 phase 2) becomes its own task"
 }

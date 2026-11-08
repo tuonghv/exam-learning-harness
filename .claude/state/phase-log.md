@@ -2593,3 +2593,9 @@ Action: Tester 39+57 tests, D1/D3 fixed, gate run
 Result: 1834 run, new=[], known=4
 Decision: UNIT_TESTED
 Next: VERIFIED
+
+## VERIFIED - TASK-090 - 2026-11-08T04:59:25Z
+Action: Real apply after the user's OK, recounts and verifier
+Result: AC1-AC6 PASS, 0 mismatches in the 41-row recount
+Decision: VERIFIED
+Next: DONE: report
