@@ -149,6 +149,23 @@ def migrated(root, path):
     return os.path.join(root, *new.split("/")) if new else None
 
 
+def migrated_run_dirs(root, path):
+    """Sorted run folders (rel. to root) that the files of an OLD reports folder `path` were moved to, per the applied
+    root/MIGRATION.json (a stamp dir moved whole counts as its run folder); [] when path was not moved."""
+    man = _manifest(root)
+    rel = _rel_to_root(root, path) if man else None
+    if not rel:
+        return []
+    out = set()
+    for mv in man.get("moves", []):
+        old = mv.get("old", "")
+        if old == rel or old.startswith(rel + "/") or rel.startswith(old + "/"):
+            parts = mv["new"].split("/")
+            i = next((k for k, x in enumerate(parts) if x.startswith(REPORT_PREFIX)), len(parts) - 1)
+            out.add("/".join(parts[:i + 1]))
+    return sorted(out)
+
+
 def folder_alias(root, name):
     """(exam, line) an OLD folder name below root was migrated to (MIGRATION.json folders map), else None."""
     man = _manifest(root)
@@ -386,9 +403,11 @@ def _sha_file(path):
     return h.hexdigest()
 
 
-def write_report_manifest(report_dir, plan_dirs, view, engine_git, cmd, repo_root=None, now=None):
+def write_report_manifest(report_dir, plan_dirs, view, engine_git, cmd, repo_root=None, now=None, extra=None):
     """Write report_dir/run.json (tmp + rename, sorted keys) after a successful build; returns the dict.
-    Plan dirs are only read: the plan -> report link lives here and is derived by list_report_runs."""
+    Plan dirs are only read: the plan -> report link lives here and is derived by list_report_runs.
+    extra: keys merged over the manifest (plans-migrate: exam_id, migrated_from, link, plan_line, status,
+    superseded); its exam_id is the fallback when no plan run names the exam (a line folder's name is not one)."""
     from exam_engine.pipeline import report_kinds as rk
     report_dir = os.path.abspath(report_dir.rstrip("/"))
     repo_root = os.path.abspath(repo_root or os.getcwd())
@@ -413,10 +432,11 @@ def write_report_manifest(report_dir, plan_dirs, view, engine_git, cmd, repo_roo
                    if r["layout"] == "run" and (id_time(r["id"]), _suffix(r["id"])) < (id_time(rid), _suffix(rid))]
         prev = earlier[-1] if earlier else None
     man = {"schema": 1, "report_run_id": rid,
-           "exam_id": plans[0]["exam_id"] if plans else os.path.basename(exam_folder),
+           "exam_id": plans[0]["exam_id"] if plans else (extra or {}).get("exam_id") or os.path.basename(exam_folder),
            "created_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(now)), "cmd": cmd, "view": view,
            "plan_runs": plans, "prev_report_run": prev, "status": "complete",
            "registry_sha256": _sha_file(rk.REGISTRY), "engine_git": engine_git}
+    man.update({k: v for k, v in (extra or {}).items() if k != "exam_id" or not plans})
     path = os.path.join(report_dir, RUN_JSON)
     tmp = path + ".tmp"
     with open(tmp, "w", encoding="utf-8") as fh:

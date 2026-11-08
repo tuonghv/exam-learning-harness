@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-091",
-  "state": "DESIGN",
-  "next": "coder implements 91.1-91.4 (never touching the real reports/); tester tests on tmp trees; main shows the user the dry-run table",
+  "state": "IMPLEMENTING",
+  "next": "tester rewrites ReportsPhase2 and adds the design tests; main shows the user the dry-run table",
   "title": "Convert old reports into reports/<exam>/<line>/run-<id> with reviewed dry-run, backup, manifest, undo (REQ-0099)",
   "active": [
     {
       "task_id": "TASK-091",
-      "state": "DESIGN",
-      "next": "coder implements 91.1-91.4 (never touching the real reports/); tester tests on tmp trees; main shows the user the dry-run table",
-      "updated_at": "2026-11-08T05:16:11Z"
+      "state": "IMPLEMENTING",
+      "next": "tester rewrites ReportsPhase2 and adds the design tests; main shows the user the dry-run table",
+      "updated_at": "2026-11-08T05:26:37Z"
     }
   ],
   "max_active": 1

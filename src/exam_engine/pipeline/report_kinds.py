@@ -93,14 +93,25 @@ def legacy_kind(basename):
     return None
 
 
-def classify(rel, root_name=None):
+def run_superseded(folder):
+    """[{glob, note}] of folder/run.json `superseded` (globs relative to the run folder); [] when absent or unreadable."""
+    try:
+        with open(os.path.join(folder, "run.json"), encoding="utf-8") as fh:
+            sup = json.load(fh).get("superseded") or []
+    except (OSError, ValueError, AttributeError):
+        return []
+    return [s for s in sup if isinstance(s, dict) and isinstance(s.get("glob"), str)]
+
+
+def classify(rel, root_name=None, extra=None):
     """(kind|None, 'standard'|'legacy'|'superseded'|None) of a path relative to an exam folder.
-    Superseded globs match the relative path, also with the folder name in front."""
+    Superseded globs (registry + extra, the run.json list of a moved run) match the relative path,
+    also with the folder name in front."""
     base = os.path.basename(rel)
     p = parse(base)
     kind = p["kind"] if p else legacy_kind(base)
     cands = [rel] + (["%s/%s" % (root_name, rel)] if root_name else [])
-    for sup in load().get("superseded", []):
+    for sup in list(load().get("superseded", [])) + list(extra or []):
         if any(fnmatch.fnmatch(c, sup["glob"]) for c in cands):
             return kind, "superseded"
     if p:
@@ -108,11 +119,11 @@ def classify(rel, root_name=None):
     return (kind, "legacy") if kind else (None, None)
 
 
-def superseded_note(rel, root_name=None):
+def superseded_note(rel, root_name=None, extra=None):
     cands = [rel] + (["%s/%s" % (root_name, rel)] if root_name else [])
-    for sup in load().get("superseded", []):
+    for sup in list(load().get("superseded", [])) + list(extra or []):
         if any(fnmatch.fnmatch(c, sup["glob"]) for c in cands):
-            return sup["note"]
+            return sup.get("note", "")
     return ""
 
 
@@ -193,8 +204,8 @@ def _manifest_lines(folder):
         return []
 
 
-def write_index(folder):
-    """Write folder/INDEX.md listing every file below it (sorted, no clock, no absolute path); returns its path.
+def render_index(folder):
+    """Text of folder/INDEX.md listing every file below it (sorted, no clock, no absolute path).
     A run folder's run.json is not a registered kind: it is skipped and summarised in 3 header lines. A folder
     that holds new report runs (run-<id> with run.json) gets a runs table and lists only files outside them."""
     from exam_engine.pipeline import runlayout
@@ -213,9 +224,10 @@ def write_index(folder):
                 rels.append(rel)
     rels.sort()
     kinds = load()["kinds"]
+    sup_extra = run_superseded(folder)
     rows, per_kind, stat = [], {}, {"standard": 0, "legacy": 0, "superseded": 0, "unregistered": 0}
     for rel in rels:
-        kind, status = classify(rel, root_name)
+        kind, status = classify(rel, root_name, sup_extra)
         cnt, wt = count_of(os.path.join(folder, rel), kind) if kind else (None, None)
         if status is None:
             status = "unregistered"
@@ -223,7 +235,7 @@ def write_index(folder):
         if kind:
             per_kind[kind] = per_kind.get(kind, 0) + 1
         if status == "superseded":
-            desc = superseded_note(rel, root_name)
+            desc = superseded_note(rel, root_name, sup_extra)
         elif status == "legacy" and wt is not None:
             desc = ("old format (before TASK-085): no question text, raw explanation; kept for history" if not wt
                     else "old format (before TASK-085): question text for %d of %d questions; kept for history" % (wt, cnt))
@@ -252,7 +264,13 @@ def write_index(folder):
     md += ["- standard: %d" % stat["standard"], "- legacy: %d" % stat["legacy"],
            "- superseded: %d" % stat["superseded"], "- unregistered: %d" % stat["unregistered"],
            "- total: %d" % len(rels)]
-    path = os.path.join(folder, INDEX_NAME)
+    return "\n".join(md) + "\n"
+
+
+def write_index(folder):
+    """Write folder/INDEX.md (render_index); returns its path."""
+    path = os.path.join(os.path.abspath(folder), INDEX_NAME)
+    text = render_index(folder)
     with open(path, "w", encoding="utf-8") as fh:
-        fh.write("\n".join(md) + "\n")
+        fh.write(text)
     return path

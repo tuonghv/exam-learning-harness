@@ -2611,3 +2611,9 @@ Action: Design from the real reports tree; best picks D1/D2
 Result: docs/design/phase-91-reports-run-layout.md
 Decision: DESIGN
 Next: IMPLEMENTING
+
+## IMPLEMENTING - TASK-091 - 2026-11-08T05:26:37Z
+Action: Coder implemented 91.1-91.4 and proved apply+undo on a scratch copy
+Result: real trees untouched; 11 report runs
+Decision: IMPLEMENTING
+Next: UNIT_TESTED

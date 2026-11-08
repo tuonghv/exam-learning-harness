@@ -472,6 +472,13 @@ def report_pack_main(argv):
 def report_index_main(argv):
     """report-index DIR...: (re)write INDEX.md of each exam report folder."""
     if not argv or any(not os.path.isdir(d) for d in argv):
+        for d in argv:
+            if not os.path.isdir(d):  # an old reports folder that plans-migrate moved: say where its files went
+                new = runlayout.migrated_run_dirs(os.path.dirname(os.path.abspath(d)), d)
+                if new:
+                    print("report-index: %s was moved to %s (run folders below %s)" % (
+                        d, ", ".join(new), os.path.dirname(os.path.abspath(d))), file=sys.stderr)
+                    return 2
         print("usage: exam.py report-index DIR...", file=sys.stderr)
         return 2
     for d in argv:
@@ -1448,6 +1455,10 @@ def run_list_main(argv):
                        if isinstance(p, dict))
         if rr["layout"] == "legacy":
             pl = runlayout.legacy_plan_link(rr["dir"]) or ""
+        elif man.get("link") == "line":  # migrated report run (plans-migrate): the plan line is known, the run is not
+            pl = "line %s (run unknown)" % man.get("plan_line")
+        elif man.get("link") == "unknown":
+            pl = "unknown"
         print("| %s | %s | %s | %s |" % (os.path.basename(rr["dir"]), rr["layout"], man.get("view", "-"), pl or "-"))
     return 0
 

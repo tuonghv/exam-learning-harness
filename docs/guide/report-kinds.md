@@ -26,8 +26,8 @@ File name: `<exam>_<subject>_<kind>_<run>.<ext>`
 
 | Path glob | Note |
 | --- | --- |
-| `dhqg2024/solutions.*` | superseded 2026-11-05 by dhqg2024-t81/ALL-120/report.* (raw-JSON doubt, unaccented steps) |
-| `dgnl2026-crosscheck/*` | superseded by reports/dgnl2026/ (run-f pack, standard names, hybrid solution-report) |
+| `dhqg2024/solutions*` | superseded 2026-11-05 by the dhqg2024 line t81 run, ALL-120/report.* (raw-JSON doubt, unaccented steps) |
+| `dgnl2026-crosscheck/*` | superseded by the dgnl2026 line f pack run (standard names, hybrid solution-report) |
 
 ## Run layout (TASK-087, REQ-0095; line layout TASK-090, REQ-0098)
 
@@ -35,6 +35,7 @@ File name: `<exam>_<subject>_<kind>_<run>.<ext>`
 - Report runs: `reports/<exam>/<line>/run-<YYYYMMDD-HHMMSS>[-N]/` (mirrors the plan line; a plan run without a line keeps `reports/<exam>/run-<id>/`) with `INDEX.md` and `run.json` (not a registered kind; `write_index`, `report-pack` and `tools/check_report_pack.py` skip it). Every report build makes a new report run; the same `--report-id` overwrites that run. Many report runs may point to one plan run.
 - `run.json`: `{schema, report_run_id, exam_id, created_utc, cmd, view, plan_runs:[{exam_id, plan_run_id, dir, result_sha256, line?}], prev_report_run, registry_sha256, engine_git}`. Plan dirs are never written; the plan -> report link lives here.
 - Old layouts (`plans/<exam>/<run>/`, `reports/<exam>/<run>/<report-id>/`, `out-X`, old ids `YYYYMMDDTHHMMSSZ`) stay readable (`layout legacy`). `exam plans-migrate` (reviewed map `config/plans_migration.json`, backup, `plans/MIGRATION.json`, `--undo`) moves the old plan folders into `<exam>/<line>/`; the resolver maps every old path through the manifest and migrated `plan.json` files stay byte-identical (old `plan_run_id` = alias). No `latest` symlink: the newest run is computed.
+- Migrated reports (TASK-091, REQ-0099): `exam plans-migrate --root reports` moves each old folder (`reports/dgnl2026f/`, `reports/dgnl2026/` pack, ...) to `reports/<exam>/<line>/run-<newest file mtime>/` (a `YYYYMMDDTHHMMSSZ` stamp dir is one run each; nothing stays directly in an exam folder). `run.json` adds `migrated_from`, `link` (`result_sha256` = plan runs found by result-data sha256, `name` = plan run of the same stamp, `line` = plan line known, run unknown, `unknown`), `plan_line`, `status` (`complete`|`superseded`) and `superseded` [{glob, note}] (globs relative to the run folder, added to the registry globs by `write_index`; moved from the registry paths `<old folder>/<glob>`). `run-list` shows `line <L> (run unknown)` / `unknown` for such runs.
 - `reports/<exam>/INDEX.md` holds a report-runs table (run, layout, plan runs, view, cmd, created) plus the file table of files outside the run folders.
 
 ## Commands

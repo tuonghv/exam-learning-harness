@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-091",
   "title": "Convert old reports into reports/<exam>/<line>/run-<id> with reviewed dry-run, backup, manifest, undo (REQ-0099)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0099",
   "acceptance_criteria": [
     "AC1 complete map no UNMAPPED",
@@ -18,8 +18,18 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/plansmigrate.py",
+      "src/exam_engine/pipeline/report_kinds.py",
+      "src/exam_engine/pipeline/runlayout.py",
+      "src/exam_engine/cli.py",
+      "config/report_kinds.json",
+      "config/plans_migration.json",
+      "docs/guide/report-kinds.md",
+      "docs/guide/toolkit-reference.md"
+    ],
+    "summary": "plansmigrate --root reports groups each old report folder into reports/<exam>/<line>/run-<newest mtime> with run.json (plan runs linked by result_sha256 for the pack, link unknown otherwise), superseded status in run.json, INDEX.md per run; reports map written (10 folders -> 11 report runs, 84 moves, 0 keep, 0 UNMAPPED); scratch apply+verify+undo equal for every file; check_report_pack 53 checks 0 failed on the moved copy; real reports/ and plans/ untouched"
   },
   "unit_test": {
     "status": "pending",
@@ -42,7 +52,8 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-091/handoff/design.md"
+    "designer": "work/TASK-091/handoff/design.md",
+    "coder": "work/TASK-091/handoff/code.md"
   },
   "user_notes": [
     {
@@ -52,14 +63,24 @@
     }
   ],
   "picked_at": "2026-11-08T05:10:36Z",
-  "updated_at": "2026-11-08T05:16:11Z",
+  "updated_at": "2026-11-08T05:26:37Z",
   "updated_by": "main",
-  "scope": [],
+  "scope": [
+    "src/exam_engine/pipeline/plansmigrate.py",
+    "src/exam_engine/pipeline/report_kinds.py",
+    "src/exam_engine/pipeline/runlayout.py",
+    "src/exam_engine/cli.py",
+    "config/report_kinds.json",
+    "config/plans_migration.json",
+    "docs/guide/report-kinds.md",
+    "docs/guide/toolkit-reference.md",
+    "tests/unit/*.py"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
     "done": [],
     "notes": ""
   },
-  "next": "coder implements 91.1-91.4 (never touching the real reports/); tester tests on tmp trees; main shows the user the dry-run table"
+  "next": "tester rewrites ReportsPhase2 and adds the design tests; main shows the user the dry-run table"
 }

@@ -31,7 +31,7 @@
       "legacy": ["run.log"]}
   },
   "superseded": [
-    {"glob": "dhqg2024/solutions.*", "note": "superseded 2026-11-05 by dhqg2024-t81/ALL-120/report.* (raw-JSON doubt, unaccented steps)"},
-    {"glob": "dgnl2026-crosscheck/*", "note": "superseded by reports/dgnl2026/ (run-f pack, standard names, hybrid solution-report)"}
+    {"glob": "dhqg2024/solutions*", "note": "superseded 2026-11-05 by the dhqg2024 line t81 run, ALL-120/report.* (raw-JSON doubt, unaccented steps)"},
+    {"glob": "dgnl2026-crosscheck/*", "note": "superseded by the dgnl2026 line f pack run (standard names, hybrid solution-report)"}
   ]
 }
