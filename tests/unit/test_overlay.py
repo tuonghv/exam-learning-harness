@@ -278,6 +278,13 @@ class T1Applied(Base):
         self.assertEqual(merged["questions"][1]["id"], "2")
         self.assertEqual(r["questions"][1]["answer"], None)  # input untouched (deep copy)
 
+    def test_104_1_checker_refuses_overlay_dir_as_plan_dir(self):
+        cmd = [sys.executable, "-I", CHECK, self.o2] + self.base + [self.ov]
+        r = subprocess.run(cmd, capture_output=True, text=True, cwd=self.tmp)
+        self.assertEqual(r.returncode, 2, r.stdout + r.stderr)
+        self.assertIn("overlay plan dir", r.stderr)
+        self.assertNotIn("FAIL", r.stdout)
+
     def test_96_3_checker_passes_and_fails_when_tampered(self):
         cmd = [sys.executable, "-I", CHECK, self.o2] + self.base
         r = subprocess.run(cmd, capture_output=True, text=True, cwd=self.tmp)

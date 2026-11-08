@@ -671,5 +671,23 @@ class LegacyCounts(unittest.TestCase):
         self.assertIn("120 (with_text 0/120)", row)
 
 
+    def test_104_2_run_json_superseded_applies_in_exam_index(self):
+        t = os.path.join(self.d, "ex104")
+        run = os.path.join(t, "main", "run-20261105-110545")
+        os.makedirs(run)
+        for n in ("solutions.md", "stray.txt"):
+            with open(os.path.join(run, n), "w") as fh:
+                fh.write("x\n")
+        with open(os.path.join(run, "run.json"), "w") as fh:
+            json.dump({"plan_runs": [], "superseded": [{"glob": "solutions*", "note": "replaced by X"}]}, fh)
+        with open(rk.write_index(t), encoding="utf-8") as fh:
+            md = fh.read()
+        rows = {ln.split("|")[1].strip(): [c.strip() for c in ln.split("|")[2:6]] for ln in md.splitlines() if ln.startswith("| ") and "---" not in ln}
+        self.assertEqual(rows["main/run-20261105-110545/solutions.md"][1], "superseded")
+        self.assertIn("replaced by X", rows["main/run-20261105-110545/solutions.md"][3])
+        self.assertEqual(rows["main/run-20261105-110545/stray.txt"][1], "unregistered")
+        self.assertIn("- superseded: 1", md)
+
+
 if __name__ == "__main__":
     unittest.main()
