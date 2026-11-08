@@ -2797,3 +2797,9 @@ Action: Coded both fixes
 Result: --affected 341 tests OK
 Decision: IMPLEMENTING
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-097 - 2026-11-08T10:30:03Z
+Action: Tests and full gate
+Result: gate_ok, new=[]
+Decision: UNIT_TESTED
+Next: VERIFIED

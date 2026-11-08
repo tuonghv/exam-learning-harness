@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0104",
-  "next": "tests (test_overlay, test_report_kinds), gate --full on the committed tree, regenerate two INDEX files, recount",
-  "updated": "2026-11-08 17:23"
+  "next": "recount of the INDEX files and checker, then VERIFIED",
+  "updated": "2026-11-08 17:30"
 }
