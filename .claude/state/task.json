@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-094",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "coder implements 94.1-94.5 and 94.8; tester with --affected/--fast; main runs the gate and the first publication",
   "title": "main is the published line: write guard (--publish), exam publish, run-list published/dev, docs (REQ-0101)",
   "active": [
     {
       "task_id": "TASK-094",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "coder implements 94.1-94.5 and 94.8; tester with --affected/--fast; main runs the gate and the first publication",
+      "updated_at": "2026-11-08T07:04:55Z"
     }
   ],
   "max_active": 1

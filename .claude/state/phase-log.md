@@ -2695,3 +2695,9 @@ Action: Report written
 Result: docs/report/phase-93-readable-no-answer-wording.md
 Decision: DONE
 Next: none
+
+## DESIGN - TASK-094 - 2026-11-08T07:04:55Z
+Action: Design drafted; best picks D1-D3
+Result: docs/design/phase-94-main-published-line.md
+Decision: DESIGN
+Next: IMPLEMENTING
