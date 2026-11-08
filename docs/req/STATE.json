@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0101",
-  "next": "user answers Q1-Q3, then DESIGN",
-  "updated": "2026-11-08 13:20"
+  "next": "RESUME: (1) read REQ-0101 Q1-Q3 (user answers pending; recommended 'best' for all: refuse writes to main without --publish; exam publish EXAM --from LINE builds a new main report run at $0 + solve --line main --publish only when the user asks; publish DGNL 2026 line f and DHQG 2024 line t81 into main now, keep old runs); (2) after the answers: new TASK under REQ-0101 (backlog add + req.py task + backlog.sh pick), designer reads runlayout.py/cli.py/plansmigrate.py/planrun.py, coder guard + publish command, tester with tools/run_tests.py --fast/--affected, main runs tools/run_tests.py --full once, verifier, docs/report; (3) rules for me: tests always --line <dev>, main only when asked; full suite only via --full (worktree), roles use --affected/--fast",
+  "updated": "2026-11-08 13:21"
 }
