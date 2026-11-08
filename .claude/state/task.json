@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-096",
-  "state": "DONE",
-  "next": "",
-  "title": "Overlay the corrected printed 64-67 (t82) into the DHQG 2024 report, labelled, then publish into main (REQ-0103)",
-  "active": [],
+  "task_id": "TASK-097",
+  "state": "TODO",
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "title": "Small fixes: exam INDEX shows run-superseded files as superseded; checker refuses an overlay plan dir clearly (REQ-0104)",
+  "active": [
+    {
+      "task_id": "TASK-097",
+      "state": "TODO",
+      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+      "updated_at": ""
+    }
+  ],
   "max_active": 1
 }

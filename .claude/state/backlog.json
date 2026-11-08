@@ -1925,7 +1925,7 @@
     "task_id": "TASK-097",
     "title": "Small fixes: exam INDEX shows run-superseded files as superseded; checker refuses an overlay plan dir clearly (REQ-0104)",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-11-09T10:00:00",
     "requirement": "REQ-0104",
     "acceptance_criteria": [
