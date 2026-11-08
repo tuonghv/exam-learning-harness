@@ -2635,3 +2635,9 @@ Action: Report written
 Result: docs/report/phase-91-reports-run-layout.md
 Decision: DONE
 Next: none
+
+## DESIGN - TASK-092 - 2026-11-08T05:56:01Z
+Action: Design for the DHQG 2024 pack
+Result: docs/design/phase-92-dhqg2024-pack.md
+Decision: DESIGN
+Next: IMPLEMENTING
