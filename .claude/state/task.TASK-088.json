@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-088",
   "title": "Fast test mode: tiers, --fast, --affected, --full in a git worktree with cached result (REQ-0096)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0096",
   "acceptance_criteria": [
     "AC1 timing report script and summary",
@@ -21,8 +21,14 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "tools/run_tests.py",
+      "config/test_tiers.json",
+      "docs/guide/testing.md",
+      "docs/guide/toolkit-reference.md"
+    ],
+    "summary": "tools/run_tests.py (--fast/--affected/--full/--list/--time), config/test_tiers.json (20 slow ids, 4 known failures), --full in a git worktree of HEAD (mkdtemp, background, result cached by tree hash); measured: all 1752 = fast 1732 + slow 20; --fast 50.5 s vs 370 s full; --full 364 s with new=[] known=4 skipped=40; second --full REUSED"
   },
   "unit_test": {
     "status": "pending",
@@ -45,7 +51,8 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-088/handoff/design.md"
+    "designer": "work/TASK-088/handoff/design.md",
+    "coder": "work/TASK-088/handoff/code.md"
   },
   "user_notes": [
     {
@@ -55,14 +62,20 @@
     }
   ],
   "picked_at": "2026-11-08T02:19:04Z",
-  "updated_at": "2026-11-08T02:21:45Z",
+  "updated_at": "2026-11-08T02:38:56Z",
   "updated_by": "main",
-  "scope": [],
+  "scope": [
+    "tools/run_tests.py",
+    "config/test_tiers.json",
+    "docs/guide/testing.md",
+    "docs/guide/toolkit-reference.md",
+    "tests/unit/*.py"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
     "done": [],
     "notes": ""
   },
-  "next": "coder implements 88.1-88.8 (run_tests.py, test_tiers.json, docs); tester tests the runner"
+  "next": "tester writes tests/unit/test_run_tests.py; main updates role briefs/docs pointers (88.7)"
 }

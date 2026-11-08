@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-088",
-  "state": "DESIGN",
-  "next": "coder implements 88.1-88.8 (run_tests.py, test_tiers.json, docs); tester tests the runner",
+  "state": "IMPLEMENTING",
+  "next": "tester writes tests/unit/test_run_tests.py; main updates role briefs/docs pointers (88.7)",
   "title": "Fast test mode: tiers, --fast, --affected, --full in a git worktree with cached result (REQ-0096)",
   "active": [
     {
       "task_id": "TASK-088",
-      "state": "DESIGN",
-      "next": "coder implements 88.1-88.8 (run_tests.py, test_tiers.json, docs); tester tests the runner",
-      "updated_at": "2026-11-08T02:21:45Z"
+      "state": "IMPLEMENTING",
+      "next": "tester writes tests/unit/test_run_tests.py; main updates role briefs/docs pointers (88.7)",
+      "updated_at": "2026-11-08T02:38:56Z"
     }
   ],
   "max_active": 1

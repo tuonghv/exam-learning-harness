@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0096",
-  "next": "coder implements 88.1-88.8 (run_tests.py, test_tiers.json, docs); tester tests the runner",
-  "updated": "2026-11-08 09:21"
+  "next": "tester writes tests/unit/test_run_tests.py; main updates role briefs/docs pointers (88.7)",
+  "updated": "2026-11-08 09:38"
 }

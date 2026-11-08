@@ -1,0 +1,20 @@
+{
+ "threshold_s": 2.0,
+ "note": "measured 2026-11-08, 370 s total (tools/run_tests.py --time); slow = ~300 s in 3 files; see docs/guide/testing.md",
+ "slow": [
+  "test_window_golden.TestIngestGolden.test_existing_pdfs_unchanged_but_cut_warnings",
+  "test_ocr_respace.TestOcrFamilies.test_glued_tokens_per_page",
+  "test_ocr_respace.TestOcrFamilies.test_respacing_beats_bridge_text_with_vie",
+  "test_completeness_measure_pdf.Families",
+  "test_assembly_qa.Golden"
+ ],
+ "known_failures": [
+  "test_multipage_adversarial.TestRealDocxTextBox.test_d1_text_box_text_is_read_once_inline",
+  "test_check_examples.Check.test_12b_real_repo_passes",
+  "test_req0012_acs.CwdAndReadme.test_cwd_independence_of_subcommands",
+  "test_scripts_exam.Exam.test_check_examples_ok"
+ ],
+ "affected_map": {},
+ "affected_ignore": ["docs/*", "*.md", ".claude/state/*", "input/*", "work/*", "plans/*", "reports/*"],
+ "cache_ignore": [".claude/state/", "docs/req/", "docs/design/", "docs/report/"]
+}
