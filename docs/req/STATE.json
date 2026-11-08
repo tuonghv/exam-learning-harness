@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0102",
-  "next": "coder changes cli.run_list_main and report_kinds.render_index; tester; gate",
-  "updated": "2026-11-08 14:36"
+  "next": "tester adds the badge and index tests; main runs the gate and report-index on the exam folders",
+  "updated": "2026-11-08 14:37"
 }

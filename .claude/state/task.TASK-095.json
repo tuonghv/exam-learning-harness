@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-095",
   "title": "Publish badge from the main report runs' plan links; exam INDEX ignores line-level INDEX.md (REQ-0102)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0102",
   "acceptance_criteria": [
     "AC1 run-list publish badge from main report links",
@@ -16,8 +16,13 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/cli.py",
+      "src/exam_engine/pipeline/report_kinds.py",
+      "docs/guide/workflow-roles.md"
+    ],
+    "summary": "run-list publish badge = plan runs linked by a complete main report run's plan_runs (existing linked() with aliases), else dev; exam-level INDEX skips generated INDEX.md and run.json (unregistered rows dgnl2026 18->3, dhqg2024 19->4 on scratch copies); real run-list matches the design; --affected 1093 OK"
   },
   "unit_test": {
     "status": "pending",
@@ -40,7 +45,8 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-095/handoff/design.md"
+    "designer": "work/TASK-095/handoff/design.md",
+    "coder": "work/TASK-095/handoff/code.md"
   },
   "user_notes": [
     {
@@ -50,14 +56,20 @@
     }
   ],
   "picked_at": "2026-11-08T07:33:04Z",
-  "updated_at": "2026-11-08T07:36:10Z",
+  "updated_at": "2026-11-08T07:37:58Z",
   "updated_by": "main",
-  "scope": [],
+  "scope": [
+    "src/exam_engine/cli.py",
+    "src/exam_engine/pipeline/report_kinds.py",
+    "docs/guide/workflow-roles.md",
+    "docs/design/phase-95-publish-badge-and-index.md",
+    "tests/unit/*.py"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
     "done": [],
     "notes": ""
   },
-  "next": "coder changes cli.run_list_main and report_kinds.render_index; tester; gate"
+  "next": "tester adds the badge and index tests; main runs the gate and report-index on the exam folders"
 }

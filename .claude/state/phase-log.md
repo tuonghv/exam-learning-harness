@@ -2731,3 +2731,9 @@ Action: Design for the badge and index scan
 Result: docs/design/phase-95-publish-badge-and-index.md
 Decision: DESIGN
 Next: IMPLEMENTING
+
+## IMPLEMENTING - TASK-095 - 2026-11-08T07:37:58Z
+Action: Coder implemented 95.1 and 95.2
+Result: real run-list matches the design
+Decision: IMPLEMENTING
+Next: UNIT_TESTED

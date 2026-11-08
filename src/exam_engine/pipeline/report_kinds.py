@@ -204,6 +204,27 @@ def _manifest_lines(folder):
         return []
 
 
+def _generated_index(path):
+    """True for an INDEX.md that render_index wrote (header line), not a hand-written one."""
+    if os.path.basename(path) != INDEX_NAME:
+        return False
+    try:
+        with open(path, encoding="utf-8") as f:
+            return f.readline().startswith("# Reports index: ")
+    except (OSError, UnicodeDecodeError):
+        return False
+
+
+def _generated_run_json(path):
+    """True for a report run's manifest (a JSON object with a plan_runs list), written by the engine."""
+    try:
+        with open(path, encoding="utf-8") as f:
+            d = json.load(f)
+    except (OSError, ValueError):
+        return False
+    return isinstance(d, dict) and isinstance(d.get("plan_runs"), list)
+
+
 def render_index(folder):
     """Text of folder/INDEX.md listing every file below it (sorted, no clock, no absolute path).
     A run folder's run.json is not a registered kind: it is skipped and summarised in 3 header lines. A folder
@@ -220,8 +241,11 @@ def render_index(folder):
             dns[:] = [d for d in dns if d not in skip]
         for fn in fns:
             rel = os.path.relpath(os.path.join(dp, fn), folder).replace(os.sep, "/")
-            if rel not in (INDEX_NAME, runlayout.RUN_JSON):
-                rels.append(rel)
+            if rel in (INDEX_NAME, runlayout.RUN_JSON) or _generated_index(os.path.join(dp, fn)):
+                continue
+            if fn == runlayout.RUN_JSON and _generated_run_json(os.path.join(dp, fn)):
+                continue
+            rels.append(rel)
     rels.sort()
     kinds = load()["kinds"]
     sup_extra = run_superseded(folder)

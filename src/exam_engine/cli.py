@@ -1450,6 +1450,16 @@ def _rl_publish(line):
     return runlayout.PUBLISHED if runlayout.is_published_line(line) else runlayout.DEV
 
 
+def _rl_plan_keys(man, exam):
+    """[(line, key)] of a report run's plan_runs; key = plan run id, or `exam/id` for another exam's plan run."""
+    out = []
+    for pr in man.get("plan_runs", []):
+        if isinstance(pr, dict):
+            key = pr.get("plan_run_id") if pr.get("exam_id") == exam else "%s/%s" % (pr.get("exam_id"), pr.get("plan_run_id"))
+            out.append((pr.get("line"), key))
+    return out
+
+
 def run_list_main(argv):
     """run-list EXAM [--line L] [--plans DIR] [--reports DIR]: plan runs -> report runs, cost, score (all layouts)."""
     ap = argparse.ArgumentParser(prog="exam run-list", description="List the plan runs and report runs of one exam "
@@ -1479,6 +1489,9 @@ def run_list_main(argv):
             if ex == exam and old != exam and (not line or ln == line):
                 extra.extend(dict(r, line=ln) for r in runlayout.scan_report_runs(os.path.join(a.reports, old), False))
         reps = reps + extra
+        pubs = [r for r in runlayout.list_report_runs(a.reports, exam)  # publications: whole exam, any --line
+                if r["line"] in ("-", runlayout.LINE_DEFAULT) and r["layout"] == "run"
+                and (r["manifest"] or {}).get("status") == "complete"]
     except SystemExit as exc:
         return 2 if exc.code else 0
     except ValueError as exc:
@@ -1490,28 +1503,29 @@ def run_list_main(argv):
         return 2
     rows = [(_rl_label(r), r) for r in plans]
     links = {}  # (line or None, plan run id or alias) -> report run entries linking that plan run
+    pub_links = {}  # same, only from complete main report runs: what `publish` is computed from
+    for rr in pubs:
+        for k in _rl_plan_keys(rr["manifest"] or {}, exam):
+            pub_links.setdefault(k, []).append(rr)
     for rr in reps:
         man = rr["manifest"] or {}
         if rr["layout"] == "run":
+            for k in _rl_plan_keys(man, exam):
+                links.setdefault(k, []).append(rr)
             for pr in man.get("plan_runs", []):
-                if not isinstance(pr, dict):
-                    continue
-                if pr.get("exam_id") == exam:
-                    links.setdefault((pr.get("line"), pr.get("plan_run_id")), []).append(rr)
-                    continue
-                label = "%s/%s" % (pr.get("exam_id"), pr.get("plan_run_id"))
-                links.setdefault((pr.get("line"), label), []).append(rr)
-                if label not in [x[0] for x in rows]:
-                    try:
-                        d = runlayout.plan_ref(pr, a.plans)
-                    except (KeyError, ValueError):
-                        continue
-                    if not d:
-                        continue
-                    rows.append((label, {"id": label, "dir": d, "line": pr.get("line") or "-", "subject": None, "alias": None,
-                                         "layout": "line" if pr.get("line") else
-                                         "runs" if os.sep + runlayout.RUNS + os.sep in d else "legacy",
-                                         "plan": settings.load_json(os.path.join(d, "plan.json")) if os.path.isfile(os.path.join(d, "plan.json")) else None}))
+                if isinstance(pr, dict) and pr.get("exam_id") != exam:
+                    label = "%s/%s" % (pr.get("exam_id"), pr.get("plan_run_id"))
+                    if label not in [x[0] for x in rows]:
+                        try:
+                            d = runlayout.plan_ref(pr, a.plans)
+                        except (KeyError, ValueError):
+                            continue
+                        if not d:
+                            continue
+                        rows.append((label, {"id": label, "dir": d, "line": pr.get("line") or "-", "subject": None, "alias": None,
+                                             "layout": "line" if pr.get("line") else
+                                             "runs" if os.sep + runlayout.RUNS + os.sep in d else "legacy",
+                                             "plan": settings.load_json(os.path.join(d, "plan.json")) if os.path.isfile(os.path.join(d, "plan.json")) else None}))
         elif rr["layout"] == "legacy":
             pid = runlayout.legacy_plan_link(rr["dir"])
             if pid:  # a legacy report links only to the main line (or to the line its old folder moved to)
@@ -1520,7 +1534,7 @@ def run_list_main(argv):
             print("WARN: unreadable %s in %s; shown as incomplete" % (runlayout.RUN_JSON, rr["dir"]), file=sys.stderr)
     rows.sort(key=lambda x: _rl_line_order(x[1].get("line", "-")))  # stable: keeps the time order inside a line
 
-    def linked(label, r):
+    def linked(label, r, links=links):
         got = []
         for (ln, pid), lst in links.items():
             if pid in (label, r["id"], r.get("alias")) and (ln is None or r.get("line", "-") in ("-", ln)):
@@ -1537,7 +1551,7 @@ def run_list_main(argv):
         print("| %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s |" % (
             label, r.get("line", "-"), r.get("subject") or "-", r["layout"], st, model, calls, cost,
             ", ".join(os.path.basename(x["dir"]) for x in rl) or "-", _rl_score([x["dir"] for x in rl]),
-            _rl_publish(r.get("line", "-"))))
+            runlayout.PUBLISHED if linked(label, r, pub_links) else runlayout.DEV))
     print()
     print("## Report runs")
     print()

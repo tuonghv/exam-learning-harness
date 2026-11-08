@@ -138,6 +138,6 @@ Known failures are listed in `config/test_tiers.json` and reported as known. The
 | test or experiment | `solve ... --line v3` (any line except main) | free to repeat; never changes the published line |
 | publish an accepted line, $0 | `exam publish EXAM --from LINE` | builds a NEW report run in `main` from the line's latest pack plan runs; `run.json` has `published_from`; earlier main runs are kept |
 | real run in main, only when the user asks | `solve --line main --publish` | a new plan run id; an unchanged re-run costs $0 through the per-exam solve cache |
-| read / compare | `run-list EXAM`, `run-compare` | column `publish`: `published` for main, `dev` for the other lines |
+| read / compare | `run-list EXAM`, `run-compare` | column `publish`: `published` for a plan run that a complete report run in `main` links through its `run.json` `plan_runs`, `dev` for every other plan run (a plan run in the line `main` that no published report links is `dev`) |
 Guard: a write into a line named `main` under the repo's own `plans/` or `reports/` is refused (exit 2) unless `--publish` is given; the message says to use `--line <name>` for tests. Read-only commands and `plans-migrate` are not guarded; unit tests use tmp roots.
 Agent rules: always pass `--line <dev>` for tests and experiments; run in `main` only when the user asks; publishing is a report run built from a dev line, not a copy.
