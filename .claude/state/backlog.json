@@ -1770,7 +1770,7 @@
       "AC5 shared per-exam cache, run-list grouped by line with subject column",
       "AC6 tests, real dry-run reviewed by the user before --apply, QA recount before/after"
     ],
-    "completed_at": "2026-11-08T04:59:39Z",
+    "completed_at": "2026-11-08T04:59:40Z",
     "report": "docs/report/phase-90-line-based-plans.md",
     "user_notes": [
       {
