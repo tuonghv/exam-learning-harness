@@ -74,15 +74,34 @@ def letter_of(ans, options):
     return verifier.option_for_value(s, options) if s and options else None
 
 
-def load_key(path):
-    """{printed number str: letter} from any answer list that pairs a number with a letter A-D."""
+def parse_key(path):
+    """(key {printed number str: letter A-D}, issues [{printed, kind, token}]) from any answer list pairing a
+    number with a letter. Issues: bad_letter (single letter outside A-D, not keyed), duplicate (a different
+    letter for a keyed number, first kept), missing (a number below the highest with neither)."""
     with open(path, encoding="utf-8") as fh:
         toks = re.findall(r"[^\W\d_]+|\d+", fh.read())
-    out = {}
+    out, issues, seen = {}, [], set()
     for a, b in zip(toks, toks[1:]):
-        if a.isdigit() and re.fullmatch(r"[A-Da-d]", b):
-            out.setdefault(str(int(a)), b.upper())
-    return out
+        if not a.isdigit():
+            continue
+        n = str(int(a))
+        if re.fullmatch(r"[A-Da-d]", b):
+            if n in out and out[n] != b.upper():
+                issues.append({"printed": n, "kind": "duplicate", "token": b.upper()})
+            out.setdefault(n, b.upper())
+        elif len(b) == 1 and n not in out and n not in seen:
+            seen.add(n)
+            issues.append({"printed": n, "kind": "bad_letter", "token": b})
+    top = max([int(k) for k in out] + [int(i["printed"]) for i in issues], default=0)
+    for i in range(1, top + 1):
+        if str(i) not in out and str(i) not in seen:
+            issues.append({"printed": str(i), "kind": "missing", "token": ""})
+    return out, issues
+
+
+def load_key(path):
+    """{printed number str: letter} from any answer list that pairs a number with a letter A-D."""
+    return parse_key(path)[0]
 
 
 # ---- PDF text ----

@@ -8,6 +8,7 @@ holds an unregistered file or lacks a registered kind. No model call, no network
 import json
 import os
 import shutil
+import sys
 
 from exam_engine.pipeline import explain, planrun, report_build, report_kinds as rk, reporter, runlayout
 
@@ -42,19 +43,40 @@ def _rows(parts):
     return out
 
 
-def _score_rows(rows, key):
+def _why(q):
+    """One line of the engine's reasoning: first 3 solution steps, else the explanation (as review._engine_line)."""
+    steps = [s for s in (q.get("solution") or []) if str(s).strip()][:3]
+    return (" / ".join(reporter._one_line(s) for s in steps) or reporter._one_line(q.get("explanation")))[:300]
+
+
+def _score_rows(rows, key, issues=()):
+    """Rows scored against key; a printed number named in issues is `keybad` (never guessed, not scorable)."""
+    bad = {str(i["printed"]) for i in issues}
     out = []
     for subject, printed, q in rows:
         k = key.get(str(printed))
         ours = _answer(q)
-        res = "nokey" if k is None else ("declined" if ours is None else ("correct" if ours == k else "WRONG"))
+        if k is None and str(printed) in bad:
+            toks = [i["token"] for i in issues if str(i["printed"]) == str(printed) and i["token"]]
+            res, k = "keybad", "?" + "/".join(toks)
+        else:
+            res = "nokey" if k is None else ("declined" if ours is None else ("correct" if ours == k else "WRONG"))
+        a = q.get("answer")
         out.append({"subject": subject, "printed": printed, "key": k or "-", "ours": ours or "-", "result": res,
                     "status": q["verification_status"], "doubt": _level(q),
-                    "flag": "unresolved" if q.get("unresolved") else ""})
+                    "flag": "unresolved" if q.get("unresolved") else "",
+                    "answer_text": "" if a is None else reporter._one_line(a)[:300], "why": _why(q)})
     return out
 
 
-def _summary(parts, scored):
+SCORABLE = ("correct", "WRONG", "declined")
+
+
+def _pct(a, b):
+    return 100.0 * a / b if b else 0.0
+
+
+def _summary(parts, scored, issues=()):
     per = {}
     for p in parts:
         r = p["result"]
@@ -63,34 +85,63 @@ def _summary(parts, scored):
         per[s] = {"n": len(rows), "ok": sum(x["result"] == "correct" for x in rows),
                   "wrong": sum(x["result"] == "WRONG" for x in rows),
                   "none": sum(x["result"] == "declined" for x in rows),
+                  "scorable": sum(x["result"] in SCORABLE for x in rows),
+                  "nokey": sum(x["result"] == "nokey" for x in rows),
+                  "keybad": sum(x["result"] == "keybad" for x in rows),
                   "cost": r["run"].get("cost_usd", 0), "calls": r["run"].get("calls", 0)}
-    dvo = {}
+    dvo, cal = {}, {}
     for x in scored:
         o = dvo.setdefault(x["result"], {})
         o[x["doubt"]] = o.get(x["doubt"], 0) + 1
+        if x["result"] in SCORABLE:
+            c = cal.setdefault(x["doubt"], {"n": 0, "correct": 0, "wrong": 0, "declined": 0})
+            c["n"] += 1
+            c[{"correct": "correct", "WRONG": "wrong", "declined": "declined"}[x["result"]]] += 1
+    for c in cal.values():
+        c["accuracy"] = round(_pct(c["correct"], c["n"]), 1)
     bad = [x for x in scored if x["result"] in ("WRONG", "declined")]
     return {"per": per, "total_correct": sum(v["ok"] for v in per.values()),
-            "total": sum(v["n"] for v in per.values()), "not_correct": bad, "doubt_vs_outcome": dvo}
+            "total": sum(v["scorable"] for v in per.values()), "n_items": sum(v["n"] for v in per.values()),
+            "not_correct": bad, "doubt_vs_outcome": dvo, "calibration": cal, "scored": scored,
+            "key_issues": list(issues)}
+
+
+def _cell(v):
+    return str(v).replace("|", "/").replace("\n", " ")
 
 
 def _summary_md(sm, exam, run):
     t, n = sm["total_correct"], sm["total"]
     md = ["# Score summary: %s %s" % (exam, run), "", "## Score", "",
-          "| Subject | Correct | Wrong | Declined | Cost USD | Calls |", "| --- | --- | --- | --- | --- | --- |"]
+          "Accuracy = correct / scorable (correct + wrong + declined); items without a usable key are excluded.", "",
+          "| Subject | Correct | Wrong | Declined | Scorable | Accuracy % | No key | Bad key | Cost USD | Calls |",
+          "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |"]
     for s, v in sm["per"].items():
-        md.append("| %s | %d | %d | %d | %.4f | %d |" % (s, v["ok"], v["wrong"], v["none"], v["cost"], v["calls"]))
-    md += ["| **Total** | **%d / %d (%.1f%%)** | %d | %d | **%.4f** | %d |" % (
-        t, n, 100.0 * t / n if n else 0, sum(v["wrong"] for v in sm["per"].values()),
-        sum(v["none"] for v in sm["per"].values()), sum(v["cost"] for v in sm["per"].values()),
-        sum(v["calls"] for v in sm["per"].values())), "",
-        "## Items that are not correct (%d)" % len(sm["not_correct"]), "",
-        "| Printed | Subject | Key | Ours | Result | Status | Doubt | Flag |", "| --- | --- | --- | --- | --- | --- | --- | --- |"]
+        md.append("| %s | %d | %d | %d | %d | %.1f | %d | %d | %.4f | %d |" % (
+            s, v["ok"], v["wrong"], v["none"], v["scorable"], _pct(v["ok"], v["scorable"]), v["nokey"], v["keybad"],
+            v["cost"], v["calls"]))
+    pv = sm["per"].values()
+    md += ["| **Total** | **%d / %d** | %d | %d | %d | **%.1f** | %d | %d | **%.4f** | %d |" % (
+        t, n, sum(v["wrong"] for v in pv), sum(v["none"] for v in pv), n, _pct(t, n),
+        sum(v["nokey"] for v in pv), sum(v["keybad"] for v in pv), sum(v["cost"] for v in pv),
+        sum(v["calls"] for v in pv)), "",
+        "## Per question", "",
+        "| Printed | Subject | Key | Ours | Result | Doubt | Status |", "| --- | --- | --- | --- | --- | --- | --- |"]
+    for x in sm["scored"]:
+        md.append("| %s | %s | %s | %s | %s | %s | %s |" % tuple(
+            _cell(x[c]) for c in ("printed", "subject", "key", "ours", "result", "doubt", "status")))
+    md += ["", "## Calibration", "", "| Doubt | n | Correct | Wrong | Declined | Accuracy % |",
+           "| --- | --- | --- | --- | --- | --- |"]
+    for lv, c in sorted(sm["calibration"].items()):
+        md.append("| %s | %d | %d | %d | %d | %.1f |" % (lv, c["n"], c["correct"], c["wrong"], c["declined"], c["accuracy"]))
+    md += ["", "## Mismatches (%d)" % len(sm["not_correct"]), "",
+           "| Printed | Subject | Key | Ours | Doubt | Status | Why |", "| --- | --- | --- | --- | --- | --- | --- |"]
     for x in sm["not_correct"]:
-        md.append("| %s | %s | %s | %s | %s | %s | %s | %s |" % (
-            x["printed"], x["subject"], x["key"], x["ours"], x["result"], x["status"], x["doubt"], x["flag"]))
-    md += ["", "## Doubt vs outcome", "", "| Outcome | Doubt: count |", "| --- | --- |"]
-    for o in sorted(sm["doubt_vs_outcome"]):
-        md.append("| %s | %s |" % (o, ", ".join("%s %d" % (k, v) for k, v in sorted(sm["doubt_vs_outcome"][o].items()))))
+        md.append("| %s | %s | %s | %s | %s | %s | %s |" % tuple(
+            _cell(x[c]) for c in ("printed", "subject", "key", "ours", "doubt", "status", "why")))
+    md += ["", "## Key issues", ""]
+    md += ["- %s: %s%s" % (i["printed"], i["kind"], " " + i["token"] if i["token"] else "")
+           for i in sm["key_issues"]] or ["none"]
     return "\n".join(md) + "\n"
 
 
@@ -125,7 +176,7 @@ def build_pack(plan_dirs, out_dir, exam, run, key=None, pdf=True, engine_git=Non
             p = rk.parse(f)
             if p and p["ext"] == "pdf" and os.path.isfile(os.path.join(out_dir, f[:-4] + ".md")):
                 os.remove(os.path.join(out_dir, f))
-    keymap = explain.load_key(key) if key else None
+    keymap, key_issues = explain.parse_key(key) if key else (None, [])
     if key and not keymap:
         raise ValueError("no letter keys found in %s" % key)
     parts = []
@@ -155,11 +206,13 @@ def build_pack(plan_dirs, out_dir, exam, run, key=None, pdf=True, engine_git=Non
            (q.get("error") or {}).get("cls") or "", (q.get("score") or {}).get("basis") or ""] for s, pr, q in rows])
     correct = total = None
     if keymap:
-        scored = _score_rows(rows, keymap)
+        for i in key_issues:
+            print("key issue: %s %s %s" % (i["printed"], i["kind"], i["token"]), file=sys.stderr)
+        scored = _score_rows(rows, keymap, key_issues)
         _tsv(os.path.join(out_dir, rk.name(exam, "all", "score-vs-key", run, "tsv")),
              ["printed", "subject", "key", "ours", "result", "status", "doubt", "flag"],
              [[x[c] for c in ("printed", "subject", "key", "ours", "result", "status", "doubt", "flag")] for x in scored])
-        sm = _summary(parts, scored)
+        sm = _summary(parts, scored, key_issues)
         with open(os.path.join(out_dir, rk.name(exam, "all", "score-summary", run, "json")), "w", encoding="utf-8") as fh:
             json.dump(sm, fh, ensure_ascii=False, indent=1, sort_keys=True)
             fh.write("\n")
@@ -180,6 +233,6 @@ def build_pack(plan_dirs, out_dir, exam, run, key=None, pdf=True, engine_git=Non
     if key:  # recorded so a later publish can reuse the key (repo-relative when inside the cwd)
         rel = os.path.relpath(os.path.abspath(key))
         meta.update(key=os.path.abspath(key) if rel.startswith("..") else rel.replace(os.sep, "/"),
-                    key_sha256=runlayout._sha_file(key))
+                    key_sha256=runlayout._sha_file(key), key_issues=key_issues)
     runlayout.finish_report_run(out_dir, plan_dirs, view, engine_git, cmd, extra=meta or None)
     return {"files": have, "expected": want, "parts": parts, "correct": correct, "total": total}

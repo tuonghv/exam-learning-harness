@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0105",
-  "next": "coder: parse_key + report_pack summary (98.1-98.3), then tester",
-  "updated": "2026-11-10 15:12"
+  "next": "tester: write tests per design, run --fast",
+  "updated": "2026-11-10 15:15"
 }

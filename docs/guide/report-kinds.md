@@ -29,6 +29,8 @@ File name: `<exam>_<subject>_<kind>_<run>.<ext>`
 | `dhqg2024/solutions*` | superseded 2026-11-05 by the dhqg2024 line t81 run, ALL-120/report.* (raw-JSON doubt, unaccented steps) |
 | `dgnl2026-crosscheck/*` | superseded by the dgnl2026 line f pack run (standard names, hybrid solution-report) |
 
+`score-summary` (TASK-098): accuracy = correct / scorable (nokey and keybad rows excluded); also sections Per question, Calibration (by doubt level), Mismatches (wrong/declined with the engine's reasoning) and Key issues (bad, duplicate or missing key entries, also on stderr). Registry names are unchanged.
+
 ## Run layout (TASK-087, REQ-0095; line layout TASK-090, REQ-0098)
 
 - Plan runs: `plans/<exam>/<line>/runs/<YYYYMMDD-HHMMSS>[-<subject>][-N]/` (UTC; line default `main`, `solve --line NAME`; `<subject>` = lowercase tag of the exam file stem when `--exam-id` names another exam folder or the run was migrated; `-2`, `-3` only on a same-second collision, after the tag). REQ-0095 `plans/<exam>/runs/<id>/` and `plans/<exam>/<run>/` stay readable. The solve cache stays `plans/<exam>/cache/` for every line. New `plan.json` carries `line` and `plan_exam` (the folder; `exam_id` stays the file stem).

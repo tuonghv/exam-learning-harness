@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-098",
   "title": "dgnl2024 official key: flag malformed key entries, key-scored report with per-question key/engine match, calibration and mismatch reasoning, re-run (REQ-0105)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0105",
   "acceptance_criteria": [
     "AC1 key parser flags malformed entries (65 I) instead of silently skipping",
@@ -17,8 +17,13 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/explain.py",
+      "src/exam_engine/pipeline/report_pack.py",
+      "docs/guide/report-kinds.md"
+    ],
+    "summary": "parse_key (bad_letter/duplicate/missing issues) with load_key wrapper; report_pack keybad rows, accuracy over scorable, per-question, calibration, mismatches with why, key issues"
   },
   "unit_test": {
     "status": "pending",
@@ -41,18 +46,24 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-098/handoff/design.md"
+    "designer": "work/TASK-098/handoff/design.md",
+    "coder": "work/TASK-098/handoff/code.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-10T08:10:15Z",
-  "updated_at": "2026-11-10T08:12:12Z",
+  "updated_at": "2026-11-10T08:15:59Z",
   "updated_by": "main",
-  "scope": [],
+  "scope": [
+    "src/exam_engine/pipeline/explain.py",
+    "src/exam_engine/pipeline/report_pack.py",
+    "docs/guide/report-kinds.md",
+    "tests/unit/*.py"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
     "done": [],
     "notes": ""
   },
-  "next": "coder: parse_key + report_pack summary (98.1-98.3), then tester"
+  "next": "tester: write tests per design, run --fast"
 }
