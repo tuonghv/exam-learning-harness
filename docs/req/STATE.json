@@ -1,5 +1,5 @@
 {
-  "focus": "",
-  "next": "",
-  "updated": "2026-11-08 17:30"
+  "focus": "REQ-0105",
+  "next": "await inspector findings, then start TASK via workflow",
+  "updated": "2026-11-10 15:09"
 }
