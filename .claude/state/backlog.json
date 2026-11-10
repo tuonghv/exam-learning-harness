@@ -1940,7 +1940,7 @@
     "task_id": "TASK-098",
     "title": "dgnl2024 official key: flag malformed key entries, key-scored report with per-question key/engine match, calibration and mismatch reasoning, re-run (REQ-0105)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-10T08:30:00",
     "requirement": "REQ-0105",
     "acceptance_criteria": [
@@ -1948,6 +1948,8 @@
       "AC2 free key-scored report for dhqg2024 from existing plans, baseline accuracy",
       "AC3 report shows per-question match/mismatch, declined, doubt-vs-correct calibration, mismatch reasoning",
       "AC4 paid re-solve (user approved) only after baseline, key never in engine inputs"
-    ]
+    ],
+    "completed_at": "2026-11-10T08:42:44Z",
+    "report": "docs/report/phase-98-dgnl2024-key-score.md"
   }
 ]
