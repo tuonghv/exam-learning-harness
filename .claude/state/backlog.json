@@ -1949,7 +1949,7 @@
       "AC3 report shows per-question match/mismatch, declined, doubt-vs-correct calibration, mismatch reasoning",
       "AC4 paid re-solve (user approved) only after baseline, key never in engine inputs"
     ],
-    "completed_at": "2026-11-10T08:42:44Z",
+    "completed_at": "2026-11-10T08:42:54Z",
     "report": "docs/report/phase-98-dgnl2024-key-score.md"
   }
 ]
