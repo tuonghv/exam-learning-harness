@@ -623,7 +623,7 @@
     "created_at": "2026-10-30T15:30:00Z",
     "requirement": "REQ-0034",
     "acceptance_criteria": [
-      "REQ-0034 AC1-AC4: sheet 'Subject – N Questions', 5 per row, 2-digit ids as stored, circled A-D, — for null/Open/non A-D, block at top of report.md/html/pdf plus answers.md, solver/schema unchanged",
+      "REQ-0034 AC1-AC4: sheet 'Subject \u2013 N Questions', 5 per row, 2-digit ids as stored, circled A-D, \u2014 for null/Open/non A-D, block at top of report.md/html/pdf plus answers.md, solver/schema unchanged",
       "REQ-0035 AC1-AC4 phase 1: --view sheet|learn (default sheet), learn view reuses explanation+solution, optional key_concept/common_mistake only if present, no extra LLM cost",
       "Tests in tests/unit/test_exam_report.py with null-answer results (work/dgnl-real Vietnamese/Science), existing report tests stay green, PDF font check for circled letters"
     ],
@@ -1513,7 +1513,7 @@
     "user_notes": [
       {
         "raw": "RAW-00220",
-        "note": "vi explanations must be proper accented Vietnamese (e.g. Mệnh đề quan hệ), not unaccented",
+        "note": "vi explanations must be proper accented Vietnamese (e.g. M\u1ec7nh \u0111\u1ec1 quan h\u1ec7), not unaccented",
         "at": "2026-11-05T11:45:02Z"
       },
       {
@@ -1940,7 +1940,7 @@
     "task_id": "TASK-098",
     "title": "dgnl2024 official key: flag malformed key entries, key-scored report with per-question key/engine match, calibration and mismatch reasoning, re-run (REQ-0105)",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-11-10T08:30:00",
     "requirement": "REQ-0105",
     "acceptance_criteria": [

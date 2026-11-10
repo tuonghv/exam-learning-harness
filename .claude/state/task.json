@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-097",
-  "state": "DONE",
-  "next": "",
-  "title": "Small fixes: exam INDEX shows run-superseded files as superseded; checker refuses an overlay plan dir clearly (REQ-0104)",
-  "active": [],
+  "task_id": "TASK-098",
+  "state": "TODO",
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "title": "dgnl2024 official key: flag malformed key entries, key-scored report with per-question key/engine match, calibration and mismatch reasoning, re-run (REQ-0105)",
+  "active": [
+    {
+      "task_id": "TASK-098",
+      "state": "TODO",
+      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+      "updated_at": ""
+    }
+  ],
   "max_active": 1
 }

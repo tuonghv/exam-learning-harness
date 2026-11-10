@@ -1,0 +1,56 @@
+{
+  "task_id": "TASK-098",
+  "title": "dgnl2024 official key: flag malformed key entries, key-scored report with per-question key/engine match, calibration and mismatch reasoning, re-run (REQ-0105)",
+  "state": "TODO",
+  "requirement": "REQ-0105",
+  "acceptance_criteria": [
+    "AC1 key parser flags malformed entries (Cau 65 'I') instead of silently skipping",
+    "AC2 free key-scored report for dhqg2024 from existing plans, baseline accuracy",
+    "AC3 report shows per-question match/mismatch, declined, doubt-vs-correct calibration, mismatch reasoning",
+    "AC4 paid re-solve (user approved) only after baseline, key never in engine inputs"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {},
+  "user_notes": [],
+  "picked_at": "2026-11-10T08:10:15Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
