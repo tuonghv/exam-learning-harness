@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-098",
-  "state": "IMPLEMENTING",
-  "next": "tester: write tests per design, run --fast",
+  "state": "UNIT_TESTED",
+  "next": "run free baseline report-pack (98.5) and verify",
   "title": "dgnl2024 official key: flag malformed key entries, key-scored report with per-question key/engine match, calibration and mismatch reasoning, re-run (REQ-0105)",
   "active": [
     {
       "task_id": "TASK-098",
-      "state": "IMPLEMENTING",
-      "next": "tester: write tests per design, run --fast",
-      "updated_at": "2026-11-10T08:15:59Z"
+      "state": "UNIT_TESTED",
+      "next": "run free baseline report-pack (98.5) and verify",
+      "updated_at": "2026-11-10T08:19:04Z"
     }
   ],
   "max_active": 1

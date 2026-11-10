@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0105",
-  "next": "tester: write tests per design, run --fast",
-  "updated": "2026-11-10 15:15"
+  "next": "run free baseline report-pack (98.5) and verify",
+  "updated": "2026-11-10 15:19"
 }
