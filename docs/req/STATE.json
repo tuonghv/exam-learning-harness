@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0105",
-  "next": "await inspector findings, then start TASK via workflow",
-  "updated": "2026-11-10 15:09"
+  "next": "coder: parse_key + report_pack summary (98.1-98.3), then tester",
+  "updated": "2026-11-10 15:12"
 }
