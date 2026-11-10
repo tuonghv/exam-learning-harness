@@ -1950,6 +1950,13 @@
       "AC4 paid re-solve (user approved) only after baseline, key never in engine inputs"
     ],
     "completed_at": "2026-11-10T08:42:54Z",
-    "report": "docs/report/phase-98-dgnl2024-key-score.md"
+    "report": "docs/report/phase-98-dgnl2024-key-score.md",
+    "user_notes": [
+      {
+        "raw": "RAW-00299",
+        "note": "user: report full now; will give corrected Cau 65 later",
+        "at": "2026-11-10T10:38:44Z"
+      }
+    ]
   }
 ]
