@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-098",
   "title": "dgnl2024 official key: flag malformed key entries, key-scored report with per-question key/engine match, calibration and mismatch reasoning, re-run (REQ-0105)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0105",
   "acceptance_criteria": [
     "AC1 key parser flags malformed entries (65 I) instead of silently skipping",
@@ -31,12 +31,21 @@
     "result": "13 new tests OK (11 fail on pre-change code); --fast 1915 run, 4 known failures, 0 new"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "key only scored in report-pack, never in solve inputs/prompts/script/logs (grep 0, e-*.md sha equal); parse_key reads a user-given path as text, no eval/exec; no secrets in evidence"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-098/evidence/inputs-key-isolation.txt",
+      "work/TASK-098/evidence/score-vs-key-baseline.tsv",
+      "work/TASK-098/evidence/score-vs-key-t98.tsv",
+      "work/TASK-098/evidence/t98-calibration-mismatches.md",
+      "work/TASK-098/evidence/clean-tree-known-failures.txt",
+      "work/TASK-098/evidence/baseline-vs-t98.txt"
+    ],
+    "command": "parse_key on real key; report-pack --key on t81+t82 (baseline) and fresh t98 runs; python3 -I tools/run_tests.py --full --wait",
+    "result": "parse_key 119 keys + 65 bad_letter I; baseline 105/9/5/1, t98 104/9/6/1 of 120 match key vs ours; inputs sha OK, key grep 0; --full 1935 ran, 4 known, 0 new"
   },
   "report": {
     "status": "pending",
@@ -48,11 +57,12 @@
   "roles": {
     "designer": "work/TASK-098/handoff/design.md",
     "coder": "work/TASK-098/handoff/code.md",
-    "tester": "work/TASK-098/handoff/test.md"
+    "tester": "work/TASK-098/handoff/test.md",
+    "verifier": "work/TASK-098/handoff/verify.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-10T08:10:15Z",
-  "updated_at": "2026-11-10T08:19:04Z",
+  "updated_at": "2026-11-10T08:42:16Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/explain.py",
@@ -66,5 +76,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "run free baseline report-pack (98.5) and verify"
+  "next": "write report docs/report/phase-98-dgnl2024-key-score.md, DONE"
 }
