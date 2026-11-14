@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-101",
   "title": "report runs hold only human-readable reports, no json/log (REQ-0108)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0108",
   "acceptance_criteria": [
     "AC1 publish/report-pack write no .json except run.json and no .log under reports/; INDEX lists .md/.pdf/.tsv only; run.json names source plan runs and score",
@@ -38,12 +38,16 @@
     "result": "KNOWN 4 NEW 0; test_101_* in test_report_kinds and test_runlayout (U101RlScore) bite on old code"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "change only stops writing files; no new input handling"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "docs/report/evidence/TASK-101/verify.md"
+    ],
+    "command": "scripts/exam.py publish dgnl2026 --from f; scripts/exam.py publish dhqg2024 --from t81; tools/check_report_pack.py; find RUN -name '*.json' ! -name run.json -o -name '*.log'",
+    "result": "dgnl2026 46 checks 0 failed, dhqg2024 53 checks 0 failed; 0 json/log besides run.json in both new runs; old main runs deleted, indexes rebuilt"
   },
   "report": {
     "status": "pending",
@@ -55,7 +59,8 @@
   "roles": {
     "designer": "work/TASK-101/handoff/design.md",
     "coder": "work/TASK-101/handoff/code.md",
-    "tester": "work/TASK-101/handoff/test.md"
+    "tester": "work/TASK-101/handoff/test.md",
+    "verifier": "work/TASK-101/handoff/verify.md"
   },
   "user_notes": [
     {
@@ -65,7 +70,7 @@
     }
   ],
   "picked_at": "2026-11-14T08:36:10Z",
-  "updated_at": "2026-11-14T08:49:42Z",
+  "updated_at": "2026-11-14T08:51:58Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
@@ -82,5 +87,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verify: re-publish dgnl2026 --from f and dhqg2024 --from t81, checker, delete old main runs"
+  "next": "report + DONE"
 }

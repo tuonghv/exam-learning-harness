@@ -2923,3 +2923,9 @@ Action: tester: _rl_score tests + bite check
 Result: --fast KNOWN 4 NEW 0
 Decision: tests bite (5 of 6 fail on old code; 1 guards fallback)
 Next: real re-publish
+
+## VERIFIED - TASK-101 - 2026-11-14T08:51:57Z
+Action: real re-publish + checker; verifier static pass
+Result: both packs 0 failed, no json/log; verifier AC1-AC4 PASS
+Decision: prev_report_run naming a deleted run is history (as TASK-100); keep
+Next: report
