@@ -3055,3 +3055,9 @@ Action: report
 Result: docs/report/phase-105-rebuild-reports.md
 Decision: done
 Next: TASK-106 exam backup
+
+## DESIGN - TASK-106 - 2026-11-14T14:42:52Z
+Action: designer draft -> phase-106 design
+Result: design doc, 4 decisions
+Decision: tarbackup.py shared helper; per-file sha manifest; reject whole archive on unsafe member; reports/ not archived
+Next: implement
