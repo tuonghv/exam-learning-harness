@@ -2965,3 +2965,9 @@ Action: report
 Result: docs/report/phase-102-run-manifest-in-plans.md
 Decision: done
 Next: REQ-0110
+
+## DESIGN - TASK-103 - 2026-11-14T13:49:34Z
+Action: designer draft -> phase-103 design
+Result: design doc, 4 decisions
+Decision: D1 plans/MIGRATION.reports.*, D2 no fallback, D3 extend report-manifests-migrate, D4 leftover check exit 2
+Next: implement
