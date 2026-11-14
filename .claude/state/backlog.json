@@ -2038,5 +2038,69 @@
     ],
     "completed_at": "2026-11-14T14:10:45Z",
     "report": "docs/report/phase-103-reports-map-in-plans.md"
+  },
+  {
+    "task_id": "TASK-104",
+    "title": "check_report_pack: bad key letter excluded like the engine (REQ-0112)",
+    "priority": 1,
+    "status": "queued",
+    "created_at": "2026-11-14T14:40:00",
+    "requirement": "REQ-0112",
+    "acceptance_criteria": [
+      "AC1 dhqg2024 main 0 failed, key issue 65 listed",
+      "AC2 mismatch still FAILs",
+      "AC3 unit tests green"
+    ],
+    "user_notes": [
+      {
+        "raw": "RAW-00325",
+        "note": "user: do A+B; for C give best solution (keys never tracked -> local verified backup)",
+        "at": "2026-11-14T14:23:14Z"
+      }
+    ]
+  },
+  {
+    "task_id": "TASK-105",
+    "title": "tracked published-reports recipe + exam rebuild-reports + guide (REQ-0111)",
+    "priority": 2,
+    "status": "queued",
+    "created_at": "2026-11-14T14:40:00",
+    "requirement": "REQ-0111",
+    "acceptance_criteria": [
+      "AC1 recipe for 3 exams + schema test",
+      "AC2 byte-identical rebuild, same scores",
+      "AC3 dry-run / refusal before delete",
+      "AC4 how-to-rebuild guide",
+      "AC5 unit tests green"
+    ],
+    "user_notes": [
+      {
+        "raw": "RAW-00325",
+        "note": "user: do A+B; for C give best solution (keys never tracked -> local verified backup)",
+        "at": "2026-11-14T14:23:14Z"
+      }
+    ]
+  },
+  {
+    "task_id": "TASK-106",
+    "title": "exam backup of untracked rebuild inputs, verify + restore check (REQ-0113)",
+    "priority": 3,
+    "status": "queued",
+    "created_at": "2026-11-14T14:40:00",
+    "requirement": "REQ-0113",
+    "acceptance_criteria": [
+      "AC1 archive+manifest outside repo, refuses in-repo dest",
+      "AC2 --check passes, tamper fails",
+      "AC3 restore + rebuild-reports --dry-run finds inputs",
+      "AC4 guide",
+      "AC5 unit tests green"
+    ],
+    "user_notes": [
+      {
+        "raw": "RAW-00325",
+        "note": "user: do A+B; for C give best solution (keys never tracked -> local verified backup)",
+        "at": "2026-11-14T14:23:14Z"
+      }
+    ]
   }
 ]
