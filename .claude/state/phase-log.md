@@ -2875,3 +2875,9 @@ Action: report
 Result: docs/report/phase-99-public-report-default.md
 Decision: DONE
 Next: backlog complete
+
+## DESIGN - TASK-100 - 2026-11-14T08:21:18Z
+Action: design phase-100
+Result: design doc
+Decision: use basename(out) as run
+Next: implement

@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-100",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "implement in cli.publish_main + test",
   "title": "publish uses the main run date id in file names (REQ-0107)",
   "active": [
     {
       "task_id": "TASK-100",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "implement in cli.publish_main + test",
+      "updated_at": "2026-11-14T08:21:18Z"
     }
   ],
   "max_active": 1
