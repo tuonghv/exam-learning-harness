@@ -52,7 +52,11 @@
   "picked_at": "2026-11-14T14:23:21Z",
   "updated_at": "2026-11-14T14:25:08Z",
   "updated_by": "main",
-  "scope": [],
+  "scope": [
+    "tools/check_report_pack.py",
+    "tests/unit/test_report_kinds.py",
+    "docs/report/evidence/TASK-104/*"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
