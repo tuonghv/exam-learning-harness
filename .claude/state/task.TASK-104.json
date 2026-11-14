@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-104",
   "title": "check_report_pack: bad key letter excluded like the engine (REQ-0112)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0112",
   "acceptance_criteria": [
     "AC1 dhqg2024 main pack 0 failed, KEYISSUE 65 bad_letter I listed",
@@ -29,12 +29,16 @@
     "result": "1946 tests, KNOWN 4 NEW 0; test_104_bad_key_letter fails on c77e611 checker (bites)"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "read-only local checker, no exec/network; verifier: no risk"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "docs/report/evidence/TASK-104/verify.md"
+    ],
+    "command": "python3 -I tools/check_report_pack.py <4 published packs> --key ...; python3 -I tools/run_tests.py --fast",
+    "result": "4/4 packs 0 failed; dhqg2024 main+t81 KEYISSUE 65 bad_letter I, md total 105/119 ok; fast KNOWN 4 NEW 0"
   },
   "report": {
     "status": "pending",
@@ -46,7 +50,8 @@
   "roles": {
     "designer": "work/TASK-104/handoff/design.md",
     "coder": "work/TASK-104/handoff/code.md",
-    "tester": "work/TASK-104/handoff/test.md"
+    "tester": "work/TASK-104/handoff/test.md",
+    "verifier": "work/TASK-104/handoff/verify.md"
   },
   "user_notes": [
     {
@@ -56,7 +61,7 @@
     }
   ],
   "picked_at": "2026-11-14T14:23:21Z",
-  "updated_at": "2026-11-14T14:28:25Z",
+  "updated_at": "2026-11-14T14:29:10Z",
   "updated_by": "main",
   "scope": [
     "tools/check_report_pack.py",
@@ -69,5 +74,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verifier: AC1-AC3 from saved evidence"
+  "next": "report + DONE"
 }
