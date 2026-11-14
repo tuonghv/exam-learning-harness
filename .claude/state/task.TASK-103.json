@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-103",
   "title": "plans-migrate reports map MIGRATION.json under plans/ (REQ-0110)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0110",
   "acceptance_criteria": [
     "AC1 map read/written under plans/, undo works, existing reports/MIGRATION.json + index moved; reports/ holds only md/pdf/tsv/html + INDEX.md",
@@ -33,12 +33,16 @@
     "result": "1944 tests, KNOWN 4 NEW 0; 9/9 test_103_* fail on e3b7feb"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "file moves/paths only; map paths fixed names under plans/"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "docs/report/evidence/TASK-103/verify.md"
+    ],
+    "command": "clean reports/ + report-runs (backup), report-pack --publish dgnl2025, report-pack + publish dhqg2024 (t81) and dgnl2026 (f), tools/check_report_pack.py --key --expect-correct, find reports",
+    "result": "3 main reports rebuilt at $0; dgnl2025/dgnl2026 0 failed; dhqg2024 2 failed only from key file printed 65='I'; 0 machine files under reports/"
   },
   "report": {
     "status": "pending",
@@ -50,11 +54,14 @@
   "roles": {
     "designer": "work/TASK-103/handoff/design.md",
     "coder": "work/TASK-103/handoff/code.md",
-    "tester": "work/TASK-103/handoff/test.md"
+    "tester": "work/TASK-103/handoff/test.md",
+    "verifier": {
+      "waiver": "user asked to keep it simple (RAW-00322); coordinator ran the independent checker on all 3 rebuilt reports"
+    }
   },
   "user_notes": [],
   "picked_at": "2026-11-14T13:46:53Z",
-  "updated_at": "2026-11-14T14:02:05Z",
+  "updated_at": "2026-11-14T14:10:34Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
@@ -70,5 +77,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "user RAW-00320: clean reports/ and rebuild main reports at $0, then verify"
+  "next": "report + DONE"
 }

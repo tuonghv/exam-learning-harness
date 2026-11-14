@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-103",
-  "state": "UNIT_TESTED",
-  "next": "user RAW-00320: clean reports/ and rebuild main reports at $0, then verify",
+  "state": "VERIFIED",
+  "next": "report + DONE",
   "title": "plans-migrate reports map MIGRATION.json under plans/ (REQ-0110)",
   "active": [
     {
       "task_id": "TASK-103",
-      "state": "UNIT_TESTED",
-      "next": "user RAW-00320: clean reports/ and rebuild main reports at $0, then verify",
-      "updated_at": "2026-11-14T14:02:05Z"
+      "state": "VERIFIED",
+      "next": "report + DONE",
+      "updated_at": "2026-11-14T14:10:34Z"
     }
   ],
   "max_active": 1
