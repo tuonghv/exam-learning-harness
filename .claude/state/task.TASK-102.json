@@ -44,9 +44,17 @@
   },
   "user_notes": [],
   "picked_at": "2026-11-14T08:57:47Z",
-  "updated_at": "2026-11-14T09:02:00Z",
+  "updated_at": "2026-11-14T09:02:09Z",
   "updated_by": "main",
-  "scope": [],
+  "scope": [
+    "src/exam_engine/cli.py",
+    "src/exam_engine/pipeline/*.py",
+    "config/*.json",
+    "tools/check_report_pack.py",
+    "docs/guide/*.md",
+    "tests/unit/*.py",
+    "docs/report/evidence/TASK-102/*"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
