@@ -2089,7 +2089,7 @@
     "task_id": "TASK-106",
     "title": "exam backup of untracked rebuild inputs, verify + restore check (REQ-0113)",
     "priority": 3,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-14T14:40:00",
     "requirement": "REQ-0113",
     "acceptance_criteria": [
@@ -2105,6 +2105,8 @@
         "note": "user: do A+B; for C give best solution (keys never tracked -> local verified backup)",
         "at": "2026-11-14T14:23:14Z"
       }
-    ]
+    ],
+    "completed_at": "2026-11-14T14:50:55Z",
+    "report": "docs/report/phase-106-exam-backup.md"
   }
 ]

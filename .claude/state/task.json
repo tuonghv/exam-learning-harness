@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-106",
-  "state": "VERIFIED",
-  "next": "report + DONE",
+  "state": "DONE",
+  "next": "",
   "title": "exam backup of untracked rebuild inputs, verify + restore check (REQ-0113)",
-  "active": [
-    {
-      "task_id": "TASK-106",
-      "state": "VERIFIED",
-      "next": "report + DONE",
-      "updated_at": "2026-11-14T14:50:55Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

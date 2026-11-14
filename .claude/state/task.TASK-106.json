@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-106",
   "title": "exam backup of untracked rebuild inputs, verify + restore check (REQ-0113)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0113",
   "acceptance_criteria": [
     "AC1 archive+manifest outside repo; in-repo dest exit 2",
@@ -45,11 +45,18 @@
       "docs/report/evidence/TASK-106/verify.md"
     ],
     "command": "python3 scripts/exam.py backup; backup --check (+ tampered copy); backup --check --restore-to; rebuild-reports --dry-run --root <restore>; backup --dest ./tmpb",
-    "result": "rc 0, 1706 files 13.0 MB archive; check OK; tamper rc 1 names member; restore + dry-run rc 0 for 3 exams; in-repo dest rc 2"
+    "result": "rc 0, 1706 files 13.0 MB archive; check OK; tamper rc 1 names member; restore + dry-run rc 0 for 3 exams; in-repo dest rc 2",
+    "quality": {
+      "kind": "real-run",
+      "evidence": [
+        "docs/report/evidence/TASK-106/verify.md"
+      ],
+      "reason": "real backup, tamper and restore checked"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-106-exam-backup.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -58,7 +65,10 @@
     "designer": "work/TASK-106/handoff/design.md",
     "coder": "work/TASK-106/handoff/code.md",
     "tester": "work/TASK-106/handoff/test.md",
-    "verifier": "work/TASK-106/handoff/verify.md"
+    "verifier": "work/TASK-106/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "non-content task; real backup/check/tamper/restore run + rebuild dry-run on the restore in verify.md"
+    }
   },
   "user_notes": [
     {
@@ -68,7 +78,7 @@
     }
   ],
   "picked_at": "2026-11-14T14:42:39Z",
-  "updated_at": "2026-11-14T14:50:55Z",
+  "updated_at": "2026-11-14T14:50:56Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/backup.py",
@@ -84,5 +94,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report + DONE"
+  "next": ""
 }
