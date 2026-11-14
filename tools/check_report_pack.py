@@ -64,11 +64,17 @@ def parse_name(base, kinds):
 def key_map(path):
     with open(path, encoding="utf-8") as fh:
         toks = re.findall(r"[^\W\d_]+|\d+", fh.read())
-    out = {}
+    out, issues, seen = {}, [], set()
     for a, b in zip(toks, toks[1:]):
-        if a.isdigit() and re.fullmatch(r"[A-Da-d]", b):
-            out.setdefault(int(a), b.upper())
-    return out
+        if not a.isdigit():
+            continue
+        n = int(a)
+        if re.fullmatch(r"[A-Da-d]", b):
+            out.setdefault(n, b.upper())
+        elif len(b) == 1 and n not in out and n not in seen:  # same rule as the engine's parse_key, not imported
+            seen.add(n)
+            issues.append((n, b))
+    return out, issues
 
 
 def offset_of(plan):
@@ -239,13 +245,20 @@ def main(argv):
     want.update(ovl)
     chk("answer-table letters differ", 0, sum(1 for r in tab if want.get((r[0], r[1])) != r[3]))
     if key:
-        km = key_map(key)
-        correct = wrong = declined = 0
+        km, key_issues = key_map(key)
+        bad_nums = {n for n, _ in key_issues}
+        correct = wrong = declined = keybad = nokey = 0
         for x in results:
             off = offset_of(x["plan"])
             for q in x["r"]["questions"]:
                 a = want[(x["r"]["exam"].get("subject"), str(q["id"]))]
                 k = km.get(int(q["id"]) + off)
+                if k is None:
+                    if int(q["id"]) + off in bad_nums:
+                        keybad += 1
+                    else:
+                        nokey += 1
+                    continue
                 if a == "-":
                     declined += 1
                 elif a == k:
@@ -257,10 +270,12 @@ def main(argv):
         chk("score-vs-key correct", correct, sum(1 for r in sk if r[4] == "correct"))
         chk("score-vs-key WRONG", wrong, sum(1 for r in sk if r[4] == "WRONG"))
         chk("score-vs-key declined", declined, sum(1 for r in sk if r[4] == "declined"))
+        chk("score-vs-key keybad", keybad, sum(1 for r in sk if r[4] == "keybad"))
+        scorable = correct + wrong + declined
         sc = man.get("score") if isinstance(man.get("score"), dict) else {}
         chk("score-summary run.json total_correct", correct, sc.get("total_correct"))
         smd = read(by.get(("score-summary", "all", "md"), ""))
-        chk("score-summary md total", "%d / %d" % (correct, total), (re.search(r"\*\*(\d+ / \d+)", smd) or [0, None])[1])
+        chk("score-summary md total", "%d / %d" % (correct, scorable), (re.search(r"\*\*(\d+ / \d+)", smd) or [0, None])[1])
         if expect is not None:
             chk("correct vs expected", expect, correct)
     # INDEX totals = directory listing
@@ -275,6 +290,8 @@ def main(argv):
     print("check\texpected\tgot\tok")
     for r in rows:
         print("\t".join(str(c) for c in r))
+    for n, tok in (key_issues if key else []):
+        print("KEYISSUE\t%d\tbad_letter\t%s" % (n, tok))
     bad = sum(1 for r in rows if r[3] != "ok")
     print("RESULT\t%d checks\t%d failed\t%s" % (len(rows), bad, "FAIL" if bad else "ok"))
     return 1 if bad else 0

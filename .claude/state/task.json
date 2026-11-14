@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-104",
-  "state": "DESIGN",
-  "next": "coder: items 104.1-104.3 + tests T1/T2",
+  "state": "IMPLEMENTING",
+  "next": "tester: --fast suite + real checker runs, save evidence",
   "title": "check_report_pack: bad key letter excluded like the engine (REQ-0112)",
   "active": [
     {
       "task_id": "TASK-104",
-      "state": "DESIGN",
-      "next": "coder: items 104.1-104.3 + tests T1/T2",
-      "updated_at": "2026-11-14T14:25:08Z"
+      "state": "IMPLEMENTING",
+      "next": "tester: --fast suite + real checker runs, save evidence",
+      "updated_at": "2026-11-14T14:26:26Z"
     }
   ],
   "max_active": 1

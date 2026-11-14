@@ -417,6 +417,37 @@ class Packed(unittest.TestCase):
         self.assertEqual(rc, 0, out)
         self.assertIn("0 failed", out)
 
+    def bad_key_pack(self):
+        bad = os.path.join(self.tmp, "badkey.txt")
+        with open(bad, "w") as fh:
+            fh.write("1 I\n2 B\n3 C\n")  # fixture questions are printed number 1
+        out = os.path.join(self.tmp, "bk-pack")
+        self.addCleanup(shutil.rmtree, out, True)
+        with mock.patch.object(reporter, "git_info", return_value=None):
+            report_pack.build_pack(self.plans, out, "ex", "run-t", key=bad, pdf=False)
+        return out, self.args(out)[:-1] + [bad]
+
+    def test_104_bad_key_letter_is_key_issue_not_fail(self):
+        out, argv = self.bad_key_pack()
+        rc, text = checker(*argv)
+        self.assertEqual(rc, 0, text)
+        self.assertIn("0 failed", text)
+        self.assertIn("KEYISSUE\t1\tbad_letter\tI", text)
+        self.assertRegex(text, r"score-vs-key keybad\t([1-9]\d*)\t\1\tok")
+
+    def test_104_summary_disagreeing_with_recount_still_fails(self):
+        out, argv = self.bad_key_pack()
+        f = [os.path.join(out, n) for n in os.listdir(out) if n.startswith("ex_all_score-summary") and n.endswith(".md")][0]
+        with open(f, encoding="utf-8") as fh:
+            txt = fh.read()
+        m = re.search(r"\*\*(\d+) / (\d+)", txt)
+        txt = txt.replace(m.group(0), "**%s / %d" % (m.group(1), int(m.group(2)) + 1), 1)
+        with open(f, "w", encoding="utf-8") as fh:
+            fh.write(txt)
+        rc, text = checker(*argv)
+        self.assertEqual(rc, 1, text)
+        self.assertRegex(text, r"score-summary md total\t.*\tFAIL")
+
     def test_102_pack_has_no_json_or_log_and_manifest_is_outside(self):
         names = self.listing()
         self.assertEqual([n for n in names if n.endswith((".json", ".log"))], [])

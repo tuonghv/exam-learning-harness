@@ -3001,3 +3001,9 @@ Action: designer draft -> phase-104 design
 Result: design doc, 1 decision
 Decision: D1 reimplement bad_letter rule in checker (independent oracle), no engine import
 Next: implement
+
+## IMPLEMENTING - TASK-104 - 2026-11-14T14:26:25Z
+Action: coder 104.1-104.3 + T1/T2
+Result: --affected pass; dhqg2024 main 64 checks 0 failed, KEYISSUE 65 bad_letter I; dgnl2025 0 failed
+Decision: T1 uses key '1 I' (fixture has only number 1), design text said 2
+Next: unit tests
