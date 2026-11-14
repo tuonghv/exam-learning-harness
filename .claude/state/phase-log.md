@@ -2959,3 +2959,9 @@ Action: migrate + re-publish + checker; verifier static pass; old json/log copie
 Result: AC1-AC3 pass; scores carried into manifests
 Decision: html fallback is human-readable, kept; MIGRATION.json -> REQ-0110
 Next: report
+
+## DONE - TASK-102 - 2026-11-14T13:46:40Z
+Action: report
+Result: docs/report/phase-102-run-manifest-in-plans.md
+Decision: done
+Next: REQ-0110

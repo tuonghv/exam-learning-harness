@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-102",
   "title": "report runs hold no run.json; manifest under plans/ (REQ-0109)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0109",
   "acceptance_criteria": [
     "AC1 new report run holds only md/pdf/tsv + INDEX.md",
@@ -53,11 +53,18 @@
       "docs/report/evidence/TASK-102/verify.md"
     ],
     "command": "scripts/exam.py report-manifests-migrate [--apply]; scripts/exam.py publish dgnl2026 --from f; publish dhqg2024 --from t81; tools/check_report_pack.py; find reports -name run.json; run-list",
-    "result": "23 manifests migrated (idempotent); new runs hold only reports + INDEX.md; checker 47/54 checks 0 failed; 0 run.json under reports/; run-list reads manifests"
+    "result": "23 manifests migrated (idempotent); new runs hold only reports + INDEX.md; checker 47/54 checks 0 failed; 0 run.json under reports/; run-list reads manifests",
+    "quality": {
+      "kind": "real-run",
+      "evidence": [
+        "docs/report/evidence/TASK-102/verify.md"
+      ],
+      "reason": "real migration and re-publish checked by the independent checker"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-102-run-manifest-in-plans.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -66,11 +73,14 @@
     "designer": "work/TASK-102/handoff/design.md",
     "coder": "work/TASK-102/handoff/code.md",
     "tester": "work/TASK-102/handoff/test.md",
-    "verifier": "work/TASK-102/handoff/verify.md"
+    "verifier": "work/TASK-102/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "tools/check_report_pack.py (imports no exam_engine code) was the oracle on both real packs, plus find/run-list/migrate dry-run; see verify.md"
+    }
   },
   "user_notes": [],
   "picked_at": "2026-11-14T08:57:47Z",
-  "updated_at": "2026-11-14T13:46:30Z",
+  "updated_at": "2026-11-14T13:46:41Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
@@ -87,5 +97,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report + DONE"
+  "next": ""
 }
