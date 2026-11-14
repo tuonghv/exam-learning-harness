@@ -3025,3 +3025,9 @@ Action: report
 Result: docs/report/phase-104-checker-bad-key-letter.md
 Decision: done
 Next: TASK-105 rebuild-reports
+
+## DESIGN - TASK-105 - 2026-11-14T14:29:44Z
+Action: designer draft -> phase-105 design
+Result: design doc, 5 decisions
+Decision: mode from line; delete main + source-line packs only; call *_main in process; --write-recipe seed; paths via --root
+Next: implement
