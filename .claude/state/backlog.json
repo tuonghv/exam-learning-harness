@@ -1979,12 +1979,14 @@
     "task_id": "TASK-100",
     "title": "publish uses the main run date id in file names (REQ-0107)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-14T08:30:00",
     "requirement": "REQ-0107",
     "acceptance_criteria": [
       "AC1 publish default run part = new main run folder id; --run overrides",
       "AC2 unit tests green; dgnl2026, dhqg2024 re-published with date names, old main runs deleted"
-    ]
+    ],
+    "completed_at": "2026-11-14T08:23:22Z",
+    "report": "docs/report/phase-100-publish-date-run-names.md"
   }
 ]

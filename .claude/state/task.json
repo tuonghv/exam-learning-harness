@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-100",
-  "state": "VERIFIED",
-  "next": "report and DONE",
+  "state": "DONE",
+  "next": "",
   "title": "publish uses the main run date id in file names (REQ-0107)",
-  "active": [
-    {
-      "task_id": "TASK-100",
-      "state": "VERIFIED",
-      "next": "report and DONE",
-      "updated_at": "2026-11-14T08:23:22Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

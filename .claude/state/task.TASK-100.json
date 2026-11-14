@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-100",
   "title": "publish uses the main run date id in file names (REQ-0107)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0107",
   "acceptance_criteria": [
     "AC1 publish default run part = new main run folder id; --run overrides",
@@ -38,11 +38,18 @@
       "docs/report/evidence/TASK-100/verify.md"
     ],
     "command": "exam.py publish dgnl2026 --from f; exam.py publish dhqg2024 --from t81; tools/check_report_pack.py",
-    "result": "both packs 0 failed, all file run parts = run-<date id>; old main runs deleted"
+    "result": "both packs 0 failed, all file run parts = run-<date id>; old main runs deleted",
+    "quality": {
+      "kind": "real-run",
+      "evidence": [
+        "docs/report/evidence/TASK-100/verify.md"
+      ],
+      "reason": "real re-publish checked by the independent checker"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-100-publish-date-run-names.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -59,11 +66,14 @@
     },
     "verifier": {
       "waiver": "coordinator ran the real publish and the independent checker"
+    },
+    "crosscheck": {
+      "waiver": "tools/check_report_pack.py (independent of exam_engine) was the oracle, see verify.md"
     }
   },
   "user_notes": [],
   "picked_at": "2026-11-14T08:21:02Z",
-  "updated_at": "2026-11-14T08:23:22Z",
+  "updated_at": "2026-11-14T08:23:23Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
@@ -77,5 +87,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report and DONE"
+  "next": ""
 }
