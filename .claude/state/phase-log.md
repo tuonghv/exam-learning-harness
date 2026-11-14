@@ -2995,3 +2995,9 @@ Action: report
 Result: docs/report/phase-103-reports-map-in-plans.md
 Decision: done
 Next: retire report-migration code (ask user)
+
+## DESIGN - TASK-104 - 2026-11-14T14:25:07Z
+Action: designer draft -> phase-104 design
+Result: design doc, 1 decision
+Decision: D1 reimplement bad_letter rule in checker (independent oracle), no engine import
+Next: implement
