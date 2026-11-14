@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-104",
   "title": "check_report_pack: bad key letter excluded like the engine (REQ-0112)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0112",
   "acceptance_criteria": [
     "AC1 dhqg2024 main pack 0 failed, KEYISSUE 65 bad_letter I listed",
@@ -24,9 +24,9 @@
     "summary": "key_map returns (keys, bad_letter issues); keyless items counted keybad/nokey and left out of scorable; new check score-vs-key keybad; KEYISSUE lines printed, not counted as FAIL"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --fast",
+    "result": "1946 tests, KNOWN 4 NEW 0; test_104_bad_key_letter fails on c77e611 checker (bites)"
   },
   "security": {
     "status": "pending",
@@ -45,7 +45,8 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-104/handoff/design.md",
-    "coder": "work/TASK-104/handoff/code.md"
+    "coder": "work/TASK-104/handoff/code.md",
+    "tester": "work/TASK-104/handoff/test.md"
   },
   "user_notes": [
     {
@@ -55,7 +56,7 @@
     }
   ],
   "picked_at": "2026-11-14T14:23:21Z",
-  "updated_at": "2026-11-14T14:26:26Z",
+  "updated_at": "2026-11-14T14:28:25Z",
   "updated_by": "main",
   "scope": [
     "tools/check_report_pack.py",
@@ -68,5 +69,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tester: --fast suite + real checker runs, save evidence"
+  "next": "verifier: AC1-AC3 from saved evidence"
 }

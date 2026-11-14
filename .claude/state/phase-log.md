@@ -3007,3 +3007,9 @@ Action: coder 104.1-104.3 + T1/T2
 Result: --affected pass; dhqg2024 main 64 checks 0 failed, KEYISSUE 65 bad_letter I; dgnl2025 0 failed
 Decision: T1 uses key '1 I' (fixture has only number 1), design text said 2
 Next: unit tests
+
+## UNIT_TESTED - TASK-104 - 2026-11-14T14:28:25Z
+Action: tester --fast + bite check + 4 real packs
+Result: 1946 tests KNOWN 4 NEW 0; 4/4 packs 0 failed; KEYISSUE 65 on both dhqg2024 packs
+Decision: go verify
+Next: verify
