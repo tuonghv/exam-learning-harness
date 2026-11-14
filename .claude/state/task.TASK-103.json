@@ -71,7 +71,7 @@
   },
   "user_notes": [],
   "picked_at": "2026-11-14T13:46:53Z",
-  "updated_at": "2026-11-14T14:10:44Z",
+  "updated_at": "2026-11-14T14:10:45Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
