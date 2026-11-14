@@ -3049,3 +3049,9 @@ Action: verifier AC1-AC5 + main real rebuild
 Result: PASS; F1 fixed with 2 tests
 Decision: VERIFIED
 Next: report
+
+## DONE - TASK-105 - 2026-11-14T14:42:34Z
+Action: report
+Result: docs/report/phase-105-rebuild-reports.md
+Decision: done
+Next: TASK-106 exam backup

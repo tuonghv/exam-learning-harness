@@ -2065,7 +2065,7 @@
     "task_id": "TASK-105",
     "title": "tracked published-reports recipe + exam rebuild-reports + guide (REQ-0111)",
     "priority": 2,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-14T14:40:00",
     "requirement": "REQ-0111",
     "acceptance_criteria": [
@@ -2081,7 +2081,9 @@
         "note": "user: do A+B; for C give best solution (keys never tracked -> local verified backup)",
         "at": "2026-11-14T14:23:14Z"
       }
-    ]
+    ],
+    "completed_at": "2026-11-14T14:42:34Z",
+    "report": "docs/report/phase-105-rebuild-reports.md"
   },
   {
     "task_id": "TASK-106",
