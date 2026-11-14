@@ -1986,7 +1986,7 @@
       "AC1 publish default run part = new main run folder id; --run overrides",
       "AC2 unit tests green; dgnl2026, dhqg2024 re-published with date names, old main runs deleted"
     ],
-    "completed_at": "2026-11-14T08:23:22Z",
+    "completed_at": "2026-11-14T08:23:23Z",
     "report": "docs/report/phase-100-publish-date-run-names.md"
   }
 ]
