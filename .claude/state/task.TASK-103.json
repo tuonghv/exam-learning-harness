@@ -45,7 +45,14 @@
   "picked_at": "2026-11-14T13:46:53Z",
   "updated_at": "2026-11-14T13:49:34Z",
   "updated_by": "main",
-  "scope": [],
+  "scope": [
+    "src/exam_engine/cli.py",
+    "src/exam_engine/pipeline/*.py",
+    "tools/check_report_pack.py",
+    "docs/guide/*.md",
+    "tests/unit/*.py",
+    "docs/report/evidence/TASK-103/*"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
