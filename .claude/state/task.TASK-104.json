@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-104",
   "title": "check_report_pack: bad key letter excluded like the engine (REQ-0112)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0112",
   "acceptance_criteria": [
     "AC1 dhqg2024 main pack 0 failed, KEYISSUE 65 bad_letter I listed",
@@ -38,11 +38,18 @@
       "docs/report/evidence/TASK-104/verify.md"
     ],
     "command": "python3 -I tools/check_report_pack.py <4 published packs> --key ...; python3 -I tools/run_tests.py --fast",
-    "result": "4/4 packs 0 failed; dhqg2024 main+t81 KEYISSUE 65 bad_letter I, md total 105/119 ok; fast KNOWN 4 NEW 0"
+    "result": "4/4 packs 0 failed; dhqg2024 main+t81 KEYISSUE 65 bad_letter I, md total 105/119 ok; fast KNOWN 4 NEW 0",
+    "quality": {
+      "kind": "real-run",
+      "evidence": [
+        "docs/report/evidence/TASK-104/verify.md"
+      ],
+      "reason": "checker run on the 4 published packs"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-104-checker-bad-key-letter.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -51,7 +58,10 @@
     "designer": "work/TASK-104/handoff/design.md",
     "coder": "work/TASK-104/handoff/code.md",
     "tester": "work/TASK-104/handoff/test.md",
-    "verifier": "work/TASK-104/handoff/verify.md"
+    "verifier": "work/TASK-104/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "the task is the crosscheck tool itself; real runs on 4 published packs in verify.md"
+    }
   },
   "user_notes": [
     {
@@ -61,7 +71,7 @@
     }
   ],
   "picked_at": "2026-11-14T14:23:21Z",
-  "updated_at": "2026-11-14T14:29:10Z",
+  "updated_at": "2026-11-14T14:29:23Z",
   "updated_by": "main",
   "scope": [
     "tools/check_report_pack.py",
@@ -74,5 +84,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report + DONE"
+  "next": ""
 }

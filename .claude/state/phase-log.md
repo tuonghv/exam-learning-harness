@@ -3019,3 +3019,9 @@ Action: verifier AC1-AC3
 Result: PASS; 4/4 real packs 0 failed
 Decision: VERIFIED
 Next: report
+
+## DONE - TASK-104 - 2026-11-14T14:29:22Z
+Action: report
+Result: docs/report/phase-104-checker-bad-key-letter.md
+Decision: done
+Next: TASK-105 rebuild-reports
