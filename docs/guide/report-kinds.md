@@ -61,6 +61,11 @@ Reports are derived data: rebuild them, never migrate or hand-edit them ($0, no 
 3. After a new `publish`: `python3 scripts/exam.py rebuild-reports --write-recipe`, review `git diff config/published_reports.json`, commit.
 Exit 2 = a plan run, overlay or key is missing or changed: nothing was deleted. Check: `python3 -I tools/check_report_pack.py` (TASK-104).
 
+Backup (TASK-106): `plans/` (AI output) and `input/` (exams, keys) are not in git, and a rebuild needs them.
+After each publish run `python3 scripts/exam.py backup` (default `~/exam-harness-backup/`, newest 5 kept, verified).
+`backup --check <archive> [--restore-to DIR]` proves it; then `rebuild-reports --dry-run --root DIR` there.
+Copy the archive + `.sha256.json` to another disk or cloud storage you own; it holds the answer keys, keep it private.
+
 ## Not covered yet
 
 - Benchmark output: `pipeline/benchmark.py` writes a bare `report.md` (+ `summary.json`) into its out dir. It is a cost/benchmark summary, not an exam report; it keeps the old name and is outside REQ-0092 / TASK-085.

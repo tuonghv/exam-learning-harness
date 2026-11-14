@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-106",
-  "state": "DESIGN",
-  "next": "coder: items 106.1-106.5 + tests; main writes 106.6 guide",
+  "state": "IMPLEMENTING",
+  "next": "tester: --fast + bite + failure modes; main: real backup to default dest",
   "title": "exam backup of untracked rebuild inputs, verify + restore check (REQ-0113)",
   "active": [
     {
       "task_id": "TASK-106",
-      "state": "DESIGN",
-      "next": "coder: items 106.1-106.5 + tests; main writes 106.6 guide",
-      "updated_at": "2026-11-14T14:42:52Z"
+      "state": "IMPLEMENTING",
+      "next": "tester: --fast + bite + failure modes; main: real backup to default dest",
+      "updated_at": "2026-11-14T14:47:58Z"
     }
   ],
   "max_active": 1

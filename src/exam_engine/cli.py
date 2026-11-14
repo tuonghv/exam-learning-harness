@@ -13,7 +13,7 @@ import sys
 import tempfile
 import time
 
-from exam_engine import engine, settings
+from exam_engine import backup, engine, settings
 from exam_engine.adapters import claude
 from exam_engine.core import schema as sch
 from exam_engine.core.decision import decide
@@ -24,7 +24,7 @@ COMMANDS = ("solve", "parse", "verify", "report", "plan-import", "check-examples
             "check-prompts", "ingest", "ingest-inspect", "ingest-refine", "cross-solve", "benchmark",
             "extract-eval", "gold-pdf", "gen-exams", "lessons", "review-pack", "review-apply", "run-stats",
             "report-pack", "report-index", "run-list", "run-compare", "plans-migrate", "publish", "report-manifests-migrate",
-            "rebuild-reports")
+            "rebuild-reports", "backup")
 DEFAULT_HISTORY = os.path.join("plans", "run-history.jsonl")
 LEGACY_HISTORY = (os.path.join("reports", "run-history.jsonl"),  # read-only fallbacks (RAW-00174, phase 58)
                   os.path.join("results", "run-history.jsonl"))
@@ -1905,7 +1905,8 @@ def main(argv=None):
              "report-index": report_index_main, "run-list": run_list_main,
              "run-compare": run_compare_main, "plans-migrate": plansmigrate.main,
              "report-manifests-migrate": report_manifests_migrate_main,
-             "publish": publish_main, "rebuild-reports": rebuild_reports_main}
+             "publish": publish_main, "rebuild-reports": rebuild_reports_main,
+             "backup": backup.backup_main}
     if cmd not in table:
         print(USAGE, file=sys.stderr)
         return 2

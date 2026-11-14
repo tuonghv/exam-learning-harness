@@ -3061,3 +3061,9 @@ Action: designer draft -> phase-106 design
 Result: design doc, 4 decisions
 Decision: tarbackup.py shared helper; per-file sha manifest; reject whole archive on unsafe member; reports/ not archived
 Next: implement
+
+## IMPLEMENTING - TASK-106 - 2026-11-14T14:47:58Z
+Action: coder 106.1-106.5, main 106.6 guide
+Result: --affected pass (plansmigrate 61, backup 16); smoke: 1706 files 31.0 MB -> 13.0 MB archive, --check OK, restore + rebuild-reports --dry-run --root exit 0; in-repo dest exit 2
+Decision: go unit test
+Next: unit tests

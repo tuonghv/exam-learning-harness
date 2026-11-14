@@ -23,11 +23,11 @@ import time
 
 from exam_engine import settings
 from exam_engine.pipeline import report_kinds as rk
-from exam_engine.pipeline import runlayout
+from exam_engine.pipeline import runlayout, tarbackup
 
 SCHEMA = 1
 HISTORY = "run-history.jsonl"
-MIN_FREE = 64 * 1024 * 1024
+MIN_FREE = tarbackup.MIN_FREE
 REPO = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", ".."))
 DEFAULT_MAP = os.path.join(settings.config_dir(), "plans_migration.json")
 SECTIONS = {"plans": ("folders", "moves"), "reports": ("report_folders", "report_moves")}
@@ -74,12 +74,7 @@ def _dump_atomic(path, obj):
     os.replace(tmp, path)
 
 
-def _sha_file(path):
-    h = hashlib.sha256()
-    with open(path, "rb") as fh:
-        for chunk in iter(lambda: fh.read(1 << 20), b""):
-            h.update(chunk)
-    return h.hexdigest()
+_sha_file = tarbackup.sha_file
 
 
 def _stash_abs(root, orig):
@@ -714,32 +709,16 @@ def make_backup(root, backup_dir, moves, extra, stamp):
     """tar.gz of the move sources + extra [(abs path, arcname)] in backup_dir (outside root); the listing is re-read and
     must match the expected member count and bytes. Returns the manifest "backup" dict; ValueError on any refusal."""
     root = os.path.abspath(root)
-    bd = os.path.realpath(backup_dir)
-    rr = os.path.realpath(root)
-    if bd == rr or bd.startswith(rr + os.sep):
-        raise ValueError("backup dir %s is inside %s" % (backup_dir, root))
+    bd = tarbackup.refuse_inside(backup_dir, root)
     n_src, b_src = _source_bytes(root, moves)
     n_ext = sum(1 for p, _a in extra if os.path.isfile(p))
     b_ext = sum(os.path.getsize(p) for p, _a in extra if os.path.isfile(p))
-    need = b_src + b_ext + MIN_FREE
-    os.makedirs(bd, exist_ok=True)
-    free = shutil.disk_usage(bd).free
-    if free < need:
-        raise ValueError("not enough free space in %s: need %d bytes, have %d" % (backup_dir, need, free))
+    tarbackup.ensure_free(bd, b_src + b_ext)
     base = os.path.basename(root)
     path = os.path.join(bd, "%s-backup-%s.tar.gz" % (base, stamp))
-    with tarfile.open(path, "w:gz") as tf:
-        for mv in moves:
-            tf.add(_abs(root, mv["old"]), arcname="%s/%s" % (base, mv["old"]))
-        for p, arc in extra:
-            if os.path.isfile(p):
-                tf.add(p, arcname=arc)
-    with tarfile.open(path, "r:gz") as tf:
-        members = [m for m in tf.getmembers() if m.isfile()]
-    if len(members) != n_src + n_ext or sum(m.size for m in members) != b_src + b_ext:
-        raise ValueError("backup listing mismatch: %d files / %d bytes, expected %d / %d" % (
-            len(members), sum(m.size for m in members), n_src + n_ext, b_src + b_ext))
-    return {"path": path, "sha256": _sha_file(path), "members": len(members), "bytes": b_src + b_ext}
+    items = [(_abs(root, mv["old"]), "%s/%s" % (base, mv["old"])) for mv in moves] + [(p, a) for p, a in extra if os.path.isfile(p)]
+    res = tarbackup.write_verified(path, items, n_src + n_ext, b_src + b_ext)
+    return {"path": path, "sha256": _sha_file(path), "members": res["members"], "bytes": b_src + b_ext}
 
 
 def _gen_targets(runs):
