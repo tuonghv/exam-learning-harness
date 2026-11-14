@@ -1993,12 +1993,21 @@
     "task_id": "TASK-101",
     "title": "report runs hold only human-readable reports, no json/log (REQ-0108)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-14T08:40:00",
     "requirement": "REQ-0108",
     "acceptance_criteria": [
       "AC1 publish/report-pack write no metrics/result-data .json or run-log .log under reports/; INDEX lists .md/.pdf/.tsv only; run.json names source plan runs",
       "AC2 unit tests green; dgnl2026, dhqg2024 main re-published without json/log, old main runs deleted"
+    ],
+    "completed_at": "2026-11-14T08:52:19Z",
+    "report": "docs/report/phase-101-report-runs-readable-only.md",
+    "user_notes": [
+      {
+        "raw": "RAW-00317",
+        "note": "standing rule: report folders hold only human-readable files (md/pdf/tsv + INDEX.md, run.json); machine data stays in plans/",
+        "at": "2026-11-14T08:40:19Z"
+      }
     ]
   }
 ]

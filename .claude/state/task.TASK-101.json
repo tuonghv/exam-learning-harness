@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-101",
   "title": "report runs hold only human-readable reports, no json/log (REQ-0108)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0108",
   "acceptance_criteria": [
     "AC1 publish/report-pack write no .json except run.json and no .log under reports/; INDEX lists .md/.pdf/.tsv only; run.json names source plan runs and score",
@@ -47,11 +47,18 @@
       "docs/report/evidence/TASK-101/verify.md"
     ],
     "command": "scripts/exam.py publish dgnl2026 --from f; scripts/exam.py publish dhqg2024 --from t81; tools/check_report_pack.py; find RUN -name '*.json' ! -name run.json -o -name '*.log'",
-    "result": "dgnl2026 46 checks 0 failed, dhqg2024 53 checks 0 failed; 0 json/log besides run.json in both new runs; old main runs deleted, indexes rebuilt"
+    "result": "dgnl2026 46 checks 0 failed, dhqg2024 53 checks 0 failed; 0 json/log besides run.json in both new runs; old main runs deleted, indexes rebuilt",
+    "quality": {
+      "kind": "real-run",
+      "evidence": [
+        "docs/report/evidence/TASK-101/verify.md"
+      ],
+      "reason": "real re-publish of both exams checked by the independent checker"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-101-report-runs-readable-only.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -60,7 +67,10 @@
     "designer": "work/TASK-101/handoff/design.md",
     "coder": "work/TASK-101/handoff/code.md",
     "tester": "work/TASK-101/handoff/test.md",
-    "verifier": "work/TASK-101/handoff/verify.md"
+    "verifier": "work/TASK-101/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "tools/check_report_pack.py (imports no exam_engine code) was the oracle on both real packs, plus find for json/log; see verify.md"
+    }
   },
   "user_notes": [
     {
@@ -70,7 +80,7 @@
     }
   ],
   "picked_at": "2026-11-14T08:36:10Z",
-  "updated_at": "2026-11-14T08:51:58Z",
+  "updated_at": "2026-11-14T08:52:19Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
@@ -87,5 +97,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report + DONE"
+  "next": ""
 }

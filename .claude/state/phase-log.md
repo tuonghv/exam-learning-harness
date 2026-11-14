@@ -2929,3 +2929,9 @@ Action: real re-publish + checker; verifier static pass
 Result: both packs 0 failed, no json/log; verifier AC1-AC4 PASS
 Decision: prev_report_run naming a deleted run is history (as TASK-100); keep
 Next: report
+
+## DONE - TASK-101 - 2026-11-14T08:52:19Z
+Action: report
+Result: docs/report/phase-101-report-runs-readable-only.md
+Decision: done
+Next: none
