@@ -75,8 +75,9 @@ class ReportBuildTest(unittest.TestCase):
         rid = os.path.basename(self.plan)
         d = os.path.join(self.tmp, "reports", "input-001", "main", "run-" + rid)  # 87.3: one run dir, files flat
         names = sorted(os.listdir(d))
-        for kind, ext in (("solution-report", "md"), ("answer-sheet", "md"), ("metrics", "json"), ("result-data", "json")):
+        for kind, ext in (("solution-report", "md"), ("answer-sheet", "md"), ):
             self.assertIsNotNone(stdpath(d, kind, ext), names)
+        self.assertFalse([n for n in names if n.endswith((".json", ".log")) and n != "run.json"], names)
         self.assertFalse(any(n in names for n in ("report.md", "answers.md", "metrics.json", "report.json")))
         self.assertIsNone(rk.find(self.plan, "solution-report"))
         self.assertIn("## Metrics", pick(tree(d), "report.md").decode())
@@ -93,7 +94,7 @@ class ReportBuildTest(unittest.TestCase):
 
     def test_metrics_use_stored_exam(self):
         info = report_build.build(self.plan, os.path.join(self.tmp, "x"))
-        self.assertEqual(json.loads(pick(tree(os.path.join(self.tmp, "x")), "metrics.json")), info["metrics"])
+        self.assertFalse([n for n in os.listdir(os.path.join(self.tmp, "x")) if n.endswith(".json")])
         self.assertTrue(any(r.get("group_kind") for r in info["metrics"]["questions"]))
 
     def test_ai_forbidden_import_check(self):

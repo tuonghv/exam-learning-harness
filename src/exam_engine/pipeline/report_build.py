@@ -3,17 +3,10 @@
 Pure and deterministic: no model call, no network, no clock. The only process it may start is the
 local PDF renderer behind reporter.md_to_pdf (pdf=True). Guarded by tests/unit/test_report_build.py.
 """
-import hashlib
 import json
 import os
 
 from exam_engine.pipeline import metrics, overlay as overlay_mod, parser, planrun, report_kinds, reporter, router
-
-
-def _dump(path, obj):
-    with open(path, "w", encoding="utf-8") as fh:
-        json.dump(obj, fh, ensure_ascii=False, indent=2, sort_keys=True)
-        fh.write("\n")
 
 
 def _config(plan_dir):
@@ -63,15 +56,4 @@ def build(plan_dir, out_dir, *, view="sheet", pdf=False, renderer=None, runner=N
                                      metrics=m, exam=exam, names=names, **kw)
     reports["solution_public-report"] = reporter.write_public(result, out_dir, pdf=pdf, renderer=renderer, exam=exam,
                                               names=names, **kw)
-    def path(kind):
-        return os.path.join(out_dir, report_kinds.name(names["exam"], names["subject"], kind, names["run"],
-                                                       report_kinds.load()["kinds"][kind]["ext"][0]))
-    _dump(path("metrics"), m)
-    plan = loaded["plan"] or {}
-    with open(os.path.join(plan_dir, "result.json"), "rb") as fh:
-        rsha = hashlib.sha256(fh.read()).hexdigest()
-    _dump(path("result-data"),
-          {"plan_run_id": plan.get("plan_run_id"), "exam_id": plan.get("exam_id"),
-           "result_sha256": rsha, "view": view, "engine_git": engine_git,
-           **({"overlays": [overlay]} if overlay else {})})
     return {"reports": reports, "metrics": m, "result": result, "exam": exam, "names": names}

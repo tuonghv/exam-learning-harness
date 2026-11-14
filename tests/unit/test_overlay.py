@@ -230,14 +230,11 @@ class T1Applied(Base):
     def test_96_3_answer_sheet_and_metrics_reflect_overlay(self):
         # a pack has no per-subject answer-sheet (REQ-0106); the overlay shows in the all-subject answer-table
         self.assertEqual([f for f in self.files(self.o2, ".md") if "answer-sheet" in f], [])
-        met = [f for f in self.files(self.o2, ".json") if "metrics" in f and "physics" in f.lower()]
-        met1 = [f for f in self.files(self.o1, ".json") if "metrics" in f and "physics" in f.lower()]
-        self.assertEqual((len(met), len(met1)), (1, 1), os.listdir(self.o2))
-        m1, m2 = jread(met1[0]), jread(met[0])
-        self.assertNotEqual(m1, m2)
-        self.assertEqual(json.dumps(m2).count('"overlay"') >= 0, True)
-        # cost metrics use the base run only (overlay cost 0.25 lives in run.json)
-        self.assertNotIn("0.25", json.dumps(m2))
+        # TASK-101: no metrics json is written; the combined solution report differs and carries no overlay cost
+        self.assertEqual([f for f in self.files(self.o2, ".json") if not f.endswith("run.json")], [])
+        t1, t2 = self.solution_all(self.o1), self.solution_all(self.o2)
+        self.assertNotEqual(t1, t2)
+        self.assertNotIn("0.25", t2)  # overlay cost lives in run.json
 
     def test_96_4_run_json_overlays_shape(self):
         run = jread(os.path.join(self.o2, "run.json"))
@@ -288,7 +285,7 @@ class T1Applied(Base):
         bad = [ln for ln in r.stdout.splitlines() if ln.endswith("FAIL") and "pdf" not in ln.lower()
                and not ln.startswith("RESULT")]
         self.assertEqual(bad, [], r.stdout)
-        self.assertRegex(r.stdout, r"RESULT\t53 checks\t3 failed")  # exactly the 3 PDF rows (all solution-report + all public pdf, md without pdf)
+        self.assertRegex(r.stdout, r"RESULT\t48 checks\t3 failed")  # exactly the 3 PDF rows (all solution-report + all public pdf, md without pdf)
         self.assertRegex(r.stdout, r"overlay result_sha256 mismatches\t0\t0\tok")
         self.assertRegex(r.stdout, r"overlay source lines physics\t1\t1\tok")
         res = jread(self.ov + "/result.json")

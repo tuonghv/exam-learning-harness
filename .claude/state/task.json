@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-101",
-  "state": "DESIGN",
-  "next": "coder: items 101.1-101.5 of the design",
+  "state": "IMPLEMENTING",
+  "next": "tester: add _rl_score run.json-first test, full suite",
   "title": "report runs hold only human-readable reports, no json/log (REQ-0108)",
   "active": [
     {
       "task_id": "TASK-101",
-      "state": "DESIGN",
-      "next": "coder: items 101.1-101.5 of the design",
-      "updated_at": "2026-11-14T08:39:42Z"
+      "state": "IMPLEMENTING",
+      "next": "tester: add _rl_score run.json-first test, full suite",
+      "updated_at": "2026-11-14T08:46:17Z"
     }
   ],
   "max_active": 1

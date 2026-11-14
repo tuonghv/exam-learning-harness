@@ -64,7 +64,7 @@ class Registry(unittest.TestCase):
         self.assertNotIn("dgnl2025_science_solution-report_run-a.md", e)
         self.assertNotIn("dgnl2025_science_solution_public-report_run-a.md", e)
         self.assertIn("dgnl2025_all_solution_public-report_run-a.pdf", e)
-        self.assertIn("dgnl2025_science_metrics_run-a.json", e)
+        self.assertNotIn("dgnl2025_science_metrics_run-a.json", e)  # TASK-101: retired kind
         self.assertIn("dgnl2025_science_answer-sheet_run-a.md", rk.expected("dgnl2025", ["Science"], "run-a"))
 
     def test_85_1_bad_parts_kind_ext_raise(self):
@@ -141,7 +141,8 @@ class Registry(unittest.TestCase):
         self.assertFalse([x for x in e if "score-" in x or "learning-report" in x or ".html" in x])
         k = rk.expected("e", ["Math"], "run-a", key=True, pdf=False)
         self.assertIn("e_all_score-vs-key_run-a.tsv", k)
-        self.assertIn("e_all_score-summary_run-a.json", k)
+        self.assertNotIn("e_all_score-summary_run-a.json", k)  # TASK-101: json is optional/old runs only
+        self.assertFalse([x for x in e + k if x.endswith((".json", ".log"))])
         self.assertFalse([x for x in k if x.endswith(".pdf")])
         self.assertEqual(e, sorted(e))
 
@@ -415,6 +416,35 @@ class Packed(unittest.TestCase):
         self.assertEqual(rc, 0, out)
         self.assertIn("0 failed", out)
 
+    def test_101_pack_has_no_json_or_log_except_run_json(self):
+        names = self.listing()
+        self.assertEqual([n for n in names if n.endswith((".json", ".log")) and n != "run.json"], [])
+        with open(os.path.join(self.work, "run.json"), encoding="utf-8") as fh:
+            run = json.load(fh)
+        self.assertEqual(sorted(p["plan_run_id"] for p in run["plan_runs"]), ["out-Alpha", "out-Beta"])
+        self.assertTrue(all(len(p["result_sha256"]) == 64 for p in run["plan_runs"]))
+        self.assertEqual(run["score"]["total"], self.info["total"])
+        self.assertEqual(run["score"]["total_correct"], self.info["correct"])
+        rc, out = checker(*self.args(self.work))
+        self.assertEqual(rc, 0, out)
+        self.assertIn("json/log files in pack\t0\t0\tok", out)
+
+    def test_101_checker_fails_on_stray_metrics_json(self):
+        open(os.path.join(self.work, rk.name("ex", "alpha", "metrics", "run-t", "json")), "w").write("{}\n")
+        rc, out = checker(*self.args(self.work))
+        self.assertNotEqual(rc, 0, out)
+        self.assertRegex(out, r"json/log files in pack\t0\t1\tFAIL")
+
+    def test_101_synthetic_non_dgnl_exam_pack(self):
+        out = os.path.join(self.tmp, "zz-pack")
+        self.addCleanup(shutil.rmtree, out, True)
+        with mock.patch.object(reporter, "git_info", return_value=None):
+            info = report_pack.build_pack(self.plans[:1], out, "zzexam2030", "run-z", pdf=False)
+        self.assertEqual(info["expected"], info["files"])
+        self.assertTrue(all(n.startswith("zzexam2030_") for n in info["files"]))
+        self.assertFalse([n for n in os.listdir(out) if n.endswith((".json", ".log")) and n != "run.json"])
+        self.assertIsNone(info["total"])
+
     def test_85_10_stray_unregistered_file_fails(self):
         open(os.path.join(self.work, "report.md"), "w").close()
         rc, out = checker(*self.args(self.work))
@@ -422,7 +452,7 @@ class Packed(unittest.TestCase):
         self.assertRegex(out, r"unregistered files\t0\t1\tFAIL")
 
     def test_85_10_missed_kind_fails(self):
-        for kind, ext in (("metrics", "json"), ("score-vs-key", "tsv"), ("solution-report", "md")):
+        for kind, ext in (("answer-table", "tsv"), ("score-vs-key", "tsv"), ("solution-report", "md")):
             d = os.path.join(self.tmp, "m-" + kind)
             shutil.copytree(self.work, d)
             self.addCleanup(shutil.rmtree, d, True)

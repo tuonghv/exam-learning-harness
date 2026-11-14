@@ -1448,8 +1448,16 @@ def _drop_idle_adjudication(cfg, exam):
 
 
 def _rl_score(report_dirs):
-    """'correct/total' from the newest report run (last in list) that holds a score-summary json, else '-'."""
+    """'correct/total' from the newest report run (last in list) with a score: run.json `score`, else the
+    score-summary json of an old run; '-' when none."""
     for d in reversed(report_dirs):
+        try:
+            with open(os.path.join(d, runlayout.RUN_JSON), encoding="utf-8") as fh:
+                sc = json.load(fh).get("score")
+            if sc:
+                return "%d/%d" % (sc["total_correct"], sc["total"])
+        except (OSError, ValueError, KeyError, TypeError, AttributeError):
+            pass
         try:
             hit = report_kinds.find(d, "score-summary", ext="json")
             with open(hit[0] if isinstance(hit, (list, tuple)) else hit, encoding="utf-8") as fh:

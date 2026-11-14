@@ -201,9 +201,10 @@ def main(argv):
             chk("overlay source lines %s" % s, sum(len(o["questions"]) for o in overlays if slug(o.get("subject")) == s),
                 len(SOURCE_LINE.findall(sr)))
         chk("raw-JSON doubt lines %s" % s, 0, len(re.findall(r"""[{]\s*["']level["']""", sr)))
-        chk("log copy %s" % s, 1, 1 if ("run-log", s, "log") in by else 0)
-        meta = jload(by[("result-data", s, "json")]) if ("result-data", s, "json") in by else {}
-        chk("result-data plan_run_id %s" % s, jload(os.path.join(x["plan"], "plan.json")).get("plan_run_id"), meta.get("plan_run_id"))
+        pid = jload(os.path.join(x["plan"], "plan.json")).get("plan_run_id")
+        ids = {str(p.get("plan_run_id")) for p in man.get("plan_runs", []) if isinstance(p, dict)}
+        chk("plan_run_id in run.json %s" % s, True, str(pid) in ids or os.path.basename(os.path.abspath(x["plan"])) in ids)
+    chk("json/log files in pack", 0, sum(1 for f in files if f.rpartition(".")[2] in ("json", "log")))
     chk("questions total", total, qsum)
     allsr = read(by.get(("solution-report", "all", "md"), ""))
     chk("questions combined solution-report", total, len(re.findall(r"^### \S+ (\d+)\s*$", allsr, re.M)))
@@ -238,11 +239,8 @@ def main(argv):
         chk("score-vs-key correct", correct, sum(1 for r in sk if r[4] == "correct"))
         chk("score-vs-key WRONG", wrong, sum(1 for r in sk if r[4] == "WRONG"))
         chk("score-vs-key declined", declined, sum(1 for r in sk if r[4] == "declined"))
-        try:
-            sj = jload(by[("score-summary", "all", "json")])
-        except (KeyError, OSError, ValueError):
-            sj = {}
-        chk("score-summary json total_correct", correct, sj.get("total_correct"))
+        sc = man.get("score") if isinstance(man.get("score"), dict) else {}
+        chk("score-summary run.json total_correct", correct, sc.get("total_correct"))
         smd = read(by.get(("score-summary", "all", "md"), ""))
         chk("score-summary md total", "%d / %d" % (correct, total), (re.search(r"\*\*(\d+ / \d+)", smd) or [0, None])[1])
         if expect is not None:

@@ -12,6 +12,7 @@ from unittest import mock
 ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 sys.path.insert(0, os.path.join(ROOT, "src"))
 from exam_engine import cli  # noqa: E402
+from exam_engine.pipeline import report_kinds as rk  # noqa: E402
 from exam_engine.pipeline import explain, report_pack, reporter  # noqa: E402
 
 EXAM = os.path.join(ROOT, "examples", "english", "input-001.md")
@@ -178,17 +179,18 @@ class Packed(unittest.TestCase):
         res = {r[0]: r[4] for r in tsv}
         self.assertEqual(res, {"1": "correct", "2": "WRONG", "3": "keybad"})
         self.assertEqual(len(tsv), self.n)
-        sm = json.loads(self.read(out, "score-summary", "json"))
+        self.assertIsNone(rk.find(out, "score-summary", ext="json"))  # TASK-101: score lives in run.json
+        with open(os.path.join(out, "run.json"), encoding="utf-8") as fh:
+            sm = dict(json.load(fh)["score"])
         scorable = sum(r[4] in ("correct", "WRONG", "declined") for r in tsv)
         self.assertEqual(info["total"], scorable)
         self.assertEqual((sm["total"], sm["total_correct"]), (2, 1))
-        self.assertEqual(sm["key_issues"], [{"printed": "3", "kind": "bad_letter", "token": "I"}])
         md = self.read(out, "score-summary", "md")
         for h in ("## Score", "## Per question", "## Calibration", "## Mismatches", "## Key issues"):
             self.assertIn(h, md)
         with open(os.path.join(out, "run.json"), encoding="utf-8") as fh:
             run = json.load(fh)
-        self.assertEqual(run["key_issues"], sm["key_issues"])
+        self.assertEqual(run["key_issues"], [{"printed": "3", "kind": "bad_letter", "token": "I"}])
 
     def test_98_5_answer_table_unchanged_by_key(self):
         a, _, _ = self.pack("a")

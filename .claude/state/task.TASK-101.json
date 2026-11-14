@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-101",
   "title": "report runs hold only human-readable reports, no json/log (REQ-0108)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0108",
   "acceptance_criteria": [
     "AC1 publish/report-pack write no .json except run.json and no .log under reports/; INDEX lists .md/.pdf/.tsv only; run.json names source plan runs and score",
@@ -15,8 +15,22 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/report_build.py",
+      "src/exam_engine/pipeline/report_pack.py",
+      "src/exam_engine/cli.py",
+      "config/report_kinds.json",
+      "tools/check_report_pack.py",
+      "docs/guide/report-kinds.md",
+      "tests/unit/test_report_build.py",
+      "tests/unit/test_plan_qa.py",
+      "tests/unit/test_overlay.py",
+      "tests/unit/test_plan_import.py",
+      "tests/unit/test_report_kinds.py",
+      "tests/unit/test_key_score_98.py"
+    ],
+    "summary": "report_build/report_pack stop writing metrics, result-data, score-summary json and run-log; kinds needs=retired (score-summary json optional_ext for old runs); run.json score; _rl_score reads run.json first; checker counts stray json/log"
   },
   "unit_test": {
     "status": "pending",
@@ -39,7 +53,8 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-101/handoff/design.md"
+    "designer": "work/TASK-101/handoff/design.md",
+    "coder": "work/TASK-101/handoff/code.md"
   },
   "user_notes": [
     {
@@ -49,14 +64,22 @@
     }
   ],
   "picked_at": "2026-11-14T08:36:10Z",
-  "updated_at": "2026-11-14T08:39:42Z",
+  "updated_at": "2026-11-14T08:46:17Z",
   "updated_by": "main",
-  "scope": [],
+  "scope": [
+    "src/exam_engine/cli.py",
+    "src/exam_engine/pipeline/*.py",
+    "config/report_kinds.json",
+    "tools/check_report_pack.py",
+    "docs/guide/*.md",
+    "tests/unit/*.py",
+    "docs/report/evidence/TASK-101/*"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
     "done": [],
     "notes": ""
   },
-  "next": "coder: items 101.1-101.5 of the design"
+  "next": "tester: add _rl_score run.json-first test, full suite"
 }

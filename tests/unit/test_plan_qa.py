@@ -121,9 +121,8 @@ class PlanQA(unittest.TestCase):
                 self.assertEqual(rd(rk.find(flat, kind)), rd(rk.find(other, kind)), kind)
         md = rd(rk.find(flat, "solution-report"))
         self.assertIn("## Metrics", md)
-        mine = json.loads(rd(rk.find(os.path.join(self.tmp, "r"), "metrics", ext="json")))
-        self.assertEqual(mine, json.loads(rd(rk.find(dflt, "metrics", ext="json"))))
-        self.assertTrue(mine)
+        for other in (os.path.join(self.tmp, "r"), dflt):
+            self.assertIsNone(rk.find(other, "metrics", ext="json"))  # TASK-101: only the md Metrics block
 
     def test_58_1_token_in_reply_masked_in_calls_through_engine(self):
         tok = "sk-ant-" + "b" * 30

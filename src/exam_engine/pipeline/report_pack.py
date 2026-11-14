@@ -1,13 +1,11 @@
 """Report pack (TASK-085 85.5): several stored plan runs -> one standard-named report folder, $0.
 
-Per plan: report_build.build (solution-report, answer-sheet, metrics, result-data) + a run-log copy; for the
+Per plan: report_build.build (solution-report, answer-sheet, public report); no json/log files (provenance is run.json); for the
 whole exam: a combined solution-report, answer-table and, with an answer key, score-vs-key and score-summary.
 Kinds and names come from report_kinds (config/report_kinds.json); build_pack fails when the folder then
 holds an unregistered file or lacks a registered kind. No model call, no network, no clock.
 """
-import json
 import os
-import shutil
 import sys
 
 from exam_engine.pipeline import explain, planrun, report_build, report_kinds as rk, reporter, runlayout
@@ -193,9 +191,6 @@ def build_pack(plan_dirs, out_dir, exam, run, key=None, pdf=True, engine_git=Non
                         os.remove(os.path.join(out_dir, rk.name(exam, nm["subject"], kind, run, ext)))
                     except (OSError, ValueError):
                         pass
-        src = os.path.join(pd, "run.log")
-        if os.path.isfile(src):
-            shutil.copyfile(src, os.path.join(out_dir, rk.name(exam, nm["subject"], "run-log", run, "log")))
         parts.append({"result": info["result"], "metrics": info["metrics"], "exam": info["exam"],
                       "name": nm["subject"], "plan": pd})
     subjects = [p["name"] for p in parts]
@@ -224,9 +219,6 @@ def build_pack(plan_dirs, out_dir, exam, run, key=None, pdf=True, engine_git=Non
              ["printed", "subject", "key", "ours", "result", "status", "doubt", "flag"],
              [[x[c] for c in ("printed", "subject", "key", "ours", "result", "status", "doubt", "flag")] for x in scored])
         sm = _summary(parts, scored, key_issues)
-        with open(os.path.join(out_dir, rk.name(exam, "all", "score-summary", run, "json")), "w", encoding="utf-8") as fh:
-            json.dump(sm, fh, ensure_ascii=False, indent=1, sort_keys=True)
-            fh.write("\n")
         with open(os.path.join(out_dir, rk.name(exam, "all", "score-summary", run, "md")), "w", encoding="utf-8") as fh:
             fh.write(_summary_md(sm, exam, run))
         correct, total = sm["total_correct"], sm["total"]
@@ -239,6 +231,8 @@ def build_pack(plan_dirs, out_dir, exam, run, key=None, pdf=True, engine_git=Non
     if missing or stray:
         raise ValueError("pack check failed: missing %s; unregistered %s" % (missing, stray))
     meta = dict(extra or {})
+    if total is not None:  # the score-summary json is retired; run-list reads this
+        meta["score"] = {"total_correct": correct, "total": total}
     if overlays:
         meta["overlays"] = list(overlays)
     if key:  # recorded so a later publish can reuse the key (repo-relative when inside the cwd)

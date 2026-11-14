@@ -72,7 +72,7 @@ class PlanImportTest(unittest.TestCase):
         (rdir,) = [n for n in os.listdir(base) if n.startswith("run-")]
         d = os.path.join(base, rdir)
         self.assertIsNotNone(rk.find(d, "solution-report"))
-        self.assertIsNotNone(rk.find(d, "metrics", ext="json"))
+        self.assertIsNone(rk.find(d, "metrics", ext="json"))  # TASK-101: not written
 
     def test_idempotent(self):
         self.imp()

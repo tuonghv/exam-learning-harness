@@ -2911,3 +2911,9 @@ Action: designer draft -> phase-101 design, D1 asked
 Result: design doc; user: drop score-summary json too
 Decision: retire kinds via needs=retired, score into run.json
 Next: implement 101.1-101.5
+
+## IMPLEMENTING - TASK-101 - 2026-11-14T08:46:17Z
+Action: coder 101.1-101.5
+Result: --fast KNOWN 4 NEW 0
+Decision: accept deviation: score-summary json kept as optional_ext so old runs still classify; not written
+Next: unit tests (tester)
