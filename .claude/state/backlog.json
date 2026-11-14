@@ -1963,7 +1963,7 @@
     "task_id": "TASK-099",
     "title": "Default solution_public-report kind and all-only multi-subject pack (REQ-0106)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-14T08:00:00",
     "requirement": "REQ-0106",
     "acceptance_criteria": [
@@ -1971,6 +1971,8 @@
       "AC2 single-plan report writes the per-subject solution_public-report by default, no AI notes",
       "AC3 multi-subject pack writes only all-scope reports + per-subject data files; pack checks pass",
       "AC4 unit tests green; dgnl2025, dgnl2026, dhqg2024 packs re-run at $0"
-    ]
+    ],
+    "completed_at": "2026-11-14T08:10:49Z",
+    "report": "docs/report/phase-99-public-report-default.md"
   }
 ]

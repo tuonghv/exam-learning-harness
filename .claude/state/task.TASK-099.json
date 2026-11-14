@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-099",
   "title": "Default solution_public-report kind and all-only multi-subject pack (REQ-0106)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0106",
   "acceptance_criteria": [
     "AC1 kind solution_public-report registered, name/parse handle the underscore, kind public removed",
@@ -48,11 +48,18 @@
       "docs/report/evidence/TASK-099/verify.md"
     ],
     "command": "exam.py report-pack dgnl2025 --publish; exam.py publish dgnl2026 --from f; exam.py publish dhqg2024 --from t81; python3 -I tools/check_report_pack.py <pack> <plans> [--key]",
-    "result": "3 packs 0 failed; public md 120/120 answers, 0 AI-note lines; 0 per-subject human reports"
+    "result": "3 packs 0 failed; public md 120/120 answers, 0 AI-note lines; 0 per-subject human reports",
+    "quality": {
+      "kind": "real-run",
+      "evidence": [
+        "docs/report/evidence/TASK-099/verify.md"
+      ],
+      "reason": "real packs rebuilt and checked by the independent checker"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-99-public-report-default.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -67,11 +74,14 @@
     },
     "verifier": {
       "waiver": "coordinator ran the real packs and the independent checker (imports nothing from exam_engine)"
+    },
+    "crosscheck": {
+      "waiver": "the independent checker tools/check_report_pack.py (imports nothing from exam_engine) was the crosscheck oracle, see verify.md"
     }
   },
   "user_notes": [],
   "picked_at": "2026-11-14T07:57:36Z",
-  "updated_at": "2026-11-14T08:10:23Z",
+  "updated_at": "2026-11-14T08:10:49Z",
   "updated_by": "main",
   "scope": [
     "config/report_kinds.json",
@@ -88,5 +98,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report and DONE"
+  "next": ""
 }

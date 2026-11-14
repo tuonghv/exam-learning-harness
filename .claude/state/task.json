@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-099",
-  "state": "VERIFIED",
-  "next": "report and DONE",
+  "state": "DONE",
+  "next": "",
   "title": "Default solution_public-report kind and all-only multi-subject pack (REQ-0106)",
-  "active": [
-    {
-      "task_id": "TASK-099",
-      "state": "VERIFIED",
-      "next": "report and DONE",
-      "updated_at": "2026-11-14T08:10:23Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
