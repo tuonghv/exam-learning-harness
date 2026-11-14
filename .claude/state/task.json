@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-102",
-  "state": "UNIT_TESTED",
-  "next": "verify: migrated 23 manifests, re-published, checker; delete old json/log copies (user)",
+  "state": "VERIFIED",
+  "next": "report + DONE",
   "title": "report runs hold no run.json; manifest under plans/ (REQ-0109)",
   "active": [
     {
       "task_id": "TASK-102",
-      "state": "UNIT_TESTED",
-      "next": "verify: migrated 23 manifests, re-published, checker; delete old json/log copies (user)",
-      "updated_at": "2026-11-14T13:44:32Z"
+      "state": "VERIFIED",
+      "next": "report + DONE",
+      "updated_at": "2026-11-14T13:46:30Z"
     }
   ],
   "max_active": 1

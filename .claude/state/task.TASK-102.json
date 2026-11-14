@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-102",
   "title": "report runs hold no run.json; manifest under plans/ (REQ-0109)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0109",
   "acceptance_criteria": [
     "AC1 new report run holds only md/pdf/tsv + INDEX.md",
@@ -44,12 +44,16 @@
     "result": "KNOWN 4 NEW 0; 13 test_102_* fail on pre-TASK-102 code"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "manifest path from run folder name only; migrate never overwrites a differing manifest (verifier)"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "docs/report/evidence/TASK-102/verify.md"
+    ],
+    "command": "scripts/exam.py report-manifests-migrate [--apply]; scripts/exam.py publish dgnl2026 --from f; publish dhqg2024 --from t81; tools/check_report_pack.py; find reports -name run.json; run-list",
+    "result": "23 manifests migrated (idempotent); new runs hold only reports + INDEX.md; checker 47/54 checks 0 failed; 0 run.json under reports/; run-list reads manifests"
   },
   "report": {
     "status": "pending",
@@ -61,11 +65,12 @@
   "roles": {
     "designer": "work/TASK-102/handoff/design.md",
     "coder": "work/TASK-102/handoff/code.md",
-    "tester": "work/TASK-102/handoff/test.md"
+    "tester": "work/TASK-102/handoff/test.md",
+    "verifier": "work/TASK-102/handoff/verify.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-14T08:57:47Z",
-  "updated_at": "2026-11-14T13:44:32Z",
+  "updated_at": "2026-11-14T13:46:30Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
@@ -82,5 +87,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verify: migrated 23 manifests, re-published, checker; delete old json/log copies (user)"
+  "next": "report + DONE"
 }
