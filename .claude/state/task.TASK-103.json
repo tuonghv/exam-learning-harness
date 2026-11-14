@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-103",
   "title": "plans-migrate reports map MIGRATION.json under plans/ (REQ-0110)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0110",
   "acceptance_criteria": [
     "AC1 map read/written under plans/, undo works, existing reports/MIGRATION.json + index moved; reports/ holds only md/pdf/tsv/html + INDEX.md",
@@ -42,11 +42,18 @@
       "docs/report/evidence/TASK-103/verify.md"
     ],
     "command": "clean reports/ + report-runs (backup), report-pack --publish dgnl2025, report-pack + publish dhqg2024 (t81) and dgnl2026 (f), tools/check_report_pack.py --key --expect-correct, find reports",
-    "result": "3 main reports rebuilt at $0; dgnl2025/dgnl2026 0 failed; dhqg2024 2 failed only from key file printed 65='I'; 0 machine files under reports/"
+    "result": "3 main reports rebuilt at $0; dgnl2025/dgnl2026 0 failed; dhqg2024 2 failed only from key file printed 65='I'; 0 machine files under reports/",
+    "quality": {
+      "kind": "real-run",
+      "evidence": [
+        "docs/report/evidence/TASK-103/verify.md"
+      ],
+      "reason": "real rebuild of 3 reports checked by the independent checker"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-103-reports-map-in-plans.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -57,11 +64,14 @@
     "tester": "work/TASK-103/handoff/test.md",
     "verifier": {
       "waiver": "user asked to keep it simple (RAW-00322); coordinator ran the independent checker on all 3 rebuilt reports"
+    },
+    "crosscheck": {
+      "waiver": "tools/check_report_pack.py (imports no exam_engine code) with --key/--expect-correct on all 3 rebuilt reports; see verify.md"
     }
   },
   "user_notes": [],
   "picked_at": "2026-11-14T13:46:53Z",
-  "updated_at": "2026-11-14T14:10:34Z",
+  "updated_at": "2026-11-14T14:10:44Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
@@ -77,5 +87,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report + DONE"
+  "next": ""
 }

@@ -2989,3 +2989,9 @@ Action: clean reports/ and rebuild 3 main reports at $0 (user)
 Result: 0 machine files in reports/; checker pass except key-file defect q65
 Decision: migrate of old reports not needed (user); follow-up: retire report migration code
 Next: report
+
+## DONE - TASK-103 - 2026-11-14T14:10:44Z
+Action: report
+Result: docs/report/phase-103-reports-map-in-plans.md
+Decision: done
+Next: retire report-migration code (ask user)

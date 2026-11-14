@@ -2029,12 +2029,14 @@
     "task_id": "TASK-103",
     "title": "plans-migrate reports map MIGRATION.json under plans/ (REQ-0110)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-14T09:40:00",
     "requirement": "REQ-0110",
     "acceptance_criteria": [
       "AC1 map read/written under plans/, undo works, existing reports/MIGRATION.json moved; reports/ holds only md/pdf/tsv/html + INDEX.md",
       "AC2 unit tests green"
-    ]
+    ],
+    "completed_at": "2026-11-14T14:10:44Z",
+    "report": "docs/report/phase-103-reports-map-in-plans.md"
   }
 ]
