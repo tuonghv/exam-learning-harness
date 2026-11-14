@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-100",
   "title": "publish uses the main run date id in file names (REQ-0107)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0107",
   "acceptance_criteria": [
     "AC1 publish default run part = new main run folder id; --run overrides",
@@ -29,12 +29,16 @@
     "result": "1918 tests, KNOWN 4 NEW 0"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "file naming only"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "docs/report/evidence/TASK-100/verify.md"
+    ],
+    "command": "exam.py publish dgnl2026 --from f; exam.py publish dhqg2024 --from t81; tools/check_report_pack.py",
+    "result": "both packs 0 failed, all file run parts = run-<date id>; old main runs deleted"
   },
   "report": {
     "status": "pending",
@@ -52,11 +56,14 @@
     },
     "tester": {
       "waiver": "coordinator ran the full suite"
+    },
+    "verifier": {
+      "waiver": "coordinator ran the real publish and the independent checker"
     }
   },
   "user_notes": [],
   "picked_at": "2026-11-14T08:21:02Z",
-  "updated_at": "2026-11-14T08:23:21Z",
+  "updated_at": "2026-11-14T08:23:22Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
@@ -70,5 +77,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verify by re-publishing dgnl2026, dhqg2024"
+  "next": "report and DONE"
 }
