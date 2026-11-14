@@ -2905,3 +2905,9 @@ Action: report
 Result: docs/report/phase-100-publish-date-run-names.md
 Decision: DONE
 Next: backlog complete
+
+## DESIGN - TASK-101 - 2026-11-14T08:39:42Z
+Action: designer draft -> phase-101 design, D1 asked
+Result: design doc; user: drop score-summary json too
+Decision: retire kinds via needs=retired, score into run.json
+Next: implement 101.1-101.5
