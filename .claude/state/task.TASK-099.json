@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-099",
   "title": "Default solution_public-report kind and all-only multi-subject pack (REQ-0106)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0106",
   "acceptance_criteria": [
     "AC1 kind solution_public-report registered, name/parse handle the underscore, kind public removed",
@@ -34,9 +34,9 @@
     "summary": "kind solution_public-report (underscore-aware parse), default in every report; pack_subject:false drops per-subject human reports from a multi-subject pack"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --fast",
+    "result": "1917 tests, KNOWN 4 NEW 0 (same 4 known failures without the change)"
   },
   "security": {
     "status": "pending",
@@ -57,7 +57,10 @@
     "designer": {
       "waiver": "small change; coordinator wrote the design directly from the existing uncommitted public-kind code"
     },
-    "coder": "work/TASK-099/handoff/code.md"
+    "coder": "work/TASK-099/handoff/code.md",
+    "tester": {
+      "waiver": "coordinator re-ran the full suite itself and compared against the stashed baseline"
+    }
   },
   "user_notes": [],
   "picked_at": "2026-11-14T07:57:36Z",
@@ -78,5 +81,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "unit tests: python3 -I tools/run_tests.py --fast"
+  "next": "verify: rebuild dgnl2025/dgnl2026/dhqg2024 packs, check_report_pack.py"
 }

@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0106",
-  "next": "unit tests: python3 -I tools/run_tests.py --fast",
+  "next": "verify: rebuild dgnl2025/dgnl2026/dhqg2024 packs, check_report_pack.py",
   "updated": "2026-11-14 15:10"
 }

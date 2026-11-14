@@ -1,14 +1,14 @@
 {
   "schema": 2,
   "task_id": "TASK-099",
-  "state": "IMPLEMENTING",
-  "next": "unit tests: python3 -I tools/run_tests.py --fast",
+  "state": "UNIT_TESTED",
+  "next": "verify: rebuild dgnl2025/dgnl2026/dhqg2024 packs, check_report_pack.py",
   "title": "Default solution_public-report kind and all-only multi-subject pack (REQ-0106)",
   "active": [
     {
       "task_id": "TASK-099",
-      "state": "IMPLEMENTING",
-      "next": "unit tests: python3 -I tools/run_tests.py --fast",
+      "state": "UNIT_TESTED",
+      "next": "verify: rebuild dgnl2025/dgnl2026/dhqg2024 packs, check_report_pack.py",
       "updated_at": "2026-11-14T08:10:16Z"
     }
   ],
