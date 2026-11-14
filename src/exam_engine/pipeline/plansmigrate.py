@@ -86,6 +86,13 @@ def _abs(root, rel):
     return os.path.join(os.path.abspath(root), *rel.split("/"))
 
 
+def _gpath(root, rel):
+    """File of a generated target: the run manifest lives under plans (outside the reports root), the rest in root."""
+    if rel.endswith("/" + runlayout.RUN_JSON):
+        return runlayout.manifest_path(_abs(root, rel.rsplit("/", 1)[0]))
+    return _abs(root, rel)
+
+
 # ---------------------------------------------------------------- map and move table
 
 def load_map(path, section):
@@ -743,11 +750,11 @@ def _stash(root, moves, targets):
                     os.makedirs(os.path.dirname(dst), exist_ok=True)
                     shutil.copy2(os.path.join(base, fn), dst)
     for rel, _k in targets:
-        if rel not in orig and os.path.isfile(_abs(root, rel)):
+        if rel not in orig and os.path.isfile(_gpath(root, rel)):
             orig[rel] = STASH + "/" + rel
             dst = _abs(root, STASH + "/" + rel)
             os.makedirs(os.path.dirname(dst), exist_ok=True)
-            shutil.copy2(_abs(root, rel), dst)
+            shutil.copy2(_gpath(root, rel), dst)
     return orig
 
 
@@ -769,19 +776,24 @@ def _generate(root, man, plans_root=None):
         else:
             rk.write_index(_abs(root, rel.rsplit("/", 1)[0]))
     for g in man["generated"]:
-        g["sha"] = _sha_file(_abs(root, g["path"]))
+        g["sha"] = _sha_file(_gpath(root, g["path"]))
 
 
 def _unwind_generated(root, man):
     """Remove the generated files, put back the stashed originals at their (moved) place, drop the stash."""
     root = os.path.abspath(root)
     for g in man.get("generated") or []:
-        p = _abs(root, g["path"])
-        if g.get("orig"):
+        p = _gpath(root, g["path"])
+        if g.get("orig") and p == _abs(root, g["path"]):
             if os.path.lexists(p) and os.path.isfile(_abs(root, g["orig"])):
                 shutil.copy2(_abs(root, g["orig"]), p)
         elif os.path.isfile(p):
             os.remove(p)
+            if p != _abs(root, g["path"]):  # plans manifest: drop its report-runs folder when empty
+                try:
+                    os.rmdir(os.path.dirname(p))
+                except OSError:
+                    pass
     sd = _abs(root, STASH)
     for base, dns, fns in os.walk(sd, topdown=False):
         for fn in fns:
@@ -834,8 +846,8 @@ def _verify_reports(root, man, base, chk):
     chk("content sha256 equal (%d)" % len(want), [], sorted(k for k, v in want.items() if cshas.get(k) != v)[:5])
     runs = man.get("report_runs") or []
     dirs = ["%s/%s/%s%s" % (r["exam"], r["line"], runlayout.REPORT_PREFIX, r["id"]) for r in runs]
-    chk("run.json per run (%d)" % len(runs), [],
-        [d for d in dirs if runlayout._jload(_abs(root, d + "/" + runlayout.RUN_JSON)) is None][:5])
+    chk("run manifest per run (%d)" % len(runs), [],
+        [d for d in dirs if runlayout.read_report_manifest(_abs(root, d)) is None][:5])
     chk("INDEX.md per run (%d)" % len(runs), [], [d for d in dirs if not os.path.isfile(_abs(root, d + "/" + rk.INDEX_NAME))][:5])
     stale = []
     for rel, kind in _gen_targets(runs):
@@ -1076,7 +1088,7 @@ def undo(root):
             return 2
     gen = man.get("generated") or []
     changed = [g["path"] for g in gen if g.get("sha") and (
-        not os.path.isfile(_abs(root, g["path"])) or _sha_file(_abs(root, g["path"])) != g["sha"])]
+        not os.path.isfile(_gpath(root, g["path"])) or _sha_file(_gpath(root, g["path"])) != g["sha"])]
     if changed:  # a regenerated file was edited after the apply: keep it, the original is in MIGRATION.index
         for rel in changed:
             print("ERROR: undo refused: %s changed since the apply (original copy: %s/%s)" % (

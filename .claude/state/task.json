@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-102",
-  "state": "DESIGN",
-  "next": "coder: items 102.1-102.7",
+  "state": "IMPLEMENTING",
+  "next": "tester bite check; coordinator migrate + re-publish",
   "title": "report runs hold no run.json; manifest under plans/ (REQ-0109)",
   "active": [
     {
       "task_id": "TASK-102",
-      "state": "DESIGN",
-      "next": "coder: items 102.1-102.7",
-      "updated_at": "2026-11-14T09:02:09Z"
+      "state": "IMPLEMENTING",
+      "next": "tester bite check; coordinator migrate + re-publish",
+      "updated_at": "2026-11-14T09:14:36Z"
     }
   ],
   "max_active": 1

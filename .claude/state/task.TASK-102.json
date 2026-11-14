@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-102",
   "title": "report runs hold no run.json; manifest under plans/ (REQ-0109)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0109",
   "acceptance_criteria": [
     "AC1 new report run holds only md/pdf/tsv + INDEX.md",
@@ -16,8 +16,27 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "docs/guide/report-kinds.md",
+      "docs/guide/toolkit-reference.md",
+      "docs/guide/workflow-roles.md",
+      "src/exam_engine/cli.py",
+      "src/exam_engine/pipeline/plansmigrate.py",
+      "src/exam_engine/pipeline/report_kinds.py",
+      "src/exam_engine/pipeline/report_pack.py",
+      "src/exam_engine/pipeline/runlayout.py",
+      "tests/unit/test_key_score_98.py",
+      "tests/unit/test_overlay.py",
+      "tests/unit/test_plansmigrate.py",
+      "tests/unit/test_publish.py",
+      "tests/unit/test_publish_badge.py",
+      "tests/unit/test_report_build.py",
+      "tests/unit/test_report_kinds.py",
+      "tests/unit/test_runlayout.py",
+      "tools/check_report_pack.py"
+    ],
+    "summary": "run manifest at plans/<exam>[/<line>]/report-runs/run-<id>.json via runlayout helpers; writers/readers/checker switched; report-manifests-migrate (dry-run default, --apply, idempotent); unmigrated in-folder run.json warns and publish refuses"
   },
   "unit_test": {
     "status": "pending",
@@ -40,11 +59,12 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-102/handoff/design.md"
+    "designer": "work/TASK-102/handoff/design.md",
+    "coder": "work/TASK-102/handoff/code.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-14T08:57:47Z",
-  "updated_at": "2026-11-14T09:02:09Z",
+  "updated_at": "2026-11-14T09:14:36Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
@@ -61,5 +81,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "coder: items 102.1-102.7"
+  "next": "tester bite check; coordinator migrate + re-publish"
 }

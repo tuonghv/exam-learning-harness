@@ -16,7 +16,7 @@ from unittest import mock
 ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 sys.path.insert(0, os.path.join(ROOT, "src"))
 from exam_engine import cli  # noqa: E402
-from exam_engine.pipeline import report_build, report_kinds as rk, report_pack, reporter  # noqa: E402
+from exam_engine.pipeline import report_build, report_kinds as rk, report_pack, reporter, runlayout  # noqa: E402
 
 EXAM = os.path.join(ROOT, "examples", "english", "input-001.md")
 MOCK = os.path.join(ROOT, "tests", "unit", "fixtures", "mock_english_001.json")
@@ -206,13 +206,14 @@ class Packed(unittest.TestCase):
         # per-test copy of the pack so a test may delete or add files
         self.work = os.path.join(self.tmp, "w-" + self.id().split(".")[-1])
         shutil.copytree(self.pack, self.work)
+        shutil.copy(runlayout.manifest_path(self.pack), runlayout.manifest_path(self.work))  # TASK-102: beside the pack
         self.addCleanup(shutil.rmtree, self.work, True)
 
     def listing(self, d=None):
         return sorted(os.listdir(d or self.work))
 
     def test_85_2_writers_emit_only_standard_names(self):
-        names = [n for n in self.listing() if n not in ("INDEX.md", "run.json")]  # 87.3: run.json is no report file
+        names = [n for n in self.listing() if n != "INDEX.md"]  # TASK-102: the manifest is not in the pack
         self.assertEqual(names, sorted(self.info["files"]))
         for n in names:
             self.assertIsNotNone(rk.parse(n), n)
@@ -301,7 +302,7 @@ class Packed(unittest.TestCase):
         with open(os.path.join(self.work, "INDEX.md"), encoding="utf-8") as fh:
             md = fh.read()
         self.assertNotIn("| INDEX.md |", md)
-        self.assertIn("- total: %d" % (len(self.listing()) - 2), md)  # minus INDEX.md and run.json
+        self.assertIn("- total: %d" % (len(self.listing()) - 1), md)  # minus INDEX.md
 
     # ---- AC4 hybrid solution-report ----
     def result(self):
@@ -352,7 +353,7 @@ class Packed(unittest.TestCase):
         self.assertEqual(self.info["total"], 2 * self.n)
         self.assertIsInstance(self.info["correct"], int)
         want = rk.expected("ex", ["alpha", "beta"], "run-t", key=True, pdf=False, pack=True)
-        self.assertEqual([f for f in self.listing() if f not in ("INDEX.md", "run.json")], want)  # exactly the registry's list
+        self.assertEqual([f for f in self.listing() if f != "INDEX.md"], want)  # exactly the registry's list
         with open(os.path.join(self.work, rk.name("ex", "all", "answer-table", "run-t", "tsv")), encoding="utf-8") as fh:
             self.assertEqual(len(fh.read().splitlines()), 1 + 2 * self.n)
 
@@ -416,10 +417,10 @@ class Packed(unittest.TestCase):
         self.assertEqual(rc, 0, out)
         self.assertIn("0 failed", out)
 
-    def test_101_pack_has_no_json_or_log_except_run_json(self):
+    def test_102_pack_has_no_json_or_log_and_manifest_is_outside(self):
         names = self.listing()
-        self.assertEqual([n for n in names if n.endswith((".json", ".log")) and n != "run.json"], [])
-        with open(os.path.join(self.work, "run.json"), encoding="utf-8") as fh:
+        self.assertEqual([n for n in names if n.endswith((".json", ".log"))], [])
+        with open(runlayout.manifest_path(self.work), encoding="utf-8") as fh:
             run = json.load(fh)
         self.assertEqual(sorted(p["plan_run_id"] for p in run["plan_runs"]), ["out-Alpha", "out-Beta"])
         self.assertTrue(all(len(p["result_sha256"]) == 64 for p in run["plan_runs"]))
@@ -442,7 +443,7 @@ class Packed(unittest.TestCase):
             info = report_pack.build_pack(self.plans[:1], out, "zzexam2030", "run-z", pdf=False)
         self.assertEqual(info["expected"], info["files"])
         self.assertTrue(all(n.startswith("zzexam2030_") for n in info["files"]))
-        self.assertFalse([n for n in os.listdir(out) if n.endswith((".json", ".log")) and n != "run.json"])
+        self.assertFalse([n for n in os.listdir(out) if n.endswith((".json", ".log"))])
         self.assertIsNone(info["total"])
 
     def test_85_10_stray_unregistered_file_fails(self):
@@ -733,7 +734,7 @@ class LegacyCounts(unittest.TestCase):
         for n in ("solutions.md", "stray.txt"):
             with open(os.path.join(run, n), "w") as fh:
                 fh.write("x\n")
-        with open(os.path.join(run, "run.json"), "w") as fh:
+        with open(runlayout.manifest_path(run), "w") as fh:
             json.dump({"plan_runs": [], "superseded": [{"glob": "solutions*", "note": "replaced by X"}]}, fh)
         with open(rk.write_index(t), encoding="utf-8") as fh:
             md = fh.read()

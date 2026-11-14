@@ -1,6 +1,6 @@
 """Report pack (TASK-085 85.5): several stored plan runs -> one standard-named report folder, $0.
 
-Per plan: report_build.build (solution-report, answer-sheet, public report); no json/log files (provenance is run.json); for the
+Per plan: report_build.build (solution-report, answer-sheet, public report); no json/log files (provenance is the plans manifest); for the
 whole exam: a combined solution-report, answer-table and, with an answer key, score-vs-key and score-summary.
 Kinds and names come from report_kinds (config/report_kinds.json); build_pack fails when the folder then
 holds an unregistered file or lacks a registered kind. No model call, no network, no clock.
@@ -225,7 +225,7 @@ def build_pack(plan_dirs, out_dir, exam, run, key=None, pdf=True, engine_git=Non
     if pdf:
         _pdf_siblings(out_dir, reporter.learn_lang(parts[0]["result"]))
     want = rk.expected(exam, subjects, run, key=bool(keymap), pdf=pdf, view=view, pack=True)
-    have = sorted(f for f in os.listdir(out_dir) if f not in (rk.INDEX_NAME, runlayout.RUN_JSON))
+    have = sorted(f for f in os.listdir(out_dir) if f != rk.INDEX_NAME)
     missing = [w for w in want if w not in have]
     stray = [h for h in have if rk.classify(h)[1] != "standard"]
     if missing or stray:

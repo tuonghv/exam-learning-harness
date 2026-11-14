@@ -2941,3 +2941,9 @@ Action: designer draft -> phase-102 design
 Result: design doc, 3 decisions
 Decision: D1 plans/<exam>/<line>/report-runs, D2 no fallback, D3 separate migrate command (recommendations, follow RAW-00317/318)
 Next: implement 102.1-102.7
+
+## IMPLEMENTING - TASK-102 - 2026-11-14T09:14:36Z
+Action: coder 102.1-102.7
+Result: --fast KNOWN 4 NEW 0; dry-run 23 to move, 0 problems
+Decision: accept 3-tuple migrate return (adds already_migrated)
+Next: unit tests

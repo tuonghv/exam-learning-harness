@@ -23,7 +23,7 @@ from exam_engine.pipeline import (examples_check, explain, metrics, overlay, par
 COMMANDS = ("solve", "parse", "verify", "report", "plan-import", "check-examples", "score", "prompts",
             "check-prompts", "ingest", "ingest-inspect", "ingest-refine", "cross-solve", "benchmark",
             "extract-eval", "gold-pdf", "gen-exams", "lessons", "review-pack", "review-apply", "run-stats",
-            "report-pack", "report-index", "run-list", "run-compare", "plans-migrate", "publish")
+            "report-pack", "report-index", "run-list", "run-compare", "plans-migrate", "publish", "report-manifests-migrate")
 DEFAULT_HISTORY = os.path.join("plans", "run-history.jsonl")
 LEGACY_HISTORY = (os.path.join("reports", "run-history.jsonl"),  # read-only fallbacks (RAW-00174, phase 58)
                   os.path.join("results", "run-history.jsonl"))
@@ -329,7 +329,7 @@ def _print_image_header(cfg, exam, image):
 
 
 def _build_default_report(a, result):
-    """solve without --out: the report goes through report_build into a new reports/<exam>/run-<id>/ (+ run.json)."""
+    """solve without --out: the report goes through report_build into a new reports/<exam>/run-<id>/ (+ manifest under plans)."""
     pexam, pline = runlayout.exam_line_of_plan_dir(a.out)
     out = runlayout.new_report_run(DEFAULT_REPORT_ROOT, pexam if pline != "-" else planrun.exam_id_of(a.exam),
                                    line=pline, publish=a.publish)
@@ -413,7 +413,7 @@ def verify_main(argv):
 def _report_plan(argv):
     """report PLAN_RUN [--view sheet|learn] [--no-pdf] [--report-id ID] [--out DIR]"""
     ap = argparse.ArgumentParser(prog="exam report", description="Rebuild a report from a plan run "
-                                 "(no model call). Default out: a new reports/<exam-id>/run-<id>/ with run.json.")
+                                 "(no model call). Default out: a new reports/<exam-id>/run-<id>/ with its manifest under plans/.")
     ap.add_argument("plan_run")
     ap.add_argument("--view", choices=reporter.VIEWS, default="sheet")
     ap.add_argument("--no-pdf", action="store_true")
@@ -443,7 +443,7 @@ def _report_plan(argv):
                                   engine_git=reporter.git_info(_REPO_ROOT), exam_name=a.exam_name,
                                   run_name=report_kinds.short_run(a.run_name) if a.run_name else None)
         git = reporter.git_info(_REPO_ROOT)
-        if a.out:  # explicit --out: as before plus run.json; no INDEX
+        if a.out:  # explicit --out: manifest beside --out (never inside it); no INDEX
             runlayout.write_report_manifest(out, [plan], a.view, git, "report")
         else:
             runlayout.finish_report_run(out, [plan], a.view, git, "report")
@@ -513,8 +513,13 @@ def report_pack_main(argv):
 
 def _publish_selection(plans_root, reports_root, exam, line):
     """([(plan dir, subject)], source report run row or None): plan runs of the latest complete pack of `line`
-    (run.json cmd report-pack/publish, every plan run in `line` and present), else the latest plan run per subject."""
-    packs = [r for r in runlayout.list_report_runs(reports_root, exam, line=line)
+    (manifest cmd report-pack/publish, every plan run in `line` and present), else the latest plan run per subject."""
+    rows = runlayout.list_report_runs(reports_root, exam, line=line)
+    bad = [r["id"] for r in rows if r["warn"] == "unmigrated"]
+    if bad:  # no fallback to the old in-folder run.json: never drop silently to "latest per subject"
+        raise ValueError("report run(s) %s of line %s still have run.json in the folder; "
+                         "run exam report-manifests-migrate --apply" % (", ".join("run-" + b for b in bad), line))
+    packs = [r for r in rows
              if r["layout"] == "run" and (r["manifest"] or {}).get("cmd") in ("report-pack", "publish")]
     for r in sorted(packs, key=lambda r: (runlayout.id_time(r["id"]), r["id"]), reverse=True):
         prs = r["manifest"].get("plan_runs") or []
@@ -537,7 +542,7 @@ def publish_main(argv):
     ap.add_argument("--from", dest="line", required=True, metavar="LINE", help="dev line to publish (not main)")
     ap.add_argument("--view", choices=reporter.VIEWS, default="sheet")
     ap.add_argument("--run", help="run part of the file names (default: the new main run id, run-YYYYMMDD-HHMMSS)")
-    ap.add_argument("--key", dest="keyfile", help="answer key file (default: the key recorded in the source pack run.json)")
+    ap.add_argument("--key", dest="keyfile", help="answer key file (default: the key recorded in the source pack manifest)")
     ap.add_argument("--no-pdf", action="store_true")
     ap.add_argument("--plans", default=DEFAULT_OUT_ROOT)
     ap.add_argument("--reports", default=DEFAULT_REPORT_ROOT)
@@ -578,17 +583,37 @@ def publish_main(argv):
                                       view=a.view, cmd="publish", overlays=overlays,
                                       extra={"published_from": line, "source_report_run": src["id"] if src else None})
     except (OSError, ValueError) as exc:
-        if out and not os.path.isfile(os.path.join(out, runlayout.RUN_JSON)):
+        if out and not os.path.isfile(runlayout.manifest_path(out)):
             shutil.rmtree(out, ignore_errors=True)  # a half-built run never stays as an incomplete main run
         print("ERROR: %s" % exc, file=sys.stderr)
         return 2
     print("publish %d file(s) -> %s" % (len(info["files"]), out))
-    man = runlayout._jload(os.path.join(out, runlayout.RUN_JSON)) or {}
+    man = runlayout.read_report_manifest(out) or {}
     prev = man.get("prev_report_run")
     print("main: %s -> %s" % ("run-" + prev if prev else "(none)", os.path.basename(out)))
     if info["total"]:
         print("score %d/%d" % (info["correct"], info["total"]))
     return 0
+
+
+def report_manifests_migrate_main(argv):
+    """report-manifests-migrate [--reports reports] [--apply]: move each in-folder run.json to plans/ (TASK-102)."""
+    ap = argparse.ArgumentParser(prog="exam report-manifests-migrate", description="Move every report run's in-folder "
+                                 "run.json to plans/<exam>[/<line>]/report-runs/run-<id>.json (dry run unless --apply; "
+                                 "a custom --reports root not named `reports` puts them beside the run folder).")
+    ap.add_argument("--reports", default=DEFAULT_REPORT_ROOT)
+    ap.add_argument("--apply", action="store_true")
+    a = ap.parse_args(argv)
+    if not os.path.isdir(a.reports):
+        print("ERROR: %s is not a folder" % a.reports, file=sys.stderr)
+        return 2
+    moves, done, problems = runlayout.migrate_run_json(a.reports, apply=a.apply)
+    for src, dst in moves:
+        print("%s %s -> %s" % ("moved" if a.apply else "would move", src, dst))
+    for p in problems:
+        print("PROBLEM: %s" % p, file=sys.stderr)
+    print("%d %s, %d already migrated, %d problems" % (len(moves), "moved" if a.apply else "to move", done, len(problems)))
+    return 2 if problems else 0
 
 
 def report_index_main(argv):
@@ -1448,15 +1473,14 @@ def _drop_idle_adjudication(cfg, exam):
 
 
 def _rl_score(report_dirs):
-    """'correct/total' from the newest report run (last in list) with a score: run.json `score`, else the
+    """'correct/total' from the newest report run (last in list) with a score: manifest `score`, else the
     score-summary json of an old run; '-' when none."""
     for d in reversed(report_dirs):
         try:
-            with open(os.path.join(d, runlayout.RUN_JSON), encoding="utf-8") as fh:
-                sc = json.load(fh).get("score")
+            sc = (runlayout.read_report_manifest(d) or {}).get("score")
             if sc:
                 return "%d/%d" % (sc["total_correct"], sc["total"])
-        except (OSError, ValueError, KeyError, TypeError, AttributeError):
+        except (KeyError, TypeError):
             pass
         try:
             hit = report_kinds.find(d, "score-summary", ext="json")
@@ -1578,7 +1602,11 @@ def run_list_main(argv):
             if pid:  # a legacy report links only to the main line (or to the line its old folder moved to)
                 links.setdefault((rr["line"] if rr["line"] != "-" else runlayout.LINE_DEFAULT, pid), []).append(rr)
         if rr["warn"]:
-            print("WARN: unreadable %s in %s; shown as incomplete" % (runlayout.RUN_JSON, rr["dir"]), file=sys.stderr)
+            if rr["warn"] == "unmigrated":
+                print("WARN: %s still has run.json in the folder; run exam report-manifests-migrate --apply" % rr["dir"],
+                      file=sys.stderr)
+            else:
+                print("WARN: unreadable manifest of %s; shown as incomplete" % rr["dir"], file=sys.stderr)
     rows.sort(key=lambda x: _rl_line_order(x[1].get("line", "-")))  # stable: keeps the time order inside a line
 
     def linked(label, r, links=links):
@@ -1642,6 +1670,7 @@ def main(argv=None):
              "run-stats": run_stats_main, "report-pack": report_pack_main,
              "report-index": report_index_main, "run-list": run_list_main,
              "run-compare": run_compare_main, "plans-migrate": plansmigrate.main,
+             "report-manifests-migrate": report_manifests_migrate_main,
              "publish": publish_main}
     if cmd not in table:
         print(USAGE, file=sys.stderr)

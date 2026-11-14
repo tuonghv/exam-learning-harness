@@ -22,7 +22,7 @@ class Badge(Base):
     def report_run(self, line, manifest, name="run-20240102-000000"):
         d = os.path.join(self.reports, "ex", line, name)
         os.makedirs(d)
-        jwrite(os.path.join(d, "run.json"), manifest)
+        jwrite(runlayout.manifest_path(d), manifest)
         return d
 
     def pub(self, *extra):
@@ -75,7 +75,7 @@ class Badge(Base):
         d = self.report_run("main", man([("f", "20240101-000002-b")], status="running"))
         got, _ = self.pub()
         self.assertEqual(got["20240101-000002-b"], "dev")
-        with open(os.path.join(d, "run.json"), "w") as fh:
+        with open(runlayout.manifest_path(d), "w") as fh:
             fh.write("{not json")
         got, _ = self.pub()
         self.assertEqual(got["20240101-000002-b"], "dev")
@@ -109,7 +109,7 @@ class IndexScan(Base):
         ex = os.path.join(self.reports, "ex")
         run = os.path.join(ex, "f", "run-20240101-000000")
         os.makedirs(run)
-        jwrite(os.path.join(run, "run.json"), man([("f", "x")]))
+        jwrite(runlayout.manifest_path(run), man([("f", "x")]))
         for p in (os.path.join(ex, "f"), run):
             with open(os.path.join(p, "INDEX.md"), "w") as fh:
                 fh.write("# Reports index: f\n\nbody\n")
@@ -136,7 +136,7 @@ class IndexScan(Base):
         with open(os.path.join(ex, "f", "x", "INDEX.md"), "w") as fh:
             fh.write("my notes\n")
         with open(os.path.join(ex, "f", "run-20240101-000000", "run.json"), "w") as fh:
-            fh.write("{}")  # not an engine manifest (no plan_runs list)
+            fh.write("{}")  # TASK-102: a run.json in a report folder is a stray file, no longer hidden
         rows, md = self.unreg(ex)
         self.assertEqual(len(rows), 2, md)
 

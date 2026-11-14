@@ -22,6 +22,22 @@ def jload(path):
         return json.load(fh)
 
 
+def manifest_path(pack):
+    """Run manifest of a pack (copy of runlayout.manifest_path; a test keeps them equal): below a dir named `reports`
+    plans/<exam>[/<line>]/report-runs/<run>.json beside it, else a sibling <run>.run.json."""
+    d = os.path.abspath(str(pack).rstrip("/"))
+    base, top = os.path.basename(d), os.path.dirname(d)
+    while True:
+        if os.path.basename(top) == "reports":
+            rel = os.path.relpath(d, top)
+            return os.path.join(os.path.dirname(top), "plans", os.path.dirname(rel), "report-runs", base + ".json")
+        up = os.path.dirname(top)
+        if up == top:
+            break
+        top = up
+    return os.path.join(os.path.dirname(d), base + ".run.json")
+
+
 def slug(s):
     return re.sub(r"[^a-z0-9]+", "-", str(s or "").lower()).strip("-")
 
@@ -101,14 +117,14 @@ def main(argv):
         return 2
     pack, plans = args[0], args[1:]
     kinds = jload(reg)["kinds"]
-    try:  # REQ-0104: an overlay plan dir is read from run.json, it is not a PLAN_DIR argument
-        ov_dirs = {os.path.abspath(o.get("dir") or "") for o in (jload(os.path.join(pack, "run.json")).get("overlays") or [])
+    try:  # REQ-0104: an overlay plan dir is read from the run manifest, it is not a PLAN_DIR argument
+        ov_dirs = {os.path.abspath(o.get("dir") or "") for o in (jload(manifest_path(pack)).get("overlays") or [])
                    if isinstance(o, dict)}
     except (OSError, ValueError, AttributeError):
         ov_dirs = set()
     bad_arg = [pd for pd in plans if os.path.abspath(pd) in ov_dirs]
     if bad_arg:
-        print("usage error: %s is an overlay plan dir of this pack (run.json overlays); the checker reads overlays itself. "
+        print("usage error: %s is an overlay plan dir of this pack (manifest overlays); the checker reads overlays itself. "
               "Pass only the base PLAN_DIRs, one per subject." % ", ".join(bad_arg), file=sys.stderr)
         return 2
     rows = []
@@ -120,21 +136,23 @@ def main(argv):
     for pd in plans:
         r = jload(os.path.join(pd, "result.json"))
         results.append({"plan": pd, "r": r, "slug": slug(r["exam"].get("subject")), "n": len(r["questions"])})
-    files = sorted(f for f in os.listdir(pack) if f not in ("INDEX.md", "run.json") and os.path.isfile(os.path.join(pack, f)))
+    files = sorted(f for f in os.listdir(pack) if f != "INDEX.md" and os.path.isfile(os.path.join(pack, f)))
     parsed = {f: parse_name(f, kinds) for f in files}
-    if os.path.isfile(os.path.join(pack, "run.json")):  # TASK-087: run manifest is not a kind; it must match the plans
-        try:
-            man = jload(os.path.join(pack, "run.json"))
-            got = [str(p.get("result_sha256")) for p in man.get("plan_runs", [])]
-        except (OSError, ValueError, AttributeError):
-            man, got = {}, []
-        chk("run.json plan_runs", len(plans), len(got))
+    mp = manifest_path(pack)  # TASK-102: the run manifest lives under plans, it is not a kind and not in the pack
+    chk("run manifest present", True, os.path.isfile(mp))
+    try:
+        man = jload(mp)
+        got = [str(p.get("result_sha256")) for p in man.get("plan_runs", [])]
+    except (OSError, ValueError, AttributeError):
+        man, got = {}, []
+    if man:
+        chk("manifest plan_runs", len(plans), len(got))
         want = []
         for pd in plans:
             with open(os.path.join(pd, "result.json"), "rb") as fh:
                 want.append(hashlib.sha256(fh.read()).hexdigest())
-        chk("run.json result_sha256 mismatches", 0, sum(1 for w in want if w not in got))
-    overlays = [o for o in (man.get("overlays") or []) if isinstance(o, dict)] if os.path.isfile(os.path.join(pack, "run.json")) else []
+        chk("manifest result_sha256 mismatches", 0, sum(1 for w in want if w not in got))
+    overlays = [o for o in (man.get("overlays") or []) if isinstance(o, dict)]
     ovl = {}  # (subject, base id) -> overlay letter
     if overlays:
         bad_sha = bad_text = 0
@@ -203,7 +221,7 @@ def main(argv):
         chk("raw-JSON doubt lines %s" % s, 0, len(re.findall(r"""[{]\s*["']level["']""", sr)))
         pid = jload(os.path.join(x["plan"], "plan.json")).get("plan_run_id")
         ids = {str(p.get("plan_run_id")) for p in man.get("plan_runs", []) if isinstance(p, dict)}
-        chk("plan_run_id in run.json %s" % s, True, str(pid) in ids or os.path.basename(os.path.abspath(x["plan"])) in ids)
+        chk("plan_run_id in manifest %s" % s, True, str(pid) in ids or os.path.basename(os.path.abspath(x["plan"])) in ids)
     chk("json/log files in pack", 0, sum(1 for f in files if f.rpartition(".")[2] in ("json", "log")))
     chk("questions total", total, qsum)
     allsr = read(by.get(("solution-report", "all", "md"), ""))

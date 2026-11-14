@@ -5,6 +5,7 @@ runner for the solve checks. The shipped map config/plans_migration.json is only
 """
 import collections
 import contextlib
+import glob
 import hashlib
 import io
 import json
@@ -602,7 +603,7 @@ class Lines(unittest.TestCase):
         rows = runlayout.list_plan_runs("plans", "dgnl2025", "fix")
         self.assertEqual([(r["id"], r["line"], r["subject"]) for r in rows][0][1], "fix")
         (rr,) = [n for n in os.listdir(os.path.join("reports", "dgnl2025", "fix")) if n.startswith("run-")]
-        self.assertTrue(os.path.isfile(os.path.join("reports", "dgnl2025", "fix", rr, "run.json")))
+        self.assertTrue(os.path.isfile(runlayout.manifest_path(os.path.join("reports", "dgnl2025", "fix", rr))))
 
     def test_90_1_out_with_line_flags_is_a_usage_error(self):
         code, _, err = quiet(cli.solve_main, [EXAM, "--mock", MOCK, "--no-pdf", "--out", "o", "--line", "x"])
@@ -666,7 +667,7 @@ class Lines(unittest.TestCase):
         (rid,) = self.runs("ex", "fix")
         (rr,) = [n for n in os.listdir(os.path.join("reports", "ex", "fix")) if n.startswith("run-")]
         rdir = os.path.join("reports", "ex", "fix", rr)
-        self.assertTrue(os.path.isfile(os.path.join(rdir, "run.json")))
+        self.assertTrue(os.path.isfile(runlayout.manifest_path(rdir)))
         self.assertTrue(os.path.isfile(os.path.join(rdir, "INDEX.md")))
         self.assertTrue(os.path.isfile(os.path.join("reports", "ex", "fix", "INDEX.md")))
         self.assertEqual(os.listdir(os.path.join("reports", "ex")).count("fix"), 1)
@@ -800,7 +801,7 @@ class ReportsRunLayout(unittest.TestCase):
         return os.path.join(self.rep, r["exam"], r["line"], "run-" + r["id"])
 
     def manifest(self, frm):
-        with open(os.path.join(self.run_dir(frm), "run.json"), encoding="utf-8") as fh:
+        with open(runlayout.manifest_path(self.run_dir(frm)), encoding="utf-8") as fh:
             return json.load(fh)
 
     # ---- 91.1 target map
@@ -913,8 +914,8 @@ class ReportsRunLayout(unittest.TestCase):
         mapped_new = set(new_of(r) for r in before)
         extra = [k for k, v in after.items() if v != "DIR" and k not in mapped_new and not k.startswith("MIGRATION.")]
         self.assertTrue(extra)
-        self.assertEqual(set(os.path.basename(k) for k in extra), {"INDEX.md", "run.json"})
-        self.assertEqual(sum(1 for k in extra if k.endswith("run.json")), 11)
+        self.assertEqual(set(os.path.basename(k) for k in extra), {"INDEX.md"})  # TASK-102: no run.json in reports/
+        self.assertEqual(len(glob.glob(os.path.join(self.plans, "*", "*", "report-runs", "run-*.json"))), 11)
         self.assertFalse([n for n in os.listdir(os.path.join(self.rep, "dgnl2026")) if os.path.isfile(os.path.join(self.rep, "dgnl2026", n))])
         self.assertNotIn("dgnl2026f", os.listdir(self.rep))
         self.assertIn("old pack index", txt(os.path.join(self.rep, "MIGRATION.index", "dgnl2026", "INDEX.md")))
@@ -924,11 +925,15 @@ class ReportsRunLayout(unittest.TestCase):
         self.mapped()
         outside = tree(self.plans)
         code, out, err = self.pm("--apply", "--backup-dir", self.bk)
+        self.assertTrue(glob.glob(os.path.join(self.plans, "*", "*", "report-runs", "run-*.json")))
         self.assertEqual(code, 0, out + err)
         self.assertIn("backup ok", out)
         self.assertTrue([n for n in os.listdir(self.bk) if n.endswith(".tar.gz")])
         self.assertLess(out.index("backup ok"), out.index("plans-migrate applied"))
-        self.assertEqual(tree(self.plans), outside)  # plans/ untouched
+        # plans/ untouched but for the run manifests (TASK-102)
+        now = {k: v for k, v in tree(self.plans).items() if "report-runs" not in k}
+        self.assertEqual({k: v for k, v in now.items() if v != "DIR"}, {k: v for k, v in outside.items() if v != "DIR"})
+        self.assertLessEqual(set(outside), set(now))  # new exam/line folders may hold the manifests
         with open(os.path.join(self.rep, "MIGRATION.json"), encoding="utf-8") as fh:
             man = json.load(fh)
         self.assertEqual(man["state"], "applied")
@@ -1040,9 +1045,9 @@ class ReportsRunLayout(unittest.TestCase):
         pk = self.run_dir("dgnl2026")
         r = subprocess.run([sys.executable, "-I", os.path.join(ROOT, "tools", "check_report_pack.py"), pk, self.pd1],
                            capture_output=True, text=True, timeout=60)
-        rows = [ln.split("\t") for ln in r.stdout.splitlines() if ln.startswith("run.json")]
+        rows = [ln.split("\t") for ln in r.stdout.splitlines() if ln.startswith("manifest")]
         self.assertEqual([(x[0], x[3]) for x in rows],
-                         [("run.json plan_runs", "ok"), ("run.json result_sha256 mismatches", "ok")], r.stdout + r.stderr)
+                         [("manifest plan_runs", "ok"), ("manifest result_sha256 mismatches", "ok")], r.stdout + r.stderr)
 
 
 if __name__ == "__main__":

@@ -231,13 +231,13 @@ class T1Applied(Base):
         # a pack has no per-subject answer-sheet (REQ-0106); the overlay shows in the all-subject answer-table
         self.assertEqual([f for f in self.files(self.o2, ".md") if "answer-sheet" in f], [])
         # TASK-101: no metrics json is written; the combined solution report differs and carries no overlay cost
-        self.assertEqual([f for f in self.files(self.o2, ".json") if not f.endswith("run.json")], [])
+        self.assertEqual([f for f in self.files(self.o2, ".json")], [])
         t1, t2 = self.solution_all(self.o1), self.solution_all(self.o2)
         self.assertNotEqual(t1, t2)
         self.assertNotIn("0.25", t2)  # overlay cost lives in run.json
 
     def test_96_4_run_json_overlays_shape(self):
-        run = jread(os.path.join(self.o2, "run.json"))
+        run = jread(runlayout.manifest_path(self.o2))
         self.assertEqual(len(run["overlays"]), 1)
         e = run["overlays"][0]
         self.assertEqual((e["plan_run_id"], e["line"], e["subject"], e["exam_id"]),
@@ -252,7 +252,7 @@ class T1Applied(Base):
         self.assertEqual(q[0]["text_sha256"], overlay.text_sha256(ex["questions"][0]))
         self.assertEqual([p["plan_run_id"] for p in run["plan_runs"]],
                          [os.path.basename(d) for d in self.base])
-        self.assertNotIn("overlays", jread(os.path.join(self.o1, "run.json")))
+        self.assertNotIn("overlays", jread(runlayout.manifest_path(self.o1)))
 
     def test_96_2_base_and_overlay_plan_files_unchanged(self):
         before = snapshot(self.plans)
@@ -263,7 +263,7 @@ class T1Applied(Base):
 
     def test_96_3_recounted_summary(self):
         r = jread(self.phy + "/result.json")
-        merged, _ = overlay.apply(r, overlay.load_exam(self.phy), jread(os.path.join(self.o2, "run.json"))["overlays"][0],
+        merged, _ = overlay.apply(r, overlay.load_exam(self.phy), jread(runlayout.manifest_path(self.o2))["overlays"][0],
                                   jread(self.ov + "/result.json"), overlay.load_exam(self.ov))
         self.assertEqual(r["summary"]["unresolved"], 1)
         self.assertEqual(merged["summary"]["unresolved"], 0)
@@ -285,7 +285,7 @@ class T1Applied(Base):
         bad = [ln for ln in r.stdout.splitlines() if ln.endswith("FAIL") and "pdf" not in ln.lower()
                and not ln.startswith("RESULT")]
         self.assertEqual(bad, [], r.stdout)
-        self.assertRegex(r.stdout, r"RESULT\t48 checks\t3 failed")  # exactly the 3 PDF rows (all solution-report + all public pdf, md without pdf)
+        self.assertRegex(r.stdout, r"RESULT\t49 checks\t3 failed")  # exactly the 3 PDF rows (all solution-report + all public pdf, md without pdf)
         self.assertRegex(r.stdout, r"overlay result_sha256 mismatches\t0\t0\tok")
         self.assertRegex(r.stdout, r"overlay source lines physics\t1\t1\tok")
         res = jread(self.ov + "/result.json")
@@ -370,7 +370,7 @@ class T6Publish(Base):
         self.assertIn("overlay inherited: 20240102-000001-ov printed 12", out)
         runs = self.main_runs()
         self.assertEqual(len(runs), 1, runs)
-        run = jread(os.path.join(self.reports, "ex", "main", runs[0], "run.json"))
+        run = jread(runlayout.manifest_path(os.path.join(self.reports, "ex", "main", runs[0])))
         self.assertEqual(run["overlays"][0]["plan_run_id"], "20240102-000001-ov")
         self.assertEqual(run["overlays"][0]["reason"], REASON)
         main_dir = os.path.join(self.reports, "ex", "main", runs[0])
@@ -410,7 +410,7 @@ class TNoOverlayGolden(Base):
         out = os.path.join(self.tmp, "g")
         code, _, err = self.pack(out)
         self.assertEqual(code, 0, err)
-        self.assertNotIn("overlays", jread(os.path.join(out, "run.json")))
+        self.assertNotIn("overlays", jread(runlayout.manifest_path(out)))
         for f in os.listdir(out):
             if f.endswith((".md", ".json", ".tsv")):
                 self.assertNotIn("Answer source", open(os.path.join(out, f), encoding="utf-8").read())
@@ -425,7 +425,7 @@ class TPdf(Base):
             self.skipTest("pdf engine unavailable: " + (o + err)[:80])
         self.assertEqual(code, 0, o + err)
         self.assertTrue(self.files(out, ".pdf"))
-        run = jread(os.path.join(out, "run.json"))
+        run = jread(runlayout.manifest_path(out))
         self.assertEqual(len(run["overlays"]), 1)
 
 

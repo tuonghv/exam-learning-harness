@@ -95,17 +95,16 @@ def legacy_kind(basename):
 
 
 def run_superseded(folder):
-    """[{glob, note}] of folder/run.json `superseded` (globs relative to the run folder); [] when absent or unreadable."""
-    try:
-        with open(os.path.join(folder, "run.json"), encoding="utf-8") as fh:
-            sup = json.load(fh).get("superseded") or []
-    except (OSError, ValueError, AttributeError):
+    """[{glob, note}] of the run manifest `superseded` (globs relative to the run folder); [] when absent or unreadable."""
+    from exam_engine.pipeline import runlayout
+    sup = (runlayout.read_report_manifest(folder) or {}).get("superseded") or []
+    if not isinstance(sup, list):
         return []
     return [s for s in sup if isinstance(s, dict) and isinstance(s.get("glob"), str)]
 
 
 def nested_superseded(folder, rel, cache):
-    """Note of the first `superseded` glob of a run.json in a parent folder of rel (glob matched against the
+    """Note of the first `superseded` glob of a run manifest of a parent folder of rel (glob matched against the
     path inside that run folder), else None. cache: {dir: [{glob, note}]} shared by the caller (REQ-0104)."""
     parts = rel.split("/")
     for i in range(len(parts) - 1, 0, -1):
@@ -210,10 +209,10 @@ def _has_text(block):
 
 
 def _manifest_lines(folder):
-    """3 header lines (plan runs, view, registry/engine) + blank from folder/run.json; [] when absent or unreadable."""
+    """3 header lines (plan runs, view, registry/engine) + blank from the run manifest; [] when absent or unreadable."""
+    from exam_engine.pipeline import runlayout
     try:
-        with open(os.path.join(folder, "run.json"), encoding="utf-8") as fh:
-            m = json.load(fh)
+        m = runlayout.read_report_manifest(folder)
         plans = ", ".join("%s/%s" % (p["exam_id"], p["plan_run_id"]) for p in m["plan_runs"]) or "-"
         eng = (m.get("engine_git") or {}).get("commit") or "-"
         return ["Plan runs: %s" % plans, "View: %s (cmd %s)" % (m.get("view"), m.get("cmd")),
@@ -233,20 +232,10 @@ def _generated_index(path):
         return False
 
 
-def _generated_run_json(path):
-    """True for a report run's manifest (a JSON object with a plan_runs list), written by the engine."""
-    try:
-        with open(path, encoding="utf-8") as f:
-            d = json.load(f)
-    except (OSError, ValueError):
-        return False
-    return isinstance(d, dict) and isinstance(d.get("plan_runs"), list)
-
-
 def render_index(folder):
     """Text of folder/INDEX.md listing every file below it (sorted, no clock, no absolute path).
-    A run folder's run.json is not a registered kind: it is skipped and summarised in 3 header lines. A folder
-    that holds new report runs (run-<id> with run.json) gets a runs table and lists only files outside them."""
+    A run's manifest lives under plans (runlayout.manifest_path); its summary is 3 header lines. A folder
+    that holds new report runs (run-<id> with a manifest) gets a runs table and lists only files outside them."""
     from exam_engine.pipeline import runlayout
     folder = os.path.abspath(folder)
     root_name = os.path.basename(folder)
@@ -259,9 +248,7 @@ def render_index(folder):
             dns[:] = [d for d in dns if d not in skip]
         for fn in fns:
             rel = os.path.relpath(os.path.join(dp, fn), folder).replace(os.sep, "/")
-            if rel in (INDEX_NAME, runlayout.RUN_JSON) or _generated_index(os.path.join(dp, fn)):
-                continue
-            if fn == runlayout.RUN_JSON and _generated_run_json(os.path.join(dp, fn)):
+            if rel == INDEX_NAME or _generated_index(os.path.join(dp, fn)):
                 continue
             rels.append(rel)
     rels.sort()

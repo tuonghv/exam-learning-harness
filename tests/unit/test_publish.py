@@ -35,6 +35,7 @@ def jread(p):
 
 
 def jwrite(p, obj):
+    os.makedirs(os.path.dirname(p), exist_ok=True)
     with open(p, "w", encoding="utf-8") as fh:
         json.dump(obj, fh)
 
@@ -272,7 +273,7 @@ class T943Publish(Base):
         code, out, err = self.publish("--from", "f")
         self.assertEqual(code, 0, out + err)
         (rid,) = self.main_runs()
-        man = jread(os.path.join(self.reports, "ex", "main", rid, "run.json"))
+        man = jread(runlayout.manifest_path(os.path.join(self.reports, "ex", "main", rid)))
         self.assertEqual((man["cmd"], man["published_from"]), ("publish", "f"))
         self.assertEqual(man["source_report_run"], src["id"])
         self.assertEqual({p["line"] for p in man["plan_runs"]}, {"f"})
@@ -305,7 +306,7 @@ class T943Publish(Base):
         code, out, err = self.publish("--from", "f")
         self.assertEqual(code, 0, out + err)
         self.assertEqual(len(self.main_runs()), 1)
-        self.assertIsNone(jread(os.path.join(self.reports, "ex", "main", self.main_runs()[0], "run.json"))["source_report_run"])
+        self.assertIsNone(jread(runlayout.manifest_path(os.path.join(self.reports, "ex", "main", self.main_runs()[0])))["source_report_run"])
 
     def test_94_3_earlier_main_runs_untouched_and_second_publish_is_new(self):
         self.fixture()
@@ -387,7 +388,7 @@ class T945Columns(Base):
         for line in ("zz", "main", "aa"):
             d = os.path.join(self.reports, "ex", line, "run-20240101-000000")
             os.makedirs(d)
-            jwrite(os.path.join(d, "run.json"), {"cmd": "report", "status": "complete", "exam_id": "ex",
+            jwrite(runlayout.manifest_path(d), {"cmd": "report", "status": "complete", "exam_id": "ex",
                                                  "created_utc": "2024-01-01T00:00:00Z", "plan_runs": []})
         rows = runlayout.lines_table(os.path.join(self.reports, "ex"))
         names = [r.split("|")[1].strip() for r in rows if r.startswith("| ") and "---" not in r][1:]

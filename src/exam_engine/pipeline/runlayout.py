@@ -17,7 +17,8 @@ import time
 RUNS = "runs"
 CACHE = "cache"
 REPORT_PREFIX = "run-"
-RUN_JSON = "run.json"
+RUN_JSON = "run.json"  # legacy in-folder name (migration + guards only; TASK-102)
+REPORT_RUNS = "report-runs"  # per line: run-<id>.json files, one per report run
 LINE_DEFAULT = "main"
 MIGRATION_JSON = "MIGRATION.json"
 NEW_ID = re.compile(r"^\d{8}-\d{6}(-\d+)?$")  # report run ids
@@ -74,7 +75,7 @@ def subject_tag(text):
 def safe_line(line):
     """Line name used as a path component: a safe id that is not a reserved folder name."""
     line = _safe(line, "line")
-    if line in (RUNS, CACHE):
+    if line in (RUNS, CACHE, REPORT_RUNS):
         raise ValueError("invalid line %r (reserved name)" % line)
     return line
 
@@ -135,7 +136,7 @@ def line_dirs(base):
         names = sorted(os.listdir(base))
     except OSError:
         return []
-    return [n for n in names if n not in (RUNS, CACHE) and not os.path.islink(os.path.join(base, n))
+    return [n for n in names if n not in (RUNS, CACHE, REPORT_RUNS) and not os.path.islink(os.path.join(base, n))
             and os.path.isdir(os.path.join(base, n, RUNS))]
 
 
@@ -334,7 +335,7 @@ def list_plan_runs(root, exam_id, line=None):
         names = []
     for n in names:
         d = os.path.join(base, n)
-        if n in (RUNS, CACHE) or os.path.islink(d) or not os.path.isdir(d):
+        if n in (RUNS, CACHE, REPORT_RUNS) or os.path.islink(d) or not os.path.isdir(d):
             continue
         if os.path.isfile(os.path.join(d, "plan.json")) or os.path.isfile(os.path.join(d, "result.json")):
             out.append(_run_row(d, n, "legacy", "-"))
@@ -353,6 +354,7 @@ def new_report_run(root, exam_id, run_id=None, line=None, publish=False):
         rid = run_id[len(REPORT_PREFIX):] if run_id.startswith(REPORT_PREFIX) else run_id
         d = os.path.join(base, REPORT_PREFIX + _safe(rid, "report run id"))
         os.makedirs(d, exist_ok=True)
+        drop_report_manifest(d)  # a rebuild in progress is `incomplete`, not complete with the old one
         return d
     return _claim_dir(base, new_run_id(), REPORT_PREFIX)
 
@@ -402,10 +404,13 @@ def scan_report_runs(exam_dir, skip_lines=True):
             continue
         rid = n[len(REPORT_PREFIX):] if n.startswith(REPORT_PREFIX) else None
         if rid is not None and NEW_ID.match(rid):
-            has = os.path.isfile(os.path.join(d, RUN_JSON))
-            man = _jload(os.path.join(d, RUN_JSON)) if has else None
-            out.append({"id": rid, "dir": d, "layout": "run" if man else "incomplete", "manifest": man,
-                        "warn": has and man is None})
+            mp = manifest_path(d)
+            has = os.path.isfile(mp)
+            man = _jload(mp) if has else None
+            warn = has and man is None
+            if not has and os.path.isfile(os.path.join(d, RUN_JSON)):
+                warn = "unmigrated"  # old in-folder run.json, no plans manifest: exam report-manifests-migrate
+            out.append({"id": rid, "dir": d, "layout": "run" if man else "incomplete", "manifest": man, "warn": warn})
         elif skip_lines and _is_line_report_dir(d):
             continue
         else:
@@ -432,7 +437,7 @@ def list_report_runs(root, exam_id, line=None):
 
 
 def new_run_dirs(folder):
-    """Names of the complete new report runs (run-<NEW_ID> holding a readable run.json) directly in folder."""
+    """Names of the complete new report runs (run-<NEW_ID> with a readable manifest) directly in folder."""
     return [os.path.basename(r["dir"]) for r in scan_report_runs(folder) if r["layout"] == "run"]
 
 
@@ -443,8 +448,36 @@ def _sha_file(path):
     return h.hexdigest()
 
 
+def manifest_path(report_dir):
+    """Manifest file of a report run, never inside the run folder. (a) below a dir named `reports`:
+    <its parent>/plans/<exam>[/<line>]/report-runs/<run>.json; (b) otherwise a sibling <run>.run.json."""
+    d = os.path.abspath(str(report_dir).rstrip("/"))
+    base = os.path.basename(d)
+    top = os.path.dirname(d)
+    while True:
+        if os.path.basename(top) == "reports":
+            rel = os.path.relpath(d, top)
+            return os.path.join(os.path.dirname(top), "plans", os.path.dirname(rel), REPORT_RUNS, base + ".json")
+        up = os.path.dirname(top)
+        if up == top:
+            break
+        top = up
+    return os.path.join(os.path.dirname(d), base + ".run.json")
+
+
+def read_report_manifest(report_dir):
+    return _jload(manifest_path(report_dir))
+
+
+def drop_report_manifest(report_dir):
+    try:
+        os.unlink(manifest_path(report_dir))
+    except FileNotFoundError:
+        pass
+
+
 def write_report_manifest(report_dir, plan_dirs, view, engine_git, cmd, repo_root=None, now=None, extra=None):
-    """Write report_dir/run.json (tmp + rename, sorted keys) after a successful build; returns the dict.
+    """Write the manifest of report_dir (manifest_path; tmp + rename, sorted keys) after a successful build; returns the dict.
     Plan dirs are only read: the plan -> report link lives here and is derived by list_report_runs.
     extra: keys merged over the manifest (plans-migrate: exam_id, migrated_from, link, plan_line, status,
     superseded); its exam_id is the fallback when no plan run names the exam (a line folder's name is not one)."""
@@ -477,7 +510,8 @@ def write_report_manifest(report_dir, plan_dirs, view, engine_git, cmd, repo_roo
            "plan_runs": plans, "prev_report_run": prev, "status": "complete",
            "registry_sha256": _sha_file(rk.REGISTRY), "engine_git": engine_git}
     man.update({k: v for k, v in (extra or {}).items() if k != "exam_id" or not plans})
-    path = os.path.join(report_dir, RUN_JSON)
+    path = manifest_path(report_dir)
+    os.makedirs(os.path.dirname(path), exist_ok=True)
     tmp = path + ".tmp"
     with open(tmp, "w", encoding="utf-8") as fh:
         json.dump(man, fh, ensure_ascii=False, indent=2, sort_keys=True)
@@ -486,8 +520,60 @@ def write_report_manifest(report_dir, plan_dirs, view, engine_git, cmd, repo_roo
     return man
 
 
+def migrate_run_json(reports_root, apply=False):
+    """TASK-102: move each in-folder run.json of a report run (dir run-<id> holding a manifest dict with a plan_runs
+    list) to manifest_path(dir). Returns (moves [(src, dst)], already_migrated count, problems [text]).
+    Target missing: os.replace. Target equal (sha256): the source is removed. Target different: problem, nothing
+    moved for that run. apply: INDEX.md of each touched run folder, its parent and (exam/line/run) the exam folder
+    are rewritten (their text does not change). Idempotent."""
+    from exam_engine.pipeline import report_kinds as rk
+    moves, problems, touched, done = [], [], [], 0
+    for dp, dns, fns in os.walk(reports_root):
+        dns.sort()
+        dns[:] = [n for n in dns if not os.path.islink(os.path.join(dp, n))]
+        base = os.path.basename(os.path.abspath(dp))
+        if not base.startswith(REPORT_PREFIX):
+            continue
+        src, dst = os.path.join(dp, RUN_JSON), manifest_path(dp)
+        if RUN_JSON not in fns:
+            done += 1 if os.path.isfile(dst) else 0
+            continue
+        man = _jload(src)
+        if man is None or not isinstance(man.get("plan_runs"), list):
+            continue
+        if os.path.isfile(dst):
+            if _sha_file(dst) != _sha_file(src):
+                problems.append("%s differs from existing %s; nothing moved" % (src, dst))
+                continue
+        moves.append((src, dst))
+        if not apply:
+            continue
+        try:
+            if os.path.isfile(dst):
+                os.unlink(src)
+            else:
+                os.makedirs(os.path.dirname(dst), exist_ok=True)
+                os.replace(src, dst)
+        except OSError as exc:
+            moves.pop()
+            problems.append("%s: %s" % (src, exc))
+            continue
+        touched.append(os.path.abspath(dp))
+    root = os.path.abspath(reports_root)
+    idx = []
+    for d in touched:
+        for x in (d, os.path.dirname(d), os.path.dirname(os.path.dirname(d))):
+            if x not in idx and x != root and x.startswith(root + os.sep):
+                if x == os.path.dirname(os.path.dirname(d)) and len(os.path.relpath(d, root).split(os.sep)) < 3:
+                    continue
+                idx.append(x)
+    for x in idx:
+        rk.write_index(x)
+    return moves, done, problems
+
+
 def finish_report_run(report_dir, plan_dirs, view, engine_git, cmd, repo_root=None, extra=None):
-    """run.json, then INDEX.md of the run folder and, for a run folder in the new layout, of its (line or exam) folder;
+    """manifest, then INDEX.md of the run folder and, for a run folder in the new layout, of its (line or exam) folder;
     a run in a line folder also refreshes the exam folder's INDEX.md (lines table)."""
     from exam_engine.pipeline import report_kinds as rk
     man = write_report_manifest(report_dir, plan_dirs, view, engine_git, cmd, repo_root=repo_root, extra=extra)

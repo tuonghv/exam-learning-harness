@@ -17,7 +17,7 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), 
 sys.path.insert(0, os.path.join(ROOT, "src"))
 from exam_engine import cli  # noqa: E402
 from exam_engine.adapters import claude  # noqa: E402
-from exam_engine.pipeline import report_build, report_kinds as rk, reporter  # noqa: E402
+from exam_engine.pipeline import report_build, report_kinds as rk, reporter, runlayout  # noqa: E402
 
 EXAM = os.path.join(ROOT, "examples", "english", "input-001.md")
 MOCK = os.path.join(ROOT, "tests", "unit", "fixtures", "mock_english_001.json")
@@ -77,7 +77,7 @@ class ReportBuildTest(unittest.TestCase):
         names = sorted(os.listdir(d))
         for kind, ext in (("solution-report", "md"), ("answer-sheet", "md"), ):
             self.assertIsNotNone(stdpath(d, kind, ext), names)
-        self.assertFalse([n for n in names if n.endswith((".json", ".log")) and n != "run.json"], names)
+        self.assertFalse([n for n in names if n.endswith((".json", ".log"))], names)  # TASK-102: no run.json
         self.assertFalse(any(n in names for n in ("report.md", "answers.md", "metrics.json", "report.json")))
         self.assertIsNone(rk.find(self.plan, "solution-report"))
         self.assertIn("## Metrics", pick(tree(d), "report.md").decode())
@@ -88,8 +88,7 @@ class ReportBuildTest(unittest.TestCase):
             report_build.build(self.plan, d, pdf=False)
         self.assertEqual(tree(a), tree(b))
         run = tree(os.path.join(self.tmp, "reports", "input-001", "main", "run-" + os.path.basename(self.plan)))
-        for k in ("run.json", "INDEX.md"):  # the run dir adds its manifest and index; the report files are equal
-            run.pop(k)
+        run.pop("INDEX.md")  # the run dir adds its index; the manifest lives under plans (TASK-102)
         self.assertEqual(tree(a), run)
 
     def test_metrics_use_stored_exam(self):
@@ -136,9 +135,9 @@ class ReportBuildTest(unittest.TestCase):
         base = os.path.join(self.tmp, "reports", "input-001", "main")
         self.assertEqual(sorted(os.listdir(base)), ["INDEX.md", "run-" + os.path.basename(self.plan), "run-a", "run-b", "run-l"])  # INDEX.md = exam runs index (87.6)
 
-        def body(n):  # report files only: run.json holds created_utc, INDEX.md lists the run
+        def body(n):  # report files only: INDEX.md lists the run
             t = tree(os.path.join(base, n))
-            return {k: v for k, v in t.items() if k not in ("run.json", "INDEX.md")}
+            return {k: v for k, v in t.items() if k != "INDEX.md"}
         self.assertEqual(body("run-a"), body("run-b"))
         self.assertNotEqual(pick(body("run-a"), "report.md"), pick(body("run-l"), "learning.md"))
 

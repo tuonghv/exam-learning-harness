@@ -303,7 +303,7 @@ class U7ExamOfPlanDir(unittest.TestCase):
         self.assertFalse(os.path.exists(os.path.join(tmp, "reports", "runs")))
         self.assertTrue(os.path.isdir(os.path.join(tmp, "reports", "weird-exam")))
         (rr,) = [n for n in os.listdir(os.path.join(tmp, "reports", "weird-exam")) if n.startswith("run-")]
-        self.assertEqual(jread(os.path.join(tmp, "reports", "weird-exam", rr, "run.json"))["exam_id"], "weird-exam")
+        self.assertEqual(jread(runlayout.manifest_path(os.path.join(tmp, "reports", "weird-exam", rr)))["exam_id"], "weird-exam")
 
 
 class U4LastSolvedImported(unittest.TestCase):
@@ -372,10 +372,10 @@ class U5ReportRuns(Base):
         plan = self.copy_plan()
         self.assertEqual(quiet(cli.report_main, [plan, "--no-pdf", "--report-id", "fix"])[0], 0)
         d = os.path.join("reports", "input-001", "main", "run-fix")
-        self.assertTrue(os.path.isfile(os.path.join(d, "run.json")))
-        os.remove(os.path.join(d, "run.json"))
+        self.assertTrue(os.path.isfile(runlayout.manifest_path(d)))
+        os.remove(runlayout.manifest_path(d))
         self.assertEqual(quiet(cli.report_main, [plan, "--no-pdf", "--report-id", "fix"])[0], 0)
-        self.assertTrue(os.path.isfile(os.path.join(d, "run.json")))
+        self.assertTrue(os.path.isfile(runlayout.manifest_path(d)))
         self.assertEqual([n for n in os.listdir(os.path.join("reports", "input-001", "main")) if n.startswith("run-")], ["run-fix"])
 
     def test_87_3_new_report_run_ids(self):
@@ -394,7 +394,7 @@ class U5ReportRuns(Base):
         out = runlayout.new_report_run("reports", "input-001")
         rk_dir = out
         man = runlayout.write_report_manifest(rk_dir, [plan], "sheet", "abc123", "report", now=0)
-        disk = jread(os.path.join(out, "run.json"))
+        disk = jread(runlayout.manifest_path(out))
         self.assertEqual(man, disk)
         self.assertEqual(disk["schema"], 1)
         self.assertEqual(disk["created_utc"], "1970-01-01T00:00:00Z")
@@ -420,7 +420,8 @@ class U5ReportRuns(Base):
 
     def test_87_3_broken_run_json_is_incomplete_with_warn(self):
         d = os.path.join(self.tmp, "reports", "ex", "run-20240101-000000")
-        put(os.path.join(d, "run.json"), "{not json")
+        put(os.path.join(d, "a.md"))
+        put(runlayout.manifest_path(d), "{not json")
         put(os.path.join(self.tmp, "reports", "ex", "run-20240102-000000", "a.md"))
         got = {r["id"]: r for r in runlayout.list_report_runs("reports", "ex")}
         self.assertEqual(got["20240101-000000"]["layout"], "incomplete")
@@ -449,7 +450,7 @@ class U5ReportRuns(Base):
         self.assertIn("boom", err)
         runs = runlayout.list_report_runs("reports", "input-001")
         self.assertEqual(len(runs), 1)
-        self.assertFalse(os.path.exists(os.path.join(runs[0]["dir"], "run.json")))
+        self.assertFalse(os.path.exists(runlayout.manifest_path(runs[0]["dir"])))
         self.assertEqual(runs[0]["layout"], "incomplete")
         self.assertEqual(runlayout.new_run_dirs(os.path.join("reports", "input-001")), [])
 
@@ -481,7 +482,7 @@ class U6RunJsonChecks(Base):
 
     def test_87_3_report_pack_default_out_writes_run_json(self):
         plans, pack = self.pack()
-        man = jread(os.path.join(pack, "run.json"))
+        man = jread(runlayout.manifest_path(pack))
         self.assertEqual(man["cmd"], "report-pack")
         self.assertEqual(len(man["plan_runs"]), 2)
         self.assertEqual(man["exam_id"], "input-001")
@@ -495,14 +496,41 @@ class U6RunJsonChecks(Base):
         text = self.check(pack, plans)
         (r,) = self.row(text, "unregistered files")
         self.assertIn("ok", r, text)
-        self.assertTrue(all("ok" in x for x in self.row(text, "run.json")), text)
-        self.assertTrue(self.row(text, "run.json plan_runs"), text)
+        self.assertTrue(all("ok" in x for x in self.row(text, "manifest")), text)
+        self.assertTrue(all("ok" in x for x in self.row(text, "run manifest present")), text)
+        self.assertTrue(self.row(text, "manifest plan_runs"), text)
+
+    def test_102_checker_fails_on_run_json_in_pack_and_on_missing_manifest(self):
+        plans, pack = self.pack()
+        put(os.path.join(pack, "run.json"), {"plan_runs": []})
+        text = self.check(pack, plans)
+        self.assertTrue([r for r in self.row(text, "json/log files in pack") if "FAIL" in r], text)
+        os.remove(os.path.join(pack, "run.json"))
+        os.remove(runlayout.manifest_path(pack))
+        text = self.check(pack, plans)
+        self.assertTrue([r for r in self.row(text, "run manifest present") if "FAIL" in r], text)
+
+    def test_102_checker_and_runlayout_manifest_path_agree(self):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("check_report_pack", CHECK)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        for d in ("/x/reports/ex/main/run-20240101-000000", "/x/reports/ex/run-a", "/x/y/run-b", "/x/reports/ex/main/run-key-baseline"):
+            self.assertEqual(mod.manifest_path(d), runlayout.manifest_path(d), d)
+
+    def test_102_finish_leaves_only_report_files_and_index_in_the_run_folder(self):
+        plans, pack = self.pack()
+        self.assertEqual([n for n in os.listdir(pack) if n.endswith((".json", ".log"))], [])
+        self.assertFalse(os.path.exists(os.path.join(pack, "run.json")))
+        man = jread(runlayout.manifest_path(pack))
+        self.assertLessEqual({"schema", "report_run_id", "exam_id", "created_utc", "cmd", "view", "plan_runs",
+                              "prev_report_run", "status", "registry_sha256", "engine_git"}, set(man))
 
     def test_87_3_checker_fails_on_sha_mismatch(self):
         plans, pack = self.pack()
-        man = jread(os.path.join(pack, "run.json"))
+        man = jread(runlayout.manifest_path(pack))
         man["plan_runs"][0]["result_sha256"] = "0" * 64
-        put(os.path.join(pack, "run.json"), man)
+        put(runlayout.manifest_path(pack), man)
         text = self.check(pack, plans)
         (r,) = self.row(text, "result_sha256 mismatches")
         self.assertIn("FAIL", r, text)
@@ -510,7 +538,7 @@ class U6RunJsonChecks(Base):
     def test_87_3_checker_fails_on_plan_count_mismatch(self):
         plans, pack = self.pack()
         text = self.check(pack, plans[:1])
-        (r,) = self.row(text, "run.json plan_runs")
+        (r,) = self.row(text, "manifest plan_runs")
         self.assertIn("FAIL", r, text)
 
     def test_87_3_rebuild_into_same_out_ignores_run_json(self):
@@ -519,13 +547,13 @@ class U6RunJsonChecks(Base):
         info = report_pack.build_pack([os.path.abspath(p) for p in plans], os.path.abspath(pack), "ex", "run-t", pdf=False)
         self.assertNotIn("run.json", info["files"])
 
-    def test_87_3_write_index_skips_run_json_row(self):
+    def test_102_write_index_shows_stray_run_json_as_unregistered(self):
         d = os.path.join(self.tmp, "r")
         put(os.path.join(d, "run.json"), {"schema": 1})
         with open(rk.write_index(d), encoding="utf-8") as fh:
             md = fh.read()
-        self.assertNotIn("| run.json |", md)
-        self.assertIn("- unregistered: 0", md)
+        self.assertIn("| run.json |", md)
+        self.assertIn("- unregistered: 1", md)
 
 
 class U8RunList(unittest.TestCase):
@@ -541,7 +569,7 @@ class U8RunList(unittest.TestCase):
         put(os.path.join(p, "out-Old", "plan.json"), {"status": "done", "model": "m-old", "calls": 4, "cost_usd": 0.5,
                                                       "started_utc": "2023-01-01T00:00:00Z"})
         put(os.path.join(p, "cache", "c.json"), {})
-        put(os.path.join(r, "run-20240102-000000", "run.json"),
+        put(runlayout.manifest_path(os.path.join(r, "run-20240102-000000")),
             {"schema": 1, "view": "learn", "cmd": "report", "created_utc": "2024-01-02T00:00:00Z",
              "plan_runs": [{"exam_id": "zz", "plan_run_id": "20240101-000000"}]})
         put(os.path.join(r, "run-20240102-000000", "zz_all_score-summary_run-t.json"), {"total_correct": 3, "total": 4})
@@ -665,7 +693,7 @@ class U9ExamIndexAndLegacy(Base):
         self.assertEqual(quiet(cli.report_main, [plan, "--no-pdf"])[0], 0)
         self.assertEqual(snapshot(plan), before)
         (rr,) = [n for n in os.listdir(os.path.join("reports", "input-001", "main")) if n.startswith("run-")]
-        man = jread(os.path.join("reports", "input-001", "main", rr, "run.json"))
+        man = jread(runlayout.manifest_path(os.path.join("reports", "input-001", "main", rr)))
         self.assertEqual(man["exam_id"], "input-001")
         self.assertEqual(man["plan_runs"][0]["dir"], "plans/input-001/out-Legacy")
 
@@ -685,14 +713,14 @@ class E2EMockSolve(unittest.TestCase):
         code, out, err = quiet(cli.solve_main, [EXAM, "--mock", MOCK, "--no-pdf"])
         self.assertIn(code, (0, 1), err)
         base = os.path.join("plans", "input-001", "main")
-        self.assertEqual(sorted(os.listdir(base)), ["runs"])  # no cache dir on a mock run, nothing beside runs/
+        self.assertEqual(sorted(os.listdir(base)), ["report-runs", "runs"])  # no cache dir on a mock run; report-runs = the report manifest (TASK-102)
         (rid,) = os.listdir(os.path.join(base, "runs"))
         self.assertRegex(rid, runlayout.NEW_ID)
         self.assertTrue(os.path.isfile(os.path.join(base, "runs", rid, "result.json")))
         self.assertTrue(os.path.isfile(os.path.join(base, "runs", rid, "plan.json")))
         self.assertIn(os.path.join("plans", "input-001", "main", "runs", rid), out)
         rdir = os.path.join("reports", "input-001", "main", "run-" + rid)
-        man = jread(os.path.join(rdir, "run.json"))
+        man = jread(runlayout.manifest_path(rdir))
         self.assertEqual(man["cmd"], "solve")
         self.assertEqual(man["plan_runs"][0]["plan_run_id"], rid)
         self.assertTrue(os.path.isfile(os.path.join(rdir, "INDEX.md")))
@@ -717,11 +745,14 @@ class U101RlScore(unittest.TestCase):
     """101: run-list score column reads run.json `score`; the score-summary json is only the old-run fallback."""
 
     def setUp(self):
-        self.d = tempfile.mkdtemp()
-        self.addCleanup(shutil.rmtree, self.d, True)
+        root = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, root, True)
+        self.d = os.path.join(root, "run-x")  # manifest = sibling run-x.run.json (no `reports` ancestor), TASK-102
+        os.makedirs(self.d)
 
     def _w(self, name, obj):
-        with open(os.path.join(self.d, name), "w", encoding="utf-8") as fh:
+        path = runlayout.manifest_path(self.d) if name == runlayout.RUN_JSON else os.path.join(self.d, name)
+        with open(path, "w", encoding="utf-8") as fh:
             json.dump(obj, fh)
 
     def test_101_run_json_score_without_summary(self):
@@ -739,6 +770,109 @@ class U101RlScore(unittest.TestCase):
         self.assertEqual(cli._rl_score([self.d]), "-")
         self._w(rk.name("ex", "all", "score-summary", "run-x", "json"), {"total_correct": 1, "total": 2})
         self.assertEqual(cli._rl_score([self.d]), "1/2")
+
+
+
+class T102Manifest(unittest.TestCase):
+    """TASK-102: the report run manifest lives under plans/, never in the run folder."""
+
+    def setUp(self):
+        self.tmp = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, self.tmp, True)
+        self.reports = os.path.join(self.tmp, "reports")
+        self.plans = os.path.join(self.tmp, "plans")
+
+    def run_dir(self, *parts):
+        d = os.path.join(self.reports, *parts)
+        put(os.path.join(d, "a.md"), "x\n")
+        return d
+
+    def test_102_manifest_path_rules(self):
+        mp = runlayout.manifest_path
+        self.assertEqual(mp(os.path.join(self.reports, "ex", "main", "run-20240101-000000")),
+                         os.path.join(self.plans, "ex", "main", "report-runs", "run-20240101-000000.json"))
+        self.assertEqual(mp(os.path.join(self.reports, "ex", "run-a")), os.path.join(self.plans, "ex", "report-runs", "run-a.json"))
+        self.assertEqual(mp(os.path.join(self.reports, "ex", "dev", "run-key-baseline")),
+                         os.path.join(self.plans, "ex", "dev", "report-runs", "run-key-baseline.json"))
+        other = os.path.join(self.tmp, "out", "run-b")
+        self.assertEqual(mp(other), other + ".run.json")  # no `reports` ancestor: sibling, never inside
+        self.assertEqual(mp(other + "/"), other + ".run.json")
+
+    def test_102_report_runs_is_a_reserved_line_and_not_a_plan_run(self):
+        with self.assertRaises(ValueError):
+            runlayout.safe_line("report-runs")
+        put(os.path.join(self.plans, "ex", "main", "runs", "20240101-000000", "plan.json"), {})
+        put(os.path.join(self.plans, "ex", "main", "report-runs", "run-20240101-000000.json"), {})
+        put(os.path.join(self.plans, "ex", "report-runs", "run-x.json"), {})
+        self.assertEqual(runlayout.line_dirs(os.path.join(self.plans, "ex")), ["main"])
+        self.assertEqual([r["line"] for r in runlayout.list_plan_runs(self.plans, "ex")], ["main"])
+
+    def test_102_dir_without_manifest_is_incomplete_and_reuse_drops_the_old_manifest(self):
+        d = self.run_dir("ex", "main", "run-20240101-000000")
+        (row,) = runlayout.scan_report_runs(os.path.dirname(d))
+        self.assertEqual((row["layout"], row["warn"]), ("incomplete", False))
+        put(runlayout.manifest_path(d), {"plan_runs": []})
+        self.assertEqual(runlayout.scan_report_runs(os.path.dirname(d))[0]["layout"], "run")
+        got = runlayout.new_report_run(self.reports, "ex", run_id="20240101-000000", line="dev")
+        self.assertEqual(got, os.path.join(self.reports, "ex", "dev", "run-20240101-000000"))
+        d2 = runlayout.new_report_run(self.reports, "ex", run_id="run-20240101-000000", line="main", publish=True)
+        self.assertEqual(d2, d)
+        self.assertFalse(os.path.exists(runlayout.manifest_path(d)))
+        self.assertEqual(runlayout.scan_report_runs(os.path.dirname(d))[0]["layout"], "incomplete")
+
+    def test_102_unmigrated_run_json_warns_and_publish_refuses(self):
+        d = self.run_dir("ex", "f", "run-20240101-000000")
+        put(os.path.join(d, "run.json"), {"cmd": "report-pack", "plan_runs": []})
+        (row,) = runlayout.scan_report_runs(os.path.dirname(d))
+        self.assertEqual((row["layout"], row["warn"]), ("incomplete", "unmigrated"))
+        with self.assertRaises(ValueError) as cm:
+            cli._publish_selection(self.plans, self.reports, "ex", "f")
+        self.assertIn("report-manifests-migrate --apply", str(cm.exception))
+
+    def _legacy(self, name="run-20240101-000000"):
+        """A built run in an old layout: manifest back in the folder, INDEX.md as written by the new code."""
+        d = self.run_dir("ex", "main", name)
+        with mock.patch.object(reporter, "git_info", return_value=None):
+            runlayout.finish_report_run(d, [], "sheet", None, "report", extra={"exam_id": "ex"})
+        with open(os.path.join(d, "INDEX.md"), encoding="utf-8") as fh:
+            idx = fh.read()
+        shutil.move(runlayout.manifest_path(d), os.path.join(d, "run.json"))
+        return d, idx
+
+    def test_102_migrate_dry_apply_reapply_and_index_text_unchanged(self):
+        d, idx = self._legacy()
+        d2, _ = self._legacy("run-key-baseline")  # non date id (basename rule)
+        moves, done, problems = runlayout.migrate_run_json(self.reports)
+        self.assertEqual((len(moves), done, problems), (2, 0, []))
+        self.assertTrue(os.path.isfile(os.path.join(d, "run.json")))  # dry run writes nothing
+        code, out, err = quiet(cli.report_manifests_migrate_main, ["--reports", self.reports])
+        self.assertEqual((code, out.strip().splitlines()[-1]), (0, "2 to move, 0 already migrated, 0 problems"))
+        self.assertTrue(os.path.isfile(os.path.join(d, "run.json")))
+        code, out, err = quiet(cli.report_manifests_migrate_main, ["--reports", self.reports, "--apply"])
+        self.assertEqual(code, 0, err)
+        for x in (d, d2):
+            self.assertFalse(os.path.exists(os.path.join(x, "run.json")))
+            self.assertIsNotNone(runlayout.read_report_manifest(x))
+        with open(os.path.join(d, "INDEX.md"), encoding="utf-8") as fh:
+            self.assertEqual(fh.read(), idx)
+        self.assertEqual({r["id"]: r["layout"] for r in runlayout.scan_report_runs(os.path.dirname(d))}["20240101-000000"], "run")
+        code, out, err = quiet(cli.report_manifests_migrate_main, ["--reports", self.reports, "--apply"])
+        self.assertEqual((code, out.strip().splitlines()[-1]), (0, "0 moved, 2 already migrated, 0 problems"))
+
+    def test_102_migrate_same_sha_target_removes_source_different_sha_is_a_problem(self):
+        d, _ = self._legacy()
+        dst = runlayout.manifest_path(d)
+        os.makedirs(os.path.dirname(dst), exist_ok=True)
+        shutil.copy(os.path.join(d, "run.json"), dst)
+        moves, _done, problems = runlayout.migrate_run_json(self.reports, apply=True)
+        self.assertEqual((len(moves), problems), (1, []))
+        self.assertFalse(os.path.exists(os.path.join(d, "run.json")))
+        d2, _ = self._legacy("run-20240102-000000")
+        put(runlayout.manifest_path(d2), {"plan_runs": [], "other": 1})
+        code, out, err = quiet(cli.report_manifests_migrate_main, ["--reports", self.reports, "--apply"])
+        self.assertEqual(code, 2, out)
+        self.assertIn("differs", err)
+        self.assertTrue(os.path.isfile(os.path.join(d2, "run.json")))  # nothing moved for that run
 
 
 if __name__ == "__main__":
