@@ -270,6 +270,54 @@ def build_markdown(result, metrics=None, exam=None, view=None):
     return "\n".join(md).rstrip("\n") + "\n"
 
 
+def build_public_report(result, exam=None):
+    """Student-facing report (kind `solution_public-report`): question, options, answer, then the steps (the explanation only when
+    there are no steps). No status, doubt, evidence, score, checks, QA or error lines (AI review notes confuse students)."""
+    md = ["# %s" % (_one_line(result["exam"].get("subject")) or "Exam"), ""] + _public_body(result, exam)
+    return "\n".join(md).rstrip("\n") + "\n"
+
+
+def build_public_combined(items, title):
+    """One student-facing report for several subjects; items = [(result, exam)] in plan order."""
+    md = ["# %s" % _one_line(title), ""]
+    for result, exam in items:
+        md += ["## %s" % (_one_line(result["exam"].get("subject")) or "Exam"), ""] + _public_body(result, exam)
+    return "\n".join(md).rstrip("\n") + "\n"
+
+
+def _public_body(result, exam=None):
+    L = LABELS[learn_lang(result)]
+    exam_meta = result["exam"]
+    by_id = {str(x.get("id")): x for x in (exam or {}).get("questions", [])}
+    md = []
+    ctx = [None]
+    for q in result["questions"]:
+        eq = by_id.get(str(q["id"]))
+        md += ["### %s %s" % (L["question"], _one_line(q["id"])), ""]
+        if eq is not None:
+            context = (eq.get("instruction") or "", eq.get("passage") or "")
+            if context != ctx[0]:
+                ctx[0] = context
+                md += [x for part in context for ln in _text_lines(part) for x in (ln, "")]
+            md += [x for ln in _text_lines(eq.get("stem") or eq.get("text")) for x in (ln, "")]
+            opts = eq.get("options") or {}
+            if opts:
+                md += ["%s. %s  " % (_one_line(k), _one_line(v)) for k, v in opts.items()] + [""]
+        a = q.get("answer")
+        if isinstance(a, str) and a.strip() in CIRCLED:
+            ans = a.strip()
+        elif _is_open(q, exam_meta):
+            ans = L["open"]
+        else:
+            ans = DASH
+        md += ["**%s: %s**" % (L["answer"], ans), ""]
+        if q.get("solution"):
+            md += ["%s:" % L["steps"], ""] + ["%d. %s" % (n, _one_line(t)) for n, t in enumerate(q["solution"], 1)] + [""]
+        elif q.get("explanation"):
+            md += ["%s: %s" % (L["why"], _one_line(q["explanation"])), ""]
+    return md
+
+
 def build_combined_markdown(items, title="Exam report: all subjects"):
     """One report for several subjects; items = [(result, metrics, exam)] in plan order."""
     md = ["# %s" % _one_line(title), "", "## Totals", ""]
@@ -460,3 +508,16 @@ def write_reports(result, out_dir, *, pdf=True, renderer=None, runner=subprocess
     with open(md_path, "a", encoding="utf-8") as fh:
         fh.write("\nPDF skipped: %s\n" % note)
     return info
+
+
+def write_public(result, out_dir, *, pdf=True, renderer=None, runner=subprocess.Popen, exam=None, names=None):
+    """Write <exam>_<subject>_solution_public-report_<run>.md (+ .pdf when asked and a renderer exists). Returns {md, pdf}."""
+    from exam_engine.pipeline import report_kinds as rk
+    n = dict(default_names(result, out_dir), **(names or {}))
+    os.makedirs(out_dir, exist_ok=True)
+    md_path, pdf_path = (os.path.join(out_dir, rk.name(n["exam"], n["subject"], "solution_public-report", n["run"], e))
+                         for e in ("md", "pdf"))
+    with open(md_path, "w", encoding="utf-8") as fh:
+        fh.write(build_public_report(result, exam))
+    ok = pdf and md_to_pdf(md_path, pdf_path, lang=learn_lang(result), renderer=renderer, runner=runner)[0]
+    return {"md": md_path, "pdf": pdf_path if ok else None}

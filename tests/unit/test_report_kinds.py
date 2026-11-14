@@ -38,12 +38,12 @@ def checker(*argv):
 class Registry(unittest.TestCase):
     def test_85_1_load_has_all_kinds_with_required_fields(self):
         kinds = rk.load()["kinds"]
-        self.assertEqual(len(kinds), 9)
+        self.assertEqual(len(kinds), 10)
         for k, spec in kinds.items():
             for f in ("ext", "scope", "count", "needs", "description", "legacy"):
                 self.assertIn(f, spec, k)
             self.assertIn(spec["scope"], ("subject", "all", "both"))
-            self.assertTrue(re.fullmatch(r"[a-z0-9-]+", k), k)
+            self.assertTrue(re.fullmatch(r"[a-z0-9]+([_-][a-z0-9]+)*", k), k)
 
     def test_85_1_name_and_parse_round_trip(self):
         for kind, spec in rk.load()["kinds"].items():
@@ -53,6 +53,19 @@ class Registry(unittest.TestCase):
                 self.assertEqual(n, "dgnl2026_%s_%s_run-f.%s" % (subject, kind, ext))
                 self.assertEqual(rk.parse(n), {"exam": "dgnl2026", "subject": subject, "kind": kind,
                                                "run": "run-f", "ext": ext})
+
+    def test_99_parse_kind_with_underscore_and_pack_expected(self):
+        n = "dgnl2025_all_solution_public-report_run-20261112-053241.md"
+        self.assertEqual(rk.parse(n), {"exam": "dgnl2025", "subject": "all", "kind": "solution_public-report",
+                                       "run": "run-20261112-053241", "ext": "md"})
+        self.assertIsNone(rk.parse("dgnl2025_all_solution_nokind_run-a.md"))
+        e = rk.expected("dgnl2025", ["Science"], "run-a", pack=True)
+        self.assertNotIn("dgnl2025_science_answer-sheet_run-a.md", e)
+        self.assertNotIn("dgnl2025_science_solution-report_run-a.md", e)
+        self.assertNotIn("dgnl2025_science_solution_public-report_run-a.md", e)
+        self.assertIn("dgnl2025_all_solution_public-report_run-a.pdf", e)
+        self.assertIn("dgnl2025_science_metrics_run-a.json", e)
+        self.assertIn("dgnl2025_science_answer-sheet_run-a.md", rk.expected("dgnl2025", ["Science"], "run-a"))
 
     def test_85_1_bad_parts_kind_ext_raise(self):
         bad = [("Dgnl", "math", "metrics", "run-f", "json"), ("a_b", "math", "metrics", "run-f", "json"),
@@ -107,7 +120,7 @@ class Registry(unittest.TestCase):
         rows = {}
         with open(GUIDE, encoding="utf-8") as fh:
             for ln in fh:
-                m = re.match(r"\| `([a-z0-9-]+)` \| `[^`]+` \| ([^|]*) \| (\w+) \| ([^|]*) \| (.*) \| ([^|]*) \|$", ln.rstrip())
+                m = re.match(r"\| `([a-z0-9_-]+)` \| `[^`]+` \| ([^|]*) \| (\w+) \| ([^|]*) \| (.*) \| ([^|]*) \|$", ln.rstrip())
                 if m:
                     rows[m.group(1)] = m.groups()[1:]
         self.assertEqual(sorted(rows), sorted(kinds))
@@ -298,7 +311,7 @@ class Packed(unittest.TestCase):
         return reporter.LABELS[reporter.learn_lang(self.result())]
 
     def test_85_4_hybrid_solution_report(self):
-        p = rk.find(self.work, "solution-report", subject="alpha", ext="md")
+        p = rk.find(self.work, "solution-report", subject="all", ext="md")  # a pack keeps only the `all` report
         self.assertTrue(p, self.listing())
         with open(p, encoding="utf-8") as fh:
             md = fh.read()
@@ -330,17 +343,29 @@ class Packed(unittest.TestCase):
 
     def test_85_4_non_dgnl_synthetic_exam(self):
         # the mock english exam has no dgnl offset/instructions: names and text must still work
-        self.assertEqual(rk.parse(os.path.basename(rk.find(self.work, "solution-report", subject="beta"))),
-                         {"exam": "ex", "subject": "beta", "kind": "solution-report", "run": "run-t", "ext": "md"})
+        self.assertEqual(rk.parse(os.path.basename(rk.find(self.work, "solution-report", subject="all"))),
+                         {"exam": "ex", "subject": "all", "kind": "solution-report", "run": "run-t", "ext": "md"})
 
     # ---- AC5 pack ----
     def test_85_5_pack_files_and_counts(self):
         self.assertEqual(self.info["total"], 2 * self.n)
         self.assertIsInstance(self.info["correct"], int)
-        want = rk.expected("ex", ["alpha", "beta"], "run-t", key=True, pdf=False)
+        want = rk.expected("ex", ["alpha", "beta"], "run-t", key=True, pdf=False, pack=True)
         self.assertEqual([f for f in self.listing() if f not in ("INDEX.md", "run.json")], want)  # exactly the registry's list
         with open(os.path.join(self.work, rk.name("ex", "all", "answer-table", "run-t", "tsv")), encoding="utf-8") as fh:
             self.assertEqual(len(fh.read().splitlines()), 1 + 2 * self.n)
+
+    def test_99_pack_has_only_all_reports_and_public_all_is_student_facing(self):
+        names = self.listing()
+        for kind in ("answer-sheet", "solution-report", "solution_public-report"):
+            self.assertEqual([f for f in names if "_%s_" % kind in f and "_all_" not in f], [], kind)
+        pub = rk.name("ex", "all", "solution_public-report", "run-t", "md")
+        self.assertIn(pub, names)
+        with open(os.path.join(self.work, pub), encoding="utf-8") as fh:
+            text = fh.read()
+        self.assertIn("Đáp án", text)
+        for bad in ("Trạng thái", "Độ nghi ngờ", "Bằng chứng", "Kiểm tra"):
+            self.assertNotIn(bad, text)
 
     def test_85_5_every_file_parses_in_a_mock_solve_output_dir(self):
         d = os.path.join(self.tmp, "solved")
@@ -397,7 +422,7 @@ class Packed(unittest.TestCase):
         self.assertRegex(out, r"unregistered files\t0\t1\tFAIL")
 
     def test_85_10_missed_kind_fails(self):
-        for kind, ext in (("metrics", "json"), ("score-vs-key", "tsv"), ("answer-sheet", "md")):
+        for kind, ext in (("metrics", "json"), ("score-vs-key", "tsv"), ("solution-report", "md")):
             d = os.path.join(self.tmp, "m-" + kind)
             shutil.copytree(self.work, d)
             self.addCleanup(shutil.rmtree, d, True)
@@ -435,7 +460,7 @@ class Packed(unittest.TestCase):
 
     def test_86_5_checker_md_without_pdf_fails(self):
         args = self.args(self.work)
-        os.remove(self._pdf_of(self.work, "answer-sheet")[0])
+        os.remove(self._pdf_of(self.work, "solution-report")[0])
         rk.write_index(self.work)
         rc, out = checker(*args)
         self.assertEqual(rc, 1, out)
@@ -508,7 +533,7 @@ class Packed(unittest.TestCase):
         names = os.listdir(out)
         mds = [n for n in names if n.endswith(".md") and n != "INDEX.md"]
         kinds = {rk.parse(n)["kind"] for n in mds}
-        self.assertTrue({"answer-sheet", "score-summary", "solution-report"} <= kinds, kinds)
+        self.assertTrue({"solution_public-report", "score-summary", "solution-report"} <= kinds, kinds)
         for n in mds:
             self.assertIn(n[:-3] + ".pdf", names, n)
 

@@ -61,6 +61,8 @@ def build(plan_dir, out_dir, *, view="sheet", pdf=False, renderer=None, runner=N
     names.update({k: v for k, v in (("exam", exam_name), ("run", run_name), ("subject", subject_name)) if v})
     reports = reporter.write_reports(result, out_dir, pdf=pdf, renderer=renderer, view=view,
                                      metrics=m, exam=exam, names=names, **kw)
+    reports["solution_public-report"] = reporter.write_public(result, out_dir, pdf=pdf, renderer=renderer, exam=exam,
+                                              names=names, **kw)
     def path(kind):
         return os.path.join(out_dir, report_kinds.name(names["exam"], names["subject"], kind, names["run"],
                                                        report_kinds.load()["kinds"][kind]["ext"][0]))

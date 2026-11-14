@@ -29,10 +29,15 @@ def slug(s):
 def parse_name(base, kinds):
     stem, dot, ext = base.rpartition(".")
     parts = stem.split("_")
-    if not dot or len(parts) != 4 or not all(PART.match(x) for x in parts):
+    if not dot or len(parts) < 4:
         return None
-    exam, subject, kind, run = parts
-    if kind not in kinds or ext not in kinds[kind]["ext"] or not run.startswith("run-"):
+    exam, subject, run = parts[0], parts[1], parts[-1]
+    kind = "_".join(parts[2:-1])  # a registered kind may contain '_'
+    if not all(PART.match(x) for x in (exam, subject, run)):
+        return None
+    if kind not in kinds or ext not in kinds[kind]["ext"]:
+        return None
+    if not run.startswith("run-"):
         return None
     sc = kinds[kind]["scope"]
     if sc == "all" and subject != "all" or sc == "subject" and subject == "all":
@@ -158,7 +163,7 @@ def main(argv):
     for kind, spec in sorted(kinds.items()):
         if spec.get("needs", "") not in active:
             continue
-        per = (len(plans) if spec["scope"] in ("subject", "both") else 0) + (1 if spec["scope"] in ("all", "both") else 0)
+        per = (len(plans) if spec["scope"] in ("subject", "both") and spec.get("pack_subject") is not False else 0) + (1 if spec["scope"] in ("all", "both") else 0)
         for ext in spec["ext"]:
             if ext in spec.get("optional_ext", []):
                 continue
@@ -180,11 +185,16 @@ def main(argv):
     for x in results:
         s, n = x["slug"], x["n"]
         sr = read(by.get(("solution-report", s, "md"), ""))
+        if not sr:  # pack_subject:false kinds live only as `all`: this subject's section of it
+            m0 = re.search(r"^## %s[ \t]*$(.*?)(?=^## |\Z)" % re.escape(x["r"]["exam"].get("subject") or ""),
+                           read(by.get(("solution-report", "all", "md"), "")), re.M | re.S)
+            sr = m0.group(1) if m0 else ""
         heads = re.findall(r"^### \S+ (\d+)\s*$", sr, re.M)
         chk("questions solution-report %s" % s, n, len(heads))
         qsum += len(heads)
-        m = re.search(r"(\d+) Questions", read(by.get(("answer-sheet", s, "md"), "")))
-        chk("questions answer-sheet %s" % s, n, m.group(1) if m else 0)
+        if ("answer-sheet", s, "md") in by:
+            m = re.search(r"(\d+) Questions", read(by[("answer-sheet", s, "md")]))
+            chk("questions answer-sheet %s" % s, n, m.group(1) if m else 0)
         nt = sum(1 for ln in sr.splitlines() if re.match(r"^<[^<>]+>$", ln.strip()))
         chk("with_text %s" % s, n, len(heads) - nt)
         if overlays:

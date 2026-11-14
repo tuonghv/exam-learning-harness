@@ -71,6 +71,8 @@ sub { font-size: 0.8em; color: #666; }
 .sev-fail      { background: #a3111b; border-color: #7d0d15; color: #fff; }
 .sev-uncertain { background: #f2d16b; border-color: #c8a52f; color: #4a3c00; }
 .sev-pass      { background: #dcecd6; border-color: #93b985; color: #294d1e; }
+/* Answer line of the student report: bold text on a yellow highlight. */
+.ans { background: #fff176; padding: 1pt 5pt; border-radius: 3pt; font-weight: 700; }
 """
 
 PAGE_BREAK_CSS = ("h2 { page-break-before: always; } "
@@ -137,6 +139,7 @@ def inline(text):
     for word, cls in SEV_CLASS.items():
         text = text.replace("<strong>%s</strong>" % word,
                             '<strong class="sev %s">%s</strong>' % (cls, word))
+    text = re.sub(r"<strong>((?:\u0110\u00e1p \u00e1n|Answer): [^<]*)</strong>", r'<strong class="ans">\1</strong>', text)
     text = re.sub(r"\x02(\d+)\x02", lambda m: hrefs[int(m.group(1))], text)
     return re.sub(r"\x00(\d+)\x00",
                   lambda m: "<code>%s</code>" % html.escape(spans[int(m.group(1))], quote=False),

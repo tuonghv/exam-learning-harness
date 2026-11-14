@@ -203,7 +203,7 @@ class Pack(unittest.TestCase):
         self.assertEqual((first[3], first[-1]), ("-", "none"))
 
     def test_93_1_pack_reports_have_no_none_token_and_show_phrases(self):
-        for subject in ("all", "alpha"):
+        for subject in ("all",):  # a pack keeps only the `all` report
             md = self.read("solution-report", "md", subject)
             self.assertEqual(NONE_RE.findall(md), [], subject)
             self.assertIn(rp.LABELS["vi"]["no_answer"], md)

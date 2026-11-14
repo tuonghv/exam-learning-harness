@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-099",
   "title": "Default solution_public-report kind and all-only multi-subject pack (REQ-0106)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0106",
   "acceptance_criteria": [
     "AC1 kind solution_public-report registered, name/parse handle the underscore, kind public removed",
@@ -17,8 +17,21 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "config/report_kinds.json",
+      "docs/guide/report-kinds.md",
+      "src/exam_engine/pipeline/report_build.py",
+      "src/exam_engine/pipeline/report_kinds.py",
+      "src/exam_engine/pipeline/report_pack.py",
+      "src/exam_engine/pipeline/reporter.py",
+      "src/exam_engine/utils/md2html.py",
+      "tools/check_report_pack.py",
+      "tests/unit/test_overlay.py",
+      "tests/unit/test_report_kinds.py",
+      "tests/unit/test_report_wording.py"
+    ],
+    "summary": "kind solution_public-report (underscore-aware parse), default in every report; pack_subject:false drops per-subject human reports from a multi-subject pack"
   },
   "unit_test": {
     "status": "pending",
@@ -43,18 +56,27 @@
   "roles": {
     "designer": {
       "waiver": "small change; coordinator wrote the design directly from the existing uncommitted public-kind code"
-    }
+    },
+    "coder": "work/TASK-099/handoff/code.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-14T07:57:36Z",
-  "updated_at": "2026-11-14T07:58:05Z",
+  "updated_at": "2026-11-14T08:10:16Z",
   "updated_by": "main",
-  "scope": [],
+  "scope": [
+    "config/report_kinds.json",
+    "docs/guide/report-kinds.md",
+    "src/exam_engine/pipeline/*.py",
+    "src/exam_engine/utils/md2html.py",
+    "tools/check_report_pack.py",
+    "tests/unit/*.py",
+    "docs/report/evidence/TASK-099/*"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
     "done": [],
     "notes": ""
   },
-  "next": "coder: implement design phase-99 (registry rename, parse, expected pack, build_pack all-only, tests)"
+  "next": "unit tests: python3 -I tools/run_tests.py --fast"
 }

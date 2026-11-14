@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0106",
-  "next": "coder: implement design phase-99 (registry rename, parse, expected pack, build_pack all-only, tests)",
-  "updated": "2026-11-14 14:58"
+  "next": "unit tests: python3 -I tools/run_tests.py --fast",
+  "updated": "2026-11-14 15:10"
 }

@@ -59,9 +59,10 @@ def parse(basename):
     """dict(exam, subject, kind, run, ext) for a standard name of a registered kind, else None."""
     stem, dot, ext = basename.rpartition(".")
     parts = stem.split("_")
-    if not dot or len(parts) != 4:
+    if not dot or len(parts) < 4:
         return None
-    exam, subject, kind, run = parts
+    exam, subject, run = parts[0], parts[1], parts[-1]
+    kind = "_".join(parts[2:-1])  # a registered kind may itself contain '_'
     try:
         if name(exam, subject, kind, run, ext) != basename:
             return None
@@ -142,15 +143,17 @@ def superseded_note(rel, root_name=None, extra=None):
     return ""
 
 
-def expected(exam, subjects, run, key=False, pdf=True, view="sheet"):
+def expected(exam, subjects, run, key=False, pdf=True, view="sheet", pack=False):
     """Sorted basenames a complete pack must hold: every registered kind whose `needs` applies, per scope.
-    Optional extensions (html) and pdf=False pdfs are left out."""
+    Optional extensions (html) and pdf=False pdfs are left out; pack=True also leaves out the per-subject
+    names of kinds with `pack_subject: false` (a pack holds only their `all` file)."""
     active = {"", view} | ({"key"} if key else set())
     out = []
     for kind, spec in load()["kinds"].items():
         if spec.get("needs", "") not in active:
             continue
-        subs = ([slug(s) for s in subjects] if spec["scope"] in ("subject", "both") else []) \
+        per_subject = spec["scope"] in ("subject", "both") and not (pack and spec.get("pack_subject") is False)
+        subs = ([slug(s) for s in subjects] if per_subject else []) \
             + (["all"] if spec["scope"] in ("all", "both") else [])
         for ext in spec["ext"]:
             if ext in spec.get("optional_ext", []) or (ext == "pdf" and not pdf):

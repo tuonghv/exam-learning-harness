@@ -183,9 +183,16 @@ def build_pack(plan_dirs, out_dir, exam, run, key=None, pdf=True, engine_git=Non
     for pd in plan_dirs:
         subj = ((planrun.load(pd)["result"] or {}).get("exam") or {}).get("subject")
         mine = [o for o in overlays or [] if o["subject"] == subj]
-        info = report_build.build(pd, out_dir, view=view, pdf=pdf, exam_name=exam, run_name=run, engine_git=engine_git,
+        info = report_build.build(pd, out_dir, view=view, pdf=False, exam_name=exam, run_name=run, engine_git=engine_git,
                                   overlay=mine[0] if mine else None)
         nm = info["names"]
+        for kind, spec in rk.load()["kinds"].items():  # a pack keeps only the `all` file of these kinds
+            if spec.get("pack_subject") is False:
+                for ext in spec["ext"]:
+                    try:
+                        os.remove(os.path.join(out_dir, rk.name(exam, nm["subject"], kind, run, ext)))
+                    except (OSError, ValueError):
+                        pass
         src = os.path.join(pd, "run.log")
         if os.path.isfile(src):
             shutil.copyfile(src, os.path.join(out_dir, rk.name(exam, nm["subject"], "run-log", run, "log")))
@@ -199,6 +206,10 @@ def build_pack(plan_dirs, out_dir, exam, run, key=None, pdf=True, engine_git=Non
     combined_md = os.path.join(out_dir, rk.name(exam, "all", "solution-report", run, "md"))
     with open(combined_md, "w", encoding="utf-8") as fh:
         fh.write(combined)
+    pub_all = os.path.join(out_dir, rk.name(exam, "all", "solution_public-report", run, "md"))
+    with open(pub_all, "w", encoding="utf-8") as fh:
+        fh.write(reporter.build_public_combined([(p["result"], p["exam"]) for p in parts],
+                                                "%s (%s)" % (exam, run)))
     rows = _rows(parts)
     _tsv(os.path.join(out_dir, rk.name(exam, "all", "answer-table", run, "tsv")),
          ["subject", "id", "printed", "answer", "status", "doubt", "error", "score"],
@@ -221,7 +232,7 @@ def build_pack(plan_dirs, out_dir, exam, run, key=None, pdf=True, engine_git=Non
         correct, total = sm["total_correct"], sm["total"]
     if pdf:
         _pdf_siblings(out_dir, reporter.learn_lang(parts[0]["result"]))
-    want = rk.expected(exam, subjects, run, key=bool(keymap), pdf=pdf, view=view)
+    want = rk.expected(exam, subjects, run, key=bool(keymap), pdf=pdf, view=view, pack=True)
     have = sorted(f for f in os.listdir(out_dir) if f not in (rk.INDEX_NAME, runlayout.RUN_JSON))
     missing = [w for w in want if w not in have]
     stray = [h for h in have if rk.classify(h)[1] != "standard"]

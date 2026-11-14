@@ -15,6 +15,7 @@ File name: `<exam>_<subject>_<kind>_<run>.<ext>`
 | `answer-sheet` | `<exam>_<subject>_answer-sheet_<run>.<ext>` | md, pdf | subject | - | one subject's answers as a bubble grid (letters only, a dash for a declined question) | `answers.md` |
 | `solution-report` | `<exam>_<subject>_solution-report_<run>.<ext>` | md, pdf, html | both | sheet | hybrid full report: question and options, answer, status, doubt in words, steps, explanation, checks (html only when no PDF renderer) | `report.md`, `report.pdf`, `report.html` |
 | `learning-report` | `<exam>_<subject>_learning-report_<run>.<ext>` | md, pdf, html | subject | learn | study view of one subject (answer, why, steps) written for --view learn | - |
+| `solution_public-report` | `<exam>_<subject>_solution_public-report_<run>.<ext>` | md, pdf, html | both | - | student-facing report of one subject: question, answer, steps, explanation; no status, doubt, evidence, score or AI-review notes | - |
 | `answer-table` | `<exam>_<subject>_answer-table_<run>.<ext>` | tsv | all | - | whole exam, one row per question: subject, printed no., answer, status, doubt, error, score | `answers.tsv` |
 | `score-vs-key` | `<exam>_<subject>_score-vs-key_<run>.<ext>` | tsv | all | key | whole exam checked against the official answers: key, ours, correct/WRONG/declined, status, doubt, flag | - |
 | `score-summary` | `<exam>_<subject>_score-summary_<run>.<ext>` | md, pdf, json | all | key | whole exam score: per subject correct/wrong/declined, cost, calls, items not correct, doubt vs outcome | - |

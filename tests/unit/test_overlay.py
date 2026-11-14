@@ -228,12 +228,8 @@ class T1Applied(Base):
         self.assertNotEqual(txt1, txt2)
 
     def test_96_3_answer_sheet_and_metrics_reflect_overlay(self):
-        sheets = [f for f in self.files(self.o2, ".md") if "answer-sheet" in f and "physics" in f.lower()]
-        sheets1 = [f for f in self.files(self.o1, ".md") if "answer-sheet" in f and "physics" in f.lower()]
-        self.assertEqual((len(sheets), len(sheets1)), (1, 1), os.listdir(self.o2))
-        s2, s1 = open(sheets[0], encoding="utf-8").read(), open(sheets1[0], encoding="utf-8").read()
-        self.assertNotEqual(s1, s2)
-        self.assertRegex(s2, "Ⓒ")
+        # a pack has no per-subject answer-sheet (REQ-0106); the overlay shows in the all-subject answer-table
+        self.assertEqual([f for f in self.files(self.o2, ".md") if "answer-sheet" in f], [])
         met = [f for f in self.files(self.o2, ".json") if "metrics" in f and "physics" in f.lower()]
         met1 = [f for f in self.files(self.o1, ".json") if "metrics" in f and "physics" in f.lower()]
         self.assertEqual((len(met), len(met1)), (1, 1), os.listdir(self.o2))
@@ -292,7 +288,7 @@ class T1Applied(Base):
         bad = [ln for ln in r.stdout.splitlines() if ln.endswith("FAIL") and "pdf" not in ln.lower()
                and not ln.startswith("RESULT")]
         self.assertEqual(bad, [], r.stdout)
-        self.assertRegex(r.stdout, r"RESULT\t53 checks\t3 failed")  # exactly the 3 PDF rows
+        self.assertRegex(r.stdout, r"RESULT\t53 checks\t3 failed")  # exactly the 3 PDF rows (all solution-report + all public pdf, md without pdf)
         self.assertRegex(r.stdout, r"overlay result_sha256 mismatches\t0\t0\tok")
         self.assertRegex(r.stdout, r"overlay source lines physics\t1\t1\tok")
         res = jread(self.ov + "/result.json")
