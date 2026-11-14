@@ -2089,7 +2089,7 @@
     "task_id": "TASK-106",
     "title": "exam backup of untracked rebuild inputs, verify + restore check (REQ-0113)",
     "priority": 3,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-11-14T14:40:00",
     "requirement": "REQ-0113",
     "acceptance_criteria": [
