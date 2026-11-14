@@ -10,3 +10,7 @@ Raw log: work/TASK-106/evidence/t106-real.txt
   --recipe <scratch>/er2/config/published_reports.json` -> rc 0, all 3 exams planned, no ERROR (every recipe input found).
 - AC4 docs/guide/report-kinds.md "How to rebuild reports" backup lines (copy to another disk/cloud you own, keep private);
   toolkit-reference.md `exam.py backup` line.
+
+Verifier: VERDICT PASS AC1-AC5, security clean (work/TASK-106/handoff/verify.md). Low findings left open: no test for a
+hardlink member or a symlinked dest; a crash between archive and manifest write can leave an archive without manifest
+(`--check` then exits 2, so it is never trusted). Fast suite KNOWN 4 NEW 0; test_backup 18 OK.
