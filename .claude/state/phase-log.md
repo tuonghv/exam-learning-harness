@@ -2845,3 +2845,9 @@ Action: Report written
 Result: docs/report/phase-98-dgnl2024-key-score.md
 Decision: DONE
 Next: none
+
+## DESIGN - TASK-099 - 2026-11-14T07:58:05Z
+Action: design phase-99 from RAW-00313
+Result: design doc written
+Decision: rename kind to solution_public-report, pack all-only
+Next: coder implements

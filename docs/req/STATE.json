@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0106",
-  "next": "TASK-099 DESIGN: kind rename + pack all-only",
-  "updated": "2026-11-14 14:57"
+  "next": "coder: implement design phase-99 (registry rename, parse, expected pack, build_pack all-only, tests)",
+  "updated": "2026-11-14 14:58"
 }
