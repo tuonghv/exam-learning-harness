@@ -536,7 +536,7 @@ def publish_main(argv):
     ap.add_argument("exam")
     ap.add_argument("--from", dest="line", required=True, metavar="LINE", help="dev line to publish (not main)")
     ap.add_argument("--view", choices=reporter.VIEWS, default="sheet")
-    ap.add_argument("--run", help="run part of the file names (default: LINE)")
+    ap.add_argument("--run", help="run part of the file names (default: the new main run id, run-YYYYMMDD-HHMMSS)")
     ap.add_argument("--key", dest="keyfile", help="answer key file (default: the key recorded in the source pack run.json)")
     ap.add_argument("--no-pdf", action="store_true")
     ap.add_argument("--plans", default=DEFAULT_OUT_ROOT)
@@ -562,7 +562,6 @@ def publish_main(argv):
             raise ValueError("answer key %s not found; pass --key" % kf)
         if not kf:
             print("WARN: no key: score files skipped; pass --key", file=sys.stderr)
-        run = a.run or line
         specs, reason = a.overlay, a.overlay_reason
         if not specs:  # inherit the source pack's overlays like the key
             inherited = [o for o in ((src or {}).get("manifest") or {}).get("overlays") or [] if isinstance(o, dict)]
@@ -572,6 +571,7 @@ def publish_main(argv):
                 print("overlay inherited: %s printed %s" % (o["plan_run_id"], _ranges([q["printed"] for q in o["questions"]])))
         overlays = overlay.resolve(specs, [d for d, _s in sel], reason)
         out = runlayout.new_report_run(a.reports, exam, line=runlayout.LINE_DEFAULT, publish=True)
+        run = a.run or os.path.basename(out)  # date-style run-<id> of the new main run (REQ-0107)
         info = report_pack.build_pack([d for d, _s in sel], out, report_kinds.slug(exam) or "exam",
                                       report_kinds.short_run(run) if not run.startswith("run-") else run,
                                       key=kf, pdf=not a.no_pdf, engine_git=reporter.git_info(_REPO_ROOT),

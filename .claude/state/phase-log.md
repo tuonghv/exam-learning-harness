@@ -2881,3 +2881,9 @@ Action: design phase-100
 Result: design doc
 Decision: use basename(out) as run
 Next: implement
+
+## IMPLEMENTING - TASK-100 - 2026-11-14T08:23:20Z
+Action: cli.publish_main run default
+Result: 1 line + test + doc
+Decision: accept
+Next: unit tests

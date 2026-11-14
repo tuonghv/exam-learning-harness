@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0107",
-  "next": "implement in cli.publish_main + test",
-  "updated": "2026-11-14 15:21"
+  "next": "unit tests",
+  "updated": "2026-11-14 15:23"
 }

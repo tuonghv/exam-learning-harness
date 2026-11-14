@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-100",
   "title": "publish uses the main run date id in file names (REQ-0107)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0107",
   "acceptance_criteria": [
     "AC1 publish default run part = new main run folder id; --run overrides",
@@ -15,8 +15,13 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/cli.py",
+      "tests/unit/test_publish.py",
+      "docs/guide/toolkit-reference.md"
+    ],
+    "summary": "publish default run part = basename of the new main run folder; test_100_1"
   },
   "unit_test": {
     "status": "pending",
@@ -41,11 +46,14 @@
   "roles": {
     "designer": {
       "waiver": "one-line change, design written by coordinator"
+    },
+    "coder": {
+      "waiver": "one-line change made by the coordinator"
     }
   },
   "user_notes": [],
   "picked_at": "2026-11-14T08:21:02Z",
-  "updated_at": "2026-11-14T08:21:18Z",
+  "updated_at": "2026-11-14T08:23:21Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
@@ -59,5 +67,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "implement in cli.publish_main + test"
+  "next": "unit tests"
 }

@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-100",
-  "state": "DESIGN",
-  "next": "implement in cli.publish_main + test",
+  "state": "IMPLEMENTING",
+  "next": "unit tests",
   "title": "publish uses the main run date id in file names (REQ-0107)",
   "active": [
     {
       "task_id": "TASK-100",
-      "state": "DESIGN",
-      "next": "implement in cli.publish_main + test",
-      "updated_at": "2026-11-14T08:21:18Z"
+      "state": "IMPLEMENTING",
+      "next": "unit tests",
+      "updated_at": "2026-11-14T08:23:21Z"
     }
   ],
   "max_active": 1

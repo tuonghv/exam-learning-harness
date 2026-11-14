@@ -279,6 +279,21 @@ class T943Publish(Base):
         self.assertEqual(sorted(p["plan_run_id"] for p in man["plan_runs"]),
                          ["20240101-000001-math", "20240101-000003-science2"])
 
+    def test_100_1_file_run_part_is_main_run_id_unless_run_given(self):
+        self.fixture()
+        code, out, err = self.publish("--from", "f")
+        self.assertEqual(code, 0, out + err)
+        (rid,) = self.main_runs()
+        self.assertRegex(rid, r"^run-\d{8}-\d{6}")
+        files = [f for f in os.listdir(os.path.join(self.reports, "ex", "main", rid)) if f.startswith("ex_")]
+        self.assertTrue(files)
+        self.assertEqual([f for f in files if not f.rsplit(".", 1)[0].endswith("_" + rid)], [])
+        code, out, err = self.publish("--from", "f", "--run", "x1")
+        self.assertEqual(code, 0, out + err)
+        rid2 = [r for r in self.main_runs() if r != rid][0]
+        self.assertTrue(all(f.rsplit(".", 1)[0].endswith("_run-x1")
+                            for f in os.listdir(os.path.join(self.reports, "ex", "main", rid2)) if f.startswith("ex_")))
+
     def test_94_3_fallback_latest_per_subject_without_pack(self):
         self.plan("ex", "f", "20240101-000001-math", "Math")
         self.plan("ex", "f", "20240101-000002-math", "Math")
