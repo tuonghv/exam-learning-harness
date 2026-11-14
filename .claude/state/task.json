@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-099",
-  "state": "UNIT_TESTED",
-  "next": "verify: rebuild dgnl2025/dgnl2026/dhqg2024 packs, check_report_pack.py",
+  "state": "VERIFIED",
+  "next": "report and DONE",
   "title": "Default solution_public-report kind and all-only multi-subject pack (REQ-0106)",
   "active": [
     {
       "task_id": "TASK-099",
-      "state": "UNIT_TESTED",
-      "next": "verify: rebuild dgnl2025/dgnl2026/dhqg2024 packs, check_report_pack.py",
-      "updated_at": "2026-11-14T08:10:16Z"
+      "state": "VERIFIED",
+      "next": "report and DONE",
+      "updated_at": "2026-11-14T08:10:23Z"
     }
   ],
   "max_active": 1

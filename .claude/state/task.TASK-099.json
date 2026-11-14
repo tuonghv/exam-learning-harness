@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-099",
   "title": "Default solution_public-report kind and all-only multi-subject pack (REQ-0106)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0106",
   "acceptance_criteria": [
     "AC1 kind solution_public-report registered, name/parse handle the underscore, kind public removed",
@@ -39,12 +39,16 @@
     "result": "1917 tests, KNOWN 4 NEW 0 (same 4 known failures without the change)"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "report formatting only; no new inputs, network or subprocess paths"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "docs/report/evidence/TASK-099/verify.md"
+    ],
+    "command": "exam.py report-pack dgnl2025 --publish; exam.py publish dgnl2026 --from f; exam.py publish dhqg2024 --from t81; python3 -I tools/check_report_pack.py <pack> <plans> [--key]",
+    "result": "3 packs 0 failed; public md 120/120 answers, 0 AI-note lines; 0 per-subject human reports"
   },
   "report": {
     "status": "pending",
@@ -60,11 +64,14 @@
     "coder": "work/TASK-099/handoff/code.md",
     "tester": {
       "waiver": "coordinator re-ran the full suite itself and compared against the stashed baseline"
+    },
+    "verifier": {
+      "waiver": "coordinator ran the real packs and the independent checker (imports nothing from exam_engine)"
     }
   },
   "user_notes": [],
   "picked_at": "2026-11-14T07:57:36Z",
-  "updated_at": "2026-11-14T08:10:16Z",
+  "updated_at": "2026-11-14T08:10:23Z",
   "updated_by": "main",
   "scope": [
     "config/report_kinds.json",
@@ -81,5 +88,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verify: rebuild dgnl2025/dgnl2026/dhqg2024 packs, check_report_pack.py"
+  "next": "report and DONE"
 }
