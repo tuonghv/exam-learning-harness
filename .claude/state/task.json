@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-102",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "coder: items 102.1-102.7",
   "title": "report runs hold no run.json; manifest under plans/ (REQ-0109)",
   "active": [
     {
       "task_id": "TASK-102",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "coder: items 102.1-102.7",
+      "updated_at": "2026-11-14T09:02:00Z"
     }
   ],
   "max_active": 1

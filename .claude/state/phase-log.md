@@ -2935,3 +2935,9 @@ Action: report
 Result: docs/report/phase-101-report-runs-readable-only.md
 Decision: done
 Next: none
+
+## DESIGN - TASK-102 - 2026-11-14T09:02:00Z
+Action: designer draft -> phase-102 design
+Result: design doc, 3 decisions
+Decision: D1 plans/<exam>/<line>/report-runs, D2 no fallback, D3 separate migrate command (recommendations, follow RAW-00317/318)
+Next: implement 102.1-102.7
