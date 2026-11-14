@@ -1,0 +1,55 @@
+{
+  "task_id": "TASK-102",
+  "title": "report runs hold no run.json; manifest under plans/ (REQ-0109)",
+  "state": "TODO",
+  "requirement": "REQ-0109",
+  "acceptance_criteria": [
+    "AC1 new report run holds only md/pdf/tsv + INDEX.md",
+    "AC2 manifest under plans/, all readers use it, existing runs migrated",
+    "AC3 tests green; dgnl2026, dhqg2024 re-published, checker passes"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {},
+  "user_notes": [],
+  "picked_at": "2026-11-14T08:57:47Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
