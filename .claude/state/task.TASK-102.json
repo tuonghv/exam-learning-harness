@@ -80,7 +80,7 @@
   },
   "user_notes": [],
   "picked_at": "2026-11-14T08:57:47Z",
-  "updated_at": "2026-11-14T13:46:41Z",
+  "updated_at": "2026-11-14T13:46:44Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",

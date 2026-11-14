@@ -2022,7 +2022,7 @@
       "AC2 manifest under plans/, all readers use it, existing runs migrated",
       "AC3 tests green; dgnl2026, dhqg2024 re-published, checker passes"
     ],
-    "completed_at": "2026-11-14T13:46:40Z",
+    "completed_at": "2026-11-14T13:46:41Z",
     "report": "docs/report/phase-102-run-manifest-in-plans.md"
   }
 ]
