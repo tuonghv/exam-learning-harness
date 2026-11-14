@@ -124,6 +124,17 @@ class TestRotate(BackupBase):
         self.assertIn("other.txt", left)
         self.assertNotIn("exam-inputs-20200101T000000Z.tar.gz", left)
 
+    def test_leftover_part_ignored_by_rotation(self):
+        # crash mid-write leaves only .part; rotation must neither count nor delete it
+        os.makedirs(self.dest)
+        part = os.path.join(self.dest, "exam-inputs-20200101T000000Z.tar.gz.part")
+        open(part, "w").close()
+        for d in (2, 3):
+            open(os.path.join(self.dest, "exam-inputs-2020010%dT000000Z%s" % (d, GZ)), "w").close()
+        backup._rotate(self.dest, 1)
+        self.assertTrue(os.path.exists(part))
+        self.assertEqual(len(self.archives()), 1)
+
 
 class TestCheck(BackupBase):
     def test_check_ok_and_restore_matches(self):
@@ -142,6 +153,21 @@ class TestCheck(BackupBase):
         raw[len(raw) // 2] ^= 0xFF
         with open(arc, "wb") as fh:
             fh.write(bytes(raw))
+        code, _o, err = _run(["--check", arc, "--repo", self.repo])
+        self.assertEqual(code, 1)
+        self.assertIn("FAIL", err)
+
+    def test_valid_gzip_with_altered_member_exit1(self):
+        # repacked (still readable) archive: only the sha check can catch it
+        arc = self.make()
+        with tarfile.open(arc, "r:gz") as tf:
+            items = [(m, tf.extractfile(m).read() if m.isfile() else None) for m in tf]
+        with tarfile.open(arc, "w:gz") as tf:
+            for m, data in items:
+                if data is not None and m.name == "input/k.answer.txt":
+                    data = b"9 Z\n"
+                    m.size = len(data)
+                tf.addfile(m, io.BytesIO(data) if data is not None else None)
         code, _o, err = _run(["--check", arc, "--repo", self.repo])
         self.assertEqual(code, 1)
         self.assertIn("FAIL", err)

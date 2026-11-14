@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-106",
   "title": "exam backup of untracked rebuild inputs, verify + restore check (REQ-0113)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0113",
   "acceptance_criteria": [
     "AC1 archive+manifest outside repo; in-repo dest exit 2",
@@ -31,9 +31,9 @@
     "summary": "pipeline/tarbackup.py shared helpers (refuse_inside, ensure_free, write_verified, sha_file) used by plansmigrate.make_backup and new backup.py: exam backup (manifest, verify, rotation) and --check/--restore-to with unsafe-member rejection; guide lines"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --fast",
+    "result": "KNOWN 4 NEW 0; test_backup 18 tests (2 added: repacked-archive sha check, rotation ignores .part); unsafe-member and tamper tests bite with the checks disabled"
   },
   "security": {
     "status": "pending",
@@ -52,7 +52,8 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-106/handoff/design.md",
-    "coder": "work/TASK-106/handoff/code.md"
+    "coder": "work/TASK-106/handoff/code.md",
+    "tester": "work/TASK-106/handoff/test.md"
   },
   "user_notes": [
     {
@@ -62,7 +63,7 @@
     }
   ],
   "picked_at": "2026-11-14T14:42:39Z",
-  "updated_at": "2026-11-14T14:47:58Z",
+  "updated_at": "2026-11-14T14:50:00Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/backup.py",
@@ -78,5 +79,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tester: --fast + bite + failure modes; main: real backup to default dest"
+  "next": "verifier: AC1-AC5 from saved evidence"
 }
