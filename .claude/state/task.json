@@ -1,14 +1,14 @@
 {
   "schema": 2,
   "task_id": "TASK-100",
-  "state": "IMPLEMENTING",
-  "next": "unit tests",
+  "state": "UNIT_TESTED",
+  "next": "verify by re-publishing dgnl2026, dhqg2024",
   "title": "publish uses the main run date id in file names (REQ-0107)",
   "active": [
     {
       "task_id": "TASK-100",
-      "state": "IMPLEMENTING",
-      "next": "unit tests",
+      "state": "UNIT_TESTED",
+      "next": "verify by re-publishing dgnl2026, dhqg2024",
       "updated_at": "2026-11-14T08:23:21Z"
     }
   ],

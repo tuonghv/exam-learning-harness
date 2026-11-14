@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-100",
   "title": "publish uses the main run date id in file names (REQ-0107)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0107",
   "acceptance_criteria": [
     "AC1 publish default run part = new main run folder id; --run overrides",
@@ -24,9 +24,9 @@
     "summary": "publish default run part = basename of the new main run folder; test_100_1"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --fast",
+    "result": "1918 tests, KNOWN 4 NEW 0"
   },
   "security": {
     "status": "pending",
@@ -49,6 +49,9 @@
     },
     "coder": {
       "waiver": "one-line change made by the coordinator"
+    },
+    "tester": {
+      "waiver": "coordinator ran the full suite"
     }
   },
   "user_notes": [],
@@ -67,5 +70,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "unit tests"
+  "next": "verify by re-publishing dgnl2026, dhqg2024"
 }
