@@ -145,6 +145,31 @@ class T3DryRunAndPrechecks(RebuildBase):
         self.assertEqual((code, "overlay dir" in err), (2, True))
         self.assertEqual(to.snapshot(self.reports), before[0])
 
+    def test_105_6_escaping_paths_refused_nothing_deleted(self):
+        outside = os.path.realpath(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, outside, True)
+        before = self.state()
+        for name, mut in (("absolute", lambda c: c.update(plan_runs=[outside])),
+                          ("dotdot", lambda c: c["overlays"][0].update(dir="../x")),
+                          ("key", lambda c: c.update(key="plans/../../k"))):
+            rec = json.loads(json.dumps(self.recipe))
+            mut(rec["exams"]["ex"])
+            to.jwrite(self.recipe_path, rec)
+            code, _, err = self.run_rb()
+            self.assertEqual((code, "relative" in err), (2, True), name)
+            self.assertEqual(self.state(), before, name)
+
+    def test_105_6_symlink_escape_refused(self):
+        outside = os.path.realpath(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, outside, True)
+        os.symlink(outside, "link")
+        self.recipe["exams"]["ex"]["overlays"][0]["dir"] = "link"
+        self.save_recipe()
+        before = self.state()
+        code, _, err = self.run_rb()
+        self.assertEqual((code, "outside --root" in err), (2, True), err)
+        self.assertEqual(self.state(), before)
+
     def test_105_5_root_resolves_recipe_paths(self):
         other = os.path.realpath(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, other, True)

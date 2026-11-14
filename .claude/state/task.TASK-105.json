@@ -61,7 +61,7 @@
     }
   ],
   "picked_at": "2026-11-14T14:29:28Z",
-  "updated_at": "2026-11-14T14:37:40Z",
+  "updated_at": "2026-11-14T14:42:17Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",

@@ -9,7 +9,7 @@
       "task_id": "TASK-105",
       "state": "UNIT_TESTED",
       "next": "verifier: AC1-AC5 from saved evidence",
-      "updated_at": "2026-11-14T14:37:40Z"
+      "updated_at": "2026-11-14T14:42:17Z"
     }
   ],
   "max_active": 1

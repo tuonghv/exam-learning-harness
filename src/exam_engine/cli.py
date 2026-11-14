@@ -602,6 +602,13 @@ RECIPE_VERSION = 1
 _PACK_CMDS = ("report-pack", "publish")
 
 
+def _safe_rel(p, what):
+    """ValueError unless `p` is a relative path without `..` segments (a recipe path must stay under --root)."""
+    if os.path.isabs(p) or ".." in p.replace("\\", "/").split("/"):
+        raise ValueError("recipe: %s: path %r must be relative with no '..'" % (what, p))
+    return p
+
+
 def _recipe_check(rec, path):
     """Validate a recipe dict (design 105.1); ValueError on a missing/unknown/ill-typed field."""
     if not isinstance(rec, dict) or rec.get("version") != RECIPE_VERSION:
@@ -626,7 +633,9 @@ def _recipe_check(rec, path):
         runs = need(cfg, "plan_runs", list, exam)
         if not runs or not all(isinstance(p, str) and p for p in runs):
             raise ValueError("recipe: %s: plan_runs must be a non-empty list of paths" % exam)
-        need(cfg, "key", str, exam)
+        for p in runs:
+            _safe_rel(p, exam)
+        _safe_rel(need(cfg, "key", str, exam), exam)
         need(cfg, "key_sha256", str, exam)
         for ov in need(cfg, "overlays", list, exam):
             ok = (isinstance(ov, dict) and isinstance(ov.get("dir"), str) and isinstance(ov.get("reason"), str)
@@ -634,6 +643,7 @@ def _recipe_check(rec, path):
                   and all(isinstance(n, int) and not isinstance(n, bool) for n in ov["printed"]))
             if not ok:
                 raise ValueError("recipe: %s: each overlay needs dir, printed [int...] and a reason" % exam)
+            _safe_rel(ov["dir"], exam)
     return rec
 
 
@@ -683,8 +693,13 @@ def _write_recipe(path, reports, exams):
 
 def _rebuild_plan(recipe, exams, root, reports):
     """[step] for every named exam; ValueError('<exam>: reason') on the first refusal. Reads only (design 105.3/4)."""
+    base = os.path.realpath(root)
+
     def rp(p):
-        return os.path.normpath(os.path.join(root, p))
+        full = os.path.normpath(os.path.join(root, p))
+        if os.path.commonpath([base, os.path.realpath(full)]) != base:  # symlink escape
+            raise ValueError("path %s resolves outside --root" % p)
+        return full
     steps = []
     for exam in exams:
         try:

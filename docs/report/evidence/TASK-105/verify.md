@@ -16,3 +16,7 @@ Independent checker (tools/check_report_pack.py --key --expect-correct):
 - dgnl2026 main: 58 checks 0 failed
 - dhqg2024 main: 65 checks 0 failed, KEYISSUE 65 bad_letter I
 Files under reports/ other than md/pdf/tsv/html: 0.
+
+Verifier: VERDICT PASS (AC1-AC4; work/TASK-105/handoff/verify.md). Finding F1 (recipe path with `..`/absolute could
+escape --root) fixed before VERIFIED: `_safe_rel` in the loader + realpath-under-root check (symlinks); 2 tests added.
+After the fix: `python3 -I tools/run_tests.py --fast` KNOWN 4 NEW 0; test_rebuild_reports OK; real `--dry-run` exit 0.
