@@ -41,7 +41,13 @@
   "roles": {
     "designer": "work/TASK-101/handoff/design.md"
   },
-  "user_notes": [],
+  "user_notes": [
+    {
+      "raw": "RAW-00317",
+      "note": "standing rule: report folders hold only human-readable files (md/pdf/tsv + INDEX.md, run.json); machine data stays in plans/",
+      "at": "2026-11-14T08:40:19Z"
+    }
+  ],
   "picked_at": "2026-11-14T08:36:10Z",
   "updated_at": "2026-11-14T08:39:42Z",
   "updated_by": "main",
