@@ -963,6 +963,17 @@ class T103MigrationMap(unittest.TestCase):
         put(os.path.join(self.reports, "x", "stray.json"), "{}")
         self.assertEqual(runlayout.reports_leftovers(self.reports), ["x/stray.json"])
 
+    def test_103_apply_with_stray_machine_files_exits_2_but_still_moves(self):
+        put(os.path.join(self.reports, "x", "x.json"), "{}")
+        put(os.path.join(self.reports, "x", "y.log"), "l")
+        code, out, err = quiet(cli.report_manifests_migrate_main, ["--reports", self.reports, "--apply"])
+        self.assertEqual(code, 2)
+        self.assertIn("LEFTOVER: x/x.json", err)
+        self.assertIn("LEFTOVER: x/y.log", err)
+        self.assertTrue(os.path.isfile(self.map))
+        self.assertTrue(os.path.isfile(os.path.join(self.stash, "ex", "INDEX.md")))
+        self.assertFalse(os.path.exists(os.path.join(self.reports, "MIGRATION.json")))
+
 
 if __name__ == "__main__":
     unittest.main()

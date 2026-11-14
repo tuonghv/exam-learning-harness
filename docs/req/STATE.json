@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0110",
-  "next": "unit tests",
-  "updated": "2026-11-14 20:56"
+  "next": "clean reports/, rebuild main reports at $0",
+  "updated": "2026-11-14 21:02"
 }

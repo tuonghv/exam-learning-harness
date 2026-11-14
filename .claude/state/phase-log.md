@@ -2977,3 +2977,9 @@ Action: coder 103.1-103.6
 Result: --fast KNOWN 4 NEW 0; dry-run 12 to move
 Decision: accept
 Next: unit tests + real move
+
+## UNIT_TESTED - TASK-103 - 2026-11-14T14:02:05Z
+Action: tester: +1 test, bite check
+Result: --fast KNOWN 4 NEW 0
+Decision: user: stop patching old runs; clean reports/ and rebuild at $0
+Next: clean + rebuild

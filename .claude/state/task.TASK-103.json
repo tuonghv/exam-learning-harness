@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-103",
   "title": "plans-migrate reports map MIGRATION.json under plans/ (REQ-0110)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0110",
   "acceptance_criteria": [
     "AC1 map read/written under plans/, undo works, existing reports/MIGRATION.json + index moved; reports/ holds only md/pdf/tsv/html + INDEX.md",
@@ -28,9 +28,9 @@
     "summary": "reports map/stash at plans/MIGRATION.reports.{json,index} via runlayout helper; old reports map = hard error with move hint; report-manifests-migrate moves map+stash and exits 2 on leftover machine files; plans side skips MIGRATION.*"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --fast",
+    "result": "1944 tests, KNOWN 4 NEW 0; 9/9 test_103_* fail on e3b7feb"
   },
   "security": {
     "status": "pending",
@@ -49,11 +49,12 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-103/handoff/design.md",
-    "coder": "work/TASK-103/handoff/code.md"
+    "coder": "work/TASK-103/handoff/code.md",
+    "tester": "work/TASK-103/handoff/test.md"
   },
   "user_notes": [],
   "picked_at": "2026-11-14T13:46:53Z",
-  "updated_at": "2026-11-14T13:56:13Z",
+  "updated_at": "2026-11-14T14:02:05Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
@@ -69,5 +70,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "apply move on real tree, verify"
+  "next": "user RAW-00320: clean reports/ and rebuild main reports at $0, then verify"
 }

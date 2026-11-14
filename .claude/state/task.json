@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-103",
-  "state": "IMPLEMENTING",
-  "next": "apply move on real tree, verify",
+  "state": "UNIT_TESTED",
+  "next": "user RAW-00320: clean reports/ and rebuild main reports at $0, then verify",
   "title": "plans-migrate reports map MIGRATION.json under plans/ (REQ-0110)",
   "active": [
     {
       "task_id": "TASK-103",
-      "state": "IMPLEMENTING",
-      "next": "apply move on real tree, verify",
-      "updated_at": "2026-11-14T13:56:13Z"
+      "state": "UNIT_TESTED",
+      "next": "user RAW-00320: clean reports/ and rebuild main reports at $0, then verify",
+      "updated_at": "2026-11-14T14:02:05Z"
     }
   ],
   "max_active": 1
