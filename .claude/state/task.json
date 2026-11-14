@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-104",
-  "state": "DONE",
-  "next": "",
-  "title": "check_report_pack: bad key letter excluded like the engine (REQ-0112)",
-  "active": [],
+  "task_id": "TASK-105",
+  "state": "TODO",
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "title": "tracked published-reports recipe + exam rebuild-reports + guide (REQ-0111)",
+  "active": [
+    {
+      "task_id": "TASK-105",
+      "state": "TODO",
+      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+      "updated_at": ""
+    }
+  ],
   "max_active": 1
 }

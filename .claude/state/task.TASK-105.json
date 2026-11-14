@@ -1,0 +1,71 @@
+{
+  "task_id": "TASK-105",
+  "title": "tracked published-reports recipe + exam rebuild-reports + guide (REQ-0111)",
+  "state": "TODO",
+  "requirement": "REQ-0111",
+  "acceptance_criteria": [
+    "AC1 recipe for 3 exams + schema test",
+    "AC2 byte-identical rebuild, same scores",
+    "AC3 dry-run / refusal before delete",
+    "AC4 how-to-rebuild guide",
+    "AC5 unit tests green"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {},
+  "user_notes": [
+    {
+      "raw": "RAW-00325",
+      "note": "user: do A+B; for C give best solution (keys never tracked -> local verified backup)",
+      "at": "2026-11-14T14:23:14Z"
+    }
+  ],
+  "picked_at": "2026-11-14T14:29:28Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [
+    "src/exam_engine/cli.py",
+    "src/exam_engine/pipeline/*.py",
+    "scripts/exam.py",
+    "config/published_reports.json",
+    "docs/guide/*.md",
+    "tests/unit/*.py",
+    "docs/report/evidence/TASK-105/*"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
