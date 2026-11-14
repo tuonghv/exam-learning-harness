@@ -829,6 +829,32 @@ class T102Manifest(unittest.TestCase):
             cli._publish_selection(self.plans, self.reports, "ex", "f")
         self.assertIn("report-manifests-migrate --apply", str(cm.exception))
 
+    def test_102_finish_writes_no_run_json_under_reports_and_manifest_under_plans(self):
+        d = self.run_dir("ex", "main", "run-20240101-000000")
+        with mock.patch.object(reporter, "git_info", return_value=None):
+            runlayout.finish_report_run(d, [], "sheet", None, "report", extra={"exam_id": "ex"})
+        found = [f for _r, _d, fs in os.walk(self.reports) for f in fs if f.endswith(".json")]
+        self.assertEqual(found, [])
+        mp = runlayout.manifest_path(d)
+        self.assertTrue(mp.startswith(self.plans + os.sep) and os.path.isfile(mp), mp)
+
+    def test_102_publish_selection_and_run_list_read_the_plans_manifest(self):
+        pr = os.path.join(self.plans, "ex", "f", "runs", "20240101-000000")
+        put(os.path.join(pr, "plan.json"), {})
+        d = self.run_dir("ex", "f", "run-20240102-000000")
+        put(runlayout.manifest_path(d), {"cmd": "report-pack", "plan_runs": [
+            {"plan_run_id": "20240101-000000", "line": "f", "exam_id": "ex"}]})
+        sel, src = cli._publish_selection(self.plans, self.reports, "ex", "f")
+        self.assertEqual(([x[0] for x in sel], src["id"]), ([pr], "20240102-000000"))  # pack source, not latest per subject
+        code, out, err = quiet(cli.run_list_main, ["ex", "--plans", self.plans, "--reports", self.reports])
+        self.assertEqual(code, 0, err)
+        self.assertIn("20240102-000000", out)
+        self.assertNotIn("unmigrated", out + err)
+        os.remove(runlayout.manifest_path(d))
+        put(os.path.join(d, "run.json"), {"cmd": "report-pack", "plan_runs": []})
+        code, out, err = quiet(cli.run_list_main, ["ex", "--plans", self.plans, "--reports", self.reports])
+        self.assertIn("report-manifests-migrate", out + err)
+
     def _legacy(self, name="run-20240101-000000"):
         """A built run in an old layout: manifest back in the folder, INDEX.md as written by the new code."""
         d = self.run_dir("ex", "main", name)

@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-102",
-  "state": "IMPLEMENTING",
-  "next": "tester bite check; coordinator migrate + re-publish",
+  "state": "UNIT_TESTED",
+  "next": "verify: migrated 23 manifests, re-published, checker; delete old json/log copies (user)",
   "title": "report runs hold no run.json; manifest under plans/ (REQ-0109)",
   "active": [
     {
       "task_id": "TASK-102",
-      "state": "IMPLEMENTING",
-      "next": "tester bite check; coordinator migrate + re-publish",
-      "updated_at": "2026-11-14T09:14:36Z"
+      "state": "UNIT_TESTED",
+      "next": "verify: migrated 23 manifests, re-published, checker; delete old json/log copies (user)",
+      "updated_at": "2026-11-14T13:44:32Z"
     }
   ],
   "max_active": 1
