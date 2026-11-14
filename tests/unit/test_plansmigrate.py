@@ -918,7 +918,8 @@ class ReportsRunLayout(unittest.TestCase):
         self.assertEqual(len(glob.glob(os.path.join(self.plans, "*", "*", "report-runs", "run-*.json"))), 11)
         self.assertFalse([n for n in os.listdir(os.path.join(self.rep, "dgnl2026")) if os.path.isfile(os.path.join(self.rep, "dgnl2026", n))])
         self.assertNotIn("dgnl2026f", os.listdir(self.rep))
-        self.assertIn("old pack index", txt(os.path.join(self.rep, "MIGRATION.index", "dgnl2026", "INDEX.md")))
+        self.assertIn("old pack index", txt(os.path.join(self.plans, "MIGRATION.reports.index", "dgnl2026", "INDEX.md")))
+        self.assertFalse([k for k in tree(self.rep) if k.startswith("MIGRATION.")])  # TASK-103: no machine file in reports
         self.assertGreater(len(olds), 0)
 
     def test_91_3_apply_backs_up_first_renames_only_inside_reports_idempotent(self):
@@ -931,10 +932,10 @@ class ReportsRunLayout(unittest.TestCase):
         self.assertTrue([n for n in os.listdir(self.bk) if n.endswith(".tar.gz")])
         self.assertLess(out.index("backup ok"), out.index("plans-migrate applied"))
         # plans/ untouched but for the run manifests (TASK-102)
-        now = {k: v for k, v in tree(self.plans).items() if "report-runs" not in k}
+        now = {k: v for k, v in tree(self.plans).items() if "report-runs" not in k and "MIGRATION.reports." not in k}
         self.assertEqual({k: v for k, v in now.items() if v != "DIR"}, {k: v for k, v in outside.items() if v != "DIR"})
         self.assertLessEqual(set(outside), set(now))  # new exam/line folders may hold the manifests
-        with open(os.path.join(self.rep, "MIGRATION.json"), encoding="utf-8") as fh:
+        with open(os.path.join(self.plans, "MIGRATION.reports.json"), encoding="utf-8") as fh:
             man = json.load(fh)
         self.assertEqual(man["state"], "applied")
         self.assertTrue(all(m["state"] == "done" for m in man["moves"]))
@@ -962,11 +963,11 @@ class ReportsRunLayout(unittest.TestCase):
         code, out, err = self.pm("--undo")
         self.assertEqual(code, 0, out + err)
         now = tree(self.rep)
-        now.pop("MIGRATION.json", None)
         self.assertEqual(now, orig)  # every file sha256 and every directory
         self.assertEqual(sum(1 for v in now.values() if v != "DIR"), nfiles)
         self.assertEqual(sum(os.path.getsize(os.path.join(self.rep, k)) for k, v in now.items() if v != "DIR"), nbytes)
-        self.assertFalse(os.path.exists(os.path.join(self.rep, "MIGRATION.index")))
+        self.assertFalse(os.path.exists(os.path.join(self.plans, "MIGRATION.reports.index")))
+        self.assertTrue(os.path.isfile(os.path.join(self.plans, "MIGRATION.reports.json")))
 
     def test_91_3_undo_refuses_an_edited_generated_file(self):
         self.applied()
@@ -1048,6 +1049,53 @@ class ReportsRunLayout(unittest.TestCase):
         rows = [ln.split("\t") for ln in r.stdout.splitlines() if ln.startswith("manifest")]
         self.assertEqual([(x[0], x[3]) for x in rows],
                          [("manifest plan_runs", "ok"), ("manifest result_sha256 mismatches", "ok")], r.stdout + r.stderr)
+
+
+class T103MapInPlans(ReportsRunLayout):
+    """TASK-103 (103.1-103.4): the reports map + stash live in plans/MIGRATION.reports.*, never in reports/.
+    Reuses the ReportsRunLayout fixture; the inherited tests are skipped here."""
+
+    def test_103_helper_rule_reports_vs_other_root(self):
+        ml = pm.runlayout
+        self.assertEqual(ml.migration_map_path(self.rep), os.path.join(self.plans, "MIGRATION.reports.json"))
+        self.assertEqual(ml.migration_stash_dir(self.rep + "/"), os.path.join(self.plans, "MIGRATION.reports.index"))
+        other = os.path.join(self.tmp, "out")
+        self.assertEqual(ml.migration_map_path(other), os.path.join(other, "MIGRATION.json"))
+        self.assertEqual(ml.migration_stash_dir(self.plans), os.path.join(self.plans, "MIGRATION.index"))
+        self.assertEqual(ml.legacy_migration_files(other), [])
+
+    def test_103_legacy_map_in_reports_is_a_hard_error_for_every_mode(self):
+        put(os.path.join(self.rep, "MIGRATION.json"), {"state": "applied"})
+        for mode in (["--dry-run"], ["--apply", "--backup-dir", self.bk], ["--undo"], ["--verify"]):
+            code, out, err = self.pm(*mode)
+            self.assertEqual(code, 2, mode)
+            self.assertIn("report-manifests-migrate --apply", err)
+        self.assertFalse(os.path.exists(os.path.join(self.plans, "MIGRATION.reports.json")))
+
+    def test_103_apply_undo_round_trip_restores_index_from_the_plans_stash(self):
+        orig = tree(self.rep)
+        self.applied()
+        stash = os.path.join(self.plans, "MIGRATION.reports.index", "dgnl2026", "INDEX.md")
+        self.assertTrue(os.path.isfile(stash))
+        self.assertEqual(self.pm("--verify")[0], 0)
+        code, out, err = self.pm("--undo")
+        self.assertEqual(code, 0, out + err)
+        self.assertEqual(tree(self.rep), orig)  # the old INDEX.md came back from plans/MIGRATION.reports.index
+        self.assertFalse(os.path.exists(os.path.join(self.plans, "MIGRATION.reports.index")))
+
+    def test_103_plans_side_ignores_the_reports_map_and_stash(self):
+        self.applied()
+        self.assertTrue(os.path.isdir(os.path.join(self.plans, "MIGRATION.reports.index")))
+        _mv, _keep, problems = pm.build_moves(self.plans, {}, "plans")
+        self.assertFalse([p for p in problems if p[0].startswith("MIGRATION.")], problems)
+        self.assertTrue(pm._is_skipped("MIGRATION.reports.json", "plans"))
+        self.assertTrue(pm._is_skipped("MIGRATION.reports.index", "plans"))
+        _f, _b, shas = pm.tree_stats(self.plans, "plans")
+        self.assertFalse([k for k in shas if k.startswith("MIGRATION.")])
+
+
+for _n in [n for n in dir(ReportsRunLayout) if n.startswith("test_")]:
+    setattr(T103MapInPlans, _n, None)  # not collected: only the test_103_* run
 
 
 if __name__ == "__main__":

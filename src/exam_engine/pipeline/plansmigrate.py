@@ -82,6 +82,20 @@ def _sha_file(path):
     return h.hexdigest()
 
 
+def _stash_abs(root, orig):
+    """Absolute path of a manifest `orig` string (MIGRATION.index/<rel>, root-relative) in the stash folder."""
+    return os.path.join(runlayout.migration_stash_dir(root), orig[len(STASH) + 1:])
+
+
+def _legacy_guard(root):
+    """True (after an ERROR line) when a reports root still has its pre TASK-103 map/stash inside it."""
+    old = runlayout.legacy_migration_files(root)
+    if old:
+        print("ERROR: old map at %s; run exam report-manifests-migrate --apply (moves it to %s)" % (
+            ", ".join(old), runlayout.migration_map_path(root)), file=sys.stderr)
+    return bool(old)
+
+
 def _abs(root, rel):
     return os.path.join(os.path.abspath(root), *rel.split("/"))
 
@@ -140,6 +154,8 @@ def build_moves(root, folders, section):
         return [], [], [(root, "unreadable: %s" % exc)]
     for name in top:
         path = os.path.join(root, name)
+        if name.startswith("MIGRATION."):  # the map and, beside the plans, the reports map + stash (TASK-103)
+            continue
         if os.path.islink(path):
             problems.append((name, "symlink"))
             continue
@@ -448,7 +464,7 @@ def _is_skipped(rel, section):
     """Files outside the counts: MIGRATION.json[.tmp] and the history with its .bak/.undone/.tmp copies."""
     if section == "reports":
         return rel.startswith("MIGRATION.")  # MIGRATION.json[.tmp] and the MIGRATION.index copies
-    return rel.startswith("MIGRATION.json") or (rel == HISTORY or rel.startswith(HISTORY + "."))
+    return rel.startswith("MIGRATION.") or (rel == HISTORY or rel.startswith(HISTORY + "."))
 
 
 def tree_stats(root, section, only=None, content=False):
@@ -597,7 +613,9 @@ def history_scan(root, moves):
 
 def dry_run(root, map_path, write_map=False, force=False, plans_root=None):
     section = section_of(root)
-    man = _jload(os.path.join(root, runlayout.MIGRATION_JSON))
+    if _legacy_guard(root):
+        return 2
+    man = _jload(runlayout.migration_map_path(root))
     if man and man.get("state") == "applying":
         print("plans-migrate: an apply is unfinished (state applying): --apply resumes it, --undo restores")
         return 0
@@ -677,7 +695,9 @@ def dry_run(root, map_path, write_map=False, force=False, plans_root=None):
 # ---------------------------------------------------------------- apply / undo / verify
 
 def _save(root, man):
-    _dump_atomic(os.path.join(os.path.abspath(root), runlayout.MIGRATION_JSON), man)
+    path = runlayout.migration_map_path(root)
+    os.makedirs(os.path.dirname(path), exist_ok=True)  # plans/ may not exist yet for a reports root
+    _dump_atomic(path, man)
 
 
 def _ensure_parent(root, rel_new, created):
@@ -746,13 +766,13 @@ def _stash(root, moves, targets):
                 if fn in GEN_NAMES:
                     old = os.path.relpath(os.path.join(base, fn), root).replace(os.sep, "/")
                     orig[_map_rel(moves, old)] = STASH + "/" + old
-                    dst = _abs(root, STASH + "/" + old)
+                    dst = _stash_abs(root, STASH + "/" + old)
                     os.makedirs(os.path.dirname(dst), exist_ok=True)
                     shutil.copy2(os.path.join(base, fn), dst)
     for rel, _k in targets:
         if rel not in orig and os.path.isfile(_gpath(root, rel)):
             orig[rel] = STASH + "/" + rel
-            dst = _abs(root, STASH + "/" + rel)
+            dst = _stash_abs(root, STASH + "/" + rel)
             os.makedirs(os.path.dirname(dst), exist_ok=True)
             shutil.copy2(_gpath(root, rel), dst)
     return orig
@@ -785,8 +805,8 @@ def _unwind_generated(root, man):
     for g in man.get("generated") or []:
         p = _gpath(root, g["path"])
         if g.get("orig") and p == _abs(root, g["path"]):
-            if os.path.lexists(p) and os.path.isfile(_abs(root, g["orig"])):
-                shutil.copy2(_abs(root, g["orig"]), p)
+            if os.path.lexists(p) and os.path.isfile(_stash_abs(root, g["orig"])):
+                shutil.copy2(_stash_abs(root, g["orig"]), p)
         elif os.path.isfile(p):
             os.remove(p)
             if p != _abs(root, g["path"]):  # plans manifest: drop its report-runs folder when empty
@@ -794,7 +814,7 @@ def _unwind_generated(root, man):
                     os.rmdir(os.path.dirname(p))
                 except OSError:
                     pass
-    sd = _abs(root, STASH)
+    sd = runlayout.migration_stash_dir(root)
     for base, dns, fns in os.walk(sd, topdown=False):
         for fn in fns:
             os.remove(os.path.join(base, fn))
@@ -866,7 +886,9 @@ def verify(root, man=None):
     """[(check, expected, got, ok)] of the 90.7 checks against the manifest (read-only)."""
     root = os.path.abspath(root)
     section = section_of(root)
-    man = man or _jload(os.path.join(root, runlayout.MIGRATION_JSON)) or {}
+    if runlayout.legacy_migration_files(root):
+        return [("old map left in the root (run exam report-manifests-migrate --apply)", "moved", "present", False)]
+    man = man or _jload(runlayout.migration_map_path(root)) or {}
     base = man.get("baseline") or {}
     rows = []
 
@@ -925,7 +947,9 @@ def _print_rows(rows):
 def apply(root, map_path, backup_dir, now=None, plans_root=None):
     root = os.path.abspath(root)
     section = section_of(root)
-    man_path = os.path.join(root, runlayout.MIGRATION_JSON)
+    if _legacy_guard(root):
+        return 2
+    man_path = runlayout.migration_map_path(root)
     folders, moves_map, _raw = load_map(map_path, section)
     if moves_map is None:
         print("ERROR: %s has no reviewed moves; run --dry-run --write-map, review, then --apply" % map_path, file=sys.stderr)
@@ -1072,9 +1096,11 @@ def apply(root, map_path, backup_dir, now=None, plans_root=None):
 def undo(root):
     root = os.path.abspath(root)
     section = section_of(root)
-    man = _jload(os.path.join(root, runlayout.MIGRATION_JSON))
+    if _legacy_guard(root):
+        return 2
+    man = _jload(runlayout.migration_map_path(root))
     if not man or man.get("state") not in ("applied", "applying", "rolled_back"):
-        print("ERROR: nothing to undo (no MIGRATION.json in state applied/applying/rolled_back)", file=sys.stderr)
+        print("ERROR: nothing to undo (no %s in state applied/applying/rolled_back)" % runlayout.migration_map_path(root), file=sys.stderr)
         return 2
     todo = []
     for mv in man["moves"]:
@@ -1092,7 +1118,7 @@ def undo(root):
     if changed:  # a regenerated file was edited after the apply: keep it, the original is in MIGRATION.index
         for rel in changed:
             print("ERROR: undo refused: %s changed since the apply (original copy: %s/%s)" % (
-                rel, STASH, next((g["orig"][len(STASH) + 1:] for g in gen if g["path"] == rel and g.get("orig")), "-")),
+                rel, runlayout.migration_stash_dir(root), next((g["orig"][len(STASH) + 1:] for g in gen if g["path"] == rel and g.get("orig")), "-")),
                 file=sys.stderr)
         return 2
     try:
@@ -1165,9 +1191,11 @@ def main(argv):
     if a.undo:
         return undo(a.root)
     if a.verify:
-        man = _jload(os.path.join(a.root, runlayout.MIGRATION_JSON))
+        if _legacy_guard(a.root):
+            return 2
+        man = _jload(runlayout.migration_map_path(a.root))
         if not man:
-            print("ERROR: no MIGRATION.json in %s" % a.root, file=sys.stderr)
+            print("ERROR: no %s" % runlayout.migration_map_path(a.root), file=sys.stderr)
             return 2
         print("state: %s" % man.get("state"))
         return 1 if _print_rows(verify(a.root, man)) else 0

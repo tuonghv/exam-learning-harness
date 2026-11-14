@@ -2971,3 +2971,9 @@ Action: designer draft -> phase-103 design
 Result: design doc, 4 decisions
 Decision: D1 plans/MIGRATION.reports.*, D2 no fallback, D3 extend report-manifests-migrate, D4 leftover check exit 2
 Next: implement
+
+## IMPLEMENTING - TASK-103 - 2026-11-14T13:56:13Z
+Action: coder 103.1-103.6
+Result: --fast KNOWN 4 NEW 0; dry-run 12 to move
+Decision: accept
+Next: unit tests + real move

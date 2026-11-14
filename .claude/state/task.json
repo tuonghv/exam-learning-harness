@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-103",
-  "state": "DESIGN",
-  "next": "coder: items 103.1-103.6",
+  "state": "IMPLEMENTING",
+  "next": "apply move on real tree, verify",
   "title": "plans-migrate reports map MIGRATION.json under plans/ (REQ-0110)",
   "active": [
     {
       "task_id": "TASK-103",
-      "state": "DESIGN",
-      "next": "coder: items 103.1-103.6",
-      "updated_at": "2026-11-14T13:49:34Z"
+      "state": "IMPLEMENTING",
+      "next": "apply move on real tree, verify",
+      "updated_at": "2026-11-14T13:56:13Z"
     }
   ],
   "max_active": 1

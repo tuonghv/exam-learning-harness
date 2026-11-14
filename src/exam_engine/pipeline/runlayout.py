@@ -21,6 +21,7 @@ RUN_JSON = "run.json"  # legacy in-folder name (migration + guards only; TASK-10
 REPORT_RUNS = "report-runs"  # per line: run-<id>.json files, one per report run
 LINE_DEFAULT = "main"
 MIGRATION_JSON = "MIGRATION.json"
+MIGRATION_STASH = "MIGRATION.index"
 NEW_ID = re.compile(r"^\d{8}-\d{6}(-\d+)?$")  # report run ids
 PLAN_ID = re.compile(r"^(\d{8}-\d{6})(?:-([a-z][a-z0-9._-]*?))?(?:-([1-9]\d*))?$")  # plan run ids: stamp[-subject][-N]
 _OLD_ID = re.compile(r"^(\d{8})T(\d{6})Z(-\d+)?$")
@@ -140,9 +141,38 @@ def line_dirs(base):
             and os.path.isdir(os.path.join(base, n, RUNS))]
 
 
+def _is_reports_root(root):
+    return os.path.basename(os.path.abspath(str(root).rstrip("/"))) == "reports"
+
+
+def migration_map_path(root):
+    """plans-migrate map of root: a root named `reports` keeps it beside it in plans/MIGRATION.reports.json (TASK-103,
+    reports/ holds no machine file), any other root root/MIGRATION.json."""
+    root = os.path.abspath(str(root).rstrip("/"))
+    if _is_reports_root(root):
+        return os.path.join(os.path.dirname(root), "plans", "MIGRATION.reports.json")
+    return os.path.join(root, MIGRATION_JSON)
+
+
+def migration_stash_dir(root):
+    """Folder of the INDEX.md copies plans-migrate stashed (same sibling rule as migration_map_path)."""
+    root = os.path.abspath(str(root).rstrip("/"))
+    if _is_reports_root(root):
+        return os.path.join(os.path.dirname(root), "plans", "MIGRATION.reports.index")
+    return os.path.join(root, MIGRATION_STASH)
+
+
+def legacy_migration_files(root):
+    """Old in-root map/stash of a reports root (pre TASK-103): existing root/MIGRATION.json and root/MIGRATION.index."""
+    if not _is_reports_root(root):
+        return []
+    root = os.path.abspath(str(root).rstrip("/"))
+    return [p for p in (os.path.join(root, MIGRATION_JSON), os.path.join(root, MIGRATION_STASH)) if os.path.lexists(p)]
+
+
 def _manifest(root):
-    """root/MIGRATION.json when its state is `applied`, else None."""
-    man = _jload(os.path.join(root, MIGRATION_JSON))
+    """migration_map_path(root) when its state is `applied`, else None."""
+    man = _jload(migration_map_path(root))
     return man if man and man.get("state") == "applied" else None
 
 
@@ -570,6 +600,74 @@ def migrate_run_json(reports_root, apply=False):
     for x in idx:
         rk.write_index(x)
     return moves, done, problems
+
+
+def _move_file(src, dst, apply):
+    """One file move: (status, problem). status 'move' (target missing), 'drop' (equal target, source removed),
+    None on a problem (target differs / OSError)."""
+    try:
+        if os.path.isfile(dst):
+            if _sha_file(dst) != _sha_file(src):
+                return None, "%s differs from existing %s; nothing moved" % (src, dst)
+            if apply:
+                os.unlink(src)
+            return "drop", None
+        if apply:
+            os.makedirs(os.path.dirname(dst), exist_ok=True)
+            os.replace(src, dst)
+        return "move", None
+    except OSError as exc:
+        return None, "%s: %s" % (src, exc)
+
+
+def migrate_migration_map(reports_root, apply=False):
+    """TASK-103: move the old reports/MIGRATION.json + MIGRATION.index/ to migration_map_path / migration_stash_dir.
+    Returns (moves [(src, dst)], problems [text]). Per file: target missing -> moved, equal sha -> source removed,
+    different -> problem. The map moves only after the whole stash moved (the map indexes the stash); empty legacy
+    dirs are removed. Idempotent. Only a root named `reports` is handled."""
+    moves, problems = [], []
+    if not _is_reports_root(reports_root):
+        return moves, problems
+    root = os.path.abspath(str(reports_root).rstrip("/"))
+    old_stash, new_stash = os.path.join(root, MIGRATION_STASH), migration_stash_dir(root)
+    if os.path.isdir(old_stash) and not os.path.islink(old_stash):
+        for dp, dns, fns in os.walk(old_stash):
+            dns.sort()
+            for fn in sorted(fns):
+                src = os.path.join(dp, fn)
+                dst = os.path.join(new_stash, os.path.relpath(src, old_stash))
+                _st, prob = _move_file(src, dst, apply)
+                if prob:
+                    problems.append(prob)
+                else:
+                    moves.append((src, dst))
+        if apply and not problems:
+            for dp, _dns, _fns in os.walk(old_stash, topdown=False):
+                try:
+                    os.rmdir(dp)
+                except OSError:
+                    pass
+    old_map = os.path.join(root, MIGRATION_JSON)
+    if os.path.isfile(old_map) and not problems:
+        _st, prob = _move_file(old_map, migration_map_path(root), apply)
+        if prob:
+            problems.append(prob)
+        else:
+            moves.append((old_map, migration_map_path(root)))
+    return moves, problems
+
+
+def reports_leftovers(reports_root):
+    """Rel paths of machine files under a reports root: every file not ending .md/.pdf/.tsv/.html (symlinked dirs skipped)."""
+    out = []
+    root = os.path.abspath(str(reports_root).rstrip("/"))
+    for dp, dns, fns in os.walk(root):
+        dns.sort()
+        dns[:] = [n for n in dns if not os.path.islink(os.path.join(dp, n))]
+        for fn in sorted(fns):
+            if not fn.endswith((".md", ".pdf", ".tsv", ".html")):
+                out.append(os.path.relpath(os.path.join(dp, fn), root).replace(os.sep, "/"))
+    return out
 
 
 def finish_report_run(report_dir, plan_dirs, view, engine_git, cmd, repo_root=None, extra=None):

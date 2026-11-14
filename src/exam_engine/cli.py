@@ -599,7 +599,8 @@ def publish_main(argv):
 def report_manifests_migrate_main(argv):
     """report-manifests-migrate [--reports reports] [--apply]: move each in-folder run.json to plans/ (TASK-102)."""
     ap = argparse.ArgumentParser(prog="exam report-manifests-migrate", description="Move every report run's in-folder "
-                                 "run.json to plans/<exam>[/<line>]/report-runs/run-<id>.json (dry run unless --apply; "
+                                 "run.json to plans/<exam>[/<line>]/report-runs/run-<id>.json, and the old MIGRATION.json + MIGRATION.index/ "
+                                 "to plans/MIGRATION.reports.* (dry run unless --apply; "
                                  "a custom --reports root not named `reports` puts them beside the run folder).")
     ap.add_argument("--reports", default=DEFAULT_REPORT_ROOT)
     ap.add_argument("--apply", action="store_true")
@@ -608,12 +609,17 @@ def report_manifests_migrate_main(argv):
         print("ERROR: %s is not a folder" % a.reports, file=sys.stderr)
         return 2
     moves, done, problems = runlayout.migrate_run_json(a.reports, apply=a.apply)
+    mmoves, mproblems = runlayout.migrate_migration_map(a.reports, apply=a.apply)
+    moves, problems = moves + mmoves, problems + mproblems
     for src, dst in moves:
         print("%s %s -> %s" % ("moved" if a.apply else "would move", src, dst))
     for p in problems:
         print("PROBLEM: %s" % p, file=sys.stderr)
+    left = runlayout.reports_leftovers(a.reports)  # dry run too: lists what is still to move out
+    for x in left:
+        print("LEFTOVER: %s (machine file in reports/)" % x, file=sys.stderr)
     print("%d %s, %d already migrated, %d problems" % (len(moves), "moved" if a.apply else "to move", done, len(problems)))
-    return 2 if problems else 0
+    return 2 if problems or left else 0
 
 
 def report_index_main(argv):

@@ -872,7 +872,8 @@ class T102Manifest(unittest.TestCase):
         self.assertEqual((len(moves), done, problems), (2, 0, []))
         self.assertTrue(os.path.isfile(os.path.join(d, "run.json")))  # dry run writes nothing
         code, out, err = quiet(cli.report_manifests_migrate_main, ["--reports", self.reports])
-        self.assertEqual((code, out.strip().splitlines()[-1]), (0, "2 to move, 0 already migrated, 0 problems"))
+        self.assertEqual((code, out.strip().splitlines()[-1]), (2, "2 to move, 0 already migrated, 0 problems"))
+        self.assertEqual(err.count("LEFTOVER:"), 2)  # TASK-103: the two run.json are still machine files in reports
         self.assertTrue(os.path.isfile(os.path.join(d, "run.json")))
         code, out, err = quiet(cli.report_manifests_migrate_main, ["--reports", self.reports, "--apply"])
         self.assertEqual(code, 0, err)
@@ -899,6 +900,68 @@ class T102Manifest(unittest.TestCase):
         self.assertEqual(code, 2, out)
         self.assertIn("differs", err)
         self.assertTrue(os.path.isfile(os.path.join(d2, "run.json")))  # nothing moved for that run
+
+
+class T103MigrationMap(unittest.TestCase):
+    """TASK-103 (103.5, 103.6): move reports/MIGRATION.json + MIGRATION.index/ to plans/MIGRATION.reports.*."""
+
+    def setUp(self):
+        self.tmp = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, self.tmp, True)
+        self.reports = os.path.join(self.tmp, "reports")
+        self.plans = os.path.join(self.tmp, "plans")
+        put(os.path.join(self.reports, "ex", "INDEX.md"), "idx\n")
+        put(os.path.join(self.reports, "MIGRATION.json"), '{"state": "applied"}')
+        put(os.path.join(self.reports, "MIGRATION.index", "ex", "INDEX.md"), "old\n")
+        put(os.path.join(self.reports, "MIGRATION.index", "ex", "a", "INDEX.md"), "old2\n")
+        self.map = os.path.join(self.plans, "MIGRATION.reports.json")
+        self.stash = os.path.join(self.plans, "MIGRATION.reports.index")
+
+    def test_103_dry_apply_reapply(self):
+        moves, problems = runlayout.migrate_migration_map(self.reports)
+        self.assertEqual((len(moves), problems), (3, []))
+        self.assertTrue(os.path.isfile(os.path.join(self.reports, "MIGRATION.json")))  # dry run writes nothing
+        self.assertFalse(os.path.exists(self.plans))
+        moves, problems = runlayout.migrate_migration_map(self.reports, apply=True)
+        self.assertEqual((len(moves), problems), (3, []))
+        self.assertTrue(os.path.isfile(self.map))
+        self.assertTrue(os.path.isfile(os.path.join(self.stash, "ex", "a", "INDEX.md")))
+        self.assertEqual(runlayout.reports_leftovers(self.reports), [])
+        self.assertFalse(os.path.exists(os.path.join(self.reports, "MIGRATION.index")))
+        self.assertEqual(runlayout.migrate_migration_map(self.reports, apply=True), ([], []))
+        self.assertEqual(runlayout.legacy_migration_files(self.reports), [])
+
+    def test_103_equal_sha_source_removed_and_differing_is_a_problem_stash_first(self):
+        put(os.path.join(self.stash, "ex", "INDEX.md"), "old\n")  # equal
+        put(os.path.join(self.stash, "ex", "a", "INDEX.md"), "DIFFERENT\n")
+        put(self.map, "other")
+        moves, problems = runlayout.migrate_migration_map(self.reports, apply=True)
+        self.assertEqual(len(problems), 1)
+        self.assertIn("differs", problems[0])
+        self.assertFalse(os.path.exists(os.path.join(self.reports, "MIGRATION.index", "ex", "INDEX.md")))  # equal one dropped
+        self.assertTrue(os.path.isfile(os.path.join(self.reports, "MIGRATION.json")))  # map stays: stash not complete
+        with open(self.map, encoding="utf-8") as fh:
+            self.assertEqual(fh.read(), "other")
+
+    def test_103_cli_exit_codes_and_leftovers(self):
+        code, out, err = quiet(cli.report_manifests_migrate_main, ["--reports", self.reports])
+        self.assertEqual(code, 2)
+        self.assertIn("LEFTOVER: MIGRATION.json", err)
+        self.assertIn("would move", out)
+        self.assertTrue(os.path.isfile(os.path.join(self.reports, "MIGRATION.json")))
+        code, out, err = quiet(cli.report_manifests_migrate_main, ["--reports", self.reports, "--apply"])
+        self.assertEqual(code, 0, err)
+        code, out, err = quiet(cli.report_manifests_migrate_main, ["--reports", self.reports, "--apply"])
+        self.assertEqual((code, out.strip().splitlines()[-1]), (0, "0 moved, 0 already migrated, 0 problems"))
+
+    def test_103_leftovers_flag_json_ignore_human_files(self):
+        for n in ("a.md", "b.pdf", "c.tsv", "d.html"):
+            put(os.path.join(self.reports, "x", n))
+        self.assertEqual(runlayout.reports_leftovers(self.reports), ["MIGRATION.json"])
+        os.remove(os.path.join(self.reports, "MIGRATION.json"))
+        shutil.rmtree(os.path.join(self.reports, "MIGRATION.index"))
+        put(os.path.join(self.reports, "x", "stray.json"), "{}")
+        self.assertEqual(runlayout.reports_leftovers(self.reports), ["x/stray.json"])
 
 
 if __name__ == "__main__":
