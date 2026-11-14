@@ -3043,3 +3043,9 @@ Action: tester --fast + bite + failure-mode coverage; main real rebuild
 Result: KNOWN 4 NEW 0; 12/12; real rebuild rc 0, 25/25 report files identical, checker 0 failed x3
 Decision: go verify
 Next: verify
+
+## VERIFIED - TASK-105 - 2026-11-14T14:42:23Z
+Action: verifier AC1-AC5 + main real rebuild
+Result: PASS; F1 fixed with 2 tests
+Decision: VERIFIED
+Next: report

@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-105",
   "title": "tracked published-reports recipe + exam rebuild-reports + guide (REQ-0111)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0111",
   "acceptance_criteria": [
     "AC1 recipe for 3 exams + schema test",
@@ -34,12 +34,16 @@
     "result": "KNOWN 4 NEW 0; test_rebuild_reports 12 tests (2 added by tester: build failure exit 1, MISMATCH exit 1); AC3 test bites with the prechecks removed"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "recipe paths refused when absolute/'..'/outside --root (F1 fixed); refusals before any delete; keys stay git-ignored (path + sha256 only)"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "docs/report/evidence/TASK-105/verify.md"
+    ],
+    "command": "python3 scripts/exam.py rebuild-reports; normalized byte compare vs backup; tools/check_report_pack.py --key --expect-correct x3; tools/run_tests.py --fast",
+    "result": "rc 0; 25/25 md/tsv identical, INDEX differs only engine commit; scores 113/120, 113/120, 105/119; checker 0 failed x3; fast KNOWN 4 NEW 0; F1 fixed"
   },
   "report": {
     "status": "pending",
@@ -51,7 +55,8 @@
   "roles": {
     "designer": "work/TASK-105/handoff/design.md",
     "coder": "work/TASK-105/handoff/code.md",
-    "tester": "work/TASK-105/handoff/test.md"
+    "tester": "work/TASK-105/handoff/test.md",
+    "verifier": "work/TASK-105/handoff/verify.md"
   },
   "user_notes": [
     {
@@ -61,7 +66,7 @@
     }
   ],
   "picked_at": "2026-11-14T14:29:28Z",
-  "updated_at": "2026-11-14T14:42:17Z",
+  "updated_at": "2026-11-14T14:42:23Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
@@ -78,5 +83,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verifier: AC1-AC5 from saved evidence"
+  "next": "report + DONE"
 }
