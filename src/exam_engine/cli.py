@@ -23,7 +23,8 @@ from exam_engine.pipeline import (examples_check, explain, metrics, overlay, par
 COMMANDS = ("solve", "parse", "verify", "report", "plan-import", "check-examples", "score", "prompts",
             "check-prompts", "ingest", "ingest-inspect", "ingest-refine", "cross-solve", "benchmark",
             "extract-eval", "gold-pdf", "gen-exams", "lessons", "review-pack", "review-apply", "run-stats",
-            "report-pack", "report-index", "run-list", "run-compare", "plans-migrate", "publish", "report-manifests-migrate")
+            "report-pack", "report-index", "run-list", "run-compare", "plans-migrate", "publish", "report-manifests-migrate",
+            "rebuild-reports")
 DEFAULT_HISTORY = os.path.join("plans", "run-history.jsonl")
 LEGACY_HISTORY = (os.path.join("reports", "run-history.jsonl"),  # read-only fallbacks (RAW-00174, phase 58)
                   os.path.join("results", "run-history.jsonl"))
@@ -593,6 +594,218 @@ def publish_main(argv):
     print("main: %s -> %s" % ("run-" + prev if prev else "(none)", os.path.basename(out)))
     if info["total"]:
         print("score %d/%d" % (info["correct"], info["total"]))
+    return 0
+
+
+RECIPE_FILE = "published_reports.json"  # in settings.config_dir()
+RECIPE_VERSION = 1
+_PACK_CMDS = ("report-pack", "publish")
+
+
+def _recipe_check(rec, path):
+    """Validate a recipe dict (design 105.1); ValueError on a missing/unknown/ill-typed field."""
+    if not isinstance(rec, dict) or rec.get("version") != RECIPE_VERSION:
+        raise ValueError("recipe %s: version must be %d" % (path, RECIPE_VERSION))
+    exams = rec.get("exams")
+    if not isinstance(exams, dict):
+        raise ValueError("recipe %s: exams must be an object" % path)
+
+    def need(cfg, key, typ, what):
+        v = cfg.get(key)
+        if not isinstance(v, typ) or (typ is not bool and isinstance(v, bool)):
+            raise ValueError("recipe: %s: field %r missing or not %s" % (what, key, typ.__name__))
+        return v
+    for exam, cfg in exams.items():
+        planrun.safe_id(exam, "exam id")
+        if not isinstance(cfg, dict):
+            raise ValueError("recipe: %s: must be an object" % exam)
+        runlayout.safe_line(need(cfg, "line", str, exam))
+        if need(cfg, "view", str, exam) not in reporter.VIEWS:
+            raise ValueError("recipe: %s: view must be one of %s" % (exam, "|".join(reporter.VIEWS)))
+        need(cfg, "pdf", bool, exam)
+        runs = need(cfg, "plan_runs", list, exam)
+        if not runs or not all(isinstance(p, str) and p for p in runs):
+            raise ValueError("recipe: %s: plan_runs must be a non-empty list of paths" % exam)
+        need(cfg, "key", str, exam)
+        need(cfg, "key_sha256", str, exam)
+        for ov in need(cfg, "overlays", list, exam):
+            ok = (isinstance(ov, dict) and isinstance(ov.get("dir"), str) and isinstance(ov.get("reason"), str)
+                  and ov["reason"].strip() and isinstance(ov.get("printed"), list) and ov["printed"]
+                  and all(isinstance(n, int) and not isinstance(n, bool) for n in ov["printed"]))
+            if not ok:
+                raise ValueError("recipe: %s: each overlay needs dir, printed [int...] and a reason" % exam)
+    return rec
+
+
+def _load_recipe(path):
+    """Validated recipe dict from a file. Reads only."""
+    try:
+        with open(path, encoding="utf-8") as fh:
+            rec = json.load(fh)
+    except (OSError, ValueError) as exc:  # JSONDecodeError is a ValueError
+        raise ValueError("recipe %s: %s" % (path, exc))
+    return _recipe_check(rec, path)
+
+
+def _write_recipe(path, reports, exams):
+    """Seed `path` from the newest main-line pack/publish manifest of each exam (named exams merge over the file)."""
+    try:
+        old = _load_recipe(path)["exams"]
+    except ValueError:
+        old = {}
+    out = dict(old) if exams else {}
+    names = exams or sorted(n for n in os.listdir(reports) if os.path.isdir(os.path.join(reports, n)))
+    for exam in names:
+        planrun.safe_id(exam, "exam id")
+        rows = [r for r in runlayout.list_report_runs(reports, exam, line=runlayout.LINE_DEFAULT)
+                if r["layout"] == "run" and (r["manifest"] or {}).get("cmd") in _PACK_CMDS]
+        if not rows:
+            if exams:
+                raise ValueError("%s: no main-line report-pack/publish manifest under %s" % (exam, reports))
+            continue
+        row = max(rows, key=lambda r: (runlayout.id_time(r["id"]), r["id"]))
+        man = row["manifest"]
+        out[exam] = {
+            "line": man.get("published_from") or runlayout.LINE_DEFAULT,
+            "view": man.get("view") or "sheet",
+            "pdf": any(n.endswith(".pdf") for n in os.listdir(row["dir"])),
+            "plan_runs": [p["dir"] for p in man.get("plan_runs") or []],
+            "key": man.get("key"), "key_sha256": man.get("key_sha256"),
+            "overlays": [{"dir": o["dir"], "printed": [q["printed"] for q in o["questions"]],
+                          "reason": o.get("reason") or ""} for o in man.get("overlays") or []]}
+    rec = _recipe_check({"version": RECIPE_VERSION, "exams": out}, path)
+    os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as fh:
+        json.dump(rec, fh, indent=2, sort_keys=True, ensure_ascii=False)
+        fh.write("\n")
+    return sorted(out)
+
+
+def _rebuild_plan(recipe, exams, root, reports):
+    """[step] for every named exam; ValueError('<exam>: reason') on the first refusal. Reads only (design 105.3/4)."""
+    def rp(p):
+        return os.path.normpath(os.path.join(root, p))
+    steps = []
+    for exam in exams:
+        try:
+            cfg = recipe["exams"].get(exam)
+            if cfg is None:
+                raise ValueError("not in the recipe")
+            plan_dirs = [rp(p) for p in cfg["plan_runs"]]
+            for d in plan_dirs:
+                if not os.path.isfile(os.path.join(d, "result.json")):
+                    raise ValueError("plan run %s missing or has no result.json" % d)
+            ov_dirs = [rp(o["dir"]) for o in cfg["overlays"]]
+            for d in ov_dirs:
+                if not os.path.isdir(d):
+                    raise ValueError("overlay dir %s missing" % d)
+            key = rp(cfg["key"])
+            if not os.path.isfile(key):
+                raise ValueError("key file %s missing" % key)
+            if runlayout._sha_file(key) != cfg["key_sha256"]:
+                raise ValueError("key file %s differs from the recipe key_sha256" % key)
+            specs = ["%s:%s" % (d, ",".join(str(n) for n in o["printed"])) for d, o in zip(ov_dirs, cfg["overlays"])]
+            reason = "; ".join(sorted({o["reason"] for o in cfg["overlays"]})) or None
+            overlay.resolve(specs, plan_dirs, reason)
+            if cfg["pdf"] and reporter.find_pdf_renderer() is None:
+                raise ValueError("recipe wants PDFs but no PDF renderer was found (--no-pdf is not used silently)")
+            dele, seen = [], set()
+            for ln in sorted({runlayout.LINE_DEFAULT, cfg["line"]}):
+                for r in runlayout.list_report_runs(reports, exam, line=ln):
+                    if ln != runlayout.LINE_DEFAULT and (r["manifest"] or {}).get("cmd") not in _PACK_CMDS:
+                        continue
+                    if r["dir"] not in seen:
+                        seen.add(r["dir"])
+                        dele.append(r["dir"])
+        except ValueError as exc:
+            raise ValueError("%s: %s" % (exam, exc))
+        steps.append({"exam": exam, "cfg": cfg, "plan_dirs": plan_dirs, "key": key, "specs": specs,
+                      "reason": reason, "delete": dele})
+    return steps
+
+
+def _delete(run_dir):
+    shutil.rmtree(run_dir, ignore_errors=True)
+    runlayout.drop_report_manifest(run_dir)
+
+
+def _rebuild_args(st, plans, reports):
+    """(report-pack argv without --out, publish argv or None) of a step."""
+    cfg = st["cfg"]
+    ov = []
+    for s in st["specs"]:
+        ov += ["--overlay", s]
+    if ov:
+        ov += ["--overlay-reason", st["reason"]]
+    nopdf = [] if cfg["pdf"] else ["--no-pdf"]
+    pack = list(st["plan_dirs"]) + ["--exam", report_kinds.slug(st["exam"]) or "exam", "--key", st["key"]] + ov + nopdf
+    pub = None
+    if not runlayout.is_published_line(cfg["line"]):
+        pub = [st["exam"], "--from", cfg["line"], "--view", cfg["view"], "--key", st["key"],
+               "--plans", plans, "--reports", reports] + nopdf
+    return pack, pub
+
+
+def _newest_main(reports, exam):
+    rows = [r for r in runlayout.list_report_runs(reports, exam, line=runlayout.LINE_DEFAULT) if r["layout"] == "run"]
+    return max(rows, key=lambda r: (runlayout.id_time(r["id"]), r["id"])) if rows else None
+
+
+def rebuild_reports_main(argv):
+    """rebuild-reports [EXAM...] [--dry-run] [--write-recipe]: every published report from the tracked recipe, $0."""
+    ap = argparse.ArgumentParser(prog="exam rebuild-reports", description="Rebuild the published (main) report runs "
+                                 "of the recipe exams from stored plan runs by calling report-pack/publish (no model "
+                                 "call). Every refusal (exit 2) happens before the first delete.")
+    ap.add_argument("exams", nargs="*", metavar="EXAM", help="default: every exam of the recipe")
+    ap.add_argument("--dry-run", action="store_true", help="print the delete set and the commands; write nothing")
+    ap.add_argument("--write-recipe", action="store_true",
+                    help="seed the recipe from the newest main manifest per exam instead of rebuilding")
+    ap.add_argument("--recipe", default=os.path.join(settings.config_dir(), RECIPE_FILE))
+    ap.add_argument("--root", default=".", help="recipe paths are relative to it (default: the current dir)")
+    ap.add_argument("--plans", help="default: <root>/plans")
+    ap.add_argument("--reports", help="default: <root>/reports")
+    a = ap.parse_args(argv)
+    plans = a.plans or os.path.join(a.root, DEFAULT_OUT_ROOT)
+    reports = a.reports or os.path.join(a.root, DEFAULT_REPORT_ROOT)
+    try:
+        if a.write_recipe:
+            print("wrote %s: %s" % (a.recipe, ", ".join(_write_recipe(a.recipe, reports, a.exams))))
+            return 0
+        recipe = _load_recipe(a.recipe)
+        steps = _rebuild_plan(recipe, a.exams or sorted(recipe["exams"]), a.root, reports)  # all before any delete
+    except (OSError, ValueError) as exc:
+        print("ERROR: %s" % exc, file=sys.stderr)
+        return 2
+    for st in steps:
+        exam, cfg = st["exam"], st["cfg"]
+        pack, pub = _rebuild_args(st, plans, reports)
+        if a.dry_run:
+            print("%s (line %s): would delete %d report run(s)" % (exam, cfg["line"], len(st["delete"])))
+            for d in st["delete"]:
+                print("  delete %s + %s" % (d, runlayout.manifest_path(d)))
+            print("  call report-pack %s --out <new run>%s" % (" ".join(pack), " --publish" if pub is None else ""))
+            if pub:
+                print("  call publish %s" % " ".join(pub))
+            continue
+        for d in st["delete"]:
+            _delete(d)
+        out = runlayout.new_report_run(reports, exam, line=cfg["line"], publish=pub is None)
+        code = report_pack_main(pack + ["--out", out] + (["--publish"] if pub is None else []))
+        if code == 0 and pub:
+            code = publish_main(pub)
+        if code != 0:
+            print("ERROR: %s: build failed (exit %s); plan runs are intact, re-run rebuild-reports" % (exam, code),
+                  file=sys.stderr)
+            return 1
+        new = _newest_main(reports, exam)
+        want = [os.path.basename(p) for p in st["plan_dirs"]]
+        got = [p.get("plan_run_id") for p in ((new or {}).get("manifest") or {}).get("plan_runs") or []]
+        if got != want:
+            print("MISMATCH %s: main manifest plan runs %s != recipe %s" % (exam, got, want), file=sys.stderr)
+            return 1
+        sc = new["manifest"].get("score") or {}
+        print("rebuilt %s main run-%s%s" % (exam, new["id"],
+              " score %s/%s" % (sc.get("total_correct"), sc.get("total")) if sc.get("total") else ""))
     return 0
 
 
@@ -1677,7 +1890,7 @@ def main(argv=None):
              "report-index": report_index_main, "run-list": run_list_main,
              "run-compare": run_compare_main, "plans-migrate": plansmigrate.main,
              "report-manifests-migrate": report_manifests_migrate_main,
-             "publish": publish_main}
+             "publish": publish_main, "rebuild-reports": rebuild_reports_main}
     if cmd not in table:
         print(USAGE, file=sys.stderr)
         return 2

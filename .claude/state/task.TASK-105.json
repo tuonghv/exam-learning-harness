@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-105",
   "title": "tracked published-reports recipe + exam rebuild-reports + guide (REQ-0111)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0111",
   "acceptance_criteria": [
     "AC1 recipe for 3 exams + schema test",
@@ -18,8 +18,15 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/cli.py",
+      "config/published_reports.json",
+      "tests/unit/test_rebuild_reports.py",
+      "docs/guide/report-kinds.md",
+      "docs/guide/toolkit-reference.md"
+    ],
+    "summary": "exam rebuild-reports: recipe loader + --write-recipe seed, prechecks before any delete, --dry-run, report_pack_main/publish_main reuse, --root path resolution; recipe seeded for 3 exams; guide section"
   },
   "unit_test": {
     "status": "pending",
@@ -42,7 +49,8 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-105/handoff/design.md"
+    "designer": "work/TASK-105/handoff/design.md",
+    "coder": "work/TASK-105/handoff/code.md"
   },
   "user_notes": [
     {
@@ -52,7 +60,7 @@
     }
   ],
   "picked_at": "2026-11-14T14:29:28Z",
-  "updated_at": "2026-11-14T14:29:44Z",
+  "updated_at": "2026-11-14T14:35:29Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
@@ -69,5 +77,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "coder: items 105.1-105.5 + tests; main writes 105.6 docs"
+  "next": "main: real rebuild + normalized byte compare; tester: --fast"
 }

@@ -1,0 +1,58 @@
+{
+  "exams": {
+    "dgnl2025": {
+      "key": "input/dgnl/2-De-minh-hoa-gioi-thieu-2025-final.answer.txt",
+      "key_sha256": "66ae6e1eb1665c0564967b5e42641dfd4d08eb8ccd796dfbf1f174d06aa092a5",
+      "line": "main",
+      "overlays": [],
+      "pdf": true,
+      "plan_runs": [
+        "plans/dgnl2025/main/runs/20261104-033012-vietnamese",
+        "plans/dgnl2025/main/runs/20261104-033245-english",
+        "plans/dgnl2025/main/runs/20261104-033551-math",
+        "plans/dgnl2025/main/runs/20261104-033731-science"
+      ],
+      "view": "sheet"
+    },
+    "dgnl2026": {
+      "key": "input/dgnl/De-thi-minh-hoa-2026-Final.answer.txt",
+      "key_sha256": "f8fed69b8b1081f7f8983b21d566557161b3701fbd28901ec45e9a2934d24eb2",
+      "line": "f",
+      "overlays": [],
+      "pdf": true,
+      "plan_runs": [
+        "plans/dgnl2026/f/runs/20261105-100541-vietnamese",
+        "plans/dgnl2026/f/runs/20261105-100543-english",
+        "plans/dgnl2026/f/runs/20261105-100543-math",
+        "plans/dgnl2026/f/runs/20261105-144607-science2"
+      ],
+      "view": "sheet"
+    },
+    "dhqg2024": {
+      "key": "input/dgnl/De-thi-mau-DHQG-HCM-2024.answer.txt",
+      "key_sha256": "501d1763323fb540d0f3cd8b540d1387ce157b5afbe521e313bb6eb514a0a31a",
+      "line": "t81",
+      "overlays": [
+        {
+          "dir": "plans/dhqg2024/t82/runs/20261107-014525",
+          "printed": [
+            64,
+            65,
+            66,
+            67
+          ],
+          "reason": "re-solve of printed 64-67 after the table fix (TASK-082), line t82"
+        }
+      ],
+      "pdf": true,
+      "plan_runs": [
+        "plans/dhqg2024/t81/runs/20261107-005624-vietnamese",
+        "plans/dhqg2024/t81/runs/20261107-005812-english",
+        "plans/dhqg2024/t81/runs/20261107-005940-math",
+        "plans/dhqg2024/t81/runs/20261107-010203-science"
+      ],
+      "view": "sheet"
+    }
+  },
+  "version": 1
+}

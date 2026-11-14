@@ -3031,3 +3031,9 @@ Action: designer draft -> phase-105 design
 Result: design doc, 5 decisions
 Decision: mode from line; delete main + source-line packs only; call *_main in process; --write-recipe seed; paths via --root
 Next: implement
+
+## IMPLEMENTING - TASK-105 - 2026-11-14T14:35:29Z
+Action: coder 105.1-105.5, main 105.6 docs
+Result: --affected pass, 10/10 new tests; real dry-run exit 0, tree md5 unchanged
+Decision: recipe default path via settings.config_dir() (test_req0012 forbids config literal in cli.py)
+Next: unit tests + real rebuild

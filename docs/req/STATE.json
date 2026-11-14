@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0111",
-  "next": "implement 105.1-105.5 (coder), 105.6 docs (main)",
-  "updated": "2026-11-14 21:29"
+  "next": "unit tests (tester) + real rebuild (main)",
+  "updated": "2026-11-14 21:35"
 }

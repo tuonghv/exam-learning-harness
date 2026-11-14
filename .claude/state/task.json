@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-105",
-  "state": "DESIGN",
-  "next": "coder: items 105.1-105.5 + tests; main writes 105.6 docs",
+  "state": "IMPLEMENTING",
+  "next": "main: real rebuild + normalized byte compare; tester: --fast",
   "title": "tracked published-reports recipe + exam rebuild-reports + guide (REQ-0111)",
   "active": [
     {
       "task_id": "TASK-105",
-      "state": "DESIGN",
-      "next": "coder: items 105.1-105.5 + tests; main writes 105.6 docs",
-      "updated_at": "2026-11-14T14:29:44Z"
+      "state": "IMPLEMENTING",
+      "next": "main: real rebuild + normalized byte compare; tester: --fast",
+      "updated_at": "2026-11-14T14:35:29Z"
     }
   ],
   "max_active": 1

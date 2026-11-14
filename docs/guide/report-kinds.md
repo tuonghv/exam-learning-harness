@@ -53,6 +53,14 @@ File name: `<exam>_<subject>_<kind>_<run>.<ext>`
 - `exam report-index DIR...`: (re)write `INDEX.md` of existing folders.
 - `python3 -I tools/check_report_pack.py PACK PLAN... [--key FILE] [--expect-correct N]`: independent recount; fails on an unregistered file or a registered kind with no file.
 
+## How to rebuild reports
+
+Reports are derived data: rebuild them, never migrate or hand-edit them ($0, no model call, TASK-105).
+1. `python3 scripts/exam.py rebuild-reports --dry-run` lists what is deleted and the commands that run; nothing is written.
+2. `python3 scripts/exam.py rebuild-reports [EXAM...]` deletes main + source-line packs and rebuilds them from `config/published_reports.json`.
+3. After a new `publish`: `python3 scripts/exam.py rebuild-reports --write-recipe`, review `git diff config/published_reports.json`, commit.
+Exit 2 = a plan run, overlay or key is missing or changed: nothing was deleted. Check: `python3 -I tools/check_report_pack.py` (TASK-104).
+
 ## Not covered yet
 
 - Benchmark output: `pipeline/benchmark.py` writes a bare `report.md` (+ `summary.json`) into its out dir. It is a cost/benchmark summary, not an exam report; it keeps the old name and is outside REQ-0092 / TASK-085.
