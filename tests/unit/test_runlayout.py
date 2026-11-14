@@ -713,5 +713,33 @@ class E2EMockSolve(unittest.TestCase):
         self.assertEqual(runlayout.list_plan_runs("plans", "ex-a"), [])
 
 
+class U101RlScore(unittest.TestCase):
+    """101: run-list score column reads run.json `score`; the score-summary json is only the old-run fallback."""
+
+    def setUp(self):
+        self.d = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, self.d, True)
+
+    def _w(self, name, obj):
+        with open(os.path.join(self.d, name), "w", encoding="utf-8") as fh:
+            json.dump(obj, fh)
+
+    def test_101_run_json_score_without_summary(self):
+        self._w(runlayout.RUN_JSON, {"score": {"total_correct": 7, "total": 9}})
+        self.assertEqual(cli._rl_score([self.d]), "7/9")
+
+    def test_101_run_json_wins_over_old_summary(self):
+        self._w(runlayout.RUN_JSON, {"score": {"total_correct": 7, "total": 9}})
+        self._w(rk.name("ex", "all", "score-summary", "run-x", "json"), {"total_correct": 1, "total": 2})
+        self.assertEqual(cli._rl_score([self.d]), "7/9")
+
+    def test_101_old_summary_fallback_and_none(self):
+        self.assertEqual(cli._rl_score([self.d]), "-")
+        self._w(runlayout.RUN_JSON, {"plan_runs": []})  # no score key
+        self.assertEqual(cli._rl_score([self.d]), "-")
+        self._w(rk.name("ex", "all", "score-summary", "run-x", "json"), {"total_correct": 1, "total": 2})
+        self.assertEqual(cli._rl_score([self.d]), "1/2")
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-101",
   "title": "report runs hold only human-readable reports, no json/log (REQ-0108)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0108",
   "acceptance_criteria": [
     "AC1 publish/report-pack write no .json except run.json and no .log under reports/; INDEX lists .md/.pdf/.tsv only; run.json names source plan runs and score",
@@ -33,9 +33,9 @@
     "summary": "report_build/report_pack stop writing metrics, result-data, score-summary json and run-log; kinds needs=retired (score-summary json optional_ext for old runs); run.json score; _rl_score reads run.json first; checker counts stray json/log"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --fast",
+    "result": "KNOWN 4 NEW 0; test_101_* in test_report_kinds and test_runlayout (U101RlScore) bite on old code"
   },
   "security": {
     "status": "pending",
@@ -54,7 +54,8 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-101/handoff/design.md",
-    "coder": "work/TASK-101/handoff/code.md"
+    "coder": "work/TASK-101/handoff/code.md",
+    "tester": "work/TASK-101/handoff/test.md"
   },
   "user_notes": [
     {
@@ -64,7 +65,7 @@
     }
   ],
   "picked_at": "2026-11-14T08:36:10Z",
-  "updated_at": "2026-11-14T08:46:17Z",
+  "updated_at": "2026-11-14T08:49:42Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
@@ -81,5 +82,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tester: add _rl_score run.json-first test, full suite"
+  "next": "verify: re-publish dgnl2026 --from f and dhqg2024 --from t81, checker, delete old main runs"
 }

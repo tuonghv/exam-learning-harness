@@ -2917,3 +2917,9 @@ Action: coder 101.1-101.5
 Result: --fast KNOWN 4 NEW 0
 Decision: accept deviation: score-summary json kept as optional_ext so old runs still classify; not written
 Next: unit tests (tester)
+
+## UNIT_TESTED - TASK-101 - 2026-11-14T08:49:42Z
+Action: tester: _rl_score tests + bite check
+Result: --fast KNOWN 4 NEW 0
+Decision: tests bite (5 of 6 fail on old code; 1 guards fallback)
+Next: real re-publish

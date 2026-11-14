@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-101",
-  "state": "IMPLEMENTING",
-  "next": "tester: add _rl_score run.json-first test, full suite",
+  "state": "UNIT_TESTED",
+  "next": "verify: re-publish dgnl2026 --from f and dhqg2024 --from t81, checker, delete old main runs",
   "title": "report runs hold only human-readable reports, no json/log (REQ-0108)",
   "active": [
     {
       "task_id": "TASK-101",
-      "state": "IMPLEMENTING",
-      "next": "tester: add _rl_score run.json-first test, full suite",
-      "updated_at": "2026-11-14T08:46:17Z"
+      "state": "UNIT_TESTED",
+      "next": "verify: re-publish dgnl2026 --from f and dhqg2024 --from t81, checker, delete old main runs",
+      "updated_at": "2026-11-14T08:49:42Z"
     }
   ],
   "max_active": 1
