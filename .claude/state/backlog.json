@@ -2000,7 +2000,7 @@
       "AC1 publish/report-pack write no metrics/result-data .json or run-log .log under reports/; INDEX lists .md/.pdf/.tsv only; run.json names source plan runs",
       "AC2 unit tests green; dgnl2026, dhqg2024 main re-published without json/log, old main runs deleted"
     ],
-    "completed_at": "2026-11-14T08:52:19Z",
+    "completed_at": "2026-11-14T08:52:20Z",
     "report": "docs/report/phase-101-report-runs-readable-only.md",
     "user_notes": [
       {
