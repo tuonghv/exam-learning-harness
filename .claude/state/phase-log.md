@@ -3037,3 +3037,9 @@ Action: coder 105.1-105.5, main 105.6 docs
 Result: --affected pass, 10/10 new tests; real dry-run exit 0, tree md5 unchanged
 Decision: recipe default path via settings.config_dir() (test_req0012 forbids config literal in cli.py)
 Next: unit tests + real rebuild
+
+## UNIT_TESTED - TASK-105 - 2026-11-14T14:37:40Z
+Action: tester --fast + bite + failure-mode coverage; main real rebuild
+Result: KNOWN 4 NEW 0; 12/12; real rebuild rc 0, 25/25 report files identical, checker 0 failed x3
+Decision: go verify
+Next: verify

@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-105",
-  "state": "IMPLEMENTING",
-  "next": "main: real rebuild + normalized byte compare; tester: --fast",
+  "state": "UNIT_TESTED",
+  "next": "verifier: AC1-AC5 from saved evidence",
   "title": "tracked published-reports recipe + exam rebuild-reports + guide (REQ-0111)",
   "active": [
     {
       "task_id": "TASK-105",
-      "state": "IMPLEMENTING",
-      "next": "main: real rebuild + normalized byte compare; tester: --fast",
-      "updated_at": "2026-11-14T14:35:29Z"
+      "state": "UNIT_TESTED",
+      "next": "verifier: AC1-AC5 from saved evidence",
+      "updated_at": "2026-11-14T14:37:40Z"
     }
   ],
   "max_active": 1

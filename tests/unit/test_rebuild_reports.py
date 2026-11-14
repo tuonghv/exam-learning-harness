@@ -182,6 +182,24 @@ class T5Rebuild(RebuildBase):
         self.assertIn("rebuilt ex main", out)
         self.assertEqual(self.runs("f"), ["run-" + PACK_ID])  # dev pack untouched
 
+    def test_105_5_build_failure_exits_1_and_names_rerun(self):
+        with mock.patch.object(cli, "report_pack_main", return_value=3):
+            code, _, err = self.run_rb()
+        self.assertEqual(code, 1)
+        self.assertIn("re-run rebuild-reports", err)
+
+    def test_105_5_mismatched_plan_runs_exit_1(self):
+        real = cli._newest_main
+
+        def other(reports, exam):
+            r = real(reports, exam)
+            r["manifest"] = dict(r["manifest"], plan_runs=[{"plan_run_id": "x"}])
+            return r
+        with mock.patch.object(cli, "_newest_main", side_effect=other):
+            code, _, err = self.run_rb()
+        self.assertEqual(code, 1)
+        self.assertIn("MISMATCH ex", err)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-105",
   "title": "tracked published-reports recipe + exam rebuild-reports + guide (REQ-0111)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0111",
   "acceptance_criteria": [
     "AC1 recipe for 3 exams + schema test",
@@ -29,9 +29,9 @@
     "summary": "exam rebuild-reports: recipe loader + --write-recipe seed, prechecks before any delete, --dry-run, report_pack_main/publish_main reuse, --root path resolution; recipe seeded for 3 exams; guide section"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --fast",
+    "result": "KNOWN 4 NEW 0; test_rebuild_reports 12 tests (2 added by tester: build failure exit 1, MISMATCH exit 1); AC3 test bites with the prechecks removed"
   },
   "security": {
     "status": "pending",
@@ -50,7 +50,8 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-105/handoff/design.md",
-    "coder": "work/TASK-105/handoff/code.md"
+    "coder": "work/TASK-105/handoff/code.md",
+    "tester": "work/TASK-105/handoff/test.md"
   },
   "user_notes": [
     {
@@ -60,7 +61,7 @@
     }
   ],
   "picked_at": "2026-11-14T14:29:28Z",
-  "updated_at": "2026-11-14T14:35:29Z",
+  "updated_at": "2026-11-14T14:37:40Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
@@ -77,5 +78,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "main: real rebuild + normalized byte compare; tester: --fast"
+  "next": "verifier: AC1-AC5 from saved evidence"
 }
