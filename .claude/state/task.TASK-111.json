@@ -1,0 +1,65 @@
+{
+  "task_id": "TASK-111",
+  "title": "Fix-D CLI exits: 107-F001/F002/F008 (REQ-0118)",
+  "state": "TODO",
+  "requirement": "REQ-0118",
+  "acceptance_criteria": [
+    "AC1 recipe not overwritten",
+    "AC2 run-stats exit 2",
+    "AC3 --help exit 0 x11",
+    "AC4 tests + old/new oracle"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {},
+  "user_notes": [
+    {
+      "raw": "RAW-00336",
+      "note": "user: auto mode, go ahead with Fix-D without step approvals",
+      "at": "2026-11-15T15:05:57Z"
+    }
+  ],
+  "picked_at": "2026-11-15T15:05:58Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [
+    "src/exam_engine/cli.py",
+    "tests/unit/*.py"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
