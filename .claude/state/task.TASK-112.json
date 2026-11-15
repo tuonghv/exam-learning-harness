@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-112",
   "title": "Fix-E metrics: 109-F002 shared_ref, 109-F004 board_delta n (REQ-0119)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0119",
   "acceptance_criteria": [
     "AC1 missing sibling not penalised",
@@ -27,9 +27,9 @@
     "summary": "112.1 shared_ref want limited to extracted ids (metrics.py:375); 112.2 board_delta n = ids in both runs (metrics.py:660)"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit -p test_structure_scores.py; ... test_run_board.py; run_tests.py --fast",
+    "result": "OK; --fast 2024 KNOWN 4 NEW 0; 3 new tests bite on old"
   },
   "security": {
     "status": "pending",
@@ -48,7 +48,10 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-112/handoff/design.md",
-    "coder": "work/TASK-112/handoff/code.md"
+    "coder": "work/TASK-112/handoff/code.md",
+    "tester": {
+      "waiver": "two one-line edits; coder added bite + AC2 guard tests, coordinator gold-case oracle covers the rest"
+    }
   },
   "user_notes": [
     {
@@ -71,5 +74,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "record tests"
+  "next": "verify"
 }
