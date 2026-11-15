@@ -1,0 +1,67 @@
+{
+  "task_id": "TASK-107",
+  "title": "triage code-review findings 107-111: BUG/IMPROVEMENT/NOT-A-DEFECT + prioritised fix plan, no source fix (REQ-0114)",
+  "state": "TODO",
+  "requirement": "REQ-0114",
+  "acceptance_criteria": [
+    "AC1 41 findings classified with evidence",
+    "AC2 BUGs reproduced or traced, reachability stated",
+    "AC3 P1/P2/P3 fix-task plan",
+    "AC4 no src/tests change; triage doc in docs/design"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {},
+  "user_notes": [
+    {
+      "raw": "RAW-00331",
+      "note": "user: plan+prioritise only; deep-dive each finding bug vs improvement before any fix",
+      "at": "2026-11-15T03:14:17Z"
+    },
+    {
+      "raw": "RAW-00330",
+      "note": "user: reviews are advisory, design from code",
+      "at": "2026-11-15T03:14:17Z"
+    }
+  ],
+  "picked_at": "2026-11-15T03:14:21Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
