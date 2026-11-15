@@ -2141,5 +2141,28 @@
     ],
     "completed_at": "2026-11-15T03:26:47Z",
     "report": "docs/report/phase-107-review-triage.md"
+  },
+  {
+    "task_id": "TASK-108",
+    "title": "Fix-A ingest boundaries: 108-F001/F002/F004/F005/F010 (REQ-0115)",
+    "priority": 1,
+    "status": "queued",
+    "created_at": "2026-11-15T11:00:00",
+    "requirement": "REQ-0115",
+    "acceptance_criteria": [
+      "AC1 cut reply passes validation",
+      "AC2 range intro not a question",
+      "AC3 _INTRO range forms",
+      "AC4 unreadable kept",
+      "AC5 Ph\u1ea7n I stem kept",
+      "AC6 regression tests, --fast green"
+    ],
+    "user_notes": [
+      {
+        "raw": "RAW-00332",
+        "note": "user approved triage plan; Fix-A first",
+        "at": "2026-11-15T03:27:10Z"
+      }
+    ]
   }
 ]
