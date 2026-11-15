@@ -2200,7 +2200,7 @@
     "task_id": "TASK-110",
     "title": "Fix-C review pack: 111-F004/F006/F007/F005 (REQ-0117)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-15T14:30:00",
     "requirement": "REQ-0117",
     "acceptance_criteria": [
@@ -2216,6 +2216,8 @@
         "note": "user: go ahead with Fix-C",
         "at": "2026-11-15T14:51:00Z"
       }
-    ]
+    ],
+    "completed_at": "2026-11-15T14:59:35Z",
+    "report": "docs/report/phase-110-review-pack-marks-safe.md"
   }
 ]

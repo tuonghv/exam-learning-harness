@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-110",
   "title": "Fix-C review pack: 111-F004/F006/F007/F005 (REQ-0117)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0117",
   "acceptance_criteria": [
     "AC1 marks kept",
@@ -40,11 +40,18 @@
       "work/TASK-110/handoff/verify.md"
     ],
     "command": "python3 -I work/TASK-110/evidence/review_oracle.py <old|new src> review/dgnl-2026-sample; apply_oracle.py same",
-    "result": "real pack copy: parse, subject list and apply identical old vs new; real files md5 unchanged; AC1-AC5 met"
+    "result": "real pack copy: parse, subject list and apply identical old vs new; real files md5 unchanged; AC1-AC5 met",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-110/handoff/verify.md"
+      ],
+      "reason": "old vs new on a copy of the user's real review pack"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-110-review-pack-marks-safe.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -55,6 +62,9 @@
     "tester": "work/TASK-110/handoff/test.md",
     "verifier": {
       "waiver": "coordinator ran the real-pack oracle itself on a copy (verify.md); no paid run needed"
+    },
+    "crosscheck": {
+      "waiver": "coordinator real-pack oracle (verify.md) is the crosscheck"
     }
   },
   "user_notes": [
@@ -65,7 +75,7 @@
     }
   ],
   "picked_at": "2026-11-15T14:51:00Z",
-  "updated_at": "2026-11-15T14:59:27Z",
+  "updated_at": "2026-11-15T14:59:36Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/review.py",
@@ -77,5 +87,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "write report, close TASK-110; next Fix-D cli"
+  "next": ""
 }

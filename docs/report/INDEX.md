@@ -75,3 +75,4 @@ Rule (RAW-00171, REQ-0061): evidence summaries are small text with no exam conte
 | TASK-107 Code-review triage: 41 findings -> 17 BU | docs/design/phase-107-review-triage.md | docs/report/phase-107-review-triage.md | - | - | - |
 | TASK-108 Fix-A ingest boundaries: 108-F001/F002/F | docs/design/phase-108-ingest-boundaries.md | docs/report/phase-108-ingest-boundaries.md | - | - | - |
 | TASK-109 Fix-B Claude adapter: 110-F001 classify, | docs/design/phase-109-claude-adapter.md | docs/report/phase-109-claude-adapter.md | - | - | - |
+| TASK-110 Fix-C review pack: 111-F004/F005/F006/F0 | docs/design/phase-110-review-pack-marks-safe.md | docs/report/phase-110-review-pack-marks-safe.md | - | - | - |

@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-110",
-  "state": "VERIFIED",
-  "next": "write report, close TASK-110; next Fix-D cli",
+  "state": "DONE",
+  "next": "",
   "title": "Fix-C review pack: 111-F004/F006/F007/F005 (REQ-0117)",
-  "active": [
-    {
-      "task_id": "TASK-110",
-      "state": "VERIFIED",
-      "next": "write report, close TASK-110; next Fix-D cli",
-      "updated_at": "2026-11-15T14:59:27Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
