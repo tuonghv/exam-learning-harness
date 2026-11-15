@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-107",
-  "state": "DESIGN",
-  "next": "user approves the triage plan, then close TASK-107 and open Fix-A as its own REQ/TASK",
+  "state": "IMPLEMENTING",
+  "next": "record the $0 repro run as the unit-test evidence",
   "title": "triage code-review findings 107-111: BUG/IMPROVEMENT/NOT-A-DEFECT + prioritised fix plan, no source fix (REQ-0114)",
   "active": [
     {
       "task_id": "TASK-107",
-      "state": "DESIGN",
-      "next": "user approves the triage plan, then close TASK-107 and open Fix-A as its own REQ/TASK",
-      "updated_at": "2026-11-15T03:19:50Z"
+      "state": "IMPLEMENTING",
+      "next": "record the $0 repro run as the unit-test evidence",
+      "updated_at": "2026-11-15T03:25:37Z"
     }
   ],
   "max_active": 1

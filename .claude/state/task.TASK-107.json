@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-107",
   "title": "triage code-review findings 107-111: BUG/IMPROVEMENT/NOT-A-DEFECT + prioritised fix plan, no source fix (REQ-0114)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0114",
   "acceptance_criteria": [
     "AC1 41 findings classified with evidence",
@@ -17,8 +17,11 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "docs/design/phase-107-review-triage.md"
+    ],
+    "summary": "triage-only task: deliverable is docs/design/phase-107-review-triage.md; no src/tests change (AC4)"
   },
   "unit_test": {
     "status": "pending",
@@ -41,7 +44,10 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-107/handoff/design-ingest.md"
+    "designer": "work/TASK-107/handoff/design-ingest.md",
+    "coder": {
+      "waiver": "triage-only task, no code to implement (REQ-0114 AC4)"
+    }
   },
   "user_notes": [
     {
@@ -53,10 +59,15 @@
       "raw": "RAW-00330",
       "note": "user: reviews are advisory, design from code",
       "at": "2026-11-15T03:14:17Z"
+    },
+    {
+      "raw": "RAW-00332",
+      "note": "user approved the triage plan (Fix-A first)",
+      "at": "2026-11-15T03:25:37Z"
     }
   ],
   "picked_at": "2026-11-15T03:14:21Z",
-  "updated_at": "2026-11-15T03:19:50Z",
+  "updated_at": "2026-11-15T03:25:37Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -65,5 +76,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "user approves the triage plan, then close TASK-107 and open Fix-A as its own REQ/TASK"
+  "next": "record the $0 repro run as the unit-test evidence"
 }

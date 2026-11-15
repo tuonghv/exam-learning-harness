@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0114",
-  "next": "user approves plan; then Fix-A REQ",
-  "updated": "2026-11-15 10:19"
+  "next": "record the $0 repro run as the unit-test evidence",
+  "updated": "2026-11-15 10:25"
 }
