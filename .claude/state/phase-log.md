@@ -3097,3 +3097,9 @@ Action: user approved the triage plan (RAW-00332)
 Result: no code change by design
 Decision: move through the gates with waivers for code roles
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-107 - 2026-11-15T03:25:59Z
+Action: ran the combined $0 repro script
+Result: 12 BUG rows reproduce
+Decision: evidence enough for the triage
+Next: VERIFIED

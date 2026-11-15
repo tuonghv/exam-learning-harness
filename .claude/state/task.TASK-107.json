@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-107",
   "title": "triage code-review findings 107-111: BUG/IMPROVEMENT/NOT-A-DEFECT + prioritised fix plan, no source fix (REQ-0114)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0114",
   "acceptance_criteria": [
     "AC1 41 findings classified with evidence",
@@ -24,9 +24,9 @@
     "summary": "triage-only task: deliverable is docs/design/phase-107-review-triage.md; no src/tests change (AC4)"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I work/TASK-107/repro.py",
+    "result": "12/12 reproduced BUG rows still show the bug on current code (work/TASK-107/repro.out); no unit tests added because no code changed"
   },
   "security": {
     "status": "pending",
@@ -47,6 +47,9 @@
     "designer": "work/TASK-107/handoff/design-ingest.md",
     "coder": {
       "waiver": "triage-only task, no code to implement (REQ-0114 AC4)"
+    },
+    "tester": {
+      "waiver": "triage-only task; repro script stands in for tests, regression tests belong to the fix tasks"
     }
   },
   "user_notes": [
@@ -67,7 +70,7 @@
     }
   ],
   "picked_at": "2026-11-15T03:14:21Z",
-  "updated_at": "2026-11-15T03:25:37Z",
+  "updated_at": "2026-11-15T03:26:00Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -76,5 +79,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "record the $0 repro run as the unit-test evidence"
+  "next": "verify ACs against the triage doc and git diff (no src/tests change)"
 }

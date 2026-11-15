@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-107",
-  "state": "IMPLEMENTING",
-  "next": "record the $0 repro run as the unit-test evidence",
+  "state": "UNIT_TESTED",
+  "next": "verify ACs against the triage doc and git diff (no src/tests change)",
   "title": "triage code-review findings 107-111: BUG/IMPROVEMENT/NOT-A-DEFECT + prioritised fix plan, no source fix (REQ-0114)",
   "active": [
     {
       "task_id": "TASK-107",
-      "state": "IMPLEMENTING",
-      "next": "record the $0 repro run as the unit-test evidence",
-      "updated_at": "2026-11-15T03:25:37Z"
+      "state": "UNIT_TESTED",
+      "next": "verify ACs against the triage doc and git diff (no src/tests change)",
+      "updated_at": "2026-11-15T03:26:00Z"
     }
   ],
   "max_active": 1

@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0114",
-  "next": "record the $0 repro run as the unit-test evidence",
-  "updated": "2026-11-15 10:25"
+  "next": "verify ACs against the triage doc and git diff (no src/tests change)",
+  "updated": "2026-11-15 10:26"
 }
