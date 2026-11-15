@@ -3163,3 +3163,9 @@ Action: tester added 3 edge tests
 Result: 0 defects
 Decision: UNIT_TESTED
 Next: VERIFIED
+
+## VERIFIED - TASK-109 - 2026-11-15T06:05:52Z
+Action: old vs new oracle on stored real replies and messages
+Result: 0 unintended changes
+Decision: VERIFIED
+Next: DONE
