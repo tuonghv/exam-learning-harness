@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-109",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "coder implements 109.1-109.2 with regression tests",
   "title": "Fix-B Claude adapter: 110-F001 classify, 110-F002 extract_json (REQ-0116)",
   "active": [
     {
       "task_id": "TASK-109",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "coder implements 109.1-109.2 with regression tests",
+      "updated_at": "2026-11-15T05:59:56Z"
     }
   ],
   "max_active": 1

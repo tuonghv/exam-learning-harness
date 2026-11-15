@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-109",
   "title": "Fix-B Claude adapter: 110-F001 classify, 110-F002 extract_json (REQ-0116)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0116",
   "acceptance_criteria": [
     "AC1 too-long not run-stopping",
@@ -11,9 +11,9 @@
     "AC5 tests + old/new oracle"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-109-claude-adapter.md",
+    "summary": "109.1 _classify: HTTP codes only after API Error/status/HTTP or line start, service/unavailable/login/connection/network narrowed to real phrases; 109.2 extract_json: _scan fallback returns one parseable object when preceding braces balance; fenced-first, two-object rejection, retraction unchanged; no cache-key change",
     "reuse": [],
     "risks": []
   },
@@ -41,7 +41,9 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-109/handoff/design.md"
+  },
   "user_notes": [
     {
       "raw": "RAW-00334",
@@ -50,8 +52,8 @@
     }
   ],
   "picked_at": "2026-11-15T05:56:51Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-15T05:59:56Z",
+  "updated_by": "main",
   "scope": [
     "src/exam_engine/adapters/*.py",
     "tests/unit/*.py"
@@ -62,5 +64,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder implements 109.1-109.2 with regression tests"
 }

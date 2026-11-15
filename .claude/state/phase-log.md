@@ -3145,3 +3145,9 @@ Action: wrote report
 Result: TASK-108 closed
 Decision: next Fix-B
 Next: user go for Fix-B
+
+## DESIGN - TASK-109 - 2026-11-15T05:59:55Z
+Action: designer drafted 2 items
+Result: pinned classes kept; no cache-key change
+Decision: design accepted
+Next: IMPLEMENTING via coder
