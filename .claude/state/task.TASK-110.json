@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-110",
   "title": "Fix-C review pack: 111-F004/F006/F007/F005 (REQ-0117)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0117",
   "acceptance_criteria": [
     "AC1 marks kept",
@@ -31,12 +31,16 @@
     "result": "test_review OK; --fast 2009 KNOWN 4 NEW 0; 10/11 test_110_* bite on old"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "not_applicable",
+    "result": "markdown parsing of local review files; no auth/secret/network change"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-110/handoff/verify.md"
+    ],
+    "command": "python3 -I work/TASK-110/evidence/review_oracle.py <old|new src> review/dgnl-2026-sample; apply_oracle.py same",
+    "result": "real pack copy: parse, subject list and apply identical old vs new; real files md5 unchanged; AC1-AC5 met"
   },
   "report": {
     "status": "pending",
@@ -48,7 +52,10 @@
   "roles": {
     "designer": "work/TASK-110/handoff/design.md",
     "coder": "work/TASK-110/handoff/code.md",
-    "tester": "work/TASK-110/handoff/test.md"
+    "tester": "work/TASK-110/handoff/test.md",
+    "verifier": {
+      "waiver": "coordinator ran the real-pack oracle itself on a copy (verify.md); no paid run needed"
+    }
   },
   "user_notes": [
     {
@@ -58,7 +65,7 @@
     }
   ],
   "picked_at": "2026-11-15T14:51:00Z",
-  "updated_at": "2026-11-15T14:59:26Z",
+  "updated_at": "2026-11-15T14:59:27Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/review.py",
@@ -70,5 +77,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verify on real pack copy"
+  "next": "write report, close TASK-110; next Fix-D cli"
 }
