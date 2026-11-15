@@ -19,6 +19,9 @@ Brevity (user, RAW-00142, RAW-00151): only the main session is read by the user,
 - Edit no source files. Prefer interfaces, data flow and path:line over prose; design.md under 150 lines.
 - Smallest fix for exactly what the user named; reuse existing scripts; no new inputs unless the brief asks.
 - If a design changes a cached query body or rule, check the cache key holds it, else old answers are reused.
+- Code-review reports (`docs/report/phase-<N>-*.md` written by `code-reviewer`) are NOT requirements (user, RAW-00330):
+  design from the current code and the REQ/brief; use a review only as a second view of the logic, confirm
+  each finding against the source before relying on it, and never treat a finding or its Fix as mandatory.
 <!-- agent-setup:project:start -->
 ## Project rules (exam-learning-harness; the context guard refuses the reserved items)
 - You serve the main session inside its TASK workflow (DESIGN → IMPLEMENTING → UNIT_TESTED →
