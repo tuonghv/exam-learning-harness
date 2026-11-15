@@ -3169,3 +3169,9 @@ Action: old vs new oracle on stored real replies and messages
 Result: 0 unintended changes
 Decision: VERIFIED
 Next: DONE
+
+## DONE - TASK-109 - 2026-11-15T06:06:01Z
+Action: wrote report
+Result: TASK-109 closed
+Decision: next Fix-C
+Next: user go for Fix-C

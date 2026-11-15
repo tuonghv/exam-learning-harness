@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-109",
-  "state": "VERIFIED",
-  "next": "write report, close TASK-109; next Fix-C review pack",
+  "state": "DONE",
+  "next": "",
   "title": "Fix-B Claude adapter: 110-F001 classify, 110-F002 extract_json (REQ-0116)",
-  "active": [
-    {
-      "task_id": "TASK-109",
-      "state": "VERIFIED",
-      "next": "write report, close TASK-109; next Fix-C review pack",
-      "updated_at": "2026-11-15T06:05:53Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

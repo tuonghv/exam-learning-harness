@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-109",
   "title": "Fix-B Claude adapter: 110-F001 classify, 110-F002 extract_json (REQ-0116)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0116",
   "acceptance_criteria": [
     "AC1 too-long not run-stopping",
@@ -40,11 +40,18 @@
       "work/TASK-109/handoff/verify.md"
     ],
     "command": "python3 -I work/TASK-109/evidence/adapter_oracle.py <old|new src> .",
-    "result": "252 stored replies 0 changed; 8 real stop messages same class; 2 intended reclassifications; AC1-AC5 met"
+    "result": "252 stored replies 0 changed; 8 real stop messages same class; 2 intended reclassifications; AC1-AC5 met",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-109/handoff/verify.md"
+      ],
+      "reason": "old vs new on 252 real replies and real error messages"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-109-claude-adapter.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -55,6 +62,9 @@
     "tester": "work/TASK-109/handoff/test.md",
     "verifier": {
       "waiver": "coordinator ran the stored-reply oracle itself (verify.md); no paid run needed"
+    },
+    "crosscheck": {
+      "waiver": "coordinator stored-reply oracle (verify.md) is the crosscheck"
     }
   },
   "user_notes": [
@@ -65,7 +75,7 @@
     }
   ],
   "picked_at": "2026-11-15T05:56:51Z",
-  "updated_at": "2026-11-15T06:05:53Z",
+  "updated_at": "2026-11-15T06:06:02Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/adapters/*.py",
@@ -77,5 +87,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "write report, close TASK-109; next Fix-C review pack"
+  "next": ""
 }
