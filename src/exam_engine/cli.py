@@ -369,8 +369,23 @@ def _load_exam(path):
     return (None, 2) if errs else (exam, None)
 
 
+def _argparse_exit(exc):
+    """argparse exits 0 on --help and 2 on a usage error: map SystemExit.code to the exit code."""
+    return 2 if exc.code else 0
+
+
+def _help_asked(argv, usage):
+    """Hand-parsed commands: print usage and report True for -h/--help (exit 0), else False."""
+    if any(x in ("-h", "--help") for x in argv):
+        print(usage)
+        return True
+    return False
+
+
 def parse_main(argv):
     """parse EXAM.md: print the parsed exam as JSON (exit 2 when invalid)."""
+    if _help_asked(argv, "usage: exam.py parse EXAM.md"):
+        return 0
     if len(argv) != 1:
         print("usage: exam.py parse EXAM.md", file=sys.stderr)
         return 2
@@ -383,6 +398,8 @@ def parse_main(argv):
 
 def verify_main(argv):
     """verify EXAM.md SOLVE_OUT.json: code checks + decision per question, no model call."""
+    if _help_asked(argv, "usage: exam.py verify EXAM.md SOLVE_OUT.json"):
+        return 0
     if len(argv) != 2:
         print("usage: exam.py verify EXAM.md SOLVE_OUT.json", file=sys.stderr)
         return 2
@@ -659,10 +676,7 @@ def _load_recipe(path):
 
 def _write_recipe(path, reports, exams):
     """Seed `path` from the newest main-line pack/publish manifest of each exam (named exams merge over the file)."""
-    try:
-        old = _load_recipe(path)["exams"]
-    except ValueError:
-        old = {}
+    old = _load_recipe(path)["exams"] if os.path.exists(path) else {}  # a bad file raises: never overwrite it
     out = dict(old) if exams else {}
     names = exams or sorted(n for n in os.listdir(reports) if os.path.isdir(os.path.join(reports, n)))
     for exam in names:
@@ -852,6 +866,8 @@ def report_manifests_migrate_main(argv):
 
 def report_index_main(argv):
     """report-index DIR...: (re)write INDEX.md of each exam report folder."""
+    if _help_asked(argv, "usage: exam.py report-index DIR..."):
+        return 0
     if not argv or any(not os.path.isdir(d) for d in argv):
         for d in argv:
             if not os.path.isdir(d):  # an old reports folder that plans-migrate moved: say where its files went
@@ -900,6 +916,8 @@ def report_main(argv):
         return _report_plan(argv)
     """report RESULT.json --out DIR [--no-pdf] [--view sheet|learn]: write report files from a result."""
     usage = "usage: exam.py report RESULT.json --out DIR [--no-pdf] [--view sheet|learn]"
+    if _help_asked(argv, usage):
+        return 0
     args, view, i = [], "sheet", 0
     while i < len(argv):
         a = argv[i]
@@ -979,8 +997,8 @@ def ingest_main(argv):
     ap.add_argument("--boundary-trace", metavar="FILE")
     try:
         args = ap.parse_args(argv)
-    except SystemExit:
-        return 2
+    except SystemExit as exc:
+        return _argparse_exit(exc)
     if args.check:
         return _ingest_check()
     modes = sum([bool(args.mock), args.dry_run, args.real])
@@ -1087,8 +1105,8 @@ def inspect_main(argv):
     ap.add_argument("--pages", metavar="SPEC")
     try:
         args = ap.parse_args(argv)
-    except SystemExit:
-        return 2
+    except SystemExit as exc:
+        return _argparse_exit(exc)
     try:
         if args.file.lower().endswith(".json"):
             with open(args.file, encoding="utf-8") as fh:
@@ -1171,8 +1189,8 @@ def refine_main(argv):
     ap.add_argument("--cache", metavar="DIR", help="page reply cache (real mode only)")
     try:
         a = ap.parse_args(argv)
-    except SystemExit:
-        return 2
+    except SystemExit as exc:
+        return _argparse_exit(exc)
     if sum([bool(a.mock), a.dry_run, a.real]) != 1:
         print("usage: choose exactly one of --mock FILE, --dry-run, --real (never defaults to real)",
               file=sys.stderr)
@@ -1281,8 +1299,8 @@ def cross_main(argv):
     ap.add_argument("--allow-key-pages", action="store_true")
     try:
         a = ap.parse_args(argv)
-    except SystemExit:
-        return 2
+    except SystemExit as exc:
+        return _argparse_exit(exc)
     if sum([bool(a.mock), a.dry_run, a.real]) != 1:
         print("usage: choose exactly one of --mock FILE, --dry-run, --real (never defaults to real)",
               file=sys.stderr)
@@ -1381,8 +1399,8 @@ def benchmark_main(argv):
     ap.add_argument("--prompt-version")
     try:
         a = ap.parse_args(argv)
-    except SystemExit:
-        return 2
+    except SystemExit as exc:
+        return _argparse_exit(exc)
     try:
         settings.use_prompts(a.channel, a.prompt_version)
     except ValueError as exc:
@@ -1491,8 +1509,8 @@ def genexam_main(argv):
     ap.add_argument("--model", default=d["model"])
     try:
         a = ap.parse_args(argv)
-    except SystemExit:
-        return 2
+    except SystemExit as exc:
+        return _argparse_exit(exc)
     if sum([bool(a.mock), a.dry_run, a.real]) != 1 or a.n < 1 or a.max_cost_usd < 0 or a.timeout <= 0:
         print("usage: choose exactly one of --mock FILE, --dry-run, --real (never defaults to real); "
               "--n >= 1, --max-cost-usd >= 0", file=sys.stderr)
@@ -1560,8 +1578,8 @@ def lessons_main(argv):
         a = ap.parse_args(argv)
         with open(a.summary, encoding="utf-8") as fh:
             ls = genexam.lessons(json.load(fh))
-    except SystemExit:
-        return 2
+    except SystemExit as exc:
+        return _argparse_exit(exc)
     except (OSError, ValueError) as exc:
         print("ERROR: --summary: %s" % exc, file=sys.stderr)
         return 2
@@ -1588,8 +1606,8 @@ def extract_eval_main(argv):
     ap.add_argument("--refined", action="store_true")
     try:
         a = ap.parse_args(argv)
-    except SystemExit:
-        return 2
+    except SystemExit as exc:
+        return _argparse_exit(exc)
     cm = None
     try:
         gold = extract_eval.load_questions(a.gold)
@@ -1629,8 +1647,8 @@ def review_pack_main(argv):
                     help="QA pipe table (n | answer | conf | flawed | reasoning); repeat, later files win")
     try:
         a = ap.parse_args(argv)
-    except SystemExit:
-        return 2
+    except SystemExit as exc:
+        return _argparse_exit(exc)
     try:
         _, msg = review.pack(a.exam_id, a.subject, a.result, a.exam, a.refined, a.offset, a.out, a.force_reset, a.note,
                              a.qa)
@@ -1649,8 +1667,8 @@ def review_apply_main(argv):
     ap.add_argument("--out", default="review")
     try:
         a = ap.parse_args(argv)
-    except SystemExit:
-        return 2
+    except SystemExit as exc:
+        return _argparse_exit(exc)
     try:
         lines, _ = review.apply(a.exam_id, a.out)
     except (ValueError, OSError) as exc:
@@ -1678,8 +1696,8 @@ def gold_pdf_main(argv):
     ap.add_argument("--scan", action="store_true", help="replace the PDF by an image-only copy (no text layer)")
     try:
         a = ap.parse_args(argv)
-    except SystemExit:
-        return 2
+    except SystemExit as exc:
+        return _argparse_exit(exc)
     try:
         info = gold_pdf.render(a.gold, a.out, a.variant, a.font, a.layout, a.furniture, a.gold_out)
         if a.scan:
@@ -1883,6 +1901,8 @@ def run_list_main(argv):
 
 def run_compare_main(argv):
     """run-compare A B: compare two plan runs (result dir, history run_id or EXAM/PLAN_RUN_ID); run-stats compare."""
+    if _help_asked(argv, "usage: exam.py run-compare A B"):
+        return 0
     if len(argv) != 2 or any(x.startswith("-") for x in argv):
         print("usage: exam.py run-compare A B   (A, B: result dir, history run_id or EXAM/PLAN_RUN_ID)", file=sys.stderr)
         return 2
@@ -1971,6 +1991,8 @@ def _rs_compute(ref, a):
         ref = _rs_plan_ref(ref) or _rs_moved(ref)
     if a.exam:
         exam, _code = _load_exam(a.exam)
+        if exam is None:  # _load_exam printed the input errors
+            raise ValueError("--exam %s: invalid or unreadable exam" % a.exam)
     elif os.path.isfile(os.path.join(ref, "input", "exam.md")):  # plan run: exam copy beside the result
         exam, _code = _load_exam(os.path.join(ref, "input", "exam.md"))
     if a.review_pack:

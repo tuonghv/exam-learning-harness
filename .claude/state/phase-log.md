@@ -3211,3 +3211,9 @@ Action: designer drafted 3 items; coordinator oracle found 16 --help sites (not 
 Result: addendum widens 111.1; D1/D2 accepted
 Decision: design accepted
 Next: IMPLEMENTING via coder
+
+## IMPLEMENTING - TASK-111 - 2026-11-15T15:12:31Z
+Action: coder implemented 111.1-111.3
+Result: 6 tests (19 fail on old); oracle: 16 help 0, missing exam 2, solve/stats_ok unchanged; --fast NEW 0
+Decision: accept
+Next: UNIT_TESTED via tester

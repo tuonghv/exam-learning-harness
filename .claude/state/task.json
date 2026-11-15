@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-111",
-  "state": "DESIGN",
-  "next": "coder implements 111.1-111.3",
+  "state": "IMPLEMENTING",
+  "next": "tester reviews tests and runs --fast",
   "title": "Fix-D CLI exits: 107-F001/F002/F008 (REQ-0118)",
   "active": [
     {
       "task_id": "TASK-111",
-      "state": "DESIGN",
-      "next": "coder implements 111.1-111.3",
-      "updated_at": "2026-11-15T15:07:45Z"
+      "state": "IMPLEMENTING",
+      "next": "tester reviews tests and runs --fast",
+      "updated_at": "2026-11-15T15:12:31Z"
     }
   ],
   "max_active": 1
