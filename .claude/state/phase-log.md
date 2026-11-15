@@ -3121,3 +3121,9 @@ Action: designer drafted 4 items; coordinator checked real DGNL stems
 Result: limits have 0 real hits; 4 heading shapes added as must-test
 Decision: design accepted
 Next: IMPLEMENTING via coder
+
+## IMPLEMENTING - TASK-108 - 2026-11-15T05:43:45Z
+Action: coder implemented 108.1-108.4 (+golden pin)
+Result: --fast NEW 0; 5/6 new tests fail on old code; coordinator checked real text: Câu N-M lines are all intros
+Decision: accept, incl. golden pin update
+Next: UNIT_TESTED via tester

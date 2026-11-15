@@ -173,7 +173,14 @@ PART_RE = re.compile(r"^\s*" + segment.PART_WORD + r"\s+(IV|V|I{1,3})\b[^\n]*(?:
 def split_part(text):
     """(roman part or None, text without the leading part heading line)."""
     m = PART_RE.match(text)
-    return (m.group(1).upper(), text[m.end():].strip()) if m else (None, text)
+    if not m:
+        return None, text
+    line = m.group(0).rstrip("\n")
+    tail = line[m.end(1):]
+    # a stem such as `Phần I của văn bản ...` is not a heading: keep it whole
+    if tail.strip() and tail.lstrip()[:1] not in ".:)–-" and not segment._mostly_upper(line):
+        return None, text
+    return m.group(1).upper(), text[m.end():].strip()
 
 
 def _gaps(questions):
@@ -240,7 +247,7 @@ def validate_refined(obj, originals=None):
         if not isinstance(q.get("cut", False), bool):
             errs.append("question %d: cut must be a boolean" % i)
         orig = (originals or {}).get(qid)
-        if orig and orig["options"] and not q.get("unreadable") and not set("ABCD") <= set(opts):
+        if orig and orig["options"] and not q.get("unreadable") and q.get("cut") is not True and not set("ABCD") <= set(opts):
             errs.append("question %s: options A-D expected (the source has options)" % qid)
     return errs
 
@@ -585,7 +592,7 @@ def refine(doc, spec, llm, source_path=None, max_cost=1.0, model="sonnet", allow
                 carried = ""
             found, rest = split_part(q["text"])
             part = found or part
-            if not rest and not q.get("options"):
+            if not rest and not q.get("options") and not q.get("unreadable"):
                 continue
             items.append(dict(q, text=rest, part=part))
         if carried and "continues" in obj and not numbered:

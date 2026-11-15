@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-108",
   "title": "Fix-A ingest boundaries: 108-F001/F002/F004/F005/F010 (REQ-0115)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0115",
   "acceptance_criteria": [
     "AC1 cut reply passes validation",
@@ -19,8 +19,14 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/ingest/refine.py",
+      "src/exam_engine/ingest/segment.py",
+      "tests/unit/test_generality_golden.py",
+      "tests/unit/test_ingest_triage_fixes.py"
+    ],
+    "summary": "108.1 cut reply exempt from A-D check; 108.2 _INTRO shares GROUP_RE span, _q_start lets intro win over _Q; 108.3 empty unreadable kept; 108.4 split_part keeps non-heading stems; golden pattern pin updated for 108.2"
   },
   "unit_test": {
     "status": "pending",
@@ -43,7 +49,8 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-108/handoff/design.md"
+    "designer": "work/TASK-108/handoff/design.md",
+    "coder": "work/TASK-108/handoff/code.md"
   },
   "user_notes": [
     {
@@ -58,14 +65,17 @@
     }
   ],
   "picked_at": "2026-11-15T03:27:10Z",
-  "updated_at": "2026-11-15T03:31:03Z",
+  "updated_at": "2026-11-15T05:43:45Z",
   "updated_by": "main",
-  "scope": [],
+  "scope": [
+    "src/exam_engine/ingest/*.py",
+    "tests/unit/*.py"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
     "done": [],
     "notes": ""
   },
-  "next": "coder implements 108.1-108.4 with regression tests"
+  "next": "tester reviews the 6 regression tests and runs --fast"
 }

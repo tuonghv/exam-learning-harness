@@ -15,16 +15,16 @@ def build(table):
     rng = langtable.alt("(?:-|–|đến|to)", "range", table)
     lead = langtable.alt("(?:Dựa vào|Đọc|Hãy đọc|Based on|Read|Use|Study)", "intro", table)
     part = langtable.alt("(?:PH[ẦA]N|PART)", "part", table)
+    span = (grp + r"\s*(?:từ\s*)?(\d+)"
+            r"(?:\s*" + rng + r"\s*(?:[Cc]âu\s*)?(\d+)|\s+and\s+(\d+)|((?:\s*,\s*\d+)+))")
     return types.SimpleNamespace(
         _Q=re.compile(r"^\s*(?:" + q + r"\s*(\d+)\s*[.:)]?|(\d+)(?!\.\d)\s*[.)])\s*(.*)$", re.I),  # `3.1.` is a sub-number, not question 3
         # a group passage intro ("Questions 46-52 ...") or a part heading is not part of option D
         # forms: `N-M`, `N đến (câu )M`, `N to M`, `N and M`, `N, M(, K)`; read the span with group_span()
-        GROUP_RE=re.compile(grp + r"\s*(?:từ\s*)?(\d+)"
-                            r"(?:\s*" + rng + r"\s*(?:[Cc]âu\s*)?(\d+)|\s+and\s+(\d+)|((?:\s*,\s*\d+)+))"),
+        GROUP_RE=re.compile(span),
         # opens a context only at the line start (short prefix allowed), so a wrapped option that
         # mentions "câu 3-5" stays in option D
-        _INTRO=re.compile(r"^\s*(?:" + lead + r"\b[^\n]{0,120}?)?"
-                          + grp + r"\s*(?:từ\s*)?\d+\s*" + rng + r"\s*\d+"),
+        _INTRO=re.compile(r"^\s*(?:" + lead + r"\b[^\n]{0,120}?)?" + span),
         _PART=re.compile(r"^\s*" + part + r"\s+(IV|V|I{1,3})\b", re.I),  # as refine.PART_RE (refine imports this module)
         # a heading that must not be glued into option D: Roman or Arabic part heading
         _PART_ANY=re.compile(r"^\s*" + part + r"\s+(?:IV|V|I{1,3}|\d{1,2})\b", re.I),
@@ -48,9 +48,14 @@ _KEYS = ["A", "B", "C", "D"]
 _ENDS = ("passage", "section_start", "subject_start", "question_end")
 
 
+def _q_start(line):
+    """_Q match unless the line is a group intro (`Câu 31-35: Đọc ...`), which is context."""
+    return None if _INTRO.match(line) else _Q.match(line)
+
+
 def _next_n(lines, i):
     for ln in lines[i:]:
-        m = _Q.match(ln)
+        m = _q_start(ln)
         if m:
             return int(m.group(1) or m.group(2))
     return None
@@ -201,7 +206,7 @@ def segment(lines, hints=None, report=None, starts=None):
 
     for i, line in enumerate(lines):
         hint = hints.get(i) if qs else None
-        m = _Q.match(line)
+        m = _q_start(line)
         if m:
             n = int(m.group(1) or m.group(2))
             if hint and n == qs[-1]["n"] + 1:
