@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-108",
-  "state": "UNIT_TESTED",
-  "next": "verify on real DGNL refine/segment output: no change except the 4 fixed shapes",
+  "state": "VERIFIED",
+  "next": "write report, close TASK-108; next Fix-B adapter",
   "title": "Fix-A ingest boundaries: 108-F001/F002/F004/F005/F010 (REQ-0115)",
   "active": [
     {
       "task_id": "TASK-108",
-      "state": "UNIT_TESTED",
-      "next": "verify on real DGNL refine/segment output: no change except the 4 fixed shapes",
-      "updated_at": "2026-11-15T05:45:57Z"
+      "state": "VERIFIED",
+      "next": "write report, close TASK-108; next Fix-B adapter",
+      "updated_at": "2026-11-15T05:46:43Z"
     }
   ],
   "max_active": 1
