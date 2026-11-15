@@ -2242,5 +2242,27 @@
     ],
     "completed_at": "2026-11-15T15:15:01Z",
     "report": "docs/report/phase-111-cli-exit-codes.md"
+  },
+  {
+    "task_id": "TASK-112",
+    "title": "Fix-E metrics: 109-F002 shared_ref, 109-F004 board_delta n (REQ-0119)",
+    "priority": 2,
+    "status": "queued",
+    "created_at": "2026-11-16T09:00:00",
+    "requirement": "REQ-0119",
+    "acceptance_criteria": [
+      "AC1 missing sibling not penalised",
+      "AC2 real unlink/overlink still fail",
+      "AC3 board_delta n pairs",
+      "AC4 phase-69 row superseded",
+      "AC5 tests + stored-run oracle"
+    ],
+    "user_notes": [
+      {
+        "raw": "RAW-00337",
+        "note": "user: Fix-E as recommended (shared_ref over extracted ids), auto",
+        "at": "2026-11-15T21:58:56Z"
+      }
+    ]
   }
 ]
