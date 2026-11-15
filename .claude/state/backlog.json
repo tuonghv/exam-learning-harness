@@ -2195,5 +2195,27 @@
     ],
     "completed_at": "2026-11-15T06:06:02Z",
     "report": "docs/report/phase-109-claude-adapter.md"
+  },
+  {
+    "task_id": "TASK-110",
+    "title": "Fix-C review pack: 111-F004/F006/F007/F005 (REQ-0117)",
+    "priority": 1,
+    "status": "queued",
+    "created_at": "2026-11-15T14:30:00",
+    "requirement": "REQ-0117",
+    "acceptance_criteria": [
+      "AC1 marks kept",
+      "AC2 apply no crash",
+      "AC3 no false Answer changed",
+      "AC4 backup not a subject",
+      "AC5 tests + old/new oracle"
+    ],
+    "user_notes": [
+      {
+        "raw": "RAW-00335",
+        "note": "user: go ahead with Fix-C",
+        "at": "2026-11-15T14:51:00Z"
+      }
+    ]
   }
 ]
