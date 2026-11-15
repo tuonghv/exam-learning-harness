@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-107",
   "title": "triage code-review findings 107-111: BUG/IMPROVEMENT/NOT-A-DEFECT + prioritised fix plan, no source fix (REQ-0114)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0114",
   "acceptance_criteria": [
     "AC1 41 findings classified with evidence",
@@ -10,9 +10,9 @@
     "AC4 no src/tests change; triage doc in docs/design"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-107-review-triage.md",
+    "summary": "41 review findings triaged: 17 BUG (11 reproduced $0), 21 IMPROVEMENT, 3 NOT-A-DEFECT; priority plan Fix-A ingest, Fix-B adapter, Fix-C review pack (P1), Fix-D cli, Fix-E metrics (P2), hardening (P3) (designer handoffs: design-cli.md, design-ingest.md, design-pipeline.md)",
     "reuse": [],
     "risks": []
   },
@@ -40,7 +40,9 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-107/handoff/design-ingest.md"
+  },
   "user_notes": [
     {
       "raw": "RAW-00331",
@@ -54,8 +56,8 @@
     }
   ],
   "picked_at": "2026-11-15T03:14:21Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-15T03:19:50Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -63,5 +65,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "user approves the triage plan, then close TASK-107 and open Fix-A as its own REQ/TASK"
 }

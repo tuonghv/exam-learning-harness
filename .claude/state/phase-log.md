@@ -3085,3 +3085,9 @@ Action: report
 Result: docs/report/phase-106-exam-backup.md
 Decision: done
 Next: none queued
+
+## DESIGN - TASK-107 - 2026-11-15T03:19:50Z
+Action: 3 designers deep-dived 41 findings; coordinator reproduced 11 BUG rows at $0 and merged
+Result: 17 BUG, 21 IMPROVEMENT, 3 NOT-A-DEFECT; plan in phase-107-review-triage.md
+Decision: P1 = ingest boundaries, Claude adapter, review pack
+Next: user approval of the plan
