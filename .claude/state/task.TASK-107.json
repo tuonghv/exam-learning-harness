@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-107",
   "title": "triage code-review findings 107-111: BUG/IMPROVEMENT/NOT-A-DEFECT + prioritised fix plan, no source fix (REQ-0114)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0114",
   "acceptance_criteria": [
     "AC1 41 findings classified with evidence",
@@ -39,11 +39,18 @@
       "work/TASK-107/repro.out"
     ],
     "command": "python3 -I work/TASK-107/repro.py; git diff --name-only 2d09c8f HEAD -- src tests",
-    "result": "AC1-AC4 met; 12 BUG repros, 0 src/tests files changed; plan approved by user (RAW-00332)"
+    "result": "AC1-AC4 met; 12 BUG repros, 0 src/tests files changed; plan approved by user (RAW-00332)",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-107/repro.out"
+      ],
+      "reason": "12 BUG rows re-run independently of the reviewers"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-107-review-triage.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -58,6 +65,9 @@
     },
     "verifier": {
       "waiver": "triage-only task; the user approved the plan (RAW-00332), coordinator checked ACs in verify.md"
+    },
+    "crosscheck": {
+      "waiver": "crosscheck run by the coordinator itself: repro.py re-ran 12 BUG rows independently of the reviewers (work/TASK-107/repro.out)"
     }
   },
   "user_notes": [
@@ -78,7 +88,7 @@
     }
   ],
   "picked_at": "2026-11-15T03:14:21Z",
-  "updated_at": "2026-11-15T03:26:16Z",
+  "updated_at": "2026-11-15T03:26:46Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -87,5 +97,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "write the report and close TASK-107; then open Fix-A ingest REQ/TASK"
+  "next": ""
 }

@@ -2113,7 +2113,7 @@
     "task_id": "TASK-107",
     "title": "triage code-review findings 107-111: BUG/IMPROVEMENT/NOT-A-DEFECT + prioritised fix plan, no source fix (REQ-0114)",
     "priority": 2,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-15T10:20:00",
     "requirement": "REQ-0114",
     "acceptance_criteria": [
@@ -2132,7 +2132,14 @@
         "raw": "RAW-00330",
         "note": "user: reviews are advisory, design from code",
         "at": "2026-11-15T03:14:17Z"
+      },
+      {
+        "raw": "RAW-00332",
+        "note": "user approved the triage plan (Fix-A first)",
+        "at": "2026-11-15T03:25:37Z"
       }
-    ]
+    ],
+    "completed_at": "2026-11-15T03:26:46Z",
+    "report": "docs/report/phase-107-review-triage.md"
   }
 ]

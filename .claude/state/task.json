@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-107",
-  "state": "VERIFIED",
-  "next": "write the report and close TASK-107; then open Fix-A ingest REQ/TASK",
+  "state": "DONE",
+  "next": "",
   "title": "triage code-review findings 107-111: BUG/IMPROVEMENT/NOT-A-DEFECT + prioritised fix plan, no source fix (REQ-0114)",
-  "active": [
-    {
-      "task_id": "TASK-107",
-      "state": "VERIFIED",
-      "next": "write the report and close TASK-107; then open Fix-A ingest REQ/TASK",
-      "updated_at": "2026-11-15T03:26:16Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
