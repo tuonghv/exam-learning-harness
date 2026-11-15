@@ -50,6 +50,11 @@
       "raw": "RAW-00332",
       "note": "user approved triage plan; Fix-A first",
       "at": "2026-11-15T03:27:10Z"
+    },
+    {
+      "raw": "RAW-00333",
+      "note": "limit reset: resume coder",
+      "at": "2026-11-15T05:41:19Z"
     }
   ],
   "picked_at": "2026-11-15T03:27:10Z",
