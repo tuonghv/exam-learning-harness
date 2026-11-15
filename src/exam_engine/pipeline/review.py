@@ -24,6 +24,7 @@ HOWTO = ("How to review: you review the EXTRACTION (is the question text and eve
          "Do not edit lines starting with `## Q`.")
 HEAD_RE = re.compile(r"^## Q(\d+)  p\.(\S+)  (\S+)  answer (\S)  conf (\S+)\s*$")
 LOOSE_RE = re.compile(r"^##\s*Q?\s*(\d+)")
+ANS_LOOSE_RE = re.compile(r"\banswer\s+(\S)(?:\s|$)")
 QA_HEAD = ("QA: in-session independent reads of the source (same model family as the engine: not an official "
            "key, agreement is not proof). You review the extraction; the answer is QA's job. Verdicts: agrees, "
            "differs, flawed, qa-only, unresolved, engine-nonletter.")
@@ -242,6 +243,10 @@ def parse_subject(text):
                    "bad": not m, "qaline": None}
             if m:
                 cur.update(page=m.group(2), status=m.group(3), answer=m.group(4), conf=m.group(5))
+            elif lm:
+                am = ANS_LOOSE_RE.search(ln)
+                if am:
+                    cur["answer"] = am.group(1)
             rows.append(cur)
         elif cur is not None:
             if ln.startswith("QA: "):
@@ -300,7 +305,7 @@ def _write(path, text):
 
 def _subject_files(d):
     return sorted(f for f in os.listdir(d) if f.endswith(".md") and f not in SUBJECT_SKIP
-                  and not f.endswith(".new.md"))
+                  and not f.endswith((".new.md", ".old.md")))
 
 
 def _is_marked(r):
@@ -316,10 +321,10 @@ def pack(exam_id, subject, result_path, exam_path, refined_path=None, offset=0, 
     result, exam = _load(result_path), exam_sections(exam_path)
     refined = refined_info(refined_path) if refined_path else {}
     path = os.path.join(d, subject + ".md")
-    old, olds, keep = {}, {}, {}
+    old, olds, keep, rows_old = {}, {}, {}, []
     if os.path.exists(path) and not force_reset:
         with open(path, encoding="utf-8") as fh:
-            rows = parse_subject(fh.read())
+            rows = rows_old = parse_subject(fh.read())
         olds = {r["n"]: r for r in rows if r["n"] is not None}
         old = {n: r for n, r in olds.items() if _is_marked(r)}
         keep = {n: x for n, x in ((n, _parse_qaline(r["qaline"])) for n, r in olds.items()) if x}
@@ -335,11 +340,20 @@ def pack(exam_id, subject, result_path, exam_path, refined_path=None, offset=0, 
     unmatched = sorted(set(qa) - {n for n, _, _ in secs})
     new_ns = {n for n, _, _ in secs}
     lost = sorted(set(old) - new_ns)
+    counts = {}
+    for r in rows_old:
+        counts[r["n"]] = counts.get(r["n"], 0) + 1
+    orphans = sorted({"?" if r["n"] is None else str(r["n"]) for r in rows_old
+                      if _is_marked(r) and (r["n"] is None or counts[r["n"]] > 1)})
     msg = "wrote %s (%d questions)" % (path, len(secs))
-    if lost:
+    if lost or orphans:
         path = os.path.join(d, subject + ".new.md")
-        msg = "kept your marks in %s.md (Q%s not in the new pack); wrote %s instead" % (
-            subject, ",".join(map(str, lost)), path)
+        why = []
+        if lost:
+            why.append("Q%s not in the new pack" % ",".join(map(str, lost)))
+        if orphans:
+            why.append("Q%s unnumbered or duplicate heading" % ",".join(orphans))
+        msg = "kept your marks in %s.md (%s); wrote %s instead" % (subject, "; ".join(why), path)
         old = {}
     elif old:
         msg += "; merged %d existing marks by printed number" % len(old)
@@ -354,9 +368,10 @@ def pack(exam_id, subject, result_path, exam_path, refined_path=None, offset=0, 
         out_lines = []
         for l in lines:
             if l == TEMPLATE and o:
-                if o["changed"] and o["answer"] == h["answer"]:
+                known = not o["bad"] or o["answer"] != "-"
+                if o["changed"] and (not known or o["answer"] == h["answer"]):
                     out_lines.append(o["changed"])
-                elif o["answer"] != h["answer"]:
+                elif known and o["answer"] != h["answer"]:
                     out_lines.append("Answer changed: was %s now %s" % (o["answer"], h["answer"]))
                     changed += 1
                 out_lines.append(o["review"])
@@ -450,13 +465,14 @@ def apply(exam_id, out="review"):
             ext, sol, corr, nt = parse_review(r["review"])
             e[ext] += 1
             s[sol] += 1
-            tag = "%s Q%s" % (sub, r["n"])
+            lab = "?" if r["n"] is None else r["n"]
+            tag = "%s Q%s" % (sub, lab)
             if r["n"] is None:
                 secbad.append(sub)
             elif r["bad"]:
                 edited.append(tag)
             if ext == "defect":
-                dl.append("Q%d%s" % (r["n"], " (%s)" % nt if nt else ""))
+                dl.append("Q%s%s" % (lab, " (%s)" % nt if nt else ""))
                 defects.append(tag)
             if sol == "disagree":
                 sdis.append("%s%s" % (tag, " correct " + corr if corr else ""))

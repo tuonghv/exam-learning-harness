@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-110",
-  "state": "DESIGN",
-  "next": "coder implements 110.1-110.4 with tests in tests/unit/test_review.py",
+  "state": "IMPLEMENTING",
+  "next": "tester reviews the 9 tests and runs --fast",
   "title": "Fix-C review pack: 111-F004/F006/F007/F005 (REQ-0117)",
   "active": [
     {
       "task_id": "TASK-110",
-      "state": "DESIGN",
-      "next": "coder implements 110.1-110.4 with tests in tests/unit/test_review.py",
-      "updated_at": "2026-11-15T14:53:27Z"
+      "state": "IMPLEMENTING",
+      "next": "tester reviews the 9 tests and runs --fast",
+      "updated_at": "2026-11-15T14:57:13Z"
     }
   ],
   "max_active": 1

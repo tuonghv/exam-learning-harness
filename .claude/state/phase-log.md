@@ -3181,3 +3181,9 @@ Action: designer drafted 5 items
 Result: all 120 real headings match HEAD_RE; real pack expected byte-identical
 Decision: design accepted; repro row 111-F004 superseded by test_110_1 (D1)
 Next: IMPLEMENTING via coder
+
+## IMPLEMENTING - TASK-110 - 2026-11-15T14:57:12Z
+Action: coder implemented 110.1-110.4; coordinator ran 110.5
+Result: 8/9 tests bite on old; --fast NEW 0; real pack parse + apply identical old vs new, md5 untouched
+Decision: accept
+Next: UNIT_TESTED via tester

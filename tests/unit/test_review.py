@@ -69,6 +69,16 @@ class Base(unittest.TestCase):
         with open(os.path.join(self.out, "X1", sub + ".md"), "w", encoding="utf-8") as fh:
             fh.write("\n".join(txt))
 
+    def retitle(self, sub, n, fn):
+        """Rewrite the `## Q<n> ` heading line of a subject file with fn(line)."""
+        path = os.path.join(self.out, "X1", sub + ".md")
+        with open(path, encoding="utf-8") as fh:
+            txt = fh.read().split("\n")
+        i = next(k for k, ln in enumerate(txt) if ln.startswith("## Q%d " % n))
+        txt[i] = fn(txt[i])
+        with open(path, "w", encoding="utf-8") as fh:
+            fh.write("\n".join(txt))
+
 
 def tick(ext="", sol="", correct="_", note=""):
     e = {k: "[x]" if k == ext else "[ ]" for k in ("ok", "defect")}
@@ -145,6 +155,62 @@ class PackTests(Base):
         self.assertIn(mark, self.read("A.md"))
         review.pack("X1", "A", self.result([q(1), q(2)]), self.w("e2.md", exam_md(2)), None, 0, self.out, True)
         self.assertNotIn(mark, self.read("A.md"))
+
+    def test_110_1_unnumbered_marked_kept(self):
+        self.pack("A", [q(1), q(2)], n=2)
+        self.fill("A", 2, tick("ok"))
+        self.retitle("A", 2, lambda ln: "## Question 2")
+        _, msg = self.pack("A", [q(1), q(2)], n=2)
+        self.assertIn("A.new.md", msg)
+        self.assertIn("Q? unnumbered or duplicate heading", msg)
+        self.assertIn(tick("ok"), self.read("A.md"))
+
+    def test_110_1_duplicate_marked_kept(self):
+        self.pack("A", [q(1), q(2)], n=2)
+        self.fill("A", 2, tick("defect"))
+        self.retitle("A", 1, lambda ln: ln.replace("## Q1 ", "## Q2 ", 1))
+        _, msg = self.pack("A", [q(1), q(2)], n=2)
+        self.assertIn("A.new.md", msg)
+        self.assertIn("Q2 unnumbered or duplicate heading", msg)
+        self.assertEqual(self.read("A.md").count("\n## Q2 "), 2)
+
+    def test_110_1_unmarked_unnumbered_merges(self):
+        self.pack("A", [q(1), q(2)], n=2)
+        self.fill("A", 1, tick("ok"))
+        with open(os.path.join(self.out, "X1", "A.md"), "a", encoding="utf-8") as fh:
+            fh.write("\n## my own section\n")
+        _, msg = self.pack("A", [q(1), q(2)], n=2)
+        self.assertIn("merged 1", msg)
+        self.assertNotIn(".new.md", msg)
+
+    def _edited_head(self, ans="A"):
+        self.pack("A", [q(1, "A")], n=1)
+        self.fill("A", 1, tick("ok"))
+        self.retitle("A", 1, lambda ln: " ".join(ln.split()))
+
+    def test_110_3_edited_heading_same_answer(self):
+        self._edited_head()
+        _, msg = self.pack("A", [q(1, "A")], n=1)
+        self.assertNotIn("Answer changed", self.read("A.md"))
+        self.assertNotIn("marked answers changed", msg)
+        self.assertIn("merged 1", msg)
+
+    def test_110_3_edited_heading_real_change(self):
+        self._edited_head()
+        _, msg = self.pack("A", [q(1, "C")], n=1)
+        self.assertIn("Answer changed: was A now C", self.read("A.md"))
+        self.assertIn("1 marked answers changed", msg)
+
+    def test_110_3_edited_heading_no_answer_token(self):
+        self._edited_head()
+        self.retitle("A", 1, lambda ln: "## Q1 edited")
+        _, msg = self.pack("A", [q(1, "C")], n=1)
+        self.assertNotIn("Answer changed", self.read("A.md"))
+        self.assertNotIn("marked answers changed", msg)
+
+    def test_110_3_parse_recovers_answer(self):
+        r = review.parse_subject("## Q5 p.1 PASS answer A conf high\n")[0]
+        self.assertEqual((r["n"], r["bad"], r["answer"]), (5, True, "A"))
 
 
 class ApplyTests(Base):
@@ -237,6 +303,30 @@ class ApplyTests(Base):
         rc, _, err = self.run_cli("review-apply", "--exam-id", "nope", "--out", self.out)
         self.assertEqual(rc, 2)
         self.assertIn("ERROR", err)
+
+    def test_110_2_defect_in_unnumbered_section(self):
+        self.pack("A", [q(1)], n=1)
+        self.fill("A", 1, tick("defect", note="x"))
+        self.retitle("A", 1, lambda ln: "## Question 1")
+        rc, out, _ = self.run_cli("review-apply", "--exam-id", "X1", "--out", self.out)
+        self.assertEqual(rc, 0)
+        self.assertIn("extraction defects: Q? (x)", out)
+        self.assertIn("unparsed section", out)
+        imp = self.read("improvements.md")
+        self.assertIn("A Q?", imp)
+        self.assertIn("- unparsed section: A", imp)
+
+    def test_110_4_old_backup_not_subject(self):
+        self.pack("A", [q(1)], n=1)
+        d = os.path.join(self.out, "X1")
+        with open(os.path.join(d, "A.old.md"), "w", encoding="utf-8") as fh:
+            fh.write(self.read("A.md"))
+        self.assertEqual(review._subject_files(d), ["A.md"])
+        rc, out, _ = self.run_cli("review-apply", "--exam-id", "X1", "--out", self.out)
+        self.assertEqual(rc, 0)
+        self.assertNotIn("A.old", out)
+        review.write_index(d, "X1")
+        self.assertNotIn("A.old", self.read("INDEX.md"))
 
 
 if __name__ == "__main__":
