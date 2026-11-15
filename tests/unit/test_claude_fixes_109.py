@@ -33,6 +33,14 @@ class Classify(unittest.TestCase):
                        ("429 rate limit hit", "rate_limit")):
             self.assertEqual(L._classify(t), cls, t)
 
+    def test_109_1_more_real_messages_keep_class(self):
+        for t, cls in (("You've hit your 5-hour limit \u00b7 resets 7pm", "rate_limit"),
+                       ("API Error: 401 Invalid API key", "auth"),
+                       ("API Error: 500 Internal server error", "service"),
+                       ('{"service_tier":"standard","n":401}', "other"),
+                       ("Prompt is too long: 215003 tokens", "other")):
+            self.assertEqual(L._classify(t), cls, t)
+
     def test_109_1_run_with_prompt_too_long_not_blocking(self):
         out = json.dumps({"type": "result", "is_error": True, "total_cost_usd": 0.0,
                           "result": "Prompt is too long: 215003 tokens > 200000 maximum"})
@@ -57,6 +65,14 @@ class Extract(unittest.TestCase):
 
     def test_109_2_two_objects_still_rejected(self):
         self.assertEqual(L.extract_json('{"a":1} x {"a":2}'), (None, "no valid JSON object found"))
+
+    def test_109_2_unbalanced_brace_before_object_no_result(self):
+        for t in ('Set {x then {"answer":"A"}', 'Set { and {"answer": "A"}'):
+            self.assertEqual(L.extract_json(t), (None, "no valid JSON object found"), t)
+
+    def test_109_2_fence_wins_over_prose_object(self):
+        for t in ('text {"a":1} and ```json\n{"b":2}\n```', '```json\n{"b":2}\n```\nprose {"a":1}'):
+            self.assertEqual(L.extract_json(t), ({"b": 2}, None), t)
 
     def test_109_2_objects_unchanged(self):
         self.assertEqual(L._objects('x {"a":1} y {"b":[1,{"c":2}]} z'), [{"a": 1}, {"b": [1, {"c": 2}]}])
