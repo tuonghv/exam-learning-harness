@@ -2247,7 +2247,7 @@
     "task_id": "TASK-112",
     "title": "Fix-E metrics: 109-F002 shared_ref, 109-F004 board_delta n (REQ-0119)",
     "priority": 2,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-11-16T09:00:00",
     "requirement": "REQ-0119",
     "acceptance_criteria": [
