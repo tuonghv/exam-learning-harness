@@ -174,6 +174,17 @@ class PackTests(Base):
         self.assertIn("Q2 unnumbered or duplicate heading", msg)
         self.assertEqual(self.read("A.md").count("\n## Q2 "), 2)
 
+    def test_110_1_duplicate_both_marked_kept(self):
+        self.pack("A", [q(1), q(2)], n=2)
+        self.fill("A", 1, tick("ok", note="m1"))
+        self.fill("A", 2, tick("defect", note="m2"))
+        self.retitle("A", 1, lambda ln: ln.replace("## Q1 ", "## Q2 ", 1))
+        _, msg = self.pack("A", [q(1), q(2)], n=2)
+        self.assertIn("Q2 unnumbered or duplicate heading", msg)
+        t = self.read("A.md")
+        self.assertIn(tick("ok", note="m1"), t)
+        self.assertIn(tick("defect", note="m2"), t)
+
     def test_110_1_unmarked_unnumbered_merges(self):
         self.pack("A", [q(1), q(2)], n=2)
         self.fill("A", 1, tick("ok"))
@@ -198,6 +209,7 @@ class PackTests(Base):
     def test_110_3_edited_heading_real_change(self):
         self._edited_head()
         _, msg = self.pack("A", [q(1, "C")], n=1)
+        self.assertEqual(self.read("A.md").count("Answer changed"), 1)
         self.assertIn("Answer changed: was A now C", self.read("A.md"))
         self.assertIn("1 marked answers changed", msg)
 
@@ -327,6 +339,15 @@ class ApplyTests(Base):
         self.assertNotIn("A.old", out)
         review.write_index(d, "X1")
         self.assertNotIn("A.old", self.read("INDEX.md"))
+
+    def test_110_4_only_subject_listed_among_backups_and_reports(self):
+        self.pack("S", [q(1)], n=1)
+        d = os.path.join(self.out, "X1")
+        for name in ("S.old.md", "improvements.md"):
+            with open(os.path.join(d, name), "w", encoding="utf-8") as fh:
+                fh.write("x")
+        self.assertTrue(os.path.exists(os.path.join(d, "INDEX.md")))
+        self.assertEqual(review._subject_files(d), ["S.md"])
 
 
 if __name__ == "__main__":

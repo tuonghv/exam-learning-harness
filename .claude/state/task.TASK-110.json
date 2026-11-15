@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-110",
   "title": "Fix-C review pack: 111-F004/F006/F007/F005 (REQ-0117)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0117",
   "acceptance_criteria": [
     "AC1 marks kept",
@@ -26,9 +26,9 @@
     "summary": "110.1 marked unnumbered/duplicate rows -> .new.md branch; 110.2 Q? label in apply; 110.3 answer recovered from edited heading, change line only when known and different; 110.4 skip .old.md"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit -p test_review.py; python3 -I tools/run_tests.py --fast",
+    "result": "test_review OK; --fast 2009 KNOWN 4 NEW 0; 10/11 test_110_* bite on old"
   },
   "security": {
     "status": "pending",
@@ -47,7 +47,8 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-110/handoff/design.md",
-    "coder": "work/TASK-110/handoff/code.md"
+    "coder": "work/TASK-110/handoff/code.md",
+    "tester": "work/TASK-110/handoff/test.md"
   },
   "user_notes": [
     {
@@ -57,7 +58,7 @@
     }
   ],
   "picked_at": "2026-11-15T14:51:00Z",
-  "updated_at": "2026-11-15T14:57:13Z",
+  "updated_at": "2026-11-15T14:59:26Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/review.py",
@@ -69,5 +70,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tester reviews the 9 tests and runs --fast"
+  "next": "verify on real pack copy"
 }
