@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-111",
   "title": "Fix-D CLI exits: 107-F001/F002/F008 (REQ-0118)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0118",
   "acceptance_criteria": [
     "AC1 recipe not overwritten",
@@ -25,9 +25,9 @@
     "summary": "111.1 _argparse_exit at 11 argparse sites + _help_asked in 5 hand-parsed usage branches: --help 0 in all 16, unknown flag 2; 111.2 _write_recipe refuses a corrupt recipe (exit 2, file untouched); 111.3 run-stats --exam load failure exits 2, no history"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I -m unittest discover -s tests/unit -p test_cli_exit_codes_111.py; python3 -I tools/run_tests.py --fast",
+    "result": "OK; --fast 2020 KNOWN 4 NEW 0; 48 subtests fail on old"
   },
   "security": {
     "status": "pending",
@@ -46,7 +46,8 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-111/handoff/design.md",
-    "coder": "work/TASK-111/handoff/code.md"
+    "coder": "work/TASK-111/handoff/code.md",
+    "tester": "work/TASK-111/handoff/test.md"
   },
   "user_notes": [
     {
@@ -56,7 +57,7 @@
     }
   ],
   "picked_at": "2026-11-15T15:05:58Z",
-  "updated_at": "2026-11-15T15:12:31Z",
+  "updated_at": "2026-11-15T15:14:52Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
@@ -68,5 +69,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tester reviews tests and runs --fast"
+  "next": "verify with CLI oracle"
 }

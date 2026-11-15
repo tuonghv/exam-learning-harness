@@ -86,5 +86,60 @@ class T3RunStats(Tmp):
             self.assertFalse(os.path.exists(h))
 
 
+class T4Edges(Tmp):
+    def test_short_h_exits_0_with_usage(self):
+        for name in ("parse", "verify", "report", "lessons", "ingest"):
+            with self.subTest(name):
+                code, out, err = quiet(getattr(cli, name + "_main"), ["-h"])
+                self.assertEqual(code, 0, err)
+                self.assertIn("usage", (out + err).lower())
+
+    def test_help_after_positional_exits_0(self):
+        for name, argv in (("parse", ["x.md", "--help"]), ("verify", ["x.md", "--help"]),
+                           ("lessons", ["x", "--help"]), ("ingest", ["x.pdf", "--help"])):
+            with self.subTest(name):
+                code, out, err = quiet(getattr(cli, name + "_main"), argv)
+                self.assertEqual(code, 0, err)
+                self.assertIn("usage", (out + err).lower())
+
+    def test_help_prints_usage_all(self):
+        for name in HELP_MAINS:
+            with self.subTest(name):
+                code, out, err = quiet(getattr(cli, name + "_main"), ["--help"])
+                self.assertEqual(code, 0)
+                self.assertIn("usage", (out + err).lower())
+
+    def test_recipe_wrong_type_refused_byte_identical(self):
+        os.makedirs(os.path.join(self.tmp, "reports"))
+        for body in (b"[]", b'["a", 1]', b"null", b'"s"'):
+            with self.subTest(body=body):
+                p = os.path.join(self.tmp, "r.json")
+                with open(p, "wb") as fh:
+                    fh.write(body)
+                code, _, err = quiet(cli.rebuild_reports_main, ["--write-recipe", "--recipe", p,
+                                                                "--reports", os.path.join(self.tmp, "reports")])
+                self.assertEqual(code, 2, err)
+                self.assertIn("ERROR", err)
+                with open(p, "rb") as fh:
+                    self.assertEqual(fh.read(), body)
+
+    def test_good_exam_stats_exit_0_and_solve_history_written(self):
+        o, h = os.path.join(self.tmp, "o"), os.path.join(self.tmp, "h")
+        exam = os.path.join(ROOT, "examples/english/input-001.md")
+        code, _, err = quiet(cli.solve_main, [exam, "--mock", os.path.join(ROOT, "tests/unit/fixtures/mock_english_001.json"),
+                                              "--out", o, "--no-pdf", "--history", h])
+        self.assertTrue(os.path.isfile(os.path.join(o, "result.json")), err)  # solve exit 1 = answers not all correct
+        with open(h, "rb") as fh:
+            before = fh.read()
+        self.assertEqual(before.count(b"\n"), 1)
+        for sub in ("stats", "compare"):
+            argv = [sub, o] + ([o] if sub == "compare" else []) + ["--exam", exam, "--history", h]
+            code, out, err = quiet(cli.run_stats_main, argv)
+            self.assertEqual(code, 0, err)
+            self.assertTrue(out.strip())
+        with open(h, "rb") as fh:
+            self.assertEqual(fh.read(), before)
+
+
 if __name__ == "__main__":
     unittest.main()
