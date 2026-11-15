@@ -3223,3 +3223,9 @@ Action: tester added 5 edge tests
 Result: 0 defects
 Decision: UNIT_TESTED
 Next: VERIFIED
+
+## VERIFIED - TASK-111 - 2026-11-15T15:14:52Z
+Action: old/new CLI oracle
+Result: only intended exit codes changed
+Decision: VERIFIED
+Next: DONE
