@@ -3205,3 +3205,9 @@ Action: wrote report
 Result: TASK-110 closed
 Decision: next Fix-D
 Next: user go for Fix-D
+
+## DESIGN - TASK-111 - 2026-11-15T15:07:45Z
+Action: designer drafted 3 items; coordinator oracle found 16 --help sites (not 11)
+Result: addendum widens 111.1; D1/D2 accepted
+Decision: design accepted
+Next: IMPLEMENTING via coder

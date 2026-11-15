@@ -1,18 +1,18 @@
 {
   "task_id": "TASK-111",
   "title": "Fix-D CLI exits: 107-F001/F002/F008 (REQ-0118)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0118",
   "acceptance_criteria": [
     "AC1 recipe not overwritten",
     "AC2 run-stats exit 2",
-    "AC3 --help exit 0 x11",
+    "AC3 --help exit 0 x16",
     "AC4 tests + old/new oracle"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-111-cli-exit-codes.md",
+    "summary": "111.1 _argparse_exit(exc) helper: --help 0, argparse error 2, at all 16 entry points; 111.2 _write_recipe loads only an existing file and refuses (exit 2) when unreadable; 111.3 _rs_compute raises on exam None -> exit 2 before history write",
     "reuse": [],
     "risks": []
   },
@@ -40,7 +40,9 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-111/handoff/design.md"
+  },
   "user_notes": [
     {
       "raw": "RAW-00336",
@@ -49,8 +51,8 @@
     }
   ],
   "picked_at": "2026-11-15T15:05:58Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-15T15:07:45Z",
+  "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
     "tests/unit/*.py"
@@ -61,5 +63,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder implements 111.1-111.3"
 }
