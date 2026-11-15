@@ -372,7 +372,7 @@ def structure_scores(exam, gold):
             put("instruction", squash(eff) == squash(g["instruction"]), i,
                 "missing" if g["instruction"] and not eff else "leak")
         if "shared" in g:
-            want = {x["id"] for x in gold if x.get("shared") == g["shared"]}
+            want = {x["id"] for x in gold if x.get("shared") == g["shared"] and x["id"] in qs}  # 112.1
             qp = squash(parser._passage(q))
             got = {x["id"] for x in gold if x["id"] in qs and qs[x["id"]].get("section") == q.get("section")
                    and qp and squash(parser._passage(qs[x["id"]])) == qp} | {i}
@@ -654,10 +654,11 @@ def pair(lines, baseline=None):
 
 
 def board_delta(ma, mb, qa=None):
-    """Pair delta A->B (63.3): classify counts plus coverage, quality and cost values of both sides."""
+    """Pair delta A->B (63.3): classify counts plus coverage, quality and cost values of both sides.
+    n = compared pairs (ids in both runs, 112.2)."""
     d = classify(ma, mb, qa)
     res = {k: len(d[k]) for k in _POOL}
-    res.update(basis=d["basis"], n=mb["n"], flips=res["fixed"] + res["regressed"])
+    res.update(basis=d["basis"], n=len({x["id"] for x in ma["questions"]} & {x["id"] for x in mb["questions"]}), flips=res["fixed"] + res["regressed"])
     return res
 
 

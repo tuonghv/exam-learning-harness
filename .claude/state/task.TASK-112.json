@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-112",
   "title": "Fix-E metrics: 109-F002 shared_ref, 109-F004 board_delta n (REQ-0119)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0119",
   "acceptance_criteria": [
     "AC1 missing sibling not penalised",
@@ -18,8 +18,13 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/metrics.py",
+      "tests/unit/test_structure_scores.py",
+      "tests/unit/test_run_board.py"
+    ],
+    "summary": "112.1 shared_ref want limited to extracted ids (metrics.py:375); 112.2 board_delta n = ids in both runs (metrics.py:660)"
   },
   "unit_test": {
     "status": "pending",
@@ -42,7 +47,8 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-112/handoff/design.md"
+    "designer": "work/TASK-112/handoff/design.md",
+    "coder": "work/TASK-112/handoff/code.md"
   },
   "user_notes": [
     {
@@ -52,7 +58,7 @@
     }
   ],
   "picked_at": "2026-11-15T21:58:56Z",
-  "updated_at": "2026-11-15T22:00:45Z",
+  "updated_at": "2026-11-15T22:04:57Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/metrics.py",
@@ -65,5 +71,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "coder makes 2 edits + 4 tests"
+  "next": "record tests"
 }

@@ -251,6 +251,27 @@ class PairTest(Base):
         self.assertIn("no_sha 1", out)
 
 
+class DeltaPairsTest(unittest.TestCase):
+    @staticmethod
+    def r(i):
+        return {"id": i, "answer": "A", "reason": None, "key_ok": True, "status": "PASS"}
+
+    def test_board_delta_n_pairs(self):
+        a = {"questions": [self.r(1)], "n": 1}
+        b = {"questions": [self.r(1), self.r(2)], "n": 2}
+        self.assertEqual(metrics.board_delta(a, b)["n"], 1)
+        self.assertEqual(metrics.board_delta(b, a)["n"], 1)
+
+    def test_board_delta_n_disjoint(self):
+        a = {"questions": [self.r(1)], "n": 1}
+        b = {"questions": [self.r(2)], "n": 1}
+        self.assertEqual(metrics.board_delta(a, b)["n"], 0)
+        a2 = {"questions": [self.r(1)], "n": 1}
+        b2 = {"questions": [self.r(1), self.r(2)], "n": 2}
+        d = metrics.board_delta(a2, b2)
+        self.assertEqual(metrics.pool([d, d])["n"], 2)
+
+
 class GeneralityTest(Base):
     def test_7_non_dgnl_kind_grouped_by_own_label(self):
         wide = [dict(q(1, "ok"), answer="G"), dict(q(2, "ok"), answer="F")]

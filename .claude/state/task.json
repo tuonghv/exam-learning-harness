@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-112",
-  "state": "DESIGN",
-  "next": "coder makes 2 edits + 4 tests",
+  "state": "IMPLEMENTING",
+  "next": "record tests",
   "title": "Fix-E metrics: 109-F002 shared_ref, 109-F004 board_delta n (REQ-0119)",
   "active": [
     {
       "task_id": "TASK-112",
-      "state": "DESIGN",
-      "next": "coder makes 2 edits + 4 tests",
-      "updated_at": "2026-11-15T22:00:45Z"
+      "state": "IMPLEMENTING",
+      "next": "record tests",
+      "updated_at": "2026-11-15T22:04:57Z"
     }
   ],
   "max_active": 1

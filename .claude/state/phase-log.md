@@ -3241,3 +3241,9 @@ Action: designer drafted 2 one-line items
 Result: no stored values (coordinator grep 0)
 Decision: design accepted
 Next: IMPLEMENTING via coder
+
+## IMPLEMENTING - TASK-112 - 2026-11-15T22:04:57Z
+Action: coder made 2 one-line edits + 4 tests
+Result: 3 bite on old, guard passes both; --fast NEW 0
+Decision: accept
+Next: UNIT_TESTED

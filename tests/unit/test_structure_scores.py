@@ -73,6 +73,22 @@ class TestScores(unittest.TestCase):
         self.assertEqual(kn(s, "shared_ref"), (0, 2))
         self.assertEqual({m["why"] for m in s["scores"]["shared_ref"]["miss"]}, {"overlinked"})
 
+    def _g3(self, p1, p2):
+        gold = [{"id": i, "stem": "s", "section": "A", "shared": "g"} for i in (1, 2, 3)]
+        ex = {"questions": [qx(1, "A", "", p1, "s"), qx(2, "A", "", p2, "s")]}
+        return metrics.structure_scores(ex, gold)
+
+    def test_t11_shared_missing_sibling(self):
+        s = self._g3("P", "P")
+        self.assertEqual(kn(s, "shared_ref"), (2, 2))
+        self.assertEqual(s["scores"]["shared_ref"]["miss"], [])
+        self.assertEqual(s["scores"]["extraction"]["miss"], [{"id": 3, "why": "missing"}])
+
+    def test_t12_shared_missing_sibling_unlinked(self):
+        s = self._g3("P", "Q")
+        self.assertEqual(kn(s, "shared_ref"), (0, 2))
+        self.assertEqual({m["why"] for m in s["scores"]["shared_ref"]["miss"]}, {"unlinked"})
+
     def test_t5_gold_set(self):
         with open(FIXTURE, encoding="utf-8") as f:
             fx = json.load(f)
