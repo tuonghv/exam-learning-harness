@@ -2224,7 +2224,7 @@
     "task_id": "TASK-111",
     "title": "Fix-D CLI exits: 107-F001/F002/F008 (REQ-0118)",
     "priority": 2,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-15T15:30:00",
     "requirement": "REQ-0118",
     "acceptance_criteria": [
@@ -2239,6 +2239,8 @@
         "note": "user: auto mode, go ahead with Fix-D without step approvals",
         "at": "2026-11-15T15:05:57Z"
       }
-    ]
+    ],
+    "completed_at": "2026-11-15T15:15:01Z",
+    "report": "docs/report/phase-111-cli-exit-codes.md"
   }
 ]

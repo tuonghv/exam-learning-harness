@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-111",
   "title": "Fix-D CLI exits: 107-F001/F002/F008 (REQ-0118)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0118",
   "acceptance_criteria": [
     "AC1 recipe not overwritten",
@@ -39,11 +39,18 @@
       "work/TASK-111/handoff/verify.md"
     ],
     "command": "python3 -I work/TASK-111/evidence/cli_oracle.py <old|new src>",
-    "result": "16/16 --help 0, unknown flag 2, missing exam 2, normal solve/run-stats unchanged; AC1-AC4 met"
+    "result": "16/16 --help 0, unknown flag 2, missing exam 2, normal solve/run-stats unchanged; AC1-AC4 met",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-111/handoff/verify.md"
+      ],
+      "reason": "old vs new exit codes and outputs of all CLI entry points"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-111-cli-exit-codes.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -54,6 +61,9 @@
     "tester": "work/TASK-111/handoff/test.md",
     "verifier": {
       "waiver": "coordinator ran the CLI oracle itself (verify.md); no paid run needed"
+    },
+    "crosscheck": {
+      "waiver": "coordinator CLI oracle (verify.md) is the crosscheck"
     }
   },
   "user_notes": [
@@ -64,7 +74,7 @@
     }
   ],
   "picked_at": "2026-11-15T15:05:58Z",
-  "updated_at": "2026-11-15T15:14:52Z",
+  "updated_at": "2026-11-15T15:15:01Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
@@ -76,5 +86,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "write report, close TASK-111"
+  "next": ""
 }
