@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-112",
-  "state": "UNIT_TESTED",
-  "next": "verify",
+  "state": "VERIFIED",
+  "next": "write report, close TASK-112",
   "title": "Fix-E metrics: 109-F002 shared_ref, 109-F004 board_delta n (REQ-0119)",
   "active": [
     {
       "task_id": "TASK-112",
-      "state": "UNIT_TESTED",
-      "next": "verify",
-      "updated_at": "2026-11-15T22:04:57Z"
+      "state": "VERIFIED",
+      "next": "write report, close TASK-112",
+      "updated_at": "2026-11-15T22:04:58Z"
     }
   ],
   "max_active": 1

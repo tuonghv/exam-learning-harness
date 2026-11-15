@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-112",
   "title": "Fix-E metrics: 109-F002 shared_ref, 109-F004 board_delta n (REQ-0119)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0119",
   "acceptance_criteria": [
     "AC1 missing sibling not penalised",
@@ -32,12 +32,16 @@
     "result": "OK; --fast 2024 KNOWN 4 NEW 0; 3 new tests bite on old"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "not_applicable",
+    "result": "metric arithmetic only"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-112/handoff/verify.md"
+    ],
+    "command": "python3 -I work/TASK-112/evidence/metrics_oracle.py <old|new src>",
+    "result": "11 gold cases unchanged; bug cases fixed; AC1-AC5 met"
   },
   "report": {
     "status": "pending",
@@ -51,6 +55,9 @@
     "coder": "work/TASK-112/handoff/code.md",
     "tester": {
       "waiver": "two one-line edits; coder added bite + AC2 guard tests, coordinator gold-case oracle covers the rest"
+    },
+    "verifier": {
+      "waiver": "coordinator ran the gold-case oracle itself (verify.md)"
     }
   },
   "user_notes": [
@@ -61,7 +68,7 @@
     }
   ],
   "picked_at": "2026-11-15T21:58:56Z",
-  "updated_at": "2026-11-15T22:04:57Z",
+  "updated_at": "2026-11-15T22:04:58Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/metrics.py",
@@ -74,5 +81,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verify"
+  "next": "write report, close TASK-112"
 }
