@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-108",
   "title": "Fix-A ingest boundaries: 108-F001/F002/F004/F005/F010 (REQ-0115)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0115",
   "acceptance_criteria": [
     "AC1 cut reply passes validation",
@@ -43,11 +43,18 @@
       "work/TASK-108/handoff/verify.md"
     ],
     "command": "python3 -I work/TASK-108/evidence/segdump.py <old|new src> . ; python3 -I work/TASK-108/evidence/partdump.py <old|new src> .",
-    "result": "old vs new: segment 0/22 example files changed, split_part 0/21 real stems changed; 4 bug repros fixed; AC1-AC6 met"
+    "result": "old vs new: segment 0/22 example files changed, split_part 0/21 real stems changed; 4 bug repros fixed; AC1-AC6 met",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-108/handoff/verify.md"
+      ],
+      "reason": "old vs new output on real examples and refined stems"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-108-ingest-boundaries.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -58,6 +65,9 @@
     "tester": "work/TASK-108/handoff/test.md",
     "verifier": {
       "waiver": "coordinator ran the before/after real-data oracle itself (verify.md); no paid run needed"
+    },
+    "crosscheck": {
+      "waiver": "coordinator before/after oracle (verify.md) is the crosscheck"
     }
   },
   "user_notes": [
@@ -73,7 +83,7 @@
     }
   ],
   "picked_at": "2026-11-15T03:27:10Z",
-  "updated_at": "2026-11-15T05:46:43Z",
+  "updated_at": "2026-11-15T05:46:55Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/*.py",
@@ -85,5 +95,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "write report, close TASK-108; next Fix-B adapter"
+  "next": ""
 }
