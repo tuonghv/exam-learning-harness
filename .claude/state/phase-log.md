@@ -3175,3 +3175,9 @@ Action: wrote report
 Result: TASK-109 closed
 Decision: next Fix-C
 Next: user go for Fix-C
+
+## DESIGN - TASK-110 - 2026-11-15T14:53:26Z
+Action: designer drafted 5 items
+Result: all 120 real headings match HEAD_RE; real pack expected byte-identical
+Decision: design accepted; repro row 111-F004 superseded by test_110_1 (D1)
+Next: IMPLEMENTING via coder

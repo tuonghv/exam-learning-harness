@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-110",
   "title": "Fix-C review pack: 111-F004/F006/F007/F005 (REQ-0117)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0117",
   "acceptance_criteria": [
     "AC1 marks kept",
@@ -11,9 +11,9 @@
     "AC5 tests + old/new oracle"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-110-review-pack-marks-safe.md",
+    "summary": "110.1 marked section without/duplicate number kept via existing .new.md branch; 110.2 apply labels '?' instead of %d None; 110.3 answer read from edited heading, no flag when unreadable; 110.4 _subject_files skips .old.md; 110.5 real-pack old/new check",
     "reuse": [],
     "risks": []
   },
@@ -41,7 +41,9 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-110/handoff/design.md"
+  },
   "user_notes": [
     {
       "raw": "RAW-00335",
@@ -50,8 +52,8 @@
     }
   ],
   "picked_at": "2026-11-15T14:51:00Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-15T14:53:27Z",
+  "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/review.py",
     "tests/unit/*.py"
@@ -62,5 +64,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder implements 110.1-110.4 with tests in tests/unit/test_review.py"
 }
