@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-112",
   "title": "Fix-E metrics: 109-F002 shared_ref, 109-F004 board_delta n (REQ-0119)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0119",
   "acceptance_criteria": [
     "AC1 missing sibling not penalised",
@@ -41,11 +41,18 @@
       "work/TASK-112/handoff/verify.md"
     ],
     "command": "python3 -I work/TASK-112/evidence/metrics_oracle.py <old|new src>",
-    "result": "11 gold cases unchanged; bug cases fixed; AC1-AC5 met"
+    "result": "11 gold cases unchanged; bug cases fixed; AC1-AC5 met",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-112/handoff/verify.md"
+      ],
+      "reason": "old vs new structure_scores on all gold cases"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-112-metrics-shared-ref-pairs.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -58,6 +65,9 @@
     },
     "verifier": {
       "waiver": "coordinator ran the gold-case oracle itself (verify.md)"
+    },
+    "crosscheck": {
+      "waiver": "coordinator gold-case oracle (verify.md) is the crosscheck"
     }
   },
   "user_notes": [
@@ -68,7 +78,7 @@
     }
   ],
   "picked_at": "2026-11-15T21:58:56Z",
-  "updated_at": "2026-11-15T22:04:58Z",
+  "updated_at": "2026-11-15T22:05:07Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/metrics.py",
@@ -81,5 +91,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "write report, close TASK-112"
+  "next": ""
 }
