@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-109",
-  "state": "DESIGN",
-  "next": "coder implements 109.1-109.2 with regression tests",
+  "state": "IMPLEMENTING",
+  "next": "tester reviews the 9 tests and runs --fast",
   "title": "Fix-B Claude adapter: 110-F001 classify, 110-F002 extract_json (REQ-0116)",
   "active": [
     {
       "task_id": "TASK-109",
-      "state": "DESIGN",
-      "next": "coder implements 109.1-109.2 with regression tests",
-      "updated_at": "2026-11-15T05:59:56Z"
+      "state": "IMPLEMENTING",
+      "next": "tester reviews the 9 tests and runs --fast",
+      "updated_at": "2026-11-15T06:03:58Z"
     }
   ],
   "max_active": 1

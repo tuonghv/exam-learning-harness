@@ -38,16 +38,28 @@ def mask(s):
     return _TOKEN.sub("<token>", s)
 
 
+# A bare "500"/"401" inside "215003 tokens" or a JSON number is not an HTTP code: anchor to a marker.
+_HTTP = re.compile(r"(?:api error|status(?: code)?|http(?:/[\d.]+)?|error)[:\s]+(401|429|50[0-4])(?!\d)")
+_HTTP_LEAD = re.compile(r"^\s*(401|429|50[0-4])\b")
+
+
 def _classify(blob):
     low = blob.casefold()
-    if any(w in low for w in ("401", "authenticat", "login", "api key", "unauthorized",
-                              "credential")):
+    codes = set(_HTTP.findall(low))
+    m = _HTTP_LEAD.match(low)
+    if m:
+        codes.add(m.group(1))
+    if "401" in codes or any(w in low for w in (
+            "authenticat", "/login", "please login", "log in", "api key", "unauthorized", "credential")):
         return "auth"
-    if any(w in low for w in ("429", "rate limit", "rate_limit", "session limit",
-                              "usage limit", "overloaded", "hit your", "-hour limit", "reached your limit", "limit reached")):
+    if "429" in codes or any(w in low for w in (
+            "rate limit", "rate_limit", "session limit", "usage limit", "overloaded", "hit your",
+            "-hour limit", "reached your limit", "limit reached")):
         return "rate_limit"
-    if any(w in low for w in ("500", "502", "503", "504", "service", "unavailable",
-                              "connection", "network")):
+    if codes & {"500", "501", "502", "503", "504"} or any(w in low for w in (
+            "service unavailable", "service_unavailable", "internal server error", "bad gateway",
+            "gateway timeout", "temporarily unavailable", "connection error", "connection refused",
+            "connection reset", "network error")):
         return "service"
     return "other"
 
@@ -144,9 +156,9 @@ def _load(s):
     return obj if isinstance(obj, dict) else None
 
 
-def _objects(text):
-    """Every top-level JSON object decoded left to right (a reply with a self-correction holds several)."""
-    dec, out, k = json.JSONDecoder(), [], text.find("{")
+def _scan(text):
+    """Yield (start, obj) for every top-level JSON object, left to right (dicts only)."""
+    dec, k = json.JSONDecoder(), text.find("{")
     while k >= 0:
         try:
             obj, end = dec.raw_decode(text, k)
@@ -156,9 +168,13 @@ def _objects(text):
             k = text.find("{", k + 1)
             continue
         if isinstance(obj, dict):
-            out.append(obj)
+            yield k, obj
         k = text.find("{", end)
-    return out
+
+
+def _objects(text):
+    """Every top-level JSON object decoded left to right (a reply with a self-correction holds several)."""
+    return [o for _, o in _scan(text)]
 
 
 def extract_json(text, schema=None):
@@ -184,9 +200,9 @@ def extract_json(text, schema=None):
         obj = _load(fences[0].strip())
         if obj is not None:
             return obj, None
-    i, j = text.find("{"), text.rfind("}")
-    if 0 <= i < j:
-        obj = _load(text[i:j + 1])
-        if obj is not None:
+    hits = list(_scan(text))  # a brace in prose must not hide the one real object
+    if len(hits) == 1:
+        start, obj = hits[0]
+        if text[:start].count("{") <= text[:start].count("}"):  # not a fragment of a broken object
             return obj, None
     return None, "no valid JSON object found"

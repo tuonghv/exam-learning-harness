@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-109",
   "title": "Fix-B Claude adapter: 110-F001 classify, 110-F002 extract_json (REQ-0116)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0116",
   "acceptance_criteria": [
     "AC1 too-long not run-stopping",
@@ -18,8 +18,12 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/adapters/claude.py",
+      "tests/unit/test_claude_fixes_109.py"
+    ],
+    "summary": "109.1 _classify digit codes only via anchored regex, phrases narrowed; 109.2 extract_json _scan fallback: one parseable object with balanced braces before it"
   },
   "unit_test": {
     "status": "pending",
@@ -42,7 +46,8 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-109/handoff/design.md"
+    "designer": "work/TASK-109/handoff/design.md",
+    "coder": "work/TASK-109/handoff/code.md"
   },
   "user_notes": [
     {
@@ -52,7 +57,7 @@
     }
   ],
   "picked_at": "2026-11-15T05:56:51Z",
-  "updated_at": "2026-11-15T05:59:56Z",
+  "updated_at": "2026-11-15T06:03:58Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/adapters/*.py",
@@ -64,5 +69,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "coder implements 109.1-109.2 with regression tests"
+  "next": "tester reviews the 9 tests and runs --fast"
 }

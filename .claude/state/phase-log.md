@@ -3151,3 +3151,9 @@ Action: designer drafted 2 items
 Result: pinned classes kept; no cache-key change
 Decision: design accepted
 Next: IMPLEMENTING via coder
+
+## IMPLEMENTING - TASK-109 - 2026-11-15T06:03:58Z
+Action: coder implemented 109.1-109.2
+Result: 5/9 tests bite on old; --fast NEW 0; oracle: 252 stored replies 0 changed, 8 real stop messages same class
+Decision: accept
+Next: UNIT_TESTED via tester
