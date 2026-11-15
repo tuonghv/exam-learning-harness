@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-108",
   "title": "Fix-A ingest boundaries: 108-F001/F002/F004/F005/F010 (REQ-0115)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0115",
   "acceptance_criteria": [
     "AC1 cut reply passes validation",
@@ -29,9 +29,9 @@
     "summary": "108.1 cut reply exempt from A-D check; 108.2 _INTRO shares GROUP_RE span, _q_start lets intro win over _Q; 108.3 empty unreadable kept; 108.4 split_part keeps non-heading stems; golden pattern pin updated for 108.2"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --affected --base 62f283f~1; python3 -I -m unittest discover -s tests/unit -p test_ingest_triage_fixes.py",
+    "result": "8/8 new tests OK; affected 489 ran KNOWN 1 NEW 0; tester --fast 1986 ran KNOWN 4 NEW 0; 5/6 coder tests bite on old code"
   },
   "security": {
     "status": "pending",
@@ -50,7 +50,8 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-108/handoff/design.md",
-    "coder": "work/TASK-108/handoff/code.md"
+    "coder": "work/TASK-108/handoff/code.md",
+    "tester": "work/TASK-108/handoff/test.md"
   },
   "user_notes": [
     {
@@ -65,7 +66,7 @@
     }
   ],
   "picked_at": "2026-11-15T03:27:10Z",
-  "updated_at": "2026-11-15T05:43:45Z",
+  "updated_at": "2026-11-15T05:45:57Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/*.py",
@@ -77,5 +78,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tester reviews the 6 regression tests and runs --fast"
+  "next": "verify on real DGNL refine/segment output: no change except the 4 fixed shapes"
 }

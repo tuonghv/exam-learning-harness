@@ -94,6 +94,17 @@ class TestFix108(unittest.TestCase):
             old = (m.group(1).upper(), t[m.end():].strip()) if m else (None, t)
             self.assertEqual(refine.split_part(t), old, t)
 
+    def test_108_f002_edge_stems_stay_questions(self):
+        for stem, n in (("Câu 5. Tính 2-3", 5), ("Câu 12: Cho 3, 4 và 5", 12)):
+            self.assertFalse(segment._INTRO.match(stem), stem)
+            self.assertEqual([x["n"] for x in segment.segment([stem] + O)[1]], [n], stem)
+        for intro in ("Câu 2-3. Dựa vào đoạn sau", "Câu 3, 4, 6 sử dụng đoạn văn sau"):
+            self.assertTrue(segment._INTRO.match(intro), intro)
+
+    def test_108_f010_bare_and_english_heading_split(self):
+        self.assertEqual(refine.split_part("PHẦN II"), ("II", ""))
+        self.assertEqual(refine.split_part("Part II: Reading\nx"), ("II", "x"))
+
 
 if __name__ == "__main__":
     unittest.main()

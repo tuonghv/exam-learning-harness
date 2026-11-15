@@ -3127,3 +3127,9 @@ Action: coder implemented 108.1-108.4 (+golden pin)
 Result: --fast NEW 0; 5/6 new tests fail on old code; coordinator checked real text: Câu N-M lines are all intros
 Decision: accept, incl. golden pin update
 Next: UNIT_TESTED via tester
+
+## UNIT_TESTED - TASK-108 - 2026-11-15T05:45:57Z
+Action: tester added 2 edge tests (real stems stay questions, bare/English headings split)
+Result: 0 defects, NEW 0
+Decision: UNIT_TESTED
+Next: VERIFIED
