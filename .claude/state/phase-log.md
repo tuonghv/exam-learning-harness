@@ -3547,3 +3547,9 @@ Action: coder implemented 122.1-122.2 (heading guard also checks the line before
 Result: --affected NEW 0
 Decision: matches design
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-122 - 2026-11-16T06:22:23Z
+Action: --fast + bite
+Result: NEW 0
+Decision: UNIT_TESTED
+Next: VERIFIED

@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-122",
   "title": "DGNL26 text path: cover-page run + image-only question (REQ-0129)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0129",
   "acceptance_criteria": [
     "AC1 120 questions",
@@ -25,9 +25,9 @@
     "summary": "segment.py: `_is_cover_run` (option-less leading run, shorter than a following run from 1 that has options, no heading before it while the next has one) moves to intro; empty-text question kept with unreadable=True and tolerated by numbering. 8 new tests"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --fast; bite on git archive HEAD",
+    "result": "--fast 2098 ran, KNOWN 4, NEW 0; T1/T5/T7 fail on old code, 5 guards pass both"
   },
   "security": {
     "status": "pending",
@@ -46,7 +46,10 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-122/handoff/design.md",
-    "coder": "work/TASK-122/handoff/code.md"
+    "coder": "work/TASK-122/handoff/code.md",
+    "tester": {
+      "waiver": "coordinator ran --fast and an independent bite check (evidence/bite.out) (RAW-00342)"
+    }
   },
   "user_notes": [
     {
@@ -69,5 +72,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tests"
+  "next": "verify"
 }
