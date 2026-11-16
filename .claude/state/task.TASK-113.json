@@ -48,6 +48,11 @@
       "raw": "RAW-00339",
       "note": "user: do the batch-2 triage (113/114), no fix before go",
       "at": "2026-11-15T23:57:32Z"
+    },
+    {
+      "raw": "RAW-00340",
+      "note": "user: show the fix tasks clearly; approval comes in a new session after context clear",
+      "at": "2026-11-16T03:36:35Z"
     }
   ],
   "picked_at": "2026-11-15T23:57:32Z",

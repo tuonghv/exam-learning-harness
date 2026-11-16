@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0120",
-  "next": "user approves plan; then Fix-F REQ",
-  "updated": "2026-11-16 07:02"
+  "next": "NEW SESSION: user approves plan in docs/design/phase-113-review-triage-b2.md -> advance TASK-113 IMPLEMENTING..DONE (waivers as TASK-107, specs work/TASK-107/advance-*.json), then open Fix-F ingest (114-F001,F002,F010,F004) as new REQ/TASK, then Fix-G cli (113-F001,F003,F005,F002)",
+  "updated": "2026-11-16 10:36"
 }
