@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-137",
-  "state": "IMPLEMENTING",
-  "next": "record repros as test evidence",
+  "state": "UNIT_TESTED",
+  "next": "verify ACs",
   "title": "Triage code-review batch 4 (REQ-0144)",
   "active": [
     {
       "task_id": "TASK-137",
-      "state": "IMPLEMENTING",
-      "next": "record repros as test evidence",
-      "updated_at": "2026-11-16T23:57:53Z"
+      "state": "UNIT_TESTED",
+      "next": "verify ACs",
+      "updated_at": "2026-11-16T23:57:54Z"
     }
   ],
   "max_active": 1
