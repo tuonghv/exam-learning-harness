@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-127",
   "title": "Prompt release v1.3.0 as default (diacritics rule reaches default runs) (REQ-0134)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0134",
   "acceptance_criteria": [
     "AC1 release v1.3.0 = dev, verify",
@@ -37,12 +37,17 @@
     "result": "KNOWN 4, NEW 0; updated release/default tests pass"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "prompt text only; no key or input surface change; old releases frozen"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-127/evidence/summary.md",
+      "work/TASK-127/evidence/fast.txt"
+    ],
+    "command": "prompts verify v1.3.0; diff dev vs release; paid DGNL English check (approved); --fast",
+    "result": "AC1-AC4 met: 0 diacritics fails (was 5), 24/25 correct"
   },
   "report": {
     "status": "pending",
@@ -60,6 +65,9 @@
     },
     "tester": {
       "waiver": "coordinator ran --fast"
+    },
+    "verifier": {
+      "waiver": "coordinator verified with the approved paid run and release verify"
     }
   },
   "user_notes": [
@@ -92,5 +100,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verify"
+  "next": "report and close"
 }
