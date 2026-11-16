@@ -1,14 +1,14 @@
 {
   "schema": 2,
   "task_id": "TASK-132",
-  "state": "UNIT_TESTED",
-  "next": "verify",
+  "state": "VERIFIED",
+  "next": "report and close",
   "title": "Report names: non-Latin/missing subject slug (REQ-0139)",
   "active": [
     {
       "task_id": "TASK-132",
-      "state": "UNIT_TESTED",
-      "next": "verify",
+      "state": "VERIFIED",
+      "next": "report and close",
       "updated_at": "2026-11-16T13:06:54Z"
     }
   ],

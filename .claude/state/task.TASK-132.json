@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-132",
   "title": "Report names: non-Latin/missing subject slug (REQ-0139)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0139",
   "acceptance_criteria": [
     "AC1 non-Latin subject report",
@@ -28,12 +28,18 @@
     "result": "KNOWN 4 NEW 0; 2/3 new tests fail on old code"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "not_applicable",
+    "result": "file-name slug only; slug stays [a-z0-9-]"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-132/evidence/summary.md",
+      "work/TASK-132/evidence/bite.txt",
+      "work/TASK-132/evidence/fast.txt"
+    ],
+    "command": "write_reports on a \u6570\u5b66 result; --fast; bite",
+    "result": "AC1-AC2 met"
   },
   "report": {
     "status": "pending",
@@ -51,6 +57,9 @@
     },
     "tester": {
       "waiver": "coordinator ran --fast and the bite"
+    },
+    "verifier": {
+      "waiver": "coordinator verified with the report write test"
     }
   },
   "user_notes": [
@@ -76,5 +85,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verify"
+  "next": "report and close"
 }
