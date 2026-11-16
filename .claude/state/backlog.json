@@ -2299,7 +2299,7 @@
     "task_id": "TASK-114",
     "title": "Fix-F ingest: 114-F001/F002/F010/F004 (REQ-0121)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-16T03:39:18Z",
     "requirement": "REQ-0121",
     "acceptance_criteria": [
@@ -2315,7 +2315,9 @@
         "note": "user approved triage b2 plan; Fix-F first",
         "at": "2026-11-16T03:39:18Z"
       }
-    ]
+    ],
+    "completed_at": "2026-11-16T04:01:14Z",
+    "report": "docs/report/phase-114-ingest-fix-f.md"
   },
   {
     "task_id": "TASK-115",

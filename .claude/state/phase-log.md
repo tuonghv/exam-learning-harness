@@ -3319,3 +3319,9 @@ Action: verifier checked ACs; coordinator ran $0 old-vs-new oracle on real PDFs 
 Result: PASS; 17 real questions fixed (F001), 0 unintended changes; refine replay impossible (prompt changed)
 Decision: VERIFIED; F002 api.py GROUP_RE sharing is a follow-up, not a TASK-114 defect
 Next: DONE
+
+## DONE - TASK-114 - 2026-11-16T04:01:14Z
+Action: wrote report
+Result: TASK-114 closed; 17 real questions fixed
+Decision: next: TASK-115 Fix-G cli
+Next: pick TASK-115

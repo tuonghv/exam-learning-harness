@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-114",
   "title": "Fix-F ingest: 114-F001/F002/F010/F004 (REQ-0121)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0121",
   "acceptance_criteria": [
     "AC1 option-less q keeps next heading/intro",
@@ -45,11 +45,19 @@
       "work/TASK-114/evidence/oracle-moves.txt"
     ],
     "command": "python3 -I work/TASK-114/evidence/oracle.py <old|new src> .; python3 -I work/TASK-114/evidence/replay.py <old|new src> .",
-    "result": "verifier PASS AC1-AC5; real data: 22 examples 0 changes, 4 PDFs 533 q same count/numbering/options, 17 changed q all F001 moves (9 suffix==next context, 0 mismatch); refine replay all cache miss (prompt changed), F004/F010 by unit tests"
+    "result": "verifier PASS AC1-AC5; real data: 22 examples 0 changes, 4 PDFs 533 q same count/numbering/options, 17 changed q all F001 moves (9 suffix==next context, 0 mismatch); refine replay all cache miss (prompt changed), F004/F010 by unit tests",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-114/evidence/oracle-summary.md",
+        "work/TASK-114/evidence/oracle-moves.txt"
+      ],
+      "reason": "old vs new segment output on 4 real PDFs + 22 examples; every change reconciled"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-114-ingest-fix-f.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -58,7 +66,10 @@
     "designer": "work/TASK-114/handoff/design.md",
     "coder": "work/TASK-114/handoff/code.md",
     "tester": "work/TASK-114/handoff/test.md",
-    "verifier": "work/TASK-114/handoff/verify.md"
+    "verifier": "work/TASK-114/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "crosscheck run by the coordinator: $0 old-vs-new oracle over real PDFs and examples, mechanical move check (work/TASK-114/evidence/oracle-moves.txt), independent of the coder's tests"
+    }
   },
   "user_notes": [
     {
@@ -68,7 +79,7 @@
     }
   ],
   "picked_at": "2026-11-16T03:39:56Z",
-  "updated_at": "2026-11-16T04:01:00Z",
+  "updated_at": "2026-11-16T04:01:15Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/*.py",
@@ -80,5 +91,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "write the report and close TASK-114; then pick TASK-115 Fix-G cli"
+  "next": ""
 }

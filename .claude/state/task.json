@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-114",
-  "state": "VERIFIED",
-  "next": "write the report and close TASK-114; then pick TASK-115 Fix-G cli",
+  "state": "DONE",
+  "next": "",
   "title": "Fix-F ingest: 114-F001/F002/F010/F004 (REQ-0121)",
-  "active": [
-    {
-      "task_id": "TASK-114",
-      "state": "VERIFIED",
-      "next": "write the report and close TASK-114; then pick TASK-115 Fix-G cli",
-      "updated_at": "2026-11-16T04:01:00Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
