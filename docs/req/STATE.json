@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0124",
-  "next": "close triage; open Fix-H",
-  "updated": "2026-11-16 12:27"
+  "next": "record the $0 repro runs as unit-test evidence",
+  "updated": "2026-11-16 12:28"
 }

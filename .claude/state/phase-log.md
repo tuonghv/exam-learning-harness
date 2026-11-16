@@ -3391,3 +3391,9 @@ Action: 2 designers deep-dived 19 findings; coordinator ran 12 repros and the re
 Result: 12 BUG, 6 IMPROVEMENT, 1 NOT-A-DEFECT
 Decision: P1 Fix-H parts, then Fix-I api, P2 Fix-J boundary; coordinator decides (RAW-00342)
 Next: IMPLEMENTING..DONE with triage waivers
+
+## IMPLEMENTING - TASK-117 - 2026-11-16T05:28:11Z
+Action: plan set by coordinator (RAW-00342: no user gate)
+Result: no code change by design
+Decision: gates with waivers for code roles
+Next: UNIT_TESTED

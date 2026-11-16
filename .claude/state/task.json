@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-117",
-  "state": "DESIGN",
-  "next": "close TASK-117 (triage only); open Fix-H parts",
+  "state": "IMPLEMENTING",
+  "next": "record the $0 repro runs as unit-test evidence",
   "title": "Triage code-review batch 3 (phases 117-118) (REQ-0124)",
   "active": [
     {
       "task_id": "TASK-117",
-      "state": "DESIGN",
-      "next": "close TASK-117 (triage only); open Fix-H parts",
-      "updated_at": "2026-11-16T05:27:46Z"
+      "state": "IMPLEMENTING",
+      "next": "record the $0 repro runs as unit-test evidence",
+      "updated_at": "2026-11-16T05:28:11Z"
     }
   ],
   "max_active": 1
