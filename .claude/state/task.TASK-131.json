@@ -1,0 +1,65 @@
+{
+  "task_id": "TASK-131",
+  "title": "Batch-1 review leftovers: re-triage 22 findings (REQ-0138)",
+  "state": "TODO",
+  "requirement": "REQ-0138",
+  "acceptance_criteria": [
+    "AC1 re-triage rows with evidence",
+    "AC2 still-valid fixed (follow-up tasks)",
+    "AC3 ledger rows closed"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {},
+  "user_notes": [
+    {
+      "raw": "RAW-00350",
+      "note": "user: list Fable reports not designed, prevent missed review fixes, plan",
+      "at": "2026-11-16T12:50:18Z"
+    }
+  ],
+  "picked_at": "2026-11-16T12:57:22Z",
+  "updated_at": "2026-11-16T13:01:20Z",
+  "updated_by": "",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [
+      "part A re-triage (work/TASK-131/handoff/design-cli.md): 9 IMPROVEMENT, 6 repros confirmed (evidence/repro_cli.txt)"
+    ],
+    "notes": "part B designer running (design-ingest.md, 13 ids)",
+    "next": "on part B: run its repros, write docs/design/phase-131 triage doc, advance DESIGN",
+    "at": "2026-11-16T13:01:20Z"
+  },
+  "next": "merge part A+B re-triage into docs/design/phase-131-review-leftovers-b1.md, advance DESIGN"
+}
