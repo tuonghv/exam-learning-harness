@@ -1,16 +1,16 @@
 {
   "task_id": "TASK-138",
   "title": "Scorer correctness: fractions, hedges, separators, minus, ordering key, open answers (batch 4) (REQ-0145)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0145",
   "acceptance_criteria": [
     "AC1 tests per id",
     "AC2 ledger, --fast"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-138-scorer-fixes-b4.md",
+    "summary": "scorer fixes 137-F001..F004, F008, F010, 136-F004 + 137-F009 per the TASK-137 triage rows",
     "reuse": [],
     "risks": []
   },
@@ -38,7 +38,11 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": {
+      "waiver": "designed in the TASK-137 triage (work/TASK-137/handoff/design-a.md)"
+    }
+  },
   "user_notes": [
     {
       "raw": "RAW-00357",
@@ -47,8 +51,8 @@
     }
   ],
   "picked_at": "2026-11-16T23:58:18Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-16T23:58:31Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -56,5 +60,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder implements 138.1-138.7"
 }
