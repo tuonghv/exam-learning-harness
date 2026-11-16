@@ -2323,7 +2323,7 @@
     "task_id": "TASK-115",
     "title": "Fix-G cli: 113-F001/F003/F005/F002 (REQ-0122)",
     "priority": 2,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-11-16T03:39:18Z",
     "requirement": "REQ-0122",
     "acceptance_criteria": [

@@ -1,0 +1,67 @@
+{
+  "task_id": "TASK-115",
+  "title": "Fix-G cli: 113-F001/F003/F005/F002 (REQ-0122)",
+  "state": "TODO",
+  "requirement": "REQ-0122",
+  "acceptance_criteria": [
+    "AC1 no empty plan run dir",
+    "AC2 clean only own dir",
+    "AC3 run-stats id == dir",
+    "AC4 --write-recipe --dry-run exit 2",
+    "AC5 regression tests, --fast green"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {},
+  "user_notes": [
+    {
+      "raw": "RAW-00341",
+      "note": "user approved triage b2 plan; Fix-G after Fix-F",
+      "at": "2026-11-16T03:39:18Z"
+    }
+  ],
+  "picked_at": "2026-11-16T04:01:37Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [
+    "src/exam_engine/cli.py",
+    "src/exam_engine/*.py",
+    "tests/unit/*.py"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
