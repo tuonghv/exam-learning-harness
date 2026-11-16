@@ -2805,7 +2805,7 @@
     "task_id": "TASK-135",
     "title": "Review leftovers fix C: metrics/report_kinds/review (REQ-0142)",
     "priority": 3,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-11-16T13:03:47Z",
     "requirement": "REQ-0142",
     "acceptance_criteria": [
