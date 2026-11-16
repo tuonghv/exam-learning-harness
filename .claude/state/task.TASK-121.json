@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-121",
   "title": "Segment false questions from passage/year/formula lines (REQ-0128)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0128",
   "acceptance_criteria": [
     "AC1 no implausible ids",
@@ -42,11 +42,19 @@
       "work/TASK-121/evidence/summary_counts.txt"
     ],
     "command": "python3 -I work/TASK-114/evidence/oracle.py <old|new src> .; python3 -I work/TASK-116/evidence/share_oracle.py <old|new src> .",
-    "result": "AC1-AC4 met; DGNL25 197->120, DHQG 141->120 (both now usable by the text path); 24 real first members gain their passage; none lost; residuals listed"
+    "result": "AC1-AC4 met; DGNL25 197->120, DHQG 141->120 (both now usable by the text path); 24 real first members gain their passage; none lost; residuals listed",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-121/evidence/summary.md",
+        "work/TASK-121/evidence/summary_counts.txt"
+      ],
+      "reason": "per-PDF counts match the printed 120 on DGNL25/DHQG; 24 passage gains, none lost"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-121-segment-plausible-starts.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -59,6 +67,9 @@
     },
     "verifier": {
       "waiver": "coordinator verified with two $0 old-vs-new oracles over all real inputs, every move explained (RAW-00342)"
+    },
+    "crosscheck": {
+      "waiver": "crosscheck by the coordinator: segment + share oracles old vs new over all real PDFs and examples, every move explained, independent of the coder's tests"
     }
   },
   "user_notes": [
@@ -69,7 +80,7 @@
     }
   ],
   "picked_at": "2026-11-16T06:03:48Z",
-  "updated_at": "2026-11-16T06:10:44Z",
+  "updated_at": "2026-11-16T06:10:57Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/*.py",
@@ -82,5 +93,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "write the report and close TASK-121"
+  "next": ""
 }

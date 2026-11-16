@@ -2464,7 +2464,7 @@
     "task_id": "TASK-121",
     "title": "Segment false questions from passage/year/formula lines (REQ-0128)",
     "priority": 2,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-16T05:56:14Z",
     "requirement": "REQ-0128",
     "acceptance_criteria": [
@@ -2479,6 +2479,8 @@
         "note": "found by the TASK-119 real-data oracle; coordinator queued",
         "at": "2026-11-16T05:56:14Z"
       }
-    ]
+    ],
+    "completed_at": "2026-11-16T06:10:56Z",
+    "report": "docs/report/phase-121-segment-plausible-starts.md"
   }
 ]

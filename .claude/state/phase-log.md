@@ -3529,3 +3529,9 @@ Action: oracles old vs new
 Result: only intended moves
 Decision: VERIFIED
 Next: DONE
+
+## DONE - TASK-121 - 2026-11-16T06:10:56Z
+Action: wrote report
+Result: TASK-121 closed
+Decision: next: DGNL26 cover-line residual, then P3
+Next: coordinator picks next

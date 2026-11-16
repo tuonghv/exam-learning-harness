@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-121",
-  "state": "VERIFIED",
-  "next": "write the report and close TASK-121",
+  "state": "DONE",
+  "next": "",
   "title": "Segment false questions from passage/year/formula lines (REQ-0128)",
-  "active": [
-    {
-      "task_id": "TASK-121",
-      "state": "VERIFIED",
-      "next": "write the report and close TASK-121",
-      "updated_at": "2026-11-16T06:10:44Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

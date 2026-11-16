@@ -86,3 +86,4 @@ Rule (RAW-00171, REQ-0061): evidence summaries are small text with no exam conte
 | TASK-118 Fix-H answer-key detection: 117-F001/F009/F010/F002/F003 | docs/design/phase-118-ingest-key-parts.md | docs/report/phase-118-ingest-key-parts.md | - | - | - |
 | TASK-119 Fix-I api: 117-F008/F004/F005/F007 | docs/design/phase-119-api-cut-merge-ranges.md | docs/report/phase-119-api-cut-merge-ranges.md | - | - | - |
 | TASK-120 Fix-J boundary + NaN cost caps: 118-F001/F007/F009, D1, D2 | docs/design/phase-120-boundary-cost-cap.md | docs/report/phase-120-boundary-cost-cap.md | - | - | - |
+| TASK-121 Segment rejects implausible question starts | docs/design/phase-121-segment-plausible-starts.md | docs/report/phase-121-segment-plausible-starts.md | - | - | - |
