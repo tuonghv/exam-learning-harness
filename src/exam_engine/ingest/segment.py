@@ -180,6 +180,16 @@ def ambiguous_heading(context):
         and _enum_bank(lines, i)
 
 
+def table_lines(text):
+    """Text lines of a table block (129.1): a box (<= 1 filled cell per row) -> its text as plain lines (a passage);
+    a data table -> `| a | b |` rows (a leading `|` never opens a question, option or heading)."""
+    rows = [[c.strip() for c in ln.split("|") if c.strip()] for ln in (text or "").split("\n")]
+    rows = [r for r in rows if r]
+    if all(len(r) <= 1 for r in rows):
+        return [r[0] for r in rows]
+    return ["| %s |" % " | ".join(r) for r in rows]
+
+
 def split_guide(rest):
     """-> (guide, passage): a leading `Questions 31-35: ...` / `Read the following passage` line is the guide."""
     first, _, tail = (rest or "").partition("\n")

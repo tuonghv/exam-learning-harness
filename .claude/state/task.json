@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-129",
-  "state": "DESIGN",
-  "next": "implement 129.1-129.3",
+  "state": "IMPLEMENTING",
+  "next": "tests",
   "title": "PDF free text path keeps table blocks (REQ-0136)",
   "active": [
     {
       "task_id": "TASK-129",
-      "state": "DESIGN",
-      "next": "implement 129.1-129.3",
-      "updated_at": "2026-11-16T12:42:50Z"
+      "state": "IMPLEMENTING",
+      "next": "tests",
+      "updated_at": "2026-11-16T12:49:40Z"
     }
   ],
   "max_active": 1

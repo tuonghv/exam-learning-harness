@@ -90,14 +90,20 @@ def select_pages(doc, spec, reviewer=None):
     new.pop("intro", None)
     if new["source"].get("format") != "md":
         page_lines = []
+        is_pdf = new["source"].get("format") == "pdf"
+        if is_pdf:
+            from exam_engine.ingest.adapters import pdf
         for p in new["pages"]:
+            if is_pdf:  # 129.3: the same lines as the full ingest, tables included and placed
+                page_lines.append(pdf._text_lines([(b["type"], b.get("bbox") or (0, i, 0, i), b["text"], None)  # no bbox: block order
+                                                for i, b in enumerate(p["blocks"])]))
+                continue
             lines = []
             for b in p["blocks"]:
                 if b["type"] in ("paragraph", "list", "heading"):
                     lines.extend(b["text"].split("\n"))
             page_lines.append(lines)
-        if new["source"].get("format") == "pdf":  # same furniture filter as the full ingest
-            from exam_engine.ingest.adapters import pdf
+        if is_pdf:  # same furniture filter as the full ingest
             page_lines, _removed = pdf._strip_furniture(page_lines)
         lines = [ln for pl in page_lines for ln in pl]
         from exam_engine.ingest import boundary  # imports this module (the _KEY pattern)

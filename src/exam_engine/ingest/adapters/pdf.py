@@ -224,6 +224,17 @@ LEAK_MIN_KEY = 8      # shorter keys are too easy to match by chance
 FURNITURE_PAGES = 3  # a repeated header / footer needs at least max(3, half the pages)
 
 
+def _text_lines(items):
+    """Segment lines of one page: paragraph lines in item order; each table (129.2: boxed passage or data table), in
+    (top, left) order, goes after the last placed block that starts at or above its top edge (tables are listed apart
+    from the reading order; side-by-side tables stay together, left first)."""
+    seq = [(bb, text.split("\n")) for kind, bb, text, _ in items if kind == "paragraph"]
+    for _k, bb, text, _ in sorted((it for it in items if it[0] == "table"), key=lambda it: (it[1][1], it[1][0])):
+        above = [i for i, (pb, _l) in enumerate(seq) if pb[1] <= bb[1]]
+        seq.insert(above[-1] + 1 if above else 0, (bb, segment.table_lines(text)))
+    return [ln for _bb, lines in seq for ln in lines]
+
+
 def _strip_furniture(pages, leaks=None):
     """-> (pages without page numbers and repeated headers/footers, removed count).
 
@@ -671,9 +682,7 @@ def _extract(fitz, pdf, raw, path, config):
         if native_text.strip() or images or drawings:
             any_content = True
         page_lines.append([])
-        for kind, _bb, text, _ex in items:
-            if kind == "paragraph":
-                page_lines[-1].extend(text.split("\n"))
+        page_lines[-1].extend(_text_lines(items))
         pages.append({"n": n, "width": round(pw, 2), "height": round(ph, 2), "blocks": blocks,
                       "chars": len(native_text.strip()), "images": len(images),
                       "drawings": len(drawings), "status": status, "method": method,
