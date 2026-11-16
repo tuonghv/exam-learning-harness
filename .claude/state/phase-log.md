@@ -3967,3 +3967,9 @@ Action: wrote prompt v2; ran 4 code-reviewer runs (3 retried after the bind guar
 Result: 4 reports, 28 findings (H1 M21 L6; 2 cap hits); ledger 28 open on TASK-137
 Decision: matches design
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-136 - 2026-11-16T23:50:17Z
+Action: deterministic checks
+Result: all v2 fields present; ledger 0 problems
+Decision: UNIT_TESTED
+Next: VERIFIED

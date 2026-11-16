@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-136",
   "title": "Review prompt v2 + code-review batch 4 (REQ-0143)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0143",
   "acceptance_criteria": [
     "AC1 prompt v2 fixes 1-9",
@@ -29,9 +29,9 @@
     "summary": "prompt v2 (122 lines, fixes 1-9); code-reviewer reply adds BUG/HARDENING + CAP HIT; 4 batch-4 reports (28 findings); 28 ledger rows open on TASK-137"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "grep v2 fields in prompt + 4 reports; ledger regex on prompt sample; tools/review_ledger.py",
+    "result": "prompt 122 lines, all 9 fixes present; every finding has Reached via/Fix risk/Type/Trigger; ledger 108 ids, 0 problems"
   },
   "security": {
     "status": "pending",
@@ -54,6 +54,9 @@
     },
     "coder": {
       "waiver": "doc-only: prompt text written by the coordinator from the user-approved critique; reports written by 4 code-reviewer runs"
+    },
+    "tester": {
+      "waiver": "doc-only change; deterministic grep/ledger checks by the coordinator (work/TASK-136/evidence/checks.txt)"
     }
   },
   "user_notes": [
@@ -64,7 +67,7 @@
     }
   ],
   "picked_at": "2026-11-16T23:41:11Z",
-  "updated_at": "2026-11-16T23:49:58Z",
+  "updated_at": "2026-11-16T23:50:17Z",
   "updated_by": "main",
   "scope": [
     "docs/prompts/cost-efficient_code_review_instructions.md",
@@ -81,5 +84,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "check v2 fields + ledger (UNIT_TESTED)"
+  "next": "verify"
 }
