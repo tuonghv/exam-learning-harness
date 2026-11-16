@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-135",
   "title": "Review leftovers fix C: metrics/report_kinds/review (REQ-0142)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0142",
   "acceptance_criteria": [
     "AC1 tests per id",
@@ -15,8 +15,14 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/metrics.py",
+      "src/exam_engine/pipeline/report_kinds.py",
+      "src/exam_engine/pipeline/review.py",
+      "tests/unit/test_review_fix_c_135.py"
+    ],
+    "summary": "metrics proxy flag + causes/backfill guards; report_kinds null note + _has_text runs; review guard + reserved names; 7 tests"
   },
   "unit_test": {
     "status": "pending",
@@ -41,7 +47,8 @@
   "roles": {
     "designer": {
       "waiver": "designed in the TASK-131 re-triage (work/TASK-131/handoff/design-ingest.md)"
-    }
+    },
+    "coder": "work/TASK-135/handoff/code.md"
   },
   "user_notes": [
     {
@@ -51,7 +58,7 @@
     }
   ],
   "picked_at": "2026-11-16T15:34:28Z",
-  "updated_at": "2026-11-16T15:34:40Z",
+  "updated_at": "2026-11-16T15:39:31Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/metrics.py",
@@ -73,5 +80,5 @@
     "next": "on coder hand-back: check code.md, --fast, set 7 ledger rows fixed TASK-135, advance IMPLEMENTING",
     "at": "2026-11-16T15:34:40Z"
   },
-  "next": "coder implements 135.1-135.7"
+  "next": "tests"
 }

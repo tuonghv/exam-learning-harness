@@ -477,9 +477,15 @@ def backfill(dirs, history, exam_path=None):
         if (rp, sha) in seen:
             skipped += 1
             continue
-        with open(rp, encoding="utf-8") as f:
-            res = json.load(f)
-        m = compute(res, load_log(os.path.join(os.path.dirname(rp), "run.log")), exam=exam)
+        try:
+            with open(rp, encoding="utf-8") as f:
+                res = json.load(f)
+            if not isinstance(res, dict):
+                raise ValueError("result.json is not an object")
+            m = compute(res, load_log(os.path.join(os.path.dirname(rp), "run.log")), exam=exam)
+        except (OSError, ValueError):
+            skipped += 1
+            continue
         ts = datetime.datetime.utcfromtimestamp(os.path.getmtime(rp)).replace(microsecond=0).isoformat() + "Z"
         meta = {"run_id": os.path.basename(os.path.dirname(rp)) + "@" + ts, "ts": ts,
                 "exam_id": os.path.splitext(os.path.basename(exam_path))[0] if exam_path else None,
@@ -586,7 +592,7 @@ def classify(ma, mb, qa=None):
     vs the reference, D5: a declined question later answered wrong counts); the old lists are unchanged."""
     qb = {q["id"]: q for q in mb["questions"]}
     out = {"fixed": [], "regressed": [], "changed": [], "status_up": [], "status_down": [], "unchanged": 0,
-           "basis": None, "cov_up": [], "cov_down": [], "wrong_new": [], "wrong_gone": []}
+           "basis": None, "proxy": False, "cov_up": [], "cov_down": [], "wrong_new": [], "wrong_gone": []}
     rank = {"PASS": 2, "UNCERTAIN": 1, "FAIL": 0}
     for a in ma["questions"]:
         b = qb.get(a["id"])
@@ -611,6 +617,8 @@ def classify(ma, mb, qa=None):
                 out["wrong_gone"].append(a["id"])
         if ra is not None and ra != rb:
             out["fixed" if rb else "regressed"].append(a["id"])
+            if ka is None or kb is None:
+                out["proxy"] = True
         elif ra is None and a["answer"] != b["answer"]:
             out["changed"].append(a["id"])
         elif rank.get(b["status"], 1) != rank.get(a["status"], 1):
@@ -658,7 +666,7 @@ def board_delta(ma, mb, qa=None):
     n = compared pairs (ids in both runs, 112.2)."""
     d = classify(ma, mb, qa)
     res = {k: len(d[k]) for k in _POOL}
-    res.update(basis=d["basis"], n=len({x["id"] for x in ma["questions"]} & {x["id"] for x in mb["questions"]}), flips=res["fixed"] + res["regressed"])
+    res.update(basis=d["basis"], proxy=d["proxy"], n=len({x["id"] for x in ma["questions"]} & {x["id"] for x in mb["questions"]}), flips=res["fixed"] + res["regressed"])
     return res
 
 
@@ -667,6 +675,7 @@ def pool(deltas):
     out = {k: sum(d[k] for d in deltas) for k in _POOL}
     bases = {d["basis"] for d in deltas}
     out["basis"] = "key" if "key" in bases else ("QA" if "QA" in bases else None)
+    out["proxy"] = any(d.get("proxy") for d in deltas)
     out["n"] = sum(d["n"] for d in deltas)
     return out
 
@@ -683,7 +692,7 @@ def verdict(d):
     if (not noise(f, r) and r > f) or (not noise(wg, wn) and wn > wg):
         return "regression", "COVERAGE_UP_QUALITY_DOWN" if cov_up else None
     if not noise(f, r) and f > r:
-        return ("better (proxy)" if d["basis"] == "QA" else "better"), None
+        return ("better (proxy)" if d["basis"] == "QA" or d.get("proxy") else "better"), None
     flag = "watch: coverage up, quality down within noise" if cov_up and (r > f or wn > wg) else None
     return "same (within noise n=%d flips=%d)" % (d["n"], f + r), flag
 
@@ -893,7 +902,9 @@ def causes_text(paths):
     cnt, wrong, flagged = {}, 0, 0
     for p in paths:
         for r in _tsv_rows(p)[1]:
-            cnt[r.get("primary")] = cnt.get(r.get("primary"), 0) + 1
+            if not r.get("primary"):
+                continue
+            cnt[r["primary"]] = cnt.get(r["primary"], 0) + 1
             if r.get("outcome") == "flagged_right":
                 flagged += 1
             else:

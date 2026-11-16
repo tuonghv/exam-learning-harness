@@ -38,6 +38,9 @@ SUBJECT_SKIP = ("INDEX.md", "improvements.md")
 def _check_name(label, v):
     if not NAME_RE.match(v or ""):
         raise ValueError("%s must match [A-Za-z0-9_.-]+ (got %r)" % (label, v))
+    if label == "subject" and ((v + ".md").lower() in {s.lower() for s in SUBJECT_SKIP}
+                               or v.lower().endswith((".new", ".old"))):
+        raise ValueError("%s %r is reserved" % (label, v))
     return v
 
 
@@ -85,7 +88,7 @@ def refined_info(path):
 
 def _guard(text):
     """Exam text is data: no line may open a section or fake a review line."""
-    return "\n".join(ZWSP + ln if ln.startswith(("#", "Your review:", "Engine:", "Flags:")) else ln
+    return "\n".join(ZWSP + ln if ln.startswith(("#", "Your review:", "Engine:", "Flags:", "QA: ", "Answer changed:")) else ln
                      for ln in text.split("\n"))
 
 

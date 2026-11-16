@@ -114,7 +114,7 @@ def nested_superseded(folder, rel, cache):
         sub = "/".join(parts[i:])
         for sup in cache[d]:
             if fnmatch.fnmatch(sub, sup["glob"]):
-                return sup.get("note", "")
+                return sup.get("note") or ""
     return None
 
 
@@ -138,7 +138,7 @@ def superseded_note(rel, root_name=None, extra=None):
     cands = [rel] + (["%s/%s" % (root_name, rel)] if root_name else [])
     for sup in list(load().get("superseded", [])) + list(extra or []):
         if any(fnmatch.fnmatch(c, sup["glob"]) for c in cands):
-            return sup.get("note", "")
+            return sup.get("note") or ""
     return ""
 
 
@@ -203,8 +203,10 @@ def _has_text(block):
             if not run:
                 first = i
             run.append(m.group(1))
-        elif run:
+        elif run and len(run) >= 2:
             break
+        elif run:
+            run, first = [], None
     return len(run) >= 2 and any(ln.strip() for ln in lines[:first])
 
 

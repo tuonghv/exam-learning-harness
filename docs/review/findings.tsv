@@ -21,25 +21,25 @@ id	report	class	disposition	ref	note
 108-F010	phase-108-ingest-segment-refine.md	BUG	fixed	TASK-108	
 109-F001	phase-109-metrics-logic.md	NOT-A-DEFECT	not-a-defect	TASK-107	closed by triage
 109-F002	phase-109-metrics-logic.md	BUG	fixed	TASK-112	
-109-F003	phase-109-metrics-logic.md	IMPROVEMENT	open	TASK-135	re-triaged TASK-131: still valid
+109-F003	phase-109-metrics-logic.md	IMPROVEMENT	fixed	TASK-135	tests/unit/test_review_fix_c_135.py
 109-F004	phase-109-metrics-logic.md	BUG	fixed	TASK-112	
-109-F005	phase-109-metrics-logic.md	IMPROVEMENT	open	TASK-135	re-triaged TASK-131: still valid
-109-F006	phase-109-metrics-logic.md	IMPROVEMENT	open	TASK-135	re-triaged TASK-131: still valid
+109-F005	phase-109-metrics-logic.md	IMPROVEMENT	fixed	TASK-135	tests/unit/test_review_fix_c_135.py
+109-F006	phase-109-metrics-logic.md	IMPROVEMENT	fixed	TASK-135	tests/unit/test_review_fix_c_135.py
 110-F001	phase-110-claude-adapter.md	BUG	fixed	TASK-109	
 110-F002	phase-110-claude-adapter.md	BUG	fixed	TASK-109	
 110-F003	phase-110-claude-adapter.md	NOT-A-DEFECT	not-a-defect	TASK-107	closed by triage
 110-F004	phase-110-claude-adapter.md	IMPROVEMENT	fixed	TASK-133	tests/unit/test_review_fix_a_133.py
 110-F005	phase-110-claude-adapter.md	IMPROVEMENT	fixed	TASK-133	tests/unit/test_review_fix_a_133.py
 110-F006	phase-110-claude-adapter.md	NOT-A-DEFECT	not-a-defect	TASK-107	closed by triage
-111-F001	phase-111-review-report-kinds.md	IMPROVEMENT	open	TASK-135	re-triaged TASK-131: still valid
-111-F002	phase-111-review-report-kinds.md	BUG	open	TASK-135	re-triaged TASK-131: still valid
+111-F001	phase-111-review-report-kinds.md	IMPROVEMENT	fixed	TASK-135	tests/unit/test_review_fix_c_135.py
+111-F002	phase-111-review-report-kinds.md	BUG	fixed	TASK-135	tests/unit/test_review_fix_c_135.py
 111-F003	phase-111-review-report-kinds.md	IMPROVEMENT	not-a-defect	TASK-131	re-triage: only caller passes an already-validated subject
 111-F004	phase-111-review-report-kinds.md	BUG	fixed	TASK-110	
 111-F005	phase-111-review-report-kinds.md	BUG	fixed	TASK-110	
 111-F006	phase-111-review-report-kinds.md	BUG	fixed	TASK-110	
 111-F007	phase-111-review-report-kinds.md	BUG	fixed	TASK-110	
-111-F008	phase-111-review-report-kinds.md	IMPROVEMENT	open	TASK-135	re-triaged TASK-131: still valid
-111-F009	phase-111-review-report-kinds.md	IMPROVEMENT	open	TASK-135	re-triaged TASK-131: still valid
+111-F008	phase-111-review-report-kinds.md	IMPROVEMENT	fixed	TASK-135	tests/unit/test_review_fix_c_135.py
+111-F009	phase-111-review-report-kinds.md	IMPROVEMENT	fixed	TASK-135	tests/unit/test_review_fix_c_135.py
 113-F001	phase-113-cli-logic-b2.md	BUG	fixed	TASK-115	
 113-F002	phase-113-cli-logic-b2.md	IMPROVEMENT	fixed	TASK-115	
 113-F003	phase-113-cli-logic-b2.md	BUG	fixed	TASK-115	
