@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-118",
-  "state": "UNIT_TESTED",
-  "next": "verify against the oracles",
+  "state": "VERIFIED",
+  "next": "write the report and close TASK-118; then pick TASK-119 Fix-I",
   "title": "Fix-H parts: 117-F001/F009/F010/F002/F003 (REQ-0125)",
   "active": [
     {
       "task_id": "TASK-118",
-      "state": "UNIT_TESTED",
-      "next": "verify against the oracles",
-      "updated_at": "2026-11-16T05:41:03Z"
+      "state": "VERIFIED",
+      "next": "write the report and close TASK-118; then pick TASK-119 Fix-I",
+      "updated_at": "2026-11-16T05:41:04Z"
     }
   ],
   "max_active": 1

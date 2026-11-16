@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-118",
   "title": "Fix-H parts: 117-F001/F009/F010/F002/F003 (REQ-0125)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0125",
   "acceptance_criteria": [
     "AC1 key after block 6",
@@ -34,12 +34,18 @@
     "result": "--fast 2058 ran, KNOWN 4, NEW 0; 11 tests OK; tester bite on old code: 6 + flipped inspect test fail, 5 guards pass"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "closes a key-leak path; failure direction is a loud answer_key_present refusal; no new input surface"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-118/handoff/verify.md",
+      "work/TASK-118/evidence/summary.md",
+      "work/TASK-118/evidence/parts.new.json"
+    ],
+    "command": "python3 -I work/TASK-118/evidence/parts_oracle.py <old|new src>; python3 -I work/TASK-114/evidence/oracle.py <old|new src> .",
+    "result": "AC1-AC6 met; 0 parts/segment changes on 4 PDFs + 22 examples; tests bite"
   },
   "report": {
     "status": "pending",
@@ -51,7 +57,10 @@
   "roles": {
     "designer": "work/TASK-118/handoff/design.md",
     "coder": "work/TASK-118/handoff/code.md",
-    "tester": "work/TASK-118/handoff/test.md"
+    "tester": "work/TASK-118/handoff/test.md",
+    "verifier": {
+      "waiver": "coordinator verified with two $0 old-vs-new oracles over all real inputs plus the tester's independent bite check (RAW-00342: keep pace)"
+    }
   },
   "user_notes": [
     {
@@ -61,7 +70,7 @@
     }
   ],
   "picked_at": "2026-11-16T05:28:38Z",
-  "updated_at": "2026-11-16T05:41:03Z",
+  "updated_at": "2026-11-16T05:41:04Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/*.py",
@@ -73,5 +82,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verify against the oracles"
+  "next": "write the report and close TASK-118; then pick TASK-119 Fix-I"
 }
