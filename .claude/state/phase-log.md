@@ -3715,3 +3715,9 @@ Action: wrote report
 Result: TASK-127 closed
 Decision: default prompts = v1.3.0
 Next: coordinator picks next
+
+## DESIGN - TASK-128 - 2026-11-16T11:39:11Z
+Action: traced stale golden
+Result: 58 intended diff lines
+Decision: invariants
+Next: IMPLEMENTING

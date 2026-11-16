@@ -1,0 +1,69 @@
+{
+  "task_id": "TASK-128",
+  "title": "Stale TASK-048 real-doc golden (REQ-0135)",
+  "state": "DESIGN",
+  "requirement": "REQ-0135",
+  "acceptance_criteria": [
+    "AC1 invariants, bites",
+    "AC2 synthetic goldens kept, --fast NEW 0"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-128-stale-golden-48.md",
+    "summary": "real-doc golden asserts sidecar invariants on HEAD instead of byte equality with 63a5299",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {
+    "designer": {
+      "waiver": "test-only change traced by the coordinator"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00348",
+      "note": "user: next (stale golden fix)",
+      "at": "2026-11-16T11:38:38Z"
+    }
+  ],
+  "picked_at": "2026-11-16T11:38:38Z",
+  "updated_at": "2026-11-16T11:39:12Z",
+  "updated_by": "main",
+  "scope": [
+    "tests/unit/test_assembly_qa.py",
+    "docs/design/phase-128*",
+    "docs/report/phase-128*",
+    "docs/report/INDEX.md"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "edit the test"
+}

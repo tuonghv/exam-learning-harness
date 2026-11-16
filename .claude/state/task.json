@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-127",
-  "state": "DONE",
-  "next": "",
-  "title": "Prompt release v1.3.0 as default (diacritics rule reaches default runs) (REQ-0134)",
-  "active": [],
+  "task_id": "TASK-128",
+  "state": "DESIGN",
+  "next": "edit the test",
+  "title": "Stale TASK-048 real-doc golden (REQ-0135)",
+  "active": [
+    {
+      "task_id": "TASK-128",
+      "state": "DESIGN",
+      "next": "edit the test",
+      "updated_at": "2026-11-16T11:39:12Z"
+    }
+  ],
   "max_active": 1
 }
