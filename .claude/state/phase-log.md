@@ -3499,3 +3499,9 @@ Action: repro + dry-run oracle
 Result: all met
 Decision: VERIFIED
 Next: DONE
+
+## DONE - TASK-120 - 2026-11-16T06:02:58Z
+Action: wrote report
+Result: TASK-120 closed; batch-3 P1/P2 done
+Decision: next: TASK-121 segment false questions
+Next: pick TASK-121

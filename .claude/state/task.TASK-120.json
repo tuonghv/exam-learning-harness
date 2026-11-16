@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-120",
   "title": "Fix-J boundary + cost cap: 118-F001/F007/F009, D1 (REQ-0127)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0127",
   "acceptance_criteria": [
     "AC1 no lost suspects",
@@ -42,11 +42,19 @@
       "work/TASK-120/evidence/repro_new.out"
     ],
     "command": "python3 -I work/TASK-117/repro_boundary.py; python3 -I scripts/exam.py ingest input/exam/math/math_12_graduation_2026_001.pdf --boundary-ai haiku --dry-run",
-    "result": "AC1-AC4 met; repros fixed; dry-run estimate unchanged; 0 paid calls"
+    "result": "AC1-AC4 met; repros fixed; dry-run estimate unchanged; 0 paid calls",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-120/evidence/summary.md",
+        "work/TASK-120/evidence/repro_new.out"
+      ],
+      "reason": "pre-fix repros flip; dry-run estimate on a real PDF unchanged"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-120-boundary-cost-cap.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -59,6 +67,9 @@
     },
     "verifier": {
       "waiver": "small accounting change; coordinator verified with repro + dry-run oracle (RAW-00342)"
+    },
+    "crosscheck": {
+      "waiver": "crosscheck by the coordinator: pre-fix repro script and dry-run estimate re-run on new code, independent of the coder's tests"
     }
   },
   "user_notes": [
@@ -69,7 +80,7 @@
     }
   ],
   "picked_at": "2026-11-16T05:56:14Z",
-  "updated_at": "2026-11-16T06:02:49Z",
+  "updated_at": "2026-11-16T06:02:58Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/*.py",
@@ -82,5 +93,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "write the report and close TASK-120; then TASK-121"
+  "next": ""
 }

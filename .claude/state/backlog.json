@@ -2441,7 +2441,7 @@
     "task_id": "TASK-120",
     "title": "Fix-J boundary + cost cap: 118-F001/F007/F009, D1 (REQ-0127)",
     "priority": 3,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-16T05:28:37Z",
     "requirement": "REQ-0127",
     "acceptance_criteria": [
@@ -2456,7 +2456,9 @@
         "note": "coordinator sets priority (batch-3 plan)",
         "at": "2026-11-16T05:28:37Z"
       }
-    ]
+    ],
+    "completed_at": "2026-11-16T06:02:58Z",
+    "report": "docs/report/phase-120-boundary-cost-cap.md"
   },
   {
     "task_id": "TASK-121",

@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-120",
-  "state": "VERIFIED",
-  "next": "write the report and close TASK-120; then TASK-121",
+  "state": "DONE",
+  "next": "",
   "title": "Fix-J boundary + cost cap: 118-F001/F007/F009, D1 (REQ-0127)",
-  "active": [
-    {
-      "task_id": "TASK-120",
-      "state": "VERIFIED",
-      "next": "write the report and close TASK-120; then TASK-121",
-      "updated_at": "2026-11-16T06:02:49Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
