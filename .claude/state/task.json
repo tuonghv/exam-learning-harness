@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-127",
-  "state": "VERIFIED",
-  "next": "report and close",
+  "state": "DONE",
+  "next": "",
   "title": "Prompt release v1.3.0 as default (diacritics rule reaches default runs) (REQ-0134)",
-  "active": [
-    {
-      "task_id": "TASK-127",
-      "state": "VERIFIED",
-      "next": "report and close",
-      "updated_at": "2026-11-16T11:21:20Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

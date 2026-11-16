@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-127",
   "title": "Prompt release v1.3.0 as default (diacritics rule reaches default runs) (REQ-0134)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0134",
   "acceptance_criteria": [
     "AC1 release v1.3.0 = dev, verify",
@@ -47,11 +47,18 @@
       "work/TASK-127/evidence/fast.txt"
     ],
     "command": "prompts verify v1.3.0; diff dev vs release; paid DGNL English check (approved); --fast",
-    "result": "AC1-AC4 met: 0 diacritics fails (was 5), 24/25 correct"
+    "result": "AC1-AC4 met: 0 diacritics fails (was 5), 24/25 correct",
+    "quality": {
+      "kind": "real-run",
+      "evidence": [
+        "work/TASK-127/evidence/summary.md"
+      ],
+      "reason": "approved paid run: 0 diacritics fails, 24/25 vs key"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-127-prompt-release-v1-3.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -68,6 +75,9 @@
     },
     "verifier": {
       "waiver": "coordinator verified with the approved paid run and release verify"
+    },
+    "crosscheck": {
+      "waiver": "crosscheck by the coordinator: answers scored against the key file, dev/release byte diff"
     }
   },
   "user_notes": [
@@ -83,7 +93,7 @@
     }
   ],
   "picked_at": "2026-11-16T10:14:50Z",
-  "updated_at": "2026-11-16T11:21:20Z",
+  "updated_at": "2026-11-16T11:21:36Z",
   "updated_by": "main",
   "scope": [
     "prompts/releases/v1.3.0/**",
@@ -100,5 +110,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report and close"
+  "next": ""
 }
