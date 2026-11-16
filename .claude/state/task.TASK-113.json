@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-113",
   "title": "Triage code-review batch 2 (phases 113-114) (REQ-0120)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0120",
   "acceptance_criteria": [
     "AC1 20 findings classified with evidence",
@@ -40,11 +40,19 @@
       "work/TASK-113/repro_ingest.out"
     ],
     "command": "python3 -I work/TASK-113/repro_cli.py; git diff --name-only baa5054 HEAD -- src tests",
-    "result": "AC1-AC4 met; 5 BUG repros, 2 traced, 0 src/tests files changed; plan approved by user 2026-11-16"
+    "result": "AC1-AC4 met; 5 BUG repros, 2 traced, 0 src/tests files changed; plan approved by user 2026-11-16",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-113/repro_cli.out",
+        "work/TASK-113/repro_ingest.out"
+      ],
+      "reason": "5 BUG rows re-run independently of the reviewers"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-113-review-triage-b2.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -59,6 +67,9 @@
     },
     "verifier": {
       "waiver": "triage-only task; the user approved the plan, coordinator checked ACs in verify.md"
+    },
+    "crosscheck": {
+      "waiver": "crosscheck run by the coordinator itself: repro scripts re-ran 5 BUG rows independently of the reviewers (work/TASK-113/repro_cli.out, repro_ingest.out)"
     }
   },
   "user_notes": [
@@ -74,7 +85,7 @@
     }
   ],
   "picked_at": "2026-11-15T23:57:32Z",
-  "updated_at": "2026-11-16T03:38:24Z",
+  "updated_at": "2026-11-16T03:38:39Z",
   "updated_by": "main",
   "scope": [
     "docs/design/phase-113-*",
@@ -86,5 +97,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "write the report and close TASK-113; then open Fix-F ingest REQ/TASK"
+  "next": ""
 }

@@ -78,3 +78,4 @@ Rule (RAW-00171, REQ-0061): evidence summaries are small text with no exam conte
 | TASK-110 Fix-C review pack: 111-F004/F005/F006/F0 | docs/design/phase-110-review-pack-marks-safe.md | docs/report/phase-110-review-pack-marks-safe.md | - | - | - |
 | TASK-111 Fix-D CLI exit codes: 107-F001/F002/F008 | docs/design/phase-111-cli-exit-codes.md | docs/report/phase-111-cli-exit-codes.md | - | - | - |
 | TASK-112 Fix-E metrics: 109-F002 shared_ref, 109-F | docs/design/phase-112-metrics-shared-ref-pairs.md | docs/report/phase-112-metrics-shared-ref-pairs.md | - | - | - |
+| TASK-113 Code-review triage b2: 20 findings -> 7 BU | docs/design/phase-113-review-triage-b2.md | docs/report/phase-113-review-triage-b2.md | - | - | - |

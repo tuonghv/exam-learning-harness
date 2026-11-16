@@ -2271,7 +2271,7 @@
     "task_id": "TASK-113",
     "title": "Triage code-review batch 2 (phases 113-114) (REQ-0120)",
     "priority": 2,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-16T06:57:32",
     "requirement": "REQ-0120",
     "acceptance_criteria": [
@@ -2280,6 +2280,19 @@
       "AC3 P1-P3 plan",
       "AC4 no src/tests change"
     ],
-    "user_notes": []
+    "user_notes": [
+      {
+        "raw": "RAW-00339",
+        "note": "user: do the batch-2 triage (113/114), no fix before go",
+        "at": "2026-11-15T23:57:32Z"
+      },
+      {
+        "raw": "RAW-00340",
+        "note": "user: show the fix tasks clearly; approval comes in a new session after context clear",
+        "at": "2026-11-16T03:36:35Z"
+      }
+    ],
+    "completed_at": "2026-11-16T03:38:39Z",
+    "report": "docs/report/phase-113-review-triage-b2.md"
   }
 ]
