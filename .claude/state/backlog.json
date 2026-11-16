@@ -2662,5 +2662,26 @@
     ],
     "completed_at": "2026-11-16T11:41:15Z",
     "report": "docs/report/phase-128-stale-golden-48.md"
+  },
+  {
+    "task_id": "TASK-129",
+    "title": "PDF free text path keeps table blocks (REQ-0136)",
+    "priority": 2,
+    "status": "queued",
+    "created_at": "2026-11-16T12:42:36Z",
+    "requirement": "REQ-0136",
+    "acceptance_criteria": [
+      "AC1 synthetic table/box",
+      "AC2 real PDFs 120 + oracle",
+      "AC3 --pages parity",
+      "AC4 tests, --fast"
+    ],
+    "user_notes": [
+      {
+        "raw": "RAW-00349",
+        "note": "found in the approved Vietnamese/Science paid runs",
+        "at": "2026-11-16T12:42:36Z"
+      }
+    ]
   }
 ]
