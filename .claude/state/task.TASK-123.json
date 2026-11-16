@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-123",
   "title": "P3-a CLI hardening 113-F004/F006-F010 (REQ-0130)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0130",
   "acceptance_criteria": [
     "AC1 compare exam mismatch",
@@ -28,9 +28,9 @@
     "summary": "cli.py: compare uses per-ref history exam sha; unsafe report dirs skipped with a note; boundary-trace parent checked before ingest; --last < 0 usage error; board 'exam sha unknown' reason; --questions without --refined / --refined without --exam-out usage errors. 7 tests"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --fast; bite on git archive HEAD",
+    "result": "--fast 2105 ran, KNOWN 4, NEW 0; all 7 item tests fail on old code"
   },
   "security": {
     "status": "pending",
@@ -51,7 +51,10 @@
     "designer": {
       "waiver": "rows already designed with repros in work/TASK-113/handoff/design-cli.md; coordinator wrote the design doc"
     },
-    "coder": "work/TASK-123/handoff/code.md"
+    "coder": "work/TASK-123/handoff/code.md",
+    "tester": {
+      "waiver": "coordinator ran --fast and an independent bite check (evidence/bite.out) (RAW-00342)"
+    }
   },
   "user_notes": [
     {
@@ -73,5 +76,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tests"
+  "next": "verify"
 }
