@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-135",
   "title": "Review leftovers fix C: metrics/report_kinds/review (REQ-0142)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0142",
   "acceptance_criteria": [
     "AC1 tests per id",
@@ -25,9 +25,9 @@
     "summary": "metrics proxy flag + causes/backfill guards; report_kinds null note + _has_text runs; review guard + reserved names; 7 tests"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --fast; coder bite on a HEAD copy",
+    "result": "KNOWN 4 NEW 0; 7/7 new tests fail on old code"
   },
   "security": {
     "status": "pending",
@@ -48,7 +48,10 @@
     "designer": {
       "waiver": "designed in the TASK-131 re-triage (work/TASK-131/handoff/design-ingest.md)"
     },
-    "coder": "work/TASK-135/handoff/code.md"
+    "coder": "work/TASK-135/handoff/code.md",
+    "tester": {
+      "waiver": "coordinator re-ran --fast; coder ran the bite"
+    }
   },
   "user_notes": [
     {
@@ -80,5 +83,5 @@
     "next": "on coder hand-back: check code.md, --fast, set 7 ledger rows fixed TASK-135, advance IMPLEMENTING",
     "at": "2026-11-16T15:34:40Z"
   },
-  "next": "tests"
+  "next": "verify"
 }
