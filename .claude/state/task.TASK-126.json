@@ -1,0 +1,82 @@
+{
+  "task_id": "TASK-126",
+  "title": "Text-path fixes: options_missing marker, wrapped group instruction, DGNL guide (REQ-0133)",
+  "state": "DESIGN",
+  "requirement": "REQ-0133",
+  "acceptance_criteria": [
+    "AC1 MC no options marked",
+    "AC2 non-MC unchanged",
+    "AC3 wrapped instruction",
+    "AC4 real PDF oracle diff",
+    "AC5 guide",
+    "AC6 tests, --fast"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-126-text-path-fixes.md",
+    "summary": "free path: MC question without options gets options_missing marker; split_guide joins a wrapped instruction line; DGNL guide text-path section",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {
+    "designer": {
+      "waiver": "two one-line causes traced by the coordinator from the paid run; coordinator wrote the design doc"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00344",
+      "note": "found in the approved paid DGNL English text-path solve",
+      "at": "2026-11-16T09:51:00Z"
+    },
+    {
+      "raw": "RAW-00345",
+      "note": "decide yourself; ask only for paid/security",
+      "at": "2026-11-16T09:51:00Z"
+    }
+  ],
+  "picked_at": "2026-11-16T09:51:00Z",
+  "updated_at": "2026-11-16T09:51:40Z",
+  "updated_by": "main",
+  "scope": [
+    "src/exam_engine/ingest/api.py",
+    "src/exam_engine/ingest/segment.py",
+    "tests/unit/test_text_path_126.py",
+    "docs/guide/dgnl-real-exam.md",
+    "docs/design/phase-126*",
+    "docs/report/phase-126*",
+    "docs/report/INDEX.md",
+    "tests/**"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "implement 126.1-126.3"
+}

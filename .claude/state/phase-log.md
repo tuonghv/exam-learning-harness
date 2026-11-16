@@ -3655,3 +3655,9 @@ Action: wrote report
 Result: TASK-125 closed; batch-2/3 review findings all handled
 Decision: backlog empty
 Next: coordinator picks next
+
+## DESIGN - TASK-126 - 2026-11-16T09:51:40Z
+Action: coordinator traced the 3 text-path issues of the DGNL English run
+Result: 2 code items + guide; diacritics check correct (dropped)
+Decision: implement
+Next: IMPLEMENTING
