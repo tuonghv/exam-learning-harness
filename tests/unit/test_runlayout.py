@@ -448,10 +448,9 @@ class U5ReportRuns(Base):
             code, _, err = quiet(cli.report_main, [plan, "--no-pdf"])
         self.assertEqual(code, 2)
         self.assertIn("boom", err)
-        runs = runlayout.list_report_runs("reports", "input-001")
-        self.assertEqual(len(runs), 1)
-        self.assertFalse(os.path.exists(runlayout.manifest_path(runs[0]["dir"])))
-        self.assertEqual(runs[0]["layout"], "incomplete")
+        # 115.2 (113-F002): the fresh run dir this call claimed is removed, so no run (complete or not) is left;
+        # `incomplete` stays for a kill/crash or a --report-id/--out reuse
+        self.assertEqual(runlayout.list_report_runs("reports", "input-001"), [])
         self.assertEqual(runlayout.new_run_dirs(os.path.join("reports", "input-001")), [])
 
     def test_87_3_legacy_report_dir_named_run_f_is_legacy(self):

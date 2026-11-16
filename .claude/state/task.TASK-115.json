@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-115",
   "title": "Fix-G cli: 113-F001/F003/F005/F002 (REQ-0122)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0122",
   "acceptance_criteria": [
     "AC1 no empty plan run dir",
@@ -19,8 +19,13 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/cli.py",
+      "tests/unit/test_cli_fix_g_115.py",
+      "tests/unit/test_runlayout.py"
+    ],
+    "summary": "cli.py: 115.1 rmtree claimed plan dir when solve fails before start; 115.2 _drop_fresh_report_dir (fresh run dir + empty line/exam parents, never root, never --out/--report-id); 115.3/3b _rs_resolve returns resolved path for stats and explain; 115.4 --write-recipe --dry-run exit 2. 7 new tests (6 bite on old cli.py, AC2b guard). test_87_3 updated to the approved F002 behaviour"
   },
   "unit_test": {
     "status": "pending",
@@ -43,7 +48,8 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-115/handoff/design.md"
+    "designer": "work/TASK-115/handoff/design.md",
+    "coder": "work/TASK-115/handoff/code.md"
   },
   "user_notes": [
     {
@@ -53,7 +59,7 @@
     }
   ],
   "picked_at": "2026-11-16T04:01:37Z",
-  "updated_at": "2026-11-16T04:19:21Z",
+  "updated_at": "2026-11-16T04:25:26Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
@@ -66,5 +72,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "coder implements 115.1-115.4 with tests/unit/test_cli_fix_g_115.py"
+  "next": "tester runs --fast and an independent bite check"
 }

@@ -49,6 +49,7 @@ New `tests/unit/test_cli_fix_g_115.py`, one test per AC (115.1-115.4) from the c
 | 115.1-115.4 | `python3 -I work/TASK-113/repro_cli.py` on new src -> `113-F001 solve rc 2 run dirs left 0`; `113-F003 ... same output`; `113-F005 ... rc 2 unchanged`; `113-F003b ... same` (old src output = work/TASK-113/repro_cli.out) | $0 |
 | AC5 | `python3 -I tools/run_tests.py --fast` -> NEW 0; new test file fails on `git stash`-ed src (main runs) | $0 |
 ## Decisions
+- 115.2 supersedes the phase-87 failure row "Build fails mid-way -> run-list incomplete" for a fresh dir only; `incomplete` remains for kill/crash and `--report-id`/`--out` reuse. test_runlayout test_87_3_failed_build_leaves_no_complete_run_json updated to expect no run.
 - F002 cleanup only for a dir this call created (not `--out`, not `--report-id`) - rejected review Fix (rmtree when manifest missing at :456) - deletes a reused complete run.
 - F005 usage error - rejected preview mode - new feature.
 - F003 4th return value - rejected re-resolving in `_rs_compute` - duplicate logic was the bug.

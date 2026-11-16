@@ -3331,3 +3331,9 @@ Action: designer drafted 4 cli fixes; user included explain <run_id> (115.3b) as
 Result: design complete; solve paths untouched
 Decision: implement as designed
 Next: IMPLEMENTING via coder
+
+## IMPLEMENTING - TASK-115 - 2026-11-16T04:25:26Z
+Action: coder implemented 115.1-115.4; main updated test_87_3 and added empty-parent cleanup after it exposed an empty line dir listed as legacy
+Result: --affected 1210 ran, NEW 0
+Decision: implementation matches design + one cleanup refinement
+Next: UNIT_TESTED via tester

@@ -233,6 +233,8 @@ def solve_main(argv=None):
             result["reports"] = _build_default_report(a, result)
     except (OSError, ValueError, _ingest_error()) as exc:
         print("ERROR: %s" % exc, file=sys.stderr)
+        if plan_only and a.out and not os.path.isfile(os.path.join(a.out, "plan.json")):
+            shutil.rmtree(a.out, ignore_errors=True)  # claimed by this call, run never started
         return 2
     finally:
         if tmp:
@@ -428,6 +430,20 @@ def verify_main(argv):
     return 0
 
 
+def _drop_fresh_report_dir(out, root=None):
+    """115.2: remove a report run dir this call claimed, then its line and exam dirs if that left them empty
+    (an empty line dir would list as a `legacy` run). Never removes `root` itself."""
+    shutil.rmtree(out, ignore_errors=True)
+    stop = os.path.abspath(root or DEFAULT_REPORT_ROOT)
+    d = os.path.dirname(os.path.abspath(out))
+    while d != stop and d.startswith(stop + os.sep):
+        try:
+            os.rmdir(d)  # only succeeds when empty
+        except OSError:
+            break
+        d = os.path.dirname(d)
+
+
 def _report_plan(argv):
     """report PLAN_RUN [--view sheet|learn] [--no-pdf] [--report-id ID] [--out DIR]"""
     ap = argparse.ArgumentParser(prog="exam report", description="Rebuild a report from a plan run "
@@ -467,6 +483,8 @@ def _report_plan(argv):
             runlayout.finish_report_run(out, [plan], a.view, git, "report")
     except (OSError, ValueError) as exc:
         print("ERROR: %s" % exc, file=sys.stderr)
+        if not a.out and not a.rid and not os.path.isfile(runlayout.manifest_path(out)):
+            _drop_fresh_report_dir(out)
         return 2
     for key in ("md", "answers", "html", "pdf"):
         if info["reports"].get(key):
@@ -507,6 +525,7 @@ def report_pack_main(argv):
                     help="allow writing into line main (the published line); default: refused, use --line <dev>")
     _add_overlay_args(ap)
     a = ap.parse_args(argv)
+    out = None
     try:
         plan_dirs = [os.path.abspath(p.rstrip("/")) for p in a.plans]
         overlays = overlay.resolve(a.overlay, plan_dirs, a.overlay_reason)  # every check before any write
@@ -522,6 +541,8 @@ def report_pack_main(argv):
                                       overlays=overlays)
     except (OSError, ValueError) as exc:
         print("ERROR: %s" % exc, file=sys.stderr)
+        if out and not a.out and not os.path.isfile(runlayout.manifest_path(out)):
+            _drop_fresh_report_dir(out)
         return 2
     print("report-pack %d file(s) + %s -> %s" % (len(info["files"]), report_kinds.INDEX_NAME, out))
     if info["total"]:
@@ -794,6 +815,9 @@ def rebuild_reports_main(argv):
     ap.add_argument("--plans", help="default: <root>/plans")
     ap.add_argument("--reports", help="default: <root>/reports")
     a = ap.parse_args(argv)
+    if a.write_recipe and a.dry_run:
+        print("ERROR: --write-recipe and --dry-run cannot be combined", file=sys.stderr)
+        return 2
     plans = a.plans or os.path.join(a.root, DEFAULT_OUT_ROOT)
     reports = a.reports or os.path.join(a.root, DEFAULT_REPORT_ROOT)
     try:
@@ -1964,7 +1988,7 @@ def _rs_moved(path):
 
 
 def _rs_resolve(ref, hist, legacy=None):
-    """(result, log lines, history line or None) for a result dir or a history run_id; ValueError if unknown."""
+    """(result, log lines, history line or None, resolved dir) for a result dir or a history run_id; ValueError if unknown."""
     lines = _rs_lines(argparse.Namespace(history=hist, legacy=legacy))[0]
     path = ref
     if not os.path.isfile(os.path.join(ref, "result.json")):
@@ -1980,15 +2004,13 @@ def _rs_resolve(ref, hist, legacy=None):
     rp = os.path.abspath(os.path.join(path, "result.json"))
     line = ([ln for ln in lines if ln.get("result_path") == rp or
              (ln.get("result_path") and os.path.abspath(_rs_moved(ln["result_path"])) == rp)] or [None])[-1]
-    return settings.load_json(rp), metrics.load_log(os.path.join(path, "run.log")), line
+    return settings.load_json(rp), metrics.load_log(os.path.join(path, "run.log")), line, path
 
 
 def _rs_compute(ref, a):
-    result, log, line = _rs_resolve(ref, a.history, a.legacy)
+    result, log, line, ref = _rs_resolve(ref, a.history, a.legacy)
     exam = qa = None
     keymap = scorer.key_letters(a.ans_key) if a.ans_key else None
-    if not os.path.isfile(os.path.join(ref, "result.json")):
-        ref = _rs_plan_ref(ref) or _rs_moved(ref)
     if a.exam:
         exam, _code = _load_exam(a.exam)
         if exam is None:  # _load_exam printed the input errors
@@ -2234,13 +2256,13 @@ def _rs_explain(a):
     rows, multi, matched, total, cal, unreliable = [], 0, 0, 0, [], 0
     for ref in a.refs:
         d, _, e = ref.partition("=")
-        path = e or a.exam or os.path.join(d, "input", "exam.md")
+        result, _log, _line, rdir = _rs_resolve(d, a.history, a.legacy)
+        path = e or a.exam or os.path.join(rdir, "input", "exam.md")
         exam, code = _load_exam(path)
         if exam is None:
             return code
-        result = _rs_resolve(d, a.history, a.legacy)[0]
         subj = re.sub(r"[^A-Za-z0-9_-]", "_", str((result.get("exam") or {}).get("subject") or os.path.basename(d)))
-        calls = os.path.join(d, "calls")
+        calls = os.path.join(rdir, "calls")
         if a.calibrate:
             cal += ["subject %s" % subj] + explain.calibrate(
                 explain.analyze(explain.join(result, exam, calls, subj)), pages or [])
