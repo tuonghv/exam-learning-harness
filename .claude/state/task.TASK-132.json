@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-132",
   "title": "Report names: non-Latin/missing subject slug (REQ-0139)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0139",
   "acceptance_criteria": [
     "AC1 non-Latin subject report",
@@ -23,9 +23,9 @@
     "summary": "reporter.default_names: '' or 'all' subject slug -> 'subject'; 3 tests"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --fast; bite on git archive",
+    "result": "KNOWN 4 NEW 0; 2/3 new tests fail on old code"
   },
   "security": {
     "status": "pending",
@@ -48,6 +48,9 @@
     },
     "coder": {
       "waiver": "one-line fix by the coordinator"
+    },
+    "tester": {
+      "waiver": "coordinator ran --fast and the bite"
     }
   },
   "user_notes": [
@@ -58,7 +61,7 @@
     }
   ],
   "picked_at": "2026-11-16T13:04:45Z",
-  "updated_at": "2026-11-16T13:06:53Z",
+  "updated_at": "2026-11-16T13:06:54Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/reporter.py",
@@ -73,5 +76,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tests"
+  "next": "verify"
 }
