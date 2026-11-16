@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-116",
   "title": "Fix-F follow-up: share unaccented Cau N - M passage (REQ-0123)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0123",
   "acceptance_criteria": [
     "AC1 Cau intro shared to range",
@@ -16,8 +16,12 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/ingest/segment.py",
+      "tests/unit/test_ingest_fix_f.py"
+    ],
+    "summary": "segment.build() returns GROUP_ANY=re.compile(span_i, re.I); module GROUP_ANY = _NS.GROUP_ANY; GROUP_RE/_INTRO untouched; 2 tests in test_ingest_fix_f.py (Cau shared bites, C\u00c2U guard)"
   },
   "unit_test": {
     "status": "pending",
@@ -42,7 +46,8 @@
   "roles": {
     "designer": {
       "waiver": "size-S one-line change; coordinator reproduced the gap end to end and wrote the design (docs/design/phase-116-cau-group-share.md)"
-    }
+    },
+    "coder": "work/TASK-116/handoff/code.md"
   },
   "user_notes": [
     {
@@ -52,7 +57,7 @@
     }
   ],
   "picked_at": "2026-11-16T04:36:07Z",
-  "updated_at": "2026-11-16T04:36:38Z",
+  "updated_at": "2026-11-16T04:45:14Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/*.py",
@@ -64,5 +69,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "coder implements 116.1 with a regression test"
+  "next": "record --fast and the independent bite as unit-test evidence"
 }

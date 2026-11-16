@@ -31,7 +31,9 @@ def build(table):
         _PART=re.compile(r"^\s*" + part + r"\s+(IV|V|I{1,3})\b", re.I),  # as refine.PART_RE (refine imports this module)
         # a heading that must not be glued into option D: Roman or Arabic part heading
         _PART_ANY=re.compile(r"^\s*" + part + r"\s+(?:IV|V|I{1,3}|\d{1,2})\b", re.I),
-        part_word=part)
+        part_word=part,
+        # group word in any case, with or without diacritics (`Cau 2 - 3`, "answer questions 5-7")
+        GROUP_ANY=re.compile(span_i, re.I))
 
 
 _NS = build(langtable.load())
@@ -74,7 +76,7 @@ def _next_n(lines, i):
 
 _SUBHEAD = re.compile(r"^\s*\d+\.\d+\.?\s+\S")
 _ENUM = re.compile(r"^(?:([IVXLC]{1,4})|([A-Z])|(\d{1,2}))[.)]\s+\S")  # `I. X`, `B. Y`, `3. Z`
-GROUP_ANY = re.compile(GROUP_RE.pattern, GROUP_RE.flags | re.I)  # group word in any case ("answer questions 5-7")
+GROUP_ANY = _NS.GROUP_ANY
 
 
 def _mostly_upper(line):

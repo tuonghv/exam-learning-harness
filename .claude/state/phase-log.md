@@ -3361,3 +3361,9 @@ Action: coordinator reproduced: CÂU already shared via GROUP_ANY, Cau not
 Result: design: GROUP_ANY from span_i
 Decision: implement
 Next: IMPLEMENTING via coder
+
+## IMPLEMENTING - TASK-116 - 2026-11-16T04:45:14Z
+Action: coder implemented 116.1 + 2 tests
+Result: --affected 294 OK NEW 0
+Decision: matches design
+Next: UNIT_TESTED

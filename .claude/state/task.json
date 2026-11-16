@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-116",
-  "state": "DESIGN",
-  "next": "coder implements 116.1 with a regression test",
+  "state": "IMPLEMENTING",
+  "next": "record --fast and the independent bite as unit-test evidence",
   "title": "Fix-F follow-up: share unaccented Cau N - M passage (REQ-0123)",
   "active": [
     {
       "task_id": "TASK-116",
-      "state": "DESIGN",
-      "next": "coder implements 116.1 with a regression test",
-      "updated_at": "2026-11-16T04:36:38Z"
+      "state": "IMPLEMENTING",
+      "next": "record --fast and the independent bite as unit-test evidence",
+      "updated_at": "2026-11-16T04:45:14Z"
     }
   ],
   "max_active": 1

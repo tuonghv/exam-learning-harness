@@ -145,5 +145,25 @@ class TestRefine(unittest.TestCase):
         self.assertEqual(out["refined"]["calls"], len(calls))
 
 
+class TestCauGroupShare(unittest.TestCase):
+    def _share(self, head):
+        lines = (["Câu 1. q"] + ABCD_LINES + [head, "Para text."] + ["Câu 2. x"] + ABCD_LINES
+                 + ["Câu 3. y"] + ABCD_LINES)
+        _, qs, _ = seg(lines)
+        qs = [dict(x, id=str(x["n"])) for x in qs]
+        from exam_engine.ingest import api
+        return api._share_context(qs)
+
+    def test_cau_unaccented_group_shared(self):
+        sh = self._share("Cau 2 - 3: Doc doan van")
+        self.assertTrue(sh[1]["context"].startswith("Cau 2 - 3"))
+        self.assertTrue(sh[2]["context"].startswith("Cau 2 - 3"))
+
+    def test_upper_cau_group_still_shared(self):
+        sh = self._share("CÂU 2 - 3: ĐỌC ĐOẠN VĂN")
+        self.assertTrue(sh[1]["context"].startswith("CÂU 2 - 3"))
+        self.assertTrue(sh[2]["context"].startswith("CÂU 2 - 3"))
+
+
 if __name__ == "__main__":
     unittest.main()
