@@ -3397,3 +3397,9 @@ Action: plan set by coordinator (RAW-00342: no user gate)
 Result: no code change by design
 Decision: gates with waivers for code roles
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-117 - 2026-11-16T05:28:11Z
+Action: ran the $0 repro scripts
+Result: 12 BUG rows reproduce
+Decision: evidence enough
+Next: VERIFIED

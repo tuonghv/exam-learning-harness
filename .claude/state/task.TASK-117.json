@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-117",
   "title": "Triage code-review batch 3 (phases 117-118) (REQ-0124)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0124",
   "acceptance_criteria": [
     "AC1 19 findings classified with evidence",
@@ -24,9 +24,9 @@
     "summary": "triage-only task: deliverable is docs/design/phase-117-review-triage-b3.md; no src/tests change (AC4)"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I work/TASK-117/repro_api.py; python3 -I work/TASK-117/repro_boundary.py",
+    "result": "12/12 BUG rows reproduce on current code (repro_api.out, repro_boundary.out); no unit tests: no code changed"
   },
   "security": {
     "status": "pending",
@@ -47,6 +47,9 @@
     "designer": "work/TASK-117/handoff/design-api.md",
     "coder": {
       "waiver": "triage-only task, no code to implement (REQ-0124 AC4)"
+    },
+    "tester": {
+      "waiver": "triage-only task; repro scripts stand in for tests, regression tests belong to the fix tasks"
     }
   },
   "user_notes": [
@@ -57,7 +60,7 @@
     }
   ],
   "picked_at": "2026-11-16T05:20:20Z",
-  "updated_at": "2026-11-16T05:28:11Z",
+  "updated_at": "2026-11-16T05:28:12Z",
   "updated_by": "main",
   "scope": [
     "docs/report/phase-11[78]-*.md"
@@ -68,5 +71,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "record the $0 repro runs as unit-test evidence"
+  "next": "verify ACs"
 }

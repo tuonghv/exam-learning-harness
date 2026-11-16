@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-117",
-  "state": "IMPLEMENTING",
-  "next": "record the $0 repro runs as unit-test evidence",
+  "state": "UNIT_TESTED",
+  "next": "verify ACs",
   "title": "Triage code-review batch 3 (phases 117-118) (REQ-0124)",
   "active": [
     {
       "task_id": "TASK-117",
-      "state": "IMPLEMENTING",
-      "next": "record the $0 repro runs as unit-test evidence",
-      "updated_at": "2026-11-16T05:28:11Z"
+      "state": "UNIT_TESTED",
+      "next": "verify ACs",
+      "updated_at": "2026-11-16T05:28:12Z"
     }
   ],
   "max_active": 1
