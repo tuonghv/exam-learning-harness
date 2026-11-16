@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-137",
   "title": "Triage code-review batch 4 (REQ-0144)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0144",
   "acceptance_criteria": [
     "AC1 rows with evidence",
@@ -9,9 +9,9 @@
     "AC3 ledger, no src change"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-137-review-triage-b4.md",
+    "summary": "28 batch-4 ids triaged on HEAD: 26 BUG, 2 IMPROVEMENT; 6 wrong review fixes replaced; fix tasks 138-143; 2 policy questions",
     "reuse": [],
     "risks": []
   },
@@ -39,7 +39,9 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-137/handoff/design-a.md"
+  },
   "user_notes": [
     {
       "raw": "RAW-00357",
@@ -48,8 +50,8 @@
     }
   ],
   "picked_at": "2026-11-16T23:51:18Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-16T23:57:49Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -60,5 +62,5 @@
     "notes": "",
     "next": "merge design-a/b into docs/design/phase-137-review-triage-b4.md"
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "close triage"
 }

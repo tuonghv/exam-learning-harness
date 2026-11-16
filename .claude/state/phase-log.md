@@ -3985,3 +3985,9 @@ Action: wrote report
 Result: TASK-136 closed; 28 batch-4 findings open on TASK-137
 Decision: triage next
 Next: pick TASK-137
+
+## DESIGN - TASK-137 - 2026-11-16T23:57:49Z
+Action: two designers traced 28 ids; coordinator ran repros A (R1-R5) and B
+Result: 26 BUG, 2 IMPROVEMENT, 0 not-a-defect
+Decision: fix tasks 138-143
+Next: IMPLEMENTING (triage only)
