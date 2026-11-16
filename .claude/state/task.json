@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-137",
-  "state": "VERIFIED",
-  "next": "report and close; pick TASK-138",
+  "state": "DONE",
+  "next": "",
   "title": "Triage code-review batch 4 (REQ-0144)",
-  "active": [
-    {
-      "task_id": "TASK-137",
-      "state": "VERIFIED",
-      "next": "report and close; pick TASK-138",
-      "updated_at": "2026-11-16T23:57:55Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

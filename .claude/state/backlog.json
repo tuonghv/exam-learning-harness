@@ -2848,7 +2848,7 @@
     "task_id": "TASK-137",
     "title": "Triage code-review batch 4 (REQ-0144)",
     "priority": 2,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-16T23:49:29Z",
     "requirement": "REQ-0144",
     "acceptance_criteria": [
@@ -2862,7 +2862,9 @@
         "note": "batch 4 review run; findings triaged before any fix (as TASK-107/113/117)",
         "at": "2026-11-16T23:49:29Z"
       }
-    ]
+    ],
+    "completed_at": "2026-11-16T23:58:05Z",
+    "report": "docs/report/phase-137-review-triage-b4.md"
   },
   {
     "task_id": "TASK-138",
