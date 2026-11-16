@@ -84,3 +84,4 @@ Rule (RAW-00171, REQ-0061): evidence summaries are small text with no exam conte
 | TASK-116 Unaccented Cau group sharing (114-F002 follow-up) | docs/design/phase-116-cau-group-share.md | docs/report/phase-116-cau-group-share.md | - | - | - |
 | TASK-117 Code-review triage b3: 19 findings -> 12 BUG | docs/design/phase-117-review-triage-b3.md | docs/report/phase-117-review-triage-b3.md | - | - | - |
 | TASK-118 Fix-H answer-key detection: 117-F001/F009/F010/F002/F003 | docs/design/phase-118-ingest-key-parts.md | docs/report/phase-118-ingest-key-parts.md | - | - | - |
+| TASK-119 Fix-I api: 117-F008/F004/F005/F007 | docs/design/phase-119-api-cut-merge-ranges.md | docs/report/phase-119-api-cut-merge-ranges.md | - | - | - |

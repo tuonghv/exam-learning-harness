@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-119",
-  "state": "VERIFIED",
-  "next": "write the report and close TASK-119; then TASK-120 Fix-J",
+  "state": "DONE",
+  "next": "",
   "title": "Fix-I api: 117-F008/F004/F005/F007 (REQ-0126)",
-  "active": [
-    {
-      "task_id": "TASK-119",
-      "state": "VERIFIED",
-      "next": "write the report and close TASK-119; then TASK-120 Fix-J",
-      "updated_at": "2026-11-16T05:55:48Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

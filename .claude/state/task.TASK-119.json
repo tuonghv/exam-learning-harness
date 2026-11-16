@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-119",
   "title": "Fix-I api: 117-F008/F004/F005/F007 (REQ-0126)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0126",
   "acceptance_criteria": [
     "AC1 cut merge keeps parts",
@@ -42,11 +42,19 @@
       "work/TASK-119/evidence/fast.out"
     ],
     "command": "python3 -I work/TASK-116/evidence/share_oracle.py <old|new src> .; python3 -I tools/run_tests.py --fast",
-    "result": "AC1-AC5 met; 0 share-context changes on 4 real PDFs; tests bite"
+    "result": "AC1-AC5 met; 0 share-context changes on 4 real PDFs; tests bite",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-119/evidence/summary.md",
+        "work/TASK-119/evidence/share.new.json"
+      ],
+      "reason": "old vs new shared contexts on 4 real PDFs: 0 changes after the rule fix"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-119-api-cut-merge-ranges.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -57,6 +65,9 @@
     "tester": "work/TASK-119/handoff/test.md",
     "verifier": {
       "waiver": "coordinator verified with the $0 share oracle over all real PDFs (which caught and drove the 119.2/119.3 fix) plus the tester's independent bite (RAW-00342)"
+    },
+    "crosscheck": {
+      "waiver": "crosscheck by the coordinator: share-context oracle old vs new over all real PDFs, independent of the coder's tests (it caught the first version's regression)"
     }
   },
   "user_notes": [
@@ -67,7 +78,7 @@
     }
   ],
   "picked_at": "2026-11-16T05:41:21Z",
-  "updated_at": "2026-11-16T05:55:48Z",
+  "updated_at": "2026-11-16T05:56:01Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/*.py",
@@ -80,5 +91,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "write the report and close TASK-119; then TASK-120 Fix-J"
+  "next": ""
 }
