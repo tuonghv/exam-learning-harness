@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-119",
   "title": "Fix-I api: 117-F008/F004/F005/F007 (REQ-0126)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0126",
   "acceptance_criteria": [
     "AC1 cut merge keeps parts",
@@ -31,12 +31,18 @@
     "result": "--fast 2071 ran, KNOWN 4, NEW 0; 10 tests OK; tester bite: 5 fail on old, 5 guards pass; real-shape guards fail on the first version; gold fixture updated for a resolved known miss"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "in-memory assembly logic only; no new input, file, network or eval path"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-119/handoff/verify.md",
+      "work/TASK-119/evidence/summary.md",
+      "work/TASK-119/evidence/fast.out"
+    ],
+    "command": "python3 -I work/TASK-116/evidence/share_oracle.py <old|new src> .; python3 -I tools/run_tests.py --fast",
+    "result": "AC1-AC5 met; 0 share-context changes on 4 real PDFs; tests bite"
   },
   "report": {
     "status": "pending",
@@ -48,7 +54,10 @@
   "roles": {
     "designer": "work/TASK-119/handoff/design.md",
     "coder": "work/TASK-119/handoff/code.md",
-    "tester": "work/TASK-119/handoff/test.md"
+    "tester": "work/TASK-119/handoff/test.md",
+    "verifier": {
+      "waiver": "coordinator verified with the $0 share oracle over all real PDFs (which caught and drove the 119.2/119.3 fix) plus the tester's independent bite (RAW-00342)"
+    }
   },
   "user_notes": [
     {
@@ -58,7 +67,7 @@
     }
   ],
   "picked_at": "2026-11-16T05:41:21Z",
-  "updated_at": "2026-11-16T05:55:47Z",
+  "updated_at": "2026-11-16T05:55:48Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/*.py",
@@ -71,5 +80,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verify"
+  "next": "write the report and close TASK-119; then TASK-120 Fix-J"
 }
