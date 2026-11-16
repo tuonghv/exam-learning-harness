@@ -2482,5 +2482,26 @@
     ],
     "completed_at": "2026-11-16T06:10:56Z",
     "report": "docs/report/phase-121-segment-plausible-starts.md"
+  },
+  {
+    "task_id": "TASK-122",
+    "title": "DGNL26 text path: cover-page run + image-only question (REQ-0129)",
+    "priority": 1,
+    "status": "queued",
+    "created_at": "2026-11-16T06:12:03Z",
+    "requirement": "REQ-0129",
+    "acceptance_criteria": [
+      "AC1 120 questions",
+      "AC2 image-only q kept missing_text",
+      "AC3 others unchanged",
+      "AC4 tests, --fast"
+    ],
+    "user_notes": [
+      {
+        "raw": "RAW-00342",
+        "note": "TASK-121 residual; coordinator queued",
+        "at": "2026-11-16T06:12:03Z"
+      }
+    ]
   }
 ]
