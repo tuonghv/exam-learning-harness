@@ -695,12 +695,23 @@ def _load_recipe(path):
     return _recipe_check(rec, path)
 
 
+def _is_exam_id(name):
+    try:
+        planrun.safe_id(name, "exam id")
+    except ValueError:
+        return False
+    return True
+
+
 def _write_recipe(path, reports, exams):
     """Seed `path` from the newest main-line pack/publish manifest of each exam (named exams merge over the file)."""
     old = _load_recipe(path)["exams"] if os.path.exists(path) else {}  # a bad file raises: never overwrite it
     out = dict(old) if exams else {}
     names = exams or sorted(n for n in os.listdir(reports) if os.path.isdir(os.path.join(reports, n)))
     for exam in names:
+        if not exams and not _is_exam_id(exam):
+            print("note: skipped %s (not a report exam id)" % exam, file=sys.stderr)
+            continue
         planrun.safe_id(exam, "exam id")
         rows = [r for r in runlayout.list_report_runs(reports, exam, line=runlayout.LINE_DEFAULT)
                 if r["layout"] == "run" and (r["manifest"] or {}).get("cmd") in _PACK_CMDS]
@@ -1033,6 +1044,15 @@ def ingest_main(argv):
         return 2
     if not args.file:
         print("ERROR: ingest: FILE required", file=sys.stderr)
+        return 2
+    if args.questions and not args.refined:
+        print("usage: --questions needs --refined DOC.json", file=sys.stderr)
+        return 2
+    if args.refined and not args.exam_out:
+        print("usage: --refined needs --exam-out FILE", file=sys.stderr)
+        return 2
+    if args.boundary_trace and not os.path.isdir(os.path.dirname(os.path.abspath(args.boundary_trace))):
+        print("ERROR: --boundary-trace %s: directory does not exist" % args.boundary_trace, file=sys.stderr)
         return 2
     meta = {}
     for item in args.meta:
@@ -2019,7 +2039,7 @@ def _rs_compute(ref, a):
         exam, _code = _load_exam(os.path.join(ref, "input", "exam.md"))
     if a.review_pack:
         qa = metrics.load_qa(a.review_pack, a.offset)
-    sha = metrics.file_sha256(a.exam) if a.exam else (line or {}).get("exam_sha256")
+    sha = (line or {}).get("exam_sha256") or (metrics.file_sha256(a.exam) if a.exam else None)
     why = metrics.load_refined_why(a.refined) if getattr(a, "refined", None) else None
     return metrics.compute(result, log, exam=exam, key=keymap, qa=qa, needs_review_why=why), sha, line, qa
 
@@ -2134,6 +2154,9 @@ def _rs_group(ln):
 
 
 def _rs_trend(a):
+    if a.last < 0:
+        print("usage: exam.py run-stats trend --last N (N >= 1)", file=sys.stderr)
+        return 2
     lines, bad = _rs_lines(a)
     if bad:
         print("WARN: %d history line(s) skipped" % bad, file=sys.stderr)
@@ -2323,7 +2346,10 @@ def _rs_board(a):
     base = _rs_board_baseline(a, lines) if a.baseline else None
     if base is not None:
         sha = sha or base.get("exam_sha256")
-        if not base.get("exam_sha256") or base["exam_sha256"] != sha:
+        if not base.get("exam_sha256") or not sha:
+            print("ERROR: exam sha unknown for %s; pass --exam" % a.baseline, file=sys.stderr)
+            return 2
+        if base["exam_sha256"] != sha:
             print("ERROR: different exam (sha %s vs %s)" % ((base.get("exam_sha256") or "?")[:12], (sha or "?")[:12]),
                   file=sys.stderr)
             return 2

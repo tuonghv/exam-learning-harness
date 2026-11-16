@@ -3571,3 +3571,9 @@ Action: coordinator wrote design from traced rows
 Result: 6 S items
 Decision: implement
 Next: IMPLEMENTING via coder
+
+## IMPLEMENTING - TASK-123 - 2026-11-16T06:27:15Z
+Action: coder implemented 123.1-123.6
+Result: --affected 1230 NEW 0
+Decision: accept deviations (see evidence/summary.md)
+Next: UNIT_TESTED

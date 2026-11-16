@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-123",
   "title": "P3-a CLI hardening 113-F004/F006-F010 (REQ-0130)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0130",
   "acceptance_criteria": [
     "AC1 compare exam mismatch",
@@ -20,8 +20,12 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/cli.py",
+      "tests/unit/test_cli_hardening_123.py"
+    ],
+    "summary": "cli.py: compare uses per-ref history exam sha; unsafe report dirs skipped with a note; boundary-trace parent checked before ingest; --last < 0 usage error; board 'exam sha unknown' reason; --questions without --refined / --refined without --exam-out usage errors. 7 tests"
   },
   "unit_test": {
     "status": "pending",
@@ -46,7 +50,8 @@
   "roles": {
     "designer": {
       "waiver": "rows already designed with repros in work/TASK-113/handoff/design-cli.md; coordinator wrote the design doc"
-    }
+    },
+    "coder": "work/TASK-123/handoff/code.md"
   },
   "user_notes": [
     {
@@ -56,7 +61,7 @@
     }
   ],
   "picked_at": "2026-11-16T06:23:04Z",
-  "updated_at": "2026-11-16T06:23:20Z",
+  "updated_at": "2026-11-16T06:27:15Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
@@ -68,5 +73,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "coder implements 123.1-123.6"
+  "next": "tests"
 }
