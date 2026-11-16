@@ -3697,3 +3697,9 @@ Action: released v1.3.0 and promoted it
 Result: rule reaches default runs
 Decision: UNIT_TESTED next
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-127 - 2026-11-16T11:21:19Z
+Action: --fast
+Result: NEW 0
+Decision: UNIT_TESTED
+Next: VERIFIED

@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-127",
   "title": "Prompt release v1.3.0 as default (diacritics rule reaches default runs) (REQ-0134)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0134",
   "acceptance_criteria": [
     "AC1 release v1.3.0 = dev, verify",
@@ -32,9 +32,9 @@
     "summary": "prompts/releases/v1.3.0 frozen from dev; config prompt_release v1.3.0 (user RAW-00347); 6 tests follow the new default; architecture guide line"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --fast",
+    "result": "KNOWN 4, NEW 0; updated release/default tests pass"
   },
   "security": {
     "status": "pending",
@@ -57,6 +57,9 @@
     },
     "coder": {
       "waiver": "release command + one config value by the coordinator; test updates follow the user's promotion"
+    },
+    "tester": {
+      "waiver": "coordinator ran --fast"
     }
   },
   "user_notes": [
@@ -72,7 +75,7 @@
     }
   ],
   "picked_at": "2026-11-16T10:14:50Z",
-  "updated_at": "2026-11-16T11:21:16Z",
+  "updated_at": "2026-11-16T11:21:20Z",
   "updated_by": "main",
   "scope": [
     "prompts/releases/v1.3.0/**",
@@ -89,5 +92,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tests"
+  "next": "verify"
 }
