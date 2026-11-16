@@ -3775,3 +3775,9 @@ Action: wrote report
 Result: TASK-129 closed
 Decision: next: review findings ledger (RAW-00350)
 Next: coordinator
+
+## DESIGN - TASK-130 - 2026-11-16T12:51:35Z
+Action: traced 17 unfixed review findings
+Result: no id-to-task link
+Decision: ledger + check
+Next: IMPLEMENTING

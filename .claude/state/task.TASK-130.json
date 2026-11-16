@@ -1,0 +1,90 @@
+{
+  "task_id": "TASK-130",
+  "title": "Review findings ledger + check (REQ-0137)",
+  "state": "DESIGN",
+  "requirement": "REQ-0137",
+  "acceptance_criteria": [
+    "AC1 ledger 80 ids",
+    "AC2 checker exit codes",
+    "AC3 workflow-check WARN",
+    "AC4 role docs",
+    "AC5 tests"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-130-review-findings-ledger.md",
+    "summary": "findings.tsv with a disposition per review finding; tools/review_ledger.py check; workflow-check WARN; coordinator rule",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {
+    "grants": {
+      "coder": [
+        ".claude/scripts/workflow-check.sh",
+        ".claude/skills/coordinator/SKILL.md"
+      ],
+      "tester": [
+        ".claude/scripts/workflow-check.sh",
+        ".claude/skills/coordinator/SKILL.md"
+      ]
+    },
+    "grants_auto": [
+      ".claude/scripts/workflow-check.sh",
+      ".claude/skills/coordinator/SKILL.md"
+    ],
+    "designer": {
+      "waiver": "coordinator traced the gap with the id-matching script (RAW-00350)"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00350",
+      "note": "user: list Fable reports not designed, prevent missed review fixes, plan",
+      "at": "2026-11-16T12:50:18Z"
+    }
+  ],
+  "picked_at": "2026-11-16T12:51:04Z",
+  "updated_at": "2026-11-16T12:51:36Z",
+  "updated_by": "main",
+  "scope": [
+    "docs/review/**",
+    "tools/review_ledger.py",
+    ".claude/scripts/workflow-check.sh",
+    ".claude/skills/coordinator/SKILL.md",
+    "tests/**",
+    "docs/design/phase-130*",
+    "docs/report/phase-130*",
+    "docs/report/INDEX.md"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "implement 130.1-130.4"
+}
