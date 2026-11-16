@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-130",
   "title": "Review findings ledger + check (REQ-0137)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0137",
   "acceptance_criteria": [
     "AC1 ledger 80 ids",
@@ -45,11 +45,19 @@
       "work/TASK-130/evidence/fast.txt"
     ],
     "command": "review_ledger.py on the repo; workflow-check with a removed row; counts reconciled with the phase-112 report",
-    "result": "AC1-AC5 met"
+    "result": "AC1-AC5 met",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-130/evidence/summary.md",
+        "work/TASK-130/evidence/ledger.txt"
+      ],
+      "reason": "80 ids reconciled; 22 open match the phase-112 'left' list"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-130-review-findings-ledger.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -80,6 +88,9 @@
     },
     "verifier": {
       "waiver": "coordinator verified with the reconciled counts"
+    },
+    "crosscheck": {
+      "waiver": "coordinator crosscheck: ledger counts reconciled with the phase-112 report"
     }
   },
   "user_notes": [
@@ -90,7 +101,7 @@
     }
   ],
   "picked_at": "2026-11-16T12:51:04Z",
-  "updated_at": "2026-11-16T12:56:49Z",
+  "updated_at": "2026-11-16T12:57:01Z",
   "updated_by": "main",
   "scope": [
     "docs/review/**",
@@ -108,5 +119,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report and close"
+  "next": ""
 }

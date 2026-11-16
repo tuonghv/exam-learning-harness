@@ -95,3 +95,4 @@ Rule (RAW-00171, REQ-0061): evidence summaries are small text with no exam conte
 | TASK-127 Prompt release v1.3.0 as the default | docs/design/phase-127-prompt-release-v1-3.md | docs/report/phase-127-prompt-release-v1-3.md | - | - | - |
 | TASK-128 Stale TASK-048 real-doc golden | docs/design/phase-128-stale-golden-48.md | docs/report/phase-128-stale-golden-48.md | - | - | - |
 | TASK-129 PDF free text path keeps table blocks | docs/design/phase-129-pdf-table-text.md | docs/report/phase-129-pdf-table-text.md | - | - | - |
+| TASK-130 Review findings ledger + check | docs/design/phase-130-review-findings-ledger.md | docs/report/phase-130-review-findings-ledger.md | - | - | - |
