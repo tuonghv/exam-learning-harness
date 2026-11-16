@@ -2299,7 +2299,7 @@
     "task_id": "TASK-114",
     "title": "Fix-F ingest: 114-F001/F002/F010/F004 (REQ-0121)",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-11-16T03:39:18Z",
     "requirement": "REQ-0121",
     "acceptance_criteria": [
