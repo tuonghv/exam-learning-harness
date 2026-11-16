@@ -3505,3 +3505,9 @@ Action: wrote report
 Result: TASK-120 closed; batch-3 P1/P2 done
 Decision: next: TASK-121 segment false questions
 Next: pick TASK-121
+
+## DESIGN - TASK-121 - 2026-11-16T06:04:06Z
+Action: designer drafted the lookahead rule from the real false-id evidence
+Result: design complete with expected per-PDF counts
+Decision: accept residuals (cover lines, mid-line intros) as listed; implement
+Next: IMPLEMENTING via coder

@@ -1,18 +1,18 @@
 {
   "task_id": "TASK-121",
   "title": "Segment false questions from passage/year/formula lines (REQ-0128)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0128",
   "acceptance_criteria": [
     "AC1 no implausible ids",
     "AC2 first members get passage",
-    "AC3 counts match print",
+    "AC3 counts match print or residual listed",
     "AC4 tests, --fast, oracles"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-121-segment-plausible-starts.md",
+    "summary": "segment.py: a start whose number breaks the sequence while prev+1 still comes later is text (lookahead `_implausible`), except a real restart at 1 whose run reaches prev; expected 197->120, 141->120, 147->122, math 48->46; residuals listed",
     "reuse": [],
     "risks": []
   },
@@ -40,7 +40,9 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-121/handoff/design.md"
+  },
   "user_notes": [
     {
       "raw": "RAW-00342",
@@ -49,8 +51,8 @@
     }
   ],
   "picked_at": "2026-11-16T06:03:48Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-16T06:04:06Z",
+  "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/*.py",
     "tests/unit/*.py",
@@ -62,5 +64,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder implements 121.1-121.2 with tests"
 }
