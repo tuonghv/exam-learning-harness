@@ -3637,3 +3637,9 @@ Action: coder implemented 125.1-125.7
 Result: --affected 718 NEW 0
 Decision: accept deviations (both hint branches; fresh-window estimate)
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-125 - 2026-11-16T07:08:04Z
+Action: --fast + bite
+Result: NEW 0
+Decision: UNIT_TESTED
+Next: VERIFIED

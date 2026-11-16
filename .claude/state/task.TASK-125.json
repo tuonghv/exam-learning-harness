@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-125",
   "title": "P3-c boundary + api hardening (REQ-0132)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0132",
   "acceptance_criteria": [
     "AC1 partial reply invalid",
@@ -32,9 +32,9 @@
     "summary": "boundary.py: missing suspect / duplicate window_id invalid, corrupt cache entry = miss, dry-run estimate dedupe, trace `call` index; segment.py: hinted line under a pending context stays context; api.py: slice gate by document-wide verification; ingest-usage.md trace wording. 7 tests"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --fast; bite on git archive HEAD",
+    "result": "--fast 2118 ran, KNOWN 4, NEW 0; 7/7 item tests fail on old code"
   },
   "security": {
     "status": "pending",
@@ -55,7 +55,10 @@
     "designer": {
       "waiver": "rows already designed with fixes and repros in the TASK-113/TASK-117 handoffs; coordinator wrote the design doc"
     },
-    "coder": "work/TASK-125/handoff/code.md"
+    "coder": "work/TASK-125/handoff/code.md",
+    "tester": {
+      "waiver": "coordinator ran --fast and an independent bite check (RAW-00342)"
+    }
   },
   "user_notes": [
     {
@@ -78,5 +81,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tests"
+  "next": "verify"
 }
