@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0138",
-  "next": "close triage",
+  "next": "record repros as test evidence",
   "updated": "2026-11-16 20:04"
 }

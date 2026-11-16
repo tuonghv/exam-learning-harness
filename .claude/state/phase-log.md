@@ -3811,3 +3811,9 @@ Action: two designers re-traced 22 ids; coordinator ran repros
 Result: 21 still valid, 1 not-a-defect, D1 new
 Decision: fix tasks 132-135
 Next: IMPLEMENTING (triage only)
+
+## IMPLEMENTING - TASK-131 - 2026-11-16T13:04:38Z
+Action: ledger rows moved to fix tasks
+Result: 21 open, 1 closed
+Decision: no code
+Next: UNIT_TESTED
