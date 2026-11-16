@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-125",
-  "state": "UNIT_TESTED",
-  "next": "verify",
+  "state": "VERIFIED",
+  "next": "report and close",
   "title": "P3-c boundary + api hardening (REQ-0132)",
   "active": [
     {
       "task_id": "TASK-125",
-      "state": "UNIT_TESTED",
-      "next": "verify",
-      "updated_at": "2026-11-16T07:08:04Z"
+      "state": "VERIFIED",
+      "next": "report and close",
+      "updated_at": "2026-11-16T07:08:05Z"
     }
   ],
   "max_active": 1

@@ -3643,3 +3643,9 @@ Action: --fast + bite
 Result: NEW 0
 Decision: UNIT_TESTED
 Next: VERIFIED
+
+## VERIFIED - TASK-125 - 2026-11-16T07:08:05Z
+Action: oracles + bite
+Result: all met
+Decision: VERIFIED
+Next: DONE
