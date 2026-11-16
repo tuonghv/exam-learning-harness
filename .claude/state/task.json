@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-136",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "coordinator writes prompt v2; then 4 code-reviewer runs",
   "title": "Review prompt v2 + code-review batch 4 (REQ-0143)",
   "active": [
     {
       "task_id": "TASK-136",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "coordinator writes prompt v2; then 4 code-reviewer runs",
+      "updated_at": "2026-11-16T23:41:38Z"
     }
   ],
   "max_active": 1

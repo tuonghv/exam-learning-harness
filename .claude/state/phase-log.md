@@ -3955,3 +3955,9 @@ Action: wrote report
 Result: TASK-135 closed; all review findings closed
 Decision: backlog empty
 Next: coordinator picks next
+
+## DESIGN - TASK-136 - 2026-11-16T23:41:38Z
+Action: design from the approved prompt critique
+Result: 9 prompt fixes + 4 scopes
+Decision: implement
+Next: IMPLEMENTING
