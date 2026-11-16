@@ -2870,7 +2870,7 @@
     "task_id": "TASK-138",
     "title": "Scorer correctness: fractions, hedges, separators, minus, ordering key, open answers (batch 4) (REQ-0145)",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-11-16T23:57:29Z",
     "requirement": "REQ-0145",
     "acceptance_criteria": [
