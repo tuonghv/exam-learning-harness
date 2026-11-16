@@ -3,7 +3,7 @@ id: EPIC-002
 title: Few-shot and evaluation example sets (Math, Physics, English, Literature; VN THPT/entrance level)
 source: [RAW-00004, RAW-00345, RAW-00346]
 created: 2026-10-29 08:24
-updated: 2026-11-16 20:03
+updated: 2026-11-17 06:40
 ---
 ## Original (verbatim, never edit)
 > **[RAW-00004]** 2026-10-29 08:24
@@ -57,6 +57,7 @@ updated: 2026-11-16 20:03
 - REQ-0140
 - REQ-0141
 - REQ-0142
+- REQ-0143
 
 ## Notes
 
