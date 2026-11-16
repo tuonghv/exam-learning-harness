@@ -3325,3 +3325,9 @@ Action: wrote report
 Result: TASK-114 closed; 17 real questions fixed
 Decision: next: TASK-115 Fix-G cli
 Next: pick TASK-115
+
+## DESIGN - TASK-115 - 2026-11-16T04:19:21Z
+Action: designer drafted 4 cli fixes; user included explain <run_id> (115.3b) as AC3b
+Result: design complete; solve paths untouched
+Decision: implement as designed
+Next: IMPLEMENTING via coder

@@ -1,19 +1,20 @@
 {
   "task_id": "TASK-115",
   "title": "Fix-G cli: 113-F001/F003/F005/F002 (REQ-0122)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0122",
   "acceptance_criteria": [
     "AC1 no empty plan run dir",
     "AC2 clean only own dir",
     "AC3 run-stats id == dir",
+    "AC3b explain id == dir",
     "AC4 --write-recipe --dry-run exit 2",
     "AC5 regression tests, --fast green"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-115-cli-fix-g.md",
+    "summary": "cli.py only: F001 rmtree claimed plan dir when solve fails before start; F002 remove only a fresh report dir on build failure (never --out/--report-id); F003 _rs_resolve returns resolved path (stats + explain by run_id); F005 --write-recipe --dry-run usage error exit 2",
     "reuse": [],
     "risks": []
   },
@@ -41,7 +42,9 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-115/handoff/design.md"
+  },
   "user_notes": [
     {
       "raw": "RAW-00341",
@@ -50,8 +53,8 @@
     }
   ],
   "picked_at": "2026-11-16T04:01:37Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-16T04:19:21Z",
+  "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
     "src/exam_engine/*.py",
@@ -63,5 +66,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder implements 115.1-115.4 with tests/unit/test_cli_fix_g_115.py"
 }
