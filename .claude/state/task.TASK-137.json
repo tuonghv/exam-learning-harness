@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-137",
   "title": "Triage code-review batch 4 (REQ-0144)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0144",
   "acceptance_criteria": [
     "AC1 rows with evidence",
@@ -16,8 +16,12 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "docs/design/phase-137-review-triage-b4.md",
+      "docs/review/findings.tsv"
+    ],
+    "summary": "triage-only: design doc + ledger rows on fix tasks; no src/tests change"
   },
   "unit_test": {
     "status": "pending",
@@ -40,7 +44,10 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-137/handoff/design-a.md"
+    "designer": "work/TASK-137/handoff/design-a.md",
+    "coder": {
+      "waiver": "triage-only task, no code (REQ-0144 AC3)"
+    }
   },
   "user_notes": [
     {
@@ -50,9 +57,11 @@
     }
   ],
   "picked_at": "2026-11-16T23:51:18Z",
-  "updated_at": "2026-11-16T23:57:49Z",
+  "updated_at": "2026-11-16T23:57:53Z",
   "updated_by": "main",
-  "scope": [],
+  "scope": [
+    "docs/review/findings.tsv"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
@@ -62,5 +71,5 @@
     "notes": "",
     "next": "merge design-a/b into docs/design/phase-137-review-triage-b4.md"
   },
-  "next": "close triage"
+  "next": "record repros as test evidence"
 }

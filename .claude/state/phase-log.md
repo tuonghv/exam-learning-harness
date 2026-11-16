@@ -3991,3 +3991,9 @@ Action: two designers traced 28 ids; coordinator ran repros A (R1-R5) and B
 Result: 26 BUG, 2 IMPROVEMENT, 0 not-a-defect
 Decision: fix tasks 138-143
 Next: IMPLEMENTING (triage only)
+
+## IMPLEMENTING - TASK-137 - 2026-11-16T23:57:53Z
+Action: ledger rows moved to fix tasks
+Result: 28 open on TASK-138..143
+Decision: no code
+Next: UNIT_TESTED
