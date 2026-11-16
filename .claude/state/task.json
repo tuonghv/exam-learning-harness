@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-120",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "coder implements 120.1-120.3b",
   "title": "Fix-J boundary + cost cap: 118-F001/F007/F009, D1 (REQ-0127)",
   "active": [
     {
       "task_id": "TASK-120",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "coder implements 120.1-120.3b",
+      "updated_at": "2026-11-16T05:56:31Z"
     }
   ],
   "max_active": 1

@@ -3475,3 +3475,9 @@ Action: wrote report
 Result: TASK-119 closed
 Decision: next: TASK-120 Fix-J, then segment false-question REQ
 Next: pick TASK-120
+
+## DESIGN - TASK-120 - 2026-11-16T05:56:31Z
+Action: designer drafted 3 items; coordinator adopted D2 (4 more paid entries) as 120.3b
+Result: design complete
+Decision: implement
+Next: IMPLEMENTING via coder

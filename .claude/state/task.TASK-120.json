@@ -1,18 +1,18 @@
 {
   "task_id": "TASK-120",
   "title": "Fix-J boundary + cost cap: 118-F001/F007/F009, D1 (REQ-0127)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0127",
   "acceptance_criteria": [
     "AC1 no lost suspects",
     "AC2 per-pass summary",
-    "AC3 NaN cap usage error",
+    "AC3 NaN cap usage error on every paid entry",
     "AC4 tests, --fast"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-120-boundary-cost-cap.md",
+    "summary": "120.1 windows(): no span merge past max_lines; 120.2 boundary summary reports per-pass deltas; 120.3 NaN cap: `not (x >= 0)` at every paid CLI entry (ingest, solve, refine, cross, benchmark, genexam) + inverted boundary cap test",
     "reuse": [],
     "risks": []
   },
@@ -40,7 +40,9 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-120/handoff/design.md"
+  },
   "user_notes": [
     {
       "raw": "RAW-00342",
@@ -49,8 +51,8 @@
     }
   ],
   "picked_at": "2026-11-16T05:56:14Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-16T05:56:31Z",
+  "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/*.py",
     "src/exam_engine/cli.py",
@@ -62,5 +64,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder implements 120.1-120.3b"
 }
