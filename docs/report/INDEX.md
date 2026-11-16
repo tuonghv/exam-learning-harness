@@ -91,3 +91,4 @@ Rule (RAW-00171, REQ-0061): evidence summaries are small text with no exam conte
 | TASK-123 P3-a CLI hardening: 113-F004/F006-F010 | docs/design/phase-123-cli-hardening.md | docs/report/phase-123-cli-hardening.md | - | - | - |
 | TASK-124 P3-b refine hardening: 114-F003/F006-F009 | docs/design/phase-124-refine-hardening.md | docs/report/phase-124-refine-hardening.md | - | - | - |
 | TASK-125 P3-c boundary + api hardening | docs/design/phase-125-boundary-api-hardening.md | docs/report/phase-125-boundary-api-hardening.md | - | - | - |
+| TASK-126 Free text path: options_missing marker, wrapped instruction, DGNL guide | docs/design/phase-126-text-path-fixes.md | docs/report/phase-126-text-path-fixes.md | - | - | - |

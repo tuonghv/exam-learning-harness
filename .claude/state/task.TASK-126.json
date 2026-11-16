@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-126",
   "title": "Text-path fixes: options_missing marker, wrapped group instruction, DGNL guide (REQ-0133)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0133",
   "acceptance_criteria": [
     "AC1 MC no options marked",
@@ -46,11 +46,19 @@
       "work/TASK-126/evidence/fast.txt"
     ],
     "command": "exam text of 4 input PDFs old vs new + solve --dry-run parse; --fast; bite",
-    "result": "AC1-AC6 met; only marker/guide lines change; 3 DGNL files parse (old 5 errors each)"
+    "result": "AC1-AC6 met; only marker/guide lines change; 3 DGNL files parse (old 5 errors each)",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-126/evidence/summary.md",
+        "work/TASK-126/evidence/oracle.txt"
+      ],
+      "reason": "tests fail on old code; real inputs change only in the intended lines"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-126-text-path-fixes.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -67,6 +75,9 @@
     },
     "verifier": {
       "waiver": "coordinator verified with the real-input exam-text oracle and parse check"
+    },
+    "crosscheck": {
+      "waiver": "crosscheck by the coordinator: real-input exam-text oracle, parse check and bite"
     }
   },
   "user_notes": [
@@ -82,7 +93,7 @@
     }
   ],
   "picked_at": "2026-11-16T09:51:00Z",
-  "updated_at": "2026-11-16T10:02:06Z",
+  "updated_at": "2026-11-16T10:02:21Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/api.py",
@@ -100,5 +111,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report and close"
+  "next": ""
 }

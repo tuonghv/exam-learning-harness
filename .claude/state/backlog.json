@@ -2588,7 +2588,7 @@
     "task_id": "TASK-126",
     "title": "Text-path fixes: options_missing marker, wrapped group instruction, DGNL guide (REQ-0133)",
     "priority": 2,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-16T09:51:00Z",
     "requirement": "REQ-0133",
     "acceptance_criteria": [
@@ -2610,6 +2610,8 @@
         "note": "decide yourself; ask only for paid/security",
         "at": "2026-11-16T09:51:00Z"
       }
-    ]
+    ],
+    "completed_at": "2026-11-16T10:02:20Z",
+    "report": "docs/report/phase-126-text-path-fixes.md"
   }
 ]
