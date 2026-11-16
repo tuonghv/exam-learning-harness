@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-115",
   "title": "Fix-G cli: 113-F001/F003/F005/F002 (REQ-0122)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0122",
   "acceptance_criteria": [
     "AC1 no empty plan run dir",
@@ -33,12 +33,19 @@
     "result": "--fast 2045 ran, KNOWN 4, NEW 0; test_cli_fix_g_115 10 OK; bite on old cli.py: ac1, ac2a, ac2c, ac3, ac3b, ac4, ac2d, ac2e, test_87_3 fail; guards ac2b, ac2f pass"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "no new input surface, shell or eval; new deletions only of dirs this call created, bounded by the reports root; F005 refuses before any write"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-115/handoff/verify.md",
+      "work/TASK-115/evidence/summary.md",
+      "work/TASK-115/evidence/repro_cli.new.out",
+      "work/TASK-115/evidence/fast.out"
+    ],
+    "command": "python3 -I work/TASK-113/repro_cli.py; python3 -I tools/run_tests.py --fast; git diff 4ec85e2 10553cb -- src",
+    "result": "verifier: AC1-AC4, AC3b met, deletion paths safe; coordinator closed AC5 (--fast 2048, NEW 0) and solve-path check (diff touches no engine/pipeline line); repro: F001 0 dirs left, F003b same, F005 rc 2 unchanged"
   },
   "report": {
     "status": "pending",
@@ -50,7 +57,8 @@
   "roles": {
     "designer": "work/TASK-115/handoff/design.md",
     "coder": "work/TASK-115/handoff/code.md",
-    "tester": "work/TASK-115/handoff/test.md"
+    "tester": "work/TASK-115/handoff/test.md",
+    "verifier": "work/TASK-115/handoff/verify.md"
   },
   "user_notes": [
     {
@@ -60,7 +68,7 @@
     }
   ],
   "picked_at": "2026-11-16T04:01:37Z",
-  "updated_at": "2026-11-16T04:27:52Z",
+  "updated_at": "2026-11-16T04:30:47Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
@@ -73,5 +81,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verifier checks AC1-AC5 + AC3b against tests and the $0 repro (work/TASK-115/evidence/repro_cli.new.out)"
+  "next": "write the report and close TASK-115"
 }
