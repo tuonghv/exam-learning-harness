@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0120",
-  "next": "2 designers triage 113/114 into work/TASK-113/handoff/design-{cli,ingest}.md; coordinator reproduces BUG rows and merges into docs/design/phase-113-review-triage-b2.md",
-  "updated": "2026-11-16 06:57"
+  "next": "user approves plan; then Fix-F REQ",
+  "updated": "2026-11-16 07:02"
 }

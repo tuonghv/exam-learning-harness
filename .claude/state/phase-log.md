@@ -3265,3 +3265,9 @@ Action: wrote report
 Result: TASK-112 closed; plan Fix-A..E complete
 Decision: P3 hardening optional
 Next: user decides P3
+
+## DESIGN - TASK-113 - 2026-11-16T00:02:18Z
+Action: 2 designers deep-dived 20 findings; coordinator reproduced 5 BUG rows at $0 and merged
+Result: 7 BUG, 13 IMPROVEMENT, 0 NOT-A-DEFECT
+Decision: P1 = Fix-F ingest, P2 = Fix-G cli
+Next: user approval of the plan

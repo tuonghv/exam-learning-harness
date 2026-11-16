@@ -1,18 +1,18 @@
 {
   "task_id": "TASK-113",
   "title": "Triage code-review batch 2 (phases 113-114) (REQ-0120)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0120",
   "acceptance_criteria": [
-    "AC1 20 findings classified",
-    "AC2 BUGs repro/traced",
-    "AC3 P1-P3 plan",
-    "AC4 no src/tests change"
+    "AC1 20 findings classified with evidence",
+    "AC2 BUGs reproduced or traced, reachability stated",
+    "AC3 P1/P2/P3 fix-task plan",
+    "AC4 no src/tests change; triage doc in docs/design"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-113-review-triage-b2.md",
+    "summary": "20 batch-2 findings: 7 BUG (5 reproduced $0), 13 IMPROVEMENT, 0 NOT-A-DEFECT; plan P1 Fix-F ingest, P2 Fix-G cli, P3 hardening",
     "reuse": [],
     "risks": []
   },
@@ -40,7 +40,9 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-113/handoff/design-ingest.md"
+  },
   "user_notes": [
     {
       "raw": "RAW-00339",
@@ -49,8 +51,8 @@
     }
   ],
   "picked_at": "2026-11-15T23:57:32Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-16T00:02:18Z",
+  "updated_by": "main",
   "scope": [
     "docs/design/phase-113-*",
     "docs/report/*"
@@ -61,5 +63,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "user approves the triage plan, then close TASK-113 and open Fix-F as its own REQ/TASK"
 }
