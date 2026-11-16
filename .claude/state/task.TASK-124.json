@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-124",
   "title": "P3-b refine hardening 114-F003/F006-F009 (REQ-0131)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0131",
   "acceptance_criteria": [
     "AC1 figures validated",
@@ -27,9 +27,9 @@
     "summary": "refine.py: validate_refined rejects non-string figures; _native_tables whole-token cells, str() joins, label-less table to the single table-referencing question; orphan advice only for an addable page; `order` review reason. 6 tests"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --fast; bite on git archive HEAD",
+    "result": "--fast 2111 ran, KNOWN 4, NEW 0 (one flaky unrelated test on a first run); 5 item tests fail on old code, guard passes"
   },
   "security": {
     "status": "pending",
@@ -50,7 +50,10 @@
     "designer": {
       "waiver": "rows already designed with repros in work/TASK-113/handoff/design-ingest.md; coordinator wrote the design doc"
     },
-    "coder": "work/TASK-124/handoff/code.md"
+    "coder": "work/TASK-124/handoff/code.md",
+    "tester": {
+      "waiver": "coordinator ran --fast twice and an independent bite check (RAW-00342)"
+    }
   },
   "user_notes": [
     {
@@ -74,5 +77,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tests"
+  "next": "verify"
 }
