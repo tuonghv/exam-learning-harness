@@ -54,8 +54,11 @@
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
-    "done": [],
-    "notes": ""
+    "done": [
+      "picked; 2 designers launched (part A engine+scorer, part B pdf+runlayout)"
+    ],
+    "notes": "",
+    "next": "merge design-a/b into docs/design/phase-137-review-triage-b4.md"
   },
   "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
 }
