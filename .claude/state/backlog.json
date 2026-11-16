@@ -2784,7 +2784,7 @@
     "task_id": "TASK-134",
     "title": "Review leftovers fix B: refine hardening (REQ-0141)",
     "priority": 3,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-11-16T13:03:47Z",
     "requirement": "REQ-0141",
     "acceptance_criteria": [
