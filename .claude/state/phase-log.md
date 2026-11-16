@@ -3301,3 +3301,9 @@ Action: designer drafted 4 fixes; coordinator found page caches and added a $0 c
 Result: design complete, 7 failing-first tests named
 Decision: implement as designed
 Next: IMPLEMENTING via coder
+
+## IMPLEMENTING - TASK-114 - 2026-11-16T03:46:57Z
+Action: coder implemented 114.1-114.4 + test_ingest_fix_f.py; main reviewed diff and updated 2 tests that asserted the old (buggy) behaviour
+Result: --affected 501 ran, NEW 2 -> 0 after the 2 test updates; 8 tests bite
+Decision: implementation matches design; deviations: J/K/L use all_pages=True
+Next: UNIT_TESTED via tester

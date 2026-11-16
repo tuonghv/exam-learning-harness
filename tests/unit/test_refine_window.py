@@ -430,10 +430,13 @@ class TestQaGaps(unittest.TestCase):
         llm = Keyed({"2": rep(qq(2, "next"), continues={"text": "tail of earlier question"}),
                      "1": rep(qq(1, STEM1, {}, cut=True)), "1-2": rep(qq(1, WHOLE1), qq(2, "next"))},
                     cost=0.3)
-        with self.assertRaises(refine.RefineError) as cm:
-            run(llm, n=3, spec="2", max_cost=0.5)
-        self.assertEqual(cm.exception.code, "cost_cap")
+        # 114.4: the cap stops the re-run, but the finished first pass is kept (was: RefineError cost_cap)
+        out = run(llm, n=3, spec="2", max_cost=0.5)
         self.assertEqual(llm.calls, ["2", "1"])
+        codes = [w["code"] for w in out["warnings"]]
+        self.assertIn("recover_failed", codes)
+        self.assertEqual(out["refined"]["calls"], 2)
+        self.assertAlmostEqual(out["refined"]["cost_usd"], 0.6)
 
     def test_cap_checked_before_every_call_in_run(self):
         # many cut pages, every call 0.3: never more than ceil(cap/cost) calls

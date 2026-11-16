@@ -403,6 +403,14 @@ def _dedupe(owner, text):
     return text
 
 
+def _merge_ctx(frag, window):
+    """Window context joined to the fragment's carried passage; either alone when the other is empty or inside it."""
+    fc, wc = frag or "", str(window or "")
+    if not fc or not _dedupe(wc, fc):
+        return wc or fc
+    return "\n".join(x for x in (fc, _dedupe(fc, wc)) if x)
+
+
 def _attach(qs, st, n, cont):
     """Merge continuation `cont` of page n into the open question of page n-1 -> orphan kind or None."""
     if st["open"] is None or st["page"] != n - 1:
@@ -482,8 +490,10 @@ def refine(doc, spec, llm, source_path=None, max_cost=1.0, model="sonnet", allow
     def ask(n, png, window=None, open_id=None):
         nonlocal calls, cost
         if cost >= max_cost:  # before every call, windows and fallbacks included
-            raise RefineError("cost_cap", "cost $%.2f reached the cap $%.2f before page %d"
+            err = RefineError("cost_cap", "cost $%.2f reached the cap $%.2f before page %d"
                               % (cost, max_cost, n))
+            err.run_calls, err.run_cost = calls, cost
+            raise err
         key = (tuple(window or (n,)), open_id)
         if key in memo:  # this run already paid for it (backward re-run)
             return copy.deepcopy(memo[key])
@@ -492,6 +502,7 @@ def refine(doc, spec, llm, source_path=None, max_cost=1.0, model="sonnet", allow
         except RefineError as e:
             calls += getattr(e, "calls", 0)
             cost += getattr(e, "cost", 0.0)
+            e.run_calls, e.run_cost = calls, cost  # run totals for a failed backward re-run
             raise
         calls += used
         cost += spent
@@ -556,7 +567,7 @@ def refine(doc, spec, llm, source_path=None, max_cost=1.0, model="sonnet", allow
                              " ".join(_page_text(doc, p) for p in win))
             f.update(text=wtxt, options=dict(whole.get("options") or {}),
                      figures=list(whole.get("figures") or []), page=win[0], similarity=sim,
-                     context=str(whole.get("context") or f["context"] or ""),
+                     context=_merge_ctx(f["context"], whole.get("context")),
                      continued_pages=win[1:], window=win)
             f.pop("cut", None)
             why = _why(bool(whole.get("unreadable")), sim < min_similarity,
@@ -661,12 +672,23 @@ def refine(doc, spec, llm, source_path=None, max_cost=1.0, model="sonnet", allow
     back = [m for m in back if _extra_ok(doc, m)][:max(0, RUN_EXTRA - len(recovered))]
     if recover and window and back and cost < max_cost and _recovered == ():
         spec2 = ",".join(map(str, sorted(set(pages) | set(recovered) | set(back))))
-        res = refine(doc, spec2, llm, source_path, max_cost - cost, model, allow_key,
-                     min_similarity, render, True, False, True, cache, trace, memo, sorted(set(recovered) | set(back)))
-        res["refined"]["calls"] += calls
-        res["refined"]["cost_usd"] = round(res["refined"]["cost_usd"] + cost, 6)
-        res["refined"]["pages"] = pages
-        return res
+        try:
+            res = refine(doc, spec2, llm, source_path, max_cost - cost, model, allow_key,
+                         min_similarity, render, True, False, True, cache, trace, memo, sorted(set(recovered) | set(back)))
+        except RefineError as e:
+            if e.code not in ("call_failed", "invalid_reply", "cost_cap"):
+                raise
+            calls += getattr(e, "run_calls", 0)  # the failed re-run still spent these
+            cost += getattr(e, "run_cost", 0.0)
+            out["refined"]["calls"], out["refined"]["cost_usd"] = calls, round(cost, 6)
+            wwarn.append({"level": "warning", "code": "recover_failed",
+                          "message": "backward re-run of page(s) %s failed (%s): first pass kept"
+                                     % (", ".join(map(str, back)), e.code)})
+        else:
+            res["refined"]["calls"] += calls
+            res["refined"]["cost_usd"] = round(res["refined"]["cost_usd"] + cost, 6)
+            res["refined"]["pages"] = pages
+            return res
     if _recovered:
         out["refined"]["recovered_pages"] = sorted(_recovered)
     elif recovered:

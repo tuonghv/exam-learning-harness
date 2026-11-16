@@ -17,6 +17,9 @@ def build(table):
     part = langtable.alt("(?:PH[ẦA]N|PART)", "part", table)
     span = (grp + r"\s*(?:từ\s*)?(\d+)"
             r"(?:\s*" + rng + r"\s*(?:[Cc]âu\s*)?(\d+)|\s+and\s+(\d+)|((?:\s*,\s*\d+)+))")
+    # intro only: group word in any case (`CÂU 31 - 35`, `Cau`); scoped so the lead words stay case-sensitive
+    grp_i = "(?i:" + langtable.alt(r"(?:Questions?|C[aâ]u(?:\s*hỏi)?)", "group", table) + ")"
+    span_i = span.replace(grp, grp_i, 1)
     return types.SimpleNamespace(
         _Q=re.compile(r"^\s*(?:" + q + r"\s*(\d+)\s*[.:)]?|(\d+)(?!\.\d)\s*[.)])\s*(.*)$", re.I),  # `3.1.` is a sub-number, not question 3
         # a group passage intro ("Questions 46-52 ...") or a part heading is not part of option D
@@ -24,7 +27,7 @@ def build(table):
         GROUP_RE=re.compile(span),
         # opens a context only at the line start (short prefix allowed), so a wrapped option that
         # mentions "câu 3-5" stays in option D
-        _INTRO=re.compile(r"^\s*(?:" + lead + r"\b[^\n]{0,120}?)?" + span),
+        _INTRO=re.compile(r"^\s*(?:" + lead + r"\b[^\n]{0,120}?)?" + span_i),
         _PART=re.compile(r"^\s*" + part + r"\s+(IV|V|I{1,3})\b", re.I),  # as refine.PART_RE (refine imports this module)
         # a heading that must not be glued into option D: Roman or Arabic part heading
         _PART_ANY=re.compile(r"^\s*" + part + r"\s+(?:IV|V|I{1,3}|\d{1,2})\b", re.I),
@@ -51,6 +54,14 @@ _ENDS = ("passage", "section_start", "subject_start", "question_end")
 def _q_start(line):
     """_Q match unless the line is a group intro (`Câu 31-35: Đọc ...`), which is context."""
     return None if _INTRO.match(line) else _Q.match(line)
+
+
+def _opens_next(line, n):
+    """A part heading, or a group intro starting at question n+1: never the stem of question n."""
+    if _PART_ANY.match(line):
+        return True
+    m = _INTRO.match(line)
+    return bool(m) and group_span(m)[0] == n + 1
 
 
 def _next_n(lines, i):
@@ -282,12 +293,17 @@ def segment(lines, hints=None, report=None, starts=None):
             if qs[-1]["options"] and (closed or _INTRO.match(line) or _READ.match(line)
                                       or _PART_ANY.match(line) or _is_subheading(lines, i)):
                 pending.append(line.strip())
+            elif not qs[-1]["options"] and _opens_next(line, qs[-1]["n"]):
+                pending.append(line.strip())  # option-less question: a heading/intro is the next one's context
             elif qs[-1]["options"]:
                 qs[-1]["options"][-1]["text"] += " " + line.strip()
             else:
                 qs[-1]["text"] = (qs[-1]["text"] + " " + line.strip()).strip()
     if pending:  # no question follows: nothing to attach to, keep the text as before
-        qs[-1]["options"][-1]["text"] += " " + " ".join(pending)
+        if qs[-1]["options"]:
+            qs[-1]["options"][-1]["text"] += " " + " ".join(pending)
+        else:
+            qs[-1]["text"] = (qs[-1]["text"] + " " + " ".join(pending)).strip()
     ok = bool(qs) and [q["n"] for q in qs] == list(range(1, len(qs) + 1)) \
         and all(q["text"] for q in qs)
     return intro, qs, ok

@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-114",
   "title": "Fix-F ingest: 114-F001/F002/F010/F004 (REQ-0121)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0121",
   "acceptance_criteria": [
     "AC1 option-less q keeps next heading/intro",
@@ -18,8 +18,15 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/ingest/segment.py",
+      "src/exam_engine/ingest/refine.py",
+      "tests/unit/test_ingest_fix_f.py",
+      "tests/unit/test_generality_golden.py",
+      "tests/unit/test_refine_window.py"
+    ],
+    "summary": "114.1 _opens_next + end-of-input guard (segment); 114.2 scoped (?i:) group word in _INTRO only, GROUP_RE unchanged; 114.3 _merge_ctx via _dedupe (refine); 114.4 try on backward re-run, run_calls/run_cost, recover_failed warning. 12 new tests (A,B,E,F,H,J,K,L bite on HEAD src; guards C,D,G,I pass both). Main updated 2 existing tests that froze the old behaviour: golden _INTRO pattern, cost_cap mid-backward now keeps first pass"
   },
   "unit_test": {
     "status": "pending",
@@ -42,7 +49,8 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-114/handoff/design.md"
+    "designer": "work/TASK-114/handoff/design.md",
+    "coder": "work/TASK-114/handoff/code.md"
   },
   "user_notes": [
     {
@@ -52,14 +60,17 @@
     }
   ],
   "picked_at": "2026-11-16T03:39:56Z",
-  "updated_at": "2026-11-16T03:43:44Z",
+  "updated_at": "2026-11-16T03:46:57Z",
   "updated_by": "main",
-  "scope": [],
+  "scope": [
+    "src/exam_engine/ingest/*.py",
+    "tests/unit/*.py"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
     "done": [],
     "notes": ""
   },
-  "next": "coder implements 114.1-114.4 with tests A,B,E,F,H,J,K; then tester confirms they bite"
+  "next": "tester runs --fast and an independent bite check of the 12 new tests and the 2 updated ones"
 }

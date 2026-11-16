@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-114",
-  "state": "DESIGN",
-  "next": "coder implements 114.1-114.4 with tests A,B,E,F,H,J,K; then tester confirms they bite",
+  "state": "IMPLEMENTING",
+  "next": "tester runs --fast and an independent bite check of the 12 new tests and the 2 updated ones",
   "title": "Fix-F ingest: 114-F001/F002/F010/F004 (REQ-0121)",
   "active": [
     {
       "task_id": "TASK-114",
-      "state": "DESIGN",
-      "next": "coder implements 114.1-114.4 with tests A,B,E,F,H,J,K; then tester confirms they bite",
-      "updated_at": "2026-11-16T03:43:44Z"
+      "state": "IMPLEMENTING",
+      "next": "tester runs --fast and an independent bite check of the 12 new tests and the 2 updated ones",
+      "updated_at": "2026-11-16T03:46:57Z"
     }
   ],
   "max_active": 1

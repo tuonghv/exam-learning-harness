@@ -20,7 +20,7 @@ from exam_engine.pipeline import cross, genexam, verifier  # noqa: E402
 PATTERNS = [
     (segment._Q, r'^\s*(?:(?:Câu|Cau|Question)\s*(\d+)\s*[.:)]?|(\d+)(?!\.\d)\s*[.)])\s*(.*)$'),
     (segment.GROUP_RE, r'(?:Questions?|[Cc]âu(?:\s*hỏi)?)\s*(?:từ\s*)?(\d+)(?:\s*(?:-|–|đến|to)\s*(?:[Cc]âu\s*)?(\d+)|\s+and\s+(\d+)|((?:\s*,\s*\d+)+))'),
-    (segment._INTRO, r'^\s*(?:(?:Dựa vào|Đọc|Hãy đọc|Based on|Read|Use|Study)\b[^\n]{0,120}?)?(?:Questions?|[Cc]âu(?:\s*hỏi)?)\s*(?:từ\s*)?(\d+)(?:\s*(?:-|–|đến|to)\s*(?:[Cc]âu\s*)?(\d+)|\s+and\s+(\d+)|((?:\s*,\s*\d+)+))'),  # 108.2: _INTRO shares the GROUP_RE span
+    (segment._INTRO, r'^\s*(?:(?:Dựa vào|Đọc|Hãy đọc|Based on|Read|Use|Study)\b[^\n]{0,120}?)?(?i:(?:Questions?|C[aâ]u(?:\s*hỏi)?))\s*(?:từ\s*)?(\d+)(?:\s*(?:-|–|đến|to)\s*(?:[Cc]âu\s*)?(\d+)|\s+and\s+(\d+)|((?:\s*,\s*\d+)+))'),  # 108.2 + 114.2: GROUP_RE span, group word case-insensitive (CÂU/Cau)
     (segment._READ, r'^\s*(?:Read|Study|Use)\s+the\s+(?:following\s+)?(?:passage|text|article)\b'),
     (segment._PART, r'^\s*(?:PH[ẦA]N|PART)\s+(IV|V|I{1,3})\b'),  # D2: was PH[ẦA]N only
     (segment._PART_ANY, r'^\s*(?:PH[ẦA]N|PART)\s+(?:IV|V|I{1,3}|\d{1,2})\b'),
