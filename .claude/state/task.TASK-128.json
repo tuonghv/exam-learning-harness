@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-128",
   "title": "Stale TASK-048 real-doc golden (REQ-0135)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0135",
   "acceptance_criteria": [
     "AC1 invariants, bites",
@@ -27,12 +27,18 @@
     "result": "module OK; --fast KNOWN 4 NEW 0; bite fails as expected"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "not_applicable",
+    "result": "test-only change"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-128/evidence/summary.md",
+      "work/TASK-128/evidence/bite.txt",
+      "work/TASK-128/evidence/fast.txt"
+    ],
+    "command": "real DGNL26 refined ingest twice inside the test; bite",
+    "result": "AC1-AC2 met"
   },
   "report": {
     "status": "pending",
@@ -50,6 +56,9 @@
     },
     "tester": {
       "waiver": "coordinator ran the bite and --fast"
+    },
+    "verifier": {
+      "waiver": "coordinator verified with the bite check"
     }
   },
   "user_notes": [
@@ -74,5 +83,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verify"
+  "next": "report and close"
 }
