@@ -2685,5 +2685,47 @@
     ],
     "completed_at": "2026-11-16T12:49:53Z",
     "report": "docs/report/phase-129-pdf-table-text.md"
+  },
+  {
+    "task_id": "TASK-130",
+    "title": "Review findings ledger + check (REQ-0137)",
+    "priority": 1,
+    "status": "queued",
+    "created_at": "2026-11-16T12:50:18Z",
+    "requirement": "REQ-0137",
+    "acceptance_criteria": [
+      "AC1 ledger 80 ids",
+      "AC2 checker exit codes",
+      "AC3 workflow-check WARN",
+      "AC4 role docs",
+      "AC5 tests"
+    ],
+    "user_notes": [
+      {
+        "raw": "RAW-00350",
+        "note": "user: list Fable reports not designed, prevent missed review fixes, plan",
+        "at": "2026-11-16T12:50:18Z"
+      }
+    ]
+  },
+  {
+    "task_id": "TASK-131",
+    "title": "Batch-1 review leftovers: re-triage 17 IMPROVEMENTs (REQ-0138)",
+    "priority": 2,
+    "status": "queued",
+    "created_at": "2026-11-16T12:50:18Z",
+    "requirement": "REQ-0138",
+    "acceptance_criteria": [
+      "AC1 re-triage rows with evidence",
+      "AC2 still-valid fixed (follow-up tasks)",
+      "AC3 ledger rows closed"
+    ],
+    "user_notes": [
+      {
+        "raw": "RAW-00350",
+        "note": "user: list Fable reports not designed, prevent missed review fixes, plan",
+        "at": "2026-11-16T12:50:18Z"
+      }
+    ]
   }
 ]
