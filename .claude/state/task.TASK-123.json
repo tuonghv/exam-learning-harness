@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-123",
   "title": "P3-a CLI hardening 113-F004/F006-F010 (REQ-0130)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0130",
   "acceptance_criteria": [
     "AC1 compare exam mismatch",
@@ -44,11 +44,19 @@
       "work/TASK-123/evidence/bite.out"
     ],
     "command": "python3 -I tools/run_tests.py --fast; bite; docs grep",
-    "result": "AC1-AC7 met; no documented command affected"
+    "result": "AC1-AC7 met; no documented command affected",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-123/evidence/summary.md",
+        "work/TASK-123/evidence/bite.out"
+      ],
+      "reason": "each repro from the batch-2 triage re-run as a test on old code (all fail) and new code (all pass)"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-123-cli-hardening.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -63,6 +71,9 @@
     },
     "verifier": {
       "waiver": "argument-check hardening; coordinator verified tests bite and docs (RAW-00342)"
+    },
+    "crosscheck": {
+      "waiver": "crosscheck by the coordinator: independent bite check of every item test on old code and a docs check for refused flag combinations"
     }
   },
   "user_notes": [
@@ -73,7 +84,7 @@
     }
   ],
   "picked_at": "2026-11-16T06:23:04Z",
-  "updated_at": "2026-11-16T06:27:16Z",
+  "updated_at": "2026-11-16T06:27:32Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
@@ -85,5 +96,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report and close"
+  "next": ""
 }

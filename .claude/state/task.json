@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-123",
-  "state": "VERIFIED",
-  "next": "report and close",
+  "state": "DONE",
+  "next": "",
   "title": "P3-a CLI hardening 113-F004/F006-F010 (REQ-0130)",
-  "active": [
-    {
-      "task_id": "TASK-123",
-      "state": "VERIFIED",
-      "next": "report and close",
-      "updated_at": "2026-11-16T06:27:16Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
