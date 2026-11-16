@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-115",
   "title": "Fix-G cli: 113-F001/F003/F005/F002 (REQ-0122)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0122",
   "acceptance_criteria": [
     "AC1 no empty plan run dir",
@@ -28,9 +28,9 @@
     "summary": "cli.py: 115.1 rmtree claimed plan dir when solve fails before start; 115.2 _drop_fresh_report_dir (fresh run dir + empty line/exam parents, never root, never --out/--report-id); 115.3/3b _rs_resolve returns resolved path for stats and explain; 115.4 --write-recipe --dry-run exit 2. 7 new tests (6 bite on old cli.py, AC2b guard). test_87_3 updated to the approved F002 behaviour"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --fast; python3 -I -m unittest discover -s tests/unit -p test_cli_fix_g_115.py",
+    "result": "--fast 2045 ran, KNOWN 4, NEW 0; test_cli_fix_g_115 10 OK; bite on old cli.py: ac1, ac2a, ac2c, ac3, ac3b, ac4, ac2d, ac2e, test_87_3 fail; guards ac2b, ac2f pass"
   },
   "security": {
     "status": "pending",
@@ -49,7 +49,8 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-115/handoff/design.md",
-    "coder": "work/TASK-115/handoff/code.md"
+    "coder": "work/TASK-115/handoff/code.md",
+    "tester": "work/TASK-115/handoff/test.md"
   },
   "user_notes": [
     {
@@ -59,7 +60,7 @@
     }
   ],
   "picked_at": "2026-11-16T04:01:37Z",
-  "updated_at": "2026-11-16T04:25:26Z",
+  "updated_at": "2026-11-16T04:27:52Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
@@ -72,5 +73,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tester runs --fast and an independent bite check"
+  "next": "verifier checks AC1-AC5 + AC3b against tests and the $0 repro (work/TASK-115/evidence/repro_cli.new.out)"
 }

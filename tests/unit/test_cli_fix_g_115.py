@@ -80,6 +80,35 @@ class FixG115(unittest.TestCase):
         self.assertEqual(r, 2)
         self.assertEqual(self.runs(), before)
 
+    def test_ac2d_drop_keeps_reports_root_no_line(self):
+        d = self.T + "/reports/ex/run-x"
+        os.makedirs(d)
+        cli._drop_fresh_report_dir(d, self.T + "/reports")
+        self.assertTrue(os.path.isdir(self.T + "/reports"))
+        self.assertFalse(os.path.exists(self.T + "/reports/ex"))
+        d = self.T + "/reports/run-y"  # run dir directly under the root
+        os.makedirs(d)
+        cli._drop_fresh_report_dir(d, self.T + "/reports")
+        self.assertTrue(os.path.isdir(self.T + "/reports"))
+
+    def test_ac2e_drop_keeps_sibling_run_under_line(self):
+        keep = self.T + "/reports/ex/dev/run-keep"
+        fresh = self.T + "/reports/ex/dev/run-new"
+        os.makedirs(keep)
+        os.makedirs(fresh)
+        cli._drop_fresh_report_dir(fresh, self.T + "/reports")
+        self.assertTrue(os.path.isdir(keep))
+        self.assertFalse(os.path.exists(fresh))
+
+    def test_ac2f_report_out_given_failure_keeps_dir(self):
+        plan = self._broken_plan()
+        out = self.T + "/myout"
+        os.makedirs(out)
+        open(out + "/x", "w").close()
+        r, _, _ = self.q(cli._report_plan, [plan, "--out", out])
+        self.assertEqual(r, 2)
+        self.assertTrue(os.path.isfile(out + "/x"))
+
     def _stats(self, ref, hist):
         return self.q(cli.run_stats_main, ["stats", ref, "--history", hist, "--json"])
 

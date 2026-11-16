@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-115",
-  "state": "IMPLEMENTING",
-  "next": "tester runs --fast and an independent bite check",
+  "state": "UNIT_TESTED",
+  "next": "verifier checks AC1-AC5 + AC3b against tests and the $0 repro (work/TASK-115/evidence/repro_cli.new.out)",
   "title": "Fix-G cli: 113-F001/F003/F005/F002 (REQ-0122)",
   "active": [
     {
       "task_id": "TASK-115",
-      "state": "IMPLEMENTING",
-      "next": "tester runs --fast and an independent bite check",
-      "updated_at": "2026-11-16T04:25:26Z"
+      "state": "UNIT_TESTED",
+      "next": "verifier checks AC1-AC5 + AC3b against tests and the $0 repro (work/TASK-115/evidence/repro_cli.new.out)",
+      "updated_at": "2026-11-16T04:27:52Z"
     }
   ],
   "max_active": 1

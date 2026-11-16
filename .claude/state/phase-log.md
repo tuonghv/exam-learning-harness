@@ -3337,3 +3337,9 @@ Action: coder implemented 115.1-115.4; main updated test_87_3 and added empty-pa
 Result: --affected 1210 ran, NEW 0
 Decision: implementation matches design + one cleanup refinement
 Next: UNIT_TESTED via tester
+
+## UNIT_TESTED - TASK-115 - 2026-11-16T04:27:52Z
+Action: tester ran --fast and an independent bite check; added 3 tests for _drop_fresh_report_dir and --out
+Result: NEW 0; every AC test bites
+Decision: UNIT_TESTED
+Next: VERIFIED via verifier
