@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-131",
-  "state": "DONE",
-  "next": "",
-  "title": "Batch-1 review leftovers: re-triage 22 findings (REQ-0138)",
-  "active": [],
+  "task_id": "TASK-132",
+  "state": "DESIGN",
+  "next": "implement",
+  "title": "Report names: non-Latin/missing subject slug (REQ-0139)",
+  "active": [
+    {
+      "task_id": "TASK-132",
+      "state": "DESIGN",
+      "next": "implement",
+      "updated_at": "2026-11-16T13:06:52Z"
+    }
+  ],
   "max_active": 1
 }
