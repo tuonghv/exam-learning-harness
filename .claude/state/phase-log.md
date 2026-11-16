@@ -3973,3 +3973,9 @@ Action: deterministic checks
 Result: all v2 fields present; ledger 0 problems
 Decision: UNIT_TESTED
 Next: VERIFIED
+
+## VERIFIED - TASK-136 - 2026-11-16T23:50:18Z
+Action: verify on disk
+Result: AC1-AC3 met
+Decision: VERIFIED
+Next: DONE

@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-136",
   "title": "Review prompt v2 + code-review batch 4 (REQ-0143)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0143",
   "acceptance_criteria": [
     "AC1 prompt v2 fixes 1-9",
@@ -34,12 +34,16 @@
     "result": "prompt 122 lines, all 9 fixes present; every finding has Reached via/Fix risk/Type/Trigger; ledger 108 ids, 0 problems"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "no code change; prompt v2 adds an untrusted-exam-text and paid-call checklist for reviewers"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-136/evidence/checks.txt"
+    ],
+    "command": "real run: 4 code-reviewer runs with prompt v2; files checked on disk; review_ledger.py",
+    "result": "AC1 prompt v2 122 lines, fixes 1-9; AC2 4 reports in v2 format (28 findings, 2 cap hits reported); AC3 28 ledger rows open on TASK-137, 0 problems; src unchanged"
   },
   "report": {
     "status": "pending",
@@ -57,6 +61,9 @@
     },
     "tester": {
       "waiver": "doc-only change; deterministic grep/ledger checks by the coordinator (work/TASK-136/evidence/checks.txt)"
+    },
+    "verifier": {
+      "waiver": "doc-only; coordinator checked the files on disk (2 reviewers had falsely claimed a save, so nothing was taken from replies)"
     }
   },
   "user_notes": [
@@ -67,7 +74,7 @@
     }
   ],
   "picked_at": "2026-11-16T23:41:11Z",
-  "updated_at": "2026-11-16T23:50:17Z",
+  "updated_at": "2026-11-16T23:50:18Z",
   "updated_by": "main",
   "scope": [
     "docs/prompts/cost-efficient_code_review_instructions.md",
@@ -84,5 +91,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verify"
+  "next": "report and close"
 }
