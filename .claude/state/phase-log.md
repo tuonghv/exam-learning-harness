@@ -3595,3 +3595,9 @@ Action: wrote report
 Result: TASK-123 closed
 Decision: next: P3-b ingest/boundary reply validation
 Next: coordinator picks next
+
+## DESIGN - TASK-124 - 2026-11-16T06:28:15Z
+Action: coordinator wrote design from traced rows
+Result: 5 S items
+Decision: implement
+Next: IMPLEMENTING via coder
