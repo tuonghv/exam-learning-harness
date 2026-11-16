@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-113",
   "title": "Triage code-review batch 2 (phases 113-114) (REQ-0120)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0120",
   "acceptance_criteria": [
     "AC1 20 findings classified with evidence",
@@ -24,9 +24,9 @@
     "summary": "triage-only task: deliverable is docs/design/phase-113-review-triage-b2.md; no src/tests change (AC4)"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I work/TASK-113/repro_cli.py; repro_ingest",
+    "result": "5/5 reproduced BUG rows still show the bug on current code (work/TASK-113/repro_cli.out, repro_ingest.out); no unit tests added because no code changed"
   },
   "security": {
     "status": "pending",
@@ -47,6 +47,9 @@
     "designer": "work/TASK-113/handoff/design-ingest.md",
     "coder": {
       "waiver": "triage-only task, no code to implement (REQ-0120 AC4)"
+    },
+    "tester": {
+      "waiver": "triage-only task; repro scripts stand in for tests, regression tests belong to the fix tasks"
     }
   },
   "user_notes": [
@@ -74,5 +77,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "record the $0 repro runs as the unit-test evidence"
+  "next": "verify ACs against the triage doc and git diff (no src/tests change)"
 }

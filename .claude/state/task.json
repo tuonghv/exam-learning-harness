@@ -1,14 +1,14 @@
 {
   "schema": 2,
   "task_id": "TASK-113",
-  "state": "IMPLEMENTING",
-  "next": "record the $0 repro runs as the unit-test evidence",
+  "state": "UNIT_TESTED",
+  "next": "verify ACs against the triage doc and git diff (no src/tests change)",
   "title": "Triage code-review batch 2 (phases 113-114) (REQ-0120)",
   "active": [
     {
       "task_id": "TASK-113",
-      "state": "IMPLEMENTING",
-      "next": "record the $0 repro runs as the unit-test evidence",
+      "state": "UNIT_TESTED",
+      "next": "verify ACs against the triage doc and git diff (no src/tests change)",
       "updated_at": "2026-11-16T03:38:23Z"
     }
   ],

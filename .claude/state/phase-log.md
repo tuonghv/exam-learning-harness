@@ -3277,3 +3277,9 @@ Action: user approved the triage plan (2026-11-16, one-click)
 Result: no code change by design
 Decision: move through the gates with waivers for code roles
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-113 - 2026-11-16T03:38:23Z
+Action: ran the $0 repro scripts
+Result: 5 BUG rows reproduce, 2 traced
+Decision: evidence enough for the triage
+Next: VERIFIED
