@@ -3745,3 +3745,9 @@ Action: wrote report
 Result: TASK-128 closed
 Decision: backlog empty
 Next: coordinator picks next
+
+## DESIGN - TASK-129 - 2026-11-16T12:42:49Z
+Action: traced 3 dropped tables
+Result: paragraph-only line source
+Decision: add table lines
+Next: IMPLEMENTING

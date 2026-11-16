@@ -1,0 +1,75 @@
+{
+  "task_id": "TASK-129",
+  "title": "PDF free text path keeps table blocks (REQ-0136)",
+  "state": "DESIGN",
+  "requirement": "REQ-0136",
+  "acceptance_criteria": [
+    "AC1 synthetic table/box",
+    "AC2 real PDFs 120 + oracle",
+    "AC3 --pages parity",
+    "AC4 tests, --fast"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-129-pdf-table-text.md",
+    "summary": "PDF table blocks reach segmentation: boxed passage as plain lines, data table as | rows; same in --pages",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {
+    "designer": {
+      "waiver": "cause traced by the coordinator from the paid run and doc blocks"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00349",
+      "note": "found in the approved Vietnamese/Science paid runs",
+      "at": "2026-11-16T12:42:36Z"
+    }
+  ],
+  "picked_at": "2026-11-16T12:42:36Z",
+  "updated_at": "2026-11-16T12:42:50Z",
+  "updated_by": "main",
+  "scope": [
+    "src/exam_engine/ingest/segment.py",
+    "src/exam_engine/ingest/adapters/pdf.py",
+    "src/exam_engine/ingest/parts.py",
+    "tests/**",
+    "docs/guide/*.md",
+    "docs/design/phase-129*",
+    "docs/report/phase-129*",
+    "docs/report/INDEX.md"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "implement 129.1-129.3"
+}
