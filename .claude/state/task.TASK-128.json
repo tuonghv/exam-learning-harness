@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-128",
   "title": "Stale TASK-048 real-doc golden (REQ-0135)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0135",
   "acceptance_criteria": [
     "AC1 invariants, bites",
@@ -22,9 +22,9 @@
     "summary": "test_48_golden_refined_real_doc checks sidecar invariants and determinism on HEAD"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "test_assembly_qa.py; --fast; bite",
+    "result": "module OK; --fast KNOWN 4 NEW 0; bite fails as expected"
   },
   "security": {
     "status": "pending",
@@ -47,6 +47,9 @@
     },
     "coder": {
       "waiver": "test-only edit by the coordinator"
+    },
+    "tester": {
+      "waiver": "coordinator ran the bite and --fast"
     }
   },
   "user_notes": [
@@ -57,7 +60,7 @@
     }
   ],
   "picked_at": "2026-11-16T11:38:38Z",
-  "updated_at": "2026-11-16T11:41:13Z",
+  "updated_at": "2026-11-16T11:41:14Z",
   "updated_by": "main",
   "scope": [
     "tests/unit/test_assembly_qa.py",
@@ -71,5 +74,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tests"
+  "next": "verify"
 }
