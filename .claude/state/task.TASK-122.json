@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-122",
   "title": "DGNL26 text path: cover-page run + image-only question (REQ-0129)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0129",
   "acceptance_criteria": [
     "AC1 120 questions",
@@ -17,8 +17,12 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/ingest/segment.py",
+      "tests/unit/test_segment_cover_unreadable.py"
+    ],
+    "summary": "segment.py: `_is_cover_run` (option-less leading run, shorter than a following run from 1 that has options, no heading before it while the next has one) moves to intro; empty-text question kept with unreadable=True and tolerated by numbering. 8 new tests"
   },
   "unit_test": {
     "status": "pending",
@@ -41,7 +45,8 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-122/handoff/design.md"
+    "designer": "work/TASK-122/handoff/design.md",
+    "coder": "work/TASK-122/handoff/code.md"
   },
   "user_notes": [
     {
@@ -51,7 +56,7 @@
     }
   ],
   "picked_at": "2026-11-16T06:12:03Z",
-  "updated_at": "2026-11-16T06:14:41Z",
+  "updated_at": "2026-11-16T06:22:23Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/*.py",
@@ -64,5 +69,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "coder implements 122.1-122.2"
+  "next": "tests"
 }

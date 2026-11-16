@@ -230,6 +230,7 @@ def segment(lines, hints=None, report=None, starts=None):
     rep = report if report is not None else []
     intro, qs, pending = [], [], []
     closed = False  # a question_end hint: later free lines are context of the next question
+    st = starts if starts is not None else []
 
     def note(code, i, hint, **extra):
         rep.append(dict(extra, code=code, line=i, label=hint[0], conf=hint[1]))
@@ -268,8 +269,7 @@ def segment(lines, hints=None, report=None, starts=None):
                 m = None
         if m:
             qs.append({"n": n, "text": m.group(3).strip(), "options": []})
-            if starts is not None:
-                starts.append(i)
+            st.append(i)
             closed = False
             if pending:
                 qs[-1]["context"] = "\n".join(pending)
@@ -291,8 +291,7 @@ def segment(lines, hints=None, report=None, starts=None):
                     note("boundary_ai_rejected", i, hint, reason="numbering")
                 else:
                     qs.append({"n": got[0], "text": got[1], "options": []})
-                    if starts is not None:
-                        starts.append(i)
+                    st.append(i)
                     closed = False
                     if pending:
                         qs[-1]["context"] = "\n".join(pending)
@@ -334,9 +333,43 @@ def segment(lines, hints=None, report=None, starts=None):
             qs[-1]["options"][-1]["text"] += " " + " ".join(pending)
         else:
             qs[-1]["text"] = (qs[-1]["text"] + " " + " ".join(pending)).strip()
+    rs = runs(qs)
+    if _is_cover_run(qs, rs, lines, st):
+        k = len(rs[0])
+        n_ctx = len(qs[k]["context"].split("\n")) if qs[k].get("context") else 0
+        intro = lines[:_ctx_start(lines, st[k], n_ctx)]
+        qs = qs[k:]
+        st[:] = st[k:]
+    for q in qs:
+        if not q["text"]:
+            q["unreadable"] = True  # an image-only question: kept, declined downstream as missing_text
     ok = bool(qs) and [q["n"] for q in qs] == list(range(1, len(qs) + 1)) \
         and all(q["text"] for q in qs)
     return intro, qs, ok
+
+
+def _ctx_start(lines, end, n):
+    """Line index where the n non-blank lines just before `end` begin (end itself when n == 0)."""
+    i = end
+    while n > 0 and i > 0:
+        i -= 1
+        if lines[i].strip():
+            n -= 1
+    return i
+
+
+def _is_cover_run(qs, rs, lines, st):
+    """A leading option-less run (cover headings `1`, `2`) before the real section 1: it is
+    shorter than the next run, the next run has options, and only the next one opens under a part heading."""
+    if len(rs) < 2 or len(rs[0]) >= len(rs[1]):
+        return False
+    k, k2 = len(rs[0]), len(rs[0]) + len(rs[1])
+    if any(q["options"] for q in qs[:k]) or not any(q["options"] for q in qs[k:k2]):
+        return False
+    before = [ln for ln in lines[:st[0]] if ln.strip()]  # the first question has no context: its heading is intro
+    return not (before and _is_heading_line(before[-1])) \
+        and not split_heading(qs[0].get("context", ""))[0] \
+        and bool(split_heading(qs[k].get("context", ""))[0])
 
 
 MAX_N = 999  # a larger "question number" is a year or a stray figure, never a question
@@ -385,7 +418,8 @@ def numbering(qs):
     """
     rs = runs(qs)
     flat = [n for r in rs for n in r]
-    sane = bool(qs) and all(q["text"] for q in qs) and all(1 <= n <= MAX_N for n in flat)
+    sane = bool(qs) and all(q["text"] or q.get("unreadable") for q in qs) \
+        and any(q["text"] for q in qs) and all(1 <= n <= MAX_N for n in flat)
     if len(rs) == 1:
         usable = sane and all(a < b for a, b in zip(rs[0], rs[0][1:]))
     else:

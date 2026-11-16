@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-122",
-  "state": "DESIGN",
-  "next": "coder implements 122.1-122.2",
+  "state": "IMPLEMENTING",
+  "next": "tests",
   "title": "DGNL26 text path: cover-page run + image-only question (REQ-0129)",
   "active": [
     {
       "task_id": "TASK-122",
-      "state": "DESIGN",
-      "next": "coder implements 122.1-122.2",
-      "updated_at": "2026-11-16T06:14:41Z"
+      "state": "IMPLEMENTING",
+      "next": "tests",
+      "updated_at": "2026-11-16T06:22:23Z"
     }
   ],
   "max_active": 1

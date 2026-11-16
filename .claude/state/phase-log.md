@@ -3541,3 +3541,9 @@ Action: designer drafted 2 rules; coordinator added a part-heading guard to 122.
 Result: design complete
 Decision: implement
 Next: IMPLEMENTING via coder
+
+## IMPLEMENTING - TASK-122 - 2026-11-16T06:22:22Z
+Action: coder implemented 122.1-122.2 (heading guard also checks the line before the first start)
+Result: --affected NEW 0
+Decision: matches design
+Next: UNIT_TESTED
