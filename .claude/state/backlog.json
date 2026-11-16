@@ -2758,7 +2758,7 @@
     "task_id": "TASK-133",
     "title": "Review leftovers fix A: cli + claude adapter (REQ-0140)",
     "priority": 3,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-11-16T13:03:47Z",
     "requirement": "REQ-0140",
     "acceptance_criteria": [
