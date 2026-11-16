@@ -3445,3 +3445,9 @@ Action: wrote report
 Result: TASK-118 closed
 Decision: next: TASK-119 Fix-I
 Next: pick TASK-119
+
+## DESIGN - TASK-119 - 2026-11-16T05:41:34Z
+Action: designer drafted 4 items (while TASK-118 was testing)
+Result: design complete; no new flag for option clash
+Decision: implement
+Next: IMPLEMENTING via coder
