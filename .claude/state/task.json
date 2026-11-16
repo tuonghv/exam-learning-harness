@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-115",
-  "state": "VERIFIED",
-  "next": "write the report and close TASK-115",
+  "state": "DONE",
+  "next": "",
   "title": "Fix-G cli: 113-F001/F003/F005/F002 (REQ-0122)",
-  "active": [
-    {
-      "task_id": "TASK-115",
-      "state": "VERIFIED",
-      "next": "write the report and close TASK-115",
-      "updated_at": "2026-11-16T04:30:47Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

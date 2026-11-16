@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-115",
   "title": "Fix-G cli: 113-F001/F003/F005/F002 (REQ-0122)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0122",
   "acceptance_criteria": [
     "AC1 no empty plan run dir",
@@ -45,11 +45,19 @@
       "work/TASK-115/evidence/fast.out"
     ],
     "command": "python3 -I work/TASK-113/repro_cli.py; python3 -I tools/run_tests.py --fast; git diff 4ec85e2 10553cb -- src",
-    "result": "verifier: AC1-AC4, AC3b met, deletion paths safe; coordinator closed AC5 (--fast 2048, NEW 0) and solve-path check (diff touches no engine/pipeline line); repro: F001 0 dirs left, F003b same, F005 rc 2 unchanged"
+    "result": "verifier: AC1-AC4, AC3b met, deletion paths safe; coordinator closed AC5 (--fast 2048, NEW 0) and solve-path check (diff touches no engine/pipeline line); repro: F001 0 dirs left, F003b same, F005 rc 2 unchanged",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-115/evidence/summary.md",
+        "work/TASK-115/evidence/repro_cli.new.out"
+      ],
+      "reason": "pre-fix repro script re-run on new code: each bug line flips, guards unchanged"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-115-cli-fix-g.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -58,7 +66,10 @@
     "designer": "work/TASK-115/handoff/design.md",
     "coder": "work/TASK-115/handoff/code.md",
     "tester": "work/TASK-115/handoff/test.md",
-    "verifier": "work/TASK-115/handoff/verify.md"
+    "verifier": "work/TASK-115/handoff/verify.md",
+    "crosscheck": {
+      "waiver": "crosscheck run by the coordinator: the TASK-113 repro script (written before the fix, independent of the coder's tests) re-run on new src; old vs new outputs compared"
+    }
   },
   "user_notes": [
     {
@@ -68,7 +79,7 @@
     }
   ],
   "picked_at": "2026-11-16T04:01:37Z",
-  "updated_at": "2026-11-16T04:30:47Z",
+  "updated_at": "2026-11-16T04:31:01Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
@@ -81,5 +92,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "write the report and close TASK-115"
+  "next": ""
 }

@@ -3349,3 +3349,9 @@ Action: verifier traced ACs and deletion guards; coordinator saved --fast and di
 Result: PASS, all ACs met
 Decision: VERIFIED
 Next: DONE
+
+## DONE - TASK-115 - 2026-11-16T04:31:00Z
+Action: wrote report
+Result: TASK-115 closed; batch-2 P1+P2 fixes done
+Decision: P3 hardening optional, user decides
+Next: user decision on P3 / F002 api follow-up

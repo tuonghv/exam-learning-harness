@@ -2323,7 +2323,7 @@
     "task_id": "TASK-115",
     "title": "Fix-G cli: 113-F001/F003/F005/F002 (REQ-0122)",
     "priority": 2,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-16T03:39:18Z",
     "requirement": "REQ-0122",
     "acceptance_criteria": [
@@ -2339,6 +2339,8 @@
         "note": "user approved triage b2 plan; Fix-G after Fix-F",
         "at": "2026-11-16T03:39:18Z"
       }
-    ]
+    ],
+    "completed_at": "2026-11-16T04:31:00Z",
+    "report": "docs/report/phase-115-cli-fix-g.md"
   }
 ]
