@@ -48,5 +48,13 @@
     "asked_at": "2026-11-04T03:57:54Z",
     "answered_at": "2026-11-04T05:03:50Z",
     "answer": "Coordinator decision: P1 ran at a 1.25 USD cap per subject (1.11 spent); P2 skipped, the 2025 answers will be pooled instead"
+  },
+  {
+    "id": "Q-1794834624",
+    "task_id": "TASK-133",
+    "question": "Update tests/unit/test_exam_llm.py:106 expected class for unparseable stdout from 'empty' to 'other' (110-F005 change; coder's edit was denied by the permission classifier)?",
+    "recommendation": "yes: one-word test update matching the designed 110-F005 behaviour; no code reads 'empty'",
+    "kind": "permission",
+    "asked_at": "2026-11-16T13:10:24Z"
   }
 ]
