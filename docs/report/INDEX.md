@@ -81,3 +81,4 @@ Rule (RAW-00171, REQ-0061): evidence summaries are small text with no exam conte
 | TASK-113 Code-review triage b2: 20 findings -> 7 BU | docs/design/phase-113-review-triage-b2.md | docs/report/phase-113-review-triage-b2.md | - | - | - |
 | TASK-114 Fix-F ingest: 114-F001/F002/F010/F004 | docs/design/phase-114-ingest-fix-f.md | docs/report/phase-114-ingest-fix-f.md | - | - | - |
 | TASK-115 Fix-G cli: 113-F001/F002/F003/F005 | docs/design/phase-115-cli-fix-g.md | docs/report/phase-115-cli-fix-g.md | - | - | - |
+| TASK-116 Unaccented Cau group sharing (114-F002 follow-up) | docs/design/phase-116-cau-group-share.md | docs/report/phase-116-cau-group-share.md | - | - | - |

@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-116",
   "title": "Fix-F follow-up: share unaccented Cau N - M passage (REQ-0123)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0123",
   "acceptance_criteria": [
     "AC1 Cau intro shared to range",
@@ -40,11 +40,19 @@
       "work/TASK-116/evidence/bite.out"
     ],
     "command": "python3 -I work/TASK-116/evidence/share_oracle.py <old|new src> .; python3 -I work/TASK-114/evidence/oracle.py <old|new src> .",
-    "result": "AC1-AC3 met; 0 real-data changes (no Cau intros in inputs); regression test bites"
+    "result": "AC1-AC3 met; 0 real-data changes (no Cau intros in inputs); regression test bites",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-116/evidence/summary.md",
+        "work/TASK-116/evidence/bite.out"
+      ],
+      "reason": "old vs new _share_context and segment output on 4 real PDFs + 22 examples: 0 changes; regression test bites"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-116-cau-group-share.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -59,6 +67,9 @@
     },
     "verifier": {
       "waiver": "size-S one-regex change; coordinator verified with two $0 old-vs-new oracles over real inputs (evidence/summary.md)"
+    },
+    "crosscheck": {
+      "waiver": "crosscheck by the coordinator: share + segment oracles old vs new over real inputs, independent of the coder's tests (evidence/summary.md)"
     }
   },
   "user_notes": [
@@ -69,11 +80,12 @@
     }
   ],
   "picked_at": "2026-11-16T04:36:07Z",
-  "updated_at": "2026-11-16T04:45:16Z",
+  "updated_at": "2026-11-16T04:45:36Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/*.py",
-    "tests/unit/*.py"
+    "tests/unit/*.py",
+    "docs/report/phase-114-ingest-fix-f.md"
   ],
   "depends_on": [],
   "inputs": {},
@@ -81,5 +93,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "write the report and close TASK-116"
+  "next": ""
 }

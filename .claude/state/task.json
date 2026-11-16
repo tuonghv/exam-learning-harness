@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-116",
-  "state": "VERIFIED",
-  "next": "write the report and close TASK-116",
+  "state": "DONE",
+  "next": "",
   "title": "Fix-F follow-up: share unaccented Cau N - M passage (REQ-0123)",
-  "active": [
-    {
-      "task_id": "TASK-116",
-      "state": "VERIFIED",
-      "next": "write the report and close TASK-116",
-      "updated_at": "2026-11-16T04:45:16Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

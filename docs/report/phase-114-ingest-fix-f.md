@@ -23,7 +23,7 @@
 designer, coder, tester, verifier runs; no paid exam run.
 
 ## Defects / follow-ups
-- F002 follow-up: `api.py` GROUP_RE stays case-sensitive, so a `CÂU 31 - 35` passage reaches q31 only, not q32-35.
+- F002 follow-up: corrected in phase 116 — `CÂU` was already shared (GROUP_ANY is case-insensitive); only unaccented `Cau` was not, fixed by TASK-116.
 - Residual risk: an option-less stem whose wrapped line starts `Phần N` would move out; none seen in real data.
 
 ## Next

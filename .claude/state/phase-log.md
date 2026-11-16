@@ -3379,3 +3379,9 @@ Action: ran share + segment oracles old vs new
 Result: 0 changes on real data
 Decision: VERIFIED
 Next: DONE
+
+## DONE - TASK-116 - 2026-11-16T04:45:36Z
+Action: wrote report; corrected the TASK-114 report's F002 follow-up line
+Result: TASK-116 closed
+Decision: backlog empty
+Next: user decides next
