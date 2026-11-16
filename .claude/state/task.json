@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-116",
-  "state": "UNIT_TESTED",
-  "next": "verify ACs against the $0 oracles",
+  "state": "VERIFIED",
+  "next": "write the report and close TASK-116",
   "title": "Fix-F follow-up: share unaccented Cau N - M passage (REQ-0123)",
   "active": [
     {
       "task_id": "TASK-116",
-      "state": "UNIT_TESTED",
-      "next": "verify ACs against the $0 oracles",
-      "updated_at": "2026-11-16T04:45:15Z"
+      "state": "VERIFIED",
+      "next": "write the report and close TASK-116",
+      "updated_at": "2026-11-16T04:45:16Z"
     }
   ],
   "max_active": 1

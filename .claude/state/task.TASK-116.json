@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-116",
   "title": "Fix-F follow-up: share unaccented Cau N - M passage (REQ-0123)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0123",
   "acceptance_criteria": [
     "AC1 Cau intro shared to range",
@@ -29,12 +29,18 @@
     "result": "--fast 2050 ran, KNOWN 4, NEW 0; on old segment.py only test_cau_unaccented_group_shared fails, C\u00c2U guard passes (evidence/bite.out)"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "regex built from existing pattern pieces; no new input, file, network or eval path"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-116/handoff/verify.md",
+      "work/TASK-116/evidence/summary.md",
+      "work/TASK-116/evidence/bite.out"
+    ],
+    "command": "python3 -I work/TASK-116/evidence/share_oracle.py <old|new src> .; python3 -I work/TASK-114/evidence/oracle.py <old|new src> .",
+    "result": "AC1-AC3 met; 0 real-data changes (no Cau intros in inputs); regression test bites"
   },
   "report": {
     "status": "pending",
@@ -50,6 +56,9 @@
     "coder": "work/TASK-116/handoff/code.md",
     "tester": {
       "waiver": "size-S change with 2 tests; coordinator ran --fast and an independent bite check in a git-archive scratch copy (work/TASK-116/evidence/bite.out)"
+    },
+    "verifier": {
+      "waiver": "size-S one-regex change; coordinator verified with two $0 old-vs-new oracles over real inputs (evidence/summary.md)"
     }
   },
   "user_notes": [
@@ -60,7 +69,7 @@
     }
   ],
   "picked_at": "2026-11-16T04:36:07Z",
-  "updated_at": "2026-11-16T04:45:15Z",
+  "updated_at": "2026-11-16T04:45:16Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/*.py",
@@ -72,5 +81,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verify ACs against the $0 oracles"
+  "next": "write the report and close TASK-116"
 }
