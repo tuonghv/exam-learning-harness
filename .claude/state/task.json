@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-132",
-  "state": "DONE",
-  "next": "",
-  "title": "Report names: non-Latin/missing subject slug (REQ-0139)",
-  "active": [],
+  "task_id": "TASK-133",
+  "state": "DESIGN",
+  "next": "coder implements 133.1-133.9",
+  "title": "Review leftovers fix A: cli + claude adapter (REQ-0140)",
+  "active": [
+    {
+      "task_id": "TASK-133",
+      "state": "DESIGN",
+      "next": "coder implements 133.1-133.9",
+      "updated_at": "2026-11-16T13:07:20Z"
+    }
+  ],
   "max_active": 1
 }

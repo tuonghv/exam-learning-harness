@@ -1,0 +1,72 @@
+{
+  "task_id": "TASK-133",
+  "title": "Review leftovers fix A: cli + claude adapter (REQ-0140)",
+  "state": "DESIGN",
+  "requirement": "REQ-0140",
+  "acceptance_criteria": [
+    "AC1 tests per id",
+    "AC2 ledger, --fast"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-133-review-fix-a-cli.md",
+    "summary": "9 cli/adapter hardening fixes from the TASK-131 re-triage",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {
+    "designer": {
+      "waiver": "designed in the TASK-131 re-triage (work/TASK-131/handoff/design-cli.md)"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00350",
+      "note": "fix tasks from the TASK-131 re-triage of never-designed review findings",
+      "at": "2026-11-16T13:03:47Z"
+    }
+  ],
+  "picked_at": "2026-11-16T13:07:12Z",
+  "updated_at": "2026-11-16T13:07:20Z",
+  "updated_by": "main",
+  "scope": [
+    "src/exam_engine/cli.py",
+    "src/exam_engine/adapters/claude.py",
+    "tests/unit/test_review_fix_a_133.py",
+    "docs/review/findings.tsv",
+    "docs/design/phase-133*",
+    "docs/report/phase-133*",
+    "docs/report/INDEX.md"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "coder implements 133.1-133.9"
+}
