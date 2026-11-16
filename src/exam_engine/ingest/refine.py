@@ -46,9 +46,10 @@ def template():
         return fh.read()
 
 
-def _why(unreadable, low_similarity, gap):
+def _why(unreadable, low_similarity, gap, order=False):
     """Reason codes behind needs_review (60.3); thresholds are the callers' own."""
-    return [c for c, on in (("unreadable", unreadable), ("similarity", low_similarity), ("gap", gap)) if on]
+    return [c for c, on in (("unreadable", unreadable), ("similarity", low_similarity), ("gap", gap),
+                            ("order", order)) if on]
 
 
 def _add_why(q, code):
@@ -197,6 +198,10 @@ def _gaps(questions):
     return out
 
 
+def _strlist(v):
+    return isinstance(v, list) and all(isinstance(f, str) for f in v)
+
+
 def _continues_errors(c):
     if c is None:
         return []
@@ -208,8 +213,8 @@ def _continues_errors(c):
     if not isinstance(c.get("options", {}), dict) or not all(
             isinstance(v, str) for v in c.get("options", {}).values()):
         errs.append("continues: options must be an object of strings")
-    if not isinstance(c.get("figures", []), list):
-        errs.append("continues: figures must be a list")
+    if not _strlist(c.get("figures", [])):
+        errs.append("continues: figures must be a list of strings")
     if not isinstance(c.get("passage", False), bool):
         errs.append("continues: passage must be a boolean")
     return errs
@@ -242,8 +247,8 @@ def validate_refined(obj, originals=None):
             continue
         if not isinstance(q.get("unreadable", False), bool):
             errs.append("question %d: unreadable must be a boolean" % i)
-        if not isinstance(q.get("figures", []), list):
-            errs.append("question %d: figures must be a list" % i)
+        if not _strlist(q.get("figures", [])):
+            errs.append("question %d: figures must be a list of strings" % i)
         if not isinstance(q.get("cut", False), bool):
             errs.append("question %d: cut must be a boolean" % i)
         orig = (originals or {}).get(qid)
@@ -266,6 +271,10 @@ def _cells(tb):
     return [c.strip() for ln in lines for c in ln.split(" | ") if c.strip()]
 
 
+def _token_in(c, hay):
+    return re.search(r"\b%s\b" % re.escape(fold(c)), hay) is not None
+
+
 def _native_tables(doc, qs):
     """Append a source table's text to the figure entry that describes it, when the refined
     page does not already carry its cells. Returns warnings."""
@@ -282,14 +291,18 @@ def _native_tables(doc, qs):
             labels = [c for c in cells if c not in data]
             hay = fold(" ".join(" ".join([q.get("text") or "", q.get("context") or ""]
                                          + list((q.get("options") or {}).values())
-                                         + list(q.get("figures") or ())) for q in on))
+                                         + [str(f) for f in (q.get("figures") or ())]) for q in on))
             need = data or cells
-            if sum(1 for c in need if fold(c) in hay) >= 0.8 * len(need):
+            if sum(1 for c in need if (_token_in(c, hay) if data else fold(c) in hay)) >= 0.8 * len(need):
                 continue
             best, share = None, 0.0
+            if not labels:  # nothing to match on: the one question whose figure names a table
+                cand = [q for q in on if any(re.search(r"\b(bang|table)\b", fold(str(f))) for f in (q.get("figures") or ()))]
+                if len(cand) == 1:
+                    best = cand[0]
             for q in on:
                 for i, f in enumerate(q.get("figures") or ()):
-                    ff = fold(f)
+                    ff = fold(str(f))
                     hit = sum(1 for c in labels if re.search(r"\b%s\b" % re.escape(fold(c)), ff))
                     if labels and hit / len(labels) > share:
                         best, share = q, hit / len(labels)
@@ -436,6 +449,19 @@ def _attach(qs, st, n, cont):
     if cont["legacy"]:
         o.update(needs_review=True, joined_page=n, needs_review_why=_add_why(o, "joined_page"))
     return None
+
+
+def _orphan_advice(orphans, pages):
+    """Advice for orphan pages: add p-1 only when it exists, nothing owns p and it is not selected yet."""
+    add = [o["page"] - 1 for o in orphans
+           if o["page"] > 1 and o.get("kind") == "no_owner" and o["page"] - 1 not in pages]
+    chk = [o["page"] for o in orphans if o["page"] <= 1 or o.get("kind") != "no_owner" or o["page"] - 1 in pages]
+    parts = []
+    if add:
+        parts.append("add page(s) %s to --pages" % ", ".join(map(str, add)))
+    if chk:
+        parts.append("check page(s) %s" % ", ".join(map(str, chk)))
+    return "; ".join(parts)
 
 
 def _files_hint(doc, orphans):
@@ -618,12 +644,13 @@ def refine(doc, spec, llm, source_path=None, max_cost=1.0, model="sonnet", allow
         for q in items:
             qid = norm_id(q["id"])
             sim = similarity(q, by_id.get(qid), text)
-            why = _why(bool(q.get("unreadable")), sim < min_similarity, (q["part"], qid) in gaps)
+            why = _why(bool(q.get("unreadable")), sim < min_similarity, (q["part"], qid) in gaps,
+                       bool(q.get("_review")))
             qs.append({"id": qid, "part": q["part"], "text": q["text"],
                        "options": q.get("options", {}), "context": str(q.get("context") or ""),
                        "figures": q.get("figures", []), "origin": "ai", "page": n,
                        "similarity": sim,
-                       "needs_review": bool(why) or bool(q.get("_review"))})
+                       "needs_review": bool(why)})
             if why:
                 qs[-1]["needs_review_why"] = why
             if q.get("cut") is True:
@@ -710,7 +737,7 @@ def refine(doc, spec, llm, source_path=None, max_cost=1.0, model="sonnet", allow
         out["warnings"].append({
             "level": "warning", "code": "orphan_continuation",
             "message": "continuation on page(s) %s not merged (no question on the page before, or it "
-                       "does not fit): add page(s) %s to --pages" % (
+                       "does not fit): %s" % (
                            ", ".join(str(o["page"]) for o in orphans),
-                           ", ".join(str(o["page"] - 1) for o in orphans)) + _files_hint(doc, orphans)})
+                           _orphan_advice(orphans, pages)) + _files_hint(doc, orphans)})
     return out

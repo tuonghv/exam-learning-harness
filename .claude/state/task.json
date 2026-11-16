@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-124",
-  "state": "DESIGN",
-  "next": "coder implements 124.1-124.5",
+  "state": "IMPLEMENTING",
+  "next": "tests",
   "title": "P3-b refine hardening 114-F003/F006-F009 (REQ-0131)",
   "active": [
     {
       "task_id": "TASK-124",
-      "state": "DESIGN",
-      "next": "coder implements 124.1-124.5",
-      "updated_at": "2026-11-16T06:28:15Z"
+      "state": "IMPLEMENTING",
+      "next": "tests",
+      "updated_at": "2026-11-16T06:32:45Z"
     }
   ],
   "max_active": 1

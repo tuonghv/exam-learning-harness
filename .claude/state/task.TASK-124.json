@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-124",
   "title": "P3-b refine hardening 114-F003/F006-F009 (REQ-0131)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0131",
   "acceptance_criteria": [
     "AC1 figures validated",
@@ -19,8 +19,12 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/ingest/refine.py",
+      "tests/unit/test_refine_hardening_124.py"
+    ],
+    "summary": "refine.py: validate_refined rejects non-string figures; _native_tables whole-token cells, str() joins, label-less table to the single table-referencing question; orphan advice only for an addable page; `order` review reason. 6 tests"
   },
   "unit_test": {
     "status": "pending",
@@ -45,7 +49,8 @@
   "roles": {
     "designer": {
       "waiver": "rows already designed with repros in work/TASK-113/handoff/design-ingest.md; coordinator wrote the design doc"
-    }
+    },
+    "coder": "work/TASK-124/handoff/code.md"
   },
   "user_notes": [
     {
@@ -55,7 +60,7 @@
     }
   ],
   "picked_at": "2026-11-16T06:28:14Z",
-  "updated_at": "2026-11-16T06:28:15Z",
+  "updated_at": "2026-11-16T06:32:45Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/*.py",
@@ -69,5 +74,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "coder implements 124.1-124.5"
+  "next": "tests"
 }
