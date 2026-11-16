@@ -2364,5 +2364,26 @@
     ],
     "completed_at": "2026-11-16T04:45:36Z",
     "report": "docs/report/phase-116-cau-group-share.md"
+  },
+  {
+    "task_id": "TASK-117",
+    "title": "Triage code-review batch 3 (phases 117-118) (REQ-0124)",
+    "priority": 1,
+    "status": "queued",
+    "created_at": "2026-11-16T05:20:16Z",
+    "requirement": "REQ-0124",
+    "acceptance_criteria": [
+      "AC1 19 findings classified with evidence",
+      "AC2 BUGs reproduced or traced, reachability stated",
+      "AC3 P1/P2/P3 fix-task plan",
+      "AC4 no src/tests change"
+    ],
+    "user_notes": [
+      {
+        "raw": "RAW-00342",
+        "note": "user: coordinator sets priority and proceeds without asking",
+        "at": "2026-11-16T05:20:16Z"
+      }
+    ]
   }
 ]
