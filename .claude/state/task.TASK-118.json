@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-118",
   "title": "Fix-H parts: 117-F001/F009/F010/F002/F003 (REQ-0125)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0125",
   "acceptance_criteria": [
     "AC1 key after block 6",
@@ -29,9 +29,9 @@
     "summary": "parts.py: _key_heading two-tier guard over all blocks (118.1), find_parts(key_pages) + select_pages passes full-doc key pages (118.3), list/heading blocks on re-segment (118.4); api.py:70 parts fallback in the refusal message (118.2). 8 new tests (6 bite, 2 guards); test_ingest_inspect:141 flipped (encoded F001)"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --fast; python3 -I -m unittest discover -s tests/unit -p test_ingest_key_parts_118.py",
+    "result": "--fast 2058 ran, KNOWN 4, NEW 0; 11 tests OK; tester bite on old code: 6 + flipped inspect test fail, 5 guards pass"
   },
   "security": {
     "status": "pending",
@@ -50,7 +50,8 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-118/handoff/design.md",
-    "coder": "work/TASK-118/handoff/code.md"
+    "coder": "work/TASK-118/handoff/code.md",
+    "tester": "work/TASK-118/handoff/test.md"
   },
   "user_notes": [
     {
@@ -60,7 +61,7 @@
     }
   ],
   "picked_at": "2026-11-16T05:28:38Z",
-  "updated_at": "2026-11-16T05:38:32Z",
+  "updated_at": "2026-11-16T05:41:03Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/*.py",
@@ -72,5 +73,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tester runs --fast and an independent bite check"
+  "next": "verify against the oracles"
 }

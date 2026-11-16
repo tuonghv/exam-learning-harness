@@ -43,6 +43,18 @@ class KeyGuard(unittest.TestCase):  # 118.1
                                                {"kind": "answer_key", "pages": [2, 2]}])
 
 
+class KeyGuardGaps(unittest.TestCase):  # 118.1 tiers
+    def test_deep_long_mixed_case_stays_exam(self):
+        pg = page(1, ["Câu %d: x" % i for i in range(1, 8)]
+                  + ["Đáp án và hướng dẫn chấm đề thi môn Toán học lớp 12"])
+        self.assertEqual(parts.find_parts(doc([pg])), [{"kind": "exam", "pages": [1, 1]}])
+
+    def test_head_single_word_solutions_starts_key(self):
+        d = doc([page(1, ["Câu 1: x"]), page(2, ["Solutions", "b"])])
+        self.assertEqual(parts.find_parts(d), [{"kind": "exam", "pages": [1, 1]},
+                                               {"kind": "answer_key", "pages": [2, 2]}])
+
+
 class MdRefusal(unittest.TestCase):  # 118.2
     def test_md_key_refused(self):
         d = doc([page(1, ["Đáp án đề 01"], "heading")], fmt="md")
@@ -50,6 +62,13 @@ class MdRefusal(unittest.TestCase):  # 118.2
             api.to_exam_text(d)
         self.assertEqual(cm.exception.code, "answer_key_present")
         self.assertIn("1-1", str(cm.exception))
+
+    def test_md_key_allowed(self):
+        d = doc([page(1, ["Đáp án đề 01"], "heading")], fmt="md")
+        try:
+            api.to_exam_text(d, {"allow_key_pages": True})
+        except IngestError as e:  # later checks (header) may refuse; the key guard must not
+            self.assertNotEqual(e.code, "answer_key_present")
 
 
 class PagesKeyGuard(unittest.TestCase):  # 118.3
