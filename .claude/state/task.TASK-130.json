@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-130",
   "title": "Review findings ledger + check (REQ-0137)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0137",
   "acceptance_criteria": [
     "AC1 ledger 80 ids",
@@ -18,8 +18,15 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "docs/review/findings.tsv",
+      "tools/review_ledger.py",
+      ".claude/scripts/workflow-check.sh",
+      ".claude/skills/coordinator/SKILL.md",
+      "tests/unit/test_review_ledger.py"
+    ],
+    "summary": "docs/review/findings.tsv (80 ids: 54 fixed, 4 not-a-defect, 22 open -> TASK-131); tools/review_ledger.py check; workflow-check WARN; coordinator rule; 7 tests"
   },
   "unit_test": {
     "status": "pending",
@@ -58,6 +65,9 @@
     ],
     "designer": {
       "waiver": "coordinator traced the gap with the id-matching script (RAW-00350)"
+    },
+    "coder": {
+      "waiver": "workflow tooling by the coordinator (owns .claude scripts and skills)"
     }
   },
   "user_notes": [
@@ -68,7 +78,7 @@
     }
   ],
   "picked_at": "2026-11-16T12:51:04Z",
-  "updated_at": "2026-11-16T12:51:36Z",
+  "updated_at": "2026-11-16T12:56:48Z",
   "updated_by": "main",
   "scope": [
     "docs/review/**",
@@ -86,5 +96,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "implement 130.1-130.4"
+  "next": "tests"
 }

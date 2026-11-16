@@ -86,6 +86,10 @@ If Bash is unavailable, give the user the exact command for the item that is due
 - Keep the team busy: no role idles while it has work. After each reply, hand the free roles the next item: current task first (QA, evidence review, verify prep), then read-only prep of the next item. One owner per file, one brief per role at a time. During a long run, give free roles work that shares no files with it.
 - Delegation sweep: when asked "what is pending" or a role returns, list open items (item | owner | independent?) and hand each independent one to a free role. Independent = files disjoint from every running role's Scope and no state move. Items waiting on a running role are listed, not started early.
 - Re-run before you commit: a role's PASS is input. Re-run its suites one filtered suite at a time; a single failure is re-run alone 3 times (3 passes = flake, hand to the tester); never edit a test blind.
+- Code-review reports (user, RAW-00350, TASK-130): a review batch is done only when every finding id has a row in
+  `docs/review/findings.tsv` (fixed TASK / not-a-defect / waived reason / open TASK). Never park a finding as "P3,
+  later" without an `open` row on a queued task; set the row to `fixed` when its task closes.
+  `python3 -I tools/review_ledger.py` must report 0 problems (workflow-check shows them as WARN).
 - Apply patches in order: `git apply --check` first, review `git diff`, run the suites, then one `wip` commit.
 - After a step, key or default change, grep the docs that list steps or keys and fix them in the same commit.
 - A commit the auto-mode check refuses: do not retry another way. Commit what you can with `git commit -- <paths>` and give the user the exact one-line command. Never edit permission settings.

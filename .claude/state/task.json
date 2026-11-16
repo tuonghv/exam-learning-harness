@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-130",
-  "state": "DESIGN",
-  "next": "implement 130.1-130.4",
+  "state": "IMPLEMENTING",
+  "next": "tests",
   "title": "Review findings ledger + check (REQ-0137)",
   "active": [
     {
       "task_id": "TASK-130",
-      "state": "DESIGN",
-      "next": "implement 130.1-130.4",
-      "updated_at": "2026-11-16T12:51:36Z"
+      "state": "IMPLEMENTING",
+      "next": "tests",
+      "updated_at": "2026-11-16T12:56:48Z"
     }
   ],
   "max_active": 1

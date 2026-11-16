@@ -461,6 +461,18 @@ if backlog_path and os.path.isfile(backlog_path):
     except (ValueError, KeyError, TypeError, AttributeError):
         fail(f"backlog.json is unreadable or malformed: {backlog_path}")
 
+# --- review findings ledger (TASK-130, REQ-0137): WARN only, never a FAIL ---
+try:
+    import subprocess as _sp
+    _lg = os.path.join(root, "tools", "review_ledger.py")
+    if os.path.isfile(_lg):
+        _r = _sp.run([sys.executable, "-I", _lg, "--root", root], capture_output=True, text=True, timeout=60)
+        for _ln in _r.stdout.splitlines():
+            if _ln.startswith("PROBLEM: "):
+                warn("review ledger: " + _ln[9:] + " (docs/review/findings.tsv)")
+except (OSError, ValueError, _sp.SubprocessError):
+    pass
+
 # --- report ---
 for w in warns:
     print(f"WARN: {w}")
