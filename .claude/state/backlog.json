@@ -2848,7 +2848,7 @@
     "task_id": "TASK-137",
     "title": "Triage code-review batch 4 (REQ-0144)",
     "priority": 2,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-11-16T23:49:29Z",
     "requirement": "REQ-0144",
     "acceptance_criteria": [
