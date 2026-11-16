@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-126",
   "title": "Text-path fixes: options_missing marker, wrapped group instruction, DGNL guide (REQ-0133)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0133",
   "acceptance_criteria": [
     "AC1 MC no options marked",
@@ -19,8 +19,14 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/ingest/api.py",
+      "src/exam_engine/ingest/segment.py",
+      "docs/guide/dgnl-real-exam.md",
+      "tests/unit/test_text_path_126.py"
+    ],
+    "summary": "api._from_questions: MC question without options gets options_missing marker; segment.split_guide joins a wrapped instruction line; DGNL guide free text path section; 5 tests"
   },
   "unit_test": {
     "status": "pending",
@@ -45,6 +51,9 @@
   "roles": {
     "designer": {
       "waiver": "two one-line causes traced by the coordinator from the paid run; coordinator wrote the design doc"
+    },
+    "coder": {
+      "waiver": "two one-line changes made by the coordinator (RAW-00345: decide and proceed)"
     }
   },
   "user_notes": [
@@ -60,7 +69,7 @@
     }
   ],
   "picked_at": "2026-11-16T09:51:00Z",
-  "updated_at": "2026-11-16T09:51:40Z",
+  "updated_at": "2026-11-16T10:02:05Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/api.py",
@@ -78,5 +87,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "implement 126.1-126.3"
+  "next": "tests"
 }

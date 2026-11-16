@@ -3661,3 +3661,9 @@ Action: coordinator traced the 3 text-path issues of the DGNL English run
 Result: 2 code items + guide; diacritics check correct (dropped)
 Decision: implement
 Next: IMPLEMENTING
+
+## IMPLEMENTING - TASK-126 - 2026-11-16T10:02:05Z
+Action: implemented 126.1-126.3
+Result: 5 tests pass
+Decision: UNIT_TESTED next
+Next: UNIT_TESTED

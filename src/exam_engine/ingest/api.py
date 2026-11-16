@@ -412,6 +412,8 @@ def _from_questions(doc, out, config=None):
         if renum:
             out += ["Questions are numbered from 1 here; printed numbers: %s." % _printed(qs, labels), ""]
     why = refcheck.incomplete_by_question(qs, [q["text"] for q in qs])
+    mc = ((doc.get("meta") or {}).get("Task") or "").strip().casefold() == "multiple choice"  # as parser.py
+    why = [w + ["options_missing"] if mc and not q["options"] else w for q, w in zip(qs, why)]  # 126.1: decline one
     prev = ""
     for k, (q, w) in enumerate(zip(ctx, why), 1):
         sl, prev = _section_lines(q, prev)

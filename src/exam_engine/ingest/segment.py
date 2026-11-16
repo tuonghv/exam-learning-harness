@@ -184,6 +184,9 @@ def split_guide(rest):
     """-> (guide, passage): a leading `Questions 31-35: ...` / `Read the following passage` line is the guide."""
     first, _, tail = (rest or "").partition("\n")
     if first.strip() and (_INTRO.match(first) or _READ.match(first)):
+        while tail and first.rstrip()[-1:] not in ".:?!)" and tail.lstrip()[:1].islower():  # 126.2 wrapped line
+            nxt, _, tail = tail.partition("\n")
+            first = first.rstrip() + " " + nxt.strip()
         return first.strip(), tail.strip("\n")
     return "", rest or ""
 

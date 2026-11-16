@@ -44,6 +44,21 @@ agreement and hand checks, status stays `uncertain`.
 - Numeric science answers come back as the value ("230%") not the letter: format check fails although the value
   equals exactly one option. Map the value to its option letter when reporting; engine unchanged (open item).
 
+## Free text path (no refine, $0 extraction)
+Since phase 121-122 the native text of the 3 DGNL/DHQG PDFs segments to its 120 printed questions, so a text section
+can skip refine. Measured (DGNL 2025 English, 25 questions): 24/25 correct against the key, $0.25, 3 calls.
+1. `ingest EXAM.pdf --meta ... --meta "Task=Multiple Choice" --exam-out e-all.md` (all 120 questions; `--questions`
+   needs `--refined`, and `--pages` cannot cut a section: sections share PDF pages).
+2. Cut the section's `## Question N` blocks from `e-all.md` into a new file, renumber from 1, put the right `Subject`
+   in the header and a line `Questions are numbered from 1 here; printed numbers: 1=31, 2=32, ...` under
+   `## Instructions` (group instructions keep printed numbers).
+3. `solve e-English.md --real --model claude-sonnet-5-5 --max-cost-usd 1.5 --no-pdf --out run-English`: `--real`
+   needs a pinned model ID, the alias `sonnet` is refused (no cost).
+Limits: math/science formulas and tables are garbled in native text (use refine). Error-finding items ("one error
+(A, B, C, or D)") lose their underlines: they have no options and get `[Incomplete: missing_text options_missing]`, so
+the engine declines them (phase 126); solve them from refine. Pass/fail labels without a key: correct answers stay
+`uncertain`; score against the key file only after the run, never put it into the exam input.
+
 ## Checking without a key
 Math: recompute by hand. The 10-question slice and the vision-extracted run agree 10/10 (61-71 except 66).
 Language/science: accept only `solver_uncertainty` low plus agreement; list the rest as unresolved, never guess.
