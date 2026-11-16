@@ -2841,5 +2841,25 @@
         "at": "2026-11-16T23:41:03Z"
       }
     ]
+  },
+  {
+    "task_id": "TASK-137",
+    "title": "Triage code-review batch 4 (REQ-0144)",
+    "priority": 2,
+    "status": "queued",
+    "created_at": "2026-11-16T23:49:29Z",
+    "requirement": "REQ-0144",
+    "acceptance_criteria": [
+      "AC1 rows with evidence",
+      "AC2 wrong fixes named",
+      "AC3 ledger, no src change"
+    ],
+    "user_notes": [
+      {
+        "raw": "RAW-00357",
+        "note": "batch 4 review run; findings triaged before any fix (as TASK-107/113/117)",
+        "at": "2026-11-16T23:49:29Z"
+      }
+    ]
   }
 ]
