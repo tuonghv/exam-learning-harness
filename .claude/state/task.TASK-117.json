@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-117",
   "title": "Triage code-review batch 3 (phases 117-118) (REQ-0124)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0124",
   "acceptance_criteria": [
     "AC1 19 findings classified with evidence",
@@ -10,9 +10,9 @@
     "AC4 no src/tests change"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-117-review-triage-b3.md",
+    "summary": "19 batch-3 findings: 12 BUG (12 reproduced $0) + D1, 6 IMPROVEMENT, 1 NOT-A-DEFECT; plan P1 Fix-H parts (key detection), Fix-I api, P2 Fix-J boundary + NaN cap, P3 hardening",
     "reuse": [],
     "risks": []
   },
@@ -40,7 +40,9 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-117/handoff/design-api.md"
+  },
   "user_notes": [
     {
       "raw": "RAW-00342",
@@ -49,8 +51,8 @@
     }
   ],
   "picked_at": "2026-11-16T05:20:20Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-16T05:27:46Z",
+  "updated_by": "main",
   "scope": [
     "docs/report/phase-11[78]-*.md"
   ],
@@ -60,5 +62,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "close TASK-117 (triage only); open Fix-H parts"
 }
