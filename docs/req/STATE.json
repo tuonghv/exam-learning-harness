@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0120",
-  "next": "verify ACs against the triage doc and git diff (no src/tests change)",
+  "next": "write the report and close TASK-113; then open Fix-F ingest REQ/TASK",
   "updated": "2026-11-16 10:38"
 }

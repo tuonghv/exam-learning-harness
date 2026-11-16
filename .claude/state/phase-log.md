@@ -3283,3 +3283,9 @@ Action: ran the $0 repro scripts
 Result: 5 BUG rows reproduce, 2 traced
 Decision: evidence enough for the triage
 Next: VERIFIED
+
+## VERIFIED - TASK-113 - 2026-11-16T03:38:24Z
+Action: checked AC1-AC4
+Result: all met
+Decision: VERIFIED
+Next: DONE

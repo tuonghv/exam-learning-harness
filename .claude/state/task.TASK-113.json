@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-113",
   "title": "Triage code-review batch 2 (phases 113-114) (REQ-0120)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0120",
   "acceptance_criteria": [
     "AC1 20 findings classified with evidence",
@@ -29,12 +29,18 @@
     "result": "5/5 reproduced BUG rows still show the bug on current code (work/TASK-113/repro_cli.out, repro_ingest.out); no unit tests added because no code changed"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "not_applicable",
+    "result": "no code change; repros are $0 local calls, no paid run, no key material"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-113/handoff/verify.md",
+      "work/TASK-113/repro_cli.out",
+      "work/TASK-113/repro_ingest.out"
+    ],
+    "command": "python3 -I work/TASK-113/repro_cli.py; git diff --name-only baa5054 HEAD -- src tests",
+    "result": "AC1-AC4 met; 5 BUG repros, 2 traced, 0 src/tests files changed; plan approved by user 2026-11-16"
   },
   "report": {
     "status": "pending",
@@ -50,6 +56,9 @@
     },
     "tester": {
       "waiver": "triage-only task; repro scripts stand in for tests, regression tests belong to the fix tasks"
+    },
+    "verifier": {
+      "waiver": "triage-only task; the user approved the plan, coordinator checked ACs in verify.md"
     }
   },
   "user_notes": [
@@ -65,7 +74,7 @@
     }
   ],
   "picked_at": "2026-11-15T23:57:32Z",
-  "updated_at": "2026-11-16T03:38:23Z",
+  "updated_at": "2026-11-16T03:38:24Z",
   "updated_by": "main",
   "scope": [
     "docs/design/phase-113-*",
@@ -77,5 +86,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verify ACs against the triage doc and git diff (no src/tests change)"
+  "next": "write the report and close TASK-113; then open Fix-F ingest REQ/TASK"
 }
