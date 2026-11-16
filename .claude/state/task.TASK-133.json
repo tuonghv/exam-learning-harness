@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-133",
   "title": "Review leftovers fix A: cli + claude adapter (REQ-0140)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0140",
   "acceptance_criteria": [
     "AC1 tests per id",
@@ -25,9 +25,9 @@
     "summary": "9 cli/adapter hardening fixes (107-F003..F007, F009, F010; 110-F004, F005); 9 tests; test_exam_llm expected class updated (user)"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --fast; coder bite on a HEAD copy",
+    "result": "KNOWN 4 NEW 0; 9/9 new tests fail on old code"
   },
   "security": {
     "status": "pending",
@@ -48,7 +48,10 @@
     "designer": {
       "waiver": "designed in the TASK-131 re-triage (work/TASK-131/handoff/design-cli.md)"
     },
-    "coder": "work/TASK-133/handoff/code.md"
+    "coder": "work/TASK-133/handoff/code.md",
+    "tester": {
+      "waiver": "coordinator re-ran --fast; coder ran the bite"
+    }
   },
   "user_notes": [
     {
@@ -85,5 +88,5 @@
     "next": "on coder hand-back: check code.md, bite + --fast, set 9 ledger rows fixed TASK-133, advance IMPLEMENTING",
     "at": "2026-11-16T13:07:35Z"
   },
-  "next": "tests"
+  "next": "verify"
 }
