@@ -2369,7 +2369,7 @@
     "task_id": "TASK-117",
     "title": "Triage code-review batch 3 (phases 117-118) (REQ-0124)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-16T05:20:16Z",
     "requirement": "REQ-0124",
     "acceptance_criteria": [
@@ -2384,6 +2384,8 @@
         "note": "user: coordinator sets priority and proceeds without asking",
         "at": "2026-11-16T05:20:16Z"
       }
-    ]
+    ],
+    "completed_at": "2026-11-16T05:28:13Z",
+    "report": "docs/report/phase-117-review-triage-b3.md"
   }
 ]

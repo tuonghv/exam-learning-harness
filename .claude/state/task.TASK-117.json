@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-117",
   "title": "Triage code-review batch 3 (phases 117-118) (REQ-0124)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0124",
   "acceptance_criteria": [
     "AC1 19 findings classified with evidence",
@@ -40,11 +40,20 @@
       "work/TASK-117/repro_boundary.out"
     ],
     "command": "python3 -I work/TASK-117/repro_api.py; python3 -I work/TASK-117/repro_boundary.py; git diff --name-only f0f363d HEAD -- src tests",
-    "result": "AC1-AC4 met; 12 BUG repros, 0 src/tests files changed"
+    "result": "AC1-AC4 met; 12 BUG repros, 0 src/tests files changed",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-117/repro_api.out",
+        "work/TASK-117/repro_boundary.out",
+        "work/TASK-117/reach_parts.out"
+      ],
+      "reason": "12 BUG rows re-run independently; reach checked on the 4 real PDFs"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-117-review-triage-b3.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -59,6 +68,9 @@
     },
     "verifier": {
       "waiver": "triage-only task; coordinator checked ACs in verify.md"
+    },
+    "crosscheck": {
+      "waiver": "crosscheck by the coordinator: repro scripts re-ran 12 BUG rows independently of the reviewers, plus a real-input parts reach check"
     }
   },
   "user_notes": [
@@ -69,7 +81,7 @@
     }
   ],
   "picked_at": "2026-11-16T05:20:20Z",
-  "updated_at": "2026-11-16T05:28:12Z",
+  "updated_at": "2026-11-16T05:28:13Z",
   "updated_by": "main",
   "scope": [
     "docs/report/phase-11[78]-*.md"
@@ -80,5 +92,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "write the report and close TASK-117; then open Fix-H parts"
+  "next": ""
 }

@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-117",
-  "state": "VERIFIED",
-  "next": "write the report and close TASK-117; then open Fix-H parts",
+  "state": "DONE",
+  "next": "",
   "title": "Triage code-review batch 3 (phases 117-118) (REQ-0124)",
-  "active": [
-    {
-      "task_id": "TASK-117",
-      "state": "VERIFIED",
-      "next": "write the report and close TASK-117; then open Fix-H parts",
-      "updated_at": "2026-11-16T05:28:12Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
