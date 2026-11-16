@@ -1,0 +1,66 @@
+{
+  "task_id": "TASK-121",
+  "title": "Segment false questions from passage/year/formula lines (REQ-0128)",
+  "state": "TODO",
+  "requirement": "REQ-0128",
+  "acceptance_criteria": [
+    "AC1 no implausible ids",
+    "AC2 first members get passage",
+    "AC3 counts match print",
+    "AC4 tests, --fast, oracles"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {},
+  "user_notes": [
+    {
+      "raw": "RAW-00342",
+      "note": "found by the TASK-119 real-data oracle; coordinator queued",
+      "at": "2026-11-16T05:56:14Z"
+    }
+  ],
+  "picked_at": "2026-11-16T06:03:48Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [
+    "src/exam_engine/ingest/*.py",
+    "tests/unit/*.py",
+    "tests/unit/fixtures/*"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
