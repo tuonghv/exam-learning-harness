@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-135",
   "title": "Review leftovers fix C: metrics/report_kinds/review (REQ-0142)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0142",
   "acceptance_criteria": [
     "AC1 tests per id",
@@ -40,11 +40,19 @@
       "work/TASK-135/evidence/fast.txt"
     ],
     "command": "new tests + --fast + ledger",
-    "result": "AC1-AC2 met"
+    "result": "AC1-AC2 met",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-135/evidence/summary.md",
+        "work/TASK-135/evidence/fast.txt"
+      ],
+      "reason": "7 tests bite; ledger 0 open"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-135-review-fix-c-pipeline.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -59,6 +67,9 @@
     },
     "verifier": {
       "waiver": "coordinator verified tests and ledger"
+    },
+    "crosscheck": {
+      "waiver": "coordinator re-ran tests, --fast and the ledger check"
     }
   },
   "user_notes": [
@@ -69,7 +80,7 @@
     }
   ],
   "picked_at": "2026-11-16T15:34:28Z",
-  "updated_at": "2026-11-16T15:39:32Z",
+  "updated_at": "2026-11-16T15:39:33Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/metrics.py",
@@ -91,5 +102,5 @@
     "next": "on coder hand-back: check code.md, --fast, set 7 ledger rows fixed TASK-135, advance IMPLEMENTING",
     "at": "2026-11-16T15:34:40Z"
   },
-  "next": "report and close"
+  "next": ""
 }

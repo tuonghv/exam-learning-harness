@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-135",
-  "state": "VERIFIED",
-  "next": "report and close",
+  "state": "DONE",
+  "next": "",
   "title": "Review leftovers fix C: metrics/report_kinds/review (REQ-0142)",
-  "active": [
-    {
-      "task_id": "TASK-135",
-      "state": "VERIFIED",
-      "next": "report and close",
-      "updated_at": "2026-11-16T15:39:32Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
