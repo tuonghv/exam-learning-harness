@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-132",
   "title": "Report names: non-Latin/missing subject slug (REQ-0139)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0139",
   "acceptance_criteria": [
     "AC1 non-Latin subject report",
@@ -39,11 +39,19 @@
       "work/TASK-132/evidence/fast.txt"
     ],
     "command": "write_reports on a \u6570\u5b66 result; --fast; bite",
-    "result": "AC1-AC2 met"
+    "result": "AC1-AC2 met",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-132/evidence/summary.md",
+        "work/TASK-132/evidence/bite.txt"
+      ],
+      "reason": "repro fixed; tests bite"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-132-report-subject-slug.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -60,6 +68,9 @@
     },
     "verifier": {
       "waiver": "coordinator verified with the report write test"
+    },
+    "crosscheck": {
+      "waiver": "coordinator bite check"
     }
   },
   "user_notes": [
@@ -70,7 +81,7 @@
     }
   ],
   "picked_at": "2026-11-16T13:04:45Z",
-  "updated_at": "2026-11-16T13:06:54Z",
+  "updated_at": "2026-11-16T13:06:55Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/reporter.py",
@@ -85,5 +96,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report and close"
+  "next": ""
 }

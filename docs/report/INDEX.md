@@ -97,3 +97,4 @@ Rule (RAW-00171, REQ-0061): evidence summaries are small text with no exam conte
 | TASK-129 PDF free text path keeps table blocks | docs/design/phase-129-pdf-table-text.md | docs/report/phase-129-pdf-table-text.md | - | - | - |
 | TASK-130 Review findings ledger + check | docs/design/phase-130-review-findings-ledger.md | docs/report/phase-130-review-findings-ledger.md | - | - | - |
 | TASK-131 Re-triage of batch-1 review leftovers | docs/design/phase-131-review-leftovers-b1.md | docs/report/phase-131-review-leftovers-b1.md | - | - | - |
+| TASK-132 Report names for a non-Latin or missing subject | docs/design/phase-132-report-subject-slug.md | docs/report/phase-132-report-subject-slug.md | - | - | - |
