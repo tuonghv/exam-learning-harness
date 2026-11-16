@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-124",
   "title": "P3-b refine hardening 114-F003/F006-F009 (REQ-0131)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0131",
   "acceptance_criteria": [
     "AC1 figures validated",
@@ -32,12 +32,18 @@
     "result": "--fast 2111 ran, KNOWN 4, NEW 0 (one flaky unrelated test on a first run); 5 item tests fail on old code, guard passes"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "reply validation tightened; no new input surface; no prompt or cache-key change"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-124/handoff/verify.md",
+      "work/TASK-124/evidence/summary.md",
+      "work/TASK-124/evidence/cache_validate.txt"
+    ],
+    "command": "python3 -I work/TASK-124/evidence/cache_validate.py <old|new src>; --fast; bite",
+    "result": "AC1-AC6 met; 41/41 real cached replies still valid"
   },
   "report": {
     "status": "pending",
@@ -53,6 +59,9 @@
     "coder": "work/TASK-124/handoff/code.md",
     "tester": {
       "waiver": "coordinator ran --fast twice and an independent bite check (RAW-00342)"
+    },
+    "verifier": {
+      "waiver": "coordinator verified with bite, --fast and a real-cache validation check (RAW-00342)"
     }
   },
   "user_notes": [
@@ -63,7 +72,7 @@
     }
   ],
   "picked_at": "2026-11-16T06:28:14Z",
-  "updated_at": "2026-11-16T06:32:45Z",
+  "updated_at": "2026-11-16T06:32:46Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/*.py",
@@ -77,5 +86,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verify"
+  "next": "report and close"
 }
