@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-129",
   "title": "PDF free text path keeps table blocks (REQ-0136)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0136",
   "acceptance_criteria": [
     "AC1 synthetic table/box",
@@ -32,12 +32,18 @@
     "result": "KNOWN 4 NEW 0; new tests fail on old code"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "no new input surface; table text is document text like paragraphs"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-129/evidence/summary.md",
+      "work/TASK-129/evidence/bite.txt",
+      "work/TASK-129/evidence/fast.txt"
+    ],
+    "command": "real-input exam-text oracle old vs new on 3 PDFs; --fast; bite",
+    "result": "AC1-AC4 met; 120 questions kept, tables in the right groups"
   },
   "report": {
     "status": "pending",
@@ -55,6 +61,9 @@
     },
     "tester": {
       "waiver": "coordinator ran --fast and the bite"
+    },
+    "verifier": {
+      "waiver": "coordinator verified with the real-input oracle"
     }
   },
   "user_notes": [
@@ -65,7 +74,7 @@
     }
   ],
   "picked_at": "2026-11-16T12:42:36Z",
-  "updated_at": "2026-11-16T12:49:40Z",
+  "updated_at": "2026-11-16T12:49:41Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/segment.py",
@@ -83,5 +92,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verify"
+  "next": "report and close"
 }
