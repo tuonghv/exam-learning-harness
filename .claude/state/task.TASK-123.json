@@ -1,0 +1,68 @@
+{
+  "task_id": "TASK-123",
+  "title": "P3-a CLI hardening 113-F004/F006-F010 (REQ-0130)",
+  "state": "TODO",
+  "requirement": "REQ-0130",
+  "acceptance_criteria": [
+    "AC1 compare exam mismatch",
+    "AC2 unsafe dir skipped",
+    "AC3 trace path error",
+    "AC4 negative --last",
+    "AC5 board reason",
+    "AC6 flag usage",
+    "AC7 tests, --fast"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {},
+  "user_notes": [
+    {
+      "raw": "RAW-00342",
+      "note": "P3 hardening, coordinator priority",
+      "at": "2026-11-16T06:23:03Z"
+    }
+  ],
+  "picked_at": "2026-11-16T06:23:04Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [
+    "src/exam_engine/cli.py",
+    "tests/unit/*.py"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
