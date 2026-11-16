@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-120",
   "title": "Fix-J boundary + cost cap: 118-F001/F007/F009, D1 (REQ-0127)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0127",
   "acceptance_criteria": [
     "AC1 no lost suspects",
@@ -26,9 +26,9 @@
     "summary": "boundary.py: no span merge past max_lines (120.1), per-pass summary deltas (120.2), NaN-safe cap test (120.3); cli.py: `not (x >= 0)` on 7 cost checks of 6 paid entries (120.3/3b). 10 new tests"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --fast; bite: test_boundary_cap_120.py on git archive HEAD",
+    "result": "--fast 2081 ran, KNOWN 4, NEW 0; 11 item failures on old code, 4 guards pass"
   },
   "security": {
     "status": "pending",
@@ -47,7 +47,10 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-120/handoff/design.md",
-    "coder": "work/TASK-120/handoff/code.md"
+    "coder": "work/TASK-120/handoff/code.md",
+    "tester": {
+      "waiver": "~20-line change; coordinator ran --fast and an independent bite check in a git-archive copy (evidence/bite.out) (RAW-00342)"
+    }
   },
   "user_notes": [
     {
@@ -57,7 +60,7 @@
     }
   ],
   "picked_at": "2026-11-16T05:56:14Z",
-  "updated_at": "2026-11-16T06:02:47Z",
+  "updated_at": "2026-11-16T06:02:48Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/*.py",
@@ -70,5 +73,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "record --fast and bite as unit-test evidence"
+  "next": "verify"
 }
