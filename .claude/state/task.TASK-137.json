@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-137",
   "title": "Triage code-review batch 4 (REQ-0144)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0144",
   "acceptance_criteria": [
     "AC1 rows with evidence",
@@ -29,12 +29,18 @@
     "result": "R1-R5 match the traced bug values; 11 pdf/runlayout rows reproduce; tests belong to fix tasks"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "not_applicable",
+    "result": "no code change; $0 local repros"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-137/evidence/summary.md",
+      "work/TASK-137/evidence/repro_a.txt",
+      "work/TASK-137/evidence/repro_b.txt"
+    ],
+    "command": "repros; review_ledger.py; git diff -- src tests",
+    "result": "AC1-AC3 met"
   },
   "report": {
     "status": "pending",
@@ -50,6 +56,9 @@
     },
     "tester": {
       "waiver": "triage-only task; repros stand in for tests"
+    },
+    "verifier": {
+      "waiver": "triage-only; coordinator checked ACs and ran every repro"
     }
   },
   "user_notes": [
@@ -60,7 +69,7 @@
     }
   ],
   "picked_at": "2026-11-16T23:51:18Z",
-  "updated_at": "2026-11-16T23:57:54Z",
+  "updated_at": "2026-11-16T23:57:55Z",
   "updated_by": "main",
   "scope": [
     "docs/review/findings.tsv"
@@ -74,5 +83,5 @@
     "notes": "",
     "next": "merge design-a/b into docs/design/phase-137-review-triage-b4.md"
   },
-  "next": "verify ACs"
+  "next": "report and close; pick TASK-138"
 }
