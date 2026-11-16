@@ -138,7 +138,7 @@ class ExtraUnit(unittest.TestCase):
 
     def test_heading_only_in_first_blocks(self):
         late = fake([["Q1"], ["a", "b", "c", "d", "e", "f", "Answer key"]])
-        self.assertEqual([x["kind"] for x in parts.find_parts(late)], ["exam"])
+        self.assertEqual([x["kind"] for x in parts.find_parts(late)], ["exam", "answer_key"])
         third = fake([["Q1"], ["a", "b", "c", "d", "e", "Answer key"]])
         self.assertEqual([x["kind"] for x in parts.find_parts(third)], ["exam", "answer_key"])
 

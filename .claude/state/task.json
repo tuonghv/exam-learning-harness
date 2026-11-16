@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-118",
-  "state": "DESIGN",
-  "next": "coder implements 118.1-118.4 with tests",
+  "state": "IMPLEMENTING",
+  "next": "tester runs --fast and an independent bite check",
   "title": "Fix-H parts: 117-F001/F009/F010/F002/F003 (REQ-0125)",
   "active": [
     {
       "task_id": "TASK-118",
-      "state": "DESIGN",
-      "next": "coder implements 118.1-118.4 with tests",
-      "updated_at": "2026-11-16T05:31:39Z"
+      "state": "IMPLEMENTING",
+      "next": "tester runs --fast and an independent bite check",
+      "updated_at": "2026-11-16T05:38:32Z"
     }
   ],
   "max_active": 1

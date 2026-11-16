@@ -3421,3 +3421,9 @@ Action: designer drafted 4 items; coordinator changed 118.1 to a two-tier guard 
 Result: design complete
 Decision: implement
 Next: IMPLEMENTING via coder
+
+## IMPLEMENTING - TASK-118 - 2026-11-16T05:38:32Z
+Action: coder implemented 118.1-118.4; coordinator ran parts + segment oracles old vs new
+Result: --affected 576 NEW 0; 26 real/example files: parts and segment identical
+Decision: matches design
+Next: UNIT_TESTED via tester

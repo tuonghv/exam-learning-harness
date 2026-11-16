@@ -67,7 +67,7 @@ def to_exam_text(doc, config=None):
     if parts.has_key(doc) and not (config or {}).get("allow_key_pages"):
         raise IngestError("answer_key_present", "answer-key pages %s in %s; select the exam "
                           "pages (--pages) or pass --allow-key-pages"
-                          % (", ".join("%d-%d" % tuple(p["pages"]) for p in doc["parts"]
+                          % (", ".join("%d-%d" % tuple(p["pages"]) for p in (doc.get("parts") or parts.find_parts(doc))
                                        if p["kind"] == "answer_key"), doc["source"]["name"]))
     src = doc["source"]
     if (config or {}).get("use_refined"):

@@ -10,20 +10,32 @@ _KEY = re.compile(r"(huong dan giai|dap an|loi giai|answer key|solutions?|markin
 _HEAD_BLOCKS = 6
 
 
+def _key_heading(blk, head):
+    """True when the block's first line is an answer-key heading (two tiers).
+
+    head blocks (first _HEAD_BLOCKS): any prefix match except a sentence (ends '.', not heading-like),
+    so a long mixed-case title still counts; deeper blocks need a heading-like first line."""
+    lines = (blk.get("text") or "").strip().split("\n")
+    ln = lines[0].strip()
+    if not ln or "?" in ln or not _KEY.match(fold(ln)):
+        return False
+    heading_like = blk.get("type") == "heading" or segment._mostly_upper(ln) or len(ln) <= 40
+    return heading_like or (head and not ln.endswith("."))
+
+
 def _starts_key(page):
-    for blk in page.get("blocks", ())[:_HEAD_BLOCKS]:
-        if _KEY.match(fold(blk.get("text", ""))):
-            return True
-    return False
+    return any(_key_heading(b, i < _HEAD_BLOCKS) for i, b in enumerate(page.get("blocks", ())))
 
 
-def find_parts(doc):
-    """-> [{kind, pages:[first,last]}]: pages from the first key heading on are the key."""
+def find_parts(doc, key_pages=()):
+    """-> [{kind, pages:[first,last]}]: pages from the first key heading on are the key.
+
+    key_pages: page numbers already known to be key (page selection keeps the full document's state)."""
     pages = doc.get("pages") or []
     parts, cur = [], None
     in_key = False
     for page in pages:
-        in_key = in_key or _starts_key(page)
+        in_key = in_key or page["n"] in key_pages or _starts_key(page)
         kind = "answer_key" if in_key else "exam"
         n = page["n"]
         if cur is not None and cur["kind"] == kind:
@@ -64,6 +76,8 @@ def select_pages(doc, spec, reviewer=None):
     if bad:
         raise IngestError("invalid_pages", "page(s) %s not in the document (pages %s-%s)"
                           % (", ".join(map(str, bad)), min(have), max(have)))
+    key_pages = set(n for p in (doc.get("parts") or find_parts(doc)) if p["kind"] == "answer_key"
+                    for n in range(p["pages"][0], p["pages"][1] + 1))
     new = copy.deepcopy(doc)
     new["pages"] = [p for p in new["pages"] if p["n"] in want]
     keep_ids = set(b["asset"] for p in new["pages"] for b in p["blocks"] if b.get("asset"))
@@ -79,7 +93,7 @@ def select_pages(doc, spec, reviewer=None):
         for p in new["pages"]:
             lines = []
             for b in p["blocks"]:
-                if b["type"] == "paragraph":
+                if b["type"] in ("paragraph", "list", "heading"):
                     lines.extend(b["text"].split("\n"))
             page_lines.append(lines)
         if new["source"].get("format") == "pdf":  # same furniture filter as the full ingest
@@ -101,5 +115,5 @@ def select_pages(doc, spec, reviewer=None):
                                    for c, m in segment.numbering_warnings(qs))
     new["warnings"].append({"level": "info", "code": "pages_selected",
                             "message": "pages %s of %d kept" % (spec, len(have))})
-    new["parts"] = find_parts(new)
+    new["parts"] = find_parts(new, key_pages)
     return new
