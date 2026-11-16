@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-121",
   "title": "Segment false questions from passage/year/formula lines (REQ-0128)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0128",
   "acceptance_criteria": [
     "AC1 no implausible ids",
@@ -31,12 +31,18 @@
     "result": "--fast 2090 ran, KNOWN 4, NEW 0; 6 item tests + new numbering test fail on old code; guards pass both"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "deterministic text rule; no new input, file, network or eval path"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-121/handoff/verify.md",
+      "work/TASK-121/evidence/summary.md",
+      "work/TASK-121/evidence/summary_counts.txt"
+    ],
+    "command": "python3 -I work/TASK-114/evidence/oracle.py <old|new src> .; python3 -I work/TASK-116/evidence/share_oracle.py <old|new src> .",
+    "result": "AC1-AC4 met; DGNL25 197->120, DHQG 141->120 (both now usable by the text path); 24 real first members gain their passage; none lost; residuals listed"
   },
   "report": {
     "status": "pending",
@@ -50,6 +56,9 @@
     "coder": "work/TASK-121/handoff/code.md",
     "tester": {
       "waiver": "coordinator ran --fast and an independent bite check in a git-archive copy (evidence/bite.out) (RAW-00342)"
+    },
+    "verifier": {
+      "waiver": "coordinator verified with two $0 old-vs-new oracles over all real inputs, every move explained (RAW-00342)"
     }
   },
   "user_notes": [
@@ -60,7 +69,7 @@
     }
   ],
   "picked_at": "2026-11-16T06:03:48Z",
-  "updated_at": "2026-11-16T06:10:43Z",
+  "updated_at": "2026-11-16T06:10:44Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/*.py",
@@ -73,5 +82,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verify"
+  "next": "write the report and close TASK-121"
 }

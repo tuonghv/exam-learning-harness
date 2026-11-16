@@ -3523,3 +3523,9 @@ Action: --fast + bite
 Result: NEW 0
 Decision: UNIT_TESTED
 Next: VERIFIED
+
+## VERIFIED - TASK-121 - 2026-11-16T06:10:43Z
+Action: oracles old vs new
+Result: only intended moves
+Decision: VERIFIED
+Next: DONE
