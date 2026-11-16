@@ -3457,3 +3457,9 @@ Action: coder implemented 119.1-119.4; real-data oracle showed 96 moved contexts
 Result: share oracle 0 diff on 4 PDFs; --affected NEW 0
 Decision: accept narrowed rules; log segment false-question defect D1 as follow-up
 Next: UNIT_TESTED via tester
+
+## UNIT_TESTED - TASK-119 - 2026-11-16T05:55:47Z
+Action: tester ran --fast and bite, added 3 real-shape guards; main resolved the t5 gold known miss
+Result: NEW 0
+Decision: UNIT_TESTED
+Next: VERIFIED

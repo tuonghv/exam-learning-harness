@@ -45,6 +45,33 @@ class Share(unittest.TestCase):
         self.assertIsNone(out["10"].get("structure"))
         self.assertEqual(out["12"]["structure"], ["instruction_override"])
 
+    def _ids(self, qs):
+        return {q["id"]: q for q in api._share_context(qs)}
+
+    def test_119_3_guard_false_carrier_outside_span(self):
+        # real exam: a passage line read as question "1" carries the group line of 46-52
+        qs = [{"id": "45", "text": "x"},
+              {"id": "1", "context": "Questions 46-52: Read.\nPASSAGE", "text": "x"}] \
+            + [{"id": str(i), "text": "x"} for i in (2, 3, 46, 47, 48, 49, 50, 51, 52)]
+        out = self._ids(qs)
+        for i in range(47, 53):
+            self.assertTrue((out[str(i)].get("context") or "").startswith("Questions 46-52"), i)
+
+    def test_119_2_guard_stray_low_id_inside_group(self):
+        qs = [{"id": "67", "context": "Dựa vào bài đọc, trả lời câu từ 67 đến 69\nPASSAGE", "text": "x"},
+              {"id": "1", "text": "x"}, {"id": "68", "text": "x"}, {"id": "69", "text": "x"}]
+        out = self._ids(qs)
+        for i in ("68", "69"):
+            self.assertIn("PASSAGE", out[i].get("context") or "", i)
+        self.assertNotIn("range_overrun", out["67"].get("structure") or [])
+
+    def test_119_2_guard_dhqg_year_line_carrier(self):
+        qs = [{"id": "1991", "context": "Dựa vào câu từ 109 đến 111\nP", "text": "x"}] \
+            + [{"id": str(i), "text": "x"} for i in (109, 110, 111)]
+        out = self._ids(qs)
+        for i in ("110", "111"):
+            self.assertIn("P", out[i].get("context") or "", i)
+
 
 class OffsetNote(unittest.TestCase):
     def _doc(self, ids):

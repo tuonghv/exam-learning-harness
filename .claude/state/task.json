@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-119",
-  "state": "IMPLEMENTING",
-  "next": "tester: --fast, bite, and regression tests for the two real patterns (false carrier outside span, stray low id in a group)",
+  "state": "UNIT_TESTED",
+  "next": "verify",
   "title": "Fix-I api: 117-F008/F004/F005/F007 (REQ-0126)",
   "active": [
     {
       "task_id": "TASK-119",
-      "state": "IMPLEMENTING",
-      "next": "tester: --fast, bite, and regression tests for the two real patterns (false carrier outside span, stray low id in a group)",
-      "updated_at": "2026-11-16T05:51:35Z"
+      "state": "UNIT_TESTED",
+      "next": "verify",
+      "updated_at": "2026-11-16T05:55:47Z"
     }
   ],
   "max_active": 1

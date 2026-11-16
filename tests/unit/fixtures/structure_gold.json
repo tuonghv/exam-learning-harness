@@ -753,6 +753,72 @@
      ]
     }
    ],
+   "known_miss": {}
+  },
+  {
+   "case": "TestFalsePositives.test_65_5_cross_page_context_keeps_range (continuation without any page, 119.1)",
+   "refined": [
+    {
+     "id": "7",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "Questions 7-9: Read.\nLine one of a synthetic passage. Line two follows. Line three ends it.",
+     "page": 1
+    },
+    {
+     "id": "8",
+     "text": "Pick one.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": "",
+     "page": 1
+    },
+    {
+     "id": "9",
+     "text": "Stem begins",
+     "options": {},
+     "context": "",
+     "page": 1
+    },
+    {
+     "id": "9",
+     "text": "and ends.",
+     "options": {
+      "A": "alpha",
+      "B": "beta",
+      "C": "gamma",
+      "D": "delta"
+     },
+     "context": ""
+    }
+   ],
+   "gold": [
+    {
+     "id": 1,
+     "stem": "Pick one."
+    },
+    {
+     "id": 2,
+     "stem": "Pick one."
+    },
+    {
+     "id": 3,
+     "stem": "Stem begins\nand ends.",
+     "pages": [
+      1,
+      2
+     ]
+    }
+   ],
    "known_miss": {
     "cross_page": [
      3
