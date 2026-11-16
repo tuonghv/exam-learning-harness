@@ -3565,3 +3565,9 @@ Action: wrote report
 Result: TASK-122 closed; 3 real exams usable on the text path
 Decision: next: P3 hardening
 Next: coordinator picks next
+
+## DESIGN - TASK-123 - 2026-11-16T06:23:20Z
+Action: coordinator wrote design from traced rows
+Result: 6 S items
+Decision: implement
+Next: IMPLEMENTING via coder
