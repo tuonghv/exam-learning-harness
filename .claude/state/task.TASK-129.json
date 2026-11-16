@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-129",
   "title": "PDF free text path keeps table blocks (REQ-0136)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0136",
   "acceptance_criteria": [
     "AC1 synthetic table/box",
@@ -43,11 +43,19 @@
       "work/TASK-129/evidence/fast.txt"
     ],
     "command": "real-input exam-text oracle old vs new on 3 PDFs; --fast; bite",
-    "result": "AC1-AC4 met; 120 questions kept, tables in the right groups"
+    "result": "AC1-AC4 met; 120 questions kept, tables in the right groups",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-129/evidence/summary.md",
+        "work/TASK-129/evidence/bite.txt"
+      ],
+      "reason": "tables mapped to their groups on 3 real PDFs; tests bite"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-129-pdf-table-text.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -64,6 +72,9 @@
     },
     "verifier": {
       "waiver": "coordinator verified with the real-input oracle"
+    },
+    "crosscheck": {
+      "waiver": "coordinator crosscheck: real-input oracle per question group and bite"
     }
   },
   "user_notes": [
@@ -74,7 +85,7 @@
     }
   ],
   "picked_at": "2026-11-16T12:42:36Z",
-  "updated_at": "2026-11-16T12:49:41Z",
+  "updated_at": "2026-11-16T12:49:53Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/segment.py",
@@ -92,5 +103,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report and close"
+  "next": ""
 }
