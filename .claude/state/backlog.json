@@ -2487,7 +2487,7 @@
     "task_id": "TASK-122",
     "title": "DGNL26 text path: cover-page run + image-only question (REQ-0129)",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-11-16T06:12:03Z",
     "requirement": "REQ-0129",
     "acceptance_criteria": [

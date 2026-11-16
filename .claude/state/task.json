@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-121",
-  "state": "DONE",
-  "next": "",
-  "title": "Segment false questions from passage/year/formula lines (REQ-0128)",
-  "active": [],
+  "task_id": "TASK-122",
+  "state": "TODO",
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "title": "DGNL26 text path: cover-page run + image-only question (REQ-0129)",
+  "active": [
+    {
+      "task_id": "TASK-122",
+      "state": "TODO",
+      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+      "updated_at": ""
+    }
+  ],
   "max_active": 1
 }
