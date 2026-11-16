@@ -3403,3 +3403,9 @@ Action: ran the $0 repro scripts
 Result: 12 BUG rows reproduce
 Decision: evidence enough
 Next: VERIFIED
+
+## VERIFIED - TASK-117 - 2026-11-16T05:28:12Z
+Action: checked AC1-AC4
+Result: all met
+Decision: VERIFIED
+Next: DONE

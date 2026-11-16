@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-117",
   "title": "Triage code-review batch 3 (phases 117-118) (REQ-0124)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0124",
   "acceptance_criteria": [
     "AC1 19 findings classified with evidence",
@@ -29,12 +29,18 @@
     "result": "12/12 BUG rows reproduce on current code (repro_api.out, repro_boundary.out); no unit tests: no code changed"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "not_applicable",
+    "result": "no code change; repros are $0 local calls, no paid run"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-117/handoff/verify.md",
+      "work/TASK-117/repro_api.out",
+      "work/TASK-117/repro_boundary.out"
+    ],
+    "command": "python3 -I work/TASK-117/repro_api.py; python3 -I work/TASK-117/repro_boundary.py; git diff --name-only f0f363d HEAD -- src tests",
+    "result": "AC1-AC4 met; 12 BUG repros, 0 src/tests files changed"
   },
   "report": {
     "status": "pending",
@@ -50,6 +56,9 @@
     },
     "tester": {
       "waiver": "triage-only task; repro scripts stand in for tests, regression tests belong to the fix tasks"
+    },
+    "verifier": {
+      "waiver": "triage-only task; coordinator checked ACs in verify.md"
     }
   },
   "user_notes": [
@@ -71,5 +80,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verify ACs"
+  "next": "write the report and close TASK-117; then open Fix-H parts"
 }
