@@ -3685,3 +3685,9 @@ Action: wrote report
 Result: TASK-126 closed
 Decision: backlog empty
 Next: coordinator picks next
+
+## DESIGN - TASK-127 - 2026-11-16T10:15:09Z
+Action: traced diacritics fails to the v1.0.0 default release
+Result: rule only in dev
+Decision: release dev as v1.3.0 default
+Next: IMPLEMENTING

@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-126",
-  "state": "DONE",
-  "next": "",
-  "title": "Text-path fixes: options_missing marker, wrapped group instruction, DGNL guide (REQ-0133)",
-  "active": [],
+  "task_id": "TASK-127",
+  "state": "DESIGN",
+  "next": "release v1.3.0, switch config",
+  "title": "Prompt release v1.3.0 as default (diacritics rule reaches default runs) (REQ-0134)",
+  "active": [
+    {
+      "task_id": "TASK-127",
+      "state": "DESIGN",
+      "next": "release v1.3.0, switch config",
+      "updated_at": "2026-11-16T10:15:09Z"
+    }
+  ],
   "max_active": 1
 }

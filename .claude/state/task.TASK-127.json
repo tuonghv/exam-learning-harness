@@ -1,0 +1,74 @@
+{
+  "task_id": "TASK-127",
+  "title": "Prompt release v1.3.0 as default (diacritics rule reaches default runs) (REQ-0134)",
+  "state": "DESIGN",
+  "requirement": "REQ-0134",
+  "acceptance_criteria": [
+    "AC1 release v1.3.0 = dev, verify",
+    "AC2 default config v1.3.0",
+    "AC3 --fast NEW 0",
+    "AC4 paid check 0 diacritics fails"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-127-prompt-release-v1-3.md",
+    "summary": "freeze prompts/dev as release v1.3.0 and make it the config default; v1.0.0 lacked the vi diacritics rule and lang/vi",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {
+    "designer": {
+      "waiver": "cause traced by the coordinator from the run's call files; config + release command only"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00346",
+      "note": "user: fix diacritics retry (paid check ~$0.25 approved)",
+      "at": "2026-11-16T10:14:50Z"
+    }
+  ],
+  "picked_at": "2026-11-16T10:14:50Z",
+  "updated_at": "2026-11-16T10:15:09Z",
+  "updated_by": "main",
+  "scope": [
+    "prompts/releases/v1.3.0/**",
+    "config/engine.json",
+    "tests/**",
+    "docs/guide/*.md",
+    "docs/design/phase-127*",
+    "docs/report/phase-127*",
+    "docs/report/INDEX.md"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "release v1.3.0, switch config"
+}
