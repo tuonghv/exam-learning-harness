@@ -105,7 +105,7 @@ class RunClaude(NoRealProcess):
             (Fake(out=env("Invalid API key", is_error=True)), "auth"),
             (Fake(out=env("")), "empty"),
             (Fake(out=env("   ")), "empty"),
-            (Fake(out="not json at all"), "empty"),
+            (Fake(out="not json at all"), "other"),  # TASK-133 110-F005: unparseable output keeps its text
             (Fake(out=""), "empty"),
             (Fake(exc=subprocess.TimeoutExpired("claude", 3)), "timeout"),
             (Fake(exc=FileNotFoundError("claude")), "other"),

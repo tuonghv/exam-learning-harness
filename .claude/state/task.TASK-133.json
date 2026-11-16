@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-133",
   "title": "Review leftovers fix A: cli + claude adapter (REQ-0140)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0140",
   "acceptance_criteria": [
     "AC1 tests per id",
@@ -15,8 +15,14 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/cli.py",
+      "src/exam_engine/adapters/claude.py",
+      "tests/unit/test_review_fix_a_133.py",
+      "tests/unit/test_exam_llm.py"
+    ],
+    "summary": "9 cli/adapter hardening fixes (107-F003..F007, F009, F010; 110-F004, F005); 9 tests; test_exam_llm expected class updated (user)"
   },
   "unit_test": {
     "status": "pending",
@@ -41,7 +47,8 @@
   "roles": {
     "designer": {
       "waiver": "designed in the TASK-131 re-triage (work/TASK-131/handoff/design-cli.md)"
-    }
+    },
+    "coder": "work/TASK-133/handoff/code.md"
   },
   "user_notes": [
     {
@@ -56,7 +63,7 @@
     }
   ],
   "picked_at": "2026-11-16T13:07:12Z",
-  "updated_at": "2026-11-16T13:07:35Z",
+  "updated_at": "2026-11-16T15:28:33Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
@@ -78,5 +85,5 @@
     "next": "on coder hand-back: check code.md, bite + --fast, set 9 ledger rows fixed TASK-133, advance IMPLEMENTING",
     "at": "2026-11-16T13:07:35Z"
   },
-  "next": "coder implements 133.1-133.9"
+  "next": "tests"
 }

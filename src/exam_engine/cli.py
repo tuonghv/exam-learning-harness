@@ -230,7 +230,10 @@ def solve_main(argv=None):
             pw.finish(result, code, time.time() - t0)
         wall = round(time.time() - t0, 1)
         if plan_only and result is not None:
-            result["reports"] = _build_default_report(a, result)
+            try:
+                result["reports"] = _build_default_report(a, result)
+            except (OSError, ValueError) as exc:  # run finished: keep its exit code and summary
+                print("WARN: report not built: %s" % exc, file=sys.stderr)
     except (OSError, ValueError, _ingest_error()) as exc:
         print("ERROR: %s" % exc, file=sys.stderr)
         if plan_only and a.out and not os.path.isfile(os.path.join(a.out, "plan.json")):
@@ -1096,7 +1099,10 @@ def ingest_main(argv):
             cfg2 = {"allow_key_pages": args.allow_key_pages, "min_verification": args.min_verification}
             if args.refined:
                 with open(args.refined, encoding="utf-8") as fh:
-                    doc["refined"] = json.load(fh)["refined"]
+                    ref = json.load(fh)
+                if not isinstance(ref, dict) or not isinstance(ref.get("refined"), dict):
+                    raise ValueError("--refined %s: no refined block" % args.refined)
+                doc["refined"] = ref["refined"]
                 cfg2.update(use_refined=True, questions=args.questions)
             text = api.to_exam_text(doc, cfg2)
             with open(args.exam_out, "w", encoding="utf-8") as fh:
@@ -1256,6 +1262,10 @@ def refine_main(argv):
         print("usage: several FILEs are allowed for image files only (png, jpg, jpeg, webp)",
               file=sys.stderr)
         return 2
+    if a.out and not os.path.isdir(os.path.dirname(os.path.abspath(a.out))):
+        print("ERROR: ingest-refine: --out: no such dir: %s" % os.path.dirname(os.path.abspath(a.out)),
+              file=sys.stderr)
+        return 2  # before any (paid) call
     tmp = None
     trace = []
     try:
@@ -1312,8 +1322,11 @@ def refine_main(argv):
         if tmp:
             shutil.rmtree(tmp, ignore_errors=True)
         if trace and a.out:
-            with open(a.out + ".trace.json", "w", encoding="utf-8") as fh:
-                fh.write(json.dumps(trace, ensure_ascii=False, indent=2) + "\n")
+            try:
+                with open(a.out + ".trace.json", "w", encoding="utf-8") as fh:
+                    fh.write(json.dumps(trace, ensure_ascii=False, indent=2) + "\n")
+            except OSError as exc:
+                print("WARN: trace not written: %s" % exc, file=sys.stderr)
     r = out["refined"]
     nr = [q["id"] for q in r["questions"] if q["needs_review"]]
     print("refined pages=%s questions=%d needs_review=%s calls=%d cost=$%.4f%s%s" % (
@@ -1467,7 +1480,11 @@ def benchmark_main(argv):
         if a.subject:
             items = [x for x in items if x[0] == a.subject]
     else:
-        items = benchmark.discover(a.inputs, a.keys, a.subject)
+        try:
+            items = benchmark.discover(a.inputs, a.keys, a.subject)
+        except OSError as exc:
+            print("ERROR: %s" % exc, file=sys.stderr)
+            return 2
     if not items:
         print("ERROR: no input/key pairs under %s and %s" % (a.inputs, a.keys), file=sys.stderr)
         return 2
@@ -1621,18 +1638,25 @@ def lessons_main(argv):
     try:
         a = ap.parse_args(argv)
         with open(a.summary, encoding="utf-8") as fh:
-            ls = genexam.lessons(json.load(fh))
+            summary = json.load(fh)
+        if not isinstance(summary, dict):
+            raise ValueError("not a summary object")
+        ls = genexam.lessons(summary)
     except SystemExit as exc:
         return _argparse_exit(exc)
     except (OSError, ValueError) as exc:
         print("ERROR: --summary: %s" % exc, file=sys.stderr)
         return 2
     out = a.out or os.path.dirname(os.path.abspath(a.summary))
-    with open(os.path.join(out, "lessons.json"), "w", encoding="utf-8") as fh:
-        json.dump(ls, fh, ensure_ascii=False, indent=2)
-        fh.write("\n")
-    with open(os.path.join(out, "lessons.md"), "w", encoding="utf-8") as fh:
-        fh.write(genexam.lessons_md(ls))
+    try:
+        with open(os.path.join(out, "lessons.json"), "w", encoding="utf-8") as fh:
+            json.dump(ls, fh, ensure_ascii=False, indent=2)
+            fh.write("\n")
+        with open(os.path.join(out, "lessons.md"), "w", encoding="utf-8") as fh:
+            fh.write(genexam.lessons_md(ls))
+    except OSError as exc:
+        print("ERROR: --out: %s" % exc, file=sys.stderr)
+        return 2
     print("%d lesson(s) -> %s" % (len(ls), out))
     return 0
 
@@ -1892,7 +1916,7 @@ def run_list_main(argv):
                         rows.append((label, {"id": label, "dir": d, "line": pr.get("line") or "-", "subject": None, "alias": None,
                                              "layout": "line" if pr.get("line") else
                                              "runs" if os.sep + runlayout.RUNS + os.sep in d else "legacy",
-                                             "plan": settings.load_json(os.path.join(d, "plan.json")) if os.path.isfile(os.path.join(d, "plan.json")) else None}))
+                                             "plan": runlayout._jload(os.path.join(d, "plan.json"))}))
         elif rr["layout"] == "legacy":
             pid = runlayout.legacy_plan_link(rr["dir"])
             if pid:  # a legacy report links only to the main line (or to the line its old folder moved to)
@@ -2190,6 +2214,12 @@ def _rs_trend(a):
 
 def _rs_backfill(a):
     dirs = [d for d in a.refs if os.path.isfile(os.path.join(d, "result.json"))]
+    for d in a.refs:
+        if d not in dirs:
+            print("WARN: not a result dir: %s" % d, file=sys.stderr)
+    if not dirs:
+        print("ERROR: backfill: no result dir among the refs", file=sys.stderr)
+        return 2
     added, skipped = metrics.backfill(dirs, a.history, a.exam)
     bad = metrics.read_history(a.history)[1]
     if bad:

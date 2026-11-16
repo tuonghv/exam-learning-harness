@@ -1,14 +1,14 @@
 id	report	class	disposition	ref	note
 107-F001	phase-107-cli-logic.md	BUG	fixed	TASK-111	
 107-F002	phase-107-cli-logic.md	BUG	fixed	TASK-111	
-107-F003	phase-107-cli-logic.md	IMPROVEMENT	open	TASK-133	re-triaged TASK-131: still valid
-107-F004	phase-107-cli-logic.md	IMPROVEMENT	open	TASK-133	re-triaged TASK-131: still valid
-107-F005	phase-107-cli-logic.md	IMPROVEMENT	open	TASK-133	re-triaged TASK-131: still valid
-107-F006	phase-107-cli-logic.md	IMPROVEMENT	open	TASK-133	re-triaged TASK-131: still valid
-107-F007	phase-107-cli-logic.md	IMPROVEMENT	open	TASK-133	re-triaged TASK-131: still valid
+107-F003	phase-107-cli-logic.md	IMPROVEMENT	fixed	TASK-133	tests/unit/test_review_fix_a_133.py
+107-F004	phase-107-cli-logic.md	IMPROVEMENT	fixed	TASK-133	tests/unit/test_review_fix_a_133.py
+107-F005	phase-107-cli-logic.md	IMPROVEMENT	fixed	TASK-133	tests/unit/test_review_fix_a_133.py
+107-F006	phase-107-cli-logic.md	IMPROVEMENT	fixed	TASK-133	tests/unit/test_review_fix_a_133.py
+107-F007	phase-107-cli-logic.md	IMPROVEMENT	fixed	TASK-133	tests/unit/test_review_fix_a_133.py
 107-F008	phase-107-cli-logic.md	BUG	fixed	TASK-111	
-107-F009	phase-107-cli-logic.md	IMPROVEMENT	open	TASK-133	re-triaged TASK-131: still valid
-107-F010	phase-107-cli-logic.md	IMPROVEMENT	open	TASK-133	re-triaged TASK-131: still valid
+107-F009	phase-107-cli-logic.md	IMPROVEMENT	fixed	TASK-133	tests/unit/test_review_fix_a_133.py
+107-F010	phase-107-cli-logic.md	IMPROVEMENT	fixed	TASK-133	tests/unit/test_review_fix_a_133.py
 108-F001	phase-108-ingest-segment-refine.md	BUG	fixed	TASK-108	
 108-F002	phase-108-ingest-segment-refine.md	BUG	fixed	TASK-108	
 108-F003	phase-108-ingest-segment-refine.md	IMPROVEMENT	open	TASK-134	re-triaged TASK-131: still valid
@@ -28,8 +28,8 @@ id	report	class	disposition	ref	note
 110-F001	phase-110-claude-adapter.md	BUG	fixed	TASK-109	
 110-F002	phase-110-claude-adapter.md	BUG	fixed	TASK-109	
 110-F003	phase-110-claude-adapter.md	NOT-A-DEFECT	not-a-defect	TASK-107	closed by triage
-110-F004	phase-110-claude-adapter.md	IMPROVEMENT	open	TASK-133	re-triaged TASK-131: still valid
-110-F005	phase-110-claude-adapter.md	IMPROVEMENT	open	TASK-133	re-triaged TASK-131: still valid
+110-F004	phase-110-claude-adapter.md	IMPROVEMENT	fixed	TASK-133	tests/unit/test_review_fix_a_133.py
+110-F005	phase-110-claude-adapter.md	IMPROVEMENT	fixed	TASK-133	tests/unit/test_review_fix_a_133.py
 110-F006	phase-110-claude-adapter.md	NOT-A-DEFECT	not-a-defect	TASK-107	closed by triage
 111-F001	phase-111-review-report-kinds.md	IMPROVEMENT	open	TASK-135	re-triaged TASK-131: still valid
 111-F002	phase-111-review-report-kinds.md	BUG	open	TASK-135	re-triaged TASK-131: still valid

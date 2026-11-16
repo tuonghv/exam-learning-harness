@@ -127,7 +127,8 @@ def _run(prompt, extra, model, timeout_s, runner, cwd, stream=False):
     t0 = time.time()
     try:
         p = runner(argv, input=prompt, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                   universal_newlines=True, timeout=timeout_s, shell=False, cwd=cwd)
+                   universal_newlines=True, encoding="utf-8", errors="replace",
+                   timeout=timeout_s, shell=False, cwd=cwd)
     except subprocess.TimeoutExpired:
         return _bad("timeout", "timeout after %ss" % timeout_s, time.time() - t0)
     except OSError as exc:
@@ -143,6 +144,8 @@ def _run(prompt, extra, model, timeout_s, runner, cwd, stream=False):
     if p.returncode != 0 or (isinstance(env, dict) and env.get("is_error")):
         blob = err + " " + (res if isinstance(res, str) else out)
         return _bad(_classify(blob), blob.strip() or "exit %s" % p.returncode, dur, cost)
+    if not isinstance(env, dict) and out.strip():
+        return _bad("other", "unparseable output: " + err + " " + out, dur, cost)
     if not isinstance(res, str) or not res.strip():
         return _bad("empty", "empty result", dur, cost)
     return Call(True, res, cost, "", "", dur)

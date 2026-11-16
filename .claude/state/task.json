@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-133",
-  "state": "DESIGN",
-  "next": "coder implements 133.1-133.9",
+  "state": "IMPLEMENTING",
+  "next": "tests",
   "title": "Review leftovers fix A: cli + claude adapter (REQ-0140)",
   "active": [
     {
       "task_id": "TASK-133",
-      "state": "DESIGN",
-      "next": "coder implements 133.1-133.9",
-      "updated_at": "2026-11-16T13:07:35Z"
+      "state": "IMPLEMENTING",
+      "next": "tests",
+      "updated_at": "2026-11-16T15:28:33Z"
     }
   ],
   "max_active": 1
