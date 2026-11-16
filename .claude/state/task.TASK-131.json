@@ -1,17 +1,18 @@
 {
   "task_id": "TASK-131",
   "title": "Batch-1 review leftovers: re-triage 22 findings (REQ-0138)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0138",
   "acceptance_criteria": [
-    "AC1 re-triage rows with evidence",
-    "AC2 still-valid fixed (follow-up tasks)",
-    "AC3 ledger rows closed"
+    "AC1 rows with evidence",
+    "AC2 repros run",
+    "AC3 ledger open on fix tasks",
+    "AC4 no src change"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-131-review-leftovers-b1.md",
+    "summary": "22 batch-1 leftovers re-triaged on HEAD: 1 cosmetic BUG, 20 IMPROVEMENT, 1 NOT-A-DEFECT; fix tasks 133-135; new P2 defect D1 -> TASK-132",
     "reuse": [],
     "risks": []
   },
@@ -39,7 +40,9 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-131/handoff/design-cli.md"
+  },
   "user_notes": [
     {
       "raw": "RAW-00350",
@@ -48,9 +51,14 @@
     }
   ],
   "picked_at": "2026-11-16T12:57:22Z",
-  "updated_at": "2026-11-16T13:01:20Z",
-  "updated_by": "",
-  "scope": [],
+  "updated_at": "2026-11-16T13:04:18Z",
+  "updated_by": "main",
+  "scope": [
+    "docs/review/**",
+    "docs/design/phase-131*",
+    "docs/report/phase-131*",
+    "docs/report/INDEX.md"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
@@ -61,5 +69,5 @@
     "next": "on part B: run its repros, write docs/design/phase-131 triage doc, advance DESIGN",
     "at": "2026-11-16T13:01:20Z"
   },
-  "next": "merge part A+B re-triage into docs/design/phase-131-review-leftovers-b1.md, advance DESIGN"
+  "next": "record repros, close triage"
 }

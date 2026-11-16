@@ -3805,3 +3805,9 @@ Action: wrote report
 Result: TASK-130 closed
 Decision: next TASK-131
 Next: pick TASK-131
+
+## DESIGN - TASK-131 - 2026-11-16T13:04:17Z
+Action: two designers re-traced 22 ids; coordinator ran repros
+Result: 21 still valid, 1 not-a-defect, D1 new
+Decision: fix tasks 132-135
+Next: IMPLEMENTING (triage only)

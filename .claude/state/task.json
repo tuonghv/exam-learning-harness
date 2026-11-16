@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-131",
-  "state": "TODO",
-  "next": "merge part A+B re-triage into docs/design/phase-131-review-leftovers-b1.md, advance DESIGN",
+  "state": "DESIGN",
+  "next": "record repros, close triage",
   "title": "Batch-1 review leftovers: re-triage 22 findings (REQ-0138)",
   "active": [
     {
       "task_id": "TASK-131",
-      "state": "TODO",
-      "next": "merge part A+B re-triage into docs/design/phase-131-review-leftovers-b1.md, advance DESIGN",
-      "updated_at": "2026-11-16T13:01:20Z"
+      "state": "DESIGN",
+      "next": "record repros, close triage",
+      "updated_at": "2026-11-16T13:04:18Z"
     }
   ],
   "max_active": 1
