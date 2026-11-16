@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-123",
   "title": "P3-a CLI hardening 113-F004/F006-F010 (REQ-0130)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0130",
   "acceptance_criteria": [
     "AC1 compare exam mismatch",
@@ -33,12 +33,18 @@
     "result": "--fast 2105 ran, KNOWN 4, NEW 0; all 7 item tests fail on old code"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "argument validation only; no new input surface"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-123/handoff/verify.md",
+      "work/TASK-123/evidence/summary.md",
+      "work/TASK-123/evidence/bite.out"
+    ],
+    "command": "python3 -I tools/run_tests.py --fast; bite; docs grep",
+    "result": "AC1-AC7 met; no documented command affected"
   },
   "report": {
     "status": "pending",
@@ -54,6 +60,9 @@
     "coder": "work/TASK-123/handoff/code.md",
     "tester": {
       "waiver": "coordinator ran --fast and an independent bite check (evidence/bite.out) (RAW-00342)"
+    },
+    "verifier": {
+      "waiver": "argument-check hardening; coordinator verified tests bite and docs (RAW-00342)"
     }
   },
   "user_notes": [
@@ -64,7 +73,7 @@
     }
   ],
   "picked_at": "2026-11-16T06:23:04Z",
-  "updated_at": "2026-11-16T06:27:15Z",
+  "updated_at": "2026-11-16T06:27:16Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
@@ -76,5 +85,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verify"
+  "next": "report and close"
 }
