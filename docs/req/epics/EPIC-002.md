@@ -1,9 +1,9 @@
 ---
 id: EPIC-002
 title: Few-shot and evaluation example sets (Math, Physics, English, Literature; VN THPT/entrance level)
-source: [RAW-00004, RAW-00345]
+source: [RAW-00004, RAW-00345, RAW-00346]
 created: 2026-10-29 08:24
-updated: 2026-11-16 16:50
+updated: 2026-11-16 17:14
 ---
 ## Original (verbatim, never edit)
 > **[RAW-00004]** 2026-10-29 08:24
@@ -32,6 +32,8 @@ updated: 2026-11-16 16:50
 > </pasted_content id="7c68">
 > **[RAW-00345]** 2026-11-16 16:49
 > just ask me like : Your turn: say "fix text-path issues"  in case need approve and cost or it related to security confirm otherwise you can auto decide.
+> **[RAW-00346]** 2026-11-16 17:13
+> fix diacritics retry
 
 ## Goal
 
@@ -46,8 +48,10 @@ updated: 2026-11-16 16:50
 - REQ-0007
 - REQ-0038
 - REQ-0133
+- REQ-0134
 
 ## Notes
 
 ## Progress log
 - 2026-11-16 16:50 linked RAW-00345 (new input from user; re-check scope)
+- 2026-11-16 17:14 linked RAW-00346 (new input from user; re-check scope)
