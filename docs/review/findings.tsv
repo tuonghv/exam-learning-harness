@@ -11,13 +11,13 @@ id	report	class	disposition	ref	note
 107-F010	phase-107-cli-logic.md	IMPROVEMENT	fixed	TASK-133	tests/unit/test_review_fix_a_133.py
 108-F001	phase-108-ingest-segment-refine.md	BUG	fixed	TASK-108	
 108-F002	phase-108-ingest-segment-refine.md	BUG	fixed	TASK-108	
-108-F003	phase-108-ingest-segment-refine.md	IMPROVEMENT	open	TASK-134	re-triaged TASK-131: still valid
+108-F003	phase-108-ingest-segment-refine.md	IMPROVEMENT	fixed	TASK-134	tests/unit/test_review_fix_b_134.py
 108-F004	phase-108-ingest-segment-refine.md	BUG	fixed	TASK-108	
 108-F005	phase-108-ingest-segment-refine.md	BUG	fixed	TASK-108	
-108-F006	phase-108-ingest-segment-refine.md	IMPROVEMENT	open	TASK-134	re-triaged TASK-131: still valid
-108-F007	phase-108-ingest-segment-refine.md	IMPROVEMENT	open	TASK-134	re-triaged TASK-131: still valid
-108-F008	phase-108-ingest-segment-refine.md	IMPROVEMENT	open	TASK-134	re-triaged TASK-131: still valid
-108-F009	phase-108-ingest-segment-refine.md	IMPROVEMENT	open	TASK-134	re-triaged TASK-131: still valid
+108-F006	phase-108-ingest-segment-refine.md	IMPROVEMENT	fixed	TASK-134	tests/unit/test_review_fix_b_134.py
+108-F007	phase-108-ingest-segment-refine.md	IMPROVEMENT	fixed	TASK-134	tests/unit/test_review_fix_b_134.py
+108-F008	phase-108-ingest-segment-refine.md	IMPROVEMENT	fixed	TASK-134	tests/unit/test_review_fix_b_134.py
+108-F009	phase-108-ingest-segment-refine.md	IMPROVEMENT	fixed	TASK-134	tests/unit/test_review_fix_b_134.py
 108-F010	phase-108-ingest-segment-refine.md	BUG	fixed	TASK-108	
 109-F001	phase-109-metrics-logic.md	NOT-A-DEFECT	not-a-defect	TASK-107	closed by triage
 109-F002	phase-109-metrics-logic.md	BUG	fixed	TASK-112	

@@ -429,9 +429,9 @@ def _attach(qs, st, n, cont):
     if st["open"] is None or st["page"] != n - 1:
         return "no_owner"
     o = qs[st["open"]]
-    if segment._Q.match(cont["text"]):
+    if segment._Q.match(cont["text"].split("\n", 1)[0]):
         kind = "starts_with_number"
-    elif cont["options"] and o["options"]:
+    elif cont["options"] and set(cont["options"]) & set(o["options"]):
         kind = "owner_has_options"
     else:
         kind = None
@@ -443,7 +443,7 @@ def _attach(qs, st, n, cont):
         key = "context" if cont["passage"] and o["context"] else "text"
         o[key] = (o[key] + "\n" + text).strip()
     if cont["options"]:
-        o["options"] = cont["options"]
+        o["options"] = dict(o["options"], **cont["options"])
     o["figures"] = list(o["figures"]) + cont["figures"]
     o["continued_pages"] = o.get("continued_pages", []) + [n]
     if cont["legacy"]:
@@ -597,7 +597,7 @@ def refine(doc, spec, llm, source_path=None, max_cost=1.0, model="sonnet", allow
                      continued_pages=win[1:], window=win)
             f.pop("cut", None)
             why = _why(bool(whole.get("unreadable")), sim < min_similarity,
-                       (f["part"], f["id"]) in _gaps(qs[:pending["qi"] + 1]))
+                       (f["part"], f["id"]) in _gaps([x for x in qs[:pending["qi"] + 1] if x["page"] >= pending["pages"][0]]))
             f["needs_review"] = bool(why)
             f.pop("needs_review_why", None)
             if why:
@@ -623,16 +623,16 @@ def refine(doc, spec, llm, source_path=None, max_cost=1.0, model="sonnet", allow
                 if kind:
                     orphans.append({"page": n, "kind": kind})
         for q in numbered:
-            if carried:
-                # passage printed on the previous page whose questions start here
-                q = dict(q, context=(carried + "\n" + str(q.get("context") or "")).strip())
-                carried = ""
             found, rest = split_part(q["text"])
             part = found or part
             if not rest and not q.get("options") and not q.get("unreadable"):
                 continue
+            if carried:
+                # passage printed on the previous page whose questions start here
+                q = dict(q, context=(carried + "\n" + str(q.get("context") or "")).strip())
+                carried = ""
             items.append(dict(q, text=rest, part=part))
-        if carried and "continues" in obj and not numbered:
+        if carried and not numbered:
             carry = (carried + "\n" + carry).strip()  # the passage goes on over this page
         if items:
             st["open"], st["page"] = len(qs) + len(items) - 1, n
