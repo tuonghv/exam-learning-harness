@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-118",
   "title": "Fix-H parts: 117-F001/F009/F010/F002/F003 (REQ-0125)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0125",
   "acceptance_criteria": [
     "AC1 key after block 6",
@@ -45,11 +45,19 @@
       "work/TASK-118/evidence/parts.new.json"
     ],
     "command": "python3 -I work/TASK-118/evidence/parts_oracle.py <old|new src>; python3 -I work/TASK-114/evidence/oracle.py <old|new src> .",
-    "result": "AC1-AC6 met; 0 parts/segment changes on 4 PDFs + 22 examples; tests bite"
+    "result": "AC1-AC6 met; 0 parts/segment changes on 4 PDFs + 22 examples; tests bite",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-118/evidence/summary.md",
+        "work/TASK-118/evidence/parts.new.json"
+      ],
+      "reason": "old vs new parts/segment output on 4 PDFs + 22 examples: 0 changes"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-118-ingest-key-parts.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -60,6 +68,9 @@
     "tester": "work/TASK-118/handoff/test.md",
     "verifier": {
       "waiver": "coordinator verified with two $0 old-vs-new oracles over all real inputs plus the tester's independent bite check (RAW-00342: keep pace)"
+    },
+    "crosscheck": {
+      "waiver": "crosscheck by the coordinator: parts + segment oracles old vs new over all real inputs, independent of the coder's tests"
     }
   },
   "user_notes": [
@@ -70,7 +81,7 @@
     }
   ],
   "picked_at": "2026-11-16T05:28:38Z",
-  "updated_at": "2026-11-16T05:41:04Z",
+  "updated_at": "2026-11-16T05:41:16Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/*.py",
@@ -82,5 +93,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "write the report and close TASK-118; then pick TASK-119 Fix-I"
+  "next": ""
 }
