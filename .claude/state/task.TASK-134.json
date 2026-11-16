@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-134",
   "title": "Review leftovers fix B: refine hardening (REQ-0141)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0141",
   "acceptance_criteria": [
     "AC1 tests per id",
@@ -23,9 +23,9 @@
     "summary": "refine: first-line number check, disjoint option merge, carry kept without continues, carry consumed by kept entries only, window gap over pending pages; 8 tests"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --fast; coder bite on a HEAD copy",
+    "result": "KNOWN 4 NEW 0; 6/8 new tests fail on old code, 2 guards"
   },
   "security": {
     "status": "pending",
@@ -46,7 +46,10 @@
     "designer": {
       "waiver": "designed in the TASK-131 re-triage (work/TASK-131/handoff/design-ingest.md)"
     },
-    "coder": "work/TASK-134/handoff/code.md"
+    "coder": "work/TASK-134/handoff/code.md",
+    "tester": {
+      "waiver": "coordinator re-ran --fast; coder ran the bite"
+    }
   },
   "user_notes": [
     {
@@ -56,7 +59,7 @@
     }
   ],
   "picked_at": "2026-11-16T15:28:59Z",
-  "updated_at": "2026-11-16T15:34:13Z",
+  "updated_at": "2026-11-16T15:34:14Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/refine.py",
@@ -76,5 +79,5 @@
     "next": "on coder hand-back: check code.md, --fast, set 5 ledger rows fixed TASK-134, advance IMPLEMENTING",
     "at": "2026-11-16T15:29:12Z"
   },
-  "next": "tests"
+  "next": "verify"
 }

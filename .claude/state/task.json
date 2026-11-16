@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-134",
-  "state": "IMPLEMENTING",
-  "next": "tests",
+  "state": "UNIT_TESTED",
+  "next": "verify",
   "title": "Review leftovers fix B: refine hardening (REQ-0141)",
   "active": [
     {
       "task_id": "TASK-134",
-      "state": "IMPLEMENTING",
-      "next": "tests",
-      "updated_at": "2026-11-16T15:34:13Z"
+      "state": "UNIT_TESTED",
+      "next": "verify",
+      "updated_at": "2026-11-16T15:34:14Z"
     }
   ],
   "max_active": 1
