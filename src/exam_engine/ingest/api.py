@@ -143,7 +143,8 @@ def _share_context(qs):
         if cur and cur["last"] < cur["hi"]:
             out[cur["at"]] = _flag(out[cur["at"]], "range_overrun")
 
-    for q in qs:
+    nums = [int(q["id"]) if str(q.get("id", "")).isdigit() else None for q in qs]
+    for i, q in enumerate(qs):
         heads, ctx = segment.split_heading(q.get("context") or "")
         for h in heads:
             segment.push_heading(stack, h)
@@ -158,17 +159,28 @@ def _share_context(qs):
         q = dict(q, context=ctx, section=sec) if heads or sec else q
         if not heads and segment.ambiguous_heading(ctx):  # kept as text (maybe an option bank)
             q = _flag(q, "ambiguous_heading")
-        if m:
-            lo, hi = segment.group_span(m)
+        lo, hi = segment.group_span(m) if m else (0, 0)
+        member = bool(cur) and num is not None and cur["lo"] < num <= cur["hi"]
+        # 119.3: a member of the open range whose context mentions other questions (`answers to questions 3, 4`)
+        # stays a member; a non-member keeps opening the range even when numbered outside it (a passage whose own
+        # numbered lines were read as questions carries the real group line)
+        if m and (num is None or lo <= num <= hi or not member):
             if cur and cur["ctx"] == ctx and (cur["lo"], cur["hi"]) == (lo, hi):
                 cur["last"] = max(cur["last"], num or 0)  # the group line repeated on a member
                 q = _with_carrier(dict(q, context=ctx), cur)
             else:
                 close()
-                cur = {"lo": lo, "hi": hi, "ctx": ctx, "at": len(out), "last": num or 0, **_carrier(q)}
+                cur = {"lo": lo, "hi": hi, "ctx": ctx, "at": len(out), **_carrier(q),
+                       "last": num if num is not None and lo <= num <= hi else lo - 1}  # carrier outside its span: none seen yet
                 if cur["figs"]:
                     q = dict(q, group_figures=list(cur["figs"]))
             ghost = None
+        elif cur and num is not None and num <= cur["last"] and not any(
+                n is not None and cur["last"] < n <= cur["hi"] for n in nums[i + 1:]):
+            # 119.2: numbering went back and the range never resumes -> a restart (a stray low id read from
+            # passage or formula lines inside a group does not close it)
+            close()
+            cur = None
         elif cur and num is not None and cur["lo"] < num <= cur["hi"]:
             cur["last"] = max(cur["last"], num)
             if ctx.strip() and ctx != cur["ctx"]:  # nearer text wins: own line leads the question text
@@ -187,11 +199,17 @@ def refined_questions(doc):
     for q in (doc.get("refined") or {}).get("questions") or []:
         if qs and qs[-1]["id"] == q["id"]:
             # one question cut by a page break: stem on the first page, options on the next
-            cp = sorted(set(qs[-1].get("continued_pages", [])) | set(q.get("continued_pages", [])))
-            qs[-1] = dict(qs[-1], text=(qs[-1]["text"] + "\n" + q["text"]).strip(),
-                          options=q["options"] or qs[-1]["options"], cut=bool(q.get("cut")))
+            a = qs[-1]
+            cp = set(a.get("continued_pages", [])) | set(q.get("continued_pages", []))
+            if q.get("page") and q["page"] != a.get("page"):
+                cp.add(q["page"])  # as refine._attach: the page the second part sits on
+            figs = list(a.get("figures") or []) + [f for f in q.get("figures") or [] if f not in (a.get("figures") or [])]
+            qs[-1] = dict(a, text=(a["text"] + "\n" + q["text"]).strip(),
+                          options={**(a.get("options") or {}), **(q.get("options") or {})}, cut=bool(q.get("cut")))
+            if figs:
+                qs[-1]["figures"] = figs
             if cp:
-                qs[-1]["continued_pages"] = cp  # the last part's cut stays; the first part's is joined
+                qs[-1]["continued_pages"] = sorted(cp)  # the last part's cut stays; the first part's is joined
         else:
             qs.append(q)
     return qs
@@ -292,7 +310,8 @@ def _from_refined(doc, spec=None, config=None):
     out = ["# Exam Input", ""] + ["%s: %s" % (k, v) for k, v in meta.items()]
     first = int(qs[0]["id"])
     out += ["", "## Instructions", "", "Choose the best answer and explain why."]
-    if skipped:  # kept ids may have gaps: the N + offset line would be wrong
+    seq = all(q["id"] == str(first + k) for k, q in enumerate(qs))
+    if skipped or not seq:  # kept ids not consecutive: the N + offset line would be wrong
         out += ["", "Questions are numbered from 1 here; printed numbers: %s."
                 % ", ".join("%d=%s" % (k, q["id"]) for k, q in enumerate(qs, 1))]
     elif first != 1:

@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-119",
   "title": "Fix-I api: 117-F008/F004/F005/F007 (REQ-0126)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0126",
   "acceptance_criteria": [
     "AC1 cut merge keeps parts",
@@ -18,8 +18,12 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/ingest/api.py",
+      "tests/unit/test_api_fix_i_119.py"
+    ],
+    "summary": "api.py: 119.1 cut merge union (options, figures, continued_pages); 119.2 restart closes a range only when it never resumes, outside carrier starts last at lo-1; 119.3 a mention not covering its number is ignored only for a member of the open range; 119.4 offset note only for consecutive ids. 7 new tests (5 bite, 2 guards)"
   },
   "unit_test": {
     "status": "pending",
@@ -42,7 +46,8 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-119/handoff/design.md"
+    "designer": "work/TASK-119/handoff/design.md",
+    "coder": "work/TASK-119/handoff/code.md"
   },
   "user_notes": [
     {
@@ -52,7 +57,7 @@
     }
   ],
   "picked_at": "2026-11-16T05:41:21Z",
-  "updated_at": "2026-11-16T05:41:34Z",
+  "updated_at": "2026-11-16T05:51:35Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/*.py",
@@ -64,5 +69,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "coder implements 119.1-119.4"
+  "next": "tester: --fast, bite, and regression tests for the two real patterns (false carrier outside span, stray low id in a group)"
 }

@@ -87,3 +87,18 @@ F001-F003, F006, F009, F010 (TASK-118/120); refine `_attach` itself.
 
 ## Defects
 None new (the 4 findings above are the task).
+
+## Coordinator changes after the real-data oracle (2026-11-16)
+The first implementation moved 96 contexts on the 3 DGNL/DHQG PDFs. Cause: segment reads numbered passage lines and
+year/formula lines (`1`..`6`, `1991`, `2020`, `0`) as questions, so a real group line often sits on a false carrier
+outside its span, and stray low ids sit inside groups. Changes:
+- 119.3: a mention that does not cover its own number is ignored only when the question is a member of the open range
+  (`cur["lo"] < num <= cur["hi"]`); a non-member keeps opening the range as before.
+- 119.2: a drop (`num <= last`) closes the range only when no later question falls in `(last, hi]` (the range never
+  resumes); a carrier outside its span starts `last` at `lo - 1`.
+Result: share oracle old vs new over the 4 input PDFs = 0 diff lines; the F004/F005 repros still fixed.
+
+## Defects (new, follow-up)
+- D1 MED segment.py: passage/year/formula lines (`1991 ...`, `2020 ...`, numbered passage lines) are read as questions;
+  the real first member of a group (DHQG 106, 109, 112; DGNL 2025 q46) then gets no passage (`''`) before and after this
+  task. Needs its own REQ (number plausibility in segment).

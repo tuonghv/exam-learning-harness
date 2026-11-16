@@ -3451,3 +3451,9 @@ Action: designer drafted 4 items (while TASK-118 was testing)
 Result: design complete; no new flag for option clash
 Decision: implement
 Next: IMPLEMENTING via coder
+
+## IMPLEMENTING - TASK-119 - 2026-11-16T05:51:35Z
+Action: coder implemented 119.1-119.4; real-data oracle showed 96 moved contexts; main narrowed 119.2/119.3
+Result: share oracle 0 diff on 4 PDFs; --affected NEW 0
+Decision: accept narrowed rules; log segment false-question defect D1 as follow-up
+Next: UNIT_TESTED via tester
