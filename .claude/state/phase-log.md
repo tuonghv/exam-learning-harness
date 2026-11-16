@@ -3415,3 +3415,9 @@ Action: wrote report
 Result: TASK-117 closed
 Decision: next: Fix-H parts
 Next: open Fix-H
+
+## DESIGN - TASK-118 - 2026-11-16T05:31:38Z
+Action: designer drafted 4 items; coordinator changed 118.1 to a two-tier guard so a long mixed-case key title in the head blocks is still caught
+Result: design complete
+Decision: implement
+Next: IMPLEMENTING via coder
