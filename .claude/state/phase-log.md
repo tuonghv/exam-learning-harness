@@ -3517,3 +3517,9 @@ Action: coder implemented 121.1-121.2; main repointed one existing test to the n
 Result: --affected NEW 0 after the test change
 Decision: matches design
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-121 - 2026-11-16T06:10:43Z
+Action: --fast + bite
+Result: NEW 0
+Decision: UNIT_TESTED
+Next: VERIFIED
