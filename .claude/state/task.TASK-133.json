@@ -51,7 +51,7 @@
     }
   ],
   "picked_at": "2026-11-16T13:07:12Z",
-  "updated_at": "2026-11-16T13:07:20Z",
+  "updated_at": "2026-11-16T13:07:35Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
@@ -65,8 +65,12 @@
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
-    "done": [],
-    "notes": ""
+    "done": [
+      "DESIGN dc0743a"
+    ],
+    "notes": "coder running 133.1-133.9",
+    "next": "on coder hand-back: check code.md, bite + --fast, set 9 ledger rows fixed TASK-133, advance IMPLEMENTING",
+    "at": "2026-11-16T13:07:35Z"
   },
   "next": "coder implements 133.1-133.9"
 }
