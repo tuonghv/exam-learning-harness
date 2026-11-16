@@ -3295,3 +3295,9 @@ Action: wrote report
 Result: TASK-113 closed
 Decision: next: Fix-F ingest REQ/TASK
 Next: open Fix-F
+
+## DESIGN - TASK-114 - 2026-11-16T03:43:44Z
+Action: designer drafted 4 fixes; coordinator found page caches and added a $0 cached refine replay to the oracle
+Result: design complete, 7 failing-first tests named
+Decision: implement as designed
+Next: IMPLEMENTING via coder
