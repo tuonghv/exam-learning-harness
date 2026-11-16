@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-125",
-  "state": "DESIGN",
-  "next": "coder implements 125.1-125.7",
+  "state": "IMPLEMENTING",
+  "next": "tests",
   "title": "P3-c boundary + api hardening (REQ-0132)",
   "active": [
     {
       "task_id": "TASK-125",
-      "state": "DESIGN",
-      "next": "coder implements 125.1-125.7",
-      "updated_at": "2026-11-16T06:33:19Z"
+      "state": "IMPLEMENTING",
+      "next": "tests",
+      "updated_at": "2026-11-16T07:08:04Z"
     }
   ],
   "max_active": 1

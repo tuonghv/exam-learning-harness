@@ -257,14 +257,17 @@ def _labels(qs, refined=False):
     return out
 
 
-def _gate(qs, config=None, refined=False):
+def _gate(qs, config=None, refined=False, active=None):
     """-> (indices to keep, skipped [{printed, status, reasons}]) for `config["min_verification"]` (default any).
 
-    Active only when some question carries `verification`; there a missing key counts as unverified."""
+    Active only when some question carries `verification` (`active`, when given, says it for the full list
+    so a slice without its own keys is still gated); there a missing key counts as unverified."""
     lvl = (config or {}).get("min_verification", "any")
     if lvl not in LEVELS:
         raise ValueError("min_verification: %r (use verified or any)" % (lvl,))
-    if not any("verification" in q for q in qs):
+    if active is None:
+        active = any("verification" in q for q in qs)
+    if not active:
         return list(range(len(qs))), []
     labels = _labels(qs, refined)
     keep, skipped = [], []
@@ -281,10 +284,11 @@ def _gate(qs, config=None, refined=False):
 def _pick_refined(doc, spec=None, config=None):
     """(kept refined questions after context sharing, slice and gate; skipped)."""
     qs = _share_context(refined_questions(doc))  # before the slice: a group's carrier may lie outside `spec`
+    active = any("verification" in q for q in qs)
     if spec:
         want = set(parts.parse_pages(spec))
         qs = [q for q in qs if q["id"].isdigit() and int(q["id"]) in want]
-    keep, skipped = _gate(qs, config, refined=True)
+    keep, skipped = _gate(qs, config, refined=True, active=active)
     return [qs[i] for i in keep], skipped
 
 

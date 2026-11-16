@@ -57,7 +57,7 @@ to the solver as a visual (later REQ-0021).
   `--real` (alias `haiku`, tools off, empty cwd); none given = exit 2, it never defaults to real.
   `--max-cost-usd` (default 0.10) stops before a call that could exceed it (`boundary_ai_budget`).
   `--cache DIR` (real only) reuses replies, so a rerun costs 0 calls; `--boundary-trace FILE` writes one
-  JSON row per window (with the reply text). Config key `boundary_ai` in `config/engine.json` sets the
+  JSON row per window (with the reply text; `cost_usd` is the cost of that row's call, `call` its index: sum by call). Config key `boundary_ai` in `config/engine.json` sets the
   default (absent = `off`).
 - A reply is strict JSON; a bad window is ignored whole (`boundary_ai_invalid`). A hint below confidence
   0.7 is dropped, never overrides a strong rule match (`boundary_ai_overruled`), and a start that breaks

@@ -228,6 +228,8 @@ def _items(entry, w, max_items=40):
             return None, "duplicate"
         seen.add(line)
         out.append((line, label, float(conf)))
+    if set(w["suspects"]) - seen:
+        return None, "missing"
     return out, None
 
 
@@ -252,16 +254,20 @@ def _hints(items, w, min_conf):
 def parse_reply(obj, wins, max_items=40):
     """-> {window id: (items, None) | (None, reason)} for a decoded reply (obj None = bad JSON)."""
     res = {}
-    entries = {}
+    entries, dups = {}, set()
     if isinstance(obj, dict) and isinstance(obj.get("windows"), list):
         for e in obj["windows"]:
             if isinstance(e, dict) and isinstance(e.get("window_id"), str):
+                if e["window_id"] in entries:
+                    dups.add(e["window_id"])
                 entries[e["window_id"]] = e
     for w in wins:
         if obj is None:
             res[w["id"]] = (None, "json")
         elif w["id"] not in entries:
             res[w["id"]] = (None, "schema")
+        elif w["id"] in dups:
+            res[w["id"]] = (None, "duplicate")
         else:
             res[w["id"]] = _items(entries[w["id"]], w, max_items)
     return res
@@ -296,6 +302,7 @@ class Reviewer:
         self.stats = {"windows": 0, "suspects": 0, "skipped": 0, "cached": 0, "calls": 0,
                       "est_calls": 0, "invalid": 0, "low_confidence": 0, "hints": 0}
         self.last_windows = []
+        self._estimated = set()
 
     def _key(self, w, sha):
         return "%s|%s|%s" % (window_key(w), sha, self.model)
@@ -322,7 +329,15 @@ class Reviewer:
             if got is None:
                 todo.append(w)
                 continue
-            items = [(w["start"] + r, lab, c) for r, lab, c in got]
+            try:
+                entry = {"items": [{"line": w["start"] + r, "label": lab, "confidence": c}
+                                   for r, lab, c in got]}
+            except (TypeError, ValueError):
+                entry = None
+            items = _items(entry, w)[0] if entry is not None else None
+            if items is None:
+                todo.append(w)  # corrupt or partial cache entry = miss
+                continue
             h, low = _hints(items, w, self.min_conf)
             hints.update(h)
             st["cached"] += 1
@@ -331,7 +346,9 @@ class Reviewer:
                                "ok": True, "cost_usd": 0.0, "reason": ""})
         batches = [todo[i:i + MAX_BATCH] for i in range(0, len(todo), MAX_BATCH)]
         if self.dry_run:
-            st["est_calls"] += len(batches)
+            fresh = [w for w in todo if self._key(w, sha) not in self._estimated]
+            self._estimated.update(self._key(w, sha) for w in fresh)
+            st["est_calls"] += (len(fresh) + MAX_BATCH - 1) // MAX_BATCH
         else:
             self._calls(batches, sha, hints)
         self._promote(sus, hints)
@@ -359,7 +376,7 @@ class Reviewer:
                 res = dict((w["id"], (None, "call")) for w in batch)
             for w in batch:
                 items, reason = res[w["id"]]
-                row = {"window_id": w["id"], "window_sha256": window_key(w), "cached": False,
+                row = {"window_id": w["id"], "window_sha256": window_key(w), "cached": False, "call": st["calls"],
                        "ok": items is not None, "cost_usd": call.cost_usd, "reason": reason or ""}
                 if self.keep_text:
                     row["text"] = call.text

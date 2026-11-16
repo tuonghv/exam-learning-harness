@@ -257,7 +257,9 @@ def segment(lines, hints=None, report=None, starts=None):
                     continue
                 if hint[0] in ("other", "option_continuation"):
                     note("boundary_ai_applied", i, hint)
-                    if qs[-1]["options"]:
+                    if pending:  # an open context owns the line, not the last option
+                        pending.append(line.strip())
+                    elif qs[-1]["options"]:
                         qs[-1]["options"][-1]["text"] += " " + line.strip()
                     else:
                         qs[-1]["text"] = (qs[-1]["text"] + " " + line.strip()).strip()
@@ -305,7 +307,7 @@ def segment(lines, hints=None, report=None, starts=None):
                     note("boundary_ai_applied", i, hint)
                     if hint[0] == "subject_start":
                         note("boundary_ai_subject", i, hint)
-                    if hint[0] == "question_end":
+                    if hint[0] == "question_end" and not pending:
                         qs[-1]["options"][-1]["text"] += " " + line.strip()
                         closed = True
                     else:
