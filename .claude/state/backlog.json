@@ -2718,15 +2718,92 @@
     "created_at": "2026-11-16T12:50:18Z",
     "requirement": "REQ-0138",
     "acceptance_criteria": [
-      "AC1 re-triage rows with evidence",
-      "AC2 still-valid fixed (follow-up tasks)",
-      "AC3 ledger rows closed"
+      "AC1 rows with evidence",
+      "AC2 repros run",
+      "AC3 ledger open on fix tasks",
+      "AC4 no src change"
     ],
     "user_notes": [
       {
         "raw": "RAW-00350",
         "note": "user: list Fable reports not designed, prevent missed review fixes, plan",
         "at": "2026-11-16T12:50:18Z"
+      }
+    ]
+  },
+  {
+    "task_id": "TASK-132",
+    "title": "Report names: non-Latin/missing subject slug (REQ-0139)",
+    "priority": 2,
+    "status": "queued",
+    "created_at": "2026-11-16T13:03:47Z",
+    "requirement": "REQ-0139",
+    "acceptance_criteria": [
+      "AC1 non-Latin subject report",
+      "AC2 Latin unchanged, tests"
+    ],
+    "user_notes": [
+      {
+        "raw": "RAW-00350",
+        "note": "fix tasks from the TASK-131 re-triage of never-designed review findings",
+        "at": "2026-11-16T13:03:47Z"
+      }
+    ]
+  },
+  {
+    "task_id": "TASK-133",
+    "title": "Review leftovers fix A: cli + claude adapter (REQ-0140)",
+    "priority": 3,
+    "status": "queued",
+    "created_at": "2026-11-16T13:03:47Z",
+    "requirement": "REQ-0140",
+    "acceptance_criteria": [
+      "AC1 tests per id",
+      "AC2 ledger, --fast"
+    ],
+    "user_notes": [
+      {
+        "raw": "RAW-00350",
+        "note": "fix tasks from the TASK-131 re-triage of never-designed review findings",
+        "at": "2026-11-16T13:03:47Z"
+      }
+    ]
+  },
+  {
+    "task_id": "TASK-134",
+    "title": "Review leftovers fix B: refine hardening (REQ-0141)",
+    "priority": 3,
+    "status": "queued",
+    "created_at": "2026-11-16T13:03:47Z",
+    "requirement": "REQ-0141",
+    "acceptance_criteria": [
+      "AC1 tests per id",
+      "AC2 goldens, ledger, --fast"
+    ],
+    "user_notes": [
+      {
+        "raw": "RAW-00350",
+        "note": "fix tasks from the TASK-131 re-triage of never-designed review findings",
+        "at": "2026-11-16T13:03:47Z"
+      }
+    ]
+  },
+  {
+    "task_id": "TASK-135",
+    "title": "Review leftovers fix C: metrics/report_kinds/review (REQ-0142)",
+    "priority": 3,
+    "status": "queued",
+    "created_at": "2026-11-16T13:03:47Z",
+    "requirement": "REQ-0142",
+    "acceptance_criteria": [
+      "AC1 tests per id",
+      "AC2 ledger, --fast"
+    ],
+    "user_notes": [
+      {
+        "raw": "RAW-00350",
+        "note": "fix tasks from the TASK-131 re-triage of never-designed review findings",
+        "at": "2026-11-16T13:03:47Z"
       }
     ]
   }
