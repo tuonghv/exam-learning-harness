@@ -3493,3 +3493,9 @@ Action: coordinator ran --fast and bite
 Result: NEW 0; all item tests bite
 Decision: UNIT_TESTED
 Next: VERIFIED
+
+## VERIFIED - TASK-120 - 2026-11-16T06:02:48Z
+Action: repro + dry-run oracle
+Result: all met
+Decision: VERIFIED
+Next: DONE
