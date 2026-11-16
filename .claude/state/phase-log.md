@@ -3721,3 +3721,9 @@ Action: traced stale golden
 Result: 58 intended diff lines
 Decision: invariants
 Next: IMPLEMENTING
+
+## IMPLEMENTING - TASK-128 - 2026-11-16T11:41:13Z
+Action: rewrote the stale golden
+Result: passes
+Decision: UNIT_TESTED next
+Next: UNIT_TESTED

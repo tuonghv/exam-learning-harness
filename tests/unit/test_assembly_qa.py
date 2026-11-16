@@ -113,11 +113,25 @@ class Golden(unittest.TestCase):
 
     @unittest.skipUnless(os.path.isfile(os.path.join(ROOT, PDF)) and os.path.isfile(REAL), "pdf/real doc absent")
     def test_48_golden_refined_real_doc(self):
-        b, h = self.pair(os.path.join(ROOT, PDF), ["--refined", REAL], "ref")
-        self.assertEqual(self.same(b, h), ["e.md.assembly.json"])
+        """TASK-128: invariants on HEAD; the 63a5299 bytes were superseded by TASK-114..126 (intended)."""
+        outs = []
+        for k in (1, 2):
+            d = os.path.join(self.tmp, "ref%d" % k)
+            os.mkdir(d)
+            self.assertEqual(ingest(ROOT, [os.path.join(ROOT, PDF), "--out", os.path.join(d, "doc.json"),
+                                           "--exam-out", os.path.join(d, "e.md"), "--refined", REAL] + META), 0)
+            outs.append(d)
+        h = outs[0]
+        self.assertEqual(sorted(os.listdir(h)), ["doc.json", "e.md", "e.md.assembly.json"])
+        exam = rb(os.path.join(h, "e.md")).decode("utf-8")
         side = json.loads(rb(os.path.join(h, "e.md.assembly.json")))
-        self.assertTrue(all(r["source_pages"] for r in side["questions"]))
-        self.assertEqual({r["validation_status"] for r in side["questions"]} - {"passed", "failed"}, set())
+        rows = side["questions"]
+        self.assertEqual(len(rows), len(re.findall(r"(?m)^## Question \d+$", exam)))
+        self.assertTrue(all(r["source_pages"] for r in rows))
+        self.assertEqual({r["validation_status"] for r in rows} - {"passed", "failed"}, set())
+        self.assertEqual(sum(r["validation_status"] == "failed" for r in rows), exam.count("[Incomplete:"))
+        for f in ("e.md", "e.md.assembly.json"):
+            self.assertEqual(rb(os.path.join(h, f)), rb(os.path.join(outs[1], f)), f)
 
 
 class SidecarContent(unittest.TestCase):

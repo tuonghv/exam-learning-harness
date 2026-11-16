@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-128",
-  "state": "DESIGN",
-  "next": "edit the test",
+  "state": "IMPLEMENTING",
+  "next": "tests",
   "title": "Stale TASK-048 real-doc golden (REQ-0135)",
   "active": [
     {
       "task_id": "TASK-128",
-      "state": "DESIGN",
-      "next": "edit the test",
-      "updated_at": "2026-11-16T11:39:12Z"
+      "state": "IMPLEMENTING",
+      "next": "tests",
+      "updated_at": "2026-11-16T11:41:13Z"
     }
   ],
   "max_active": 1
