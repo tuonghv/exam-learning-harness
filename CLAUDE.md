@@ -52,7 +52,7 @@ its role (`.claude/agents/`: designer, coder, tester, verifier; supporting inspe
 (a skip needs a waiver), never commit, and are blocked by the context guard from workflow/ledger/design files. Delegation briefs, grants, inspector and guard detail: `docs/guide/workflow-roles.md` §1-5.
 - Blocking is opt-in (user, 2026-09-28): default is allow; any new or wider block, deny or ask for agents or the main session
   (`.claude/settings.json`, `.claude/agent_setup.json`, `.claude/hooks/agent_setup.py`) needs the user's explicit confirmation first.
-- Working style, RAW-00134..137: keep free roles busy with non-conflicting work; ask user decisions as one-click hints.
+- Working style, RAW-00134..137, RAW-00345: keep free roles busy with non-conflicting work; decide yourself and proceed; stop and ask (one-click `Your turn: say "..."`) only for paid/real runs (cost) or security confirmations.
 - Status lines (user, RAW-00361): when the coordinator is not acting, the reply's last line says exactly one of `Wait for <what>` (background work, a role) or `Your turn: <the decision/command>`.
 <!-- agent-setup:end -->
 

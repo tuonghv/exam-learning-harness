@@ -1,9 +1,9 @@
 ---
 id: EPIC-002
 title: Few-shot and evaluation example sets (Math, Physics, English, Literature; VN THPT/entrance level)
-source: [RAW-00004]
+source: [RAW-00004, RAW-00345]
 created: 2026-10-29 08:24
-updated: 2026-10-31 05:39
+updated: 2026-11-16 16:50
 ---
 ## Original (verbatim, never edit)
 > **[RAW-00004]** 2026-10-29 08:24
@@ -30,6 +30,8 @@ updated: 2026-10-31 05:39
 >
 > Start by inspecting the current repository and proposing the smallest implementation plan. Then create the examples and validate their expected answers before reporting completion.
 > </pasted_content id="7c68">
+> **[RAW-00345]** 2026-11-16 16:49
+> just ask me like : Your turn: say "fix text-path issues"  in case need approve and cost or it related to security confirm otherwise you can auto decide.
 
 ## Goal
 
@@ -43,5 +45,9 @@ updated: 2026-10-31 05:39
 - REQ-0006
 - REQ-0007
 - REQ-0038
+- REQ-0133
 
 ## Notes
+
+## Progress log
+- 2026-11-16 16:50 linked RAW-00345 (new input from user; re-check scope)
