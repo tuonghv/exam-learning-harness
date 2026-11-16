@@ -471,7 +471,8 @@ def default_names(result, out_dir):
     from exam_engine.pipeline import report_kinds as rk
     ex = result.get("exam") or {}
     stem = os.path.splitext(os.path.basename(str(ex.get("path") or "")))[0]
-    return {"exam": rk.slug(stem) or "exam", "subject": rk.slug(ex.get("subject")) or "all",
+    subj = rk.slug(ex.get("subject"))  # TASK-132: `all` is reserved for cross-subject kinds; `数学` slugs to ''
+    return {"exam": rk.slug(stem) or "exam", "subject": subj if subj not in ("", "all") else "subject",
             "run": rk.short_run(os.path.basename(os.path.abspath(out_dir)))}
 
 

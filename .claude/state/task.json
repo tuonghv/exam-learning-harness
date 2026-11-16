@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-132",
-  "state": "DESIGN",
-  "next": "implement",
+  "state": "IMPLEMENTING",
+  "next": "tests",
   "title": "Report names: non-Latin/missing subject slug (REQ-0139)",
   "active": [
     {
       "task_id": "TASK-132",
-      "state": "DESIGN",
-      "next": "implement",
-      "updated_at": "2026-11-16T13:06:52Z"
+      "state": "IMPLEMENTING",
+      "next": "tests",
+      "updated_at": "2026-11-16T13:06:53Z"
     }
   ],
   "max_active": 1

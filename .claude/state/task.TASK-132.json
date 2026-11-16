@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-132",
   "title": "Report names: non-Latin/missing subject slug (REQ-0139)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0139",
   "acceptance_criteria": [
     "AC1 non-Latin subject report",
@@ -15,8 +15,12 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/reporter.py",
+      "tests/unit/test_report_subject_slug_132.py"
+    ],
+    "summary": "reporter.default_names: '' or 'all' subject slug -> 'subject'; 3 tests"
   },
   "unit_test": {
     "status": "pending",
@@ -41,6 +45,9 @@
   "roles": {
     "designer": {
       "waiver": "one-line fix traced in TASK-131 (design-ingest.md D1)"
+    },
+    "coder": {
+      "waiver": "one-line fix by the coordinator"
     }
   },
   "user_notes": [
@@ -51,7 +58,7 @@
     }
   ],
   "picked_at": "2026-11-16T13:04:45Z",
-  "updated_at": "2026-11-16T13:06:52Z",
+  "updated_at": "2026-11-16T13:06:53Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/reporter.py",
@@ -66,5 +73,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "implement"
+  "next": "tests"
 }
