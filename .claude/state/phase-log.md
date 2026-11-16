@@ -3979,3 +3979,9 @@ Action: verify on disk
 Result: AC1-AC3 met
 Decision: VERIFIED
 Next: DONE
+
+## DONE - TASK-136 - 2026-11-16T23:50:33Z
+Action: wrote report
+Result: TASK-136 closed; 28 batch-4 findings open on TASK-137
+Decision: triage next
+Next: pick TASK-137

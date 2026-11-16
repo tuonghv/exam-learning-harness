@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-136",
-  "state": "VERIFIED",
-  "next": "report and close",
+  "state": "DONE",
+  "next": "",
   "title": "Review prompt v2 + code-review batch 4 (REQ-0143)",
-  "active": [
-    {
-      "task_id": "TASK-136",
-      "state": "VERIFIED",
-      "next": "report and close",
-      "updated_at": "2026-11-16T23:50:18Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
