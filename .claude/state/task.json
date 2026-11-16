@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-122",
-  "state": "VERIFIED",
-  "next": "report and close",
+  "state": "DONE",
+  "next": "",
   "title": "DGNL26 text path: cover-page run + image-only question (REQ-0129)",
-  "active": [
-    {
-      "task_id": "TASK-122",
-      "state": "VERIFIED",
-      "next": "report and close",
-      "updated_at": "2026-11-16T06:22:24Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

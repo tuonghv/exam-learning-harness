@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-122",
   "title": "DGNL26 text path: cover-page run + image-only question (REQ-0129)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0129",
   "acceptance_criteria": [
     "AC1 120 questions",
@@ -41,11 +41,19 @@
       "work/TASK-122/evidence/dgnl26_check.txt"
     ],
     "command": "python3 -I work/TASK-114/evidence/oracle.py <old|new src> .; python3 -I work/TASK-116/evidence/share_oracle.py <old|new src> .; api.to_exam_text on DGNL26",
-    "result": "AC1-AC4 met; DGNL26 0 -> 120 usable questions, q4 declined; other inputs identical"
+    "result": "AC1-AC4 met; DGNL26 0 -> 120 usable questions, q4 declined; other inputs identical",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-122/evidence/summary.md",
+        "work/TASK-122/evidence/dgnl26_check.txt"
+      ],
+      "reason": "DGNL26 120 = printed, q4 declined in rendered text, other inputs identical"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-122-cover-run-unreadable.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -58,6 +66,9 @@
     },
     "verifier": {
       "waiver": "coordinator verified with two old-vs-new oracles and a rendered exam-text check (RAW-00342)"
+    },
+    "crosscheck": {
+      "waiver": "crosscheck by the coordinator: segment + share oracles old vs new over all real inputs and a rendered exam-text check, independent of the coder's tests"
     }
   },
   "user_notes": [
@@ -68,7 +79,7 @@
     }
   ],
   "picked_at": "2026-11-16T06:12:03Z",
-  "updated_at": "2026-11-16T06:22:24Z",
+  "updated_at": "2026-11-16T06:22:35Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/*.py",
@@ -81,5 +92,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report and close"
+  "next": ""
 }
