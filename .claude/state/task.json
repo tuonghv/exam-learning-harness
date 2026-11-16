@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-116",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "coder implements 116.1 with a regression test",
   "title": "Fix-F follow-up: share unaccented Cau N - M passage (REQ-0123)",
   "active": [
     {
       "task_id": "TASK-116",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "coder implements 116.1 with a regression test",
+      "updated_at": "2026-11-16T04:36:38Z"
     }
   ],
   "max_active": 1

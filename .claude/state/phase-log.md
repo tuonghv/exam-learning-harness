@@ -3355,3 +3355,9 @@ Action: wrote report
 Result: TASK-115 closed; batch-2 P1+P2 fixes done
 Decision: P3 hardening optional, user decides
 Next: user decision on P3 / F002 api follow-up
+
+## DESIGN - TASK-116 - 2026-11-16T04:36:38Z
+Action: coordinator reproduced: CÂU already shared via GROUP_ANY, Cau not
+Result: design: GROUP_ANY from span_i
+Decision: implement
+Next: IMPLEMENTING via coder

@@ -1,5 +1,5 @@
 {
   "focus": "REQ-0123",
-  "next": "coder: GROUP_ANY from span_i in build() + regression test",
+  "next": "coder implements 116.1",
   "updated": "2026-11-16 11:36"
 }

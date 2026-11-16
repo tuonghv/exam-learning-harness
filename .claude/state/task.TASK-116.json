@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-116",
   "title": "Fix-F follow-up: share unaccented Cau N - M passage (REQ-0123)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0123",
   "acceptance_criteria": [
     "AC1 Cau intro shared to range",
@@ -9,9 +9,9 @@
     "AC3 regression test, --fast green, oracle"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-116-cau-group-share.md",
+    "summary": "GROUP_ANY built in segment.build() from the 114.2 span_i (C[a\u00e2]u, re.I) so an unaccented Cau N - M passage is shared to its range; premise corrected: C\u00c2U already shared",
     "reuse": [],
     "risks": []
   },
@@ -39,7 +39,11 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": {
+      "waiver": "size-S one-line change; coordinator reproduced the gap end to end and wrote the design (docs/design/phase-116-cau-group-share.md)"
+    }
+  },
   "user_notes": [
     {
       "raw": "RAW-00341",
@@ -48,8 +52,8 @@
     }
   ],
   "picked_at": "2026-11-16T04:36:07Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-16T04:36:38Z",
+  "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/*.py",
     "tests/unit/*.py"
@@ -60,5 +64,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder implements 116.1 with a regression test"
 }
