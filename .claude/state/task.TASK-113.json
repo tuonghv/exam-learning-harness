@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-113",
   "title": "Triage code-review batch 2 (phases 113-114) (REQ-0120)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0120",
   "acceptance_criteria": [
     "AC1 20 findings classified with evidence",
@@ -17,8 +17,11 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "docs/design/phase-113-review-triage-b2.md"
+    ],
+    "summary": "triage-only task: deliverable is docs/design/phase-113-review-triage-b2.md; no src/tests change (AC4)"
   },
   "unit_test": {
     "status": "pending",
@@ -41,7 +44,10 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-113/handoff/design-ingest.md"
+    "designer": "work/TASK-113/handoff/design-ingest.md",
+    "coder": {
+      "waiver": "triage-only task, no code to implement (REQ-0120 AC4)"
+    }
   },
   "user_notes": [
     {
@@ -56,7 +62,7 @@
     }
   ],
   "picked_at": "2026-11-15T23:57:32Z",
-  "updated_at": "2026-11-16T00:02:18Z",
+  "updated_at": "2026-11-16T03:38:23Z",
   "updated_by": "main",
   "scope": [
     "docs/design/phase-113-*",
@@ -68,5 +74,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "user approves the triage plan, then close TASK-113 and open Fix-F as its own REQ/TASK"
+  "next": "record the $0 repro runs as the unit-test evidence"
 }

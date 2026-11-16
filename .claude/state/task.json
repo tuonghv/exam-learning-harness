@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-113",
-  "state": "DESIGN",
-  "next": "user approves the triage plan, then close TASK-113 and open Fix-F as its own REQ/TASK",
+  "state": "IMPLEMENTING",
+  "next": "record the $0 repro runs as the unit-test evidence",
   "title": "Triage code-review batch 2 (phases 113-114) (REQ-0120)",
   "active": [
     {
       "task_id": "TASK-113",
-      "state": "DESIGN",
-      "next": "user approves the triage plan, then close TASK-113 and open Fix-F as its own REQ/TASK",
-      "updated_at": "2026-11-16T00:02:18Z"
+      "state": "IMPLEMENTING",
+      "next": "record the $0 repro runs as the unit-test evidence",
+      "updated_at": "2026-11-16T03:38:23Z"
     }
   ],
   "max_active": 1
