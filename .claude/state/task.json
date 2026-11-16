@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-133",
-  "state": "UNIT_TESTED",
-  "next": "verify",
+  "state": "VERIFIED",
+  "next": "report and close",
   "title": "Review leftovers fix A: cli + claude adapter (REQ-0140)",
   "active": [
     {
       "task_id": "TASK-133",
-      "state": "UNIT_TESTED",
-      "next": "verify",
-      "updated_at": "2026-11-16T15:28:33Z"
+      "state": "VERIFIED",
+      "next": "report and close",
+      "updated_at": "2026-11-16T15:28:34Z"
     }
   ],
   "max_active": 1

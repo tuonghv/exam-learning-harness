@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-133",
   "title": "Review leftovers fix A: cli + claude adapter (REQ-0140)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0140",
   "acceptance_criteria": [
     "AC1 tests per id",
@@ -30,12 +30,18 @@
     "result": "KNOWN 4 NEW 0; 9/9 new tests fail on old code"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "exit paths and decoding only; refine fails before any paid call on a bad --out"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-133/evidence/summary.md",
+      "work/TASK-133/evidence/fast.txt",
+      "work/TASK-133/evidence/code_summary.md"
+    ],
+    "command": "new tests + --fast + ledger",
+    "result": "AC1-AC2 met"
   },
   "report": {
     "status": "pending",
@@ -51,6 +57,9 @@
     "coder": "work/TASK-133/handoff/code.md",
     "tester": {
       "waiver": "coordinator re-ran --fast; coder ran the bite"
+    },
+    "verifier": {
+      "waiver": "coordinator verified tests and ledger"
     }
   },
   "user_notes": [
@@ -66,7 +75,7 @@
     }
   ],
   "picked_at": "2026-11-16T13:07:12Z",
-  "updated_at": "2026-11-16T15:28:33Z",
+  "updated_at": "2026-11-16T15:28:34Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
@@ -88,5 +97,5 @@
     "next": "on coder hand-back: check code.md, bite + --fast, set 9 ledger rows fixed TASK-133, advance IMPLEMENTING",
     "at": "2026-11-16T13:07:35Z"
   },
-  "next": "verify"
+  "next": "report and close"
 }
