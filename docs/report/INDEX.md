@@ -99,3 +99,4 @@ Rule (RAW-00171, REQ-0061): evidence summaries are small text with no exam conte
 | TASK-131 Re-triage of batch-1 review leftovers | docs/design/phase-131-review-leftovers-b1.md | docs/report/phase-131-review-leftovers-b1.md | - | - | - |
 | TASK-132 Report names for a non-Latin or missing subject | docs/design/phase-132-report-subject-slug.md | docs/report/phase-132-report-subject-slug.md | - | - | - |
 | TASK-133 Review leftovers fix A: cli + Claude adapter | docs/design/phase-133-review-fix-a-cli.md | docs/report/phase-133-review-fix-a-cli.md | - | - | - |
+| TASK-134 Review leftovers fix B: refine hardening | docs/design/phase-134-review-fix-b-refine.md | docs/report/phase-134-review-fix-b-refine.md | - | - | - |

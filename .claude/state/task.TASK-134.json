@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-134",
   "title": "Review leftovers fix B: refine hardening (REQ-0141)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0141",
   "acceptance_criteria": [
     "AC1 tests per id",
@@ -38,11 +38,19 @@
       "work/TASK-134/evidence/fast.txt"
     ],
     "command": "new tests + existing refine goldens + --fast",
-    "result": "AC1-AC2 met; well-formed replies unchanged"
+    "result": "AC1-AC2 met; well-formed replies unchanged",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-134/evidence/summary.md",
+        "work/TASK-134/evidence/fast.txt"
+      ],
+      "reason": "tests bite; goldens unchanged"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-134-review-fix-b-refine.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -57,6 +65,9 @@
     },
     "verifier": {
       "waiver": "coordinator verified tests and goldens"
+    },
+    "crosscheck": {
+      "waiver": "coordinator re-ran tests and --fast; coder bite"
     }
   },
   "user_notes": [
@@ -87,5 +98,5 @@
     "next": "on coder hand-back: check code.md, --fast, set 5 ledger rows fixed TASK-134, advance IMPLEMENTING",
     "at": "2026-11-16T15:29:12Z"
   },
-  "next": "report and close"
+  "next": ""
 }
