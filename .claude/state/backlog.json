@@ -2758,7 +2758,7 @@
     "task_id": "TASK-133",
     "title": "Review leftovers fix A: cli + claude adapter (REQ-0140)",
     "priority": 3,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-16T13:03:47Z",
     "requirement": "REQ-0140",
     "acceptance_criteria": [
@@ -2770,8 +2770,15 @@
         "raw": "RAW-00350",
         "note": "fix tasks from the TASK-131 re-triage of never-designed review findings",
         "at": "2026-11-16T13:03:47Z"
+      },
+      {
+        "raw": "RAW-00351",
+        "note": "user approved test_exam_llm.py:106 expected class empty->other",
+        "at": "2026-11-16T15:25:22Z"
       }
-    ]
+    ],
+    "completed_at": "2026-11-16T15:28:44Z",
+    "report": "docs/report/phase-133-review-fix-a-cli.md"
   },
   {
     "task_id": "TASK-134",

@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-133",
   "title": "Review leftovers fix A: cli + claude adapter (REQ-0140)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0140",
   "acceptance_criteria": [
     "AC1 tests per id",
@@ -41,11 +41,19 @@
       "work/TASK-133/evidence/code_summary.md"
     ],
     "command": "new tests + --fast + ledger",
-    "result": "AC1-AC2 met"
+    "result": "AC1-AC2 met",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-133/evidence/summary.md",
+        "work/TASK-133/evidence/fast.txt"
+      ],
+      "reason": "9 tests bite; NEW 0"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-133-review-fix-a-cli.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -60,6 +68,9 @@
     },
     "verifier": {
       "waiver": "coordinator verified tests and ledger"
+    },
+    "crosscheck": {
+      "waiver": "coordinator re-ran --fast and the ledger check; coder bite on a HEAD copy"
     }
   },
   "user_notes": [
@@ -75,7 +86,7 @@
     }
   ],
   "picked_at": "2026-11-16T13:07:12Z",
-  "updated_at": "2026-11-16T15:28:34Z",
+  "updated_at": "2026-11-16T15:28:45Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/cli.py",
@@ -97,5 +108,5 @@
     "next": "on coder hand-back: check code.md, bite + --fast, set 9 ledger rows fixed TASK-133, advance IMPLEMENTING",
     "at": "2026-11-16T13:07:35Z"
   },
-  "next": "report and close"
+  "next": ""
 }
