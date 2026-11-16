@@ -3511,3 +3511,9 @@ Action: designer drafted the lookahead rule from the real false-id evidence
 Result: design complete with expected per-PDF counts
 Decision: accept residuals (cover lines, mid-line intros) as listed; implement
 Next: IMPLEMENTING via coder
+
+## IMPLEMENTING - TASK-121 - 2026-11-16T06:10:42Z
+Action: coder implemented 121.1-121.2; main repointed one existing test to the new semantics
+Result: --affected NEW 0 after the test change
+Decision: matches design
+Next: UNIT_TESTED

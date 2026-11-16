@@ -74,6 +74,23 @@ def _next_n(lines, i):
     return None
 
 
+def _implausible(n, prev, later):
+    """True when start number n breaks the sequence (n != prev+1) while prev+1 still starts a
+    later line, unless n == 1 opens a run that counts up to prev first (a section restart)."""
+    run = 1 if n == 1 else None
+    for x in later:
+        if x == prev + 1:
+            return run != prev
+        if run is not None and x == run + 1:
+            run = x
+    return False
+
+
+def _after(nums, k):
+    for j in range(k + 1, len(nums)):  # no slice copy: the check stops at the first prev+1
+        yield nums[j]
+
+
 _SUBHEAD = re.compile(r"^\s*\d+\.\d+\.?\s+\S")
 _ENUM = re.compile(r"^(?:([IVXLC]{1,4})|([A-Z])|(\d{1,2}))[.)]\s+\S")  # `I. X`, `B. Y`, `3. Z`
 GROUP_ANY = _NS.GROUP_ANY
@@ -217,6 +234,11 @@ def segment(lines, hints=None, report=None, starts=None):
     def note(code, i, hint, **extra):
         rep.append(dict(extra, code=code, line=i, label=hint[0], conf=hint[1]))
 
+    cand = [(i, int(m.group(1) or m.group(2))) for i, ln in enumerate(lines)
+            for m in (_q_start(ln),) if m]
+    nums = [n for _, n in cand]
+    pos = {i: k for k, (i, _) in enumerate(cand)}
+
     for i, line in enumerate(lines):
         hint = hints.get(i) if qs else None
         m = _q_start(line)
@@ -239,6 +261,12 @@ def segment(lines, hints=None, report=None, starts=None):
                     else:
                         qs[-1]["text"] = (qs[-1]["text"] + " " + line.strip()).strip()
                     continue
+            if qs and n != qs[-1]["n"] + 1 and _implausible(n, qs[-1]["n"], _after(nums, pos[i])):
+                if hint:
+                    note("boundary_ai_rejected", i, hint, reason="numbering")
+                hint = None  # text, not a start: falls to the free-line path below
+                m = None
+        if m:
             qs.append({"n": n, "text": m.group(3).strip(), "options": []})
             if starts is not None:
                 starts.append(i)

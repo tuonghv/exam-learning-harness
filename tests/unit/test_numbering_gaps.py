@@ -110,10 +110,16 @@ class TestPdf(unittest.TestCase):
         self.assertNotIn("numbering_gap", codes(doc))
 
     def test_restart_with_gap_skipped_and_flagged(self):
-        doc = self.ingest([1, 2, 3, 4, 5, 1, 2, 3, 6])
+        # 121: [1..5, 1, 2, 3, 6] now reads 1-3 as numbered text inside q5 (6 = 5 + 1 still comes, the DGNL passage
+        # shape); a restart that the sequence never resumes after, with a gap, is still skipped and flagged
+        doc = self.ingest([1, 2, 3, 4, 5, 1, 2, 3, 5])
         self.assertNotIn("questions", doc)
         self.assertIn("segmentation_skipped", codes(doc))
         self.assertIn("numbering_restarted", codes(doc))
+
+    def test_numbered_lines_resumed_by_next_number_are_text(self):
+        doc = self.ingest([1, 2, 3, 4, 5, 1, 2, 3, 6])  # 121: 1-3 are numbered lines inside q5
+        self.assertEqual([q["n"] for q in doc["questions"]], [1, 2, 3, 4, 5, 6])
 
     def test_stray_year_after_last_skipped(self):
         doc = self.ingest(list(range(1, 21)) + [2019])

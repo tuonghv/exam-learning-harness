@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-121",
   "title": "Segment false questions from passage/year/formula lines (REQ-0128)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0128",
   "acceptance_criteria": [
     "AC1 no implausible ids",
@@ -17,8 +17,13 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/ingest/segment.py",
+      "tests/unit/test_segment_plausible.py",
+      "tests/unit/test_numbering_gaps.py"
+    ],
+    "summary": "segment.py: `_implausible(n, prev, later)` lookahead over precomputed candidates; a start breaking the sequence while prev+1 still comes is text (real restart at 1 whose run reaches prev kept); hinted rejected lines reported. 8 new tests; test_numbering_gaps restart test repointed + 1 new"
   },
   "unit_test": {
     "status": "pending",
@@ -41,7 +46,8 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-121/handoff/design.md"
+    "designer": "work/TASK-121/handoff/design.md",
+    "coder": "work/TASK-121/handoff/code.md"
   },
   "user_notes": [
     {
@@ -51,7 +57,7 @@
     }
   ],
   "picked_at": "2026-11-16T06:03:48Z",
-  "updated_at": "2026-11-16T06:04:06Z",
+  "updated_at": "2026-11-16T06:10:42Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/*.py",
@@ -64,5 +70,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "coder implements 121.1-121.2 with tests"
+  "next": "record tests"
 }
