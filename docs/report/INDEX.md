@@ -96,3 +96,4 @@ Rule (RAW-00171, REQ-0061): evidence summaries are small text with no exam conte
 | TASK-128 Stale TASK-048 real-doc golden | docs/design/phase-128-stale-golden-48.md | docs/report/phase-128-stale-golden-48.md | - | - | - |
 | TASK-129 PDF free text path keeps table blocks | docs/design/phase-129-pdf-table-text.md | docs/report/phase-129-pdf-table-text.md | - | - | - |
 | TASK-130 Review findings ledger + check | docs/design/phase-130-review-findings-ledger.md | docs/report/phase-130-review-findings-ledger.md | - | - | - |
+| TASK-131 Re-triage of batch-1 review leftovers | docs/design/phase-131-review-leftovers-b1.md | docs/report/phase-131-review-leftovers-b1.md | - | - | - |
