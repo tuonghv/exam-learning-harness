@@ -55,6 +55,8 @@
     "question": "Update tests/unit/test_exam_llm.py:106 expected class for unparseable stdout from 'empty' to 'other' (110-F005 change; coder's edit was denied by the permission classifier)?",
     "recommendation": "yes: one-word test update matching the designed 110-F005 behaviour; no code reads 'empty'",
     "kind": "permission",
-    "asked_at": "2026-11-16T13:10:24Z"
+    "asked_at": "2026-11-16T13:10:24Z",
+    "answered_at": "2026-11-16T15:25:21Z",
+    "answer": "yes (user RAW-00351: update the test)"
   }
 ]

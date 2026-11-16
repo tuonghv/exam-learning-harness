@@ -48,6 +48,11 @@
       "raw": "RAW-00350",
       "note": "fix tasks from the TASK-131 re-triage of never-designed review findings",
       "at": "2026-11-16T13:03:47Z"
+    },
+    {
+      "raw": "RAW-00351",
+      "note": "user approved test_exam_llm.py:106 expected class empty->other",
+      "at": "2026-11-16T15:25:22Z"
     }
   ],
   "picked_at": "2026-11-16T13:07:12Z",
@@ -60,7 +65,8 @@
     "docs/review/findings.tsv",
     "docs/design/phase-133*",
     "docs/report/phase-133*",
-    "docs/report/INDEX.md"
+    "docs/report/INDEX.md",
+    "tests/unit/test_exam_llm.py"
   ],
   "depends_on": [],
   "inputs": {},
