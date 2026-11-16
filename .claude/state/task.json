@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-136",
-  "state": "DESIGN",
-  "next": "coordinator writes prompt v2; then 4 code-reviewer runs",
+  "state": "IMPLEMENTING",
+  "next": "check v2 fields + ledger (UNIT_TESTED)",
   "title": "Review prompt v2 + code-review batch 4 (REQ-0143)",
   "active": [
     {
       "task_id": "TASK-136",
-      "state": "DESIGN",
-      "next": "coordinator writes prompt v2; then 4 code-reviewer runs",
-      "updated_at": "2026-11-16T23:41:38Z"
+      "state": "IMPLEMENTING",
+      "next": "check v2 fields + ledger (UNIT_TESTED)",
+      "updated_at": "2026-11-16T23:49:58Z"
     }
   ],
   "max_active": 1

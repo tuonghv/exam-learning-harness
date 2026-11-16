@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-136",
   "title": "Review prompt v2 + code-review batch 4 (REQ-0143)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0143",
   "acceptance_criteria": [
     "AC1 prompt v2 fixes 1-9",
@@ -16,8 +16,17 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "docs/prompts/cost-efficient_code_review_instructions.md",
+      ".claude/agents/code-reviewer.md",
+      "docs/report/phase-136-engine-decision-b4.md",
+      "docs/report/phase-137-scorer-verifier-b4.md",
+      "docs/report/phase-138-pdf-adapter-b4.md",
+      "docs/report/phase-139-runlayout-b4.md",
+      "docs/review/findings.tsv"
+    ],
+    "summary": "prompt v2 (122 lines, fixes 1-9); code-reviewer reply adds BUG/HARDENING + CAP HIT; 4 batch-4 reports (28 findings); 28 ledger rows open on TASK-137"
   },
   "unit_test": {
     "status": "pending",
@@ -42,6 +51,9 @@
   "roles": {
     "designer": {
       "waiver": "design = the RAW-00356 critique the user approved (RAW-00357)"
+    },
+    "coder": {
+      "waiver": "doc-only: prompt text written by the coordinator from the user-approved critique; reports written by 4 code-reviewer runs"
     }
   },
   "user_notes": [
@@ -52,14 +64,22 @@
     }
   ],
   "picked_at": "2026-11-16T23:41:11Z",
-  "updated_at": "2026-11-16T23:41:38Z",
+  "updated_at": "2026-11-16T23:49:58Z",
   "updated_by": "main",
-  "scope": [],
+  "scope": [
+    "docs/prompts/cost-efficient_code_review_instructions.md",
+    ".claude/agents/code-reviewer.md",
+    "docs/report/phase-136-engine-decision-b4.md",
+    "docs/report/phase-137-scorer-verifier-b4.md",
+    "docs/report/phase-138-pdf-adapter-b4.md",
+    "docs/report/phase-139-runlayout-b4.md",
+    "docs/review/findings.tsv"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
     "done": [],
     "notes": ""
   },
-  "next": "coordinator writes prompt v2; then 4 code-reviewer runs"
+  "next": "check v2 fields + ledger (UNIT_TESTED)"
 }

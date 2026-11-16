@@ -28,6 +28,7 @@ complete operating instruction (scope, finding format, limits, report location, 
   do not invent one: stop and reply `BLOCKED: need phase ID`.
 - **Exclude** (optional, for a second batch): earlier report path(s). Do not re-report their findings
   or anything already fixed since; spend the 10-finding budget on new defects only.
+  `docs/review/findings.tsv` always counts as an exclude list (dispositions of every earlier finding).
 
 ## Reply
 
@@ -35,5 +36,6 @@ After saving the report, reply with only:
 
 ```
 REPORT: docs/report/phase-<ID>-<slug>.md
-FINDINGS: <total> (C<n> H<n> M<n> L<n>)[; more findings need another batch]
+FINDINGS: <total> (C<n> H<n> M<n> L<n>; BUG<n> HARDENING<n>)
+CAP HIT: yes|no
 ```

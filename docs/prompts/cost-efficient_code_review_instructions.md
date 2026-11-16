@@ -1,270 +1,122 @@
-# Cost-Efficient Code Review Instructions
+# Cost-Efficient Code Review Instructions (v2)
+
+v2 (TASK-136) adds the lessons of review batches 1-3 (80 findings): 5 were false positives (input already
+validated upstream, path unreachable, true by definition), 3 proposed fixes broke a caller or a test, 22
+hardening findings were parked as "later", and 3 of 9 reports hit the 10-finding cap.
 
 ## 1. Objective
 
-Perform a focused review of the existing source code to identify concrete logical defects, incorrect behavior, and exceptional cases that may cause unexpected results or failures.
+Find concrete logic defects in the scope named by the brief: wrong conditions and control flow, missing or wrong
+input validation, null/empty/unexpected input, boundary and exception paths, wrong data transformation or state
+transitions, runtime errors, and demonstrable security errors. For each: what is wrong, where, when it fails,
+and what must change.
 
-Prioritize:
+Out of scope unless the brief asks: refactoring, architecture, style, naming, replacement implementations,
+theoretical risks without a concrete failure case, praise, tutorials.
 
-- Incorrect business logic.
-- Incorrect conditions and control flows.
-- Missing or incorrect input validation.
-- Null, empty, invalid, or unexpected input handling.
-- Boundary conditions and exceptional execution paths.
-- Incorrect data processing or state transitions.
-- Runtime errors caused by existing implementation logic.
+## 2. Scope
 
-The primary goal is to identify exactly what is wrong, where it occurs, under what conditions it fails, and how to fix it.
+- Review only the files or functions in the brief. A scope of about 800 lines or less per report; if the brief
+  gives more, review the riskiest part and list the rest under `Not reviewed`.
+- Read callers and callees only as far as needed to prove or drop a finding.
+- Never modify source code. Write only the report file.
 
-## 2. Review Principles
+## 3. Project risks to check first
 
-1. Review the actual implementation, not hypothetical implementations.
-2. Focus on existing business logic and execution paths.
-3. Trace function calls and data flows only when necessary to verify a finding.
-4. Identify concrete scenarios that can trigger incorrect behavior.
-5. Prioritize edge cases and exceptional paths that are easy to overlook.
-6. Report only actionable findings supported by source code evidence.
-7. Identify the root cause instead of reporting multiple downstream symptoms.
-8. Do not assume intended behavior when it cannot be established from the code.
-9. Avoid duplicate findings describing the same root cause.
-10. Verify every reported line number against the current source.
+This repo is an exam/learning harness (Python stdlib only, Bash 3.2 scripts). Check in this order:
 
-## 3. Review Scope and Restrictions
+1. **Untrusted exam text.** Exam files, OCR/PDF text and LLM replies are untrusted: text that is copied into
+   prompts, reports, review packs or file paths without a guard (e.g. a line that looks like a control line,
+   a path with `..`).
+2. **Paid calls.** Any path that makes an LLM call before its input, output dir or config is validated
+   (a later failure wastes money). Cache keys that change silently (a re-run pays again).
+3. **Lost or mixed data.** Overwrite, delete or merge of run dirs, results, history or reports; a partial
+   write left behind on error.
+4. **Scores and decisions.** Anything that can turn a right answer wrong or wrong answer right, or count a
+   question twice / zero times.
+5. **Portability.** Non-stdlib imports; Bash 4+ features (`mapfile`, associative arrays, unset arrays under `set -u`).
 
-### In Scope
+## 4. Before reporting a finding (all must hold)
 
-- Functional and logical defects.
-- Incorrect conditional expressions.
-- Incorrect variable or state handling.
-- Missing boundary checks.
-- Incorrect exception handling.
-- Incorrect data validation and transformation.
-- Unexpected execution paths.
-- Demonstrable security and authorization logic errors.
+1. **Reachable.** Name the entry point that reaches the line (a CLI command, or a public function and its
+   caller). Grep the callers. If every caller already validates the input, or the path cannot be reached,
+   drop the finding.
+2. **Concrete.** One concrete input or state that triggers it, and the wrong output, crash or lost data it gives.
+3. **Root cause.** Report the cause once, not each downstream symptom.
+4. **Fix is safe.** Grep the callers and tests of the behaviour you would change. If a caller or test depends on
+   the current behaviour (e.g. a glob loop that expects "skip and continue"), the Fix must keep it, or say
+   which caller/test must change in `Fix risk`.
+5. **Not a duplicate.** Check `docs/review/findings.tsv` (one row per earlier finding with its disposition) and
+   any report the brief lists under Exclude. Do not re-report a `fixed` or `not-a-defect` row unless the code
+   changed and you have new evidence; then name the old id.
+6. **Exact location.** File exists, line numbers match the current source.
 
-### Out of Scope
+Exclude anything that depends on an assumption you cannot verify from the code.
 
-Unless explicitly requested, do NOT:
+## 5. Finding format
 
-- Perform general code refactoring.
-- Suggest architectural redesigns.
-- Report coding style or formatting issues.
-- Suggest naming improvements.
-- Report theoretical risks without a concrete failure scenario.
-- Generate replacement implementations.
-- Rewrite entire functions or files.
-- Produce lengthy explanations or tutorials.
-- Provide positive feedback about correctly implemented code.
-- Report issues already covered by existing findings.
-
-## 4. Finding Requirements
-
-Every finding MUST contain the following information:
-
-- **Severity:** Critical / High / Medium / Low.
-- **Title:** A short description of the defect.
-- **File:** Exact source file path.
-- **Lines:** Exact relevant line numbers.
-- **Issue:** What is wrong with the existing logic.
-- **Case:** A concrete condition or input that triggers the problem.
-- **Fix:** The specific logic or condition that needs to change.
-
-### Severity Classification
-
-| Severity | Criteria |
-|---|---|
-| Critical | Severe security issue, data corruption, or major system failure. |
-| High | Significant functional or security defect. |
-| Medium | Incorrect behavior under specific conditions. |
-| Low | Minor but demonstrable functional defect. |
-
-Do not exaggerate severity. Use the lowest severity that accurately represents the impact.
-
-## 5. Strict Output Limits
-
-To control review output and downstream AI processing costs:
-
-- Maximum 10 findings per report.
-- Maximum 80 words per finding.
-- Maximum 5 lines of notes per finding.
-- Maximum 5 relevant source lines referenced per finding.
-- Use concise technical language.
-- Avoid unnecessary code snippets.
-- Do not repeat the same explanation across findings.
-- Do not include full source files or stack traces.
-- Do not generate additional summaries that repeat finding details.
-
-If more than 10 actionable findings exist, prioritize the most important 10. Do not silently claim the review is complete; explicitly state that additional findings require another review batch.
-
-If a finding requires more context, identify the relevant function or execution path without expanding the report unnecessarily.
-
-## 6. Required Finding Format
-
-Use exactly this compact format:
+The heading is parsed by `tools/review_ledger.py`: keep exactly `### F<3 digits> – [<SEVERITY>] <title>`
+(en dash `–`, severity in capitals). Number from F001.
 
 ```text
-### F001 – [HIGH] Short issue title
+### F001 – [MEDIUM] Short issue title
 
-- File: src/example.go
+- File: src/exam_engine/pipeline/scorer.py
 - Lines: 120-123
-- Issue: What is wrong with the current logic.
-- Case: Concrete condition that triggers the defect.
-- Fix: Specific logic or condition that must change.
+- Type: BUG | HARDENING
+- Trigger: normal input | malformed file | off-prompt LLM reply | concurrent run
+- Reached via: `exam-engine solve` -> run() -> score()
+- Issue: what is wrong in the current logic.
+- Case: concrete input/state -> wrong result.
+- Fix: the exact condition or behaviour that must change.
+- Fix risk: none | callers/tests that rely on today's behaviour and how the fix keeps them.
+- Test: (optional) one input and the assertion that fails today.
 ```
 
-Keep each finding concise and independently understandable.
+- **Type.** BUG: wrong result on input the code is meant to accept (normal input or a file/reply the code
+  claims to handle). HARDENING: only reached by malformed input or an LLM reply that ignores its prompt, and the
+  result is a clean error or a recoverable state that is merely worse.
+- **Severity** (lowest that fits): CRITICAL security hole, data loss or corruption; HIGH wrong scores/answers or
+  wasted paid run on normal input; MEDIUM wrong behaviour under specific conditions; LOW minor but demonstrable.
+  A HARDENING finding is at most MEDIUM.
+- **Fix** must be specific enough for a smaller model to apply after reading only the finding and its local
+  code. Not acceptable: "improve validation", "handle errors properly", "refactor this".
 
-The Fix field must be actionable enough for a smaller AI model to implement without repeating the entire code review.
+## 6. Limits
 
-Avoid vague recommendations such as:
-- Improve validation.
-- Handle errors properly.
-- Refactor this function.
-- Add appropriate checks.
+- At most 10 findings per report; most important first (BUG before HARDENING, then severity).
+- At most 90 words per finding, at most 5 source lines referenced, no code snippets beyond one line.
+- If more findings exist, set `Cap hit: yes` and name the unreported areas under `Not reviewed`.
 
-Instead, specify what condition, validation, or execution behavior must change.
+## 7. Report
 
-## 7. Report Location and Naming Convention
-
-All review reports MUST be saved under:
-
-`docs/report/`
-
-Follow the existing project naming convention:
-
-```text
-phase-<ID>-<short-descriptive-name>.md
-```
-
-Examples:
-
-```text
-docs/report/
-├── phase-240-bash-deny-gaps.md
-├── phase-241-null-handling.md
-├── phase-242-business-logic-errors.md
-├── phase-243-edge-case-handling.md
-└── phase-244-data-validation-gaps.md
-```
-
-### Naming Rules
-
-1. Inspect existing reports before creating a new report.
-2. Preserve the existing phase ID sequence and naming convention.
-3. Use lowercase descriptive names separated by hyphens.
-4. Create one Markdown file per review scope.
-5. Do NOT create generic files such as:
-   - findings.md
-   - findings.json
-   - review-summary.md
-6. Do NOT introduce another report directory.
-7. Do NOT overwrite reports belonging to other review phases.
-8. If updating an existing report is explicitly required, preserve its existing filename and structure.
-9. Do not invent a new phase ID. Follow the existing workflow's assigned phase ID or request one if unavailable.
-
-## 8. Report Content Structure
-
-Each report must use the following structure:
+Path: `docs/report/phase-<ID>-<slug>.md`, ID and slug from the brief (never invent one; if missing, stop and
+reply `BLOCKED: need phase ID`). One file per scope; never overwrite another phase's report.
 
 ```markdown
-# Phase <ID> – <Review Scope>
+# Phase <ID> – <Review scope>
+
+Scope: <files/functions reviewed>
 
 ## Findings
 
-### F001 – [HIGH] Short issue title
-
-- File: src/example.go
-- Lines: 120-123
-- Issue: ...
-- Case: ...
-- Fix: ...
-
-### F002 – [MEDIUM] Short issue title
-
-- File: src/another.go
-- Lines: 45-47
-- Issue: ...
-- Case: ...
-- Fix: ...
+### F001 – [HIGH] ...
+(fields as in section 5)
 
 ## Summary
 
-- Total findings: 2
-- Critical: 0
-- High: 1
-- Medium: 1
-- Low: 0
+- Total findings: <n> (CRITICAL <n>, HIGH <n>, MEDIUM <n>, LOW <n>; BUG <n>, HARDENING <n>)
+- Cap hit: yes | no
+- Not reviewed: <functions/areas left out, or "none">
 ```
 
-If no actionable findings exist, use:
+No findings: write `No actionable findings.` under Findings and keep the Summary.
 
-```markdown
-# Phase <ID> – <Review Scope>
+## 8. Final checklist (once, before saving)
 
-## Findings
+- Every finding passes section 4 (reachable, concrete, root cause, safe fix, not a duplicate, exact lines).
+- Every finding has all required fields; headings match the ledger format.
+- Limits of section 6 hold; Summary counts match the findings.
+- No source file was modified.
 
-No actionable findings.
-
-## Summary
-
-- Total findings: 0
-```
-
-## 9. Evidence and Accuracy Requirements
-
-Before reporting a finding:
-
-1. Verify that the referenced file exists.
-2. Verify the exact line numbers.
-3. Confirm that the identified logic can produce the described behavior.
-4. Confirm that the failure scenario is technically valid.
-5. Ensure the proposed fix addresses the actual root cause.
-6. Check existing reports to avoid duplicate findings.
-
-Do not report speculative issues as confirmed defects.
-
-If an issue depends on an assumption or external behavior that cannot be verified, exclude it from confirmed findings.
-
-Do not modify source code during the review.
-
-## 10. Downstream AI Implementation Requirements
-
-Reports are intended to be consumed by smaller and lower-cost AI models for subsequent verification and code fixes.
-
-Therefore:
-
-- Each finding must be understandable independently.
-- Include exact source file paths and line references.
-- Describe the problematic logic, not just the symptom.
-- Provide a concrete failure scenario.
-- Specify the expected logic change.
-- Avoid requiring the downstream model to repeat the entire review.
-- Do not prescribe unnecessary architectural changes.
-- Preserve existing implementation patterns unless they are the root cause.
-
-The downstream model should be able to read one finding, inspect its local code context, understand the defect, and implement the targeted fix.
-
-## 11. Final Validation
-
-Before completing the review:
-
-- Verify report filename and location.
-- Verify all findings against the current source.
-- Verify line numbers and file paths.
-- Remove duplicate and unverified findings.
-- Ensure every finding has a concrete failure scenario.
-- Ensure every finding contains an actionable Fix instruction.
-- Enforce all output limits.
-- Ensure the report follows the existing Markdown convention.
-- Ensure no source code has been modified.
-
-## 12. Final Execution Rules
-
-- Only create or update reports inside `docs/report/`.
-- Do not modify source code.
-- Do not generate additional documentation unless explicitly requested.
-- Do not output lengthy review results in the conversation.
-- After saving the report, return only the report path and a concise finding count.
-- If no issues are found, explicitly report that no actionable findings were identified.
-
-**Core Principle: Identify exactly what is wrong, where it is wrong, when it fails, and what must change to fix it. Keep findings minimal, precise, evidence-based, and actionable for a smaller AI implementation model.**
+Reply with only the report path and the counts (see the code-reviewer agent's Reply section).
