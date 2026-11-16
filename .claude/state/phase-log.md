@@ -3757,3 +3757,9 @@ Action: implemented 129.1-129.3; placement rule refined twice on the oracle
 Result: tables in the right groups
 Decision: UNIT_TESTED next
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-129 - 2026-11-16T12:49:40Z
+Action: --fast + bite
+Result: NEW 0
+Decision: UNIT_TESTED
+Next: VERIFIED

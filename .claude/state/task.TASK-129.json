@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-129",
   "title": "PDF free text path keeps table blocks (REQ-0136)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0136",
   "acceptance_criteria": [
     "AC1 synthetic table/box",
@@ -27,9 +27,9 @@
     "summary": "segment.table_lines (box -> plain lines, data -> | rows); pdf._text_lines places tables after the last block above them; parts.select_pages uses the same lines for PDF; 6 tests"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --fast; bite on git archive",
+    "result": "KNOWN 4 NEW 0; new tests fail on old code"
   },
   "security": {
     "status": "pending",
@@ -52,6 +52,9 @@
     },
     "coder": {
       "waiver": "small change made by the coordinator with the real-input oracle loop (RAW-00345)"
+    },
+    "tester": {
+      "waiver": "coordinator ran --fast and the bite"
     }
   },
   "user_notes": [
@@ -80,5 +83,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tests"
+  "next": "verify"
 }
