@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-122",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "coder implements 122.1-122.2",
   "title": "DGNL26 text path: cover-page run + image-only question (REQ-0129)",
   "active": [
     {
       "task_id": "TASK-122",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "coder implements 122.1-122.2",
+      "updated_at": "2026-11-16T06:14:41Z"
     }
   ],
   "max_active": 1

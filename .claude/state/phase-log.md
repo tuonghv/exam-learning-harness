@@ -3535,3 +3535,9 @@ Action: wrote report
 Result: TASK-121 closed
 Decision: next: DGNL26 cover-line residual, then P3
 Next: coordinator picks next
+
+## DESIGN - TASK-122 - 2026-11-16T06:14:40Z
+Action: designer drafted 2 rules; coordinator added a part-heading guard to 122.1
+Result: design complete
+Decision: implement
+Next: IMPLEMENTING via coder

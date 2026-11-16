@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-122",
   "title": "DGNL26 text path: cover-page run + image-only question (REQ-0129)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0129",
   "acceptance_criteria": [
     "AC1 120 questions",
@@ -10,9 +10,9 @@
     "AC4 tests, --fast"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-122-cover-run-unreadable.md",
+    "summary": "122.1 a leading option-less run, shorter than and followed by a headed run from 1, moves to intro; 122.2 an empty-text question is kept flagged unreadable and numbering tolerates it (declined downstream, never solved)",
     "reuse": [],
     "risks": []
   },
@@ -40,7 +40,9 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": "work/TASK-122/handoff/design.md"
+  },
   "user_notes": [
     {
       "raw": "RAW-00342",
@@ -49,8 +51,8 @@
     }
   ],
   "picked_at": "2026-11-16T06:12:03Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-16T06:14:41Z",
+  "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/*.py",
     "src/exam_engine/ingest/adapters/*.py",
@@ -62,5 +64,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder implements 122.1-122.2"
 }
