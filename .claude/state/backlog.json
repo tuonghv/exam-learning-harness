@@ -2392,7 +2392,7 @@
     "task_id": "TASK-118",
     "title": "Fix-H parts: 117-F001/F009/F010/F002/F003 (REQ-0125)",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-11-16T05:28:37Z",
     "requirement": "REQ-0125",
     "acceptance_criteria": [
