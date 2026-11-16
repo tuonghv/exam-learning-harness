@@ -2536,7 +2536,7 @@
     "task_id": "TASK-124",
     "title": "P3-b refine hardening 114-F003/F006-F009 (REQ-0131)",
     "priority": 3,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-11-16T06:28:14Z",
     "requirement": "REQ-0131",
     "acceptance_criteria": [
