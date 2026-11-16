@@ -1,0 +1,71 @@
+{
+  "task_id": "TASK-134",
+  "title": "Review leftovers fix B: refine hardening (REQ-0141)",
+  "state": "DESIGN",
+  "requirement": "REQ-0141",
+  "acceptance_criteria": [
+    "AC1 tests per id",
+    "AC2 goldens, ledger, --fast"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-134-review-fix-b-refine.md",
+    "summary": "5 refine merge hardening fixes (108-F003, F006..F009); no prompt/cache change",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {
+    "designer": {
+      "waiver": "designed in the TASK-131 re-triage (work/TASK-131/handoff/design-ingest.md)"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00350",
+      "note": "fix tasks from the TASK-131 re-triage of never-designed review findings",
+      "at": "2026-11-16T13:03:47Z"
+    }
+  ],
+  "picked_at": "2026-11-16T15:28:59Z",
+  "updated_at": "2026-11-16T15:28:59Z",
+  "updated_by": "main",
+  "scope": [
+    "src/exam_engine/ingest/refine.py",
+    "tests/unit/test_review_fix_b_134.py",
+    "docs/review/findings.tsv",
+    "docs/design/phase-134*",
+    "docs/report/phase-134*",
+    "docs/report/INDEX.md"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "coder implements 134.1-134.5"
+}
