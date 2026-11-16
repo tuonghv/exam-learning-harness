@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-130",
   "title": "Review findings ledger + check (REQ-0137)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0137",
   "acceptance_criteria": [
     "AC1 ledger 80 ids",
@@ -34,12 +34,18 @@
     "result": "KNOWN 4 NEW 0; test_review_ledger 7/7"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "not_applicable",
+    "result": "workflow tooling; reads repo files only; WARN, no block"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-130/evidence/summary.md",
+      "work/TASK-130/evidence/ledger.txt",
+      "work/TASK-130/evidence/fast.txt"
+    ],
+    "command": "review_ledger.py on the repo; workflow-check with a removed row; counts reconciled with the phase-112 report",
+    "result": "AC1-AC5 met"
   },
   "report": {
     "status": "pending",
@@ -71,6 +77,9 @@
     },
     "tester": {
       "waiver": "coordinator ran --fast"
+    },
+    "verifier": {
+      "waiver": "coordinator verified with the reconciled counts"
     }
   },
   "user_notes": [
@@ -99,5 +108,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verify"
+  "next": "report and close"
 }
