@@ -1,0 +1,64 @@
+{
+  "task_id": "TASK-116",
+  "title": "Fix-F follow-up: share unaccented Cau N - M passage (REQ-0123)",
+  "state": "TODO",
+  "requirement": "REQ-0123",
+  "acceptance_criteria": [
+    "AC1 Cau intro shared to range",
+    "AC2 GROUP_RE unchanged, no new mid-text intro",
+    "AC3 regression test, --fast green, oracle"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {},
+  "user_notes": [
+    {
+      "raw": "RAW-00341",
+      "note": "user chose the GROUP_RE follow-up (one-click 2026-11-16); premise narrowed: C\u00c2U already shared, only Cau is not",
+      "at": "2026-11-16T04:35:46Z"
+    }
+  ],
+  "picked_at": "2026-11-16T04:36:07Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [
+    "src/exam_engine/ingest/*.py",
+    "tests/unit/*.py"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}

@@ -2347,7 +2347,7 @@
     "task_id": "TASK-116",
     "title": "Fix-F follow-up: share unaccented Cau N - M passage (REQ-0123)",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-11-16T04:35:46Z",
     "requirement": "REQ-0123",
     "acceptance_criteria": [
