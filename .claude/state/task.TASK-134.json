@@ -51,7 +51,7 @@
     }
   ],
   "picked_at": "2026-11-16T15:28:59Z",
-  "updated_at": "2026-11-16T15:28:59Z",
+  "updated_at": "2026-11-16T15:29:12Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/refine.py",
@@ -64,8 +64,12 @@
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
-    "done": [],
-    "notes": ""
+    "done": [
+      "DESIGN d582e42"
+    ],
+    "notes": "coder running 134.1-134.5",
+    "next": "on coder hand-back: check code.md, --fast, set 5 ledger rows fixed TASK-134, advance IMPLEMENTING",
+    "at": "2026-11-16T15:29:12Z"
   },
   "next": "coder implements 134.1-134.5"
 }
