@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-125",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "coder implements 125.1-125.7",
   "title": "P3-c boundary + api hardening (REQ-0132)",
   "active": [
     {
       "task_id": "TASK-125",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "coder implements 125.1-125.7",
+      "updated_at": "2026-11-16T06:33:19Z"
     }
   ],
   "max_active": 1

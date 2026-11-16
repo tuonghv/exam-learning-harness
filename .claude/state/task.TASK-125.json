@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-125",
   "title": "P3-c boundary + api hardening (REQ-0132)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0132",
   "acceptance_criteria": [
     "AC1 partial reply invalid",
@@ -14,9 +14,9 @@
     "AC8 tests, --fast"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-125-boundary-api-hardening.md",
+    "summary": "boundary: partial/corrupt/duplicate replies invalid or miss, dry-run estimate dedupe, trace call index; segment: hinted line under a pending context stays context; api: slice gate uses document-wide verification",
     "reuse": [],
     "risks": []
   },
@@ -44,7 +44,11 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": {
+      "waiver": "rows already designed with fixes and repros in the TASK-113/TASK-117 handoffs; coordinator wrote the design doc"
+    }
+  },
   "user_notes": [
     {
       "raw": "RAW-00342",
@@ -53,8 +57,8 @@
     }
   ],
   "picked_at": "2026-11-16T06:33:18Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-16T06:33:19Z",
+  "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/*.py",
     "tests/unit/*.py",
@@ -66,5 +70,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder implements 125.1-125.7"
 }

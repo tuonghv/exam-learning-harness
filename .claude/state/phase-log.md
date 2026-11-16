@@ -3625,3 +3625,9 @@ Action: wrote report
 Result: TASK-124 closed
 Decision: next: P3-c boundary + api hardening
 Next: coordinator picks next
+
+## DESIGN - TASK-125 - 2026-11-16T06:33:18Z
+Action: coordinator wrote design from traced rows
+Result: 7 S items
+Decision: implement
+Next: IMPLEMENTING via coder
