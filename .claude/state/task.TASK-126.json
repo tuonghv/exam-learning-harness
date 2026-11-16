@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-126",
   "title": "Text-path fixes: options_missing marker, wrapped group instruction, DGNL guide (REQ-0133)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0133",
   "acceptance_criteria": [
     "AC1 MC no options marked",
@@ -29,9 +29,9 @@
     "summary": "api._from_questions: MC question without options gets options_missing marker; segment.split_guide joins a wrapped instruction line; DGNL guide free text path section; 5 tests"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --fast; bite on git archive HEAD",
+    "result": "--fast KNOWN 4, NEW 0; 2 of 5 new tests fail on old code (the 3 others guard unchanged behaviour)"
   },
   "security": {
     "status": "pending",
@@ -54,6 +54,9 @@
     },
     "coder": {
       "waiver": "two one-line changes made by the coordinator (RAW-00345: decide and proceed)"
+    },
+    "tester": {
+      "waiver": "coordinator ran --fast and the bite check"
     }
   },
   "user_notes": [
@@ -69,7 +72,7 @@
     }
   ],
   "picked_at": "2026-11-16T09:51:00Z",
-  "updated_at": "2026-11-16T10:02:05Z",
+  "updated_at": "2026-11-16T10:02:06Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/api.py",
@@ -87,5 +90,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tests"
+  "next": "verify"
 }

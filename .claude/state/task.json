@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-126",
-  "state": "IMPLEMENTING",
-  "next": "tests",
+  "state": "UNIT_TESTED",
+  "next": "verify",
   "title": "Text-path fixes: options_missing marker, wrapped group instruction, DGNL guide (REQ-0133)",
   "active": [
     {
       "task_id": "TASK-126",
-      "state": "IMPLEMENTING",
-      "next": "tests",
-      "updated_at": "2026-11-16T10:02:05Z"
+      "state": "UNIT_TESTED",
+      "next": "verify",
+      "updated_at": "2026-11-16T10:02:06Z"
     }
   ],
   "max_active": 1
