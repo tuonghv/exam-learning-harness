@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-114",
-  "state": "UNIT_TESTED",
-  "next": "verifier checks AC1-AC5 against tests and the $0 old-vs-new oracle (work/TASK-114/evidence/oracle-summary.md)",
+  "state": "VERIFIED",
+  "next": "write the report and close TASK-114; then pick TASK-115 Fix-G cli",
   "title": "Fix-F ingest: 114-F001/F002/F010/F004 (REQ-0121)",
   "active": [
     {
       "task_id": "TASK-114",
-      "state": "UNIT_TESTED",
-      "next": "verifier checks AC1-AC5 against tests and the $0 old-vs-new oracle (work/TASK-114/evidence/oracle-summary.md)",
-      "updated_at": "2026-11-16T03:58:35Z"
+      "state": "VERIFIED",
+      "next": "write the report and close TASK-114; then pick TASK-115 Fix-G cli",
+      "updated_at": "2026-11-16T04:01:00Z"
     }
   ],
   "max_active": 1

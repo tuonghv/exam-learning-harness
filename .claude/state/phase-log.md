@@ -3313,3 +3313,9 @@ Action: tester ran --fast and an independent bite check; added test_b2 (English 
 Result: NEW 0, every lettered test bites
 Decision: UNIT_TESTED
 Next: VERIFIED via verifier
+
+## VERIFIED - TASK-114 - 2026-11-16T04:01:00Z
+Action: verifier checked ACs; coordinator ran $0 old-vs-new oracle on real PDFs + mechanical move check + cached refine replay
+Result: PASS; 17 real questions fixed (F001), 0 unintended changes; refine replay impossible (prompt changed)
+Decision: VERIFIED; F002 api.py GROUP_RE sharing is a follow-up, not a TASK-114 defect
+Next: DONE

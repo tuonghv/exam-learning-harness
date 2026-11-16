@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-114",
   "title": "Fix-F ingest: 114-F001/F002/F010/F004 (REQ-0121)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0121",
   "acceptance_criteria": [
     "AC1 option-less q keeps next heading/intro",
@@ -34,12 +34,18 @@
     "result": "--fast 2036 ran, KNOWN 4, NEW 0; test_ingest_fix_f 14 OK; tester's independent bite on old src: a,b,b2,e,f,h,j,k,l + test_cap_hit_mid_backward_recovery fail, guards c,d,g,i,h2 pass"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "regex and in-memory logic only; no new file, network, subprocess or eval path; tests synthetic; oracle and replay $0"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-114/handoff/verify.md",
+      "work/TASK-114/evidence/oracle-summary.md",
+      "work/TASK-114/evidence/oracle-moves.txt"
+    ],
+    "command": "python3 -I work/TASK-114/evidence/oracle.py <old|new src> .; python3 -I work/TASK-114/evidence/replay.py <old|new src> .",
+    "result": "verifier PASS AC1-AC5; real data: 22 examples 0 changes, 4 PDFs 533 q same count/numbering/options, 17 changed q all F001 moves (9 suffix==next context, 0 mismatch); refine replay all cache miss (prompt changed), F004/F010 by unit tests"
   },
   "report": {
     "status": "pending",
@@ -51,7 +57,8 @@
   "roles": {
     "designer": "work/TASK-114/handoff/design.md",
     "coder": "work/TASK-114/handoff/code.md",
-    "tester": "work/TASK-114/handoff/test.md"
+    "tester": "work/TASK-114/handoff/test.md",
+    "verifier": "work/TASK-114/handoff/verify.md"
   },
   "user_notes": [
     {
@@ -61,7 +68,7 @@
     }
   ],
   "picked_at": "2026-11-16T03:39:56Z",
-  "updated_at": "2026-11-16T03:58:35Z",
+  "updated_at": "2026-11-16T04:01:00Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/*.py",
@@ -73,5 +80,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verifier checks AC1-AC5 against tests and the $0 old-vs-new oracle (work/TASK-114/evidence/oracle-summary.md)"
+  "next": "write the report and close TASK-114; then pick TASK-115 Fix-G cli"
 }
