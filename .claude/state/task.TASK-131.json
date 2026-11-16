@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-131",
   "title": "Batch-1 review leftovers: re-triage 22 findings (REQ-0138)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0138",
   "acceptance_criteria": [
     "AC1 rows with evidence",
@@ -25,9 +25,9 @@
     "summary": "triage-only: design doc + ledger rows; no src/tests change (AC4)"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "repro snippets in work/TASK-131/evidence/repro_{cli,ingest}.txt",
+    "result": "14 rows + D1 reproduce on HEAD; tests belong to fix tasks"
   },
   "security": {
     "status": "pending",
@@ -48,6 +48,9 @@
     "designer": "work/TASK-131/handoff/design-cli.md",
     "coder": {
       "waiver": "triage-only task, no code (REQ-0138 AC4)"
+    },
+    "tester": {
+      "waiver": "triage-only task; repros stand in for tests"
     }
   },
   "user_notes": [
@@ -58,7 +61,7 @@
     }
   ],
   "picked_at": "2026-11-16T12:57:22Z",
-  "updated_at": "2026-11-16T13:04:38Z",
+  "updated_at": "2026-11-16T13:04:39Z",
   "updated_by": "main",
   "scope": [
     "docs/review/**",
@@ -76,5 +79,5 @@
     "next": "on part B: run its repros, write docs/design/phase-131 triage doc, advance DESIGN",
     "at": "2026-11-16T13:01:20Z"
   },
-  "next": "record repros as test evidence"
+  "next": "verify ACs"
 }

@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-131",
-  "state": "IMPLEMENTING",
-  "next": "record repros as test evidence",
+  "state": "UNIT_TESTED",
+  "next": "verify ACs",
   "title": "Batch-1 review leftovers: re-triage 22 findings (REQ-0138)",
   "active": [
     {
       "task_id": "TASK-131",
-      "state": "IMPLEMENTING",
-      "next": "record repros as test evidence",
-      "updated_at": "2026-11-16T13:04:38Z"
+      "state": "UNIT_TESTED",
+      "next": "verify ACs",
+      "updated_at": "2026-11-16T13:04:39Z"
     }
   ],
   "max_active": 1

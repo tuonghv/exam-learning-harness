@@ -3817,3 +3817,9 @@ Action: ledger rows moved to fix tasks
 Result: 21 open, 1 closed
 Decision: no code
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-131 - 2026-11-16T13:04:39Z
+Action: ran repros
+Result: confirmed
+Decision: evidence enough
+Next: VERIFIED
