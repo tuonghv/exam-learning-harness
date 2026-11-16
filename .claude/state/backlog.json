@@ -2369,7 +2369,7 @@
     "task_id": "TASK-117",
     "title": "Triage code-review batch 3 (phases 117-118) (REQ-0124)",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-11-16T05:20:16Z",
     "requirement": "REQ-0124",
     "acceptance_criteria": [
