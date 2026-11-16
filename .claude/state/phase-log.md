@@ -3691,3 +3691,9 @@ Action: traced diacritics fails to the v1.0.0 default release
 Result: rule only in dev
 Decision: release dev as v1.3.0 default
 Next: IMPLEMENTING
+
+## IMPLEMENTING - TASK-127 - 2026-11-16T11:21:15Z
+Action: released v1.3.0 and promoted it
+Result: rule reaches default runs
+Decision: UNIT_TESTED next
+Next: UNIT_TESTED

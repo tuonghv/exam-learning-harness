@@ -40,7 +40,7 @@ src/exam_engine/
   utils/      md2html.py text.py (detect_lang)
 config/       engine.json (defaults)  subjects.json (per subject: task, checks, score_basis, language, prompt)
 schemas/      solve_out / qa_out / result  (*.schema.json)
-prompts/      dev/ (editable)  releases/v1.0.0 v1.1.0 v1.2.0 (frozen, MANIFEST.json)
+prompts/      dev/ (editable)  releases/v1.0.0 .. v1.3.0 (frozen, MANIFEST.json; default v1.3.0 = dev of TASK-127)
               each channel: system.md exam/ subjects/ verification/ lang/vi/ (+ genexam*.md in dev/)
 examples/     few-shot pairs + FORMAT.md        evals/  inputs/ keys/ (+ generated*/ dgnl/)
 tools/examples/*.py   thin shims to src (check_examples, score_eval, exam_run, ...)

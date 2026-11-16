@@ -11,9 +11,11 @@ import os
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 sys.path.insert(0, os.path.join(ROOT, "src"))
+from exam_engine import settings  # noqa: E402
 from exam_engine.ingest import api  # noqa: E402
 from exam_engine.pipeline import parser, solver  # noqa: E402
 
@@ -28,6 +30,7 @@ def sha(s):
 
 
 class TestGoldenUnlabelled(unittest.TestCase):
+    @mock.patch.dict(settings.PROMPT_SOURCE, {"channel": "release", "version": "v1.0.0"})  # code guard (TASK-127)
     def test_parse_and_prompt_unchanged(self):
         gold = json.load(open(GOLDEN, encoding="utf-8"))
         paths = sorted(os.path.relpath(p, ROOT) for p in

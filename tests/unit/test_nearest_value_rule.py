@@ -41,10 +41,10 @@ def strip_rule(text):
     return text.replace(r, "", 1) if r else text
 
 
-def prompts_for(channel, exam):
+def prompts_for(channel, exam, version=None):
     i = exam["questions"][0]["id"]
     recs = {i: {"findings": [], "reason": "x"}}
-    with mock.patch.dict(settings.PROMPT_SOURCE, {"channel": channel, "version": None}):
+    with mock.patch.dict(settings.PROMPT_SOURCE, {"channel": channel, "version": version}):
         return solver.base_prompt(exam), solver.retry_prompt(exam, recs, [i])
 
 
@@ -91,7 +91,7 @@ class Assembled(unittest.TestCase):
                 continue
             n += 1
             try:
-                rel = prompts_for("release", exam)
+                rel = prompts_for("release", exam, "v1.0.0")  # pre-TASK-127 release
             except FileNotFoundError:  # release v1.0.0 lacks this subject addendum
                 continue
             dev = prompts_for("dev", exam)
@@ -99,10 +99,12 @@ class Assembled(unittest.TestCase):
                 self.assertNotIn("closest", r)
                 self.assertIn("closest", d, f)
                 self.assertNotEqual(r, d)
+            self.assertEqual(prompts_for("release", exam), dev, f)  # default release v1.3.0 = dev (TASK-127)
         self.assertGreater(n, 10)
 
     def test_release_files_frozen(self):
-        for p in glob.glob(os.path.join(ROOT, "prompts", "releases", "*", "**", "solve.md"), recursive=True):
+        for p in [x for v in ("v1.0.0", "v1.1.0", "v1.2.0")  # releases before TASK-127 stay frozen
+                  for x in glob.glob(os.path.join(ROOT, "prompts", "releases", v, "**", "solve.md"), recursive=True)]:
             t = read(p)
             self.assertFalse(any(x in t for x in ("closest", "gần nhất")), p)
 

@@ -169,12 +169,13 @@ class PromptLinesTest(unittest.TestCase):
         self.assertIn("missing_text:", self.read("dev", "system.md"))
         self.assertIn("missing_text:", self.read("dev", "lang", "vi", "system.md"))
         self.assertIn("12. Never transcribe running headers", self.read("dev", "ingest", "refine.md"))
-        rel = os.path.join(ROOT, "prompts", "releases")
-        for base, _, names in os.walk(rel):
-            for n in names:
-                if n.endswith("system.md"):
-                    with open(os.path.join(base, n), encoding="utf-8") as fh:
-                        self.assertNotIn("missing_text:", fh.read(), base)
+        self.assertIn("missing_text:", self.read("releases", "v1.3.0", "lang", "vi", "system.md"))  # TASK-127
+        for v in ("v1.0.0", "v1.1.0", "v1.2.0"):  # frozen releases before TASK-127 stay without the line
+            for base, _, names in os.walk(os.path.join(ROOT, "prompts", "releases", v)):
+                for n in names:
+                    if n.endswith("system.md"):
+                        with open(os.path.join(base, n), encoding="utf-8") as fh:
+                            self.assertNotIn("missing_text:", fh.read(), base)
 
 
 if __name__ == "__main__":

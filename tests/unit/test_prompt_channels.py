@@ -20,6 +20,7 @@ from exam_engine.pipeline import prompts  # noqa: E402
 INPUT = os.path.join(ROOT, "examples", "english", "input-001.md")
 MOCK = os.path.join(HERE, "fixtures", "mock_english_001.json")
 MARK = "ZZ-DEV-MARKER-77"
+DEF = settings.load_config("engine")["prompt_release"]  # the default release (v1.3.0 since TASK-127)
 
 
 class Base(unittest.TestCase):
@@ -29,8 +30,8 @@ class Base(unittest.TestCase):
         self.prm = os.path.join(self.tmp, "prompts")
         os.makedirs(os.path.join(self.prm, "releases"))
         shutil.copytree(os.path.join(ROOT, "prompts", "dev"), os.path.join(self.prm, "dev"))
-        shutil.copytree(os.path.join(ROOT, "prompts", "releases", "v1.0.0"),
-                        os.path.join(self.prm, "releases", "v1.0.0"))
+        shutil.copytree(os.path.join(ROOT, "prompts", "releases", DEF),
+                        os.path.join(self.prm, "releases", DEF))
         for p in (mock.patch.object(settings, "PROMPTS_DIR", self.prm),
                   mock.patch.dict(settings.PROMPT_SOURCE, {"channel": None, "version": None})):
             p.start()
@@ -54,14 +55,14 @@ class Channels(Base):
         self.assertIn(MARK, self.dry("--channel", "dev", "--lang", "en"))  # vi reads lang/vi/system.md
 
     def test_prompt_version_selects_release(self):
-        shutil.copytree(os.path.join(self.prm, "releases", "v1.0.0"),
+        shutil.copytree(os.path.join(self.prm, "releases", DEF),
                         os.path.join(self.prm, "releases", "v1.0.1"))
         with open(os.path.join(self.prm, "releases", "v1.0.1", "system.md"), "a") as fh:
             fh.write(MARK)
-        self.assertIn(MARK, self.dry("--prompt-version", "v1.0.1"))
+        self.assertIn(MARK, self.dry("--prompt-version", "v1.0.1", "--lang", "en"))  # vi reads lang/vi
 
     def test_result_carries_channel_and_version(self):
-        for extra, want in (([], {"channel": "release", "version": "v1.0.0"}),
+        for extra, want in (([], {"channel": "release", "version": DEF}),
                             (["--channel", "dev"], {"channel": "dev", "version": None})):
             out = os.path.join(self.tmp, "o%d" % len(extra))
             with contextlib.redirect_stdout(io.StringIO()):
@@ -85,7 +86,7 @@ class Releases(Base):
 
     def test_verify_fails_after_one_byte_change(self):
         self.assertEqual(prompts.verify_release(), [])
-        path = os.path.join(self.prm, "releases", "v1.0.0", "system.md")
+        path = os.path.join(self.prm, "releases", DEF, "system.md")
         with open(path, "ab") as fh:
             fh.write(b" ")
         self.assertTrue(any("changed" in e for e in prompts.verify_release()))
@@ -93,7 +94,7 @@ class Releases(Base):
             self.assertEqual(prompts.prompts_main(["verify"]), 1)
 
     def test_verify_flags_extra_and_missing(self):
-        root = os.path.join(self.prm, "releases", "v1.0.0")
+        root = os.path.join(self.prm, "releases", DEF)
         open(os.path.join(root, "extra.md"), "w").close()
         os.remove(os.path.join(root, "system.md"))
         errs = " ".join(prompts.verify_release())
@@ -102,9 +103,10 @@ class Releases(Base):
 
     def test_real_release_is_intact(self):
         with mock.patch.object(settings, "PROMPTS_DIR", os.path.join(ROOT, "prompts")):
-            self.assertEqual(prompts.verify_release("v1.0.0"), [])
-            m = settings.load_json(os.path.join(ROOT, "prompts", "releases", "v1.0.0", "MANIFEST.json"))
-            self.assertEqual(m["version"], "v1.0.0")
+            for v in ("v1.0.0", DEF):
+                self.assertEqual(prompts.verify_release(v), [])
+                m = settings.load_json(os.path.join(ROOT, "prompts", "releases", v, "MANIFEST.json"))
+                self.assertEqual(m["version"], v)
 
 
 class VersionGuard(unittest.TestCase):

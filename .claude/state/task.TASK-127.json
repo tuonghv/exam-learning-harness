@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-127",
   "title": "Prompt release v1.3.0 as default (diacritics rule reaches default runs) (REQ-0134)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0134",
   "acceptance_criteria": [
     "AC1 release v1.3.0 = dev, verify",
@@ -17,8 +17,19 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "config/engine.json",
+      "tests/unit/test_prompt_channels.py",
+      "tests/unit/test_assembly.py",
+      "tests/unit/test_assembly_qa.py",
+      "tests/unit/test_nearest_value_rule.py",
+      "tests/unit/test_clean_golden.py",
+      "tests/unit/test_group_e2e.py",
+      "docs/guide/architecture.md",
+      "prompts/releases/v1.3.0/MANIFEST.json"
+    ],
+    "summary": "prompts/releases/v1.3.0 frozen from dev; config prompt_release v1.3.0 (user RAW-00347); 6 tests follow the new default; architecture guide line"
   },
   "unit_test": {
     "status": "pending",
@@ -43,6 +54,9 @@
   "roles": {
     "designer": {
       "waiver": "cause traced by the coordinator from the run's call files; config + release command only"
+    },
+    "coder": {
+      "waiver": "release command + one config value by the coordinator; test updates follow the user's promotion"
     }
   },
   "user_notes": [
@@ -50,10 +64,15 @@
       "raw": "RAW-00346",
       "note": "user: fix diacritics retry (paid check ~$0.25 approved)",
       "at": "2026-11-16T10:14:50Z"
+    },
+    {
+      "raw": "RAW-00347",
+      "note": "user: promote v1.3.0 as default",
+      "at": "2026-11-16T11:18:18Z"
     }
   ],
   "picked_at": "2026-11-16T10:14:50Z",
-  "updated_at": "2026-11-16T10:15:09Z",
+  "updated_at": "2026-11-16T11:21:16Z",
   "updated_by": "main",
   "scope": [
     "prompts/releases/v1.3.0/**",
@@ -70,5 +89,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "release v1.3.0, switch config"
+  "next": "tests"
 }

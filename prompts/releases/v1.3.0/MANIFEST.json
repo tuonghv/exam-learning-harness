@@ -1,0 +1,30 @@
+{
+  "created": "2026-11-16T10:15:15Z",
+  "files": {
+    "exam/solve.md": "669fc366b9700a8cc68a029cb6f55993a558bd3a3c7b7cf4c031caf5ea7f4ddf",
+    "genexam.md": "427e45bb0d62ae509d4542912aef3b7a095fcda129d29a620f25eb6acbe25fa7",
+    "genexam_blind.md": "51ebc5cad1d6bc6bc78b1137a54867a2a6281b892915115a4766b8d61be4f06b",
+    "genexam_dgnl.md": "de6f2f6521549ec5de7b0237d31dd1c98284060f3be5999c8cc32f223daee043",
+    "genexam_dgnl_en.md": "11c090abf664211829197e3746275dedbcb31b4a46f2772699f65e8f7fd02251",
+    "genexam_dgnl_vi.md": "b344066d6dd7a6768843a4a21c4babc6da2f74219324c54b096455286adfe4b6",
+    "genexam_qa.md": "fa2a6655a57d068f49449fdfc20a37836153628ffe7818d4f80993e5ee88b753",
+    "ingest/boundary.md": "f110eb888abfa4741935caba0eccae9f803b53aa55cff7881110cdd2db32d46a",
+    "ingest/refine.md": "adcf080f24ed00080400aae65e322684d0b154de54c56e5ca036d7bb1fe6cd23",
+    "lang/vi/exam/solve.md": "24534af3f2b29976a6990f81490b7b20780fc7471772182af19011a509731092",
+    "lang/vi/subjects/english.md": "d801798c8daa63cf2cdfe91d951803be68ce5e25d08123d3fc038510a01f28e9",
+    "lang/vi/subjects/informatics.md": "24e1d5102531a9c3c69b77b0c83fdd89518ef02752eec8dfb294822c2a8af588",
+    "lang/vi/subjects/literature.md": "2564d66bde399a3101784bfa2edf6c298e964c7b3d21cc5b1078872e4c17b6ed",
+    "lang/vi/subjects/math.md": "d450bb9df49a106bd6593274d7f7966463db00c39e1720779faddd0b0f38f168",
+    "lang/vi/subjects/physics.md": "ca7760e83370dfef5faa1740a53148ed6f465b3aa0e9e2284006b13dca840176",
+    "lang/vi/system.md": "3783495fcc509e1fb720520a5bad3f805174505d4c0685485852476442df5b0d",
+    "lang/vi/verification/verify_answer.md": "98d36401bb7bf1952a15bc14e39e20ff411f820194419451d5911ef912f8f88f",
+    "subjects/english.md": "f5b8422f75a04718bbc3da75fb62bfaf46fb38917d7204d29967e490677ae98a",
+    "subjects/informatics.md": "328b631ec63560925e4c3801d2057430febcf30f525d829f5b55c0827c77096e",
+    "subjects/literature.md": "8f06e96c836ecfe1cbbaf36de62a993945338a44da457afc7ea9e495a8180f2c",
+    "subjects/math.md": "5f322c750d711d8a0cab4684b3c1bc09bee16eedeed972eec4d716b49c5f5e94",
+    "subjects/physics.md": "4689f305da2be067493112bd1ac36f4526121239c6ed3615000eb308ec7b29ec",
+    "system.md": "c3328d1b9ce28362236ec58e18e9594e6cd81da599e62b8c5064f477cd3bb480",
+    "verification/verify_answer.md": "15a87b1c6cdd85862f6d0676be23e06545e11371dea8fb1ecc640923d1a44f53"
+  },
+  "version": "v1.3.0"
+}

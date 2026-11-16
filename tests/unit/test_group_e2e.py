@@ -6,6 +6,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest import mock as umock
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
@@ -14,6 +15,7 @@ sys.path.insert(0, os.path.join(HERE, "fixtures"))
 import golden_rq  # noqa: E402
 sys.path.insert(0, os.path.join(ROOT, "src"))
 from test_exam_run import a, qa, solve  # noqa: E402
+from exam_engine import settings  # noqa: E402
 from test_group_model import HEAD, _lab  # noqa: E402
 
 PAS = "Tea was first grown in Yunnan, long ago."
@@ -41,7 +43,8 @@ class TestGoldenRetryQa(unittest.TestCase):
     def test_55_golden_retry_qa_unchanged(self):
         gold = json.load(open(os.path.join(HERE, "fixtures", "golden_retry_qa.json"), encoding="utf-8"))
         self.assertGreaterEqual(len(gold), 20)
-        self.assertEqual(golden_rq.compute(ROOT), gold)
+        with umock.patch.dict(settings.PROMPT_SOURCE, {"channel": "release", "version": "v1.0.0"}):  # TASK-127
+            self.assertEqual(golden_rq.compute(ROOT), gold)  # code guard on the frozen release
 
 
 class TestCliEndToEnd(unittest.TestCase):
