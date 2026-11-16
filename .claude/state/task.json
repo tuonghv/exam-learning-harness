@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-124",
-  "state": "VERIFIED",
-  "next": "report and close",
+  "state": "DONE",
+  "next": "",
   "title": "P3-b refine hardening 114-F003/F006-F009 (REQ-0131)",
-  "active": [
-    {
-      "task_id": "TASK-124",
-      "state": "VERIFIED",
-      "next": "report and close",
-      "updated_at": "2026-11-16T06:32:46Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

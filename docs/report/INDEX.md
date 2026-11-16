@@ -89,3 +89,4 @@ Rule (RAW-00171, REQ-0061): evidence summaries are small text with no exam conte
 | TASK-121 Segment rejects implausible question starts | docs/design/phase-121-segment-plausible-starts.md | docs/report/phase-121-segment-plausible-starts.md | - | - | - |
 | TASK-122 DGNL26 text path: cover run + unreadable question | docs/design/phase-122-cover-run-unreadable.md | docs/report/phase-122-cover-run-unreadable.md | - | - | - |
 | TASK-123 P3-a CLI hardening: 113-F004/F006-F010 | docs/design/phase-123-cli-hardening.md | docs/report/phase-123-cli-hardening.md | - | - | - |
+| TASK-124 P3-b refine hardening: 114-F003/F006-F009 | docs/design/phase-124-refine-hardening.md | docs/report/phase-124-refine-hardening.md | - | - | - |
