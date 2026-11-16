@@ -1,0 +1,73 @@
+{
+  "task_id": "TASK-135",
+  "title": "Review leftovers fix C: metrics/report_kinds/review (REQ-0142)",
+  "state": "DESIGN",
+  "requirement": "REQ-0142",
+  "acceptance_criteria": [
+    "AC1 tests per id",
+    "AC2 ledger, --fast"
+  ],
+  "design": {
+    "status": "completed",
+    "path": "docs/design/phase-135-review-fix-c-pipeline.md",
+    "summary": "7 metrics/report_kinds/review-pack hardening fixes (109-F003, F005, F006; 111-F001, F002, F008, F009)",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {
+    "designer": {
+      "waiver": "designed in the TASK-131 re-triage (work/TASK-131/handoff/design-ingest.md)"
+    }
+  },
+  "user_notes": [
+    {
+      "raw": "RAW-00350",
+      "note": "fix tasks from the TASK-131 re-triage of never-designed review findings",
+      "at": "2026-11-16T13:03:47Z"
+    }
+  ],
+  "picked_at": "2026-11-16T15:34:28Z",
+  "updated_at": "2026-11-16T15:34:29Z",
+  "updated_by": "main",
+  "scope": [
+    "src/exam_engine/pipeline/metrics.py",
+    "src/exam_engine/pipeline/report_kinds.py",
+    "src/exam_engine/pipeline/review.py",
+    "tests/unit/test_review_fix_c_135.py",
+    "docs/review/findings.tsv",
+    "docs/design/phase-135*",
+    "docs/report/phase-135*",
+    "docs/report/INDEX.md"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "coder implements 135.1-135.7"
+}

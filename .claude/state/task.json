@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-134",
-  "state": "DONE",
-  "next": "",
-  "title": "Review leftovers fix B: refine hardening (REQ-0141)",
-  "active": [],
+  "task_id": "TASK-135",
+  "state": "DESIGN",
+  "next": "coder implements 135.1-135.7",
+  "title": "Review leftovers fix C: metrics/report_kinds/review (REQ-0142)",
+  "active": [
+    {
+      "task_id": "TASK-135",
+      "state": "DESIGN",
+      "next": "coder implements 135.1-135.7",
+      "updated_at": "2026-11-16T15:34:29Z"
+    }
+  ],
   "max_active": 1
 }
