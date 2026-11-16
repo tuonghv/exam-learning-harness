@@ -2387,5 +2387,71 @@
     ],
     "completed_at": "2026-11-16T05:28:13Z",
     "report": "docs/report/phase-117-review-triage-b3.md"
+  },
+  {
+    "task_id": "TASK-118",
+    "title": "Fix-H parts: 117-F001/F009/F010/F002/F003 (REQ-0125)",
+    "priority": 1,
+    "status": "queued",
+    "created_at": "2026-11-16T05:28:37Z",
+    "requirement": "REQ-0125",
+    "acceptance_criteria": [
+      "AC1 key after block 6",
+      "AC2 no prefix false key",
+      "AC3 md key refusal",
+      "AC4 --pages keeps guard",
+      "AC5 docx list lines",
+      "AC6 tests, --fast, PDFs unchanged"
+    ],
+    "user_notes": [
+      {
+        "raw": "RAW-00342",
+        "note": "coordinator sets priority (batch-3 plan)",
+        "at": "2026-11-16T05:28:37Z"
+      }
+    ]
+  },
+  {
+    "task_id": "TASK-119",
+    "title": "Fix-I api: 117-F008/F004/F005/F007 (REQ-0126)",
+    "priority": 2,
+    "status": "queued",
+    "created_at": "2026-11-16T05:28:37Z",
+    "requirement": "REQ-0126",
+    "acceptance_criteria": [
+      "AC1 cut merge keeps parts",
+      "AC2 range closes at restart",
+      "AC3 mention no new range",
+      "AC4 offset note true",
+      "AC5 tests, --fast, oracle"
+    ],
+    "user_notes": [
+      {
+        "raw": "RAW-00342",
+        "note": "coordinator sets priority (batch-3 plan)",
+        "at": "2026-11-16T05:28:37Z"
+      }
+    ]
+  },
+  {
+    "task_id": "TASK-120",
+    "title": "Fix-J boundary + cost cap: 118-F001/F007/F009, D1 (REQ-0127)",
+    "priority": 3,
+    "status": "queued",
+    "created_at": "2026-11-16T05:28:37Z",
+    "requirement": "REQ-0127",
+    "acceptance_criteria": [
+      "AC1 no lost suspects",
+      "AC2 per-pass summary",
+      "AC3 NaN cap usage error",
+      "AC4 tests, --fast"
+    ],
+    "user_notes": [
+      {
+        "raw": "RAW-00342",
+        "note": "coordinator sets priority (batch-3 plan)",
+        "at": "2026-11-16T05:28:37Z"
+      }
+    ]
   }
 ]
