@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-125",
   "title": "P3-c boundary + api hardening (REQ-0132)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0132",
   "acceptance_criteria": [
     "AC1 partial reply invalid",
@@ -48,11 +48,19 @@
       "work/TASK-125/evidence/bite.out"
     ],
     "command": "segment + share oracles old vs new; dry-run boundary estimate; --fast; bite",
-    "result": "AC1-AC8 met; 0 real-input changes"
+    "result": "AC1-AC8 met; 0 real-input changes",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-125/evidence/summary.md",
+        "work/TASK-125/evidence/bite.out"
+      ],
+      "reason": "repros as tests fail on old code; real inputs unchanged"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-125-boundary-api-hardening.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -67,6 +75,9 @@
     },
     "verifier": {
       "waiver": "coordinator verified with real-input oracles, dry-run estimate and bite (RAW-00342)"
+    },
+    "crosscheck": {
+      "waiver": "crosscheck by the coordinator: real-input segment/share oracles, dry-run estimate and an independent bite check"
     }
   },
   "user_notes": [
@@ -77,7 +88,7 @@
     }
   ],
   "picked_at": "2026-11-16T06:33:18Z",
-  "updated_at": "2026-11-16T07:08:05Z",
+  "updated_at": "2026-11-16T07:08:15Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/*.py",
@@ -90,5 +101,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report and close"
+  "next": ""
 }

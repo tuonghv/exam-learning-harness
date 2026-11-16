@@ -3649,3 +3649,9 @@ Action: oracles + bite
 Result: all met
 Decision: VERIFIED
 Next: DONE
+
+## DONE - TASK-125 - 2026-11-16T07:08:14Z
+Action: wrote report
+Result: TASK-125 closed; batch-2/3 review findings all handled
+Decision: backlog empty
+Next: coordinator picks next

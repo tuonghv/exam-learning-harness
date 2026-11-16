@@ -2561,7 +2561,7 @@
     "task_id": "TASK-125",
     "title": "P3-c boundary + api hardening (REQ-0132)",
     "priority": 3,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-16T06:33:18Z",
     "requirement": "REQ-0132",
     "acceptance_criteria": [
@@ -2580,6 +2580,8 @@
         "note": "P3 hardening, coordinator priority",
         "at": "2026-11-16T06:33:18Z"
       }
-    ]
+    ],
+    "completed_at": "2026-11-16T07:08:15Z",
+    "report": "docs/report/phase-125-boundary-api-hardening.md"
   }
 ]
