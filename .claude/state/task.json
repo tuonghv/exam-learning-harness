@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-131",
-  "state": "UNIT_TESTED",
-  "next": "verify ACs",
+  "state": "VERIFIED",
+  "next": "report and close; pick TASK-132",
   "title": "Batch-1 review leftovers: re-triage 22 findings (REQ-0138)",
   "active": [
     {
       "task_id": "TASK-131",
-      "state": "UNIT_TESTED",
-      "next": "verify ACs",
-      "updated_at": "2026-11-16T13:04:39Z"
+      "state": "VERIFIED",
+      "next": "report and close; pick TASK-132",
+      "updated_at": "2026-11-16T13:04:40Z"
     }
   ],
   "max_active": 1

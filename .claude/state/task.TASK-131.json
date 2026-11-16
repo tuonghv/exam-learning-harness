@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-131",
   "title": "Batch-1 review leftovers: re-triage 22 findings (REQ-0138)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0138",
   "acceptance_criteria": [
     "AC1 rows with evidence",
@@ -30,12 +30,19 @@
     "result": "14 rows + D1 reproduce on HEAD; tests belong to fix tasks"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "not_applicable",
+    "result": "no code change; $0 local repros"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-131/evidence/summary.md",
+      "work/TASK-131/evidence/repro_cli.txt",
+      "work/TASK-131/evidence/repro_ingest.txt",
+      "work/TASK-131/evidence/ledger.txt"
+    ],
+    "command": "repros; review_ledger.py; git diff -- src tests",
+    "result": "AC1-AC4 met"
   },
   "report": {
     "status": "pending",
@@ -51,6 +58,9 @@
     },
     "tester": {
       "waiver": "triage-only task; repros stand in for tests"
+    },
+    "verifier": {
+      "waiver": "triage-only; coordinator checked ACs"
     }
   },
   "user_notes": [
@@ -61,7 +71,7 @@
     }
   ],
   "picked_at": "2026-11-16T12:57:22Z",
-  "updated_at": "2026-11-16T13:04:39Z",
+  "updated_at": "2026-11-16T13:04:40Z",
   "updated_by": "main",
   "scope": [
     "docs/review/**",
@@ -79,5 +89,5 @@
     "next": "on part B: run its repros, write docs/design/phase-131 triage doc, advance DESIGN",
     "at": "2026-11-16T13:01:20Z"
   },
-  "next": "verify ACs"
+  "next": "report and close; pick TASK-132"
 }
