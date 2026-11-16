@@ -107,7 +107,7 @@ def solve_main(argv=None):
         print("usage: choose exactly one of --mock FILE, --dry-run, --real (never defaults to real)",
               file=sys.stderr)
         return 2
-    if a.max_attempts < 1 or a.max_cost_usd < 0 or a.timeout <= 0:
+    if a.max_attempts < 1 or not (a.max_cost_usd >= 0) or a.timeout <= 0:
         print("usage: --max-attempts >= 1, --max-cost-usd >= 0, --timeout > 0", file=sys.stderr)
         return 2
     try:  # before any prompt or call: a main run needs --publish
@@ -1026,7 +1026,7 @@ def ingest_main(argv):
     if args.check:
         return _ingest_check()
     modes = sum([bool(args.mock), args.dry_run, args.real])
-    if (args.boundary_ai == "haiku") != (modes == 1) or modes > 1 or args.max_cost_usd < 0:
+    if (args.boundary_ai == "haiku") != (modes == 1) or modes > 1 or not (args.max_cost_usd >= 0):
         print("usage: --boundary-ai haiku needs exactly one of --mock FILE, --dry-run, --real "
               "(never defaults to real); those flags need --boundary-ai haiku; --max-cost-usd >= 0",
               file=sys.stderr)
@@ -1219,7 +1219,7 @@ def refine_main(argv):
         print("usage: choose exactly one of --mock FILE, --dry-run, --real (never defaults to real)",
               file=sys.stderr)
         return 2
-    if a.max_cost_usd < 0 or a.timeout <= 0:
+    if not (a.max_cost_usd >= 0) or a.timeout <= 0:
         print("usage: --max-cost-usd >= 0, --timeout > 0", file=sys.stderr)
         return 2
     if a.real:
@@ -1329,7 +1329,7 @@ def cross_main(argv):
         print("usage: choose exactly one of --mock FILE, --dry-run, --real (never defaults to real)",
               file=sys.stderr)
         return 2
-    if a.max_cost_usd < 0 or a.timeout <= 0 or (not a.dry_run and not a.out):
+    if not (a.max_cost_usd >= 0) or a.timeout <= 0 or (not a.dry_run and not a.out):
         print("usage: --max-cost-usd >= 0, --timeout > 0, --out DIR required", file=sys.stderr)
         return 2
     exam, code = _load_exam(a.exam)
@@ -1434,7 +1434,7 @@ def benchmark_main(argv):
         print("usage: choose exactly one of --mock FILE, --dry-run, --real (never defaults to real); "
               "--out DIR required", file=sys.stderr)
         return 2
-    if a.max_attempts < 1 or a.budget_usd < 0 or a.max_cost_usd < 0 or a.timeout <= 0:
+    if a.max_attempts < 1 or not (a.budget_usd >= 0) or not (a.max_cost_usd >= 0) or a.timeout <= 0:
         print("usage: --max-attempts >= 1, costs >= 0, --timeout > 0", file=sys.stderr)
         return 2
     set_id, bases = None, {}
@@ -1535,7 +1535,7 @@ def genexam_main(argv):
         a = ap.parse_args(argv)
     except SystemExit as exc:
         return _argparse_exit(exc)
-    if sum([bool(a.mock), a.dry_run, a.real]) != 1 or a.n < 1 or a.max_cost_usd < 0 or a.timeout <= 0:
+    if sum([bool(a.mock), a.dry_run, a.real]) != 1 or a.n < 1 or not (a.max_cost_usd >= 0) or a.timeout <= 0:
         print("usage: choose exactly one of --mock FILE, --dry-run, --real (never defaults to real); "
               "--n >= 1, --max-cost-usd >= 0", file=sys.stderr)
         return 2

@@ -160,7 +160,7 @@ def windows(lines, sus, span=8, max_lines=40, max_windows=12, per_token=2):
     spans = []
     for s in sorted(send, key=lambda d: d["line"]):
         lo, hi = max(0, s["line"] - span), min(cut - 1, s["line"] + span)
-        if spans and lo <= spans[-1]["end"] + 1:
+        if spans and lo <= spans[-1]["end"] + 1 and hi - spans[-1]["start"] + 1 <= max_lines:
             spans[-1]["end"] = max(spans[-1]["end"], hi)
             spans[-1]["sus"].append(s)
         else:
@@ -303,6 +303,7 @@ class Reviewer:
     def __call__(self, lines, page_of=None):
         self.warnings = []
         st = self.stats
+        c0, k0, s0 = st["calls"], st["cached"], self.spent
         sus = suspects(lines, page_of, self.known)
         wins, skipped = windows(lines, sus)
         self.last_windows = wins
@@ -337,13 +338,13 @@ class Reviewer:
         st["hints"] += len(hints)
         self.warnings.append({"level": "info", "code": "boundary_ai_summary", "origin": "ai",
                               "message": "%d window(s), %d call(s), %d cached, cost $%.4f"
-                              % (len(wins), st["calls"], st["cached"], self.spent)})
+                              % (len(wins), st["calls"] - c0, st["cached"] - k0, self.spent - s0)})
         return hints
 
     def _calls(self, batches, sha, hints):
         st = self.stats
         for b, batch in enumerate(batches):
-            if self.spent + EST_CALL_USD > self.max_cost:
+            if not (self.spent + EST_CALL_USD <= self.max_cost):
                 self.warnings.append({"level": "warning", "code": "boundary_ai_budget", "origin": "ai",
                                       "message": "cost cap $%.2f reached: %d call(s) not made, rules kept"
                                       % (self.max_cost, len(batches) - b)})

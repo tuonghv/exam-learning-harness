@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-120",
   "title": "Fix-J boundary + cost cap: 118-F001/F007/F009, D1 (REQ-0127)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0127",
   "acceptance_criteria": [
     "AC1 no lost suspects",
@@ -17,8 +17,13 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/ingest/boundary.py",
+      "src/exam_engine/cli.py",
+      "tests/unit/test_boundary_cap_120.py"
+    ],
+    "summary": "boundary.py: no span merge past max_lines (120.1), per-pass summary deltas (120.2), NaN-safe cap test (120.3); cli.py: `not (x >= 0)` on 7 cost checks of 6 paid entries (120.3/3b). 10 new tests"
   },
   "unit_test": {
     "status": "pending",
@@ -41,7 +46,8 @@
   "crosscheck_required": true,
   "evidence_required": false,
   "roles": {
-    "designer": "work/TASK-120/handoff/design.md"
+    "designer": "work/TASK-120/handoff/design.md",
+    "coder": "work/TASK-120/handoff/code.md"
   },
   "user_notes": [
     {
@@ -51,7 +57,7 @@
     }
   ],
   "picked_at": "2026-11-16T05:56:14Z",
-  "updated_at": "2026-11-16T05:56:31Z",
+  "updated_at": "2026-11-16T06:02:47Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/*.py",
@@ -64,5 +70,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "coder implements 120.1-120.3b"
+  "next": "record --fast and bite as unit-test evidence"
 }

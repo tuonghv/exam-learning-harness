@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-120",
-  "state": "DESIGN",
-  "next": "coder implements 120.1-120.3b",
+  "state": "IMPLEMENTING",
+  "next": "record --fast and bite as unit-test evidence",
   "title": "Fix-J boundary + cost cap: 118-F001/F007/F009, D1 (REQ-0127)",
   "active": [
     {
       "task_id": "TASK-120",
-      "state": "DESIGN",
-      "next": "coder implements 120.1-120.3b",
-      "updated_at": "2026-11-16T05:56:31Z"
+      "state": "IMPLEMENTING",
+      "next": "record --fast and bite as unit-test evidence",
+      "updated_at": "2026-11-16T06:02:47Z"
     }
   ],
   "max_active": 1

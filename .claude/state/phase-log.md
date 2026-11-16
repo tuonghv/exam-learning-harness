@@ -3481,3 +3481,9 @@ Action: designer drafted 3 items; coordinator adopted D2 (4 more paid entries) a
 Result: design complete
 Decision: implement
 Next: IMPLEMENTING via coder
+
+## IMPLEMENTING - TASK-120 - 2026-11-16T06:02:47Z
+Action: coder implemented 120.1-120.3b
+Result: --affected 1251 NEW 0
+Decision: matches design
+Next: UNIT_TESTED
