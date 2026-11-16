@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-135",
   "title": "Review leftovers fix C: metrics/report_kinds/review (REQ-0142)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0142",
   "acceptance_criteria": [
     "AC1 tests per id",
@@ -30,12 +30,17 @@
     "result": "KNOWN 4 NEW 0; 7/7 new tests fail on old code"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "review pack now guards QA:/Answer changed: lines of untrusted exam text; reserved subject names refused"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-135/evidence/summary.md",
+      "work/TASK-135/evidence/fast.txt"
+    ],
+    "command": "new tests + --fast + ledger",
+    "result": "AC1-AC2 met"
   },
   "report": {
     "status": "pending",
@@ -51,6 +56,9 @@
     "coder": "work/TASK-135/handoff/code.md",
     "tester": {
       "waiver": "coordinator re-ran --fast; coder ran the bite"
+    },
+    "verifier": {
+      "waiver": "coordinator verified tests and ledger"
     }
   },
   "user_notes": [
@@ -61,7 +69,7 @@
     }
   ],
   "picked_at": "2026-11-16T15:34:28Z",
-  "updated_at": "2026-11-16T15:39:31Z",
+  "updated_at": "2026-11-16T15:39:32Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/metrics.py",
@@ -83,5 +91,5 @@
     "next": "on coder hand-back: check code.md, --fast, set 7 ledger rows fixed TASK-135, advance IMPLEMENTING",
     "at": "2026-11-16T15:34:40Z"
   },
-  "next": "verify"
+  "next": "report and close"
 }
