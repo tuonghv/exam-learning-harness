@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-130",
   "title": "Review findings ledger + check (REQ-0137)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0137",
   "acceptance_criteria": [
     "AC1 ledger 80 ids",
@@ -29,9 +29,9 @@
     "summary": "docs/review/findings.tsv (80 ids: 54 fixed, 4 not-a-defect, 22 open -> TASK-131); tools/review_ledger.py check; workflow-check WARN; coordinator rule; 7 tests"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --fast",
+    "result": "KNOWN 4 NEW 0; test_review_ledger 7/7"
   },
   "security": {
     "status": "pending",
@@ -68,6 +68,9 @@
     },
     "coder": {
       "waiver": "workflow tooling by the coordinator (owns .claude scripts and skills)"
+    },
+    "tester": {
+      "waiver": "coordinator ran --fast"
     }
   },
   "user_notes": [
@@ -78,7 +81,7 @@
     }
   ],
   "picked_at": "2026-11-16T12:51:04Z",
-  "updated_at": "2026-11-16T12:56:48Z",
+  "updated_at": "2026-11-16T12:56:49Z",
   "updated_by": "main",
   "scope": [
     "docs/review/**",
@@ -96,5 +99,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tests"
+  "next": "verify"
 }
