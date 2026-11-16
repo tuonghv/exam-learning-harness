@@ -48,6 +48,13 @@ class TestSegment(unittest.TestCase):
         _, qs, _ = seg(lines)
         self.assertEqual(qs[1]["context"], "Câu 2 - 3: Đọc đoạn văn sau\nPara.")
 
+    def test_b2_optionless_question_keeps_english_intro_out(self):
+        lines = (["Câu 1. Viết", "Questions 2-3", "Read the passage.", "Câu 2. x"] + ABCD_LINES
+                 + ["Câu 3. y"] + ABCD_LINES)
+        _, qs, _ = seg(lines)
+        self.assertEqual(qs[0]["text"], "Viết")
+        self.assertTrue(qs[1]["context"].startswith("Questions 2-3"))
+
     def test_c_read_line_and_far_span_stay_in_stem(self):
         _, qs, _ = seg(["Câu 1.", "Read the text and write a summary.", "Câu 2. q"] + ABCD_LINES)
         self.assertIn("Read the text and write a summary.", qs[0]["text"])
@@ -105,6 +112,9 @@ class TestRefine(unittest.TestCase):
     def test_i_window_with_passage_not_duplicated(self):
         s = "PASSAGE TEXT LONG ENOUGH\nQuestions 31-35"
         self.assertEqual(self._window_run(s), s)
+
+    def test_h2_window_empty_context_gets_carried_passage(self):
+        self.assertEqual(self._window_run(""), "PASSAGE TEXT LONG ENOUGH")
 
     def _orphan(self, cost=0.0):
         return C(True, json.dumps({"questions": [], "continues": {"text": "tail"}}), cost, "", "", 0.0)

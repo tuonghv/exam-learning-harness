@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-114",
-  "state": "IMPLEMENTING",
-  "next": "tester runs --fast and an independent bite check of the 12 new tests and the 2 updated ones",
+  "state": "UNIT_TESTED",
+  "next": "verifier checks AC1-AC5 against tests and the $0 old-vs-new oracle (work/TASK-114/evidence/oracle-summary.md)",
   "title": "Fix-F ingest: 114-F001/F002/F010/F004 (REQ-0121)",
   "active": [
     {
       "task_id": "TASK-114",
-      "state": "IMPLEMENTING",
-      "next": "tester runs --fast and an independent bite check of the 12 new tests and the 2 updated ones",
-      "updated_at": "2026-11-16T03:46:57Z"
+      "state": "UNIT_TESTED",
+      "next": "verifier checks AC1-AC5 against tests and the $0 old-vs-new oracle (work/TASK-114/evidence/oracle-summary.md)",
+      "updated_at": "2026-11-16T03:58:35Z"
     }
   ],
   "max_active": 1

@@ -3307,3 +3307,9 @@ Action: coder implemented 114.1-114.4 + test_ingest_fix_f.py; main reviewed diff
 Result: --affected 501 ran, NEW 2 -> 0 after the 2 test updates; 8 tests bite
 Decision: implementation matches design; deviations: J/K/L use all_pages=True
 Next: UNIT_TESTED via tester
+
+## UNIT_TESTED - TASK-114 - 2026-11-16T03:58:35Z
+Action: tester ran --fast and an independent bite check; added test_b2 (English Questions 2-3 intro, bites) and test_h2 (empty window context guard)
+Result: NEW 0, every lettered test bites
+Decision: UNIT_TESTED
+Next: VERIFIED via verifier

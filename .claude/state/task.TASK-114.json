@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-114",
   "title": "Fix-F ingest: 114-F001/F002/F010/F004 (REQ-0121)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0121",
   "acceptance_criteria": [
     "AC1 option-less q keeps next heading/intro",
@@ -29,9 +29,9 @@
     "summary": "114.1 _opens_next + end-of-input guard (segment); 114.2 scoped (?i:) group word in _INTRO only, GROUP_RE unchanged; 114.3 _merge_ctx via _dedupe (refine); 114.4 try on backward re-run, run_calls/run_cost, recover_failed warning. 12 new tests (A,B,E,F,H,J,K,L bite on HEAD src; guards C,D,G,I pass both). Main updated 2 existing tests that froze the old behaviour: golden _INTRO pattern, cost_cap mid-backward now keeps first pass"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --fast; python3 -I -m unittest discover -s tests/unit -p test_ingest_fix_f.py",
+    "result": "--fast 2036 ran, KNOWN 4, NEW 0; test_ingest_fix_f 14 OK; tester's independent bite on old src: a,b,b2,e,f,h,j,k,l + test_cap_hit_mid_backward_recovery fail, guards c,d,g,i,h2 pass"
   },
   "security": {
     "status": "pending",
@@ -50,7 +50,8 @@
   "evidence_required": false,
   "roles": {
     "designer": "work/TASK-114/handoff/design.md",
-    "coder": "work/TASK-114/handoff/code.md"
+    "coder": "work/TASK-114/handoff/code.md",
+    "tester": "work/TASK-114/handoff/test.md"
   },
   "user_notes": [
     {
@@ -60,7 +61,7 @@
     }
   ],
   "picked_at": "2026-11-16T03:39:56Z",
-  "updated_at": "2026-11-16T03:46:57Z",
+  "updated_at": "2026-11-16T03:58:35Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/*.py",
@@ -72,5 +73,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tester runs --fast and an independent bite check of the 12 new tests and the 2 updated ones"
+  "next": "verifier checks AC1-AC5 against tests and the $0 old-vs-new oracle (work/TASK-114/evidence/oracle-summary.md)"
 }
