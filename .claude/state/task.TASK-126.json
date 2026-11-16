@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-126",
   "title": "Text-path fixes: options_missing marker, wrapped group instruction, DGNL guide (REQ-0133)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0133",
   "acceptance_criteria": [
     "AC1 MC no options marked",
@@ -34,12 +34,19 @@
     "result": "--fast KNOWN 4, NEW 0; 2 of 5 new tests fail on old code (the 3 others guard unchanged behaviour)"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "no new input surface; no key data touched; render-only change"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-126/evidence/summary.md",
+      "work/TASK-126/evidence/oracle.txt",
+      "work/TASK-126/evidence/bite.txt",
+      "work/TASK-126/evidence/fast.txt"
+    ],
+    "command": "exam text of 4 input PDFs old vs new + solve --dry-run parse; --fast; bite",
+    "result": "AC1-AC6 met; only marker/guide lines change; 3 DGNL files parse (old 5 errors each)"
   },
   "report": {
     "status": "pending",
@@ -57,6 +64,9 @@
     },
     "tester": {
       "waiver": "coordinator ran --fast and the bite check"
+    },
+    "verifier": {
+      "waiver": "coordinator verified with the real-input exam-text oracle and parse check"
     }
   },
   "user_notes": [
@@ -90,5 +100,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verify"
+  "next": "report and close"
 }
