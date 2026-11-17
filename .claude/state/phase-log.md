@@ -4225,3 +4225,9 @@ Action: wrote report
 Result: TASK-144 closed; both policy questions applied
 Decision: backlog empty
 Next: user decides
+
+## DESIGN - TASK-145 - 2026-11-17T05:06:06Z
+Action: run-list summary; recipe
+Result: line f 113/120 $1.37
+Decision: paid re-solve approved (RAW-00361)
+Next: IMPLEMENTING
