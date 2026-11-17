@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-138",
-  "state": "VERIFIED",
-  "next": "report and close",
+  "state": "DONE",
+  "next": "",
   "title": "Scorer correctness: fractions, hedges, separators, minus, ordering key, open answers (batch 4) (REQ-0145)",
-  "active": [
-    {
-      "task_id": "TASK-138",
-      "state": "VERIFIED",
-      "next": "report and close",
-      "updated_at": "2026-11-17T00:04:08Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

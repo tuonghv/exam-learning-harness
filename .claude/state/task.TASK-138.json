@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-138",
   "title": "Scorer correctness: fractions, hedges, separators, minus, ordering key, open answers (batch 4) (REQ-0145)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0145",
   "acceptance_criteria": [
     "AC1 tests per id",
@@ -40,11 +40,19 @@
       "work/TASK-138/evidence/bite.txt"
     ],
     "command": "new tests + bite + repro R1/R3/R4 + --fast + ledger",
-    "result": "AC1-AC2 met"
+    "result": "AC1-AC2 met",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-138/evidence/summary.md",
+        "work/TASK-138/evidence/bite.txt"
+      ],
+      "reason": "8 tests bite; repros flip; --fast NEW 0"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-138-scorer-fixes-b4.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -59,6 +67,9 @@
     },
     "verifier": {
       "waiver": "coordinator verified tests, bite, repros and ledger"
+    },
+    "crosscheck": {
+      "waiver": "coordinator re-ran tests, bite, repros and the ledger"
     }
   },
   "user_notes": [
@@ -69,7 +80,7 @@
     }
   ],
   "picked_at": "2026-11-16T23:58:18Z",
-  "updated_at": "2026-11-17T00:04:08Z",
+  "updated_at": "2026-11-17T00:04:20Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/scorer.py",
@@ -82,5 +93,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report and close"
+  "next": ""
 }
