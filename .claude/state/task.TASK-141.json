@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-141",
   "title": "Verifier computed/format checks: labels, root sign, ordering letters (batch 4) (REQ-0148)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0148",
   "acceptance_criteria": [
     "AC1 tests per id",
@@ -25,9 +25,9 @@
     "summary": "computed check strips a leading label; root sign without parentheses and 2\u221a3 read; ordering format collects a-z; label-only quote no longer passes"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --fast; new tests on fixed code and on HEAD verifier/scorer copies",
+    "result": "KNOWN 4 NEW 0; 4/4 new tests pass, 4/4 fail on old code"
   },
   "security": {
     "status": "pending",
@@ -48,7 +48,10 @@
     "designer": {
       "waiver": "designed in the TASK-137 triage (work/TASK-137/handoff/design-a.md)"
     },
-    "coder": "work/TASK-141/handoff/code.md"
+    "coder": "work/TASK-141/handoff/code.md",
+    "tester": {
+      "waiver": "coordinator re-ran --fast, the new tests and the bite independently"
+    }
   },
   "user_notes": [
     {
@@ -58,7 +61,7 @@
     }
   ],
   "picked_at": "2026-11-17T02:05:40Z",
-  "updated_at": "2026-11-17T02:09:28Z",
+  "updated_at": "2026-11-17T02:09:29Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/verifier.py",
@@ -72,5 +75,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tests"
+  "next": "verify"
 }
