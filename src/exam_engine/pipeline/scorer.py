@@ -42,8 +42,14 @@ def match(answer, key):
     if _ORDER.match(sk):
         return sa == sk
     mk, ma = _numparse(k), _numparse(a)
+    fk, fa = _frac(k), _frac(a)
+    if fk is not None or fa is not None:
+        vk = fk if fk is not None else (mk[0] * 10 ** mk[2] if mk else None)
+        va = fa if fa is not None else (ma[0] * 10 ** ma[2] if ma else None)
+        if vk is not None and va is not None:  # exact value; no decimal-for-fraction slack
+            return abs(va - vk) <= 1e-9 * max(1.0, abs(vk))
     if mk and not ma:
-        tail = re.search(r"=\s*(-?\d+(?:[.,]\d+)?)\s*[.)]?\s*$", a)
+        tail = re.search(r"=\s*(-?\d+(?:[.,]\d+)?)\s*[.)]?\s*$", a.replace("\u2212", "-"))
         ma = _numparse(tail.group(1)) if tail else None
     if mk and ma:
         (kv, d, ke, unit_k), (av, _, ae, unit_a) = mk, ma
@@ -97,14 +103,27 @@ def _note_match(answer, key, raw_answer=None, raw_key=None):
 
 _SCI = re.compile(r"(\d+(?:[.,]\d+)?)\s*(?:[.·×x*]|\s)\s*10\s*\^\s*\{?(-?\d+)\}?")
 _NUMX = re.compile(r"^(-?\d+(?:[.,]\d+)?)(?:e(-?\d+))?\s*(.*)$")
+_FRAC = re.compile(r"^-?\d+(?:[.,]\d+)?\s*/\s*\d+(?:[.,]\d+)?\s*\.?$")
+_GROUPS = re.compile(r"^-?\d{1,3}(?:[.,]\d{3}){2,}(?!\d)")
+
+
+def _frac(s):
+    """Value of a leading fraction ('14/3', '28 / 6'); None when s does not start with one."""
+    t = re.sub(r"\s\([^)]*\)", " ", s.replace("\u2212", "-")).strip()
+    m = _FRAC.match(t)
+    return _exact_value(m.group(0)) if m else None
 
 
 def _numparse(s):
     """(mantissa, decimals, exponent, unit) of a leading number; remarks in (...) are dropped."""
     t = re.sub(r"\s\([^)]*\)", " ", s.replace("−", "-"))
     t = _SCI.sub(lambda m: "%se%s" % (m.group(1), m.group(2)), t.strip())
-    m = _NUMX.match(t.strip())
-    if not m:
+    t = t.strip()
+    g = _GROUPS.match(t)  # 19.975.000 -> 19975000 (two or more groups only; 1.000 stays ambiguous)
+    if g:
+        t = re.sub(r"[.,]", "", g.group(0)) + t[g.end():]
+    m = _NUMX.match(t)
+    if not m or re.match(r"\s*/\s*\d", m.group(3)):
         return None
     mant = m.group(1).replace(",", ".")
     return (float(mant), len(mant.split(".")[1]) if "." in mant else 0,
@@ -113,6 +132,8 @@ def _numparse(s):
 
 def _unit_ok(uk, ua):
     """Equal, one side bare, or one unit's words contained in the other's ('host' in 'dia chi host')."""
+    if re.search(r"(?<![\w^.,])\d", ua) and not re.search(r"(?<![\w^.,])\d", uk):
+        return False  # a second value in the reply ('8 hoac 9' vs '8')
     if uk == ua or not uk or not ua:
         return True
     wk, wa = set(uk.split()), set(ua.split())
@@ -121,14 +142,14 @@ def _unit_ok(uk, ua):
 
 def score_file(ans, key):
     """[(question id, 'correct'|'wrong'|'missing'|'manual')]; ans may not exist."""
-    keys = parser.parse_expected(key)["questions"]
+    keys = parser.parse_expected(key, legacy=True)["questions"]
     got = {}
     if ans and os.path.isfile(ans):
         got = dict((q["id"], q["final"]) for q in parser.parse_expected(ans)["questions"])
     out = []
     for q in keys:
         a = got.get(q["id"])
-        if norm(q["final"] or "") == "open (rubric)":
+        if q["final"] is None or norm(q["final"]) == "open (rubric)":
             out.append((q["id"], "manual" if a else "missing"))
         elif not a:
             out.append((q["id"], "missing"))
@@ -160,7 +181,8 @@ def apply_key(recs, key_path):
             # 64.1: a refusal is not a correct answer; the status/reason stay as they are
             r["score"] = {"points": 0, "max": 1, "basis": "official_key", "detail": "not_answered"}
             continue
-        if a is None or declined(a) or is_open(a):
+        open_key = final is None or norm(_strip(final)) == "open (rubric)"
+        if a is None or declined(a) or (is_open(a) and open_key):
             r["score"] = {"points": None, "max": None, "basis": "none",
                           "detail": "no key comparison (no answer or open task)"}
             continue
@@ -229,7 +251,7 @@ def key_letters(path):
     """{id: letter} from an answer key file; non-letter keys are left out (None when nothing is keyed)."""
     out = {}
     for q in parser.parse_expected(path, legacy=True)["questions"]:
-        f = re.match(r"^\s*([A-Da-d])\b", q.get("final") or "")
+        f = re.match(r"^\s*([A-Da-d])(?![\w-])", q.get("final") or "")
         if f:
             out[str(q["id"])] = f.group(1).upper()
     return out or None

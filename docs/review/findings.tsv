@@ -82,18 +82,18 @@ id	report	class	disposition	ref	note
 136-F001	phase-136-engine-decision-b4.md	BUG	open	TASK-139	TASK-137 triage
 136-F002	phase-136-engine-decision-b4.md	BUG	open	TASK-139	TASK-137 triage
 136-F003	phase-136-engine-decision-b4.md	BUG	open	TASK-139	TASK-137 triage
-136-F004	phase-136-engine-decision-b4.md	BUG	open	TASK-138	TASK-137 triage
+136-F004	phase-136-engine-decision-b4.md	BUG	fixed	TASK-138	
 136-F005	phase-136-engine-decision-b4.md	BUG	open	TASK-139	TASK-137 triage
-137-F001	phase-137-scorer-verifier-b4.md	BUG	open	TASK-138	TASK-137 triage
-137-F002	phase-137-scorer-verifier-b4.md	BUG	open	TASK-138	TASK-137 triage
-137-F003	phase-137-scorer-verifier-b4.md	BUG	open	TASK-138	TASK-137 triage
-137-F004	phase-137-scorer-verifier-b4.md	BUG	open	TASK-138	TASK-137 triage
+137-F001	phase-137-scorer-verifier-b4.md	BUG	fixed	TASK-138	
+137-F002	phase-137-scorer-verifier-b4.md	BUG	fixed	TASK-138	
+137-F003	phase-137-scorer-verifier-b4.md	BUG	fixed	TASK-138	
+137-F004	phase-137-scorer-verifier-b4.md	BUG	fixed	TASK-138	
 137-F005	phase-137-scorer-verifier-b4.md	BUG	open	TASK-141	TASK-137 triage
 137-F006	phase-137-scorer-verifier-b4.md	BUG	open	TASK-141	TASK-137 triage
 137-F007	phase-137-scorer-verifier-b4.md	BUG	open	TASK-141	TASK-137 triage
-137-F008	phase-137-scorer-verifier-b4.md	BUG	open	TASK-138	TASK-137 triage
-137-F009	phase-137-scorer-verifier-b4.md	BUG	open	TASK-138	TASK-137 triage
-137-F010	phase-137-scorer-verifier-b4.md	IMPROVEMENT	open	TASK-138	TASK-137 triage
+137-F008	phase-137-scorer-verifier-b4.md	BUG	fixed	TASK-138	
+137-F009	phase-137-scorer-verifier-b4.md	BUG	fixed	TASK-138	
+137-F010	phase-137-scorer-verifier-b4.md	IMPROVEMENT	fixed	TASK-138	
 138-F001	phase-138-pdf-adapter-b4.md	BUG	open	TASK-143	TASK-137 triage
 138-F002	phase-138-pdf-adapter-b4.md	BUG	open	TASK-143	TASK-137 triage
 138-F003	phase-138-pdf-adapter-b4.md	BUG	open	TASK-143	TASK-137 triage
