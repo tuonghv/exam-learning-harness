@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-146",
   "title": "Re-solve DGNL 2024/2025/2026 with claude-opus-5-5 on dev line o55, compare with published sonnet (REQ-0152)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0152",
   "acceptance_criteria": [
     "AC1 same inputs, opus-5-5, cap 1.50/subject, total <= 18",
@@ -16,8 +16,11 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "work/TASK-146/evidence/summary.md"
+    ],
+    "summary": "no code: 15 paid Opus 5.5 plan runs on line o55 ($8.65), 3 scored report packs"
   },
   "unit_test": {
     "status": "pending",
@@ -42,6 +45,9 @@
   "roles": {
     "designer": {
       "waiver": "run recipe from REQ-0152; coordinator-owned paid run"
+    },
+    "coder": {
+      "waiver": "run-only task, no code; coordinator runs paid jobs"
     }
   },
   "user_notes": [
@@ -52,7 +58,7 @@
     }
   ],
   "picked_at": "2026-11-17T05:29:47Z",
-  "updated_at": "2026-11-17T05:30:19Z",
+  "updated_at": "2026-11-17T07:04:06Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -61,5 +67,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "run the solves"
+  "next": "checks"
 }
