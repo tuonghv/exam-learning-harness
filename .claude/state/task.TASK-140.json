@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-140",
   "title": "Runlayout: publish guard for run folders, reserved line names, run-id suffix order (batch 4) (REQ-0147)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0147",
   "acceptance_criteria": [
     "AC1 tests per id",
@@ -15,8 +15,13 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/runlayout.py",
+      "tests/unit/test_runlayout_fixes_140.py",
+      "docs/review/findings.tsv"
+    ],
+    "summary": "publish guard treats runs/<id> and run-<id> under the exam as published; reports/plans reserved line names; report runs sorted by numeric suffix"
   },
   "unit_test": {
     "status": "pending",
@@ -41,7 +46,8 @@
   "roles": {
     "designer": {
       "waiver": "designed in the TASK-137 triage (work/TASK-137/handoff/design-b.md)"
-    }
+    },
+    "coder": "work/TASK-140/handoff/code.md"
   },
   "user_notes": [
     {
@@ -51,14 +57,18 @@
     }
   ],
   "picked_at": "2026-11-17T02:01:53Z",
-  "updated_at": "2026-11-17T02:02:05Z",
+  "updated_at": "2026-11-17T02:05:29Z",
   "updated_by": "main",
-  "scope": [],
+  "scope": [
+    "src/exam_engine/pipeline/runlayout.py",
+    "tests/unit/test_runlayout_fixes_140.py",
+    "docs/review/findings.tsv"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
     "done": [],
     "notes": ""
   },
-  "next": "coder implements 140.1-140.3"
+  "next": "tests"
 }

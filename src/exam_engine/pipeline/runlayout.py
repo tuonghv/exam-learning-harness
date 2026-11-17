@@ -76,7 +76,7 @@ def subject_tag(text):
 def safe_line(line):
     """Line name used as a path component: a safe id that is not a reserved folder name."""
     line = _safe(line, "line")
-    if line in (RUNS, CACHE, REPORT_RUNS):
+    if line in (RUNS, CACHE, REPORT_RUNS, "reports", "plans"):
         raise ValueError("invalid line %r (reserved name)" % line)
     return line
 
@@ -110,6 +110,8 @@ def require_publish(line, publish, what, root, exam=None):
     parts = [x for x in os.path.relpath(rp, prot).split(os.sep) if x != "."]
     if line is None:
         line = parts[1] if len(parts) >= 2 else None
+        if line == RUNS or (line or "").startswith(REPORT_PREFIX):
+            line = None  # runs/<id> and run-<id> sit directly under the exam: published layout, not a line
     if publish or not is_published_line(line):
         return
     exam = exam or (parts[0] if parts else None)
@@ -445,7 +447,8 @@ def scan_report_runs(exam_dir, skip_lines=True):
             continue
         else:
             out.append({"id": n, "dir": d, "layout": "legacy", "manifest": None, "warn": False})
-    out.sort(key=lambda r: (id_time(r["id"]) if r["layout"] != "legacy" else "", r["id"]))
+    out.sort(key=lambda r: ("", 1, r["id"]) if r["layout"] == "legacy"
+             else (id_time(r["id"]), _suffix(r["id"]), r["id"]))
     return out
 
 
