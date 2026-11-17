@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-141",
   "title": "Verifier computed/format checks: labels, root sign, ordering letters (batch 4) (REQ-0148)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0148",
   "acceptance_criteria": [
     "AC1 tests per id",
@@ -41,11 +41,19 @@
       "work/TASK-141/evidence/bite.txt"
     ],
     "command": "new tests + bite + repro R2 + --fast + ledger + diff review",
-    "result": "AC1-AC2 met"
+    "result": "AC1-AC2 met",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-141/evidence/summary.md",
+        "work/TASK-141/evidence/bite.txt"
+      ],
+      "reason": "4 tests bite; R2 flips; --fast NEW 0"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-141-verifier-fixes-b4.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -60,6 +68,9 @@
     },
     "verifier": {
       "waiver": "coordinator verified tests, bite, repro, diff and ledger"
+    },
+    "crosscheck": {
+      "waiver": "coordinator re-ran tests, bite, repro and the ledger"
     }
   },
   "user_notes": [
@@ -84,5 +95,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report and close"
+  "next": ""
 }

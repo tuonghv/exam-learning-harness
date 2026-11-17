@@ -2938,7 +2938,7 @@
     "task_id": "TASK-141",
     "title": "Verifier computed/format checks: labels, root sign, ordering letters (batch 4) (REQ-0148)",
     "priority": 2,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-16T23:57:29Z",
     "requirement": "REQ-0148",
     "acceptance_criteria": [
@@ -2951,7 +2951,9 @@
         "note": "fix task from the TASK-137 triage of review batch 4",
         "at": "2026-11-16T23:57:29Z"
       }
-    ]
+    ],
+    "completed_at": "2026-11-17T02:09:30Z",
+    "report": "docs/report/phase-141-verifier-fixes-b4.md"
   },
   {
     "task_id": "TASK-142",
