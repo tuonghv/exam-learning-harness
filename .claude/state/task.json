@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-142",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "coder implements 142.1-142.5",
   "title": "PDF OCR route: table area, OCR acceptance, ocr_doubt, cut detector, corrupt page (batch 4) (REQ-0149)",
   "active": [
     {
       "task_id": "TASK-142",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "coder implements 142.1-142.5",
+      "updated_at": "2026-11-17T02:09:47Z"
     }
   ],
   "max_active": 1
