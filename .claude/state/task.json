@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-144",
-  "state": "DESIGN",
-  "next": "coder implements 144.1-144.2",
+  "state": "IMPLEMENTING",
+  "next": "tests",
   "title": "Scorer strict half-unit tolerance, no decimal for fraction keys (REQ-0151)",
   "active": [
     {
       "task_id": "TASK-144",
-      "state": "DESIGN",
-      "next": "coder implements 144.1-144.2",
-      "updated_at": "2026-11-17T04:00:52Z"
+      "state": "IMPLEMENTING",
+      "next": "tests",
+      "updated_at": "2026-11-17T04:04:30Z"
     }
   ],
   "max_active": 1

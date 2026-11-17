@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-144",
   "title": "Scorer strict half-unit tolerance, no decimal for fraction keys (REQ-0151)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0151",
   "acceptance_criteria": [
     "AC1 boundary tests",
@@ -15,8 +15,12 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/scorer.py",
+      "tests/unit/test_scorer_strict_144.py"
+    ],
+    "summary": "numeric tolerance exclusive at the half unit (match and _note_match); fraction-key no-decimal pinned by a test"
   },
   "unit_test": {
     "status": "pending",
@@ -41,7 +45,8 @@
   "roles": {
     "designer": {
       "waiver": "user decision RAW-00360 on the TASK-137 policy questions; two-line change"
-    }
+    },
+    "coder": "work/TASK-144/handoff/code.md"
   },
   "user_notes": [
     {
@@ -51,14 +56,17 @@
     }
   ],
   "picked_at": "2026-11-17T04:00:42Z",
-  "updated_at": "2026-11-17T04:00:52Z",
+  "updated_at": "2026-11-17T04:04:30Z",
   "updated_by": "main",
-  "scope": [],
+  "scope": [
+    "src/exam_engine/pipeline/scorer.py",
+    "tests/unit/test_scorer_strict_144.py"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
     "done": [],
     "notes": ""
   },
-  "next": "coder implements 144.1-144.2"
+  "next": "tests"
 }

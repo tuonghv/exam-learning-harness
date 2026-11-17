@@ -14,6 +14,7 @@ from exam_engine.core.decision import declined, decide_rec, finding, is_open
 from exam_engine.pipeline import parser
 from exam_engine.utils.text import norm
 
+_HALF = 1 - 1e-9  # D1 (RAW-00360): bound is exclusive at half a unit; shave float noise on the exact half
 _NUM = re.compile(r"^(-?\d+(?:[.,]\d+)?)\s*(.*)$")
 _ORDER = re.compile(r"^[a-z](?:-[a-z])+$")
 
@@ -54,7 +55,7 @@ def match(answer, key):
     if mk and ma:
         (kv, d, ke, unit_k), (av, _, ae, unit_a) = mk, ma
         return (_unit_ok(unit_k, unit_a)
-                and abs(av * 10 ** ae - kv * 10 ** ke) <= (0.5 * 10 ** (-d) + 1e-12) * 10 ** ke)
+                and abs(av * 10 ** ae - kv * 10 ** ke) < _HALF * 0.5 * 10 ** (-d) * 10 ** ke)
     return na == nk or _note_match(_strip(answer), _strip(key), answer, key)
 
 
@@ -100,7 +101,7 @@ def _note_match(answer, key, raw_answer=None, raw_key=None):
     v = -v if neg else v
     x = nums[0].replace(",", ".")
     d = len(x.split(".")[1]) if "." in x else 0
-    return abs(v - float(x)) <= 0.5 * 10 ** (-d) + 1e-12
+    return abs(v - float(x)) < _HALF * 0.5 * 10 ** (-d)
 
 
 _SCI = re.compile(r"(\d+(?:[.,]\d+)?)\s*(?:[.·×x*]|\s)\s*10\s*\^\s*\{?(-?\d+)\}?")
