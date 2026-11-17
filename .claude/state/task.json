@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-145",
-  "state": "VERIFIED",
-  "next": "report and close",
+  "state": "DONE",
+  "next": "",
   "title": "Re-solve DGNL 2026 (paid, approved) with pinned model, cache, full report (REQ-0091)",
-  "active": [
-    {
-      "task_id": "TASK-145",
-      "state": "VERIFIED",
-      "next": "report and close",
-      "updated_at": "2026-11-17T05:06:14Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
