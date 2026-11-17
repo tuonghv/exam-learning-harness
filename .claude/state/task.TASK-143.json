@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-143",
   "title": "PDF text placement: two-column tables, cell re-split, short-stem columns, group intro lines (batch 4) (REQ-0150)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0150",
   "acceptance_criteria": [
     "AC1 tests per id",
@@ -30,12 +30,19 @@
     "result": "KNOWN 4 NEW 0; 6/6 new tests pass, 6/6 fail on old code"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "not_applicable",
+    "result": "text layout only; no new input path"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-143/evidence/summary.md",
+      "work/TASK-143/evidence/ingest_diff_words.txt",
+      "work/TASK-143/evidence/fast.txt",
+      "work/TASK-143/evidence/bite.txt"
+    ],
+    "command": "before/after native ingest of the 4 input PDFs (work/TASK-143/dump_ingest.py) + new tests + bite + --fast",
+    "result": "AC1-AC2 met; real input: only F002 table-row joins changed (3 fields x 2 exams), all improvements; F001/F003/F004 no change on these exams"
   },
   "report": {
     "status": "pending",
@@ -51,6 +58,9 @@
     "coder": "work/TASK-143/handoff/code.md",
     "tester": {
       "waiver": "coordinator re-ran --fast, the new tests and the bite independently"
+    },
+    "verifier": {
+      "waiver": "coordinator ran the real-input before/after diff and judged every changed field"
     }
   },
   "user_notes": [
@@ -61,7 +71,7 @@
     }
   ],
   "picked_at": "2026-11-17T02:19:04Z",
-  "updated_at": "2026-11-17T02:23:50Z",
+  "updated_at": "2026-11-17T02:23:51Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/adapters/pdf.py",
@@ -75,5 +85,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verify on real input"
+  "next": "report and close"
 }

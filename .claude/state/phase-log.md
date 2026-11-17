@@ -4183,3 +4183,9 @@ Action: --fast + bite
 Result: NEW 0; every test bites
 Decision: UNIT_TESTED
 Next: VERIFIED
+
+## VERIFIED - TASK-143 - 2026-11-17T02:23:51Z
+Action: real-input diff
+Result: 6 changed fields, all F002 improvements
+Decision: VERIFIED
+Next: DONE
