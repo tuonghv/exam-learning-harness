@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-140",
   "title": "Runlayout: publish guard for run folders, reserved line names, run-id suffix order (batch 4) (REQ-0147)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0147",
   "acceptance_criteria": [
     "AC1 tests per id",
@@ -24,9 +24,9 @@
     "summary": "publish guard treats runs/<id> and run-<id> under the exam as published; reports/plans reserved line names; report runs sorted by numeric suffix"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --fast; new tests on fixed code and on a HEAD runlayout copy",
+    "result": "KNOWN 4 NEW 0; 3/3 new tests pass, 3/3 fail on old code"
   },
   "security": {
     "status": "pending",
@@ -47,7 +47,10 @@
     "designer": {
       "waiver": "designed in the TASK-137 triage (work/TASK-137/handoff/design-b.md)"
     },
-    "coder": "work/TASK-140/handoff/code.md"
+    "coder": "work/TASK-140/handoff/code.md",
+    "tester": {
+      "waiver": "coordinator re-ran --fast, the new tests and the bite independently"
+    }
   },
   "user_notes": [
     {
@@ -57,7 +60,7 @@
     }
   ],
   "picked_at": "2026-11-17T02:01:53Z",
-  "updated_at": "2026-11-17T02:05:29Z",
+  "updated_at": "2026-11-17T02:05:30Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/runlayout.py",
@@ -70,5 +73,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tests"
+  "next": "verify"
 }
