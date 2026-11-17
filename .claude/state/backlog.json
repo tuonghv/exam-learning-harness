@@ -2959,7 +2959,7 @@
     "task_id": "TASK-142",
     "title": "PDF OCR route: table area, OCR acceptance, ocr_doubt, cut detector, corrupt page (batch 4) (REQ-0149)",
     "priority": 2,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-16T23:57:29Z",
     "requirement": "REQ-0149",
     "acceptance_criteria": [
@@ -2972,7 +2972,9 @@
         "note": "fix task from the TASK-137 triage of review batch 4",
         "at": "2026-11-16T23:57:29Z"
       }
-    ]
+    ],
+    "completed_at": "2026-11-17T02:18:32Z",
+    "report": "docs/report/phase-142-pdf-ocr-fixes-b4.md"
   },
   {
     "task_id": "TASK-143",

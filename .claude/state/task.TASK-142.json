@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-142",
   "title": "PDF OCR route: table area, OCR acceptance, ocr_doubt, cut detector, corrupt page (batch 4) (REQ-0149)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0149",
   "acceptance_criteria": [
     "AC1 tests per id",
@@ -41,11 +41,19 @@
       "work/TASK-142/evidence/bite.txt"
     ],
     "command": "new tests + bite + --fast + ledger + diff review (2 rounds)",
-    "result": "AC1-AC2 met"
+    "result": "AC1-AC2 met",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-142/evidence/summary.md",
+        "work/TASK-142/evidence/bite.txt"
+      ],
+      "reason": "5 fix tests bite; --fast NEW 0"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-142-pdf-ocr-fixes-b4.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -60,6 +68,9 @@
     },
     "verifier": {
       "waiver": "coordinator verified tests, bite, diff and ledger"
+    },
+    "crosscheck": {
+      "waiver": "coordinator re-ran tests, bite and the ledger"
     }
   },
   "user_notes": [
@@ -70,7 +81,7 @@
     }
   ],
   "picked_at": "2026-11-17T02:09:36Z",
-  "updated_at": "2026-11-17T02:18:24Z",
+  "updated_at": "2026-11-17T02:18:33Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/adapters/pdf.py",
@@ -83,5 +94,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report and close"
+  "next": ""
 }
