@@ -4267,3 +4267,9 @@ Action: 13 paid solves (+2 re-runs after usage limit) + 3 report-packs
 Result: $8.65; 110/119, 113/120, 112/120
 Decision: done
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-146 - 2026-11-17T07:04:07Z
+Action: exit codes, diff self-check
+Result: ok
+Decision: UNIT_TESTED
+Next: VERIFIED

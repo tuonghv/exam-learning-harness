@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-146",
   "title": "Re-solve DGNL 2024/2025/2026 with claude-opus-5-5 on dev line o55, compare with published sonnet (REQ-0152)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0152",
   "acceptance_criteria": [
     "AC1 same inputs, opus-5-5, cap 1.50/subject, total <= 18",
@@ -23,9 +23,9 @@
     "summary": "no code: 15 paid Opus 5.5 plan runs on line o55 ($8.65), 3 scored report packs"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "run-only task: solve exit codes (1 = uncertain left, as the published runs) and report-pack exit 0; diff.py self-diff of main = 0 changes",
+    "result": "all final runs stopped=None; no code change, no unit tests apply"
   },
   "security": {
     "status": "pending",
@@ -48,6 +48,9 @@
     },
     "coder": {
       "waiver": "run-only task, no code; coordinator runs paid jobs"
+    },
+    "tester": {
+      "waiver": "run-only task, no code"
     }
   },
   "user_notes": [
@@ -58,7 +61,7 @@
     }
   ],
   "picked_at": "2026-11-17T05:29:47Z",
-  "updated_at": "2026-11-17T07:04:06Z",
+  "updated_at": "2026-11-17T07:04:07Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -67,5 +70,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "checks"
+  "next": "verify"
 }
