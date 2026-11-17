@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-146",
-  "state": "VERIFIED",
-  "next": "report and close",
+  "state": "DONE",
+  "next": "",
   "title": "Re-solve DGNL 2024/2025/2026 with claude-opus-5-5 on dev line o55, compare with published sonnet (REQ-0152)",
-  "active": [
-    {
-      "task_id": "TASK-146",
-      "state": "VERIFIED",
-      "next": "report and close",
-      "updated_at": "2026-11-17T07:04:08Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }

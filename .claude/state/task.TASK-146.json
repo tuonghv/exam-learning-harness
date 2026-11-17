@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-146",
   "title": "Re-solve DGNL 2024/2025/2026 with claude-opus-5-5 on dev line o55, compare with published sonnet (REQ-0152)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0152",
   "acceptance_criteria": [
     "AC1 same inputs, opus-5-5, cap 1.50/subject, total <= 18",
@@ -38,11 +38,19 @@
       "work/TASK-146/evidence/solve-pass1.log"
     ],
     "command": "sum plan.json cost_usd; report-pack --key per exam; diff.py vs published score-vs-key; ls reports/<exam>/main",
-    "result": "AC1-AC3 met: $8.65 <= $18; 110/119, 113/120, 112/120 (main 105, 113, 113); net +5, 0, -1; main unchanged"
+    "result": "AC1-AC3 met: $8.65 <= $18; 110/119, 113/120, 112/120 (main 105, 113, 113); net +5, 0, -1; main unchanged",
+    "quality": {
+      "kind": "real-run",
+      "evidence": [
+        "work/TASK-146/evidence/summary.md",
+        "work/TASK-146/evidence/solve-pass1.log"
+      ],
+      "reason": "paid run, scored vs the official keys, compared per question"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-146-dgnl-opus-resolve.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -59,6 +67,9 @@
     },
     "verifier": {
       "waiver": "coordinator checked costs, score diff and files directly"
+    },
+    "crosscheck": {
+      "waiver": "coordinator diffed score-vs-key against the published runs per question"
     }
   },
   "user_notes": [
@@ -69,7 +80,7 @@
     }
   ],
   "picked_at": "2026-11-17T05:29:47Z",
-  "updated_at": "2026-11-17T07:04:08Z",
+  "updated_at": "2026-11-17T07:04:12Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -78,5 +89,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report and close"
+  "next": ""
 }

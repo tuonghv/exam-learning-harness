@@ -101,3 +101,4 @@ Rule (RAW-00171, REQ-0061): evidence summaries are small text with no exam conte
 | TASK-133 Review leftovers fix A: cli + Claude adapter | docs/design/phase-133-review-fix-a-cli.md | docs/report/phase-133-review-fix-a-cli.md | - | - | - |
 | TASK-134 Review leftovers fix B: refine hardening | docs/design/phase-134-review-fix-b-refine.md | docs/report/phase-134-review-fix-b-refine.md | - | - | - |
 | TASK-135 Review leftovers fix C: metrics, report_kinds, review pack | docs/design/phase-135-review-fix-c-pipeline.md | docs/report/phase-135-review-fix-c-pipeline.md | - | - | - |
+| TASK-146 Re-solve DGNL 2024-2026 with Opus 5.5 | docs/design/phase-146-dgnl-opus-resolve.md | docs/report/phase-146-dgnl-opus-resolve.md | - | - | - |
