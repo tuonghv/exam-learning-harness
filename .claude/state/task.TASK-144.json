@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-144",
   "title": "Scorer strict half-unit tolerance, no decimal for fraction keys (REQ-0151)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0151",
   "acceptance_criteria": [
     "AC1 boundary tests",
@@ -23,9 +23,9 @@
     "summary": "numeric tolerance exclusive at the half unit (match and _note_match); fraction-key no-decimal pinned by a test"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --fast; new tests on fixed code and on a HEAD scorer copy",
+    "result": "KNOWN 4 NEW 0; 4/4 pass; 3 D1 tests fail on old code, fraction pin passes on both by design"
   },
   "security": {
     "status": "pending",
@@ -46,7 +46,10 @@
     "designer": {
       "waiver": "user decision RAW-00360 on the TASK-137 policy questions; two-line change"
     },
-    "coder": "work/TASK-144/handoff/code.md"
+    "coder": "work/TASK-144/handoff/code.md",
+    "tester": {
+      "waiver": "coordinator re-ran --fast, the new tests and the bite independently"
+    }
   },
   "user_notes": [
     {
@@ -68,5 +71,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tests"
+  "next": "verify"
 }
