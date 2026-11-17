@@ -95,7 +95,7 @@ def select_pages(doc, spec, reviewer=None):
             from exam_engine.ingest.adapters import pdf
         for p in new["pages"]:
             if is_pdf:  # 129.3: the same lines as the full ingest, tables included and placed
-                page_lines.append(pdf._text_lines([(b["type"], b.get("bbox") or (0, i, 0, i), b["text"], None)  # no bbox: block order
+                page_lines.append(pdf._text_lines([(b["type"], b.get("bbox") or (0, i, 0, i), b["text"], {"rows": b["rows"]} if b.get("rows") else None)  # no bbox: block order
                                                 for i, b in enumerate(p["blocks"])]))
                 continue
             lines = []

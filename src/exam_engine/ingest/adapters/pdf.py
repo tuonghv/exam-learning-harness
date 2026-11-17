@@ -191,6 +191,9 @@ def _order_page(page, blocks, width):
     if not any(b[0][0] < mid < b[0][2] for b in blocks):
         return res, False
     res2, two2 = _order(lines, width)
+    # 143.3: options laid out in a row (A./B. left, C./D. right) are not columns
+    if two2 and all(segment._OPT.match(b[1].split("\n")[0]) for b in res2 if b[0][0] >= mid):
+        two2 = False
     if two2:
         lf = [b for b in res2 if b[0][2] <= mid]
         return _merge_column(lf) + _merge_column(res2[len(lf):]), True
@@ -224,14 +227,48 @@ LEAK_MIN_KEY = 8      # shorter keys are too easy to match by chance
 FURNITURE_PAGES = 3  # a repeated header / footer needs at least max(3, half the pages)
 
 
-def _text_lines(items):
+def _same_side(bb, pb, mid):
+    """143.1: True when no column split applies (mid None) or the box pb is in the column of bb (a box straddling
+    mid has no side: it matches everything)."""
+    if mid is None:
+        return True
+    if bb[2] <= mid:
+        return pb[2] <= mid
+    if bb[0] >= mid:
+        return pb[0] >= mid
+    return True
+
+
+def _insert_pos(items, bbox, mid=None):
+    """Index to insert a table / image block: before the first item that starts lower; on a two-column page (mid)
+    only items of its own column count (D1), else after the last one of its column."""
+    same = [i for i, it in enumerate(items) if _same_side(bbox, it[1], mid)]
+    for i in same:
+        if items[i][1][1] > bbox[1]:
+            return i
+    return same[-1] + 1 if same and mid is not None else len(items)
+
+
+def _row_lines(rows):
+    """143.2: table lines from cell rows (a cell keeps its own newlines): a box (every row <= 1 filled cell) -> the
+    cell's lines; else one `| a | b |` line per row, newlines in a cell become a space."""
+    rows = [[c.strip() for c in r if c and c.strip()] for r in rows]
+    rows = [r for r in rows if r]
+    if all(len(r) <= 1 for r in rows):
+        return [ln for r in rows for ln in r[0].split("\n")]
+    return ["| %s |" % " | ".join(" ".join(c.split()) for c in r) for r in rows]
+
+
+def _text_lines(items, mid=None):
     """Segment lines of one page: paragraph lines in item order; each table (129.2: boxed passage or data table), in
     (top, left) order, goes after the last placed block that starts at or above its top edge (tables are listed apart
-    from the reading order; side-by-side tables stay together, left first)."""
+    from the reading order; side-by-side tables stay together, left first). `mid` (two-column page): only blocks of
+    the table's column count as above it."""
     seq = [(bb, text.split("\n")) for kind, bb, text, _ in items if kind == "paragraph"]
-    for _k, bb, text, _ in sorted((it for it in items if it[0] == "table"), key=lambda it: (it[1][1], it[1][0])):
-        above = [i for i, (pb, _l) in enumerate(seq) if pb[1] <= bb[1]]
-        seq.insert(above[-1] + 1 if above else 0, (bb, segment.table_lines(text)))
+    for _k, bb, text, ex in sorted((it for it in items if it[0] == "table"), key=lambda it: (it[1][1], it[1][0])):
+        above = [i for i, (pb, _l) in enumerate(seq) if pb[1] <= bb[1] and _same_side(bb, pb, mid)]
+        rows = (ex or {}).get("rows")
+        seq.insert(above[-1] + 1 if above else 0, (bb, _row_lines(rows) if rows else segment.table_lines(text)))
     return [ln for _bb, lines in seq for ln in lines]
 
 
@@ -250,7 +287,8 @@ def _strip_furniture(pages, leaks=None):
         return sorted(set(idx[:FURNITURE_EDGE] + idx[-FURNITURE_EDGE:]))
 
     def content(ln):  # a numbered question / option line is never a repeated header
-        return bool(segment._Q.match(ln) or segment._OPT.match(ln))
+        return bool(segment._Q.match(ln) or segment._OPT.match(ln)
+                    or segment._INTRO.match(ln) or segment._READ.match(ln))
 
     def key(ln):
         return re.sub(r"\s+", "", re.sub(r"\d+", "#", _nfc(ln))).casefold()
@@ -649,7 +687,7 @@ def _extract(fitz, pdf, raw, path, config):
             items.append(("paragraph", b[0], b[1], dict(extra)))
         for bbox, rows in tables:
             tx = "\n".join(" | ".join(r) for r in rows)
-            pos = next((i for i, it in enumerate(items) if it[1][1] > bbox[1]), len(items))
+            pos = _insert_pos(items, bbox, pw / 2.0 if two_col and method == "native" else None)
             items.insert(pos, ("table", bbox, tx, {"rows": rows}))
         # visual preservation
         crops = []
@@ -682,7 +720,7 @@ def _extract(fitz, pdf, raw, path, config):
             bbox = [round(v, 2) for v in tuple(rect)]
             assets.append({"id": aid, "path": rel, "mime": "image/png", "sha256": h,
                            "page": n, "bbox": bbox})
-            pos = next((i for i, it in enumerate(items) if it[1][1] > bbox[1]), len(items))
+            pos = _insert_pos(items, bbox, pw / 2.0 if two_col and method == "native" else None)
             items.insert(pos, ("image", tuple(bbox), "", {"asset": aid}))
         blocks = []
         for kind, bbox, text, ex in items:
@@ -694,7 +732,7 @@ def _extract(fitz, pdf, raw, path, config):
         if native_text.strip() or images or drawings:
             any_content = True
         page_lines.append([])
-        page_lines[-1].extend(_text_lines(items))
+        page_lines[-1].extend(_text_lines(items, pw / 2.0 if two_col and method == "native" else None))
         pages.append({"n": n, "width": round(pw, 2), "height": round(ph, 2), "blocks": blocks,
                       "chars": len(native_text.strip()), "images": len(images),
                       "drawings": len(drawings), "status": status, "method": method,

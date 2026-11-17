@@ -4171,3 +4171,9 @@ Action: design from the triage; baseline native ingest of 4 input PDFs captured
 Result: 5 ids
 Decision: coder
 Next: IMPLEMENTING
+
+## IMPLEMENTING - TASK-143 - 2026-11-17T02:23:49Z
+Action: coder implemented 143.1-143.4 + 6 tests; ledger 4 fixed, 138-F006 waived
+Result: --fast KNOWN 4 NEW 0
+Decision: matches design
+Next: UNIT_TESTED

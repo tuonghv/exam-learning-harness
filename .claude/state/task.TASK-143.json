@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-143",
   "title": "PDF text placement: two-column tables, cell re-split, short-stem columns, group intro lines (batch 4) (REQ-0150)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0150",
   "acceptance_criteria": [
     "AC1 tests per id",
@@ -15,8 +15,14 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/ingest/adapters/pdf.py",
+      "src/exam_engine/ingest/parts.py",
+      "tests/unit/test_pdf_text_placement_143.py",
+      "docs/review/findings.tsv"
+    ],
+    "summary": "two-column table placement by side; table lines from cell rows (also select_pages); option-row pages not split as columns; group intro lines protected from furniture strip; F006 waived"
   },
   "unit_test": {
     "status": "pending",
@@ -41,7 +47,8 @@
   "roles": {
     "designer": {
       "waiver": "designed in the TASK-137 triage (work/TASK-137/handoff/design-b.md)"
-    }
+    },
+    "coder": "work/TASK-143/handoff/code.md"
   },
   "user_notes": [
     {
@@ -51,14 +58,19 @@
     }
   ],
   "picked_at": "2026-11-17T02:19:04Z",
-  "updated_at": "2026-11-17T02:19:19Z",
+  "updated_at": "2026-11-17T02:23:50Z",
   "updated_by": "main",
-  "scope": [],
+  "scope": [
+    "src/exam_engine/ingest/adapters/pdf.py",
+    "src/exam_engine/ingest/parts.py",
+    "tests/unit/test_pdf_text_placement_143.py",
+    "docs/review/findings.tsv"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
     "done": [],
     "notes": ""
   },
-  "next": "coder implements 143.1-143.4"
+  "next": "tests"
 }
