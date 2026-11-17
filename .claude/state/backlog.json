@@ -3022,7 +3022,7 @@
     "task_id": "TASK-145",
     "title": "Re-solve DGNL 2026 (paid, approved) with pinned model, cache, full report (REQ-0091)",
     "priority": 2,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-11-17T05:05:36Z",
     "requirement": "REQ-0091",
     "acceptance_criteria": [
