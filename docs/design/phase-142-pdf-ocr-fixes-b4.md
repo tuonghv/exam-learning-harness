@@ -9,7 +9,9 @@ page-cut warning. Native-text pages are unchanged. Local OCR only, $0; no prompt
 
 ## Design
 - 142.1 138-F005: when OCR is chosen for a page, set `tables = []` and use the OCR blocks unfiltered by `tbbox`;
-  keep `tbbox` only for the crop filter (~655) so table rulings do not become crops.
+  keep `tbbox` only for the crop filter (~655) so table rulings do not become crops. Refined in review: only when
+  the native text is garbled; a page whose flags are exactly `missing_text` keeps its native tables and OCR text
+  outside them (a table-only page or a native table with a scanned stem loses nothing).
 - 142.2 138-F007: accept OCR also when `len(ocr_text.strip()) >= MIN_CHARS and flags != ["missing_text"] and not
   _suspect(ocr_text)` (garbled native text loses to clean OCR even when OCR is not longer).
 - 142.3 138-F008: the `sus` set passed to `_ocr_doubt` is the pages with `method == "ocr"` and status

@@ -98,12 +98,12 @@ id	report	class	disposition	ref	note
 138-F002	phase-138-pdf-adapter-b4.md	BUG	open	TASK-143	TASK-137 triage
 138-F003	phase-138-pdf-adapter-b4.md	BUG	open	TASK-143	TASK-137 triage
 138-F004	phase-138-pdf-adapter-b4.md	BUG	open	TASK-143	TASK-137 triage
-138-F005	phase-138-pdf-adapter-b4.md	BUG	open	TASK-142	TASK-137 triage
+138-F005	phase-138-pdf-adapter-b4.md	BUG	fixed	TASK-142	
 138-F006	phase-138-pdf-adapter-b4.md	BUG	open	TASK-143	TASK-137 triage
-138-F007	phase-138-pdf-adapter-b4.md	BUG	open	TASK-142	TASK-137 triage
-138-F008	phase-138-pdf-adapter-b4.md	BUG	open	TASK-142	TASK-137 triage
-138-F009	phase-138-pdf-adapter-b4.md	BUG	open	TASK-142	TASK-137 triage
-138-F010	phase-138-pdf-adapter-b4.md	IMPROVEMENT	open	TASK-142	TASK-137 triage
+138-F007	phase-138-pdf-adapter-b4.md	BUG	fixed	TASK-142	
+138-F008	phase-138-pdf-adapter-b4.md	BUG	fixed	TASK-142	
+138-F009	phase-138-pdf-adapter-b4.md	BUG	fixed	TASK-142	
+138-F010	phase-138-pdf-adapter-b4.md	IMPROVEMENT	fixed	TASK-142	
 139-F001	phase-139-runlayout-b4.md	BUG	fixed	TASK-140	
 139-F002	phase-139-runlayout-b4.md	BUG	fixed	TASK-140	
 139-F003	phase-139-runlayout-b4.md	BUG	fixed	TASK-140	

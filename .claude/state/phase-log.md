@@ -4141,3 +4141,9 @@ Action: design from the triage
 Result: 5 ids
 Decision: coder
 Next: IMPLEMENTING
+
+## IMPLEMENTING - TASK-142 - 2026-11-17T02:18:22Z
+Action: coder implemented 142.1-142.5 + 6 tests in 2 rounds (round 2 narrowed the table guard after coordinator review); ledger 5 rows fixed
+Result: --fast KNOWN 4 NEW 0
+Decision: matches refined design
+Next: UNIT_TESTED

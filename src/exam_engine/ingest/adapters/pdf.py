@@ -477,7 +477,8 @@ def _cut_boundaries(pages, page_lines):
     S4 an image of n+1 sits above its first numbered line while n ends inside a question.
     """
     def ok(p):
-        return p.get("status") != "ocr" and p.get("chars", 0) > 0
+        return (p.get("status") != "ocr" and p.get("method", "native") != "ocr"
+                and p.get("chars", 0) > 0)
 
     out = []
     for i in range(len(pages) - 1):
@@ -543,6 +544,11 @@ def ingest(path, config=None):
         raise IngestError("corrupt", "cannot open PDF %s: %s" % (os.path.basename(path), exc))
     try:
         return _extract(fitz, pdf, raw, path, config)
+    except IngestError:
+        raise
+    except Exception as exc:  # noqa: BLE001 - a PDF that parses but breaks page access is data
+        raise IngestError("corrupt", "cannot read PDF %s: %s: %s"
+                          % (os.path.basename(path), type(exc).__name__, exc))
     finally:
         pdf.close()
 
@@ -620,11 +626,17 @@ def _extract(fitz, pdf, raw, path, config):
                 try:
                     tp = page.get_textpage_ocr(language=lang, dpi=OCR_DPI, full=True,
                                                tessdata=tess_dir)
-                    ocr_blocks = [b for b in _ocr_blocks(page, tp)
-                                  if not any(_inside(b[0], t) for t in tbbox)]
+                    ocr_blocks = _ocr_blocks(page, tp)
+                    absent = flags == ["missing_text"]  # native cells are fine: keep tables, OCR outside them
+                    if absent:
+                        ocr_blocks = [b for b in ocr_blocks if not any(_inside(b[0], t) for t in tbbox)]
                     ocr_text = "\n".join(b[1] for b in ocr_blocks)
-                    if len(ocr_text.strip()) >= MIN_CHARS and len(ocr_text) > len(native_text):
+                    clean = not absent and not _suspect(ocr_text)
+                    if len(ocr_text.strip()) >= MIN_CHARS and (len(ocr_text) > len(native_text) or clean):
+                        # OCR text carries the table cells; native tables would repeat them (tbbox stays for crops)
                         text_blocks, method = ocr_blocks, "ocr"
+                        if not absent:
+                            tables = []
                         native_text = ocr_text
                         status = "needs_review" if _suspect(ocr_text) else "ocr"
                         c = _tsv_conf(page, lang, tess_dir, config, conf_why)
@@ -732,7 +744,7 @@ def _extract(fitz, pdf, raw, path, config):
         ocr_pages = set(i for i, p in enumerate(pages) if p["method"] == "ocr")
         if ocr_pages:
             sus = set(i for i, p in enumerate(pages) if p["method"] == "ocr"
-                      and any(w.get("code") == "bad_encoding" for w in p["warnings"]))
+                      and p["status"] == "needs_review")
             ocr_q = _ocr_doubt(qs, starts, flat, [len(x) for x in page_lines], ocr_pages, leaks,
                                "vie" in have, sus, conf=conf_pages or None, floor=_floor(lang))
             _option_parity(qs, ocr_q)
