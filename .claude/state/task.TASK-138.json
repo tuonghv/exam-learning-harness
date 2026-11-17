@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-138",
   "title": "Scorer correctness: fractions, hedges, separators, minus, ordering key, open answers (batch 4) (REQ-0145)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0145",
   "acceptance_criteria": [
     "AC1 tests per id",
@@ -24,9 +24,9 @@
     "summary": "scorer: exact fraction compare, second value rejected, thousands groups, U+2212 tail, ordering key not a letter, open answer scored unless open key, score_file legacy + manual"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --fast; new tests on fixed code and on a HEAD scorer copy",
+    "result": "KNOWN 4 NEW 0; 8/8 new tests pass, 8/8 fail on old code"
   },
   "security": {
     "status": "pending",
@@ -47,7 +47,10 @@
     "designer": {
       "waiver": "designed in the TASK-137 triage (work/TASK-137/handoff/design-a.md)"
     },
-    "coder": "work/TASK-138/handoff/code.md"
+    "coder": "work/TASK-138/handoff/code.md",
+    "tester": {
+      "waiver": "coordinator re-ran --fast, the new tests and the bite independently"
+    }
   },
   "user_notes": [
     {
@@ -57,7 +60,7 @@
     }
   ],
   "picked_at": "2026-11-16T23:58:18Z",
-  "updated_at": "2026-11-17T00:04:06Z",
+  "updated_at": "2026-11-17T00:04:07Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/scorer.py",
@@ -70,5 +73,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tests"
+  "next": "verify"
 }
