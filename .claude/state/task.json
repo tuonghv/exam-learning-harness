@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-140",
-  "state": "DONE",
-  "next": "",
-  "title": "Runlayout: publish guard for run folders, reserved line names, run-id suffix order (batch 4) (REQ-0147)",
-  "active": [],
+  "task_id": "TASK-141",
+  "state": "TODO",
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "title": "Verifier computed/format checks: labels, root sign, ordering letters (batch 4) (REQ-0148)",
+  "active": [
+    {
+      "task_id": "TASK-141",
+      "state": "TODO",
+      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+      "updated_at": ""
+    }
+  ],
   "max_active": 1
 }
