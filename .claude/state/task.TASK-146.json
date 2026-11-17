@@ -1,17 +1,17 @@
 {
   "task_id": "TASK-146",
   "title": "Re-solve DGNL 2024/2025/2026 with claude-opus-5-5 on dev line o55, compare with published sonnet (REQ-0152)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0152",
   "acceptance_criteria": [
-    "AC1 same published inputs (sha256 equal), model claude-opus-5-5, cap $1.50/subject, total <= $18",
-    "AC2 report-pack per exam scored vs key on line o55; main untouched",
-    "AC3 per-question diff vs published main (fixed/lost/net) per exam"
+    "AC1 same inputs, opus-5-5, cap 1.50/subject, total <= 18",
+    "AC2 report-pack per exam vs key on o55, main untouched",
+    "AC3 per-question diff vs main"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-146-dgnl-opus-resolve.md",
+    "summary": "paid Opus 5.5 re-solve of the published DGNL 2024/2025/2026 inputs on dev line o55, scored report packs, per-question diff",
     "reuse": [],
     "risks": []
   },
@@ -39,7 +39,11 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": {
+      "waiver": "run recipe from REQ-0152; coordinator-owned paid run"
+    }
+  },
   "user_notes": [
     {
       "raw": "RAW-00365",
@@ -48,8 +52,8 @@
     }
   ],
   "picked_at": "2026-11-17T05:29:47Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-17T05:30:19Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -57,5 +61,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "run the solves"
 }

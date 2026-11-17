@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-146",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "run the solves",
   "title": "Re-solve DGNL 2024/2025/2026 with claude-opus-5-5 on dev line o55, compare with published sonnet (REQ-0152)",
   "active": [
     {
       "task_id": "TASK-146",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "run the solves",
+      "updated_at": "2026-11-17T05:30:19Z"
     }
   ],
   "max_active": 1
