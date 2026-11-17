@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-141",
   "title": "Verifier computed/format checks: labels, root sign, ordering letters (batch 4) (REQ-0148)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0148",
   "acceptance_criteria": [
     "AC1 tests per id",
@@ -30,12 +30,18 @@
     "result": "KNOWN 4 NEW 0; 4/4 new tests pass, 4/4 fail on old code"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "not_applicable",
+    "result": "deterministic checks only; expressions still go through safe_eval"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-141/evidence/summary.md",
+      "work/TASK-141/evidence/fast.txt",
+      "work/TASK-141/evidence/bite.txt"
+    ],
+    "command": "new tests + bite + repro R2 + --fast + ledger + diff review",
+    "result": "AC1-AC2 met"
   },
   "report": {
     "status": "pending",
@@ -51,6 +57,9 @@
     "coder": "work/TASK-141/handoff/code.md",
     "tester": {
       "waiver": "coordinator re-ran --fast, the new tests and the bite independently"
+    },
+    "verifier": {
+      "waiver": "coordinator verified tests, bite, repro, diff and ledger"
     }
   },
   "user_notes": [
@@ -61,7 +70,7 @@
     }
   ],
   "picked_at": "2026-11-17T02:05:40Z",
-  "updated_at": "2026-11-17T02:09:29Z",
+  "updated_at": "2026-11-17T02:09:30Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/verifier.py",
@@ -75,5 +84,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verify"
+  "next": "report and close"
 }
