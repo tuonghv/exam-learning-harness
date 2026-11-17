@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-144",
   "title": "Scorer strict half-unit tolerance, no decimal for fraction keys (REQ-0151)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0151",
   "acceptance_criteria": [
     "AC1 boundary tests",
@@ -39,11 +39,19 @@
       "work/TASK-144/evidence/rescore.txt"
     ],
     "command": "new tests + bite + --fast + re-score of 95 stored keyed answers old vs new",
-    "result": "AC1-AC2 met; 0 flips on stored answers"
+    "result": "AC1-AC2 met; 0 flips on stored answers",
+    "quality": {
+      "kind": "crosscheck",
+      "evidence": [
+        "work/TASK-144/evidence/rescore.txt",
+        "work/TASK-144/evidence/summary.md"
+      ],
+      "reason": "0 flips on stored answers; D1 tests bite"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-144-scorer-strict-half-unit.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -58,6 +66,9 @@
     },
     "verifier": {
       "waiver": "coordinator verified tests, bite and the re-score"
+    },
+    "crosscheck": {
+      "waiver": "coordinator re-scored 95 stored keyed answers old vs new"
     }
   },
   "user_notes": [
@@ -68,7 +79,7 @@
     }
   ],
   "picked_at": "2026-11-17T04:00:42Z",
-  "updated_at": "2026-11-17T04:04:31Z",
+  "updated_at": "2026-11-17T04:04:32Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/scorer.py",
@@ -80,5 +91,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report and close"
+  "next": ""
 }
