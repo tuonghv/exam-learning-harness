@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-145",
   "title": "Re-solve DGNL 2026 (paid, approved) with pinned model, cache, full report (REQ-0091)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0091",
   "acceptance_criteria": [
     "AC1 already-solved summary",
@@ -24,9 +24,9 @@
     "summary": "no code: 4 paid solves on line r4 ($1.65), report-pack scored 112/120, cache re-run $0"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "run-only task: exit codes of the 4 solves and report-pack",
+    "result": "all exit 0; no code change, no unit tests apply"
   },
   "security": {
     "status": "pending",
@@ -49,6 +49,9 @@
     },
     "coder": {
       "waiver": "run-only task, no code; coordinator runs paid jobs"
+    },
+    "tester": {
+      "waiver": "run-only task, no code"
     }
   },
   "user_notes": [
@@ -59,7 +62,7 @@
     }
   ],
   "picked_at": "2026-11-17T05:05:36Z",
-  "updated_at": "2026-11-17T05:06:12Z",
+  "updated_at": "2026-11-17T05:06:13Z",
   "updated_by": "main",
   "scope": [],
   "depends_on": [],
@@ -68,5 +71,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "checks"
+  "next": "verify"
 }
