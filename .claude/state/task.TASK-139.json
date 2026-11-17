@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-139",
   "title": "Engine image/adjudicate/retry fixes (batch 4) (REQ-0146)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0146",
   "acceptance_criteria": [
     "AC1 tests per id",
@@ -15,8 +15,14 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/engine.py",
+      "src/exam_engine/pipeline/solver.py",
+      "tests/unit/test_engine_fixes_139.py",
+      "docs/review/findings.tsv"
+    ],
+    "summary": "solver.map_option shared; image/adjudicated answers mapped to letters; adjudicated answer gets fresh checks, no old review; retry QA only for changed answers; marker reason kept on image miss"
   },
   "unit_test": {
     "status": "pending",
@@ -41,24 +47,35 @@
   "roles": {
     "designer": {
       "waiver": "designed in the TASK-137 triage (work/TASK-137/handoff/design-a.md)"
-    }
+    },
+    "coder": "work/TASK-139/handoff/code.md"
   },
   "user_notes": [
     {
       "raw": "RAW-00357",
       "note": "fix task from the TASK-137 triage of review batch 4",
       "at": "2026-11-16T23:57:29Z"
+    },
+    {
+      "raw": "RAW-00358",
+      "note": "continue after usage-limit reset",
+      "at": "2026-11-17T02:01:17Z"
     }
   ],
   "picked_at": "2026-11-17T00:04:24Z",
-  "updated_at": "2026-11-17T00:04:37Z",
+  "updated_at": "2026-11-17T02:01:31Z",
   "updated_by": "main",
-  "scope": [],
+  "scope": [
+    "src/exam_engine/engine.py",
+    "src/exam_engine/pipeline/solver.py",
+    "tests/unit/test_engine_fixes_139.py",
+    "docs/review/findings.tsv"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
     "done": [],
     "notes": ""
   },
-  "next": "coder implements 139.1-139.4"
+  "next": "tests"
 }

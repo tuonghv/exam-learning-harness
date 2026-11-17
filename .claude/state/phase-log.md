@@ -4051,3 +4051,9 @@ Action: design from the triage
 Result: 4 ids
 Decision: coder
 Next: IMPLEMENTING
+
+## IMPLEMENTING - TASK-139 - 2026-11-17T02:01:31Z
+Action: coder implemented 139.1-139.4 + 4 tests; ledger 4 rows fixed
+Result: --fast KNOWN 4 NEW 0
+Decision: matches design
+Next: UNIT_TESTED

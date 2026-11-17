@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-139",
-  "state": "DESIGN",
-  "next": "coder implements 139.1-139.4",
+  "state": "IMPLEMENTING",
+  "next": "tests",
   "title": "Engine image/adjudicate/retry fixes (batch 4) (REQ-0146)",
   "active": [
     {
       "task_id": "TASK-139",
-      "state": "DESIGN",
-      "next": "coder implements 139.1-139.4",
-      "updated_at": "2026-11-17T00:04:37Z"
+      "state": "IMPLEMENTING",
+      "next": "tests",
+      "updated_at": "2026-11-17T02:01:31Z"
     }
   ],
   "max_active": 1

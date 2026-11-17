@@ -136,6 +136,17 @@ def retry_prompt(exam, recs, ids):
                 base, router.language(exam), "\n".join(notes), ctx, render_questions(exam, set(ids), recs)))
 
 
+def map_option(q, a, findings):
+    """Option value given instead of its letter (60.1): rewrite a["answer"] to the letter, record answer_mapped."""
+    if not q.get("options") or re.match(r"^[A-D]$", str(a.get("answer")).strip()):
+        return
+    mapped = verifier.option_for_value(a.get("answer"), q["options"])
+    if mapped:
+        findings.append(finding("deterministic", "answer_mapped",
+                                '"%s" -> %s' % (str(a.get("answer"))[:40], mapped)))
+        a["answer"] = mapped
+
+
 def solve_round(exam, rn, recs, ids, prompt, tag="solve"):
     for i in ids:
         recs[i]["attempts"] += 1
@@ -171,13 +182,7 @@ def solve_round(exam, rn, recs, ids, prompt, tag="solve"):
                                         "question %d not in the solver output" % i)])
             continue
         r.update(ans=a, review=None, findings=[])
-        mapped = None
-        if qs[i].get("options") and not re.match(r"^[A-D]$", str(a.get("answer")).strip()):
-            mapped = verifier.option_for_value(a.get("answer"), qs[i]["options"])
-        if mapped:  # option value given instead of its letter (60.1)
-            r["findings"].append(finding("deterministic", "answer_mapped",
-                                          '"%s" -> %s' % (str(a.get("answer"))[:40], mapped)))
-            a["answer"] = mapped
+        map_option(qs[i], a, r["findings"])
         r["code_checks"] = verifier.det_checks(qs[i], a, exam)
         r["checks"] = list(r["code_checks"])
         if declined(a):

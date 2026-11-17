@@ -79,11 +79,11 @@ id	report	class	disposition	ref	note
 118-F007	phase-118-ingest-boundary-b3.md	BUG	fixed	TASK-120	
 118-F008	phase-118-ingest-boundary-b3.md	IMPROVEMENT	fixed	TASK-125	
 118-F009	phase-118-ingest-boundary-b3.md	BUG	fixed	TASK-120	
-136-F001	phase-136-engine-decision-b4.md	BUG	open	TASK-139	TASK-137 triage
-136-F002	phase-136-engine-decision-b4.md	BUG	open	TASK-139	TASK-137 triage
-136-F003	phase-136-engine-decision-b4.md	BUG	open	TASK-139	TASK-137 triage
+136-F001	phase-136-engine-decision-b4.md	BUG	fixed	TASK-139	
+136-F002	phase-136-engine-decision-b4.md	BUG	fixed	TASK-139	
+136-F003	phase-136-engine-decision-b4.md	BUG	fixed	TASK-139	
 136-F004	phase-136-engine-decision-b4.md	BUG	fixed	TASK-138	
-136-F005	phase-136-engine-decision-b4.md	BUG	open	TASK-139	TASK-137 triage
+136-F005	phase-136-engine-decision-b4.md	BUG	fixed	TASK-139	
 137-F001	phase-137-scorer-verifier-b4.md	BUG	fixed	TASK-138	
 137-F002	phase-137-scorer-verifier-b4.md	BUG	fixed	TASK-138	
 137-F003	phase-137-scorer-verifier-b4.md	BUG	fixed	TASK-138	

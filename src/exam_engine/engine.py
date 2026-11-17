@@ -209,6 +209,8 @@ def apply_image(exam, recs, got, targets, flags, fail=None, scope="flagged"):
             r["findings"].append(finding("image", fail[0], fail[1]))
             continue
         g = got.get(str(i))
+        if g is not None and not declined(g):
+            solver.map_option(qs[i], g, r["findings"])
         text_ok = r["ans"] is not None and not declined(r["ans"]) and not is_open(r["ans"])
         if g is not None and not declined(g):
             if text_ok and cross.same_answer(r["ans"]["answer"], g["answer"]):
@@ -252,6 +254,7 @@ def apply_image(exam, recs, got, targets, flags, fail=None, scope="flagged"):
 def adjudicate(exam, recs, rn, ids):
     """60.6/76.2: one text call for the ids whose text and image answers differ (incl. a FAIL or a tentative
     text answer); the answer is replaced with a recorded reason. A failed call keeps the pre-call result."""
+    qs_ = {q["id"]: q for q in exam["questions"]}
     side = {i: recs[i].get("text_ans") or recs[i]["ans"] for i in ids}
     items = [(i, side[i], recs[i]["image_ans"]) for i in ids]
     try:
@@ -267,12 +270,16 @@ def adjudicate(exam, recs, rn, ids):
         if g is None or declined(g):
             r["findings"].append(finding("image", "adjudication_failed", err or "not in reply"))
             continue
+        solver.map_option(qs_[i], g, r["findings"])
         r["findings"].append(finding("image", "adjudicated", "adjudicated: %s (text %s, image %s)" % (
             g["answer"], side[i]["answer"], r["image_ans"]["answer"])))
         keep_fail = (r["status"] == "FAIL" and "text_ans" not in r
                      and cross.same_answer(g["answer"], side[i]["answer"]))
         if not keep_fail:
             r["status"], r["reason"] = "UNCERTAIN", "needs_review: adjudicated"
+            r["review"] = None  # the old review judged the replaced answer
+            r["code_checks"] = verifier.det_checks(qs_[i], g, exam)
+            r["checks"] = list(r["code_checks"])
         r["ans"] = side[i] if keep_fail else g
         r["source"] = "adjudicated"
 
@@ -348,6 +355,8 @@ def image_check(exam, recs, rn, flags, skip, cfg, image):
         recs[i]["findings"].append(finding("image", "image_skipped", why))
     if not targets:
         return
+    # marker-skipped ids keep their marker reason in the text apply_image rebuilds (136-F005)
+    flags = {i: ([skip[i]] if i in skip else []) + list(flags.get(i) or []) for i in set(flags) | set(skip)}
     before = {i: recs[i]["status"] for i in targets}
     try:
         pngs = [image["render"](n) for n in pages]
@@ -487,9 +496,10 @@ def run(exam_path, out_dir, cfg, llm, sink=None, reports=True, image=None, cache
         for attempt in range(1, cfg["max_attempts"] + 1):
             if not ids:
                 break
+            prev = {i: recs[i]["ans"] for i in ids}
             solver.solve_round(exam, rn, recs, ids, prompt if attempt == 1 else solver.retry_prompt(exam, recs, ids),
                                tag="solve" if attempt == 1 else "retry")
-            verifier.qa_round(exam, rn, recs, ids)
+            verifier.qa_round(exam, rn, recs, [i for i in ids if recs[i]["ans"] is not prev[i]])
             ids = [i for i in retry_ids(recs) if i not in skip]
             if not ids:
                 break
