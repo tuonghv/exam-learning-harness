@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-139",
-  "state": "VERIFIED",
-  "next": "report and close",
+  "state": "DONE",
+  "next": "",
   "title": "Engine image/adjudicate/retry fixes (batch 4) (REQ-0146)",
-  "active": [
-    {
-      "task_id": "TASK-139",
-      "state": "VERIFIED",
-      "next": "report and close",
-      "updated_at": "2026-11-17T02:01:32Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
