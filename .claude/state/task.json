@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-139",
-  "state": "IMPLEMENTING",
-  "next": "tests",
+  "state": "UNIT_TESTED",
+  "next": "verify",
   "title": "Engine image/adjudicate/retry fixes (batch 4) (REQ-0146)",
   "active": [
     {
       "task_id": "TASK-139",
-      "state": "IMPLEMENTING",
-      "next": "tests",
-      "updated_at": "2026-11-17T02:01:31Z"
+      "state": "UNIT_TESTED",
+      "next": "verify",
+      "updated_at": "2026-11-17T02:01:32Z"
     }
   ],
   "max_active": 1
