@@ -2959,7 +2959,7 @@
     "task_id": "TASK-142",
     "title": "PDF OCR route: table area, OCR acceptance, ocr_doubt, cut detector, corrupt page (batch 4) (REQ-0149)",
     "priority": 2,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-11-16T23:57:29Z",
     "requirement": "REQ-0149",
     "acceptance_criteria": [

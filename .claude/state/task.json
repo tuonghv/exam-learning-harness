@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-141",
-  "state": "DONE",
-  "next": "",
-  "title": "Verifier computed/format checks: labels, root sign, ordering letters (batch 4) (REQ-0148)",
-  "active": [],
+  "task_id": "TASK-142",
+  "state": "TODO",
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "title": "PDF OCR route: table area, OCR acceptance, ocr_doubt, cut detector, corrupt page (batch 4) (REQ-0149)",
+  "active": [
+    {
+      "task_id": "TASK-142",
+      "state": "TODO",
+      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+      "updated_at": ""
+    }
+  ],
   "max_active": 1
 }
