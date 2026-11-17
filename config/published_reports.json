@@ -31,25 +31,25 @@
     "dhqg2024": {
       "key": "input/dgnl/De-thi-mau-DHQG-HCM-2024.answer.txt",
       "key_sha256": "501d1763323fb540d0f3cd8b540d1387ce157b5afbe521e313bb6eb514a0a31a",
-      "line": "t81",
+      "line": "o55",
       "overlays": [
         {
-          "dir": "plans/dhqg2024/t82/runs/20261107-014525",
+          "dir": "plans/dhqg2024/o55/runs/20261117-070242-slice",
           "printed": [
             64,
             65,
             66,
             67
           ],
-          "reason": "re-solve of printed 64-67 after the table fix (TASK-082), line t82"
+          "reason": "o55 re-solve of printed 64-67 (same slice as t82)"
         }
       ],
       "pdf": true,
       "plan_runs": [
-        "plans/dhqg2024/t81/runs/20261107-005624-vietnamese",
-        "plans/dhqg2024/t81/runs/20261107-005812-english",
-        "plans/dhqg2024/t81/runs/20261107-005940-math",
-        "plans/dhqg2024/t81/runs/20261107-010203-science"
+        "plans/dhqg2024/o55/runs/20261117-054238-vietnamese",
+        "plans/dhqg2024/o55/runs/20261117-054442-english",
+        "plans/dhqg2024/o55/runs/20261117-054622-math",
+        "plans/dhqg2024/o55/runs/20261117-070158-science"
       ],
       "view": "sheet"
     }

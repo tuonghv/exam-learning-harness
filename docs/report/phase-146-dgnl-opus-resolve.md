@@ -23,3 +23,9 @@ Sonnet 331/359 (net +4, all from 2024). Published main runs unchanged; the user 
 
 ## Spend
 $8.65 of the approved $18.
+
+## Publish (RAW-00367)
+User chose to publish 2024 from `o55`: pack `reports/dhqg2024/o55/run-20261117-113346` (110/119) ->
+`main: run-20261117-052511 -> run-20261117-113355`. Recipe `config/published_reports.json` rewritten with
+`--write-recipe` (only dhqg2024 changed: line o55, o55 plan runs, overlay slice); `rebuild-reports dhqg2024 --dry-run`
+passes. 2025 and 2026 stay on their Sonnet runs.
