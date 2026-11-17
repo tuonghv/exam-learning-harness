@@ -1,0 +1,61 @@
+{
+  "task_id": "TASK-146",
+  "title": "Re-solve DGNL 2024/2025/2026 with claude-opus-5-5 on dev line o55, compare with published sonnet (REQ-0152)",
+  "state": "TODO",
+  "requirement": "REQ-0152",
+  "acceptance_criteria": [
+    "AC1 same published inputs (sha256 equal), model claude-opus-5-5, cap $1.50/subject, total <= $18",
+    "AC2 report-pack per exam scored vs key on line o55; main untouched",
+    "AC3 per-question diff vs published main (fixed/lost/net) per exam"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {},
+  "user_notes": [
+    {
+      "raw": "RAW-00365",
+      "note": "Opus re-solve approved, cap $18",
+      "at": "2026-11-17T05:29:39Z"
+    }
+  ],
+  "picked_at": "2026-11-17T05:29:47Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
