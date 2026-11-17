@@ -1,0 +1,60 @@
+{
+  "task_id": "TASK-144",
+  "title": "Scorer strict half-unit tolerance, no decimal for fraction keys (REQ-0151)",
+  "state": "TODO",
+  "requirement": "REQ-0151",
+  "acceptance_criteria": [
+    "AC1 boundary tests",
+    "AC2 --fast, re-score"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {},
+  "user_notes": [
+    {
+      "raw": "RAW-00360",
+      "note": "D1 strict, no decimals (answers to the TASK-137 policy questions)",
+      "at": "2026-11-17T04:00:42Z"
+    }
+  ],
+  "picked_at": "2026-11-17T04:00:42Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}

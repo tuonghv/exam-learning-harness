@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-143",
-  "state": "DONE",
-  "next": "",
-  "title": "PDF text placement: two-column tables, cell re-split, short-stem columns, group intro lines (batch 4) (REQ-0150)",
-  "active": [],
+  "task_id": "TASK-144",
+  "state": "TODO",
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "title": "Scorer strict half-unit tolerance, no decimal for fraction keys (REQ-0151)",
+  "active": [
+    {
+      "task_id": "TASK-144",
+      "state": "TODO",
+      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+      "updated_at": ""
+    }
+  ],
   "max_active": 1
 }

@@ -3001,7 +3001,7 @@
     "task_id": "TASK-144",
     "title": "Scorer strict half-unit tolerance, no decimal for fraction keys (REQ-0151)",
     "priority": 2,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-11-17T04:00:42Z",
     "requirement": "REQ-0151",
     "acceptance_criteria": [
