@@ -63,7 +63,9 @@ _NOTE_NUM = re.compile(r"-?\d+(?:[.,]\d+)?")
 
 
 def _exact_value(s):
-    t = s.replace("\u221a", "sqrt").replace("^", "**").replace(",", ".").replace("\u2212", "-")
+    s = re.sub("\u221a\\s*(\\d+(?:[.,]\\d+)?)", r"sqrt(\1)", s)
+    s = re.sub(r"(\d)\s*sqrt", r"\1*sqrt", s.replace("\u221a", "sqrt"))
+    t = s.replace("^", "**").replace(",", ".").replace("\u2212", "-")
     try:
         return float(safe_eval(t))
     except (ValueError, ArithmeticError):

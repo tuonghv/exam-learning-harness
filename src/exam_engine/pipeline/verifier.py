@@ -67,7 +67,7 @@ def _format(q, ans, exam):
     if q.get("options"):
         ok = bool(re.match(r"^[A-D]$", a)) and a in q["options"]
         return _chk("format", "single letter A-D", "pass" if ok else "fail", False)
-    letters = _letters(q.get("text", ""))
+    letters = re.findall(r"(?m)^\s*\(?([a-z])[.)]\s", q.get("text", ""))  # ordering may exceed a-e
     if task != "sentence ordering" and not re.match(r"^[a-z](?:-[a-z])+$", a):
         part = _part_format(q, a, exam)
         if part:
@@ -113,7 +113,9 @@ _EXACT = re.compile(r"^[-+0-9.()*/\s^]*(?:sqrt\([^)]*\)[-+0-9.()*/\s^]*)*")
 
 def _answer_value(a):
     """(value, tolerance) of the answer, reading a fraction, sqrt(..), a x.10^n or xe-n form."""
-    t = re.sub(r"\s+\([^)]*\)\s*$", "", a.replace("−", "-").replace("√", "sqrt")).strip()
+    a = re.sub(r"√\s*(\d+(?:[.,]\d+)?)", r"sqrt(\1)", a.replace("−", "-"))
+    a = re.sub(r"(\d)\s*sqrt", r"\1*sqrt", a.replace("√", "sqrt"))
+    t = re.sub(r"\s+\([^)]*\)\s*$", "", a).strip()
     t = _SCI.sub(lambda m: "%se%s" % (m.group(1).replace(",", "."), m.group(2)), t)
     m = re.match(r"^(-?\d+(?:[.,]\d+)?)e(-?\d+)", t)
     if m:
@@ -135,6 +137,7 @@ def _computed(ans):
     if not expr:
         return None
     detail = "arithmetic only: %s" % expr
+    ans = dict(ans, answer=re.sub(r"^[^=]*[^\W\d][^=]*=\s*", "", str(ans.get("answer"))))
     try:
         val = safe_eval(expr)
     except ValueError as exc:
@@ -215,6 +218,8 @@ def _quotes(q, ans, exam):
     fhay = fold(hay)
     for x in quotes:
         bare = re.sub(r"^\s*[A-Za-z0-9]\s*[:.)]\s+", "", x)
+        if not bare.strip():
+            bare = x  # label-only quote: an empty string is "in" every text
         if _ws(x) in hay or _ws(bare) in hay:
             out.append(_chk("quote", "verbatim in passage/question: %s" % x[:80], "pass", False))
             continue

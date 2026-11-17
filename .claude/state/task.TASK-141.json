@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-141",
   "title": "Verifier computed/format checks: labels, root sign, ordering letters (batch 4) (REQ-0148)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0148",
   "acceptance_criteria": [
     "AC1 tests per id",
@@ -15,8 +15,14 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/verifier.py",
+      "src/exam_engine/pipeline/scorer.py",
+      "tests/unit/test_verifier_fixes_141.py",
+      "docs/review/findings.tsv"
+    ],
+    "summary": "computed check strips a leading label; root sign without parentheses and 2\u221a3 read; ordering format collects a-z; label-only quote no longer passes"
   },
   "unit_test": {
     "status": "pending",
@@ -41,7 +47,8 @@
   "roles": {
     "designer": {
       "waiver": "designed in the TASK-137 triage (work/TASK-137/handoff/design-a.md)"
-    }
+    },
+    "coder": "work/TASK-141/handoff/code.md"
   },
   "user_notes": [
     {
@@ -51,14 +58,19 @@
     }
   ],
   "picked_at": "2026-11-17T02:05:40Z",
-  "updated_at": "2026-11-17T02:05:51Z",
+  "updated_at": "2026-11-17T02:09:28Z",
   "updated_by": "main",
-  "scope": [],
+  "scope": [
+    "src/exam_engine/pipeline/verifier.py",
+    "src/exam_engine/pipeline/scorer.py",
+    "tests/unit/test_verifier_fixes_141.py",
+    "docs/review/findings.tsv"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
     "done": [],
     "notes": ""
   },
-  "next": "coder implements 141.1-141.4"
+  "next": "tests"
 }

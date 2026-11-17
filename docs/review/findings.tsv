@@ -88,9 +88,9 @@ id	report	class	disposition	ref	note
 137-F002	phase-137-scorer-verifier-b4.md	BUG	fixed	TASK-138	
 137-F003	phase-137-scorer-verifier-b4.md	BUG	fixed	TASK-138	
 137-F004	phase-137-scorer-verifier-b4.md	BUG	fixed	TASK-138	
-137-F005	phase-137-scorer-verifier-b4.md	BUG	open	TASK-141	TASK-137 triage
-137-F006	phase-137-scorer-verifier-b4.md	BUG	open	TASK-141	TASK-137 triage
-137-F007	phase-137-scorer-verifier-b4.md	BUG	open	TASK-141	TASK-137 triage
+137-F005	phase-137-scorer-verifier-b4.md	BUG	fixed	TASK-141	
+137-F006	phase-137-scorer-verifier-b4.md	BUG	fixed	TASK-141	
+137-F007	phase-137-scorer-verifier-b4.md	BUG	fixed	TASK-141	
 137-F008	phase-137-scorer-verifier-b4.md	BUG	fixed	TASK-138	
 137-F009	phase-137-scorer-verifier-b4.md	BUG	fixed	TASK-138	
 137-F010	phase-137-scorer-verifier-b4.md	IMPROVEMENT	fixed	TASK-138	

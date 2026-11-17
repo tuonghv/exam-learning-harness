@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-141",
-  "state": "DESIGN",
-  "next": "coder implements 141.1-141.4",
+  "state": "IMPLEMENTING",
+  "next": "tests",
   "title": "Verifier computed/format checks: labels, root sign, ordering letters (batch 4) (REQ-0148)",
   "active": [
     {
       "task_id": "TASK-141",
-      "state": "DESIGN",
-      "next": "coder implements 141.1-141.4",
-      "updated_at": "2026-11-17T02:05:51Z"
+      "state": "IMPLEMENTING",
+      "next": "tests",
+      "updated_at": "2026-11-17T02:09:28Z"
     }
   ],
   "max_active": 1
