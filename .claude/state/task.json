@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-142",
-  "state": "UNIT_TESTED",
-  "next": "verify",
+  "state": "VERIFIED",
+  "next": "report and close",
   "title": "PDF OCR route: table area, OCR acceptance, ocr_doubt, cut detector, corrupt page (batch 4) (REQ-0149)",
   "active": [
     {
       "task_id": "TASK-142",
-      "state": "UNIT_TESTED",
-      "next": "verify",
-      "updated_at": "2026-11-17T02:18:23Z"
+      "state": "VERIFIED",
+      "next": "report and close",
+      "updated_at": "2026-11-17T02:18:24Z"
     }
   ],
   "max_active": 1

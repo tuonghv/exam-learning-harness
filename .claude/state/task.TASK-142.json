@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-142",
   "title": "PDF OCR route: table area, OCR acceptance, ocr_doubt, cut detector, corrupt page (batch 4) (REQ-0149)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0149",
   "acceptance_criteria": [
     "AC1 tests per id",
@@ -30,12 +30,18 @@
     "result": "KNOWN 4 NEW 0; 6/6 new tests pass, 5/5 fix tests fail on old code (1 guard test passes by design)"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "a malformed PDF page now fails as IngestError corrupt (clean exit), no traceback"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-142/evidence/summary.md",
+      "work/TASK-142/evidence/fast.txt",
+      "work/TASK-142/evidence/bite.txt"
+    ],
+    "command": "new tests + bite + --fast + ledger + diff review (2 rounds)",
+    "result": "AC1-AC2 met"
   },
   "report": {
     "status": "pending",
@@ -51,6 +57,9 @@
     "coder": "work/TASK-142/handoff/code.md",
     "tester": {
       "waiver": "coordinator re-ran --fast, the new tests and the bite independently"
+    },
+    "verifier": {
+      "waiver": "coordinator verified tests, bite, diff and ledger"
     }
   },
   "user_notes": [
@@ -61,7 +70,7 @@
     }
   ],
   "picked_at": "2026-11-17T02:09:36Z",
-  "updated_at": "2026-11-17T02:18:23Z",
+  "updated_at": "2026-11-17T02:18:24Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/adapters/pdf.py",
@@ -74,5 +83,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verify"
+  "next": "report and close"
 }
