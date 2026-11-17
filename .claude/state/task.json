@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-140",
-  "state": "UNIT_TESTED",
-  "next": "verify",
+  "state": "VERIFIED",
+  "next": "report and close",
   "title": "Runlayout: publish guard for run folders, reserved line names, run-id suffix order (batch 4) (REQ-0147)",
   "active": [
     {
       "task_id": "TASK-140",
-      "state": "UNIT_TESTED",
-      "next": "verify",
-      "updated_at": "2026-11-17T02:05:30Z"
+      "state": "VERIFIED",
+      "next": "report and close",
+      "updated_at": "2026-11-17T02:05:31Z"
     }
   ],
   "max_active": 1
