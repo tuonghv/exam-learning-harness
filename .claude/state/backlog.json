@@ -3017,5 +3017,26 @@
     ],
     "completed_at": "2026-11-17T04:04:32Z",
     "report": "docs/report/phase-144-scorer-strict-half-unit.md"
+  },
+  {
+    "task_id": "TASK-145",
+    "title": "Re-solve DGNL 2026 (paid, approved) with pinned model, cache, full report (REQ-0091)",
+    "priority": 2,
+    "status": "queued",
+    "created_at": "2026-11-17T05:05:36Z",
+    "requirement": "REQ-0091",
+    "acceptance_criteria": [
+      "AC1 already-solved summary",
+      "AC2 pinned model, cache, cap; 2nd run $0",
+      "AC3 full report scored vs key",
+      "AC4 report count"
+    ],
+    "user_notes": [
+      {
+        "raw": "RAW-00361",
+        "note": "re-solve DGNL 2026 approved (paid ~$1.5)",
+        "at": "2026-11-17T05:05:36Z"
+      }
+    ]
   }
 ]
