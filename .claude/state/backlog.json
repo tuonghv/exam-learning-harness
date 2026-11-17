@@ -2980,7 +2980,7 @@
     "task_id": "TASK-143",
     "title": "PDF text placement: two-column tables, cell re-split, short-stem columns, group intro lines (batch 4) (REQ-0150)",
     "priority": 2,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-16T23:57:29Z",
     "requirement": "REQ-0150",
     "acceptance_criteria": [
@@ -2993,6 +2993,8 @@
         "note": "fix task from the TASK-137 triage of review batch 4",
         "at": "2026-11-16T23:57:29Z"
       }
-    ]
+    ],
+    "completed_at": "2026-11-17T02:24:01Z",
+    "report": "docs/report/phase-143-pdf-text-placement-b4.md"
   }
 ]

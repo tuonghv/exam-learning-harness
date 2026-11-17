@@ -1,0 +1,42 @@
+== 2-De-minh-hoa-gioi-thieu-2025-final 3 changed fields
+-- .intro
+   delete: ' |\n| Phần 1: Sử dụng ngôn ngữ |\n| 1.1. Tiếng Việt |\n| 1.2. Tiếng' -> ' |\n| Phần 1: Sử dụng ngôn ngữ 1.1. Tiếng Việt 1.2. Tiếng Anh'
+   delete: 'g ngôn ngữ |\n| 1.1. Tiếng Việt |\n| 1.2. Tiếng Anh | 60 |\n| 30 |\n' -> ' dụng ngôn ngữ 1.1. Tiếng Việt 1.2. Tiếng Anh | 60 30 30 | 1'
+   delete: ' Việt |\n| 1.2. Tiếng Anh | 60 |\n| 30 |\n| 30 | 1 - 60 |\n| 1 - 30 ' -> 'iếng Việt 1.2. Tiếng Anh | 60 30 30 | 1 - 60 1 - 30 31 - 60 '
+   delete: '\n| 1.2. Tiếng Anh | 60 |\n| 30 |\n| 30 | 1 - 60 |\n| 1 - 30 |\n| 31 ' -> 'g Việt 1.2. Tiếng Anh | 60 30 30 | 1 - 60 1 - 30 31 - 60 |\n|'
+   delete: 'h | 60 |\n| 30 |\n| 30 | 1 - 60 |\n| 1 - 30 |\n| 31 - 60 |\n| Phần 2:' -> 'Tiếng Anh | 60 30 30 | 1 - 60 1 - 30 31 - 60 |\n| Phần 2: Toá'
+   delete: '30 |\n| 30 | 1 - 60 |\n| 1 - 30 |\n| 31 - 60 |\n| Phần 2: Toán học |' -> 'nh | 60 30 30 | 1 - 60 1 - 30 31 - 60 |\n| Phần 2: Toán học |'
+   delete: '0 |\n| Phần 3: Tư duy khoa học |\n| 3.1. Logic, phân tích số liệu ' -> '0 |\n| Phần 3: Tư duy khoa học 3.1. Logic, phân tích số liệu '
+   delete: '3.1. Logic, phân tích số liệu |\n| 3.2. Suy luận khoa học | 30 |\n' -> '3.1. Logic, phân tích số liệu 3.2. Suy luận khoa học | 30 12'
+   delete: '| 3.2. Suy luận khoa học | 30 |\n| 12 |\n| 18 | 91 - 120 |\n| 91 - ' -> 'u 3.2. Suy luận khoa học | 30 12 18 | 91 - 120 91 - 102 103 '
+   delete: ' Suy luận khoa học | 30 |\n| 12 |\n| 18 | 91 - 120 |\n| 91 - 102 |\n' -> '3.2. Suy luận khoa học | 30 12 18 | 91 - 120 91 - 102 103 - '
+   delete: '| 30 |\n| 12 |\n| 18 | 91 - 120 |\n| 91 - 102 |\n| 103 - 120 |\nPHẦN ' -> 'hoa học | 30 12 18 | 91 - 120 91 - 102 103 - 120 |\nPHẦN 1: S'
+   delete: '|\n| 18 | 91 - 120 |\n| 91 - 102 |\n| 103 - 120 |\nPHẦN 1: SỬ DỤNG N' -> '| 30 12 18 | 91 - 120 91 - 102 103 - 120 |\nPHẦN 1: SỬ DỤNG N'
+-- .questions[98].context
+   delete: 'ăm 2021\n| TT | Tỉnh | Tổng số |\n| (người) | Nam |\n| (người) | Nữ' -> 'ăm 2021\n| TT | Tỉnh | Tổng số (người) | Nam (người) | Nữ (ng'
+   delete: 'h | Tổng số |\n| (người) | Nam |\n| (người) | Nữ |\n| (người) | Tỉ ' -> ' Tỉnh | Tổng số (người) | Nam (người) | Nữ (người) | Tỉ lệ ('
+   delete: 'người) | Nam |\n| (người) | Nữ |\n| (người) | Tỉ lệ |\n| (nam/nữ) |' -> 'số (người) | Nam (người) | Nữ (người) | Tỉ lệ (nam/nữ) |\n| 1'
+   delete: 'gười) | Nữ |\n| (người) | Tỉ lệ |\n| (nam/nữ) |\n| 1 | Đắk Nông | 6' -> 'm (người) | Nữ (người) | Tỉ lệ (nam/nữ) |\n| 1 | Đắk Nông | 6'
+-- .questions[108].context
+   delete: 'ng bảng dưới đây:\n| Điều kiện |\n| chiếu sáng bổ sung | Không |\n|' -> 'ng bảng dưới đây:\n| Điều kiện chiếu sáng bổ sung | Không chi'
+   delete: '\n| chiếu sáng bổ sung | Không |\n| chiếu sáng | Số giờ chiếu sáng' -> 'ện chiếu sáng bổ sung | Không chiếu sáng | Số giờ chiếu sáng'
+   delete: 'vào ban đêm (giờ) | Chiếu sáng |\n| liên tục |\n| 0,5 | 1 | 2 | 3 ' -> 'vào ban đêm (giờ) | Chiếu sáng liên tục |\n| 0,5 | 1 | 2 | 3 '
+== De-thi-minh-hoa-2026-Final 3 changed fields
+-- .intro
+   delete: ' |\n| Phần 1: Sử dụng ngôn ngữ |\n| 1.1. Tiếng Việt |\n| 1.2. Tiếng' -> ' |\n| Phần 1: Sử dụng ngôn ngữ 1.1. Tiếng Việt 1.2. Tiếng Anh'
+   delete: 'g ngôn ngữ |\n| 1.1. Tiếng Việt |\n| 1.2. Tiếng Anh | 60 |\n| 30 |\n' -> ' dụng ngôn ngữ 1.1. Tiếng Việt 1.2. Tiếng Anh | 60 30 30 | 1'
+   delete: ' Việt |\n| 1.2. Tiếng Anh | 60 |\n| 30 |\n| 30 | 1 - 60 |\n| 1 - 30 ' -> 'iếng Việt 1.2. Tiếng Anh | 60 30 30 | 1 - 60 1 - 30 31 - 60 '
+   delete: '\n| 1.2. Tiếng Anh | 60 |\n| 30 |\n| 30 | 1 - 60 |\n| 1 - 30 |\n| 31 ' -> 'g Việt 1.2. Tiếng Anh | 60 30 30 | 1 - 60 1 - 30 31 - 60 |\n|'
+   delete: 'h | 60 |\n| 30 |\n| 30 | 1 - 60 |\n| 1 - 30 |\n| 31 - 60 |\n| Phần 2:' -> 'Tiếng Anh | 60 30 30 | 1 - 60 1 - 30 31 - 60 |\n| Phần 2: Toá'
+   delete: '30 |\n| 30 | 1 - 60 |\n| 1 - 30 |\n| 31 - 60 |\n| Phần 2: Toán học |' -> 'nh | 60 30 30 | 1 - 60 1 - 30 31 - 60 |\n| Phần 2: Toán học |'
+   delete: '0 |\n| Phần 3: Tư duy khoa học |\n| 3.1. Logic, phân tích số liệu ' -> '0 |\n| Phần 3: Tư duy khoa học 3.1. Logic, phân tích số liệu '
+   delete: '3.1. Logic, phân tích số liệu |\n| 3.2. Suy luận khoa học | 30 |\n' -> '3.1. Logic, phân tích số liệu 3.2. Suy luận khoa học | 30 12'
+   delete: '| 3.2. Suy luận khoa học | 30 |\n| 12 |\n| 18 | 91 - 120 |\n| 91 - ' -> 'u 3.2. Suy luận khoa học | 30 12 18 | 91 - 120 91 - 102 103 '
+   delete: ' Suy luận khoa học | 30 |\n| 12 |\n| 18 | 91 - 120 |\n| 91 - 102 |\n' -> '3.2. Suy luận khoa học | 30 12 18 | 91 - 120 91 - 102 103 - '
+   delete: '| 30 |\n| 12 |\n| 18 | 91 - 120 |\n| 91 - 102 |\n| 103 - 120 |' -> 'hoa học | 30 12 18 | 91 - 120 91 - 102 103 - 120 |'
+   delete: '\n| 18 | 91 - 120 |\n| 91 - 102 |\n| 103 - 120 |' -> ' 30 12 18 | 91 - 120 91 - 102 103 - 120 |'
+-- .questions[3].text
+   delete: 'ì của chủ thể trữ tình? | | A. | | C. | Thương tiếc mùa xuân trô' -> 'ì của chủ thể trữ tình? | | A. C. | Thương tiếc mùa xuân trô'
+-- .questions[108].context
+   delete: 'h\ncủa 5 lần đo.\n| Nghiệm thức |\n| (NT) | Dung dịch xử lý | Độ hấ' -> 'h\ncủa 5 lần đo.\n| Nghiệm thức (NT) | Dung dịch xử lý | Độ hấ'
+   delete: '4 | Nước thải pha loãng 50% + |\n| than hoạt tính | 0,130 ± 0,012' -> '4 | Nước thải pha loãng 50% + than hoạt tính | 0,130 ± 0,012'

@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-143",
   "title": "PDF text placement: two-column tables, cell re-split, short-stem columns, group intro lines (batch 4) (REQ-0150)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0150",
   "acceptance_criteria": [
     "AC1 tests per id",
@@ -42,11 +42,19 @@
       "work/TASK-143/evidence/bite.txt"
     ],
     "command": "before/after native ingest of the 4 input PDFs (work/TASK-143/dump_ingest.py) + new tests + bite + --fast",
-    "result": "AC1-AC2 met; real input: only F002 table-row joins changed (3 fields x 2 exams), all improvements; F001/F003/F004 no change on these exams"
+    "result": "AC1-AC2 met; real input: only F002 table-row joins changed (3 fields x 2 exams), all improvements; F001/F003/F004 no change on these exams",
+    "quality": {
+      "kind": "real-run",
+      "evidence": [
+        "work/TASK-143/evidence/ingest_diff_words.txt",
+        "work/TASK-143/evidence/summary.md"
+      ],
+      "reason": "before/after native ingest of the 4 input PDFs; every change judged"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-143-pdf-text-placement-b4.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -61,6 +69,9 @@
     },
     "verifier": {
       "waiver": "coordinator ran the real-input before/after diff and judged every changed field"
+    },
+    "crosscheck": {
+      "waiver": "coordinator ran the real-input before/after diff, tests, bite and ledger"
     }
   },
   "user_notes": [
@@ -71,7 +82,7 @@
     }
   ],
   "picked_at": "2026-11-17T02:19:04Z",
-  "updated_at": "2026-11-17T02:23:51Z",
+  "updated_at": "2026-11-17T02:24:01Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/adapters/pdf.py",
@@ -85,5 +96,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report and close"
+  "next": ""
 }

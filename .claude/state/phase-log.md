@@ -4189,3 +4189,9 @@ Action: real-input diff
 Result: 6 changed fields, all F002 improvements
 Decision: VERIFIED
 Next: DONE
+
+## DONE - TASK-143 - 2026-11-17T02:24:01Z
+Action: wrote report
+Result: TASK-143 closed; all 28 batch-4 findings have a final disposition
+Decision: backlog: 2 TODO REQs (approved runs) + 2 policy questions
+Next: user decides
