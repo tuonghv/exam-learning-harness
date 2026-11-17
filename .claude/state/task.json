@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-140",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "coder implements 140.1-140.3",
   "title": "Runlayout: publish guard for run folders, reserved line names, run-id suffix order (batch 4) (REQ-0147)",
   "active": [
     {
       "task_id": "TASK-140",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "coder implements 140.1-140.3",
+      "updated_at": "2026-11-17T02:02:05Z"
     }
   ],
   "max_active": 1
