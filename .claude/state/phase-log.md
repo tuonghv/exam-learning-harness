@@ -4099,3 +4099,9 @@ Action: verify
 Result: met
 Decision: VERIFIED
 Next: DONE
+
+## DONE - TASK-140 - 2026-11-17T02:05:31Z
+Action: wrote report
+Result: TASK-140 closed; all P1 batch-4 fixes done
+Decision: next TASK-141 (P2 verifier)
+Next: pick TASK-141
