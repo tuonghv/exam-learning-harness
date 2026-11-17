@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-143",
   "title": "PDF text placement: two-column tables, cell re-split, short-stem columns, group intro lines (batch 4) (REQ-0150)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0150",
   "acceptance_criteria": [
     "AC1 tests per id",
@@ -25,9 +25,9 @@
     "summary": "two-column table placement by side; table lines from cell rows (also select_pages); option-row pages not split as columns; group intro lines protected from furniture strip; F006 waived"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --fast; new tests on fixed code and on HEAD pdf/parts copies",
+    "result": "KNOWN 4 NEW 0; 6/6 new tests pass, 6/6 fail on old code"
   },
   "security": {
     "status": "pending",
@@ -48,7 +48,10 @@
     "designer": {
       "waiver": "designed in the TASK-137 triage (work/TASK-137/handoff/design-b.md)"
     },
-    "coder": "work/TASK-143/handoff/code.md"
+    "coder": "work/TASK-143/handoff/code.md",
+    "tester": {
+      "waiver": "coordinator re-ran --fast, the new tests and the bite independently"
+    }
   },
   "user_notes": [
     {
@@ -72,5 +75,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tests"
+  "next": "verify on real input"
 }

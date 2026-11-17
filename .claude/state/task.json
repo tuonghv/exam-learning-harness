@@ -1,14 +1,14 @@
 {
   "schema": 2,
   "task_id": "TASK-143",
-  "state": "IMPLEMENTING",
-  "next": "tests",
+  "state": "UNIT_TESTED",
+  "next": "verify on real input",
   "title": "PDF text placement: two-column tables, cell re-split, short-stem columns, group intro lines (batch 4) (REQ-0150)",
   "active": [
     {
       "task_id": "TASK-143",
-      "state": "IMPLEMENTING",
-      "next": "tests",
+      "state": "UNIT_TESTED",
+      "next": "verify on real input",
       "updated_at": "2026-11-17T02:23:50Z"
     }
   ],
