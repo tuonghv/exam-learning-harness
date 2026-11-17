@@ -1,16 +1,16 @@
 {
   "task_id": "TASK-143",
   "title": "PDF text placement: two-column tables, cell re-split, short-stem columns, group intro lines (batch 4) (REQ-0150)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0150",
   "acceptance_criteria": [
     "AC1 tests per id",
     "AC2 ledger, --fast"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-143-pdf-text-placement-b4.md",
+    "summary": "pdf text placement fixes 138-F001-F004 (+D1), F006 conditional, with a before/after native ingest of input/",
     "reuse": [],
     "risks": []
   },
@@ -38,7 +38,11 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": {
+      "waiver": "designed in the TASK-137 triage (work/TASK-137/handoff/design-b.md)"
+    }
+  },
   "user_notes": [
     {
       "raw": "RAW-00357",
@@ -47,8 +51,8 @@
     }
   ],
   "picked_at": "2026-11-17T02:19:04Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-17T02:19:19Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -56,5 +60,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "coder implements 143.1-143.4"
 }

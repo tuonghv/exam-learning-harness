@@ -4165,3 +4165,9 @@ Action: wrote report
 Result: TASK-142 closed
 Decision: next TASK-143 (P2 pdf text placement)
 Next: pick TASK-143
+
+## DESIGN - TASK-143 - 2026-11-17T02:19:19Z
+Action: design from the triage; baseline native ingest of 4 input PDFs captured
+Result: 5 ids
+Decision: coder
+Next: IMPLEMENTING
