@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-144",
   "title": "Scorer strict half-unit tolerance, no decimal for fraction keys (REQ-0151)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0151",
   "acceptance_criteria": [
     "AC1 boundary tests",
@@ -28,12 +28,18 @@
     "result": "KNOWN 4 NEW 0; 4/4 pass; 3 D1 tests fail on old code, fraction pin passes on both by design"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "not_applicable",
+    "result": "scoring constant only"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-144/evidence/summary.md",
+      "work/TASK-144/evidence/fast.txt",
+      "work/TASK-144/evidence/rescore.txt"
+    ],
+    "command": "new tests + bite + --fast + re-score of 95 stored keyed answers old vs new",
+    "result": "AC1-AC2 met; 0 flips on stored answers"
   },
   "report": {
     "status": "pending",
@@ -49,6 +55,9 @@
     "coder": "work/TASK-144/handoff/code.md",
     "tester": {
       "waiver": "coordinator re-ran --fast, the new tests and the bite independently"
+    },
+    "verifier": {
+      "waiver": "coordinator verified tests, bite and the re-score"
     }
   },
   "user_notes": [
@@ -59,7 +68,7 @@
     }
   ],
   "picked_at": "2026-11-17T04:00:42Z",
-  "updated_at": "2026-11-17T04:04:30Z",
+  "updated_at": "2026-11-17T04:04:31Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/scorer.py",
@@ -71,5 +80,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verify"
+  "next": "report and close"
 }
