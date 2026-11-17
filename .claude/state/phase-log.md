@@ -4147,3 +4147,9 @@ Action: coder implemented 142.1-142.5 + 6 tests in 2 rounds (round 2 narrowed th
 Result: --fast KNOWN 4 NEW 0
 Decision: matches refined design
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-142 - 2026-11-17T02:18:23Z
+Action: --fast + bite
+Result: NEW 0; every fix test bites
+Decision: UNIT_TESTED
+Next: VERIFIED

@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-142",
   "title": "PDF OCR route: table area, OCR acceptance, ocr_doubt, cut detector, corrupt page (batch 4) (REQ-0149)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0149",
   "acceptance_criteria": [
     "AC1 tests per id",
@@ -25,9 +25,9 @@
     "summary": "garbled native page: OCR replaces text and tables; clean OCR wins over longer garbage; ocr_doubt sus = suspect OCR pages; cut check skips OCR pages; broken page -> IngestError corrupt"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --fast; new tests on fixed code and on a HEAD pdf.py copy",
+    "result": "KNOWN 4 NEW 0; 6/6 new tests pass, 5/5 fix tests fail on old code (1 guard test passes by design)"
   },
   "security": {
     "status": "pending",
@@ -48,7 +48,10 @@
     "designer": {
       "waiver": "designed in the TASK-137 triage (work/TASK-137/handoff/design-b.md)"
     },
-    "coder": "work/TASK-142/handoff/code.md"
+    "coder": "work/TASK-142/handoff/code.md",
+    "tester": {
+      "waiver": "coordinator re-ran --fast, the new tests and the bite independently"
+    }
   },
   "user_notes": [
     {
@@ -58,7 +61,7 @@
     }
   ],
   "picked_at": "2026-11-17T02:09:36Z",
-  "updated_at": "2026-11-17T02:18:22Z",
+  "updated_at": "2026-11-17T02:18:23Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/ingest/adapters/pdf.py",
@@ -71,5 +74,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tests"
+  "next": "verify"
 }
