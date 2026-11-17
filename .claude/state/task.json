@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-145",
-  "state": "DESIGN",
-  "next": "record the run",
+  "state": "IMPLEMENTING",
+  "next": "checks",
   "title": "Re-solve DGNL 2026 (paid, approved) with pinned model, cache, full report (REQ-0091)",
   "active": [
     {
       "task_id": "TASK-145",
-      "state": "DESIGN",
-      "next": "record the run",
-      "updated_at": "2026-11-17T05:06:06Z"
+      "state": "IMPLEMENTING",
+      "next": "checks",
+      "updated_at": "2026-11-17T05:06:12Z"
     }
   ],
   "max_active": 1
