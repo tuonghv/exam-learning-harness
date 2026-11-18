@@ -3089,7 +3089,7 @@
     "task_id": "TASK-148",
     "title": "check-examples: examples/dgnl source-document dir allowance, clear 3 known failures (REQ-0154)",
     "priority": 2,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-18T09:39:45Z",
     "requirement": "REQ-0154",
     "acceptance_criteria": [
@@ -3102,6 +3102,8 @@
         "note": "fix test_12b",
         "at": "2026-11-18T09:39:45Z"
       }
-    ]
+    ],
+    "completed_at": "2026-11-18T09:43:21Z",
+    "report": "docs/report/phase-148-examples-source-dir.md"
   }
 ]

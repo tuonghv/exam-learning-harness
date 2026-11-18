@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-148",
   "title": "check-examples: examples/dgnl source-document dir allowance, clear 3 known failures (REQ-0154)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0154",
   "acceptance_criteria": [
     "AC1 check-examples exit 0; .md in examples/dgnl still ERROR",
@@ -38,11 +38,19 @@
       "work/TASK-148/evidence/fast.txt"
     ],
     "command": "python3 -I scripts/exam.py check-examples; python3 -I tools/run_tests.py --fast",
-    "result": "exit 0, OK 25 pairs; --fast KNOWN 1 (docx lxml) NEW 0"
+    "result": "exit 0, OK 25 pairs; --fast KNOWN 1 (docx lxml) NEW 0",
+    "quality": {
+      "kind": "real-run",
+      "evidence": [
+        "work/TASK-148/evidence/check-examples.txt",
+        "work/TASK-148/evidence/fast.txt"
+      ],
+      "reason": "real check-examples run + fast suite"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-148-examples-source-dir.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -59,6 +67,9 @@
     },
     "verifier": {
       "waiver": "coordinator ran the real command, evidence files listed"
+    },
+    "crosscheck": {
+      "waiver": "no content numbers"
     }
   },
   "user_notes": [
@@ -69,7 +80,7 @@
     }
   ],
   "picked_at": "2026-11-18T09:39:45Z",
-  "updated_at": "2026-11-18T09:43:14Z",
+  "updated_at": "2026-11-18T09:43:22Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/examples_check.py",
@@ -82,5 +93,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report"
+  "next": ""
 }
