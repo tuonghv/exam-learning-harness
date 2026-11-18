@@ -1,0 +1,72 @@
+{
+  "task_id": "TASK-150",
+  "title": "Delete guard for every session (rm/find -delete/git clean/rmtree only under work/, scratchpad, /tmp), clean-work.sh, auto backup (REQ-0156)",
+  "state": "TODO",
+  "requirement": "REQ-0156",
+  "acceptance_criteria": [
+    "AC1 guard denies unsafe recursive deletes, allows work/ scratchpad /tmp",
+    "AC2 clean-work.sh realpath-checked, roles told",
+    "AC3 incident-shape tests",
+    "AC4 auto backup when stale + auto-push"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {},
+  "user_notes": [
+    {
+      "raw": "RAW-00377",
+      "note": "QA deleted the repo while cleaning ./work",
+      "at": "2026-11-18T10:34:39Z"
+    },
+    {
+      "raw": "RAW-00378",
+      "note": "the mistake was a bash rm",
+      "at": "2026-11-18T10:34:39Z"
+    },
+    {
+      "raw": "RAW-00379",
+      "note": "approve the delete guard",
+      "at": "2026-11-18T10:34:39Z"
+    }
+  ],
+  "picked_at": "2026-11-18T10:34:39Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
