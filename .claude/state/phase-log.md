@@ -4309,3 +4309,9 @@ Action: real ingest compare + ledger
 Result: identical ingest, ledger clean
 Decision: verified
 Next: DONE
+
+## DONE - TASK-147 - 2026-11-18T09:34:12Z
+Action: report
+Result: 13 reports moved with status header, 138-F006 fixed, 5 FPs marked
+Decision: done
+Next: backlog complete

@@ -99,7 +99,7 @@ id	report	class	disposition	ref	note
 138-F003	2026-11-17-phase138-pdf-adapter-b4.md	BUG	fixed	TASK-143	
 138-F004	2026-11-17-phase138-pdf-adapter-b4.md	BUG	fixed	TASK-143	
 138-F005	2026-11-17-phase138-pdf-adapter-b4.md	BUG	fixed	TASK-142	
-138-F006	2026-11-17-phase138-pdf-adapter-b4.md	BUG	open	TASK-147	re-check RAW-00368: true positive (waiver reason wrong, _line_blocks gives line boxes)
+138-F006	2026-11-17-phase138-pdf-adapter-b4.md	BUG	fixed	TASK-147	re-check RAW-00368: true positive (earlier waiver TASK-143 wrong: _line_blocks gives line boxes)
 138-F007	2026-11-17-phase138-pdf-adapter-b4.md	BUG	fixed	TASK-142	
 138-F008	2026-11-17-phase138-pdf-adapter-b4.md	BUG	fixed	TASK-142	
 138-F009	2026-11-17-phase138-pdf-adapter-b4.md	BUG	fixed	TASK-142	

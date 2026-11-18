@@ -1,5 +1,5 @@
 <!-- fable-status -->
-> **Status (2026-11-18):** 10 finding(s): 9 fixed (TASK-142, TASK-143). Still open: F006 open on TASK-147 (REQ-0153, RAW-00368: check against the code first; false positive marked and skipped)
+> **Status (2026-11-18):** 10 finding(s): 10 fixed (TASK-142, TASK-143, TASK-147). Nothing open.
 >
 > **Action rule (RAW-00368):** check every finding against the code. A true positive is FIXED through a task; a warning or a note alone does not close it. A false positive is recorded with its reason in `docs/review/findings.tsv` and ignored. Update the Status line at each task transition.
 <!-- /fable-status -->

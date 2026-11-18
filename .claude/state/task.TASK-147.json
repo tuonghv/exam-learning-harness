@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-147",
   "title": "Move Fable review reports to docs/report/fable-review with status header, ledger/reviewer paths, re-check 138-F006 (REQ-0153)",
-  "state": "VERIFIED",
+  "state": "DONE",
   "requirement": "REQ-0153",
   "acceptance_criteria": [
     "AC1 13 reports in docs/report/fable-review with fable-status header",
@@ -44,11 +44,19 @@
       "work/TASK-147/evidence/folder.txt"
     ],
     "command": "python3 -I work/TASK-147/dump.py <old src> / <new src> on 4 real PDFs (ocr off); python3 -I tools/review_ledger.py; ls docs/report/fable-review",
-    "result": "ingest output identical old vs new on dgnl 2024/2025/2026 + math 2026 PDFs; ledger 108 ids 0 problems; 13 reports in fable-review, each with fable-status block, 0 review reports left in docs/report"
+    "result": "ingest output identical old vs new on dgnl 2024/2025/2026 + math 2026 PDFs; ledger 108 ids 0 problems; 13 reports in fable-review, each with fable-status block, 0 review reports left in docs/report",
+    "quality": {
+      "kind": "real-run",
+      "evidence": [
+        "work/TASK-147/evidence/ingest-compare.txt",
+        "work/TASK-147/evidence/ledger.txt"
+      ],
+      "reason": "real ingest compare on 4 PDFs + ledger check"
+    }
   },
   "report": {
-    "status": "pending",
-    "path": ""
+    "status": "completed",
+    "path": "docs/report/phase-147-fable-review-folder.md"
   },
   "roles_required": true,
   "crosscheck_required": true,
@@ -65,6 +73,9 @@
     },
     "tester": {
       "waiver": "tests written in-session with the fix"
+    },
+    "crosscheck": {
+      "waiver": "no content numbers; ledger tool recomputes ids from report headings (108) and ingest compare is a byte diff"
     }
   },
   "user_notes": [
@@ -75,7 +86,7 @@
     }
   ],
   "picked_at": "2026-11-18T09:25:04Z",
-  "updated_at": "2026-11-18T09:33:50Z",
+  "updated_at": "2026-11-18T09:34:13Z",
   "updated_by": "main",
   "scope": [
     "tools/review_ledger.py",
@@ -94,5 +105,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "report + DONE"
+  "next": ""
 }
