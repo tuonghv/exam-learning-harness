@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-148",
   "title": "check-examples: examples/dgnl source-document dir allowance, clear 3 known failures (REQ-0154)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0154",
   "acceptance_criteria": [
     "AC1 check-examples exit 0; .md in examples/dgnl still ERROR",
@@ -28,12 +28,17 @@
     "result": "test_check_examples OK (new test fails on old code, 2 failures); --fast KNOWN 1 NEW 0"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "validator only; .md in the source dir still rejected, so eval keys cannot hide there"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-148/evidence/check-examples.txt",
+      "work/TASK-148/evidence/fast.txt"
+    ],
+    "command": "python3 -I scripts/exam.py check-examples; python3 -I tools/run_tests.py --fast",
+    "result": "exit 0, OK 25 pairs; --fast KNOWN 1 (docx lxml) NEW 0"
   },
   "report": {
     "status": "pending",
@@ -51,6 +56,9 @@
     },
     "tester": {
       "waiver": "test written with the fix"
+    },
+    "verifier": {
+      "waiver": "coordinator ran the real command, evidence files listed"
     }
   },
   "user_notes": [
@@ -74,5 +82,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verify"
+  "next": "report"
 }

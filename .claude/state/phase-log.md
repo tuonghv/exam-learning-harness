@@ -4333,3 +4333,9 @@ Action: tests
 Result: OK, KNOWN 4->1
 Decision: go
 Next: VERIFIED
+
+## VERIFIED - TASK-148 - 2026-11-18T09:43:14Z
+Action: real check-examples
+Result: exit 0
+Decision: verified
+Next: DONE
