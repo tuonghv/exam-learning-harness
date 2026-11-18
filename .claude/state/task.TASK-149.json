@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-149",
   "title": "Advisory post-commit git hook: left-behind changes, big files, missing Task trailer, review ledger (REQ-0155)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0155",
   "acceptance_criteria": [
     "AC1 hook + tool print WARN/OK, exit 0",
@@ -30,12 +30,17 @@
     "result": "10 OK (7 checks + 3 auto-push on a local bare origin); --fast KNOWN 1 NEW 0"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "push only to the configured origin, only non-main branches, background, never main; no secrets read; hook runs repo-tracked code only via python3 -I"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-149/real.txt",
+      "work/TASK-149/fast.txt"
+    ],
+    "command": "bash .githooks/post-commit (core.hooksPath=.githooks); python3 -I tools/post_commit_check.py --root <worktree at a069e6a>; tests incl. auto-push on local bare origin",
+    "result": "real hook ran on HEAD: caught a real left-behind (exec bit), then OK; on a069e6a flags the 3.4 MiB and 2.2 MiB PDFs; main not pushed; auto-push proven in tests"
   },
   "report": {
     "status": "pending",
@@ -53,6 +58,9 @@
     },
     "tester": {
       "waiver": "tests written with the tool"
+    },
+    "verifier": {
+      "waiver": "coordinator ran the real hook, evidence listed"
     }
   },
   "user_notes": [
@@ -68,7 +76,7 @@
     }
   ],
   "picked_at": "2026-11-18T09:50:45Z",
-  "updated_at": "2026-11-18T09:54:10Z",
+  "updated_at": "2026-11-18T10:25:25Z",
   "updated_by": "main",
   "scope": [
     ".githooks/post-commit",
@@ -83,5 +91,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "real commit check"
+  "next": "report"
 }

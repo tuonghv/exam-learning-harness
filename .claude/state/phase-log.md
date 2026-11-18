@@ -4363,3 +4363,9 @@ Action: tests + auto-push part (RAW-00373)
 Result: 10 OK
 Decision: main never auto-pushed; asking user
 Next: VERIFIED
+
+## VERIFIED - TASK-149 - 2026-11-18T10:25:25Z
+Action: real hook run
+Result: caught exec-bit drift, then OK; historic big-file caught
+Decision: verified
+Next: DONE
