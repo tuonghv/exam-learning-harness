@@ -4351,3 +4351,9 @@ Action: design
 Result: 4 advisory checks
 Decision: warn only, no block
 Next: IMPLEMENTING
+
+## IMPLEMENTING - TASK-149 - 2026-11-18T09:52:00Z
+Action: implement
+Result: OK on HEAD
+Decision: stderr output, no bytecode written
+Next: UNIT_TESTED

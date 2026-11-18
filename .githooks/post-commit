@@ -1,0 +1,7 @@
+#!/bin/sh
+# Advisory post-commit checks (TASK-149, REQ-0155): warns, never blocks. Off: POST_COMMIT_CHECK=0.
+# Enable once per clone: git config core.hooksPath .githooks
+root=$(git rev-parse --show-toplevel 2>/dev/null) || exit 0
+[ -f "$root/tools/post_commit_check.py" ] || exit 0
+python3 -I "$root/tools/post_commit_check.py" --root "$root" || true
+exit 0

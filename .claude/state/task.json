@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-149",
-  "state": "DESIGN",
-  "next": "implement",
+  "state": "IMPLEMENTING",
+  "next": "tests",
   "title": "Advisory post-commit git hook: left-behind changes, big files, missing Task trailer, review ledger (REQ-0155)",
   "active": [
     {
       "task_id": "TASK-149",
-      "state": "DESIGN",
-      "next": "implement",
-      "updated_at": "2026-11-18T09:51:02Z"
+      "state": "IMPLEMENTING",
+      "next": "tests",
+      "updated_at": "2026-11-18T09:52:00Z"
     }
   ],
   "max_active": 1

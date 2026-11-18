@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-149",
   "title": "Advisory post-commit git hook: left-behind changes, big files, missing Task trailer, review ledger (REQ-0155)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0155",
   "acceptance_criteria": [
     "AC1 hook + tool print WARN/OK, exit 0",
@@ -16,8 +16,13 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      ".githooks/post-commit",
+      "tools/post_commit_check.py",
+      "README.md"
+    ],
+    "summary": ".githooks/post-commit runs tools/post_commit_check.py: left-behind, big-file, no-task, ledger warnings, exit 0, opt-out; README setup line; core.hooksPath set in this clone"
   },
   "unit_test": {
     "status": "pending",
@@ -42,6 +47,9 @@
   "roles": {
     "designer": {
       "waiver": "small tool; design by coordinator from today's commit issues"
+    },
+    "coder": {
+      "waiver": "small stdlib tool done in-session"
     }
   },
   "user_notes": [
@@ -57,7 +65,7 @@
     }
   ],
   "picked_at": "2026-11-18T09:50:45Z",
-  "updated_at": "2026-11-18T09:51:02Z",
+  "updated_at": "2026-11-18T09:52:00Z",
   "updated_by": "main",
   "scope": [
     ".githooks/post-commit",
@@ -72,5 +80,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "implement"
+  "next": "tests"
 }
