@@ -4387,3 +4387,9 @@ Action: guard + clean-work + auto backup
 Result: live: reports/ rm denied, work/ rm allowed
 Decision: scope per RAW-00380
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-150 - 2026-11-18T10:46:13Z
+Action: tests
+Result: all OK
+Decision: go
+Next: VERIFIED
