@@ -4315,3 +4315,9 @@ Action: report
 Result: 13 reports moved with status header, 138-F006 fixed, 5 FPs marked
 Decision: done
 Next: backlog complete
+
+## DESIGN - TASK-148 - 2026-11-18T09:43:12Z
+Action: design
+Result: cause: tracked source PDF in examples/dgnl
+Decision: explicit allowance like LEGACY
+Next: IMPLEMENTING
