@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-150",
   "title": "Delete guard for every session (rm/find -delete/git clean/rmtree only under work/, scratchpad, /tmp), clean-work.sh, auto backup (REQ-0156)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0156",
   "acceptance_criteria": [
     "AC1 guard denies unsafe recursive deletes, allows work/ scratchpad /tmp",
@@ -10,9 +10,9 @@
     "AC4 auto backup when stale + auto-push"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-150-delete-guard.md",
+    "summary": "PreToolUse delete_guard.py (all sessions): recursive deletes only under work/ and /tmp, protected dirs for plain rm; clean-work.sh; auto backup when stale",
     "reuse": [],
     "risks": []
   },
@@ -40,7 +40,22 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "grants": {
+      "coder": [
+        ".claude/scripts/clean-work.sh"
+      ],
+      "tester": [
+        ".claude/scripts/clean-work.sh"
+      ]
+    },
+    "grants_auto": [
+      ".claude/scripts/clean-work.sh"
+    ],
+    "designer": {
+      "waiver": "coordinator owns hooks/settings (CLAUDE.md); design from the incident"
+    }
+  },
   "user_notes": [
     {
       "raw": "RAW-00377",
@@ -59,14 +74,26 @@
     }
   ],
   "picked_at": "2026-11-18T10:34:39Z",
-  "updated_at": "",
-  "updated_by": "",
-  "scope": [],
+  "updated_at": "2026-11-18T10:35:01Z",
+  "updated_by": "main",
+  "scope": [
+    ".claude/hooks/delete_guard.py",
+    ".claude/settings.json",
+    ".claude/scripts/clean-work.sh",
+    ".claude/agents/*.md",
+    ".githooks/post-commit",
+    "tools/post_commit_check.py",
+    "tests/unit/test_delete_guard.py",
+    "tests/unit/test_post_commit_check.py",
+    "README.md",
+    "CLAUDE.md",
+    "docs/guide/workflow-roles.md"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "implement guard"
 }

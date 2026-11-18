@@ -4375,3 +4375,9 @@ Action: report
 Result: hook live in this clone
 Decision: done
 Next: feature branch + push (RAW-00374)
+
+## DESIGN - TASK-150 - 2026-11-18T10:35:01Z
+Action: design
+Result: 3 layers: guard, clean-work.sh, auto backup
+Decision: user approved block RAW-00379
+Next: IMPLEMENTING
