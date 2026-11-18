@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-149",
   "title": "Advisory post-commit git hook: left-behind changes, big files, missing Task trailer, review ledger (REQ-0155)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0155",
   "acceptance_criteria": [
     "AC1 hook + tool print WARN/OK, exit 0",
@@ -9,9 +9,9 @@
     "AC3 core.hooksPath set, real commit shows output, setup documented"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-149-post-commit-hook.md",
+    "summary": "advisory post-commit hook: left-behind, big-file, no-task, ledger checks; core.hooksPath .githooks",
     "reuse": [],
     "risks": []
   },
@@ -39,7 +39,11 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": {
+      "waiver": "small tool; design by coordinator from today's commit issues"
+    }
+  },
   "user_notes": [
     {
       "raw": "RAW-00371",
@@ -53,14 +57,20 @@
     }
   ],
   "picked_at": "2026-11-18T09:50:45Z",
-  "updated_at": "",
-  "updated_by": "",
-  "scope": [],
+  "updated_at": "2026-11-18T09:51:02Z",
+  "updated_by": "main",
+  "scope": [
+    ".githooks/post-commit",
+    "tools/post_commit_check.py",
+    "tests/unit/test_post_commit_check.py",
+    "README.md",
+    "docs/guide/workflow-roles.md"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "implement"
 }

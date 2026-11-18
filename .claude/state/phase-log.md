@@ -4345,3 +4345,9 @@ Action: report
 Result: 3 known failures fixed
 Decision: done
 Next: backlog complete
+
+## DESIGN - TASK-149 - 2026-11-18T09:51:01Z
+Action: design
+Result: 4 advisory checks
+Decision: warn only, no block
+Next: IMPLEMENTING

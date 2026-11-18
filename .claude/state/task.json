@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-149",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "implement",
   "title": "Advisory post-commit git hook: left-behind changes, big files, missing Task trailer, review ledger (REQ-0155)",
   "active": [
     {
       "task_id": "TASK-149",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "implement",
+      "updated_at": "2026-11-18T09:51:02Z"
     }
   ],
   "max_active": 1
