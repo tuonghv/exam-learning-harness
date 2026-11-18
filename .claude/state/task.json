@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-147",
-  "state": "IMPLEMENTING",
-  "next": "unit tests",
+  "state": "UNIT_TESTED",
+  "next": "real verification",
   "title": "Move Fable review reports to docs/report/fable-review with status header, ledger/reviewer paths, re-check 138-F006 (REQ-0153)",
   "active": [
     {
       "task_id": "TASK-147",
-      "state": "IMPLEMENTING",
-      "next": "unit tests",
-      "updated_at": "2026-11-18T09:33:29Z"
+      "state": "UNIT_TESTED",
+      "next": "real verification",
+      "updated_at": "2026-11-18T09:33:38Z"
     }
   ],
   "max_active": 1

@@ -4297,3 +4297,9 @@ Action: move + header + ledger path + F006 fix
 Result: ledger 108 ids, 1 open (F006 until DONE), 0 problems
 Decision: OCR path filter left as is (finding names native path)
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-147 - 2026-11-18T09:33:38Z
+Action: unit tests
+Result: new tests pass, fail on old code; fast suite no new failure from this task
+Decision: test_12b pre-existing (tracked examples/dgnl pdf), out of scope
+Next: VERIFIED

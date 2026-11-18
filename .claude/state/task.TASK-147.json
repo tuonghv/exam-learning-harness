@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-147",
   "title": "Move Fable review reports to docs/report/fable-review with status header, ledger/reviewer paths, re-check 138-F006 (REQ-0153)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0153",
   "acceptance_criteria": [
     "AC1 13 reports in docs/report/fable-review with fable-status header",
@@ -28,9 +28,9 @@
     "summary": "13 Fable reports git-mv'd to docs/report/fable-review/<date>-phase<N>-<slug>.md with fable-status header (from ledger); review_ledger scans the folder; code-reviewer + prompt path; FP reasons in ledger; pdf._drop_table_blocks keeps lines of a block straddling a table (138-F006)"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tests/unit/test_pdf_table_straddle_147.py; python3 -I tests/unit/test_review_ledger.py; python3 -I tools/run_tests.py --fast",
+    "result": "4 + 8 OK (straddle tests fail on old code: 4 errors); --fast KNOWN 4, NEW 1 = test_check_examples test_12b (examples/dgnl unknown subject dir), fails on HEAD without this change too"
   },
   "security": {
     "status": "pending",
@@ -63,7 +63,7 @@
     }
   ],
   "picked_at": "2026-11-18T09:25:04Z",
-  "updated_at": "2026-11-18T09:33:29Z",
+  "updated_at": "2026-11-18T09:33:38Z",
   "updated_by": "main",
   "scope": [
     "tools/review_ledger.py",
@@ -82,5 +82,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "unit tests"
+  "next": "real verification"
 }
