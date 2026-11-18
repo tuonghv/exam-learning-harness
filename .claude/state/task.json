@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-148",
-  "state": "IMPLEMENTING",
-  "next": "tests",
+  "state": "UNIT_TESTED",
+  "next": "verify",
   "title": "check-examples: examples/dgnl source-document dir allowance, clear 3 known failures (REQ-0154)",
   "active": [
     {
       "task_id": "TASK-148",
-      "state": "IMPLEMENTING",
-      "next": "tests",
-      "updated_at": "2026-11-18T09:43:13Z"
+      "state": "UNIT_TESTED",
+      "next": "verify",
+      "updated_at": "2026-11-18T09:43:14Z"
     }
   ],
   "max_active": 1
