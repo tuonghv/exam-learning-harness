@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-147",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "move reports, ledger path, F006 fix",
   "title": "Move Fable review reports to docs/report/fable-review with status header, ledger/reviewer paths, re-check 138-F006 (REQ-0153)",
   "active": [
     {
       "task_id": "TASK-147",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "move reports, ledger path, F006 fix",
+      "updated_at": "2026-11-18T09:25:36Z"
     }
   ],
   "max_active": 1

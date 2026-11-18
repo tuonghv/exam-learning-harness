@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-147",
   "title": "Move Fable review reports to docs/report/fable-review with status header, ledger/reviewer paths, re-check 138-F006 (REQ-0153)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0153",
   "acceptance_criteria": [
     "AC1 13 reports in docs/report/fable-review with fable-status header",
@@ -9,9 +9,9 @@
     "AC3 not-fixed findings re-checked: TP fixed with failing-on-old test, FP recorded"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-147-fable-review-folder.md",
+    "summary": "move 13 Fable review reports to docs/report/fable-review/<date>-phase<N>-<slug>.md with fable-status header, ledger + reviewer paths, fix true-positive 138-F006",
     "reuse": [],
     "risks": []
   },
@@ -39,7 +39,11 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": {
+      "waiver": "small file move + one-function fix; design by coordinator from the ledger"
+    }
+  },
   "user_notes": [
     {
       "raw": "RAW-00368",
@@ -48,8 +52,8 @@
     }
   ],
   "picked_at": "2026-11-18T09:25:04Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-18T09:25:36Z",
+  "updated_by": "main",
   "scope": [],
   "depends_on": [],
   "inputs": {},
@@ -57,5 +61,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "move reports, ledger path, F006 fix"
 }

@@ -4285,3 +4285,9 @@ Action: wrote report
 Result: TASK-146 closed; Opus 335/359 vs Sonnet 331/359, $8.65
 Decision: published runs unchanged; user decides publish (2024 candidate)
 Next: user decides
+
+## DESIGN - TASK-147 - 2026-11-18T09:25:35Z
+Action: design
+Result: 13 reports, 1 waived finding (138-F006) is a true positive
+Decision: fix it in this task
+Next: IMPLEMENTING
