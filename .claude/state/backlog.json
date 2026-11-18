@@ -3105,5 +3105,30 @@
     ],
     "completed_at": "2026-11-18T09:43:22Z",
     "report": "docs/report/phase-148-examples-source-dir.md"
+  },
+  {
+    "task_id": "TASK-149",
+    "title": "Advisory post-commit git hook: left-behind changes, big files, missing Task trailer, review ledger (REQ-0155)",
+    "priority": 2,
+    "status": "queued",
+    "created_at": "2026-11-18T09:50:45Z",
+    "requirement": "REQ-0155",
+    "acceptance_criteria": [
+      "AC1 hook + tool print WARN/OK, exit 0",
+      "AC2 unit tests per check + opt-out",
+      "AC3 core.hooksPath set, real commit shows output, setup documented"
+    ],
+    "user_notes": [
+      {
+        "raw": "RAW-00371",
+        "note": "apply a post-commit hook like code-security-scanner's",
+        "at": "2026-11-18T09:50:45Z"
+      },
+      {
+        "raw": "RAW-00372",
+        "note": "similar idea, not only copy",
+        "at": "2026-11-18T09:50:45Z"
+      }
+    ]
   }
 ]
