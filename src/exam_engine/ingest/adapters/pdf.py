@@ -167,6 +167,33 @@ def _inside(box, outer):
     return outer[0] <= cx <= outer[2] and outer[1] <= cy <= outer[3]
 
 
+def _exceeds(box, outer, tol=2.0):
+    return (box[0] < outer[0] - tol or box[1] < outer[1] - tol
+            or box[2] > outer[2] + tol or box[3] > outer[3] + tol)
+
+
+def _drop_table_blocks(blocks, tbbox, lines_of):
+    """Blocks whose centre is outside every table box, in order (table text comes from the table rows).
+
+    138-F006: a block whose centre is inside a table but which reaches more than 2pt beyond it (a stem line
+    merged with the first cells) is replaced, in place, by its own lines whose centre is outside every table.
+    `lines_of()` gives the page's line items; it is called only when such a block exists.
+    """
+    out, lines = [], None
+    for b in blocks:
+        hit = [t for t in tbbox if _inside(b[0], t)]
+        if not hit:
+            out.append(b)
+            continue
+        if not any(_exceeds(b[0], t) for t in hit):
+            continue
+        if lines is None:
+            lines = lines_of()
+        own = [ln for ln in lines if _inside(ln[0], b[0]) and not any(_inside(ln[0], t) for t in tbbox)]
+        out.extend(_merge_column(own))
+    return out
+
+
 def _overlap(a, b):
     return min(a[2], b[2]) - max(a[0], b[0]) > 1 and min(a[3], b[3]) - max(a[1], b[1]) > 1
 
@@ -623,7 +650,7 @@ def _extract(fitz, pdf, raw, path, config):
         except Exception:  # noqa: BLE001 - table detection is best effort
             tables = []
         tbbox = [t[0] for t in tables]
-        text_blocks = [b for b in _page_blocks(page) if not any(_inside(b[0], t) for t in tbbox)]
+        text_blocks = _drop_table_blocks(_page_blocks(page), tbbox, lambda: _line_blocks(page))
         text_blocks, two_col = _order_page(page, text_blocks, pw)
         native_text = "\n".join(b[1] for b in text_blocks)
         fonts = set()

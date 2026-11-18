@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-147",
   "title": "Move Fable review reports to docs/report/fable-review with status header, ledger/reviewer paths, re-check 138-F006 (REQ-0153)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0153",
   "acceptance_criteria": [
     "AC1 13 reports in docs/report/fable-review with fable-status header",
@@ -16,8 +16,16 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "tools/review_ledger.py",
+      "src/exam_engine/ingest/adapters/pdf.py",
+      ".claude/agents/code-reviewer.md",
+      "docs/prompts/cost-efficient_code_review_instructions.md",
+      "docs/review/findings.tsv",
+      "docs/report/fable-review/*.md"
+    ],
+    "summary": "13 Fable reports git-mv'd to docs/report/fable-review/<date>-phase<N>-<slug>.md with fable-status header (from ledger); review_ledger scans the folder; code-reviewer + prompt path; FP reasons in ledger; pdf._drop_table_blocks keeps lines of a block straddling a table (138-F006)"
   },
   "unit_test": {
     "status": "pending",
@@ -42,6 +50,9 @@
   "roles": {
     "designer": {
       "waiver": "small file move + one-function fix; design by coordinator from the ledger"
+    },
+    "coder": {
+      "waiver": "file moves + 25-line helper; coordinator did it in-session, user asked for direct review and fix (RAW-00368)"
     }
   },
   "user_notes": [
@@ -52,14 +63,24 @@
     }
   ],
   "picked_at": "2026-11-18T09:25:04Z",
-  "updated_at": "2026-11-18T09:25:36Z",
+  "updated_at": "2026-11-18T09:33:29Z",
   "updated_by": "main",
-  "scope": [],
+  "scope": [
+    "tools/review_ledger.py",
+    "src/exam_engine/ingest/adapters/pdf.py",
+    ".claude/agents/code-reviewer.md",
+    "docs/prompts/cost-efficient_code_review_instructions.md",
+    "docs/review/findings.tsv",
+    "docs/report/fable-review/**",
+    "docs/report/phase-*.md",
+    "tests/unit/test_pdf_table_straddle_147.py",
+    "tests/unit/test_review_ledger.py"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
     "done": [],
     "notes": ""
   },
-  "next": "move reports, ledger path, F006 fix"
+  "next": "unit tests"
 }

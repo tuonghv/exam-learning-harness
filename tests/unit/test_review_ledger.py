@@ -44,6 +44,15 @@ class Ledger(unittest.TestCase):
         self.assertEqual(L.review_ids(self.root), {"140-F001": "phase-140-x-review.md",
                                                     "140-F002": "phase-140-x-review.md"})
 
+    def test_fable_review_folder_dated_names(self):
+        # TASK-147 (RAW-00368/00369): docs/report/fable-review/<date>-phase<N>-<slug>.md
+        os.makedirs(os.path.join(self.root, "docs/report/fable-review"))
+        self.write("docs/report/fable-review/2026-11-17-phase142-y-b4.md", REVIEW)
+        self.write("docs/report/fable-review/notes.md", REVIEW)  # no phase id -> ignored
+        ids = L.review_ids(self.root)
+        self.assertEqual(ids["142-F001"], "2026-11-17-phase142-y-b4.md")
+        self.assertEqual(len(ids), 4)
+
     def test_clean(self):
         n, n_open, probs = self.ledger(self.row("140-F001", "fixed", "TASK-141"),
                                        self.row("140-F002", "open", "TASK-150"))

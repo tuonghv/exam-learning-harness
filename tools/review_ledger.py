@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Review findings ledger check (TASK-130, REQ-0137).
 
-Every finding of a code-review report (docs/report/*.md with a `### Fnnn – [SEV]` heading) must have one row in
+Every finding of a code-review report (docs/report/fable-review/<date>-phase<N>-<slug>.md, or the older
+docs/report/phase-<N>-<slug>.md, with a `### Fnnn – [SEV]` heading) must have one row in
 docs/review/findings.tsv with a disposition:
   fixed         ref = TASK-NNN that fixed it
   not-a-defect  ref = TASK-NNN that triaged it
@@ -17,7 +18,8 @@ import re
 import sys
 
 HEAD = re.compile(r"(?m)^### F(\d{3}) – \[")
-PHASE = re.compile(r"^phase-(\d+)-")
+PHASE = re.compile(r"^(?:\d{4}-\d{2}-\d{2}-)?phase-?(\d+)-")
+REPORT_DIRS = ("docs/report/fable-review", "docs/report")
 TASK = re.compile(r"^TASK-\d{3,}$")
 DISPOSITIONS = ("fixed", "not-a-defect", "waived", "open")
 COLUMNS = ["id", "report", "class", "disposition", "ref", "note"]
@@ -26,15 +28,16 @@ COLUMNS = ["id", "report", "class", "disposition", "ref", "note"]
 def review_ids(root):
     """{id: report file name} for every finding heading of every review report."""
     out = {}
-    rep = os.path.join(root, "docs/report")
-    for fn in sorted(os.listdir(rep)) if os.path.isdir(rep) else ():
-        m = PHASE.match(fn)
-        if not (m and fn.endswith(".md")):
-            continue
-        with open(os.path.join(rep, fn), encoding="utf-8", errors="replace") as fh:
-            nums = HEAD.findall(fh.read())
-        for n in nums:
-            out["%s-F%s" % (m.group(1), n)] = fn
+    for d in REPORT_DIRS:
+        rep = os.path.join(root, d)
+        for fn in sorted(os.listdir(rep)) if os.path.isdir(rep) else ():
+            m = PHASE.match(fn)
+            if not (m and fn.endswith(".md")):
+                continue
+            with open(os.path.join(rep, fn), encoding="utf-8", errors="replace") as fh:
+                nums = HEAD.findall(fh.read())
+            for n in nums:
+                out.setdefault("%s-F%s" % (m.group(1), n), fn)
     return out
 
 

@@ -90,8 +90,8 @@ The heading is parsed by `tools/review_ledger.py`: keep exactly `### F<3 digits>
 
 ## 7. Report
 
-Path: `docs/report/phase-<ID>-<slug>.md`, ID and slug from the brief (never invent one; if missing, stop and
-reply `BLOCKED: need phase ID`). One file per scope; never overwrite another phase's report.
+Path: `docs/report/fable-review/<YYYY-MM-DD>-phase<ID>-<slug>.md`, ID and slug from the brief (never invent one; if missing, stop and
+reply `BLOCKED: need phase ID`); date = today. The coordinator adds the `<!-- fable-status -->` header (RAW-00368). One file per scope; never overwrite another phase's report.
 
 ```markdown
 # Phase <ID> – <Review scope>

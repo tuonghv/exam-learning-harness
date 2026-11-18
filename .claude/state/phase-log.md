@@ -4291,3 +4291,9 @@ Action: design
 Result: 13 reports, 1 waived finding (138-F006) is a true positive
 Decision: fix it in this task
 Next: IMPLEMENTING
+
+## IMPLEMENTING - TASK-147 - 2026-11-18T09:33:28Z
+Action: move + header + ledger path + F006 fix
+Result: ledger 108 ids, 1 open (F006 until DONE), 0 problems
+Decision: OCR path filter left as is (finding names native path)
+Next: UNIT_TESTED
