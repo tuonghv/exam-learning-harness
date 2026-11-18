@@ -3137,7 +3137,7 @@
     "task_id": "TASK-150",
     "title": "Delete guard for every session (rm/find -delete/git clean/rmtree only under work/, scratchpad, /tmp), clean-work.sh, auto backup (REQ-0156)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-18T10:34:39Z",
     "requirement": "REQ-0156",
     "acceptance_criteria": [
@@ -3162,6 +3162,8 @@
         "note": "approve the delete guard",
         "at": "2026-11-18T10:34:39Z"
       }
-    ]
+    ],
+    "completed_at": "2026-11-18T10:46:26Z",
+    "report": "docs/report/phase-150-delete-guard.md"
   }
 ]
