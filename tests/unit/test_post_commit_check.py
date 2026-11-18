@@ -113,6 +113,35 @@ class PostCommit(unittest.TestCase):
         self.assertEqual((r.returncode, r.stderr), (0, ""))
 
 
+class StaleBackup(unittest.TestCase):
+    """TASK-150 (REQ-0156): --stale-backup decides when the post-commit hook runs `exam backup`."""
+
+    def setUp(self):
+        self.root = tempfile.mkdtemp()
+        self.bak = tempfile.mkdtemp()
+        for d in (self.root, self.bak):
+            self.addCleanup(shutil.rmtree, d, True)
+
+    def touch(self, path, mtime):
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        open(path, "w").close()
+        os.utime(path, (mtime, mtime))
+
+    def rc(self):
+        return P.main(["--root", self.root, "--stale-backup", "--backup-dir", self.bak])
+
+    def test_stale_when_data_newer_or_no_backup(self):
+        self.assertEqual(self.rc(), 1)  # nothing to back up
+        self.touch(os.path.join(self.root, "plans", "e", "run", "result.json"), 2000)
+        self.assertEqual(self.rc(), 0)  # no archive yet
+        self.touch(os.path.join(self.bak, "exam-inputs-x.tar.gz"), 3000)
+        self.assertEqual(self.rc(), 1)  # archive newer
+        self.touch(os.path.join(self.root, "input", "a.pdf"), 4000)
+        self.assertEqual(self.rc(), 0)  # input changed after it
+        self.touch(os.path.join(self.bak, "other.tar.gz"), 5000)
+        self.assertEqual(self.rc(), 0)  # only exam-inputs-* archives count
+
+
 class AutoPush(unittest.TestCase):
     """Hook part 2 (RAW-00373): background push of non-main branches to a local bare origin."""
 

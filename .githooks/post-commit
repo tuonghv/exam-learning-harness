@@ -10,6 +10,18 @@ if [ -f "$root/tools/post_commit_check.py" ]; then
   python3 -I "$root/tools/post_commit_check.py" --root "$root" || true
 fi
 
+# 3. Auto backup (TASK-150, REQ-0156): git cannot restore the ignored plans/ and input/; when they changed after
+#    the newest ~/exam-harness-backup archive, run `exam backup` in the background. Off: AUTO_BACKUP=0
+#    Log: $(git rev-parse --git-dir)/autobackup.log
+if [ "${AUTO_BACKUP:-1}" = 1 ] && [ -f "$root/scripts/exam.py" ] \
+   && python3 -I "$root/tools/post_commit_check.py" --root "$root" --stale-backup; then
+  blog="$(git rev-parse --git-dir)/autobackup.log"
+  (
+    cd "$root" && python3 -I scripts/exam.py backup >>"$blog" 2>&1 \
+      || echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) BACKUP FAILED (run: python3 -I scripts/exam.py backup)" >>"$blog"
+  ) </dev/null >/dev/null 2>&1 &
+fi
+
 [ "${AUTO_PUSH:-1}" = 1 ] || exit 0
 b="$(git symbolic-ref --short -q HEAD)" || exit 0
 case "$b" in main|master) exit 0 ;; esac

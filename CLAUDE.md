@@ -34,6 +34,7 @@ queue in `backlog.json`, audit trail in `phase-log.md`; one task per commit (`Ta
 - Eval keys never appear in eval inputs or few-shot files; exam prompts do not live under `docs/prompts/`.
 - Bash 3.2 clean (no `mapfile`, no associative arrays, init arrays under `set -u`); Python stdlib only.
 - Haiku only for simple jobs with small context (user).
+- No unrecoverable delete (RAW-00377..00380): the delete guard hook denies `rm -r`/`find -delete`/`git clean -x` of the repo root, its parents, `./*`, empty `$VAR` and plans/ reports/ input/ results/ .git; clean scratch with `.claude/scripts/clean-work.sh`.
 
 <!-- req-kit -->
 ## Requirement ledger (req-kit)

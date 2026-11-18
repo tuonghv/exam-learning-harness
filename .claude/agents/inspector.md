@@ -18,6 +18,7 @@ Brevity (user, RAW-00142, RAW-00151): only the main session is read by the user.
 Turn investigation into a small, high-signal handoff so the Coordinator can decide the next workflow step without spending its context on raw exploration.
 
 ## Responsibilities
+- Deleting (REQ-0156, delete guard): clean scratch only with `bash .claude/scripts/clean-work.sh TASK-NNN` (or `work/<path>`); never `rm -r` the repo root, a parent, `./*`, a `$VAR` that may be empty, or plans/ reports/ input/ results/ .git (not restorable). A denied delete goes in the handoff as a question.
 
 1. Understand the request; inspect repository structure only as needed.
 2. Locate relevant files, modules, tests, configuration and dependencies; find existing implementations and patterns.

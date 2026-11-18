@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-150",
   "title": "Delete guard for every session (rm/find -delete/git clean/rmtree only under work/, scratchpad, /tmp), clean-work.sh, auto backup (REQ-0156)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0156",
   "acceptance_criteria": [
     "AC1 guard denies unsafe recursive deletes, allows work/ scratchpad /tmp",
@@ -17,8 +17,21 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      ".claude/hooks/delete_guard.py",
+      ".claude/settings.json",
+      ".claude/scripts/clean-work.sh",
+      ".claude/agents/coder.md",
+      ".claude/agents/designer.md",
+      ".claude/agents/tester.md",
+      ".claude/agents/verifier.md",
+      ".claude/agents/inspector.md",
+      ".githooks/post-commit",
+      "tools/post_commit_check.py",
+      "tests/unit/test_delete_guard.py"
+    ],
+    "summary": "delete_guard.py PreToolUse Bash hook for all sessions (repo-inside and /tmp deletes allowed; repo root/parents/home/, bare root globs, plans/reports/input/results/.git, unresolved recursive targets, git clean -x denied); clean-work.sh; roles + CLAUDE.md rule; post-commit auto backup when stale"
   },
   "unit_test": {
     "status": "pending",
@@ -54,6 +67,9 @@
     ],
     "designer": {
       "waiver": "coordinator owns hooks/settings (CLAUDE.md); design from the incident"
+    },
+    "coder": {
+      "waiver": "hooks/settings are coordinator-owned (CLAUDE.md); user-approved block RAW-00379"
     }
   },
   "user_notes": [
@@ -74,7 +90,7 @@
     }
   ],
   "picked_at": "2026-11-18T10:34:39Z",
-  "updated_at": "2026-11-18T10:35:01Z",
+  "updated_at": "2026-11-18T10:45:50Z",
   "updated_by": "main",
   "scope": [
     ".claude/hooks/delete_guard.py",
@@ -95,5 +111,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "implement guard"
+  "next": "tests"
 }

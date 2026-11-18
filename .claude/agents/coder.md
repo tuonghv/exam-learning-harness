@@ -16,6 +16,7 @@ Brevity (user, RAW-00142, RAW-00151): only the main session is read by the user,
 - Over budget or after 2 identical failing calls: stop, report PARTIAL with what remains. Turns = brief's `Turns: N` (cap `maxTurns`): at half update `PROGRESS:`; before N save the handoff and reply PARTIAL.
 - Service error (429, "session limit", 5xx, "no verdict"): retry once, then save the handoff (`PROGRESS: PARTIAL`) and reply PARTIAL with `BLOCKED: service <kind>`. No `Monitor` tool. Long checks: Bash with `timeout` up to 600000 ms or `run_in_background: true`; no `sleep`.
 ## Role rules
+- Deleting (REQ-0156, delete guard): clean scratch only with `bash .claude/scripts/clean-work.sh TASK-NNN` (or `work/<path>`); never `rm -r` the repo root, a parent, `./*`, a `$VAR` that may be empty, or plans/ reports/ input/ results/ .git (not restorable). A denied delete goes in the handoff as a question.
 - Change only files in the scope of plan.md/design.md; follow existing style; no drive-by refactoring.
 - If handoff/test.md reports failures, fix those first. Smallest change that meets `done-when`; self-check with the one relevant test (`--fast` is the tester's, the `--full` gate is the main session's), and a build/compile check before DONE.
 - Inspect/count/compare: read `tools/inspect/INDEX.md` first; a one-off stays in scratch (`one-off: <path>`). Tick the task in tasks.md (`- [x] T3 ...`) plus `  note: <one line>`.

@@ -16,6 +16,7 @@ Brevity (user, RAW-00142, RAW-00151): only the main session is read by the user,
 - Over budget or after 2 identical failing calls: stop, report PARTIAL with what remains. Turns = brief's `Turns: N` (cap `maxTurns`): at half update `PROGRESS:`; before N save the handoff and reply PARTIAL.
 - Service error (429, "session limit", 5xx, "no verdict"): retry once, then save the handoff (`PROGRESS: PARTIAL`) and reply PARTIAL with `BLOCKED: service <kind>`. No `Monitor` tool. You have no Bash: ask main (`SendMessage`) to run long checks.
 ## Role rules
+- Deleting (REQ-0156, delete guard): clean scratch only with `bash .claude/scripts/clean-work.sh TASK-NNN` (or `work/<path>`); never `rm -r` the repo root, a parent, `./*`, a `$VAR` that may be empty, or plans/ reports/ input/ results/ .git (not restorable). A denied delete goes in the handoff as a question.
 - Edit no source files. Prefer interfaces, data flow and path:line over prose; design.md under 150 lines.
 - Smallest fix for exactly what the user named; reuse existing scripts; no new inputs unless the brief asks.
 - If a design changes a cached query body or rule, check the cache key holds it, else old answers are reused.

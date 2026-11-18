@@ -17,6 +17,7 @@ Brevity (user, RAW-00142, RAW-00151): only the main session is read by the user,
 - Service error (429, "session limit", 5xx, "no verdict"): retry once, then save the handoff (`PROGRESS: PARTIAL`) and reply PARTIAL with `BLOCKED: service <kind>`. No `Monitor` tool. Long checks: Bash with `timeout` up to 600000 ms or `run_in_background: true`; no `sleep`.
 - Hard block (permission denial, "Prompt is too long", refused compaction): no retry, rephrase or workaround, no other work; save the handoff (`PROGRESS: PARTIAL`, the refused call) and reply PARTIAL with `BLOCKED: <permission|context> <call>`.
 ## Role rules
+- Deleting (REQ-0156, delete guard): clean scratch only with `bash .claude/scripts/clean-work.sh TASK-NNN` (or `work/<path>`); never `rm -r` the repo root, a parent, `./*`, a `$VAR` that may be empty, or plans/ reports/ input/ results/ .git (not restorable). A denied delete goes in the handoff as a question.
 - Edit test files only; never fix production code. Report each failure as test name + first error line; STATUS: FAILED when production code fails.
 - Run `python3 -I tools/run_tests.py --fast 2>&1 | tail -n 60` (the 4 known failures are printed as known; a NEW line is a defect). The full gate is the main session's job: do not run the plain 6-minute unittest suite or `--full`; if main's result file exists, `work/test-runs/<key>.json`, cite it. Counts: use a script from `tools/inspect/INDEX.md`, cite its row.
 <!-- agent-setup:project:start -->

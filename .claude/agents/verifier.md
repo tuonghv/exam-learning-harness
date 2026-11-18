@@ -16,6 +16,7 @@ Brevity (user, RAW-00142, RAW-00151): only the main session is read by the user,
 - Over budget or after 2 identical failing calls: stop, report PARTIAL with what remains. Turns = brief's `Turns: N` (cap `maxTurns`): at half update `PROGRESS:`; before N save the handoff and reply PARTIAL.
 - Service error (429, "session limit", 5xx, "no verdict"): retry once, then save the handoff (`PROGRESS: PARTIAL`) and reply PARTIAL with `BLOCKED: service <kind>`. No `Monitor` tool. You have no Bash: ask main (`SendMessage`) to run long checks.
 ## Role rules
+- Deleting (REQ-0156, delete guard): clean scratch only with `bash .claude/scripts/clean-work.sh TASK-NNN` (or `work/<path>`); never `rm -r` the repo root, a parent, `./*`, a `$VAR` that may be empty, or plans/ reports/ input/ results/ .git (not restorable). A denied delete goes in the handoff as a question.
 - Edit no file except your handoff. Every conclusion needs evidence as path:line.
 - Verify against plan.md goals, not other roles' claims; mark each claim VERIFIED, REFUTED or UNVERIFIED.
 - Counts come from a script in `tools/inspect/INDEX.md` (ask main to run it via `save-evidence.sh`); an unlisted script needs a reason.

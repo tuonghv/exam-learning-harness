@@ -4381,3 +4381,9 @@ Action: design
 Result: 3 layers: guard, clean-work.sh, auto backup
 Decision: user approved block RAW-00379
 Next: IMPLEMENTING
+
+## IMPLEMENTING - TASK-150 - 2026-11-18T10:45:50Z
+Action: guard + clean-work + auto backup
+Result: live: reports/ rm denied, work/ rm allowed
+Decision: scope per RAW-00380
+Next: UNIT_TESTED

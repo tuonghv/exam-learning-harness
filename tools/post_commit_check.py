@@ -7,7 +7,9 @@ Prints `post-commit: WARN <check>: ...` per issue, or `post-commit: OK <sha>`, o
   no-task      HEAD changes code (src/, tools/, tests/, .claude/ scripts) without a `Task:` trailer
   ledger       HEAD touched review reports or the findings ledger and tools/review_ledger.py reports problems
 Off with POST_COMMIT_CHECK=0. Run by .githooks/post-commit (git config core.hooksPath .githooks).
-Usage: python3 -I tools/post_commit_check.py [--root DIR]
+--stale-backup (TASK-150, REQ-0156): exit 0 when a file under plans/, input/ or config/published_reports.json is
+newer than the newest ~/exam-harness-backup/exam-inputs-*.tar.gz (or none exists), else 1; prints nothing.
+Usage: python3 -I tools/post_commit_check.py [--root DIR] [--stale-backup [--backup-dir DIR]]
 """
 import argparse
 import os
@@ -77,6 +79,36 @@ def ledger(root, files):
     return ["ledger: " + p for p in probs[:SHOW]]
 
 
+BACKUP_SOURCES = ("plans", "input", "config/published_reports.json")
+
+
+def newest_mtime(path):
+    if os.path.isfile(path):
+        return os.path.getmtime(path)
+    best = 0.0
+    for d, _, files in os.walk(path):
+        for f in files:
+            try:
+                best = max(best, os.path.getmtime(os.path.join(d, f)))
+            except OSError:
+                pass
+    return best
+
+
+def backup_stale(root, backup_dir):
+    """True when the ignored inputs/outputs changed after the newest backup archive."""
+    data = max([newest_mtime(os.path.join(root, s)) for s in BACKUP_SOURCES] + [0.0])
+    if not data:
+        return False
+    try:
+        arcs = [os.path.join(backup_dir, f) for f in os.listdir(backup_dir)
+                if f.startswith("exam-inputs-") and f.endswith(".tar.gz")]
+    except OSError:
+        arcs = []
+    last = max([os.path.getmtime(a) for a in arcs] + [0.0])
+    return data > last
+
+
 def run(root):
     files = head_files(root)
     warns = left_behind(root) + big_files(root, files) + no_task(root, files) + ledger(root, files)
@@ -88,7 +120,14 @@ def run(root):
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--root", default=os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+    ap.add_argument("--stale-backup", action="store_true")
+    ap.add_argument("--backup-dir", default=os.path.expanduser(os.path.join("~", "exam-harness-backup")))
     a = ap.parse_args(argv)
+    if a.stale_backup:
+        try:
+            return 0 if backup_stale(a.root, a.backup_dir) else 1
+        except Exception:  # noqa: BLE001 - advisory
+            return 1
     if os.environ.get("POST_COMMIT_CHECK") == "0":
         return 0
     try:
