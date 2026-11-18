@@ -3132,5 +3132,36 @@
     ],
     "completed_at": "2026-11-18T10:25:33Z",
     "report": "docs/report/phase-149-post-commit-hook.md"
+  },
+  {
+    "task_id": "TASK-150",
+    "title": "Delete guard for every session (rm/find -delete/git clean/rmtree only under work/, scratchpad, /tmp), clean-work.sh, auto backup (REQ-0156)",
+    "priority": 1,
+    "status": "queued",
+    "created_at": "2026-11-18T10:34:39Z",
+    "requirement": "REQ-0156",
+    "acceptance_criteria": [
+      "AC1 guard denies unsafe recursive deletes, allows work/ scratchpad /tmp",
+      "AC2 clean-work.sh realpath-checked, roles told",
+      "AC3 incident-shape tests",
+      "AC4 auto backup when stale + auto-push"
+    ],
+    "user_notes": [
+      {
+        "raw": "RAW-00377",
+        "note": "QA deleted the repo while cleaning ./work",
+        "at": "2026-11-18T10:34:39Z"
+      },
+      {
+        "raw": "RAW-00378",
+        "note": "the mistake was a bash rm",
+        "at": "2026-11-18T10:34:39Z"
+      },
+      {
+        "raw": "RAW-00379",
+        "note": "approve the delete guard",
+        "at": "2026-11-18T10:34:39Z"
+      }
+    ]
   }
 ]
