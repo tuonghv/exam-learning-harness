@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-150",
-  "state": "UNIT_TESTED",
-  "next": "verify live",
+  "state": "VERIFIED",
+  "next": "report",
   "title": "Delete guard for every session (rm/find -delete/git clean/rmtree only under work/, scratchpad, /tmp), clean-work.sh, auto backup (REQ-0156)",
   "active": [
     {
       "task_id": "TASK-150",
-      "state": "UNIT_TESTED",
-      "next": "verify live",
-      "updated_at": "2026-11-18T10:46:13Z"
+      "state": "VERIFIED",
+      "next": "report",
+      "updated_at": "2026-11-18T10:46:14Z"
     }
   ],
   "max_active": 1
