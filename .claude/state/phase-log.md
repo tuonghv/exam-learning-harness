@@ -4369,3 +4369,9 @@ Action: real hook run
 Result: caught exec-bit drift, then OK; historic big-file caught
 Decision: verified
 Next: DONE
+
+## DONE - TASK-149 - 2026-11-18T10:25:32Z
+Action: report
+Result: hook live in this clone
+Decision: done
+Next: feature branch + push (RAW-00374)

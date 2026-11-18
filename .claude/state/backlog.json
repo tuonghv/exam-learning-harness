@@ -3110,7 +3110,7 @@
     "task_id": "TASK-149",
     "title": "Advisory post-commit git hook: left-behind changes, big files, missing Task trailer, review ledger (REQ-0155)",
     "priority": 2,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-18T09:50:45Z",
     "requirement": "REQ-0155",
     "acceptance_criteria": [
@@ -3129,6 +3129,8 @@
         "note": "similar idea, not only copy",
         "at": "2026-11-18T09:50:45Z"
       }
-    ]
+    ],
+    "completed_at": "2026-11-18T10:25:33Z",
+    "report": "docs/report/phase-149-post-commit-hook.md"
   }
 ]
