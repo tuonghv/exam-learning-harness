@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-149",
   "title": "Advisory post-commit git hook: left-behind changes, big files, missing Task trailer, review ledger (REQ-0155)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0155",
   "acceptance_criteria": [
     "AC1 hook + tool print WARN/OK, exit 0",
@@ -25,9 +25,9 @@
     "summary": ".githooks/post-commit runs tools/post_commit_check.py: left-behind, big-file, no-task, ledger warnings, exit 0, opt-out; README setup line; core.hooksPath set in this clone"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tests/unit/test_post_commit_check.py; python3 -I tools/run_tests.py --fast",
+    "result": "10 OK (7 checks + 3 auto-push on a local bare origin); --fast KNOWN 1 NEW 0"
   },
   "security": {
     "status": "pending",
@@ -50,6 +50,9 @@
     },
     "coder": {
       "waiver": "small stdlib tool done in-session"
+    },
+    "tester": {
+      "waiver": "tests written with the tool"
     }
   },
   "user_notes": [
@@ -65,7 +68,7 @@
     }
   ],
   "picked_at": "2026-11-18T09:50:45Z",
-  "updated_at": "2026-11-18T09:52:00Z",
+  "updated_at": "2026-11-18T09:54:10Z",
   "updated_by": "main",
   "scope": [
     ".githooks/post-commit",
@@ -80,5 +83,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tests"
+  "next": "real commit check"
 }

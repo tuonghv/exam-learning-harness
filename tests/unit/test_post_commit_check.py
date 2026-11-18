@@ -5,6 +5,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 import unittest
 from contextlib import redirect_stderr
 
@@ -110,6 +111,63 @@ class PostCommit(unittest.TestCase):
         r = subprocess.run(["sh", hook], cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                            universal_newlines=True, env=dict(os.environ, POST_COMMIT_CHECK="0"))
         self.assertEqual((r.returncode, r.stderr), (0, ""))
+
+
+class AutoPush(unittest.TestCase):
+    """Hook part 2 (RAW-00373): background push of non-main branches to a local bare origin."""
+
+    def setUp(self):
+        self.tmp = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, self.tmp, True)
+        self.origin = os.path.join(self.tmp, "origin.git")
+        self.repo = os.path.join(self.tmp, "repo")
+        subprocess.run(["git", "init", "-q", "--bare", self.origin], check=True)
+        subprocess.run(["git", "init", "-q", "-b", "main", self.repo], check=True)
+        hooks = os.path.join(self.repo, ".githooks")
+        os.makedirs(hooks)
+        shutil.copy(os.path.join(ROOT, ".githooks", "post-commit"), hooks)
+        for k, v in (("user.email", "t@example.invalid"), ("user.name", "t"), ("core.hooksPath", ".githooks")):
+            self.git("config", k, v)
+        self.git("remote", "add", "origin", self.origin)
+
+    def git(self, *args, env=None):
+        return subprocess.run(("git", "-C", self.repo) + args, check=True, stdout=subprocess.PIPE,
+                              stderr=subprocess.PIPE, universal_newlines=True,
+                              env=dict(os.environ, **(env or {}))).stdout
+
+    def commit(self, name, env=None):
+        with open(os.path.join(self.repo, name), "w") as fh:
+            fh.write(name)
+        self.git("add", name)
+        self.git("commit", "-q", "-m", name, env=env)
+        return self.git("rev-parse", "HEAD").strip()
+
+    def remote_sha(self, branch, wait=15.0):
+        log = os.path.join(self.repo, ".git", "autopush.log")
+        end = time.time() + wait
+        while time.time() < end:
+            if os.path.exists(log) and (" pushed " in open(log).read() or "FAILED" in open(log).read()):
+                break
+            time.sleep(0.1)
+        r = subprocess.run(["git", "-C", self.origin, "rev-parse", "-q", "--verify", "refs/heads/" + branch],
+                           stdout=subprocess.PIPE, universal_newlines=True)
+        return r.stdout.strip()
+
+    def test_branch_commit_pushed_and_logged(self):
+        self.commit("a", env={"AUTO_PUSH": "0"})
+        self.git("checkout", "-q", "-b", "work")
+        sha = self.commit("b")
+        self.assertEqual(self.remote_sha("work"), sha)
+        self.assertIn("pushed work", open(os.path.join(self.repo, ".git", "autopush.log")).read())
+
+    def test_main_never_pushed(self):
+        self.commit("a")
+        self.assertEqual(self.remote_sha("main", wait=1.0), "")
+
+    def test_auto_push_off(self):
+        self.git("checkout", "-q", "-b", "work")
+        self.commit("a", env={"AUTO_PUSH": "0"})
+        self.assertEqual(self.remote_sha("work", wait=1.0), "")
 
 
 if __name__ == "__main__":

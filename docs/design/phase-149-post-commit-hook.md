@@ -1,7 +1,7 @@
 # Phase 149 – Advisory post-commit git hook (TASK-149, REQ-0155)
 
-Source: REQ-0155 (RAW-00371 hook like code-security-scanner's; RAW-00372 own design from the idea, the file is not
-on disk).
+Source: REQ-0155 (RAW-00371 hook like code-security-scanner's; RAW-00372 own design from the idea; RAW-00373 sample
+`tmp/post-commit` = background auto-push of non-main branches).
 
 ## Plan modes
 No change to single-source or pipeline plans; git tooling only.
@@ -21,6 +21,9 @@ No change to single-source or pipeline plans; git tooling only.
   - `ledger`: HEAD touched `docs/report/fable-review/` or `docs/review/` -> run `review_ledger.check`, show its
     problems.
   Every git call has a timeout; any exception prints one `post-commit: skipped (<error>)` line.
+- 149.2b Auto-push (user sample `tmp/post-commit`, RAW-00373): after the checks, push HEAD of a non-main branch to
+  `origin` in the background (`timeout 120` when available), log `<git-dir>/autopush.log`, `AUTO_PUSH=0` off;
+  `main`/`master` are never pushed by the hook (publishing main stays a user decision).
 - 149.3 Setup line in README and workflow-roles §9.
 
 ## Verification
