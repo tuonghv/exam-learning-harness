@@ -3110,7 +3110,7 @@
     "task_id": "TASK-149",
     "title": "Advisory post-commit git hook: left-behind changes, big files, missing Task trailer, review ledger (REQ-0155)",
     "priority": 2,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-11-18T09:50:45Z",
     "requirement": "REQ-0155",
     "acceptance_criteria": [
