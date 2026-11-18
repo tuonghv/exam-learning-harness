@@ -4321,3 +4321,9 @@ Action: design
 Result: cause: tracked source PDF in examples/dgnl
 Decision: explicit allowance like LEGACY
 Next: IMPLEMENTING
+
+## IMPLEMENTING - TASK-148 - 2026-11-18T09:43:13Z
+Action: implement
+Result: check-examples OK 25 pairs
+Decision: done
+Next: UNIT_TESTED

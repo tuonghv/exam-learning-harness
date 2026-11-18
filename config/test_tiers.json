@@ -9,10 +9,7 @@
   "test_assembly_qa.Golden"
  ],
  "known_failures": [
-  "test_multipage_adversarial.TestRealDocxTextBox.test_d1_text_box_text_is_read_once_inline",
-  "test_check_examples.Check.test_12b_real_repo_passes",
-  "test_req0012_acs.CwdAndReadme.test_cwd_independence_of_subcommands",
-  "test_scripts_exam.Exam.test_check_examples_ok"
+  "test_multipage_adversarial.TestRealDocxTextBox.test_d1_text_box_text_is_read_once_inline"
  ],
  "affected_map": {},
  "affected_ignore": ["docs/*", "*.md", ".claude/state/*", "input/*", "work/*", "plans/*", "reports/*"],

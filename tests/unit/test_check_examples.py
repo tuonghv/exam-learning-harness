@@ -221,6 +221,17 @@ class Check(Base):
             rc = ce.main(["--root", REPO])
         self.assertEqual(rc, 0, out.getvalue())
 
+    def test_148_source_dir_pdf_ok_md_stray(self):  # TASK-148 (REQ-0154)
+        files = valid()
+        files["examples/dgnl/exam.pdf"] = "%PDF-1.4"
+        rc, out = self.run_main(files)
+        self.assertEqual(rc, 0, out)
+        files["examples/dgnl/input-001.md"] = "x"
+        self.assertFails(files, "pairing", "examples/dgnl/input-001.md")
+        files.pop("examples/dgnl/input-001.md")
+        files["evals/inputs/dgnl/exam.pdf"] = "%PDF-1.4"  # allowance is for examples/ only
+        self.assertFails(files, "pairing", "evals/inputs/dgnl")
+
     def test_15_subprocess_isolated(self):  # AC5
         write(self.root, valid())
         r = subprocess.run([sys.executable, "-I", os.path.join(TOOLS, "check_examples.py"),

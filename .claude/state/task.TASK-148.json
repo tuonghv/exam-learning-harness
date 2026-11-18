@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-148",
   "title": "check-examples: examples/dgnl source-document dir allowance, clear 3 known failures (REQ-0154)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0154",
   "acceptance_criteria": [
     "AC1 check-examples exit 0; .md in examples/dgnl still ERROR",
@@ -15,8 +15,12 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "src/exam_engine/pipeline/examples_check.py",
+      "config/test_tiers.json"
+    ],
+    "summary": "examples_check.SOURCE_DIRS skips examples/dgnl, .md there is a stray; 3 tests off known_failures"
   },
   "unit_test": {
     "status": "pending",
@@ -41,6 +45,9 @@
   "roles": {
     "designer": {
       "waiver": "one-rule validator change, design by coordinator"
+    },
+    "coder": {
+      "waiver": "8-line change done in-session"
     }
   },
   "user_notes": [
@@ -51,7 +58,7 @@
     }
   ],
   "picked_at": "2026-11-18T09:39:45Z",
-  "updated_at": "2026-11-18T09:43:12Z",
+  "updated_at": "2026-11-18T09:43:13Z",
   "updated_by": "main",
   "scope": [
     "src/exam_engine/pipeline/examples_check.py",
@@ -64,5 +71,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "implement"
+  "next": "tests"
 }

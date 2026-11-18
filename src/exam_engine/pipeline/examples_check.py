@@ -21,6 +21,8 @@ KEY_HEADINGS = ("Solution", "Explanation", "Verification", "Grading",
                 "Accepted interpretations", "Model answer outline")
 LEGACY = {"examples/english/expected-001.md":
           "562d65e29cf5d1768cfa981dc2f6557f090c6273477a21c98bf21fb1ae251b8c"}
+# Source-document dirs (real exam PDFs, REQ-0032; read by the window/assembly tests), not few-shot pairs.
+SOURCE_DIRS = {"examples": ("dgnl",)}
 _FILE = re.compile(r"^(input|expected)-(\d{3})\.md$")
 _QUOTE = re.compile(r'"([^"]+)"|“([^”]+)”')
 _KEYLINE = re.compile(r"^\s*[-*]?\s*(Final answer|Correct answer|Status):", re.I)
@@ -43,6 +45,11 @@ def _scan(root, base, errs):
     for sub in sorted(os.listdir(base)):
         d = os.path.join(base, sub)
         if not os.path.isdir(d):
+            continue
+        if sub in SOURCE_DIRS.get(_rel(root, base), ()):
+            for name in sorted(os.listdir(d)):  # source documents only; a markdown file here is a stray
+                if name.lower().endswith(".md"):
+                    errs.append("ERROR: %s: pairing: stray file" % _rel(root, os.path.join(d, name)))
             continue
         if sub not in SUBJECTS:
             errs.append("ERROR: %s: pairing: unknown subject dir" % _rel(root, d))
