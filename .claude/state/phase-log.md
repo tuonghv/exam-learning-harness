@@ -4303,3 +4303,9 @@ Action: unit tests
 Result: new tests pass, fail on old code; fast suite no new failure from this task
 Decision: test_12b pre-existing (tracked examples/dgnl pdf), out of scope
 Next: VERIFIED
+
+## VERIFIED - TASK-147 - 2026-11-18T09:33:50Z
+Action: real ingest compare + ledger
+Result: identical ingest, ledger clean
+Decision: verified
+Next: DONE

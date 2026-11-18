@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-147",
   "title": "Move Fable review reports to docs/report/fable-review with status header, ledger/reviewer paths, re-check 138-F006 (REQ-0153)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0153",
   "acceptance_criteria": [
     "AC1 13 reports in docs/report/fable-review with fable-status header",
@@ -33,12 +33,18 @@
     "result": "4 + 8 OK (straddle tests fail on old code: 4 errors); --fast KNOWN 4, NEW 1 = test_check_examples test_12b (examples/dgnl unknown subject dir), fails on HEAD without this change too"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "no new input surface; reads only local PDFs already ingested; no secrets, no network"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-147/evidence/ingest-compare.txt",
+      "work/TASK-147/evidence/ledger.txt",
+      "work/TASK-147/evidence/folder.txt"
+    ],
+    "command": "python3 -I work/TASK-147/dump.py <old src> / <new src> on 4 real PDFs (ocr off); python3 -I tools/review_ledger.py; ls docs/report/fable-review",
+    "result": "ingest output identical old vs new on dgnl 2024/2025/2026 + math 2026 PDFs; ledger 108 ids 0 problems; 13 reports in fable-review, each with fable-status block, 0 review reports left in docs/report"
   },
   "report": {
     "status": "pending",
@@ -53,6 +59,12 @@
     },
     "coder": {
       "waiver": "file moves + 25-line helper; coordinator did it in-session, user asked for direct review and fix (RAW-00368)"
+    },
+    "verifier": {
+      "waiver": "small task; coordinator ran real ingest compare and ledger check, evidence files listed"
+    },
+    "tester": {
+      "waiver": "tests written in-session with the fix"
     }
   },
   "user_notes": [
@@ -63,7 +75,7 @@
     }
   ],
   "picked_at": "2026-11-18T09:25:04Z",
-  "updated_at": "2026-11-18T09:33:38Z",
+  "updated_at": "2026-11-18T09:33:50Z",
   "updated_by": "main",
   "scope": [
     "tools/review_ledger.py",
@@ -82,5 +94,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "real verification"
+  "next": "report + DONE"
 }
