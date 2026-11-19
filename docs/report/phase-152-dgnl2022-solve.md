@@ -32,9 +32,11 @@ $4.70, RAW-00390): 119 answered, 1 declined. No key for 2022, so no score.
   warning and a misleading context line; worth a fix before a re-run or publish.
 - The first solve attempt used `--line main` and was refused (published line, needs `--publish`); no spend.
 
-## Next
-- Score: put the official key at `input/dgnl/de-thi-mau-dgnl-hcm-2022.answer.txt`, then `report-pack ... --key`.
-- Publish to `main` only on the user's word.
+## Published (RAW-00392, 2026-11-19)
+- `config/published_reports.json` gains `dgnl2022` (line `s22`, key + sha256, 4 plan runs, view sheet).
+- `rebuild-reports dgnl2022` -> `reports/dgnl2022/main/run-20261119-053005/` (8 files + INDEX), score 106/120;
+  `check_report_pack.py ... --expect-correct 106`: 58 checks, 0 failed (`work/TASK-152/evidence/publish-check.txt`).
+- Rebuild recipe: `python3 -I scripts/exam.py rebuild-reports dgnl2022` (same as the other exams).
 
 ## Spend
 $2.33 (approved $4.70).

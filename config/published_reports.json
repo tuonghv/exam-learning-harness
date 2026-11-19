@@ -1,5 +1,19 @@
 {
   "exams": {
+    "dgnl2022": {
+      "key": "input/dgnl/de-thi-mau-dgnl-hcm-2022.answer.txt",
+      "key_sha256": "3346abed14b09a21cebaeed2a4549801228f637ec8274a10d4b8e03bd80c2b05",
+      "line": "s22",
+      "overlays": [],
+      "pdf": true,
+      "plan_runs": [
+        "plans/dgnl2022/s22/runs/20261119-042558-vietnamese",
+        "plans/dgnl2022/s22/runs/20261119-042754-english",
+        "plans/dgnl2022/s22/runs/20261119-042950-math",
+        "plans/dgnl2022/s22/runs/20261119-043254-science"
+      ],
+      "view": "sheet"
+    },
     "dgnl2025": {
       "key": "input/dgnl/2-De-minh-hoa-gioi-thieu-2025-final.answer.txt",
       "key_sha256": "66ae6e1eb1665c0564967b5e42641dfd4d08eb8ccd796dfbf1f174d06aa092a5",
