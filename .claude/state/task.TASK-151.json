@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-151",
   "title": "DGNL extraction gold: sample 40 questions, draft gold + review sheet, user corrects, extract-eval (REQ-0078)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0078",
   "acceptance_criteria": [
     "AC1 seeded stratified 40-question sample + draft gold + extracted file by a tested tool",
@@ -24,9 +24,9 @@
     "summary": "tools/extract_gold_draft.py build/store: seeded stratified 40-question sample of published DGNL solver inputs, extracted + draft gold + review.html (page images, editable, JSON export); real build 40 q (13/14/13), 29 pages, all stems on their pages"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tests/unit/test_extract_gold_draft.py; python3 -I tools/run_tests.py --fast",
+    "result": "6 OK (ids/printed, stratified seeded sample, files + sheet, extract-eval accepts, store refuses unchecked/changed letters/missing); baseline extract-eval draft vs extracted 40/40; --fast see fast.txt"
   },
   "security": {
     "status": "pending",
@@ -49,6 +49,9 @@
     },
     "coder": {
       "waiver": "small tool on existing parser/extract-eval; done in-session"
+    },
+    "tester": {
+      "waiver": "tests written with the tool"
     }
   },
   "user_notes": [
@@ -59,7 +62,7 @@
     }
   ],
   "picked_at": "2026-11-19T03:58:40Z",
-  "updated_at": "2026-11-19T04:02:29Z",
+  "updated_at": "2026-11-19T04:02:30Z",
   "updated_by": "main",
   "scope": [
     "tools/extract_gold_draft.py",
@@ -73,5 +76,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "tests"
+  "next": "user corrects gold in review.html"
 }

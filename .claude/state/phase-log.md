@@ -4417,3 +4417,9 @@ Action: tool + real sample
 Result: 40 questions, 37 exact on page text, 3 differ in math glyphs
 Decision: user corrects via review.html
 Next: UNIT_TESTED
+
+## UNIT_TESTED - TASK-151 - 2026-11-19T04:02:30Z
+Action: tests
+Result: 6 OK
+Decision: wait for the user's corrected gold
+Next: VERIFIED after store + extract-eval
