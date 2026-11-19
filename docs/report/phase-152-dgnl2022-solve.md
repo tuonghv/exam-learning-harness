@@ -17,6 +17,15 @@ $4.70, RAW-00390): 119 answered, 1 declined. No key for 2022, so no score.
   95, 107, 108, 119.
 - Evidence: `work/TASK-152/evidence/` (cost.tsv, solve.log, summary.txt).
 
+## Score vs key (RAW-00391, 2026-11-19, $0)
+- Key `input/dgnl/de-thi-mau-dgnl-hcm-2022.answer.txt` (one line `1.D 2.A ...`, 120 entries) parsed by report-pack.
+- **106/120 (88.3%)**: Vietnamese 18/20, English 17/20, Math 28/30, Science 43/50. Independent recount from the
+  answer table matches (`work/TASK-152/evidence/score-crosscheck.txt`). Pack `reports/dgnl2022/s22/run-20261119-052314/`.
+- Wrong: 14, 18, 21, 22, 33, 49, 57 (declined; key B, the solver judged B impossible -> check the extraction),
+  72, 80, 88, 89, 104, 105, 119.
+- Doubt signal: of the 12 medium/high-doubt answers 5 are wrong; 9 wrong answers had low doubt. Of the 4 verifier
+  FAILs only 33 is wrong (29, 62, 69 are right).
+
 ## Defects
 - Section headings in the exam files are wrong (Math: "1.2. TIẾNG ANH", Science: "1.2. TIẾNG ANH > PHẦN 3"): the
   ingest carries a stale heading. Solving uses the `Subject:` header (correct), so only a `section_subject_mismatch`
