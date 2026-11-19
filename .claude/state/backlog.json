@@ -3170,7 +3170,7 @@
     "task_id": "TASK-151",
     "title": "DGNL extraction gold: sample 40 questions, draft gold + review sheet, user corrects, extract-eval (REQ-0078)",
     "priority": 2,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-11-19T03:58:39Z",
     "requirement": "REQ-0078",
     "acceptance_criteria": [

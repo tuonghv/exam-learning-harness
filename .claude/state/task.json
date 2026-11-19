@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-150",
-  "state": "DONE",
-  "next": "",
-  "title": "Delete guard for every session (rm/find -delete/git clean/rmtree only under work/, scratchpad, /tmp), clean-work.sh, auto backup (REQ-0156)",
-  "active": [],
+  "task_id": "TASK-151",
+  "state": "TODO",
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "title": "DGNL extraction gold: sample 40 questions, draft gold + review sheet, user corrects, extract-eval (REQ-0078)",
+  "active": [
+    {
+      "task_id": "TASK-151",
+      "state": "TODO",
+      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+      "updated_at": ""
+    }
+  ],
   "max_active": 1
 }
