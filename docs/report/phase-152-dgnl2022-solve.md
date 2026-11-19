@@ -32,6 +32,15 @@ $4.70, RAW-00390): 119 answered, 1 declined. No key for 2022, so no score.
   warning and a misleading context line; worth a fix before a re-run or publish.
 - The first solve attempt used `--line main` and was refused (published line, needs `--publish`); no spend.
 
+## Q57 check (RAW-00393, 2026-11-19, $0)
+- Extraction is exact: the refined stem, options and shared intro (rules for 57-60) match page 7 word for word.
+- Hand solution: 4 boys never adjacent in 7 seats -> boys at 1, 3, 5, 7, girls at 2, 4, 6; P=5, Y right of P -> Y=6.
+  Ordered (M, X) per "theo thứ tự": A (1,2) possible, B (2,3) impossible (seat 2 is a girl seat), C (3,4) possible,
+  D (6,7) impossible (seat 6 is Y). Two impossible options: B and D. Unordered reading: B possible (M3, X2), only D
+  impossible. The key's B is right only under the ordered reading, where D is right too.
+- Verdict: question/key defect (no unique answer), not an extraction or engine error; the solver's decline is the
+  correct behaviour. Score stays 106/120 as published (no key override).
+
 ## Published (RAW-00392, 2026-11-19)
 - `config/published_reports.json` gains `dgnl2022` (line `s22`, key + sha256, 4 plan runs, view sheet).
 - `rebuild-reports dgnl2022` -> `reports/dgnl2022/main/run-20261119-053005/` (8 files + INDEX), score 106/120;
