@@ -74,7 +74,11 @@
   "inputs": {},
   "checkpoint": {
     "done": [],
-    "notes": ""
+    "notes": "",
+    "next": "store corrected gold, run extract-eval, VERIFIED"
   },
-  "next": "user corrects gold in review.html"
+  "next": "user corrects gold in review.html",
+  "status": "held",
+  "held_at": "2026-11-19T04:03:13Z",
+  "held_reason": "waiting for the user's corrected gold from work/TASK-151/review.html (RAW-00388); DGNL 2022 solve requested (RAW-00389)"
 }
