@@ -3190,7 +3190,7 @@
     "task_id": "TASK-152",
     "title": "Solve DGNL HCM 2022 (paid, sonnet, cap $4.70): refine, 4 section solves, report pack (REQ-0157)",
     "priority": 1,
-    "status": "active",
+    "status": "done",
     "created_at": "2026-11-19T04:20:17Z",
     "requirement": "REQ-0157",
     "acceptance_criteria": [
@@ -3209,6 +3209,8 @@
         "note": "approve sonnet, cap $4.70",
         "at": "2026-11-19T04:20:17Z"
       }
-    ]
+    ],
+    "completed_at": "2026-11-19T04:38:34Z",
+    "report": "docs/report/phase-152-dgnl2022-solve.md"
   }
 ]

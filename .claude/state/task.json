@@ -1,16 +1,9 @@
 {
   "schema": 2,
   "task_id": "TASK-152",
-  "state": "VERIFIED",
-  "next": "report",
+  "state": "DONE",
+  "next": "",
   "title": "Solve DGNL HCM 2022 (paid, sonnet, cap $4.70): refine, 4 section solves, report pack (REQ-0157)",
-  "active": [
-    {
-      "task_id": "TASK-152",
-      "state": "VERIFIED",
-      "next": "report",
-      "updated_at": "2026-11-19T04:38:23Z"
-    }
-  ],
+  "active": [],
   "max_active": 1
 }
