@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-152",
   "title": "Solve DGNL HCM 2022 (paid, sonnet, cap $4.70): refine, 4 section solves, report pack (REQ-0157)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0157",
   "acceptance_criteria": [
     "AC1 120 questions ingested in 3 parts",
@@ -30,12 +30,18 @@
     "result": "run-only task, tree unchanged: KNOWN 1 NEW 0"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "paid calls only via exam.py with per-step caps; no secrets; outputs git-ignored"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-152/evidence/cost.tsv",
+      "work/TASK-152/evidence/solve.log",
+      "work/TASK-152/evidence/summary.txt"
+    ],
+    "command": "answer-table check (120 rows, printed 1-120, subjects 20/20/30/50); cost.tsv vs cap; Q45/Q101 refine flags compared with the PDF",
+    "result": "120 rows, 119 answered, Q57 declined (two options impossible); doubt low 108 / medium 10 / high 2; FAIL 29, 33, 62, 69; $2.33 <= $4.70"
   },
   "report": {
     "status": "pending",
@@ -53,6 +59,9 @@
     },
     "tester": {
       "waiver": "no code change"
+    },
+    "verifier": {
+      "waiver": "coordinator-owned paid run; evidence listed"
     }
   },
   "user_notes": [
@@ -68,7 +77,7 @@
     }
   ],
   "picked_at": "2026-11-19T04:20:17Z",
-  "updated_at": "2026-11-19T04:38:22Z",
+  "updated_at": "2026-11-19T04:38:23Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-152/"
@@ -79,5 +88,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verify"
+  "next": "report"
 }
