@@ -1,9 +1,16 @@
 {
   "schema": 2,
-  "task_id": "TASK-151",
-  "state": "UNIT_TESTED",
-  "next": "user corrects gold in review.html",
-  "title": "DGNL extraction gold: sample 40 questions, draft gold + review sheet, user corrects, extract-eval (REQ-0078)",
-  "active": [],
+  "task_id": "TASK-152",
+  "state": "TODO",
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "title": "Solve DGNL HCM 2022 (paid, sonnet, cap $4.70): refine, 4 section solves, report pack (REQ-0157)",
+  "active": [
+    {
+      "task_id": "TASK-152",
+      "state": "TODO",
+      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+      "updated_at": ""
+    }
+  ],
   "max_active": 1
 }
