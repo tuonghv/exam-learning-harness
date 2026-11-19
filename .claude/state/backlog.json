@@ -3165,5 +3165,25 @@
     ],
     "completed_at": "2026-11-18T10:46:27Z",
     "report": "docs/report/phase-150-delete-guard.md"
+  },
+  {
+    "task_id": "TASK-151",
+    "title": "DGNL extraction gold: sample 40 questions, draft gold + review sheet, user corrects, extract-eval (REQ-0078)",
+    "priority": 2,
+    "status": "queued",
+    "created_at": "2026-11-19T03:58:39Z",
+    "requirement": "REQ-0078",
+    "acceptance_criteria": [
+      "AC1 seeded stratified 40-question sample + draft gold + extracted file by a tested tool",
+      "AC2 review sheet with page images, editable text, JSON export",
+      "AC3 corrected gold stored, extract-eval n=40 with Wilson intervals"
+    ],
+    "user_notes": [
+      {
+        "raw": "RAW-00388",
+        "note": "option A, 40 questions",
+        "at": "2026-11-19T03:58:39Z"
+      }
+    ]
   }
 ]
