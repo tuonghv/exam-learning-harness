@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-151",
   "title": "DGNL extraction gold: sample 40 questions, draft gold + review sheet, user corrects, extract-eval (REQ-0078)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0078",
   "acceptance_criteria": [
     "AC1 seeded stratified 40-question sample + draft gold + extracted file by a tested tool",
@@ -9,9 +9,9 @@
     "AC3 corrected gold stored, extract-eval n=40 with Wilson intervals"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-151-dgnl-extraction-gold.md",
+    "summary": "tool samples 40 published DGNL questions (seeded, stratified), writes extracted + draft gold + review sheet with page images; user corrects; extract-eval n=40",
     "reuse": [],
     "risks": []
   },
@@ -39,7 +39,11 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": {
+      "waiver": "small tool on existing parser/extract-eval; design by coordinator"
+    }
+  },
   "user_notes": [
     {
       "raw": "RAW-00388",
@@ -48,14 +52,19 @@
     }
   ],
   "picked_at": "2026-11-19T03:58:40Z",
-  "updated_at": "",
-  "updated_by": "",
-  "scope": [],
+  "updated_at": "2026-11-19T03:58:59Z",
+  "updated_by": "main",
+  "scope": [
+    "tools/extract_gold_draft.py",
+    "tests/unit/test_extract_gold_draft.py",
+    "evals/extract/gold/dgnl-real-001.json",
+    "docs/guide/ingest-usage.md"
+  ],
   "depends_on": [],
   "inputs": {},
   "checkpoint": {
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "build tool"
 }

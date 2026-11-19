@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-151",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "build tool",
   "title": "DGNL extraction gold: sample 40 questions, draft gold + review sheet, user corrects, extract-eval (REQ-0078)",
   "active": [
     {
       "task_id": "TASK-151",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "build tool",
+      "updated_at": "2026-11-19T03:58:59Z"
     }
   ],
   "max_active": 1

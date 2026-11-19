@@ -4405,3 +4405,9 @@ Action: report
 Result: repo-loss protection in place
 Decision: done
 Next: backlog complete
+
+## DESIGN - TASK-151 - 2026-11-19T03:58:59Z
+Action: design
+Result: sample from published exam.md, review sheet
+Decision: option A, 40 (RAW-00388)
+Next: IMPLEMENTING
