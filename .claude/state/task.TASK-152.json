@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-152",
   "title": "Solve DGNL HCM 2022 (paid, sonnet, cap $4.70): refine, 4 section solves, report pack (REQ-0157)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0157",
   "acceptance_criteria": [
     "AC1 120 questions ingested in 3 parts",
@@ -25,9 +25,9 @@
     "summary": "no code: paid refine p2-16 ($0.65, 120 q) + 4 sonnet solves on dev line s22 ($1.68) + report pack reports/dgnl2022/s22/run-20261119-043718; total $2.33 of $4.70"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --fast",
+    "result": "run-only task, tree unchanged: KNOWN 1 NEW 0"
   },
   "security": {
     "status": "pending",
@@ -50,6 +50,9 @@
     },
     "coder": {
       "waiver": "run-only task, coordinator runs paid jobs"
+    },
+    "tester": {
+      "waiver": "no code change"
     }
   },
   "user_notes": [
@@ -65,7 +68,7 @@
     }
   ],
   "picked_at": "2026-11-19T04:20:17Z",
-  "updated_at": "2026-11-19T04:38:21Z",
+  "updated_at": "2026-11-19T04:38:22Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-152/"
@@ -76,5 +79,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "checks"
+  "next": "verify"
 }
