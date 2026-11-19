@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-151",
-  "state": "DESIGN",
-  "next": "build tool",
+  "state": "IMPLEMENTING",
+  "next": "tests",
   "title": "DGNL extraction gold: sample 40 questions, draft gold + review sheet, user corrects, extract-eval (REQ-0078)",
   "active": [
     {
       "task_id": "TASK-151",
-      "state": "DESIGN",
-      "next": "build tool",
-      "updated_at": "2026-11-19T03:58:59Z"
+      "state": "IMPLEMENTING",
+      "next": "tests",
+      "updated_at": "2026-11-19T04:02:29Z"
     }
   ],
   "max_active": 1

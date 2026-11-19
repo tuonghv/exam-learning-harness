@@ -182,3 +182,14 @@ python3 -I scripts/exam.py review-pack --exam-id ID --subject Math --result work
 python3 -I scripts/exam.py review-apply --exam-id ID [--out review]
 ```
 `review-pack` writes `<subject>.md` (a section `## Q<printed n>  p.<page>  <status>  answer <A-D|->  conf <..>`, stem, `Engine:`, `QA: -` (filled by TASK-053), `Flags:`, `Your review: extraction [ ] ok [ ] defect | solution (optional) [ ] agree [ ] disagree [ ] unsure | correct: _ | note: `) and regenerates `INDEX.md`. Offset maps exam position to the printed number. A re-run keeps your marks (merged by printed number; `<subject>.new.md` if a marked number vanished; a changed answer keeps the mark and adds `Answer changed: was X now Y`; old-format marks are saved to `<subject>.old.md`; `--force-reset` discards; `--note` prints a header line). `--qa FILE` (repeatable, later wins) reads a pipe table `n | answer | conf | flawed | reasoning` (header row and extra columns tolerated, `-` = no answer, flawed yes/no/mild; printed numbers) and fills `QA: <letter> conf <c> | <verdict> | <reasoning>`; verdict (tool-computed): agrees, differs, flawed, qa-only (engine declined), unresolved (`-`). INDEX.md then has `qa` and `verdict` columns and a per-subject count line; the message reports `qa_unmatched` (numbers outside the subject) and `qa_unparsed` (malformed rows, never guessed). The pack header says QA = same-family in-session independent reads, not an official key. Without `--qa` the pack is unchanged. `review-apply` prints extraction ok/defect/blank/unparsed counts (ok rate with Wilson 95%), the defects by number with notes, the optional solution counts, and writes `improvements.md` (numbers only). Malformed or old-format lines and unnumbered `## ` sections are `unparsed`, never guessed; an edited heading keeps its marks by number. Refuses `--out` inside examples/, evals/, tests/.
+
+## Real-exam extraction gold (TASK-151, REQ-0078)
+```
+python3 -I tools/extract_gold_draft.py build [--n 40] [--seed 151] [--out work/TASK-151]   # sample + review.html
+# open review.html, fix each question against its page image, tick "checked", Download gold JSON
+python3 -I tools/extract_gold_draft.py store ~/Downloads/dgnl-real-001.json work/TASK-151/extracted.json evals/extract/gold/dgnl-real-001.json
+python3 -I scripts/exam.py extract-eval evals/extract/gold/dgnl-real-001.json work/TASK-151/extracted.json --out work/TASK-151/eval
+```
+Measures: exact stem and option text of 40 published DGNL questions (2024/2025/2026) as the solver saw them, against
+a hand-checked page reading. Does not measure: shared passages, figures, formula images, other exams. n=40: even
+40/40 only proves >= 91.2% (Wilson 95% lower bound).

@@ -4411,3 +4411,9 @@ Action: design
 Result: sample from published exam.md, review sheet
 Decision: option A, 40 (RAW-00388)
 Next: IMPLEMENTING
+
+## IMPLEMENTING - TASK-151 - 2026-11-19T04:02:29Z
+Action: tool + real sample
+Result: 40 questions, 37 exact on page text, 3 differ in math glyphs
+Decision: user corrects via review.html
+Next: UNIT_TESTED
