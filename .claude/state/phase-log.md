@@ -4423,3 +4423,9 @@ Action: tests
 Result: 6 OK
 Decision: wait for the user's corrected gold
 Next: VERIFIED after store + extract-eval
+
+## DESIGN - TASK-152 - 2026-11-19T04:20:47Z
+Action: design
+Result: sections 20/20/30/50, refine est $1.28
+Decision: approved sonnet cap 4.70 (RAW-00390)
+Next: IMPLEMENTING

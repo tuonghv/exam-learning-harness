@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "task_id": "TASK-152",
-  "state": "TODO",
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
+  "state": "DESIGN",
+  "next": "paid refine pages 2-16",
   "title": "Solve DGNL HCM 2022 (paid, sonnet, cap $4.70): refine, 4 section solves, report pack (REQ-0157)",
   "active": [
     {
       "task_id": "TASK-152",
-      "state": "TODO",
-      "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path.",
-      "updated_at": ""
+      "state": "DESIGN",
+      "next": "paid refine pages 2-16",
+      "updated_at": "2026-11-19T04:20:47Z"
     }
   ],
   "max_active": 1

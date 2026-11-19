@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-152",
   "title": "Solve DGNL HCM 2022 (paid, sonnet, cap $4.70): refine, 4 section solves, report pack (REQ-0157)",
-  "state": "TODO",
+  "state": "DESIGN",
   "requirement": "REQ-0157",
   "acceptance_criteria": [
     "AC1 120 questions ingested in 3 parts",
@@ -9,9 +9,9 @@
     "AC3 report pack (answers by printed number; no key -> no score)"
   ],
   "design": {
-    "status": "pending",
-    "path": "",
-    "summary": "",
+    "status": "completed",
+    "path": "docs/design/phase-152-dgnl2022-solve.md",
+    "summary": "paid run: refine pages 2-16 (cap 1.50), 4 sonnet section solves (caps 0.6/0.5/0.8/1.3), report pack; no key",
     "reuse": [],
     "risks": []
   },
@@ -39,7 +39,11 @@
   "roles_required": true,
   "crosscheck_required": true,
   "evidence_required": false,
-  "roles": {},
+  "roles": {
+    "designer": {
+      "waiver": "run recipe from docs/guide/dgnl-real-exam.md; coordinator-owned paid run"
+    }
+  },
   "user_notes": [
     {
       "raw": "RAW-00389",
@@ -53,8 +57,8 @@
     }
   ],
   "picked_at": "2026-11-19T04:20:17Z",
-  "updated_at": "",
-  "updated_by": "",
+  "updated_at": "2026-11-19T04:20:47Z",
+  "updated_by": "main",
   "scope": [
     "work/TASK-152/"
   ],
@@ -64,5 +68,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+  "next": "paid refine pages 2-16"
 }
