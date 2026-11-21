@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-153",
   "title": "Solve DGNL HCM 2020 (paid, sonnet, cap $4.40): refine, 4 section solves, report pack (REQ-0158)",
-  "state": "UNIT_TESTED",
+  "state": "VERIFIED",
   "requirement": "REQ-0158",
   "acceptance_criteria": [
     "AC1 120 questions ingested in 3 parts",
@@ -30,12 +30,18 @@
     "result": "run-only task, tree unchanged: KNOWN 1 NEW 0"
   },
   "security": {
-    "status": "pending",
-    "result": ""
+    "status": "completed",
+    "result": "paid calls only via exam.py with per-step caps; no secrets; outputs git-ignored"
   },
   "verification": {
-    "status": "pending",
-    "evidence": []
+    "status": "passed",
+    "evidence": [
+      "work/TASK-153/evidence/cost.tsv",
+      "work/TASK-153/evidence/solve.log",
+      "work/TASK-153/evidence/summary.txt"
+    ],
+    "command": "answer-table check (120 rows, printed 1-120, subjects 20/20/30/50); cost.tsv vs cap; refine flags 45/48/92 and declines 50/57/60/63/66 compared with the PDF",
+    "result": "120 rows, 115 answered, 5 declined (no unique option: 50, 57, 60, 63, 66); doubt low 102 / medium 16 / high 2; FAIL 19, 75, 105; $2.64 <= $4.40"
   },
   "report": {
     "status": "pending",
@@ -53,6 +59,9 @@
     },
     "tester": {
       "waiver": "no code change"
+    },
+    "verifier": {
+      "waiver": "coordinator-owned paid run; evidence listed"
     }
   },
   "user_notes": [
@@ -68,7 +77,7 @@
     }
   ],
   "picked_at": "2026-11-21T10:19:29Z",
-  "updated_at": "2026-11-21T10:39:03Z",
+  "updated_at": "2026-11-21T10:39:04Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-153/"
@@ -79,5 +88,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "verify"
+  "next": "report"
 }
