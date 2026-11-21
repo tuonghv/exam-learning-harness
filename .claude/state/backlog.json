@@ -3217,7 +3217,7 @@
     "task_id": "TASK-153",
     "title": "Solve DGNL HCM 2020 (paid, sonnet, cap $4.40): refine, 4 section solves, report pack (REQ-0158)",
     "priority": 1,
-    "status": "queued",
+    "status": "active",
     "created_at": "2026-11-21T10:19:21Z",
     "requirement": "REQ-0158",
     "acceptance_criteria": [

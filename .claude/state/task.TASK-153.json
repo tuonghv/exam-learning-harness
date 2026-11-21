@@ -1,0 +1,68 @@
+{
+  "task_id": "TASK-153",
+  "title": "Solve DGNL HCM 2020 (paid, sonnet, cap $4.40): refine, 4 section solves, report pack (REQ-0158)",
+  "state": "TODO",
+  "requirement": "REQ-0158",
+  "acceptance_criteria": [
+    "AC1 120 questions ingested in 3 parts",
+    "AC2 refine + 4 solves on dgnl2020, sonnet, total <= $4.40",
+    "AC3 report pack (answers by printed number; no key -> no score)"
+  ],
+  "design": {
+    "status": "pending",
+    "path": "",
+    "summary": "",
+    "reuse": [],
+    "risks": []
+  },
+  "implementation": {
+    "status": "pending",
+    "files": []
+  },
+  "unit_test": {
+    "status": "pending",
+    "command": "",
+    "result": ""
+  },
+  "security": {
+    "status": "pending",
+    "result": ""
+  },
+  "verification": {
+    "status": "pending",
+    "evidence": []
+  },
+  "report": {
+    "status": "pending",
+    "path": ""
+  },
+  "roles_required": true,
+  "crosscheck_required": true,
+  "evidence_required": false,
+  "roles": {},
+  "user_notes": [
+    {
+      "raw": "RAW-00394",
+      "note": "solve dgnl 2020",
+      "at": "2026-11-21T10:19:21Z"
+    },
+    {
+      "raw": "RAW-00395",
+      "note": "approve sonnet, cap $4.40",
+      "at": "2026-11-21T10:19:21Z"
+    }
+  ],
+  "picked_at": "2026-11-21T10:19:29Z",
+  "updated_at": "",
+  "updated_by": "",
+  "scope": [
+    "work/TASK-153/"
+  ],
+  "depends_on": [],
+  "inputs": {},
+  "checkpoint": {
+    "done": [],
+    "notes": ""
+  },
+  "next": "Enter DESIGN: understand the requirement and acceptance criteria, then draft docs/design/phase-<N>-<slug>.md (design skill) and record it in design.path."
+}
