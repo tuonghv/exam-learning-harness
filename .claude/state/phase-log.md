@@ -4453,3 +4453,9 @@ Action: report
 Result: DGNL 2022 solved on s22
 Decision: done
 Next: user: key file to score, publish decision
+
+## DESIGN - TASK-153 - 2026-11-21T10:20:08Z
+Action: design
+Result: sections 20/20/30/50, 14 refine calls
+Decision: approved sonnet cap 4.40 (RAW-00395)
+Next: IMPLEMENTING
