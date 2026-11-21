@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-153",
   "title": "Solve DGNL HCM 2020 (paid, sonnet, cap $4.40): refine, 4 section solves, report pack (REQ-0158)",
-  "state": "DESIGN",
+  "state": "IMPLEMENTING",
   "requirement": "REQ-0158",
   "acceptance_criteria": [
     "AC1 120 questions ingested in 3 parts",
@@ -16,8 +16,13 @@
     "risks": []
   },
   "implementation": {
-    "status": "pending",
-    "files": []
+    "status": "completed",
+    "files": [
+      "work/TASK-153/evidence/cost.tsv",
+      "work/TASK-153/evidence/solve.log",
+      "work/TASK-153/evidence/summary.txt"
+    ],
+    "summary": "no code: paid refine p1-14 ($0.72, 120 q) + 4 sonnet solves on dev line s20 ($1.93) + report pack reports/dgnl2020/s20/run-20261121-103828; total $2.64 of $4.40"
   },
   "unit_test": {
     "status": "pending",
@@ -42,6 +47,9 @@
   "roles": {
     "designer": {
       "waiver": "run recipe from docs/guide/dgnl-real-exam.md; coordinator-owned paid run"
+    },
+    "coder": {
+      "waiver": "run-only task, coordinator runs paid jobs"
     }
   },
   "user_notes": [
@@ -57,7 +65,7 @@
     }
   ],
   "picked_at": "2026-11-21T10:19:29Z",
-  "updated_at": "2026-11-21T10:20:08Z",
+  "updated_at": "2026-11-21T10:39:03Z",
   "updated_by": "main",
   "scope": [
     "work/TASK-153/"
@@ -68,5 +76,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "paid refine pages 1-14"
+  "next": "checks"
 }
