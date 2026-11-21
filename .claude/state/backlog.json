@@ -3212,5 +3212,30 @@
     ],
     "completed_at": "2026-11-19T04:38:35Z",
     "report": "docs/report/phase-152-dgnl2022-solve.md"
+  },
+  {
+    "task_id": "TASK-153",
+    "title": "Solve DGNL HCM 2020 (paid, sonnet, cap $4.40): refine, 4 section solves, report pack (REQ-0158)",
+    "priority": 1,
+    "status": "queued",
+    "created_at": "2026-11-21T10:19:21Z",
+    "requirement": "REQ-0158",
+    "acceptance_criteria": [
+      "AC1 120 questions ingested in 3 parts",
+      "AC2 refine + 4 solves on dgnl2020, sonnet, total <= $4.40",
+      "AC3 report pack (answers by printed number; no key -> no score)"
+    ],
+    "user_notes": [
+      {
+        "raw": "RAW-00394",
+        "note": "solve dgnl 2020",
+        "at": "2026-11-21T10:19:21Z"
+      },
+      {
+        "raw": "RAW-00395",
+        "note": "approve sonnet, cap $4.40",
+        "at": "2026-11-21T10:19:21Z"
+      }
+    ]
   }
 ]
