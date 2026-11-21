@@ -1,14 +1,14 @@
 {
   "schema": 2,
   "task_id": "TASK-153",
-  "state": "IMPLEMENTING",
-  "next": "checks",
+  "state": "UNIT_TESTED",
+  "next": "verify",
   "title": "Solve DGNL HCM 2020 (paid, sonnet, cap $4.40): refine, 4 section solves, report pack (REQ-0158)",
   "active": [
     {
       "task_id": "TASK-153",
-      "state": "IMPLEMENTING",
-      "next": "checks",
+      "state": "UNIT_TESTED",
+      "next": "verify",
       "updated_at": "2026-11-21T10:39:03Z"
     }
   ],

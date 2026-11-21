@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-153",
   "title": "Solve DGNL HCM 2020 (paid, sonnet, cap $4.40): refine, 4 section solves, report pack (REQ-0158)",
-  "state": "IMPLEMENTING",
+  "state": "UNIT_TESTED",
   "requirement": "REQ-0158",
   "acceptance_criteria": [
     "AC1 120 questions ingested in 3 parts",
@@ -25,9 +25,9 @@
     "summary": "no code: paid refine p1-14 ($0.72, 120 q) + 4 sonnet solves on dev line s20 ($1.93) + report pack reports/dgnl2020/s20/run-20261121-103828; total $2.64 of $4.40"
   },
   "unit_test": {
-    "status": "pending",
-    "command": "",
-    "result": ""
+    "status": "passed",
+    "command": "python3 -I tools/run_tests.py --fast",
+    "result": "run-only task, tree unchanged: KNOWN 1 NEW 0"
   },
   "security": {
     "status": "pending",
@@ -50,6 +50,9 @@
     },
     "coder": {
       "waiver": "run-only task, coordinator runs paid jobs"
+    },
+    "tester": {
+      "waiver": "no code change"
     }
   },
   "user_notes": [
@@ -76,5 +79,5 @@
     "done": [],
     "notes": ""
   },
-  "next": "checks"
+  "next": "verify"
 }
